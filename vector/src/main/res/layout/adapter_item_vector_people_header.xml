@@ -27,7 +27,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:fontFamily="sans-serif-medium"
-                android:textColor="?attr/vctr_riot_primary_text_color"
+                android:textColor="?attr/vctr_list_header_primary_text_color"
                 android:textSize="14sp"
                 tools:text="Header" />
 
@@ -41,7 +41,9 @@
                 android:layout_toEndOf="@+id/people_header_text_view"
                 android:layout_toRightOf="@+id/people_header_text_view"
                 android:indeterminate="true"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
+
         </RelativeLayout>
 
         <ImageView
@@ -52,30 +54,34 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginRight="15dp"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/people_header_matrix_contacts_layout"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginBottom="11dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        tools:visibility="gone">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/contacts_filter_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="19dp"
-            android:layout_marginLeft="19dp" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/people_search_filter_text"
-            android:textColor="?attr/vctr_riot_primary_text_color"
+            android:textColor="?attr/vctr_list_header_primary_text_color"
             android:textSize="14sp" />
+
     </LinearLayout>
+
 </LinearLayout>

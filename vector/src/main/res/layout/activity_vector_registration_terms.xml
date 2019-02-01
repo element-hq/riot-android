@@ -13,12 +13,12 @@
 
     <ImageView
         android:id="@+id/login_large_logo"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="27dp"
-        android:src="@drawable/logo_login"
+        android:src="@drawable/riot_splash_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -48,12 +48,10 @@
 
     <Button
         android:id="@+id/account_creation_policy_button_accept"
-        android:layout_width="94dp"
-        android:layout_height="36dp"
-        android:layout_margin="16dp"
-        android:background="?attr/vctr_primary_color"
+        style="@style/LoginButtonStyle"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/accept"
-        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_creation_policy_list" />

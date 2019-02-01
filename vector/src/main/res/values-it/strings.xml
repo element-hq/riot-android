@@ -109,7 +109,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
     <string name="send_bug_report_alert_message">Sembra che tu stia scuotendo il dispositivo con frustrazione. Desideri aprire la schermata di segnalazione errore?</string>
-    <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
+    <string name="send_bug_report_app_crashed">L\'applicazione è andata in crash l\'ultima volta. Desideri aprire la schermata di segnalazione del crash?</string>
 
     <string name="send_bug_report_sent">La segnalazione dell\'errore è stata spedita con successo</string>
     <string name="send_bug_report_failed">Fallito l\'invio della segnalazione di errore (%s)</string>
@@ -247,7 +247,7 @@ Ci scusiamo per l\'inconveniente.</string>
     <string name="incoming_call">Chiamata in arrivo</string>
     <string name="incoming_video_call">Videochiamata in arrivo</string>
     <string name="incoming_voice_call">Chiamata voce in arrivo</string>
-    <string name="call_in_progress">Chiamata in corso</string>
+    <string name="call_in_progress">Chiamata in corso…</string>
 
     <string name="call_error_user_not_responding">Ricezione fallita da parte del destinatario.</string>
     <string name="call_error_ice_failed">Fallita connessione al supporto multimediale</string>
@@ -281,7 +281,7 @@ Per favore consenti l\'accesso nella prossima finestra in modo da scoprire i con
 
 Consentire a Riot di accedere ai tuoi contatti?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Spiacenti… azione non eseguita a causa di mancate autorizzazioni</string>
+    <string name="permissions_action_not_performed_missing_permissions">Spiacente. Azione non eseguita a causa di mancate autorizzazioni</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
@@ -434,7 +434,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora elenco</string>
-    <string name="directory_searching_title">Ricerca in corso…</string>
+    <string name="directory_searching_title">Ricerca negli elenchi…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Preferito</string>
@@ -671,8 +671,8 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="encryption_import_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
+    <string name="passphrase_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
+    <string name="passphrase_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
 
 Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
@@ -741,7 +741,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
-    <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
+    <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget da questa stanza?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
@@ -874,7 +874,6 @@ In futuro il processo di verifica sarà più sofisticato.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Spento</string>
-    <string name="notification_on">Acceso</string>
     <string name="notification_noisy">Rumoroso</string>
 
     <string name="create">Crea</string>
@@ -1085,8 +1084,8 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <string name="room_sliding_menu_version_x">Versione %s</string>
     <string name="encryption_export_notice">Crea una passphrase (frase d\'ordine) per crittografare le chiavi esportate. Dovrai inserire la stessa passphrase per poter importare le chiavi.</string>
-    <string name="encryption_export_create_passphrase">Crea passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
+    <string name="passphrase_create_passphrase">Crea passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Le passphrase devono corrispondere</string>
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">collassa</string>
 
@@ -1255,4 +1254,9 @@ Per gli sviluppatori:
 
 Scopri una collaborazione davvero efficiente e aperta con Riot.im!</string>
 
+    <string name="video_call_in_progress">Videochiamata in corso…</string>
+
+    <string name="store_whats_new">Apportiamo continuamente cambiamenti e migliorie a Riot.im.
+Il registro completo delle modifiche si può trovare qui: %1$s.
+Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
 </resources>

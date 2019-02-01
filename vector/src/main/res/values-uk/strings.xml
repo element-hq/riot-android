@@ -656,8 +656,8 @@
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
     <string name="encryption_export_room_keys_summary">Експортувати ключі до локального файлу</string>
     <string name="encryption_export_export">Експорт</string>
-    <string name="encryption_import_enter_passphrase">Введіть парольну фразу</string>
-    <string name="encryption_export_confirm_passphrase">Підтвердіть парольну фразу</string>
+    <string name="passphrase_enter_passphrase">Введіть парольну фразу</string>
+    <string name="passphrase_confirm_passphrase">Підтвердіть парольну фразу</string>
     <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'
 
 Попередження: цей файл може бути видалений, якщо видалити додаток.</string>
@@ -747,7 +747,6 @@
     <!-- conference call -->
     <string name="conference_call_warning_title">Увага!</string>
     <string name="notification_off">Вимкнено</string>
-    <string name="notification_on">Увімкнено</string>
     <string name="notification_noisy">Гучно</string>
 
     <string name="encrypted_message">Зашифроване повідомлення</string>
@@ -956,8 +955,8 @@
 
 
     <string name="encryption_export_notice">Будь ласка, створіть пароль для шифрування ключів що експортуються. Вам знадобиться ввести такий самий пароль для імпорту цих ключів.</string>
-    <string name="encryption_export_create_passphrase">Створіть пароль</string>
-    <string name="encryption_export_passphrase_dont_match">Паролі мають збігатися</string>
+    <string name="passphrase_create_passphrase">Створіть пароль</string>
+    <string name="passphrase_passphrase_does_not_match">Паролі мають збігатися</string>
     <string name="lock_screen_hint">Набирайте тут…</string>
 
     <plurals name="notification_unread_notified_messages">

@@ -35,7 +35,7 @@
     <string name="incoming_call">Входящо повикване</string>
     <string name="incoming_video_call">Входящо видео повикване</string>
     <string name="incoming_voice_call">Входящо гласово повикване</string>
-    <string name="call_in_progress">В момента тече разговор</string>
+    <string name="call_in_progress">В момента тече разговор…</string>
 
     <string name="call_connecting">Свързване…</string>
     <string name="call_ended">Разговорът приключи</string>
@@ -185,7 +185,7 @@
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
     <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Доклада, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
     <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
-    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за забиване?</string>
+    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да отворите екрана за изпращане на грешки?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
 
     <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
@@ -399,7 +399,7 @@
         <item quantity="one">%1$s стая намерена за %2$s</item>
         <item quantity="other">%1$s стаи намерени за %2$s</item>
     </plurals>
-    <string name="directory_searching_title">Търсене в директорията..</string>
+    <string name="directory_searching_title">Търсене в директорията…</string>
 
     <string name="room_settings_all_messages_noisy">Всички съобщения (шумно)</string>
     <string name="room_settings_all_messages">Всички съобщения</string>
@@ -620,8 +620,8 @@
     <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
     <string name="encryption_export_room_keys_summary">Експортирай ключовете в локален файл</string>
     <string name="encryption_export_export">Експортирай</string>
-    <string name="encryption_import_enter_passphrase">Въведи парола</string>
-    <string name="encryption_export_confirm_passphrase">Потвърди парола</string>
+    <string name="passphrase_enter_passphrase">Въведи парола</string>
+    <string name="passphrase_confirm_passphrase">Потвърди парола</string>
     <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'
 
 Внимание: ако приложението бъде деинсталирано, този файл може да бъде изтрит.</string>
@@ -678,7 +678,7 @@
     <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
     <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
-    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението?</string>
+    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението от тази стая?</string>
     <plurals name="active_widgets">
         <item quantity="one">1 активно приспособление</item>
         <item quantity="other">%d активни приспособления</item>
@@ -715,7 +715,7 @@
 
 Позволяване на достъп до контактите Ви?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Извинете.. Операцията не е извършена поради липсващи разрешения за достъп</string>
+    <string name="permissions_action_not_performed_missing_permissions">Извинете. Операцията не е извършена поради липсващи разрешения за достъп</string>
 
     <string name="media_slider_saved">Запазено</string>
     <string name="media_slider_saved_message">Запазване в изтеглени файлове?</string>
@@ -824,7 +824,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
-    <string name="notification_on">Включено</string>
     <string name="notification_noisy">Шумно</string>
 
     <string name="create">Създай</string>
@@ -1022,8 +1021,8 @@
 
     <string name="room_sliding_menu_version_x">Версия %s</string>
     <string name="encryption_export_notice">Моля, въведете парола за шифроване на екпортираните ключове. Ще е нужно да въведете същата парола за да можете да ги импортирате.</string>
-    <string name="encryption_export_create_passphrase">Създай парола</string>
-    <string name="encryption_export_passphrase_dont_match">Паролите трябва да съвпадат</string>
+    <string name="passphrase_create_passphrase">Създай парола</string>
+    <string name="passphrase_passphrase_does_not_match">Паролите трябва да съвпадат</string>
     <string name="merged_events_expand">разшири</string>
     <string name="merged_events_collapse">свий</string>
 
@@ -1160,9 +1159,9 @@
 
     <string name="store_title">Riot.im - отворена колаборация за екипи</string>
     <string name="store_short_description">Добре дошли в Riot.im: нов свят на отворена комуникация!</string>
-    <string name="store_full_description">Riot.im е проста и елегантна среда за колаборация, която събира всички твои кореспонденции и интеграции в едно единствено приложение.
+    <string name="store_full_description">Riot.im е проста и елегантна среда за колаборация, която събира всички твой кореспонденции и интеграции в едно единствено приложение.
 
-Изградени върху групови чат стаи, Riot.im позволява изпращането на съобщения, изображения, видеа и файлове - взаимодействайте с инструментите си и достъпвайте всички Ваши общности на едно място. Едно единствено място за всички ваши екипи: без да е нужно да сменяте акаунти, работете и чатете с хора от различни организации в публични или частни стаи: от професионални проекти до училищни пътувания, Riot.im ще стане центърът на всички ваши дискусии!
+Изградено върху групови чат стаи, Riot.im позволява изпращането на съобщения, изображения, видеа и файлове - взаимодействайте с инструментите си и достъпвайте всички Ваши общности на едно място. Едно единствено място за всички ваши екипи: без необходимост от смяна на акаунти, работете и чатете с хора от различни организации в публични или лични стаи: от професионални проекти до училищни пътувания, Riot.im ще стане центърът на всички ваши дискусии!
 
 Вече и с шифроване от край до край!
 
@@ -1176,19 +1175,24 @@
 • Откривайте и канете потребители по имейл адрес
 • Участвайте в публични стаи достъпни за гости
 • Highly scalable - поддържа стотици стаи и хиляди потребители
-• Напълно синхронизирана история на чат съобщенията на множество устройство и уеб браузъри
-• Фино конфигурируеми настройки за уведомление, синхронизирани измежду всички устройства
-• Неограничено като период търсене в чат хронологията
-• Директни линкове към съобщения (Permalinks)
+• Напълно синхронизирана история на чат съобщенията на множество устройства и уеб браузъри
+• Фино-конфигурируеми настройки за уведомление, синхронизирани измежду всички устройства
+• Неограничен период на търсене в чат хронологията
+• Директни връзки към съобщения (Permalinks)
 • Пълно търсене на съобщения
-• Поддръжка за езици от-дясно-наляво като арабски
+• Поддръжка за езици от-дясно-наляво, като арабски
 
 За разработчици:
 • Riot.im е Matrix клиент - изграден върху отворения стандарт и екосистема Matrix.org, предлагащ съвместимост с всички други Matrix приложения, сървъри и интеграции
-• Изцяло отворен код под \"позволяващия\" Apache License - вижте кода на https://github.com/vector-im/vector-android. Принос към кода е добре дошъл!
-• Лесни разшируеми посредством отвореното Matrix Client-Server API (https://matrix.org/docs/spec)
+• Изцяло отворен код под \"позволяващия\" Apache лиценз - вижте кода на https://github.com/vector-im/vector-android. Принос към кода е добре дошъл!
+• Лесно разшируем посредством отвореното Matrix Client-Server API (https://matrix.org/docs/spec)
 • Използвайте ваш собствен сървър! Можете да използвате сървърът по подразбиране (matrix.org) или ваш собствен Matrix сървър (пример: https://matrix.org/docs/projects/server/synapse.html)
 
-Намерете истински ефективна и отворена колаборация благодарение на Riot.im!</string>
+Открийте истински ефективна и отворена колаборация с Riot.im!</string>
 
+    <string name="video_call_in_progress">В момента тече видео разговор…</string>
+
+    <string name="store_whats_new">Постоянно правим промени и подобрения по Riot.im.
+Пълният списък с промени може да бъде намерен тук: %1$s.
+За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
 </resources>

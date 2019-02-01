@@ -4,8 +4,8 @@
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/vctr_primary_color</item>
-        <item name="background">?attr/vctr_primary_color</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
@@ -25,7 +25,7 @@
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
     </style>
 
@@ -34,9 +34,8 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:popupBackground">?attr/vctr_riot_primary_background_color</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+    <style name="Vector.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
@@ -49,8 +48,8 @@
 
     <!-- custom action bar -->
     <style name="Vector.Styled.ActionBar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/vctr_primary_color</item>
-        <item name="background">?attr/vctr_primary_color</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
 
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>
@@ -64,14 +63,14 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
     <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -81,15 +80,31 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
+    <!-- Styles for login screen -->
+    <style name="LoginEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="LoginButtonStyle" parent="@android:style/Widget.Button">
+    <!-- Styles for button -->
+    <style name="VectorButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:minWidth">94dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:background">?colorAccent</item>
+        <item name="android:textColor">@color/button_text_color_selector</item>
     </style>
+
+    <style name="LoginButtonStyleBase" parent="VectorButtonStyle">
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_height">36dp</item>
+    </style>
+
+    <style name="LoginButtonStyle" parent="LoginButtonStyleBase" />
 
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
@@ -98,8 +113,8 @@
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">?attr/vctr_riot_primary_background_color</item>
-        <item name="background">?attr/vctr_riot_primary_background_color</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="background">?android:attr/colorBackground</item>
     </style>
 
     <!-- tabbar text color -->
@@ -137,10 +152,10 @@
 
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:textColor">?vctr_list_header_primary_text_color</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">?attr/vctr_list_header_background_color</item>
+        <item name="android:background">?vctr_list_header_background_color</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">10dp</item>
@@ -148,7 +163,7 @@
     </style>
 
     <style name="SpinnerTheme">
-        <item name="colorControlNormal">?attr/vctr_list_header_public_room_spinner_color</item>
+        <item name="colorControlNormal">?attr/vctr_list_header_primary_text_color</item>
     </style>
 
     <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
@@ -161,7 +176,7 @@
 
     <style name="Floating_Actions_Menu">
         <item name="android:background">@drawable/vector_background_fab_label</item>
-        <item name="android:textColor">?attr/vctr_riot_primary_text_color</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="Floating_Actions_Menu.Light">

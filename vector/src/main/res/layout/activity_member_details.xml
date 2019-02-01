@@ -5,14 +5,14 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/vctr_riot_primary_background_color"
+    android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/member_details_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/vctr_primary_color">
+        android:background="?colorPrimary">
 
         <RelativeLayout
             android:id="@+id/action_bar_header"
@@ -97,7 +97,7 @@
                 android:paddingTop="6dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="16dp"
-                android:textColor="?attr/vctr_default_text_light_color"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
                 tools:text="User presence" />
 

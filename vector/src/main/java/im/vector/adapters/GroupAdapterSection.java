@@ -23,8 +23,14 @@ import java.util.List;
 
 public class GroupAdapterSection<T> extends AdapterSection<T> {
 
-    public GroupAdapterSection(Context context , String title, int headerSubViewResId, int contentResId, int headerViewType,
-                          int contentViewType, List<T> items, Comparator<T> comparator) {
+    public GroupAdapterSection(Context context,
+                               String title,
+                               int headerSubViewResId,
+                               int contentResId,
+                               int headerViewType,
+                               int contentViewType,
+                               List<T> items,
+                               Comparator<T> comparator) {
         super(context, title, headerSubViewResId, contentResId, headerViewType, contentViewType, items, comparator);
     }
 

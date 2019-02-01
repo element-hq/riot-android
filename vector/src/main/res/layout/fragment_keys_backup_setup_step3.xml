@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keys_backup_setup_step3_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".fragments.keysbackup.setup.KeysBackupSetupStep3Fragment">
+
+    <TextView
+        android:id="@+id/keys_backup_setup_step3_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/keys_backup_setup_step3_text"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recovery_key"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="6dp"
+        android:background="?vctr_list_divider_color" />
+
+    <ProgressBar
+        android:id="@+id/keys_backup_recovery_key_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        tools:max="100"
+        tools:progress="30" />
+
+    <TextView
+        android:id="@+id/keys_backup_recovery_key_spinner_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/keys_backup_setup_step3_generating_key_status"
+        android:textAlignment="center"
+        android:textColor="?attr/colorAccent" />
+
+    <TextView
+        android:id="@+id/keys_backup_recovery_key_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="monospace"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:text="HHWJ Y8DK OD04\nBQEN FQ4V M4O8\nBQEN FQ4V M4O8" />
+
+    <Button
+        android:id="@+id/keys_backup_setup_step3_copy_button"
+        style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:minWidth="200dp"
+        android:text="@string/keys_backup_setup_step3_copy_button_title" />
+
+    <Button
+        android:id="@+id/keys_backup_setup_step3_save_button"
+        style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minWidth="200dp"
+        android:text="@string/keys_backup_setup_step3_save_button_title" />
+
+    <Button
+        android:id="@+id/keys_backup_setup_step3_button"
+        style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:minWidth="200dp"
+        android:text="@string/keys_backup_setup_step3_button_title" />
+
+</LinearLayout>

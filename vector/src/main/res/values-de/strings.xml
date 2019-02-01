@@ -104,11 +104,11 @@
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
     <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
-    <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du einen Fehlerbericht senden?</string>
+    <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du das Fenster zum Senden eines Fehlerberichts öffnen?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du eine Fehlermeldung übermitteln?</string>
+    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du das Fehler-melden-Fenster öffnen?</string>
 
     <string name="send_files_in">Sende Datei nach</string>
     <string name="read_receipt">Gelesen</string>
@@ -238,7 +238,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="incoming_call">Eingehender Anruf</string>
     <string name="incoming_video_call">Eingehender Video-Anruf</string>
     <string name="incoming_voice_call">Eingehender Sprachanruf</string>
-    <string name="call_in_progress">Anruf aktiv</string>
+    <string name="call_in_progress">Anruf aktiv…</string>
 
     <string name="call_error_user_not_responding">Die Gegenseite hat den Anruf nicht angenommen.</string>
     <string name="call_error_ice_failed">Medien-Verbindung fehlgeschlagen</string>
@@ -270,7 +270,7 @@ Bitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu find
 
 Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Entschuldige… die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
+    <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Gespeichert</string>
@@ -416,7 +416,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <!-- Directory -->
     <string name="directory_search_results_title">Verzeichnis durchsuchen</string>
-    <string name="directory_searching_title">Verzeichnis wird durchsucht..</string>
+    <string name="directory_searching_title">Verzeichnis wird durchsucht…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Favorit</string>
@@ -641,8 +641,8 @@ Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüss
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys_summary">Schlüssel in lokale Datei exportieren</string>
     <string name="encryption_export_export">Exportieren</string>
-    <string name="encryption_import_enter_passphrase">Passphrase eingeben</string>
-    <string name="encryption_export_confirm_passphrase">Passphrase bestätigen</string>
+    <string name="passphrase_enter_passphrase">Passphrase eingeben</string>
+    <string name="passphrase_confirm_passphrase">Passphrase bestätigen</string>
     <string name="encryption_export_saved_as">Die Ende-zu-Ende-Raumschlüssel wurden in \'%s\' gespeichert.
 
 Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.</string>
@@ -732,7 +732,7 @@ Unbekannte Geräte:</string>
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
-    <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
+    <string name="widget_delete_message_confirmation">Soll das Widget wirklich aus diesem Raum gelöscht werden?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
@@ -784,7 +784,6 @@ Unbekannte Geräte:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Aus</string>
-    <string name="notification_on">An</string>
     <string name="notification_noisy">Laut</string>
 
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
@@ -1078,8 +1077,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="status_theme">Status.im-Thema</string>
 
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
-    <string name="encryption_export_create_passphrase">Erzeuge Passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Passphrasen müssen übereinstimmen</string>
+    <string name="passphrase_create_passphrase">Erzeuge Passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrasen müssen übereinstimmen</string>
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
 
@@ -1131,4 +1130,123 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d Schlüssel erfolgreich importiert.</string>
 
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Bitte sende einen Fehlerbericht um uns zu helfen diese(n) zu untersuchen.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Systemeinstellungen.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Benachrichtigungen sind in den Systemeinstellungen aktiviert.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notifications sind in den Systemeinstellungen deaktiviert.
+Bitte überprüfe die Systemeinstellungen.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Öffne Einstellungen</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Kontoeinstellungen.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Benachrichtigungen sind für dein Konto eingeschaltet.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Notifications sind für dein Konto deaktiviert.
+Bitte überprüfe die Kontoeinstellungen.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Aktiviere</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Geräteeinstellungen.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für dieses Gerät aktiviert.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications sind für dieses Gerät deaktiviert.
+Bitte überprüfe die Einstellungen für Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
+
+    <string name="settings_troubleshoot_test_play_services_failed">Riot benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play Dienste</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase-Token</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM-Token erfolgreich abgefragt:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Abfragen des FCM-Tokens fehlgeschlagen:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Heimserver registriert.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Heimserver registriert werden:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Benachrichtigungsdienst</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Benachrichtigungsdienst läuft.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Benachrichtigungsdienst läuft nicht.
+Versuche die Anwendung neuzustarten.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starte Dienst</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Automatischer Neustart des Benachrichtigungsdienstes</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Dienst wurde automatisch gestoppt und erneut gestartet.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Dienst konnte nicht neugestartet werden</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Starte beim Hochfahren</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Dienst wird starten, wenn das Gerät gestartet wird.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis Riot einmal geöffnet wurde.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiviere das Starten beim Hochfahren</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Überprüfe Hintergrund-Einschränkungen</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Riot deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Riot aktiviert.
+Die App wird aggressiv eingeschränkt während sie im Hintergrund ist. Dies kann Benachrichtigungen beeinflussen.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Einschränkungen deaktivieren</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Batterieoptimierung</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot wird nicht von Batterieoptimierungen beeinflusst.</string>
+    <string name="settings_notification_troubleshoot">Fehler bei Benachrichtigungen finden</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnose von Fehlern</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, damit wir und das anschauen können.</string>
+    <string name="settings_troubleshoot_test_play_services_title">Check der Play Dienste</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Dienste sind verfügbar und aktuell.</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Wenn ein Benutzer das Gerät nicht lädt und für eine Weile nicht bewegt während der Bildschirm aus ist, wechselt das Gerät in den Doze-Modus. Dieser hindert Apps daran auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot braucht eine Hintergrundverbindung um verlässliche Benachrichtigunen zu bekommen.
+Auf dem nächsten Bildschirm wirst du gefragt ob du Riot erlauben möchtest im Hintergrund zu laufen. Bitte akzeptiere.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Berechtigung gewähren</string>
+
+    <string name="account_email_error">Beim Verifizieren deiner E-Mail-Adresse trat ein Fehler auf.</string>
+
+    <string name="account_phone_number_error">Beim Verifizieren deiner Telefonnummer trat ein Fehler auf.</string>
+    <string name="account_additional_info">Weitere Information: %s</string>
+
+    <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
+
+    <string name="store_title">Riot.im - Offene Team-Zusammenarbeit</string>
+    <string name="store_short_description">Willkommen zu Riot.im: Einer neuen Welt der offenen Kommunikation!</string>
+    <string name="store_full_description">Riot.im ist eine einfache und elegante Umgebung der Zusammenarbeit, die alle Deine verschiedenen Konversationen nimmt und sie in einer einzigen App zusammenfasst.
+
+Gebaut um Gruppenchats herum lässt Riot.im dich Nachrichten, Bilder und Dateien teilen. Interagiere mit Deinen Werkzeugen und greife auf deine verschiedenen Communities zu - alles unter einer Haube. Eine Identität und Platz für alle Deine Teams: Du brauchst nicht mehr die Konten zu wechseln. Arbeite und chatte mit Personen von verschiedenen Organisationen in öffentlichen und privaten Räumen - von professionellen Projekten bis zu Schulausflügen: Riot.im wird das Zentrum all Deiner Diskussionen werden!
+
+Jetzt auch mit Ende-zu-Ende-Verschlüsselung!
+
+Die Funktionen sind unter anderem die Folgenden:
+• Teile Nachrichten, Bilder, Videos und Dateien jeder Art in Gruppen jeder Größe
+• Sprache und Video in 1:1- und Konferenzgesprächen über WebRTC
+• Ende-zu-Ende-Verschlüsselung mittels Olm (https://matrix.org/git/olm)
+• Sehe, wer Deine Nachrichten liest mit Lesebestätigungen
+• Kommuniziere mit Benutzern überall im Matrix.org-Ökosystem - nicht nur Nutzer von Riot.im!
+• Entdecke und lade Benutzer ein mittels E-Mail-Adresse
+• Beteilige dich in öffentlichen Räumen, die auch für Gäste erreichbar sein können
+• Hoch skalierbar: Unterstützt hunderte Räume mit tausenden von Benutzern
+• Volle Synchronisierung deiner Nachrichtenhistorie zwischen mehreren Geräten und Browsern
+• Fein konfigurierbare Benachrichtigungseinstellungen - synchronisiert zwischen allen Geräten
+• Endlos durchsuchbare Chat-Historie
+• Permanente Links zu Nachrichten
+• Unterstützung von RTL-Sprachen wie Arabisch
+
+Für Entwickler:
+• Riot.im ist ein Matrix-Client - gebaut auf dem offenen Standard von Matrix.org. Er erlaubt einen Austausch mit allen anderen Matrix-Kompatiblen Apps, Servern und Integrationen
+• Komplett Open-Source und der Apache Lizenz. Hol dir den Code von https://github.com/vector-im/vector-android. Pull Requests sind willkommen!
+• Einfach zu erweitern mit der offenen Matrix Client-Server API (https://matrix.org/docs/spec)
+• Betreibe deinen eigenen Server! Du kannst den Standard matrix.org-Server benutzen oder deinen eigenen Matrix-Heimserver betreiben (z.B. https://matrix.org/docs/projects/server/synapse.html)
+
+Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
+
+    <string name="video_call_in_progress">Videogespräch aktiv…</string>
+
+    <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
+Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
+Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
 </resources>

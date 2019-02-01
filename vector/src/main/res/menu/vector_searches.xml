@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.matrix.vector.activity.RoomActivity">
 
-    <item android:id="@+id/ic_action_speak_to_search"
-        android:title="@string/speak"
+    <item
+        android:id="@+id/ic_action_speak_to_search"
         android:icon="@drawable/vector_micro_green"
+        android:title="@string/speak"
         app:showAsAction="always" />
 
-    <item android:id="@+id/ic_action_clear_search"
-        android:title="@string/clear"
+    <item
+        android:id="@+id/ic_action_clear_search"
         android:icon="@drawable/vector_clear_edittext_green"
+        android:title="@string/clear"
         app:showAsAction="always" />
 </menu>

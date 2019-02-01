@@ -22,7 +22,6 @@ import im.vector.VectorApp
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
-import java.lang.Exception
 
 /**
  * Force registration of the token to HomeServer

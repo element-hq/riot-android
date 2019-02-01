@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -52,7 +53,7 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginTop="1dp"
                         android:text="@string/settings_notification_privacy_warning"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp" />
                 </RelativeLayout>
 
@@ -93,10 +94,11 @@
                         android:layout_alignStart="@+id/tv_normal_notification_privacy"
                         android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_need_permission"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp"
                         android:textStyle="italic"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <TextView
                         android:id="@+id/tv_notifications_fcm"
@@ -107,7 +109,7 @@
                         android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:layout_marginTop="10dp"
                         android:text="@string/settings_notification_privacy_fcm"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -118,7 +120,7 @@
                         android:layout_alignStart="@+id/tv_normal_notification_privacy"
                         android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_metadata"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -129,7 +131,7 @@
                         android:layout_alignStart="@+id/tv_normal_notification_privacy"
                         android:layout_alignLeft="@+id/tv_normal_notification_privacy"
                         android:text="@string/settings_notification_privacy_secure_message_content"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp" />
                 </RelativeLayout>
 
@@ -159,7 +161,7 @@
                         android:layout_alignStart="@+id/tv_power_saving_options"
                         android:layout_alignLeft="@+id/tv_power_saving_options"
                         android:text="@string/settings_notification_privacy_no_permission"
-                        android:textColor="@color/default_text_light_color_dark"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp"
                         android:textStyle="italic" />
 
@@ -201,7 +203,7 @@
                             android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:layout_marginTop="3dp"
                             android:text="@string/settings_notification_privacy_fcm"
-                            android:textColor="@color/default_text_light_color_dark"
+                            android:textColor="?android:attr/textColorSecondary"
                             android:textSize="13sp" />
 
                         <TextView
@@ -212,7 +214,7 @@
                             android:layout_alignStart="@+id/tv_notification_low_detail"
                             android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:text="@string/settings_notification_privacy_metadata"
-                            android:textColor="@color/default_text_light_color_dark"
+                            android:textColor="?android:attr/textColorSecondary"
                             android:textSize="13sp" />
 
                         <TextView
@@ -223,7 +225,7 @@
                             android:layout_alignStart="@+id/tv_notification_low_detail"
                             android:layout_alignLeft="@+id/tv_notification_low_detail"
                             android:text="@string/settings_notification_privacy_message_content_not_shown"
-                            android:textColor="@color/default_text_light_color_dark"
+                            android:textColor="?android:attr/textColorSecondary"
                             android:textSize="13sp" />
                     </RelativeLayout>
 
@@ -265,7 +267,7 @@
                             android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:layout_marginTop="3dp"
                             android:text="@string/settings_notification_privacy_fcm"
-                            android:textColor="@color/default_text_light_color_dark"
+                            android:textColor="?android:attr/textColorSecondary"
                             android:textSize="13sp" />
 
                         <TextView
@@ -276,7 +278,7 @@
                             android:layout_alignStart="@+id/tv_notification_reduce_privacy"
                             android:layout_alignLeft="@+id/tv_notification_reduce_privacy"
                             android:text="@string/settings_notification_privacy_nosecure_message_content"
-                            android:textColor="@color/default_text_light_color_dark"
+                            android:textColor="?android:attr/textColorSecondary"
                             android:textSize="13sp" />
                     </RelativeLayout>
                 </RelativeLayout>

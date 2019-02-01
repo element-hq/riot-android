@@ -56,7 +56,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i krypterte rom</string>
-    <string name="send_anyway">Send Likevel</string>
+    <string name="send_anyway"></string>
     <string name="or">eller</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>
@@ -759,8 +759,8 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_room_keys">Hent romnyklar ut</string>
     <string name="encryption_export_room_keys_summary">Hent nyklane ut til ei lokal fil</string>
     <string name="encryption_export_export">Hent ut</string>
-    <string name="encryption_import_enter_passphrase">Skriv passetning inn</string>
-    <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
+    <string name="passphrase_enter_passphrase">Skriv passetning inn</string>
+    <string name="passphrase_confirm_passphrase">Stadfest passetninga</string>
     <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
 
 Åtvaring: fila kan verta sletta vis æppen avinstallerast.</string>
@@ -885,7 +885,6 @@ Ukjende einingar:</string>
     <string name="command_description_clear_scalar_token">For å retta opp i Matrix-Æppadministrering</string>
 
     <string name="notification_off">Av</string>
-    <string name="notification_on">På</string>
     <string name="notification_noisy">Bråket</string>
 
     <string name="encrypted_message">Kryptert melding</string>
@@ -996,5 +995,12 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
     <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
+
+    <string name="status_theme">Status.im Tema</string>
+
+    <string name="call_anyway" />
+    <string name="accept">Aksepter</string>
+
+    <string name="dialog_title_error">Feil</string>
 
 </resources>

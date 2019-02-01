@@ -24,7 +24,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,9 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
@@ -58,7 +55,7 @@ import java.util.TimerTask;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.JitsiCallActivity;
 import im.vector.activity.VectorCallViewActivity;
-import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
@@ -66,10 +63,12 @@ import im.vector.analytics.PiwikAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
+import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
@@ -77,15 +76,13 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.VectorMarkdownParser;
+import im.vector.util.VectorUtils;
 
 /**
  * The main application injection point
  */
 public class VectorApp extends MultiDexApplication {
     private static final String LOG_TAG = VectorApp.class.getSimpleName();
-
-    // key to save the crash status
-    private static final String PREFS_CRASH_KEY = "PREFS_CRASH_KEY";
 
     /**
      * The current instance.
@@ -187,8 +184,14 @@ public class VectorApp extends MultiDexApplication {
             Stetho.initializeWithDefaults(this);
         }
 
+        VectorUtils.initAvatarColors(this);
+
+        NotificationUtils.INSTANCE.createNotificationChannels(this);
+
         // init the REST client
         MXSession.initUserAgent(this, BuildConfig.FLAVOR_DESCRIPTION);
+
+        VectorUncaughtExceptionHandler.INSTANCE.activate();
 
         instance = this;
         mCallsManager = new CallsManager(this);
@@ -205,6 +208,9 @@ public class VectorApp extends MultiDexApplication {
         } else {
             SDK_VERSION_STRING = "";
         }
+
+        VectorUncaughtExceptionHandler.INSTANCE.setVersions(VECTOR_VERSION_STRING, SDK_VERSION_STRING);
+
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
@@ -598,7 +604,7 @@ public class VectorApp extends MultiDexApplication {
     private void restartActivity(Activity activity) {
         // avoid restarting activities when it is not required
         // some of them has no text
-        if (!(activity instanceof VectorMediasPickerActivity)
+        if (!(activity instanceof VectorMediaPickerActivity)
                 && !(activity instanceof VectorCallViewActivity)
                 && !(activity instanceof JitsiCallActivity)
                 && !(activity instanceof WidgetActivity)) {
@@ -719,27 +725,6 @@ public class VectorApp extends MultiDexApplication {
         }
 
         return isSyncing;
-    }
-
-    /**
-     * Tells if the application crashed
-     *
-     * @return true if the application crashed
-     */
-    public boolean didAppCrash() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance());
-        return preferences.getBoolean(PREFS_CRASH_KEY, false);
-    }
-
-
-    /**
-     * Clear the crash status
-     */
-    public void clearAppCrashStatus() {
-        PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance())
-                .edit()
-                .remove(PREFS_CRASH_KEY)
-                .apply();
     }
 
     //==============================================================================================================

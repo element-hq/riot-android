@@ -38,11 +38,11 @@
     <string name="invite">دعوت</string>
     <string name="offline">آفلاین</string>
 
-    <string name="action_exit">خروج</string>
-    <string name="action_sign_out">خروج</string>
+    <string name="action_exit">بستن برنامه</string>
+    <string name="action_sign_out">خروج از حساب</string>
     <string name="action_voice_call">تماس صوتی</string>
     <string name="action_video_call">تماس تصویری</string>
-    <string name="action_global_search">جستجوی جهانی</string>
+    <string name="action_global_search">جستجوی عمومی</string>
     <string name="action_mark_all_as_read">همه را به عنوان خوانده شده علامت بزن</string>
     <string name="action_quick_reply">پاسخ سریع</string>
     <string name="action_open">باز کن</string>
@@ -57,7 +57,7 @@
     <string name="low_priority_header">اولویت کم</string>
 
     <string name="direct_chats_header">گفتگو</string>
-    <string name="no_conversation_placeholder">هیچ مکالمه‌ای وجود ندارد</string>
+    <string name="no_conversation_placeholder">مکالمه‌ای نیست</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">%d کاربر</item>
@@ -72,7 +72,7 @@
 
     <string name="join_room">عضویت در اتاق</string>
     <string name="username">نام کاربری</string>
-    <string name="create_account">ثبت نام</string>
+    <string name="create_account">ثبت‌نام</string>
     <string name="login">ورود</string>
     <string name="logout">خروج</string>
     <string name="search">جستجو</string>
@@ -81,9 +81,9 @@
     <string name="start_voice_call">شروع تماس صوتی</string>
     <string name="start_video_call">شروع تماس تصویری</string>
 
-    <string name="option_take_photo_video">عکس یا ویدیو بگیرید</string>
+    <string name="option_take_photo_video">عکس یا فیلم بگیرید</string>
     <string name="option_take_photo">عکس گرفتن</string>
-    <string name="option_take_video">ویدیو بگیرید</string>
+    <string name="option_take_video">فیلم بگیرید</string>
 
     <string name="auth_login">ورود</string>
     <string name="auth_register">ثبت نام</string>
@@ -122,11 +122,107 @@
     <string name="compression_opt_list_medium">متوسط</string>
     <string name="compression_opt_list_small">کوچک</string>
 
-    <string name="attachment_cancel_download">دانلود لغو شود؟</string>
+    <string name="attachment_cancel_download">بارگزاری لغو شود؟</string>
     <string name="attachment_cancel_upload">آپلود لغو شود؟</string>
     <string name="attachment_remaining_time_seconds">%d ثانیه</string>
     <string name="yesterday">دیروز</string>
     <string name="today">امروز</string>
 
     <string name="room_info_room_name">نام اتاق</string>
+    <string name="notification_sync_in_progress">همگام‌سازی</string>
+    <string name="call_anyway">به هر حال تماس بگیر</string>
+    <string name="missing_permissions_title_to_start_conf_call">نمی‌توان تماس را شروع کرد</string>
+    <string name="cannot_start_call">نمی‌توان تماس را شروع کرد، لطفاً بعداً تلاش نمایید</string>
+    <string name="accept">پذیرفتن</string>
+
+    <string name="actions">عملیات</string>
+    <string name="action_sign_out_confirmation">برای حفظ امنیت شما، خروج از حساب باعث حذف کلیدهای رمزنگاری شما می‌شود و در نتیجه حتی پس از ورود دوباره، پیام‌های رمز قبلی شما برایتان قابل مشاهده نخواهد بود.
+برای ذخیره‌سازی پیام‌ها، پیش از خروج از حساب از آن‌ها توسط همین برنامه پشتیبان بگیرید.</string>
+    <string name="dialog_title_confirmation">تایید</string>
+    <string name="dialog_title_error">خطا</string>
+
+    <string name="bottom_action_favourites">پسندیده‌ها</string>
+    <string name="bottom_action_people">افراد</string>
+    <string name="bottom_action_groups">جامعه‌ها</string>
+
+    <string name="home_filter_placeholder_home">جستجوی اتاق‌ها</string>
+    <string name="home_filter_placeholder_favorites">جستجوی پسندیده‌ها</string>
+    <string name="home_filter_placeholder_people">جستجوی افراد</string>
+    <string name="home_filter_placeholder_rooms">جستجوی اتاق‌ها</string>
+    <string name="home_filter_placeholder_groups">جستجوی جامعه‌ها</string>
+
+    <string name="invitations_header">دعوت‌ها</string>
+    <string name="system_alerts_header">هشدارهای سیستمی</string>
+
+    <string name="local_address_book_header">مخاطبین من</string>
+    <string name="user_directory_header">فهرست کاربران</string>
+    <string name="matrix_only_filter">فقط نمایش مخاطبین ماتریکس</string>
+    <string name="no_contact_access_placeholder">شما اجازه‌ی دسترسی به مخاطبین را به Riot نداده‌اید</string>
+    <string name="no_result_placeholder">نتیجه‌ای نیست</string>
+
+    <string name="rooms_directory_header">فهرست اتاق‌ها</string>
+    <string name="no_room_placeholder">اتاقی نیست</string>
+    <string name="no_public_room_placeholder">اتاق عمومی در دسترس نیست</string>
+    <string name="groups_header">جامعه‌ها</string>
+    <string name="send_bug_report_include_logs">ارسال رخدادنگارها</string>
+    <string name="send_bug_report_include_crash_logs">ارسال رخدادنگارهای خطا</string>
+    <string name="send_bug_report_include_screenshot">ارسال تصویر صفحه</string>
+    <string name="send_bug_report_description">لطفاً اشکال پیش آمده را توصیف کنید. شما چه کاری انجام دادید؟ انتظار داشتید چه اتفاقی بیفتد؟ چه اتفاقی رخ داد؟</string>
+    <string name="send_bug_report_description_in_english">ترجیحاً توضیحات را به زبان انگلیسی بنویسید.</string>
+    <string name="send_bug_report_placeholder">مشکل خود را اینجا شرح دهید</string>
+    <string name="send_bug_report_logs_description">برای کمک به اشکال‌یابی، رخدادنگارهای مربوط به این دستگاه به همراه گزارش اشکال ارسال خواهند شد. البته گزارش اشکال شما و پیوست‌های آن به صورت عمومی منتشر نمی‌شوند. می‌توانید با برداشتن علامت گزینه‌های زیر، اطلاعات کمتری را ارسال نمایید:</string>
+    <string name="send_bug_report_alert_message">به نظر می‌رسد دارید گوشی خود را به دلیل کار نکردن تکان می‌دهید! آیا می‌خواهید یک اشکال در برنامه گزارش نمایید؟</string>
+    <string name="send_bug_report_app_crashed">برنامه آخرین بار با خطا بسته شد. آیا می‌خواهید یک اشکال در برنامه گزارش نمایید؟</string>
+    <string name="send_bug_report_rage_shake">تکان دادن محکم گوشی برای گزارش اشکال</string>
+
+    <string name="send_bug_report_sent">گزارش اشکال با موفقیت ارسال شد</string>
+    <string name="send_bug_report_failed">امکان ارسال گزارش اشکال وجود نداشت، دوباره تلاش کنید (%s)</string>
+    <string name="send_bug_report_progress">پیشرفت (%s%%)</string>
+
+    <string name="send_files_in">ارسال در</string>
+    <string name="hs_url">آدرس کارگزار پیام‌رسانی</string>
+    <string name="identity_url">آدرس کارگزار احراز هویت</string>
+    <string name="option_send_voice">ارسال صدا</string>
+
+    <string name="start_new_chat_prompt_msg">آیا شروع یک گپ جدید با %s را تایید می‌کنید؟</string>
+    <string name="start_voice_call_prompt_msg">آیا برقراری تماس صوتی را تایید می‌کنید؟</string>
+    <string name="start_video_call_prompt_msg">آیا برقراری تماس تصویری را تایید می‌کنید؟</string>
+
+    <string name="option_send_files">ارسال فایل‌ها</string>
+    <string name="option_send_sticker">ارسال استیکر</string>
+    <string name="no_sticker_application_dialog_content">شما بسته‌ی استیکر فعالی ندارید.
+
+تمایل دارید بسته‌ی استیکر جدید اضافه کنید؟</string>
+
+    <string name="go_on_with">ادامه با…</string>
+    <string name="error_no_external_application_found">متاسفانه برنامه‌ای روی گوشی شما برای انجام این کار پیدا نشد.</string>
+
+    <string name="auth_return_to_login">بازگشت به صفحه ورود</string>
+    <string name="auth_missing_password">گذرواژه وارد نشده است</string>
+    <string name="auth_missing_phone">شماره تلفن وارد نشده است</string>
+    <string name="auth_missing_email">آدرس ایمیل وارد نشده است</string>
+    <string name="auth_invalid_token">توکن نامعتبر است</string>
+    <string name="auth_missing_email_or_phone">آدرس ایمیل یا شماره تلفن وارد نشده است</string>
+    <string name="auth_email_already_defined">این آدرس ایمیل قبلاً ثبت شده است.</string>
+    <string name="auth_home_server">کارگزار پیام‌رسانی:</string>
+    <string name="auth_identity_server">کارگزار احراز هویت:</string>
+    <string name="login_error_unable_login">امکان ورود وجود ندارد</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="room_info_room_topic">موضوع اتاق</string>
+
+    <string name="settings_call_category">تماس‌ها</string>
+    <string name="call">تماس</string>
+    <string name="media_slider_saved">ذخیره شد</string>
+    <string name="yes">بله</string>
+    <string name="no">نه</string>
+    <string name="media_slider_saved_message">بارگزاری شود؟</string>
+    <string name="_continue">ادامه</string>
+
+    <string name="remove">حذف</string>
+    <string name="join">پیوستن</string>
+    <string name="preview">پیش‌نمایش</string>
+    <string name="reject">رد کردن</string>
+
+    <string name="list_members">اعضای لیست</string>
 </resources>

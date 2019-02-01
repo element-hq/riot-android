@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="74dp">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/filtered_list_actions"
         android:layout_width="55dp"
         android:layout_height="match_parent"
@@ -14,25 +14,21 @@
         android:background="@color/vector_fuchsia_color"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/filtered_list_delete_action"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_material_eject_white" />
 
-            <ImageView
-                android:id="@+id/filtered_list_delete_action"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_material_eject_white" />
-
-        </RelativeLayout>
-    </LinearLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/filtered_list_cell"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/vctr_riot_primary_background_color">
+        android:background="?android:attr/colorBackground"
+        tools:layout_marginEnd="55dp">
 
         <RelativeLayout
             android:id="@+id/filtered_list_actions_list"
@@ -85,8 +81,9 @@
             android:layout_marginTop="-7dp"
             android:layout_marginEnd="-7dp"
             android:layout_marginRight="-7dp"
-            android:src="@drawable/logo"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:src="@tools:sample/avatars"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/filtered_list_avatar_badge"
@@ -116,7 +113,6 @@
             android:layout_toEndOf="@id/filtered_list_avatar"
             android:layout_toRightOf="@id/filtered_list_avatar"
             android:singleLine="true"
-            android:textColor="?attr/vctr_default_text_dark_color"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="A member name" />
@@ -134,7 +130,7 @@
             android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="?attr/vctr_default_text_light_color"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             tools:text="A member status" />
 

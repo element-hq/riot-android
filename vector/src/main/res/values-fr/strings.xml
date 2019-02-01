@@ -166,7 +166,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="incoming_call">Appel entrant</string>
     <string name="incoming_video_call">Appel vidéo entrant</string>
     <string name="incoming_voice_call">Appel vocal entrant</string>
-    <string name="call_in_progress">Appel en cours</string>
+    <string name="call_in_progress">Appel en cours…</string>
 
     <string name="call_error_ice_failed">Échec de la connexion</string>
     <string name="call_error_camera_init_failed">Impossible d\'initialiser l\'appareil photo</string>
@@ -404,8 +404,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
-    <string name="encryption_import_enter_passphrase">Saisir la phrase secrète</string>
-    <string name="encryption_export_confirm_passphrase">Confirmer la phrase secrète</string>
+    <string name="passphrase_enter_passphrase">Saisir la phrase secrète</string>
+    <string name="passphrase_confirm_passphrase">Confirmer la phrase secrète</string>
     <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
     <string name="encryption_import_import">Importer</string>
@@ -438,7 +438,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="send_bug_report_description">Veuillez décrire l\'erreur. Qu\'avez-vous fait ? Quel était le comportement attendu ? Que s\'est-il réellement passé ?</string>
     <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d\'erreur. Ce rapport d\'erreur, y compris les journaux et la capture d\'écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décochez :</string>
     <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec frustration. Souhaitez-vous ouvrir l\'écran pour soumettre un rapport d\'erreur ?</string>
-    <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous soumettre un rapport d’erreur ?</string>
+    <string name="send_bug_report_app_crashed">L\'application s\'est arrêtée anormalement la dernière fois. Souhaitez-vous ouvrir l\'écran de rapport d’anomalie ?</string>
 
     <string name="send_bug_report_sent">Le rapport d\'erreur a bien été envoyé</string>
     <string name="send_bug_report_failed">L\'envoi du rapport d\'erreur a échoué (%s)</string>
@@ -512,7 +512,7 @@ Veuillez autoriser l\'accès dans la prochaine fenêtre contextuelle pour décou
 
 Autorisez-vous Riot à accéder à vos contacts ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Désolé… L\'action n\'a pas été réalisée, faute d\'autorisations</string>
+    <string name="permissions_action_not_performed_missing_permissions">Désolé. L\'action n\'a pas été réalisée, faute d\'autorisations</string>
 
     <string name="room_jump_to_first_unread">Aller au premier message non lu.</string>
 
@@ -702,7 +702,7 @@ Appareils inconnus :</string>
     <string name="event_formatter_widget_added">%1$s ajouté par %2$s</string>
     <string name="event_formatter_widget_removed">%1$s supprimé par %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
-    <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer ce widget ?</string>
+    <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer le widget de ce salon ?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
@@ -744,7 +744,6 @@ Appareils inconnus :</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Désactivé</string>
-    <string name="notification_on">Activé</string>
     <string name="notification_noisy">Notification sonore</string>
 
     <string name="encrypted_message">Message chiffré</string>
@@ -1038,8 +1037,8 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">Veuillez créer une phrase secrète pour chiffrer les clés exportées. Vous devrez saisir cette même phrase secrète afin de pouvoir importer les clés.</string>
-    <string name="encryption_export_create_passphrase">Créer la phrase secrète</string>
-    <string name="encryption_export_passphrase_dont_match">Les phrases secrètes doivent concorder</string>
+    <string name="passphrase_create_passphrase">Créer la phrase secrète</string>
+    <string name="passphrase_passphrase_does_not_match">Les phrases secrètes doivent concorder</string>
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
 
@@ -1180,18 +1179,18 @@ Sur l\'écran suivant on vous demandera d\'autoriser Riot à toujours fonctionne
 
 Construit autour de salons de discussion en groupe, Riot.im vous permet de partager des messages, des images, des vidéos et des fichiers — interagissez avec vos outils et accédez à toutes vos communautés sous un même toit. Une seule identité et un seul lieu pour toutes vos équipes : pas besoin de changer de compte, travaillez et discutez avec des personnes de différentes organisations dans des salons privés ou publics : des projets professionnels aux voyages scolaires, Riot.im deviendra le centre de toutes vos discussions !
 
-Maintenant avec le chiffrement bout-à-bout !
+Maintenant avec le chiffrement de bout en bout !
 
 Les fonctionnalités comprennent :
 
 • Partage instantané de messages, d’images, de vidéos et de fichiers de tous types avec des groupes de toutes les tailles
 • Appels voix et vidéo personnels et en conférence via WebRTC
-• Chiffrement bout-à-bout utilisant Olm (https://matrix.org/git/olm)
+• Chiffrement de bout en bout utilisant Olm (https://matrix.org/git/olm)
 • Voyez qui a lu vos messages avec les accusés de lecture
 • Communiquez avec des utilisateurs de tout l’écosystème Matrix.org — pas seulement les utilisateurs de Riot.im !
 • Découvrez et invitez les utilisateurs par adresse e-mail
 • Participez à des salons publics accessibles aux invités
-• Hautement évolutif — supporte des centaines de salons et des milliers d\'utilisateurs
+• Hautement évolutif — supporte des centaines de salons et des milliers d’utilisateurs
 • Synchronisation complète de l’historique des messages entre plusieurs appareils et navigateurs
 • Paramètres de notification configurables précisément et synchronisés entre les appareils
 • Recherche infinie dans l’historique de discussion
@@ -1207,4 +1206,9 @@ Pour les développeurs :
 
 Découvrez une collaboration libre et vraiment efficace avec Riot.im !</string>
 
+    <string name="video_call_in_progress">Appel vidéo en cours…</string>
+
+    <string name="store_whats_new">Nous sommes constamment en train de modifier et d\'améliorer Riot.im.
+Le journal des modifications peut être consulté ici : %1$s.
+Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
 </resources>

@@ -21,9 +21,7 @@ package im.vector.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 

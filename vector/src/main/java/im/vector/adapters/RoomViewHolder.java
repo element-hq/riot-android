@@ -139,11 +139,6 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         int highlightCount;
         int notificationCount;
 
-        // Setup colors
-        int defaultColor = ThemeUtils.INSTANCE.getColor(context, R.attr.vctr_default_icon_tint_color);
-        int fuchsiaColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
-        int silverColor = ContextCompat.getColor(context, R.color.vector_silver_color);
-
         highlightCount = roomSummary.getHighlightCount();
         notificationCount = roomSummary.getNotificationCount();
 
@@ -153,12 +148,13 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         }
 
         int bingUnreadColor;
+
         if (isInvitation || (0 != highlightCount)) {
-            bingUnreadColor = fuchsiaColor;
+            bingUnreadColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         } else if (0 != notificationCount) {
-            bingUnreadColor = defaultColor;
+            bingUnreadColor = ThemeUtils.INSTANCE.getColor(context, R.attr.colorAccent);
         } else if (0 != unreadMsgCount) {
-            bingUnreadColor = silverColor;
+            bingUnreadColor = ThemeUtils.INSTANCE.getColor(context, R.attr.vctr_unread_room_indent_color);
         } else {
             bingUnreadColor = Color.TRANSPARENT;
         }

@@ -152,7 +152,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
-        mPatternToSearchEditText.setText(isFirstCreation() ? null:  getSavedInstanceState().getString(KEY_STATE_SEARCH_PATTERN, null));
+        mPatternToSearchEditText.setText(isFirstCreation() ? null : getSavedInstanceState().getString(KEY_STATE_SEARCH_PATTERN, null));
     }
 
     @Override

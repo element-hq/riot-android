@@ -41,7 +41,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
     <string name="device_information">Информация об устройстве</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
-    <string name="send_anyway">Отправить все равно</string>
+    <string name="send_anyway">Все равно отправить</string>
     <string name="or">или</string>
     <string name="invite">Приглашение</string>
 
@@ -103,11 +103,11 @@
     <string name="send_bug_report_include_logs">Отправить логи</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
     <string name="send_bug_report_include_screenshot">Отправить скриншот</string>
-    <string name="send_bug_report">Отчет об ошибке</string>
+    <string name="send_bug_report">Сообщить об ошибке</string>
     <string name="send_bug_report_description">Пожалуйста опишите ошибку. Что вы делали? Что вы ожидали получить? Что произошло?</string>
     <string name="send_bug_report_placeholder">Опишите проблему здесь</string>
     <string name="send_bug_report_logs_description">Для диагностики проблемы журналы работы приложения будут приложены к отчету об ошибке. Этот отчет, включая журналы и скриншот, не будет доступен публично. Если вы предпочитаете отправить только текст, то снимите отметку:</string>
-    <string name="send_bug_report_alert_message">Хотите отправить отчет об ошибке?</string>
+    <string name="send_bug_report_alert_message">Похоже вы разочарованы, раз трясёте телефоном. Хотите сообщить об ошибке?</string>
     <string name="send_bug_report_sent">Отчет об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчета об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
@@ -137,20 +137,22 @@
     <string name="auth_register">Регистрация</string>
     <string name="auth_submit">Отправить</string>
     <string name="auth_skip">Пропустить</string>
-    <string name="auth_send_reset_email">Сбросить</string>
+    <string name="auth_send_reset_email">Выслать письмо для сброса</string>
     <string name="auth_return_to_login">Вернуться на экран входа</string>
-    <string name="auth_user_id_placeholder">Email или логин</string>
+    <string name="auth_user_id_placeholder">Электронная почта или логин</string>
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
     <string name="auth_user_name_placeholder">Логин</string>
-    <string name="auth_add_email_message">Добавьте email к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
+    <string name="auth_add_email_message">Добавьте адрес электронной почты к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
     <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
-    <string name="auth_add_email_phone_message">"Добавьте email и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.\n\nEmail также позволит вам при необходимости восстановить пароль."</string>
+    <string name="auth_add_email_phone_message">Добавьте электронную почту и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
+
+Электронная почта также позволит вам при необходимости восстановить пароль.</string>
     <string name="auth_add_email_and_phone_message">Добавьте email и телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
 
 Email также позволит вам при необходимости восстановить пароль.</string>
-    <string name="auth_email_placeholder">Email адрес</string>
-    <string name="auth_opt_email_placeholder">Email адрес (дополнительный)</string>
+    <string name="auth_email_placeholder">Адрес электронной почты</string>
+    <string name="auth_opt_email_placeholder">Адрес электронной почты (не обязательно)</string>
     <string name="auth_phone_number_placeholder">Номер телефона</string>
     <string name="auth_opt_phone_number_placeholder">Номер телефона (дополнительный)</string>
     <string name="auth_repeat_password_placeholder">Повтор пароля</string>
@@ -159,9 +161,9 @@ Email также позволит вам при необходимости во�
     <string name="auth_invalid_user_name">Логин может содержать только буквы, цифры, точки, дефис и подчеркивание</string>
     <string name="auth_invalid_password">Короткий пароль (минимум 6 символов)</string>
     <string name="auth_missing_password">Отсутствует пароль</string>
-    <string name="auth_invalid_email">Похоже, что введен некорректный email</string>
+    <string name="auth_invalid_email">Это не похоже на адрес электронной почты</string>
     <string name="auth_invalid_phone">Введен некорректный номер телефона</string>
-    <string name="auth_email_already_defined">Этот email уже используется.</string>
+    <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_missing_email">Отсутствует email</string>
     <string name="auth_missing_phone">Отстутсвует номер телефона</string>
     <string name="auth_missing_email_or_phone">Отсутствует номер телефона или email</string>
@@ -178,10 +180,10 @@ Email также позволит вам при необходимости во�
     <string name="auth_home_server">Сервер:</string>
     <string name="auth_identity_server">Сервер идентификации:</string>
     <string name="auth_reset_password_next_step_button">Я проверил мой email адрес</string>
-    <string name="auth_reset_password_message">Для сброса пароля введите привязанный к учетной записи email:</string>
-    <string name="auth_reset_password_missing_email">Должен быть введен привязанный к учетной записи email.</string>
+    <string name="auth_reset_password_message">Для сброса пароля введите email привязанный к учетной записи:</string>
+    <string name="auth_reset_password_missing_email">Должен быть введен email привязанный к учетной записи.</string>
     <string name="auth_reset_password_missing_password">Должен быть введен новый пароль.</string>
-    <string name="auth_reset_password_email_validation_message">На адрес %s было отправлено письмо. После перехода по ссыдке в письме нажмите ниже.</string>
+    <string name="auth_reset_password_email_validation_message">На адрес %s было отправлено письмо. После перехода по ссылке в письме, нажмите ниже.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить email: убедитесь, что вы перешли по присланной ссылке</string>
     <string name="auth_reset_password_success_message">Ваш пароль сброшен.
 
@@ -235,14 +237,14 @@ Email также позволит вам при необходимости во�
     <string name="room_info_room_topic">Тема комнаты</string>
 
     <!-- call string -->
-    <string name="call_connected">Вызов соеденен</string>
+    <string name="call_connected">Вызов соединён</string>
     <string name="call_connecting">Устанавливается соединение…</string>
     <string name="call_ended">Вызов закончен</string>
     <string name="call_ring">Звонок…</string>
     <string name="incoming_call">Входящий вызов</string>
     <string name="incoming_video_call">Входящий видеовызов</string>
     <string name="incoming_voice_call">Входящий голосовой вызов</string>
-    <string name="call_in_progress">Выполняется вызов</string>
+    <string name="call_in_progress">Идёт разговор…</string>
 
     <string name="call_error_user_not_responding">Вызываемый абонент не отвечает.</string>
     <string name="call_error_ice_failed">Медиавызов не удался</string>
@@ -263,14 +265,14 @@ Email также позволит вам при необходимости во�
     <string name="permissions_rationale_msg_camera_and_audio">Riot необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 
 Пожалуйста дайте разрешение в следующем окне для звонка.</string>
-    <string name="permissions_rationale_msg_contacts">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_rationale_msg_contacts">Райоту необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
-Пожалуйста разрешите доступ в следующем окне, чтобы Ваши контакты были доступны в приложении.</string>
+Пожалуйста разрешите доступ в следующем окне, чтобы ваши контакты были доступны в приложении.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру.
 
 Разрешить Riot доступ к контактам?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Извините.. Действие не выполнено из-зо недостаточных разрешений</string>
+    <string name="permissions_action_not_performed_missing_permissions">Извините. Действие не выполнено из-за недостаточных разрешений</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Сохранено</string>
@@ -420,7 +422,7 @@ Email также позволит вам при необходимости во�
 
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
-    <string name="directory_searching_title">Поиск в каталоге..</string>
+    <string name="directory_searching_title">Поиск в каталоге…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Избранное</string>
@@ -446,7 +448,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_add_email_address">Добавить email</string>
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Добавить телефон</string>
-    <string name="settings_app_info_link_summary">Экран системной информации приложения</string>
+    <string name="settings_app_info_link_summary">Системные настройки приложения.</string>
     <string name="settings_app_info_link_title">Сведения о приложении</string>
 
     <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
@@ -455,14 +457,14 @@ Email также позволит вам при необходимости во�
 
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
-    <string name="settings_invited_to_room">Приглашения в чаты</string>
+    <string name="settings_invited_to_room">Когда меня приглашают в комнату</string>
     <string name="settings_call_invitations">Вызовы</string>
     <string name="settings_messages_sent_by_bot">Сообщения от бота</string>
 
     <string name="settings_background_sync">Синхронизация</string>
     <string name="settings_enable_background_sync">Включить фоновую синхронизацию</string>
     <string name="settings_set_sync_timeout">Таймаут синхронизации</string>
-    <string name="settings_set_sync_delay">Задержка между запросами синхронизации</string>
+    <string name="settings_set_sync_delay">Задержка между запросами</string>
     <string name="settings_second">секунда</string>
     <string name="settings_seconds">секунд</string>
 
@@ -507,18 +509,18 @@ Email также позволит вам при необходимости во�
     <string name="settings_identity_server">Сервер идентификации</string>
 
     <string name="account_email_validation_title">Ожидается подтверждение</string>
-    <string name="account_email_validation_message">Проверьте свой email и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
-    <string name="account_email_validation_error">Не удалось проверить адрес электронной почты. Проверьте свою электронную почту и нажмите на содержащуюся ссылку. Когда это будет сделано, нажмите Продолжить</string>
+    <string name="account_email_validation_message">Проверьте электронную почту и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
+    <string name="account_email_validation_error">Не удалось подтвердить адрес электронной почты. Проверьте электронную почту и нажмите на содержащуюся ссылку. После этого нажмите продолжить.</string>
 
-    <string name="account_email_already_used_error">Этот адрес электронной почты уже занят</string>
-    <string name="account_email_not_found_error">Не удалось отправить сообщение электронной почты: этот адрес email не был найден</string>
-    <string name="account_phone_number_already_used_error">Этот номер телефона уже используется</string>
+    <string name="account_email_already_used_error">Этот адрес электронной почты уже занят.</string>
+    <string name="account_email_not_found_error">Такой адрес электронной почты не найден.</string>
+    <string name="account_phone_number_already_used_error">Этот номер телефона уже используется.</string>
 
     <string name="settings_change_password">Смена пароля</string>
     <string name="settings_old_password">Cтарый пароль</string>
     <string name="settings_new_password">Новый пароль</string>
     <string name="settings_confirm_password">Подтверждение пароля</string>
-    <string name="settings_fail_to_update_password">Ошибка смены пароля</string>
+    <string name="settings_fail_to_update_password">Не удалось обновить пароль</string>
     <string name="settings_password_updated">Пароль был обновлен</string>
     <string name="settings_unignore_user">Отображать сообщения пользователя %s?
 
@@ -648,8 +650,8 @@ Email также позволит вам при необходимости во�
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
-    <string name="encryption_import_enter_passphrase">Введите пароль</string>
-    <string name="encryption_export_confirm_passphrase">Подтвердите пароль</string>
+    <string name="passphrase_enter_passphrase">Введите пароль</string>
+    <string name="passphrase_confirm_passphrase">Подтвердите пароль</string>
     <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
 
 Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
@@ -659,7 +661,7 @@ Email также позволит вам при необходимости во�
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным устройствам</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным устройствам.</string>
 
     <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
@@ -669,7 +671,7 @@ Email также позволит вам при необходимости во�
     <string name="encryption_information_none">ничего</string>
 
     <string name="encryption_information_verify">Подтвердить</string>
-    <string name="encryption_information_unverify">Отменить</string>
+    <string name="encryption_information_unverify">Отменить подтверждение</string>
     <string name="encryption_information_block">Блокировать</string>
     <string name="encryption_information_unblock">Разрешить</string>
 
@@ -703,11 +705,11 @@ Email также позволит вам при необходимости во�
     <!-- historical -->
     <string name="historical_placeholder">Поиск в истории</string>
     <string name="settings_user_interface">Пользовательский интерфейс</string>
-    <string name="settings_interface_language">Язык интерфейса</string>
+    <string name="settings_interface_language">Язык</string>
     <string name="settings_select_language">Выберите язык</string>
 
     <string name="settings_start_on_boot">Запускать при загрузке</string>
-    <string name="settings_always_show_timestamps">Всегда показывать временные метки сообщений</string>
+    <string name="settings_always_show_timestamps">Показывать метки времени для всех сообщений</string>
 
     <string name="media_saving_period_3_days">3 дня</string>
     <string name="media_saving_period_1_week">1 неделя</string>
@@ -738,14 +740,14 @@ Email также позволит вам при необходимости во�
     <string name="black_them">Черная тема</string>
 
     <string name="settings_notification_ringtone">Звук уведомлений</string>
-    <string name="settings_12_24_timestamps">Показывать временные метки в 12-часовом формате (например 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Показывать метки времени в 12-часовом формате</string>
     <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
     <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
     <string name="widget_creation_failure">Создание виджета не удалось</string>
     <string name="settings_labs_create_conference_with_jitsi">Осуществлять конференц звонки через Jitsi</string>
-    <string name="widget_delete_message_confirmation">Вы уверены, что хотите удалить виджет?</string>
+    <string name="widget_delete_message_confirmation">Вы уверены, что хотите удалить виджет из этой комнаты?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Не удалось создать виджет.</string>
@@ -793,7 +795,6 @@ Email также позволит вам при необходимости во�
 
     <!-- notification statuses -->
     <string name="notification_off">Выкл</string>
-    <string name="notification_on">Вкл</string>
     <string name="notification_noisy">Громко</string>
 
     <string name="encrypted_message">Зашифрованное сообщение</string>
@@ -802,7 +803,7 @@ Email также позволит вам при необходимости во�
 
     <string name="loading">Загрузка…</string>
 
-    <string name="action_exit">Закрыть</string>
+    <string name="action_exit">"Закрыть  приложение"</string>
     <string name="bottom_action_groups">Сообщества</string>
 
     <string name="home_filter_placeholder_groups">Поиск сообществ</string>
@@ -826,7 +827,7 @@ Email также позволит вам при необходимости во�
     <string name="room_settings_add_homescreen_shortcut">Добавить ярлык на главный экран</string>
 
     <string name="settings_inline_url_preview">Предпросмотр URL-адресов</string>
-    <string name="settings_vibrate_on_mention">Вибрация при упоминании</string>
+    <string name="settings_vibrate_on_mention">Вибрация при упоминании пользователя</string>
 
     <string name="room_settings_room_notifications_title">Уведомления</string>
     <string name="room_settings_add_new_group">Новый ID сообщества (например +foo:matrix.org)</string>
@@ -936,9 +937,9 @@ Email также позволит вам при необходимости во�
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
-    <string name="settings_flair">Настроение</string>
+    <string name="settings_flair">Лычки</string>
 
-    <string name="room_settings_no_flair">Эта комната не показывает настроение для сообществ</string>
+    <string name="room_settings_no_flair">Эта комната не показывает лычки сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_warning">Riot.im работает в фоновом режиме для сохранения приватности ваших уведомлений. Вы можете изменить этот параметр, чтобы уменьшить потребление заряда батареи.</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
@@ -951,7 +952,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомления <b>не будут показывать содержимое сообщения</b></string>
 
     <string name="startup_notification_privacy_title">Конфиденциальность уведомлений</string>
-    <string name="startup_notification_privacy_message">Riot может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений (это может повлиять на время работы от батареи).</string>
+    <string name="startup_notification_privacy_message">Riot может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений. Это может повлиять на время работы от батареи.</string>
     <string name="startup_notification_privacy_button_grant">Предоставить разрешение</string>
     <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
 
@@ -1007,7 +1008,7 @@ Email также позволит вам при необходимости во�
     <string name="go_on_with">продолжить с…</string>
     <string name="error_no_external_application_found">К сожалению, для выполнения этого действия не найдено внешнее приложение.</string>
 
-    <string name="settings_labs_enable_send_voice">Отправить голосовое сообщение (требуется стороннее приложение для записи голосовых сообщений)</string>
+    <string name="settings_labs_enable_send_voice">Отправлять голосовые сообщения</string>
 
     <string name="error_empty_field_your_password">Пожалуйста, введите ваш пароль.</string>
 
@@ -1095,7 +1096,7 @@ Email также позволит вам при необходимости во�
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
-    <string name="resource_limit_exceeded_title">Превышен лимит ресурсов</string>
+    <string name="resource_limit_exceeded_title">Исчерпан лимит ресурсов</string>
     <string name="resource_limit_contact_action">Связаться с администратором</string>
 
     <string name="status_theme">Тема status.im</string>
@@ -1103,27 +1104,197 @@ Email также позволит вам при необходимости во�
     <string name="dialog_title_error">Ошибка</string>
 
     <string name="room_sliding_menu_version_x">Версия %s</string>
-    <string name="encryption_export_create_passphrase">Создать парольную фразу</string>
-    <string name="encryption_export_passphrase_dont_match">Парольные фразы должны совпадать</string>
+    <string name="passphrase_create_passphrase">Создать парольную фразу</string>
+    <string name="passphrase_passphrase_does_not_match">Парольные фразы должны совпадать</string>
     <string name="resource_limit_contact_admin">свяжитесь с вашим администратором</string>
 
-    <string name="resource_limit_soft_default">Превышен один из лимитов ресурсов на этом сервере, так что <b>некоторые пользователи не смогу залогиниться</b>.</string>
-    <string name="resource_limit_hard_default">Превышен один из лимитов ресурсов на этом сервере.</string>
+    <string name="resource_limit_soft_default">Превышен один из ресурсных лимитов сервера, по этому <b>некоторые пользователи не смогут залогиниться</b>.</string>
+    <string name="resource_limit_hard_default">Превышен один из ресурсных лимитов сервера.</string>
 
     <string name="encryption_export_notice">Пожалуйста придумайте парольную фразу для шифрования экспортируемых ключей. Вам нужно будет ввести ту же самую фразу для импорта ключей.</string>
-    <string name="resource_limit_soft_mau"> Этот сервер достиг ежемесячного ограничения активных пользователей, так что <b>некоторые из пользователей не смогут залогиниться</b>.</string>
-    <string name="resource_limit_hard_mau">Этот сервер достиг ежемесячного ограничения активных пользователей.</string>
+    <string name="resource_limit_soft_mau"> Из-за ежемесячного ограничения активных пользователей сервера <b>некоторые из пользователей не смогут залогиниться</b>.</string>
+    <string name="resource_limit_hard_mau">Сервер достиг ежемесячного ограничения активных пользователей.</string>
 
-    <string name="resource_limit_soft_contact">Пожалуйста %s что бы увеличить этот лимит.</string>
-    <string name="resource_limit_hard_contact">Пожалуйста %s что бы продолжить пользоваться этим сервисом.</string>
+    <string name="resource_limit_soft_contact">Пожалуйста, %s, для увеличения этого лимита.</string>
+    <string name="resource_limit_hard_contact">Пожалуйста, %s, чтобы продолжить пользоваться этим сервисом.</string>
 
     <string name="settings_lazy_loading_title">Ленивая подгрузка собеседников</string>
-    <string name="settings_lazy_loading_description">Увеличить производительность за счёт загрузки собеседников только при первом просмотре</string>
+    <string name="settings_lazy_loading_description">Увеличить производительность за счёт загрузки собеседников только при первом просмотре.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Ваш сервер не поддерживает ленивую подгрузку собеседников. Попробуйте позже.</string>
 
     <string name="unknown_error">Извините, произошла ошибка</string>
 
     <string name="merged_events_expand">развернуть</string>
     <string name="merged_events_collapse">свернуть</string>
+
+    <string name="call_anyway">Всё равно позвонить</string>
+    <string name="settings_password">Пароль</string>
+    <string name="auth_accept_policies">Пожалуйста ознакомьтесь и подтвердите согласие с политикой этого сервера:</string>
+
+    <string name="settings_call_category">Вызовы</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Использовать стандартную мелодию Riot для входящих звонков</string>
+    <string name="settings_call_ringtone_title">Мелодия звонка</string>
+    <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
+
+    <string name="video_call_in_progress">Идёт видеозвонок …</string>
+
+    <string name="room_participants_action_kick">Выгнать</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Вы уверены, что хотите выгнать этого пользователя из чата?</item>
+        <item quantity="few" />
+        <item quantity="many">Вы уверены, что хотите выгнать этих пользователей из чата?</item>
+        <item quantity="other" />
+    </plurals>
+    <string name="reason_hint">Причина</string>
+
+    <string name="settings_notification_troubleshoot">Поиск проблем с уведомлениями</string>
+    <string name="settings_send_typing_notifs">Оправлять уведомления о наборе текста</string>
+    <string name="settings_send_markdown">Markdown форматирование</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Фоновое Соединение</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Предоставить разрешение</string>
+
+    <string name="account_email_error">Произошла ошибка при подтверждении вашего адреса электронной почты.</string>
+
+    <string name="account_phone_number_error">Произошла ошибка при подтверждении вашего номера телефона.</string>
+    <string name="account_additional_info">Дополнительная информация: %s</string>
+
+    <string name="settings_labs_enable_send_voice_summary">Эта опция требует стороннего приложения для записи сообщений.</string>
+
+    <string name="command_problem_with_parameters">Команде \"%s\" нужно больше параметров, или некоторые параметры неверны.</string>
+    <string name="markdown_has_been_enabled">Markdown включен.</string>
+    <string name="markdown_has_been_disabled">Markdown выключен.</string>
+
+    <string name="show_info_area_always">Всегда</string>
+    <string name="show_info_area_messages_and_errors">Для сообщений и ошибок</string>
+    <string name="show_info_area_only_errors">Только для ошибок</string>
+
+    <string name="store_whats_new">Мы постоянно изменяем и улучшаем Riot.im.
+Полный список изменений можно найти здесь: %1$s.
+Чтобы ничего не пропустить просто держите обновления включенными.</string>
+    <string name="accept">Принимаю</string>
+
+    <string name="settings_troubleshoot_diagnostic">Результаты диагностики</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Запустить тесты</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Выполняется… (%1$d из %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">В основном всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Один или несколько тестов не пройдены, попробуйте предлагаемые решения.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один или несколько тестов не пройдены, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Настройки системы.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Уведомления включены в настройках системы.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Уведомления отключены в настройках системы.
+Пожалуйста, проверьте настройки системы.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Открыть настройки</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Настройки аккаунта.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Уведомления включены для вашей учетной записи.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Уведомления отключены для вашей учетной записи.
+Пожалуйста, проверьте настройки аккаунта.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Настройки устройства.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этого устройства.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не разрешены для этого устройства.
+Пожалуйста, проверьте настройки Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK Google Play сервисов доступен и обновлён.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot использует сервисы Google Play для доставки push-сообщений, но не похоже что он настроен правильно:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Исправить сервисы Play</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Токен Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">Токен FCM успешно получен:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Не удалось получить токен FCM:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Регистрация токена</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успешно зарегистрирован на сервере.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на сервере:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Служба уведомлений</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба уведомлений запущена.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба уведомлений не запущена.
+Попробуйте перезапустить приложение.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запустить службу</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Автоматический перезапуск службы уведомлений</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Служба была убита и перезапущена автоматически.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Не удалось перезапустить службу</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Запуск при загрузке</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Служба будет запущена после перезапуска устройства.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">При перезагрузке устройства служба не будет запущена , вы не будете получать уведомления, пока Riot не будет открыт один раз.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Включить запуск при загрузке</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Проверьте фоновые ограничения</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Фоновые ограничения отключены для Riot. Этот тест должен быть запущен с использованием мобильных данных (без WIFI).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Фоновые ограничения включены для Riot.
+Работа приложения будет жестко ограничена, пока оно находится в фоновом режиме, и это может повлиять на уведомления.
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Райот.</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Когда пользователь оставляет устройство неподвижным, отключенным от питания и с выключенным экраном, через некоторое время оно переходит в режим Doze. Это препятствует доступу приложений к сети и откладывает их работу, синхронизацию и стандартные сигналы. "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
+
+    <string name="settings_inline_url_preview_summary">Предпросмотр ссылок в чате, когда ваш домашний сервер поддерживает эту функцию.</string>
+    <string name="settings_send_typing_notifs_summary">Позволя пользователи знают, что вы печатаете.</string>
+    <string name="settings_send_markdown_summary">Форматировать сообщения, используя markdown. Для расширенного форматирования, например, звездочки для курсивного текста.</string>
+    <string name="settings_show_read_receipts">Показывать уведомления о прочтении</string>
+    <string name="settings_show_read_receipts_summary">Нажмите на уведомление оп прочтении для получения подробного списка.</string>
+    <string name="settings_show_join_leave_messages">Показывать события о вступлении/выходе</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
+На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
+    <string name="encryption_import_room_keys_success">%1$d/%2$d ключ(и) успешно импортированы.</string>
+
+    <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Райот.</string>
+    <string name="settings_info_area_show">Показать информацию</string>
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Не найден APK сервисов Google Play. Уведомления могут работать неправильно.</string>
+
+    <string name="store_title">Riot.im — свобода совместной работы</string>
+    <string name="store_short_description">Добро пожаловать в Riot.im: новый мир открытого общения!</string>
+    <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, исключения и запреты.</string>
+    <string name="store_full_description">Riot.im — это простая и элегантная среда для совместной работы, которая объединяет все ваши беседы и интеграции в одном приложении.
+
+Построенный на групповых чатах, Riot.im позволяет вам обмениваться сообщениями, изображениями, видео и файлами - взаимодействовать с инструментами и иметь доступ ко всем сообществам в одном месте. Единственное место для всех групп: нет необходимости переключать учетные записи, работайте и общайтесь с людьми из разных организаций в общественных или личных комнатах: от профессиональных проектов до школьных поездок, Riot.im станет центром всех ваших дискуссий!
+
+Теперь с сквозным шифрованием!
+
+Особенности:
+
+• Мгновенный обмен сообщениями, изображениями, видео и любыми файлами между группами любого размера
+• Голос, видео и конференц-связь через WebRTC
+• Сквозное шифрование с использованием Olm (https://matrix.org/git/olm)
+• Уведомления о прочтении сообщений
+• Связь со всеми пользователями экосистемы Matrix.org, а не только с пользователями Riot.im!
+• Поиск и приглашение пользователей по адресу электронной почты
+• Принимайте участие в гостевых общественных комнатах
+• Высокая масштабируемость — поддерживает сотни комнат и тысячи пользователей.
+• Полностью синхронизированная история сообщений на различных устройствах и браузерах
+• Тонко настраиваемые параметры уведомлений, синхронизированные на всех устройствах
+• Поиск по безлимитной истории чата
+• Постоянные ссылки на сообщения
+• Полнотесктовый поиск сообщений
+• Поддержка языков с направлением письма справа налево, таких как арабский
+
+Для разработчиков:
+• Riot.im — это клиент Matrix построенный на открытом стандарте экосистемы Matrix.org, обеспечивающий взаимодействие со всеми другими совместимыми с Matrix приложениями, серверами и интеграциями.
+• Полностью открытый исходный код под разрешительной лицензией Apache — доступен по адресу https://github.com/vector-im/vector-android. Pull requests приветствуются!
+• Тривиально расширяемый с помощью открытого Matrix Client-Server API (https://matrix.org/docs/spec)
+• Запустите свой собственный сервер! Вы можете использовать стандартный сервер matrix.org или запустить собственный домашний сервер Matrix (например, https://matrix.org/docs/projects/server/synapse.html).
+
+Откройте для себя действительно эффективную и свободную совместную работу с Riot.im!</string>
 
 </resources>

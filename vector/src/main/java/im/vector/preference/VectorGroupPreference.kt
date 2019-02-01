@@ -63,14 +63,14 @@ class VectorGroupPreference : SwitchPreference {
                 }
 
                 val inflater = LayoutInflater.from(context)
-                val layout = inflater.inflate(R.layout.vector_settings_round_group_avatar, null, false) as FrameLayout
+                val layout = inflater.inflate(R.layout.vector_settings_round_group_avatar, (iconViewParent as LinearLayout), false) as FrameLayout
                 mAvatarView = layout.findViewById(R.id.settings_round_group_avatar)
 
                 val params = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.gravity = Gravity.CENTER
                 layout.layoutParams = params
-                (iconViewParent as LinearLayout).addView(layout, 0)
+                iconViewParent.addView(layout, 0)
 
             } catch (e: Exception) {
                 mAvatarView = null

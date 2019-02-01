@@ -244,7 +244,7 @@ Disculpas por la molestia.</string>
     <string name="incoming_call">Llamada Entrante</string>
     <string name="incoming_video_call">Llamada de Vídeo Entrante</string>
     <string name="incoming_voice_call">Llamada de Voz Entrante</string>
-    <string name="call_in_progress">Llamada En Curso</string>
+    <string name="call_in_progress">Llamada En Curso…</string>
 
     <string name="call_error_user_not_responding">El lado remoto no contestó.</string>
     <string name="call_error_ice_failed">Falló la Conexión de Medios</string>
@@ -278,7 +278,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
 
 ¿Permitir que Riot acceda a tus contactos ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Lo sentimos.. Acción no realizada, debido a que faltan permisos</string>
+    <string name="permissions_action_not_performed_missing_permissions">Lo sentimos. Acción no realizada, debido a que faltan permisos</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -430,7 +430,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <!-- Directory -->
     <string name="directory_search_results_title">Explorar directorio</string>
-    <string name="directory_searching_title">Buscando directorio..</string>
+    <string name="directory_searching_title">Buscando directorio…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Agregar a Favoritos</string>
@@ -657,8 +657,8 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Ingresar frase de contraseña</string>
-    <string name="encryption_export_confirm_passphrase">Confirmar frase de contraseña</string>
+    <string name="passphrase_enter_passphrase">Ingresar frase de contraseña</string>
+    <string name="passphrase_confirm_passphrase">Confirmar frase de contraseña</string>
     <string name="encryption_export_saved_as">Las claves de salas con Cifrado de Extremo a Extremo se guardaron en \'%s\'.
 
 Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</string>
@@ -800,7 +800,6 @@ Dispositivos desconocidos:</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Desactivado</string>
-    <string name="notification_on">Activado</string>
     <string name="notification_noisy">Ruidoso</string>
 
     <string name="encrypted_message">Mensaje cifrado</string>
@@ -1088,8 +1087,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="room_sliding_menu_version_x">Versión %s</string>
     <string name="encryption_export_notice">Por favor, crea una frase de contraseña para cifrar las claves exportadas. Necesitarás ingresar la misma frase de contraseña para poder importar las claves.</string>
-    <string name="encryption_export_create_passphrase">Crear frase de contraseña</string>
-    <string name="encryption_export_passphrase_dont_match">Las frases de contraseña deben coincidir</string>
+    <string name="passphrase_create_passphrase">Crear frase de contraseña</string>
+    <string name="passphrase_passphrase_does_not_match">Las frases de contraseña deben coincidir</string>
     <string name="settings_lazy_loading_title">Utiliza carga diferida para los miembros de la sala</string>
     <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Tu servidor doméstico aún no admite la carga diferida de los miembros de la sala. Prueba más tarde.</string>
@@ -1099,4 +1098,27 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="merged_events_expand">expandir</string>
     <string name="merged_events_collapse">colapsar</string>
 
+    <string name="call_anyway">llamar de cada manera</string>
+    <string name="accept">Acceptar</string>
+
+    <string name="auth_accept_policies">Por favor revisar y aceptar las reglas de este servidor doméstico:</string>
+
+    <string name="settings_call_category">Llamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar Riot sonido normal por entrando llamadas</string>
+    <string name="settings_call_ringtone_title">Sonido de entrando llamadas</string>
+    <string name="settings_call_ringtone_dialog_title">Eligir sonido de llamadas:</string>
+
+    <string name="video_call_in_progress">Llamada de video en proceso…</string>
+
+    <string name="room_participants_action_kick">Expulsar</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">¿Seguro que quieres expulsar este usuario de esta conversación?</item>
+        <item quantity="other">¿Seguro que quieres expulsar estos usuarios de esta conversación?</item>
+    </plurals>
+    <string name="reason_hint">Razón</string>
+
+    <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de fallas</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Inicia pruebas</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Haciendo… (%1$d of %2$d)</string>
 </resources>

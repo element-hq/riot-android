@@ -16,12 +16,14 @@
 package im.vector.view
 
 import android.content.Context
+import android.support.transition.TransitionManager
 import android.support.v7.preference.PreferenceManager
 import android.text.Html
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -31,6 +33,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import im.vector.VectorApp
+import im.vector.ui.animation.VectorTransitionSet
 import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.URLPreview
@@ -126,8 +129,15 @@ class UrlPreviewView @JvmOverloads constructor(
 
     @OnClick(R.id.url_preview_hide_image_view)
     internal fun closeUrlPreview() {
+        // Parent is a LinearLayout
+        val parent = parent as ViewGroup
+        TransitionManager.beginDelayedTransition(parent, VectorTransitionSet().apply {
+            appearWithAlpha(this@UrlPreviewView)
+        })
+
         mIsDismissed = true
-        visibility = View.GONE
+
+        parent.removeView(this)
 
         sDismissedUrlsPreviews.add(mUID)
 

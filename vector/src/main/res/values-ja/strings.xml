@@ -589,8 +589,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_import_room_keys">ルームキーをインポート</string>
     <string name="encryption_import_e2e_room_keys">部屋のエンドツーエンド暗号鍵をインポート</string>
 
-    <string name="encryption_export_confirm_passphrase">パスフレーズを確認</string>
-    <string name="encryption_import_enter_passphrase">パスフレーズを入力</string>
+    <string name="passphrase_confirm_passphrase">パスフレーズを確認</string>
+    <string name="passphrase_enter_passphrase">パスフレーズを入力</string>
     <string name="encryption_export_export">エクスポート</string>
     <string name="encryption_export_room_keys_summary">暗号鍵をローカルファイルにエクスポートする</string>
     <string name="encryption_export_room_keys">部屋の暗号鍵をエクスポート</string>
@@ -734,7 +734,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <!-- notification statuses -->
     <string name="notification_off">切</string>
-    <string name="notification_on">入</string>
     <string name="notification_noisy">音量大</string>
 
     <string name="encrypted_message">暗号化されたメッセージ</string>
@@ -1015,8 +1014,8 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
-    <string name="encryption_export_create_passphrase">パスフレーズの作成</string>
-    <string name="encryption_export_passphrase_dont_match">パスフレーズは一致する必要があります</string>
+    <string name="passphrase_create_passphrase">パスフレーズの作成</string>
+    <string name="passphrase_passphrase_does_not_match">パスフレーズは一致する必要があります</string>
     <string name="settings_info_area_show">情報領域を表示</string>
     <string name="show_info_area_always">常に</string>
     <string name="show_info_area_only_errors">エラーの場合のみ</string>

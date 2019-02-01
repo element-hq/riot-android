@@ -19,7 +19,7 @@
             android:padding="8dp"
             android:rotationY="@integer/rtl_mirror_flip"
             android:src="@drawable/ic_material_arrow_back_white"
-            android:tint="?attr/vctr_primary_control_color" />
+            android:tint="@android:color/white" />
 
         <TextView
             android:id="@+id/widget_title"
@@ -45,8 +45,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:padding="8dp"
-            android:src="@drawable/vector_close_widget"
-            android:tint="@android:color/white" />
+            android:src="@drawable/ic_material_delete_white" />
 
     </RelativeLayout>
 
@@ -58,7 +57,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/black" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/widget_progress_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -66,10 +65,9 @@
         <ProgressBar
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:indeterminate="true" />
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

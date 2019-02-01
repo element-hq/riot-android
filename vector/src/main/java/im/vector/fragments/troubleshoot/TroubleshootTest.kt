@@ -35,7 +35,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     var statusListener: ((TroubleshootTest) -> Unit)? = null
 
-    var manager : NotificationTroubleshootTestManager? = null
+    var manager: NotificationTroubleshootTestManager? = null
 
     abstract fun perform()
 

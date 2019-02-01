@@ -91,7 +91,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
     <string name="send_bug_report_include_crash_logs">Wyślij dzienniki awarii</string>
     <string name="send_bug_report_include_screenshot">Wyślij zrzut ekranu</string>
-    <string name="send_bug_report">Zgłoszenie błędu</string>
+    <string name="send_bug_report">Zgłoś błąd</string>
     <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Co powinno się wydarzyć? Co się stało?</string>
     <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
     <string name="send_bug_report_logs_description">W celu zdiagnozowania problemów, logi z tego klienta zostaną wysłane wraz z tym raportem o błędzie. Ten raport o błędzie, w tym dzienniki i zrzut ekranu, nie będzie publicznie widoczny. Jeśli wolisz wysłać tylko powyższy tekst, odznacz:</string>
@@ -204,7 +204,7 @@ Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="incoming_call">Połączenie przychodzące</string>
     <string name="incoming_video_call">Przychodzące połączenie wideo</string>
     <string name="incoming_voice_call">Przychodzące połączenie głosowe</string>
-    <string name="call_in_progress">W trakcie połączenia</string>
+    <string name="call_in_progress">W trakcie połączenia…</string>
 
     <string name="call_error_ice_failed">Połączenie multimedialne nie powiodło się</string>
     <string name="call_error_camera_init_failed">Nie udało się zainicjalizować aparatu</string>
@@ -337,7 +337,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
 
     <string name="directory_search_results_title">Przeglądaj katalog</string>
-    <string name="directory_searching_title">Wyszukiwanie katalogu..</string>
+    <string name="directory_searching_title">Przeszukiwanie katalogu…</string>
 
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
     <string name="room_settings_de_prioritize">Usuń z priorytetyzowanych</string>
@@ -400,7 +400,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nazwa</string>
     <string name="devices_details_device_name">Nazwa urządzenia</string>
-    <string name="devices_details_last_seen_title">Ostatnio widziany</string>
+    <string name="devices_details_last_seen_title">Ostatnio widziany(-a)</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">To działanie wymaga dodatkowego uwierzytelnienia.
 Wprowadź hasło, aby kontynuować.</string>
@@ -492,8 +492,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="encryption_information_ed25519_fingerprint">Odcisk palca Ed25519</string>
 
     <string name="encryption_export_export">Eksportuj</string>
-    <string name="encryption_import_enter_passphrase">Wprowadź hasło</string>
-    <string name="encryption_export_confirm_passphrase">Potwierdź hasło</string>
+    <string name="passphrase_enter_passphrase">Wprowadź hasło</string>
+    <string name="passphrase_confirm_passphrase">Potwierdź hasło</string>
     <string name="encryption_information_not_verified">Nie zweryfikowano</string>
     <string name="encryption_information_verified">Zweryfikowano</string>
     <string name="encryption_information_blocked">Na czarnej liście</string>
@@ -534,7 +534,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
     <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
     <string name="group_details_rooms">Pokoje</string>
-    <string name="joined">Dołączył</string>
+    <string name="joined">Dołączeni</string>
     <string name="group_details_people">Ludzie</string>
     <string name="community_name_hint">Przykład</string>
     <string name="community_id_hint">przykład</string>
@@ -544,7 +544,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
 
     <!-- groups creation -->
     <string name="create">Utwórz</string>
-    <string name="notification_on">On</string>
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
     <string name="notification_sync_in_progress">W trakcie synchronizacji</string>
@@ -926,7 +925,7 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="no_users_placeholder">Brak użytkowników</string>
 
     <string name="rooms">Pokoje</string>
-    <string name="invited">Zaproszony</string>
+    <string name="invited">Zaproszeni</string>
     <string name="filter_group_members">Filtrowanie członków grupy</string>
     <string name="filter_group_rooms">Filtrowanie pokoi grupy</string>
 
@@ -1025,8 +1024,8 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_without_flair">Nie jesteś obecnie członkiem żadnej społeczności.</string>
 
     <string name="encryption_export_notice">Utwórz hasło, aby zaszyfrować wyeksportowane klucze. Będziesz musiał wpisać to samo hasło, aby móc zaimportować klucze.</string>
-    <string name="encryption_export_create_passphrase">Utwórz hasło</string>
-    <string name="encryption_export_passphrase_dont_match">Hasło musi się zgadzać</string>
+    <string name="passphrase_create_passphrase">Utwórz hasło</string>
+    <string name="passphrase_passphrase_does_not_match">Hasło musi się zgadzać</string>
     <string name="command_description_emote">Wyświetla akcję</string>
     <string name="command_description_ban_user">Banuje użytkownika z podanym ID</string>
     <string name="command_description_unban_user">Odbanowywuje użytkownika z podanym ID</string>
@@ -1136,4 +1135,26 @@ Sprawdź ustawienia systemowe.</string>
 Sprawdź ustawienia konta.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są dozwolone dla tego urządzenia.
 Proszę sprawdź ustawienia Riot.</string>
+    <string name="store_whats_new">Zawsze wprowadzamy zmiany i ulepszenia do Riot.im.
+Pełną listę zmian można znaleźć tutaj: %1$s.
+Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktualizacje.</string>
+    <string name="account_additional_info">Dodatkowe informacje: %s</string>
+
+    <string name="account_phone_number_error">Wystąpił błąd podczas weryfikowania numeru telefonu.</string>
+    <string name="account_email_error">Wystąpił błąd podczas weryfikowania adresu e-mail.</string>
+
+    <string name="startup_notification_fdroid_battery_optim_title">Połączenie w tle</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignoruj Optymalizację</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Optymalizacja Baterii</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jeden lub więcej testów nie powiodło się, prosimy o przesłanie raportu o błędzie, aby pomóc nam w zbadaniu problemu.</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Uruchom Usługę</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Usługa Powiadomień</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Usługa Powiadomień jest uruchomiona.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Usługa Powiadomień nie jest uruchomiona.
+Spróbuj uruchomić ponownie aplikację.</string>
+    <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
+
 </resources>

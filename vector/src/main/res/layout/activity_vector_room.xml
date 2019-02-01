@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/room_action_bar"
-        android:background="?attr/vctr_primary_color"
+        android:background="?colorPrimary"
         android:contentDescription="@string/room_sync_in_progress"
         android:indeterminate="true" />
 
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/room_sync_in_progress"
-        android:background="?attr/vctr_riot_primary_background_color"
+        android:background="?android:attr/colorBackground"
         android:orientation="vertical"
         android:paddingTop="16dp">
 
@@ -60,7 +60,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="?attr/vctr_riot_primary_text_color"
             android:textSize="14sp"
             tools:text="Preview invitation" />
 
@@ -139,7 +138,7 @@
         android:layout_below="@+id/room_pending_widgets_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:background="?attr/vctr_riot_primary_background_color"
+        android:background="?android:attr/colorBackground"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -203,216 +202,203 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/jump_to_first_unread"
-        android:layout_alignParentBottom="true">
+        android:background="?android:attr/colorBackground">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/search_background_imageview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/vctr_riot_primary_background_color"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp">
+            android:background="#FFFFFFFF"
+            android:src="@drawable/vector_search_bg"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <ImageView
-                android:id="@+id/search_background_imageview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#FFFFFFFF"
-                android:src="@drawable/vector_search_bg"
-                android:visibility="gone"
-                tools:visibility="visible" />
+        <TextView
+            android:id="@+id/search_no_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/search_no_results"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="no result"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/search_no_result_textview"
+        <FrameLayout
+            android:id="@+id/anchor_fragment_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/room_notification_separator" />
+
+        <View
+            android:id="@+id/room_notification_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@id/room_notifications_area"
+            android:background="?attr/vctr_room_activity_divider_color" />
+
+        <im.vector.view.NotificationAreaView
+            android:id="@+id/room_notifications_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_separator"
+            android:minHeight="42dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:visibility="invisible"
+            tools:background="@color/vector_fuchsia_color"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/bottom_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@id/room_bottom_layout"
+            android:background="?attr/vctr_room_activity_divider_color" />
+
+        <RelativeLayout
+            android:id="@+id/room_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/colorBackground">
+
+            <im.vector.view.VectorCircularImageView
+                android:id="@+id/room_self_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:id="@+id/room_sending_message_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:text="@string/search_no_results"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                tools:text="no result"
-                tools:visibility="visible" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/room_self_avatar"
+                android:layout_toRightOf="@id/room_self_avatar"
+                android:minHeight="56dp">
 
-            <RelativeLayout
-                android:id="@+id/room_bottom_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp">
+                <ImageView
+                    android:id="@+id/room_encrypted_image_view"
+                    android:layout_width="20dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2e_verified"
+                    android:tint="?attr/colorAccent" />
 
-                <im.vector.view.VectorCircularImageView
-                    android:id="@+id/room_self_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    tools:src="@tools:sample/avatars" />
-
-                <LinearLayout
-                    android:id="@+id/room_sending_message_layout"
-                    android:layout_width="wrap_content"
+                <im.vector.view.VectorAutoCompleteTextView
+                    android:id="@+id/editText_messageBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_toEndOf="@id/room_self_avatar"
-                    android:layout_toRightOf="@id/room_self_avatar"
-                    android:minHeight="56dp">
-
-                    <ImageView
-                        android:id="@+id/room_encrypted_image_view"
-                        android:layout_width="20dp"
-                        android:layout_height="12dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/e2e_verified"
-                        android:tint="?attr/vctr_default_icon_tint_color" />
-
-                    <im.vector.view.VectorAutoCompleteTextView
-                        android:id="@+id/editText_messageBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:dropDownAnchor="@+id/room_sending_message_layout"
-                        android:hint="@string/room_message_placeholder_not_encrypted"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:maxHeight="160dp"
-                        android:textColor="?attr/vctr_riot_primary_text_color"
-                        android:textColorHint="?attr/vctr_default_text_hint_color"
-                        android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textSize="14sp"
-                        tools:text="line 1" />
-
-                    <ImageView
-                        android:id="@+id/room_send_image_view"
-                        android:layout_width="38dp"
-                        android:layout_height="56dp"
-                        android:layout_gravity="bottom"
-                        android:contentDescription="@string/send"
-                        android:padding="8dp"
-                        android:rotationY="@integer/rtl_mirror_flip"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_material_file"
-                        android:tint="?attr/colorAccent" />
-
-                    <ImageView
-                        android:id="@+id/room_start_call_image_view"
-                        android:layout_width="38dp"
-                        android:layout_height="56dp"
-                        android:layout_gravity="bottom"
-                        android:contentDescription="@string/call_connecting"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/voice_call_start_green"
-                        android:tint="?attr/colorAccent"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/room_end_call_image_view"
-                        android:layout_width="38dp"
-                        android:layout_height="56dp"
-                        android:layout_gravity="bottom"
-                        android:contentDescription="@string/call_ended"
-                        android:padding="8dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/voice_call_end_fushia"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-
-                    <View
-                        android:id="@+id/room_button_margin_right"
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/room_cannot_post_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_toEndOf="@id/room_self_avatar"
-                    android:layout_toRightOf="@id/room_self_avatar"
-                    android:text="@string/room_do_not_have_permission_to_post"
-                    android:textColor="?attr/vctr_riot_primary_text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:dropDownAnchor="@+id/room_sending_message_layout"
+                    android:hint="@string/room_message_placeholder_not_encrypted"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxHeight="160dp"
+                    android:textColor="?android:textColorPrimary"
+                    android:textColorHint="?attr/vctr_default_text_hint_color"
+                    android:textCursorDrawable="@drawable/searches_cursor_background"
                     android:textSize="14sp"
+                    tools:text="line 1" />
+
+                <ImageView
+                    android:id="@+id/room_send_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/send"
+                    android:padding="8dp"
+                    android:rotationY="@integer/rtl_mirror_flip"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_material_file"
+                    android:tint="?attr/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/room_start_call_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/call_connecting"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/voice_call_start_green"
+                    android:tint="?attr/colorAccent"
                     android:visibility="gone"
                     tools:visibility="visible" />
 
-            </RelativeLayout>
+                <ImageView
+                    android:id="@+id/room_end_call_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/call_ended"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/voice_call_end_fushia"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
-            <View
-                android:id="@+id/bottom_separator"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_above="@id/room_bottom_layout"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:background="?attr/vctr_room_activity_divider_color" />
+                <View
+                    android:id="@+id/room_button_margin_right"
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
 
-            <im.vector.view.NotificationAreaView
-                android:id="@+id/room_notifications_area"
-                android:layout_width="match_parent"
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/room_cannot_post_textview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/bottom_separator"
-                android:minHeight="42dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:visibility="invisible"
-                tools:background="@color/vector_fuchsia_color"
-                tools:visibility="visible" />
-
-            <View
-                android:id="@+id/room_notification_separator"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_above="@id/room_notifications_area"
-                android:background="?attr/vctr_room_activity_divider_color" />
-
-            <RelativeLayout
-                android:id="@+id/anchor_fragment_messages"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/room_notification_separator"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-
-            <ProgressBar
-                android:id="@+id/loading_room_paginate_back_progress"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:contentDescription="@string/loading"
-                android:indeterminate="true"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <ProgressBar
-                android:id="@+id/loading_room_paginate_forward_progress"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_alignBottom="@id/anchor_fragment_messages"
-                android:contentDescription="@string/loading"
-                android:indeterminate="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@id/room_self_avatar"
+                android:layout_toRightOf="@id/room_self_avatar"
+                android:text="@string/room_do_not_have_permission_to_post"
+                android:textSize="14sp"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_back_progress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_forward_progress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/anchor_fragment_messages"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </RelativeLayout>
 

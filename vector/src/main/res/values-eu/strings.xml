@@ -94,8 +94,8 @@ Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="send_bug_report_description">Azaldu akatsa. Zer egin duzu? Zer espero zenuen? Zer gertatu da benetan?</string>
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
-    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Akats-tostenen pantaila ireki nahi duzu?</string>
-    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze txostena bidali nahi duzu?</string>
+    <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Arazte-txostena ireki nahi duzu?</string>
+    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu?</string>
 
     <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
     <string name="send_bug_report_failed">Huts egin du arazte-txostenaren bidalketak (%s)</string>
@@ -218,7 +218,7 @@ Saiotik atera zaizu gailu guztietan eta ez dituzu jakinarazpenak jasoko. Jakinar
     <string name="incoming_call">Deia jasotzen</string>
     <string name="incoming_video_call">Bideo-deia jasotzen</string>
     <string name="incoming_voice_call">Ahots-deia jasotzen</string>
-    <string name="call_in_progress">Deia martxan</string>
+    <string name="call_in_progress">Deia abioan…</string>
 
     <string name="call_error_user_not_responding">Urruneko aldeak ez du erantzun.</string>
     <string name="call_error_ice_failed">Media konexioak huts egin du</string>
@@ -396,7 +396,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_recents_join_room_prompt">Idatzi gelaren IDa edo ezizena</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
-    <string name="directory_searching_title">Direktorioa bilatzen..</string>
+    <string name="directory_searching_title">Direktorioa bilatzen…</string>
 
     <string name="room_settings_favourite">Gogokoa</string>
     <string name="room_settings_de_prioritize">Jaitsi lehentasuna</string>
@@ -605,8 +605,8 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_export_e2e_room_keys">Esportatu gelako E2E gakoak</string>
     <string name="encryption_export_room_keys">Esportatu gelako gakoak</string>
     <string name="encryption_export_export">Esportatu</string>
-    <string name="encryption_import_enter_passphrase">Idatzi pasaesaldia</string>
-    <string name="encryption_export_confirm_passphrase">Berretsi pasaesaldia</string>
+    <string name="passphrase_enter_passphrase">Idatzi pasaesaldia</string>
+    <string name="passphrase_confirm_passphrase">Berretsi pasaesaldia</string>
     <string name="encryption_export_saved_as">Gelako E2E gakoak \'%s\' helbidean gorde dira
 
 Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
@@ -697,7 +697,7 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
     <string name="event_formatter_widget_added">%1$s gehitu du %2$s erabiltzaileak</string>
     <string name="event_formatter_widget_removed">%1$s kendu du %2$s erabiltzaileak</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak jitsi bidez</string>
-    <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula?</string>
+    <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula gela honetatik?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
@@ -735,7 +735,6 @@ Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan 
 
     <!-- notification statuses -->
     <string name="notification_off">Ez</string>
-    <string name="notification_on">Bai</string>
     <string name="notification_noisy">Zaratatsua</string>
 
     <string name="encrypted_message">Zifratutako mezua</string>
@@ -1035,8 +1034,8 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="room_sliding_menu_version_x">%s bertsioa</string>
     <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
-    <string name="encryption_export_create_passphrase">Sortu pasaesaldia</string>
-    <string name="encryption_export_passphrase_dont_match">Pasaesaldiak berdinak izan behar dira</string>
+    <string name="passphrase_create_passphrase">Sortu pasaesaldia</string>
+    <string name="passphrase_passphrase_does_not_match">Pasaesaldiak berdinak izan behar dira</string>
     <string name="merged_events_expand">hedatu</string>
     <string name="merged_events_collapse">tolestu</string>
 
@@ -1092,9 +1091,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_troubleshoot_diagnostic">Arazoak egiaztatzen</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Abiatu probak</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Exekutatzen… (%1$d / %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Oinarrizko diagnostikoa ongi dago. Oraindik ez badituzu jakinarazpenak jasotzen, bidali akats-txosten bat ikertu dezagun.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Oinarrizko diagnostikoa ongi dago. Oraindik ez badituzu jakinarazpenak jasotzen, bidali arazte-txosten bat ikertu dezagun.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Gutxienez proba batek kale egin du, saiatu proposatutako konponketa(k).</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Gutxienez proba batek kale egin du, bidali mesedez akats-txosten bat ikertu dezagun.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Gutxienez proba batek kale egin du, bidali mesedez arazte-txosten bat ikertu dezagun.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Sistemaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Jakinarazpenak aktibatuta daude sistemaren ezarpenetan.</string>
@@ -1204,4 +1203,9 @@ Garatzaileentzat:
 
 Ezagutu benetako kolaborazio ireki eta eraginkorra Riot.im erabiliz!</string>
 
+    <string name="video_call_in_progress">Bide-deia abioan…</string>
+
+    <string name="store_whats_new">Etengabe egiten dizkiogu hobekuntzak eta aldaketak Riot.im aplikazioari.
+Aldaketen zerrenda osoa hemen aurkitu daiteke: %1$s.
+Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta.</string>
 </resources>

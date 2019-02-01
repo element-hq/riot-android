@@ -12,14 +12,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="?attr/vctr_primary_dark_color"
+        android:background="?colorPrimaryDark"
         android:gravity="center_vertical"
         android:text="Status Bar" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="?attr/vctr_primary_color"
+        android:background="?colorPrimary"
         android:gravity="center_vertical"
         android:text="This is a simple text" />
 

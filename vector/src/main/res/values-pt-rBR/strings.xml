@@ -16,7 +16,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Salvar</string>
-    <string name="leave">Sair</string>
+    <string name="leave">Sair da sala</string>
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
@@ -41,13 +41,14 @@
     <string name="missing_permissions_title_to_start_conf_call">Não consigo iniciar a chamada</string>
     <string name="device_information">Informações do dispositivo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Chamadas de conferência não são permitidas em salas encriptografadas</string>
-    <string name="send_anyway">Enviar de qualquer maneira</string>
+    <string name="send_anyway">Enviar mesmo assim</string>
     <string name="or">ou</string>
-    <string name="invite">Invite</string>
+    <string name="invite">Convidar</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Sair</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.\nExporte estas conversas para o backup antes de sair se quiser armazená-las.</string>
+    <string name="action_sign_out">Sair da Conta</string>
+    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair da Conta, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.
+Exporte estas conversas para o backup antes de sair da Conta se quiser armazená-las.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
@@ -84,7 +85,7 @@
     <string name="local_address_book_header">Agenda de endereços local</string>
     <string name="matrix_only_filter">Apenas contatos Matrix</string>
     <string name="no_conversation_placeholder">Não há conversas</string>
-    <string name="no_contact_access_placeholder">Você não autorizou o acesso deste App aos seus contatos locais</string>
+    <string name="no_contact_access_placeholder">Você não autorizou o Riot a acessar seus contatos locais</string>
     <string name="no_result_placeholder">Nenhum resultado</string>
 
     <!-- Rooms fragment -->
@@ -100,15 +101,15 @@
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
     <string name="send_bug_report_include_screenshot">Enviar print de tela</string>
-    <string name="send_bug_report">Reportar erro (bug)</string>
+    <string name="send_bug_report">Relatar erro</string>
     <string name="send_bug_report_description">Por favor, descreva o erro (bug). O que você fez? O que você esperava ocorrer? O que aconteceu?</string>
     <string name="send_bug_report_placeholder">Descreva o seu problema aqui</string>
     <string name="send_bug_report_logs_description">Para diagnosticar problemas, logs deste cliente serão enviados junto a este relatório de erros (bugs). Este relatório de erros, incluindo os logs e prints da tela, não serão visíveis publicamente. Se você prefere enviar apenas o texto acima, por favor desmarque:</string>
-    <string name="send_bug_report_alert_message">Você parece estar frustrado balançando o telefone. Quer enviar um relatório de erro (bug)?</string>
+    <string name="send_bug_report_alert_message">Você parece estar frustrado balançando o telefone. Você gostaria de abrir a tela de relato de erro?</string>
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente na última vez. Gostaria de abrir a tela de relatos de falhas?</string>
 
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Ler</string>
@@ -117,7 +118,7 @@
     <string name="username">Nome de usuário</string>
     <string name="create_account">Criar conta</string>
     <string name="login">Entrar</string>
-    <string name="logout">Sair</string>
+    <string name="logout">Sair da Conta</string>
     <string name="hs_url">URL do "Home Server"</string>
     <string name="identity_url">URL do "Identity Server"</string>
     <string name="search">Pesquisar</string>
@@ -156,7 +157,7 @@
     <string name="auth_missing_password">Falta a senha</string>
     <string name="auth_invalid_email">"Endereço de email inválido"</string>
     <string name="auth_invalid_phone">"Isso não me parece ser um número de telefone válido"</string>
-    <string name="auth_email_already_defined">Este email já está cadastrado.</string>
+    <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
     <string name="auth_missing_email">Falta endereço de email</string>
     <string name="auth_missing_phone">Falta número de telefone</string>
     <string name="auth_missing_email_or_phone">Falta endereço de email ou número de telefone</string>
@@ -170,11 +171,11 @@
     <string name="auth_username_in_use">Nome de usuário já existe</string>
     <string name="auth_home_server">Servidor Principal (Home Server):</string>
     <string name="auth_identity_server">Servidor de Identidade (Identity Server):</string>
-    <string name="auth_reset_password_next_step_button">Eu verifiquei meu email</string>
+    <string name="auth_reset_password_next_step_button">Eu verifiquei meu endereço de e-mail</string>
     <string name="auth_reset_password_message">Para redefinir sua senha, coloque o email ligado à sua conta:</string>
     <string name="auth_reset_password_missing_email">O email ligado à sua conta tem que ser inserido.</string>
     <string name="auth_reset_password_missing_password">Uma nova senha tem que ser inserida.</string>
-    <string name="auth_reset_password_email_validation_message">Um email foi enviado para %s. Quando você tiver clicado no link desta mensagem, clique abaixo.</string>
+    <string name="auth_reset_password_email_validation_message">Um e-mail foi enviado para %s. Quando você tiver clicado no link desta mensagem, clique abaixo.</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao verificar o email: verifique se você clicou no link no email</string>
     <string name="auth_reset_password_success_message">Sua senha foi resetada.\n\nVocê foi desconectado de todos os aparelhos e não receberá mais notificações. Para reativar as notificações, entre novamente em cada um dos aparelhos.</string>
 
@@ -229,10 +230,10 @@
     <string name="call_connecting">Conectando chamada…</string>
     <string name="call_ended">Chamada terminada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Chamada recebida</string>
-    <string name="incoming_video_call">Chamada de vídeo recebida</string>
-    <string name="incoming_voice_call">Chamada de voz recebida</string>
-    <string name="call_in_progress">Chamada em andamento</string>
+    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_video_call">Recebendo chamada de vídeo</string>
+    <string name="incoming_voice_call">Recebendo chamada de voz</string>
+    <string name="call_in_progress">Chamada em andamento…</string>
 
     <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
@@ -266,7 +267,7 @@ Por favor, autorize o acesso na próxima tela para poder encontrar usuários na 
 
 Você autoriza o Riot a acessar seus contatos?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissão</string>
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe. A ação não foi realizada, por falta de permissão</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvo</string>
@@ -359,7 +360,7 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">Não confiar</string>
-    <string name="ssl_logout_account">Sair</string>
+    <string name="ssl_logout_account">Sair da Conta</string>
     <string name="ssl_remain_offline">Ignorar</string>
     <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
     <string name="ssl_could_not_verify">Não consegui verificar a identidade do servidor remoto.</string>
@@ -367,19 +368,19 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="ssl_cert_new_account_expl">Se o administrador do servidor disse que isso era esperado, verifique se a impressão digital abaixo é a mesma que a impressão digital que ele forneceu a você.</string>
     <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiável no seu telefone. Isso é ALTAMENTE ESTRANHO. Recomendamos que você NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado mudou de um que era confiável no seu telefone para um que não é considerado confiável pelo seu aparelho. Pode ser que o servidor renovou seu certificado. Entre em contato com o administrador do servidor e peça a impressão digital esperada.</string>
-    <string name="ssl_only_accept">APENAS aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica à que está acima.</string>
+    <string name="ssl_only_accept">Apenas aceite o certificado se o administrador do servidor publicou uma impressão digital que é idêntica a que está acima.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Detalhes da sala</string>
     <string name="room_details_people">Pessoas</string>
     <string name="room_details_files">Arquivos</string>
     <string name="room_details_settings">Configurações</string>
-    <string name="malformed_id">ID mal formatado. Tem que ser um endereço de email ou um ID Matrix como por exemplo \'@localpart:domain\'</string>
+    <string name="malformed_id">ID mal formatado. Tem que ser um endereço de e-mail ou um ID Matrix como por exemplo \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">CONVIDADOS</string>
     <string name="room_details_people_present_group_name">ENTRARAM</string>
 
     <!-- Room events -->
-    <string name="room_event_action_report_prompt_reason">Motivos para denunciar este conteúdo</string>
+    <string name="room_event_action_report_prompt_reason">Motivo de denunciar este conteúdo</string>
     <string name="room_event_action_report_prompt_ignore_user">Você deseja ocultar todas as mensagens deste usuário?
 
 Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.</string>
@@ -436,7 +437,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_add_email_address">Adicionar endereço de email</string>
     <string name="settings_phone_number">Telefone</string>
     <string name="settings_add_phone_number">Adicionar número de telefone</string>
-    <string name="settings_app_info_link_summary">Tela de informações sobre o sistema do aplicativo</string>
+    <string name="settings_app_info_link_summary">Tela de informações sobre o sistema do aplicativo.</string>
     <string name="settings_app_info_link_title">Informações sobre o aplicativo</string>
 
     <string name="settings_enable_all_notif">Habilitar notificações para esta conta</string>
@@ -449,10 +450,10 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="settings_call_invitations">Convites para chamadas</string>
     <string name="settings_messages_sent_by_bot">Mensagens enviadas por "bot"</string>
 
-    <string name="settings_background_sync">Sincronização em background</string>
-    <string name="settings_enable_background_sync">Habilitar sincronização em background</string>
+    <string name="settings_background_sync">Sincronização em segundo plano</string>
+    <string name="settings_enable_background_sync">Habilitar sincronização em segundo plano</string>
     <string name="settings_set_sync_timeout">Tempo expirado na solicitação de sincronização</string>
-    <string name="settings_set_sync_delay">Demora entre duas solicitações de sincronização</string>
+    <string name="settings_set_sync_delay">Demora entre cada solicitação</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundos</string>
 
@@ -497,16 +498,16 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <string name="account_email_validation_title">Verificação pendente</string>
     <string name="account_email_validation_message">Por favor verifique o seu email e clique no link que está lá. Feito isso, clique em continuar.</string>
-    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de email. Favor verificar seu email e clicar no link que ele contém. Quando tiver feito isso, clique em continuar</string>
+    <string name="account_email_validation_error">Não consegui averiguar o seu endereço de e-mail. Favor verificar seu e-mail e clicar no link que ele contém. Quando tiver feito isso, clique em continuar.</string>
 
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">Este número de telefone já está em uso</string>
+    <string name="account_email_already_used_error">Este endereço de e-mail já está em uso.</string>
+    <string name="account_email_not_found_error">Este endereço de e-mail não foi encontrado.</string>
+    <string name="account_phone_number_already_used_error">Este número de telefone já está em uso.</string>
 
     <string name="settings_change_password">Mudar a senha</string>
-    <string name="settings_old_password">senha antiga</string>
-    <string name="settings_new_password">senha nova</string>
-    <string name="settings_confirm_password">confirme a senha</string>
+    <string name="settings_old_password">Senha antiga</string>
+    <string name="settings_new_password">Senha nova</string>
+    <string name="settings_confirm_password">Confirme a senha</string>
     <string name="settings_fail_to_update_password">Não consegui atualizar a senha</string>
     <string name="settings_password_updated">Sua senha foi atualizada</string>
     <string name="settings_unignore_user">Mostrar todas as mensagens de %s?
@@ -584,10 +585,10 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato inválido de alias</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' não é um formato válido para um alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Você não especificou nenhum endereço principal. O endereço principal padrão será defindo aleatoriamente"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Você não terá endereço principal especificado para esta sala.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Alertas do endereço principal</string>
 
-    <string name="room_settings_set_main_address">Definir como endereço principal</string>
+    <string name="room_settings_set_main_address">Definir como Endereço Principal</string>
     <string name="room_settings_unset_main_address">Retirar este endereço como principal</string>
     <string name="room_settings_copy_room_id">Copiar o ID desta sala</string>
     <string name="room_settings_copy_room_address">Copiar o endereço desta sala</string>
@@ -628,8 +629,8 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Entre com a \'passphrase\'</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
+    <string name="passphrase_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="passphrase_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
 
 Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
@@ -639,7 +640,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="encryption_import_room_keys_summary">Importar as chaves de um arquivo local</string>
     <string name="encryption_import_import">Importar</string>
     <string name="encryption_never_send_to_unverified_devices_title">Criptografar apenas para dispositivos verificados</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensagens criptografadas para dispositivos não verificados a partir deste dispositivo</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensagens criptografadas para dispositivos não verificados a partir deste dispositivo.</string>
 
     <string name="encryption_information_not_verified">NÃO verificado</string>
     <string name="encryption_information_verified">Verificado</string>
@@ -655,9 +656,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para confirmar que este dispositivo é confiável, entre em contato com o seu proprietário usando outros meios (por exemplo pessoalmente ou através de uma chamada telefônica) e pergunte a ele se a chave que ele está vendo na sua configuração de usuário para este dispositivo é igual à chave abaixo:</string>
-    <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo.
-Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear.
-No futuro, este processo de verificação será mais sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar abaixo. Se não é igual, então alguém está interceptando este dispositivo e você pode querer clicar no botão bloquear. No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="encryption_information_verify_key_match">Eu confirmo que as chaves são iguais</string>
 
     <string name="e2e_enabling_on_app_update">Riot agora permite criptografia ponta-a-ponta mas você precisa fazer login de novo para ativá-la.\n\nVocê pode fazer isso mais tarde a partir das configurações do aplicativo.</string>
@@ -684,11 +683,11 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
 
-    <string name="settings_always_show_timestamps">Sempre mostrar a hora das mensagens</string>
+    <string name="settings_always_show_timestamps">Mostrar a hora para todas as mensagens</string>
     <string name="settings_data_save_mode">Modo de economia de dados</string>
 
     <string name="settings_user_interface">Interface de usuária(o)</string>
-    <string name="settings_interface_language">Idioma de interface</string>
+    <string name="settings_interface_language">Idioma</string>
     <string name="settings_select_language">Escolha o idioma</string>
 
     <string name="media_saving_period_3_days">3 dias</string>
@@ -720,7 +719,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <string name="loading">Carregando…</string>
 
-    <string name="action_exit">Sair</string>
+    <string name="action_exit">Sair do App</string>
     <string name="bottom_action_groups">Comunidades</string>
 
     <string name="home_filter_placeholder_groups">Pesquisar comunidades</string>
@@ -752,9 +751,9 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
     <string name="settings_containing_my_user_name">Mensagens que contenham o meu nome de usuária(o)</string>
-    <string name="settings_inline_url_preview">Habilitar visualização resumida dos links por padrão</string>
-    <string name="settings_12_24_timestamps">Utilizar o formato de 12 horas (p.ex: 2:30pm)</string>
-    <string name="settings_vibrate_on_mention">Vibrar quando mencionado</string>
+    <string name="settings_inline_url_preview">Visualização prévia do URL</string>
+    <string name="settings_12_24_timestamps">Mostrar a hora no formato de 12 horas</string>
+    <string name="settings_vibrate_on_mention">Vibrar ao mencionar um usuário</string>
 
     <string name="settings_analytics">Estatísticas de uso</string>
 
@@ -772,7 +771,7 @@ No futuro, este processo de verificação será mais sofisticado.</string>
     <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
-    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
@@ -803,7 +802,6 @@ No futuro, este processo de verificação será mais sofisticado.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Desativado</string>
-    <string name="notification_on">Ativado</string>
     <string name="notification_noisy">Alto</string>
 
     <string name="encrypted_message">Mensagem criptografada</string>
@@ -972,7 +970,7 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="settings_deactivate_my_account">Desativar a minha conta</string>
 
     <string name="startup_notification_privacy_title">Privacidade das notificações</string>
-    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerir as suas notificações de forma segura e confidencial (isso poderá impactar no uso da bateria).</string>
+    <string name="startup_notification_privacy_message">Riot pode funcionar em segundo plano para gerenciar as suas notificações de forma segura e confidencial. Isso poderá impactar o uso da bateria.</string>
     <string name="startup_notification_privacy_button_grant">Conceder a permissão</string>
     <string name="startup_notification_privacy_button_other">Escolha outra opção</string>
 
@@ -988,7 +986,7 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
     <string name="widget_integration_missing_parameter">Um parâmetro obrigatório está faltando.</string>
     <string name="widget_integration_invalid_parameter">Um parâmetro não é válido.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Use a tecla Enter do teclado para enviar a mensagem</string>
-    <string name="settings_labs_enable_send_voice">Enviar uma mensagem de voz (necessita um aplicativo de terceiros para registrar mensagens de voz)</string>
+    <string name="settings_labs_enable_send_voice">Enviar mensagens de voz</string>
 
     <string name="command_description_emote">Mostra a ação</string>
     <string name="command_description_ban_user">Remove a(o) usuária(o) com a ID fornecida</string>
@@ -1035,16 +1033,200 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="resource_limit_exceeded_title">Limite de recursos excedido</string>
     <string name="resource_limit_contact_action">Entre em contato com o(a) administrador(a)</string>
 
-    <string name="resource_limit_contact_admin">entre em contato com o(a) administrador(a) do seu serviço</string>
+    <string name="resource_limit_contact_admin">entre em contato com o administrador do seu serviço</string>
 
-    <string name="resource_limit_soft_default">Este Servidor de Base excedeu um dos seus limites de recursos, portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
-    <string name="resource_limit_hard_default">Este Servidor de Base excedeu um de seus limites de recursos.</string>
+    <string name="resource_limit_soft_default">Este homeserver excedeu um dos seus limites de recursos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_default">Este homeserver excedeu um de seus limites de recursos.</string>
 
-    <string name="resource_limit_soft_mau"> Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os), portanto <b>alguns(mas) usuários(as) não conseguirão fazer login</b>.</string>
-    <string name="resource_limit_hard_mau">Este Servidor de Base atingiu o seu limite mensal de usuárias(os) ativas(os).</string>
+    <string name="resource_limit_soft_mau"> Este homeserver atingiu o seu limite mensal de usuários ativos, portanto <b>alguns usuários não conseguirão fazer login</b>.</string>
+    <string name="resource_limit_hard_mau">Este homeserver atingiu o seu limite mensal de usuários ativos.</string>
 
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
 
     <string name="encryption_export_notice">Por favor, crie uma senha para cifrar as chaves exportadas. Precisará de usar a mesma senha para conseguir importar as chaves.</string>
+    <string name="status_theme">Tema Status.im</string>
+
+    <string name="accept">Aceitar</string>
+
+    <string name="dialog_title_error">Erro</string>
+
+    <string name="auth_accept_policies">Por favor revise e aceite as políticas desse servidor doméstico:</string>
+
+    <string name="settings_call_category">Chamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Use o toque padrão da Riot para chamadas recebidas</string>
+    <string name="settings_call_ringtone_title">Toque de chamada recebida</string>
+    <string name="settings_call_ringtone_dialog_title">Selecione o toque para chamadas:</string>
+
+    <string name="reason_hint">Motivo</string>
+
+    <string name="room_sliding_menu_version_x">Versão %s</string>
+    <string name="settings_notification_troubleshoot">Notificações de Resolução de Problemas</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de Resolução de Problemas</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Executar Testes</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Executando… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnóstico básico está ok. Se você ainda não recebe notificações, por favor relate um erro para nos ajudar a investigar.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Um ou mais testes falharam, tente as correções sugeridas.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Um ou mais testes falharam, por favor relate um erro para nos ajudar a investigar.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
+Por favor revise as configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Abra as Configurações</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Notificações estão desabilitadas para sua conta.
+Por favor revise as configurações da conta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Habilitar</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Configurações do Dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para este dispositivo.</string>
+    <string name="room_participants_action_kick">Desconectar</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">Você tem certeza que deseja desconectar este usuário deste chat?</item>
+        <item quantity="other">Você tem certeza que deseja desconectar estes usuários deste chat?</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notificações não são permitidas para este dispositivo.
+Por favor revise as configurações do Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Revisão do Play Services</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK está disponível e atualizado.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services para entregar mensagens push, mas isto não parece está configurado corretamente:
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Consertar Play Services</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperado com sucesso:
+%1$s</string>
+    <string name="call_anyway">Ligar mesmo assim</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Falha ao recuperar o token do FCM:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registro de Token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso no HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Falha ao registrar o token FCM no HomeServer:
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Serviço de Notificações está em execução.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Serviço de Notificações não está em execução.
+Tente reiniciar a aplicação.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_restart_success">Serviço foi finalizado e reiniciado automaticamente.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Falha ao reiniciar Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Começar na inicialização</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Serviço irá iniciar quando o dispositivo for reiniciado.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">O serviço não irá começar quando o dispositivo for reiniciado, você não irá receber notificações até o Riot for aberto uma vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Habilitar Começar na inicialização</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Revisar restrições de segundo plano</string>
+    <string name="settings_troubleshoot_test_battery_title">Otimização de bateria</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot não é afetado pela Otimização de Bateria.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Reinicialização Automática do Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desabilitar restrições</string>
+
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Otimização</string>
+
+    <string name="settings_inline_url_preview_summary">Prévia de links dentro do chat quando seu homeserver suporta este recurso.</string>
+    <string name="settings_send_typing_notifs">Enviar notificações de digitação</string>
+    <string name="settings_send_typing_notifs_summary">Deixar outros usuários saberem quando você estiver digitando.</string>
+    <string name="settings_show_read_receipts">Mostrar confirmações de leitura</string>
+    <string name="settings_show_read_receipts_summary">Clique nas notificações de leitura para uma lista detalhada.</string>
+    <string name="settings_show_join_leave_messages">Mostrar eventos de entrada e saída de sala</string>
+    <string name="settings_show_join_leave_messages_summary">Convites, chutes e proibições não são afetados.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos da conta</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui avatar e alterações no nome de exibição.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
+Na próxima tela, você será solicitado a permitir que o Riot funcione sempre em segundo plano, por favor aceite.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desabilitadas para o Riot. este teste deve executar usando os dados móveis (sem WIFI).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão habilitadas para o Riot.
+Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enquanto isto estiver em segundo plano, isto poderá afetar as notificações.
+%1$s</string>
+    <string name="settings_send_markdown">Formatação Markdown</string>
+    <string name="settings_send_markdown_summary">Fomatar mensagens usando a sintaxe markdown antes delas serem enviadas. Isto permite uma formatação avançada como usar asteriscos para mostrar texto em itálico.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Conceder permissão</string>
+
+    <string name="account_email_error">Ocorreu um erro ao verificar seu endereço de e-mail.</string>
+
+    <string name="settings_password">Senha</string>
+    <string name="account_phone_number_error">Ocorreu um erro ao verificar seu número de telefone.</string>
+    <string name="account_additional_info">Informação adicional: %s</string>
+
+    <string name="encryption_import_room_keys_success">%1$d/%2$d chave(es) importada(as) com sucesso.</string>
+
+    <string name="settings_labs_native_camera_summary">Inicie a câmera do sistema em vez da tela de câmera personalizada.</string>
+    <string name="settings_labs_enable_send_voice_summary">Esta opção requer um aplicativo de terceiros para gravar as mensagens.</string>
+
+    <string name="command_problem_with_parameters">O comando \"%s\" precisa de mais parâmetros ou alguns parâmetros estão incorretos.</string>
+    <string name="markdown_has_been_enabled">Markdown foi habilitado.</string>
+    <string name="markdown_has_been_disabled">Markdown foi desabilitado.</string>
+
+    <string name="settings_lazy_loading_description">Aumente o desempenho apenas carregando os membros da sala na primeira exibição.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Seu homeserver não suporta o carregamento Lazy de membros da sala ainda. Tente depois.</string>
+
+    <string name="unknown_error">Desculpe, ocorreu um erro</string>
+
+    <string name="merged_events_expand">expandir</string>
+    <string name="merged_events_collapse">colapsar</string>
+
+    <string name="settings_info_area_show">Mostrar a área de informações</string>
+    <string name="show_info_area_always">Sempre</string>
+    <string name="show_info_area_messages_and_errors">Para mensagens e erros</string>
+    <string name="show_info_area_only_errors">Somente para erros</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
+
+    <string name="store_title">Riot.im - colaboração aberta em equipe</string>
+    <string name="store_short_description">Bem-vindo ao Riot.im: um novo mundo de comunicação aberta!</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão. "</string>
+    <string name="passphrase_create_passphrase">Criar passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
+    <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
+    <string name="store_full_description">O Riot.im é um ambiente de colaboração simples e elegante que reúne todas as suas diferentes conversas e integrações de aplicativos em um único aplicativo.
+
+Construído em torno de salas de bate-papo em grupo, o Riot.im permite que você compartilhe mensagens, imagens, vídeos e arquivos - interaja com suas ferramentas e acesse todas as suas diferentes comunidades sob o mesmo teto. Uma única identidade e lugar para todas as suas equipes: não é necessário trocar de conta, trabalhe e converse com pessoas de diferentes organizações em salas públicas ou privadas: de projetos profissionais a viagens escolares, o Riot.im se tornará o centro de todas as suas discussões!
+
+Agora com criptografia de ponta a ponta!
+
+Características incluem:
+
+• Compartilhar instantaneamente mensagens, imagens, vídeos e arquivos de qualquer tipo dentro de grupos de qualquer tamanho
+• Voz e vídeo 1-1 e chamadas em conferência via WebRTC
+• Criptografia de ponta a ponta usando Olm (https://matrix.org/git/olm)
+• Veja quem está lendo suas mensagens com recibos de leitura
+• Comunique-se com os usuários em qualquer lugar do ecossistema Matrix.org - não apenas usuários do Riot.im!
+• Descobrir e convidar usuários por endereço de e-mail
+• Participar em salas públicas acessíveis aos hóspedes
+• Altamente escalável - suporta centenas de salas e milhares de usuários
+• Histórico de mensagens totalmente sincronizado em vários dispositivos e navegadores
+• Configurações de notificação finamente configuráveis, sincronizadas em todos os dispositivos
+• Histórico infinito de bate-papo pesquisável
+• Permalinks para mensagens
+• Pesquisa completa de mensagens
+• Suporte para idiomas RTL, como o árabe
+
+Para desenvolvedores:
+• O Riot.im é um cliente Matrix - construído no padrão aberto e ecossistema Matrix.org, fornecendo interoperabilidade com todos os outros aplicativos, servidores e integrações compatíveis com Matrix.
+• Abertura completa sob a licença Apache permissiva - obtenha o código em https://github.com/vector-im/vector-android. Pull requests são bem-vindos!
+• Trivialmente extensível através da API de cliente-servidor Matrix aberta (https://matrix.org/docs/spec)
+• Execute seu próprio servidor! Você pode usar o servidor matrix.org padrão ou executar seu próprio servidor inicial Matrix (por exemplo, https://matrix.org/docs/projects/server/synapse.html)
+
+Descubra uma colaboração verdadeiramente eficiente e aberta com o Riot.im!</string>
+
+    <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+
+    <string name="store_whats_new">Estamos sempre fazendo alterações e melhorias no Riot.im.
+O changelog completo pode ser encontrado aqui: %1$s.
+Para garantir que você não perca nada, mantenha suas atualizações ativadas.</string>
 </resources>

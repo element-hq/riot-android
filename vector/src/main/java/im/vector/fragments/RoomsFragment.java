@@ -25,10 +25,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Spinner;
@@ -39,7 +37,6 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.util.Log;
 
@@ -56,6 +53,7 @@ import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
 import im.vector.adapters.RoomAdapter;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomDirectoryData;
 import im.vector.view.EmptyViewItemDecoration;
@@ -114,8 +112,11 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
+
+        mFabColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms);
+        mFabPressedColor = ContextCompat.getColor(getActivity(), R.color.tab_rooms_secondary);
 
         initViews();
 
@@ -490,7 +491,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                 mCurrentFilter, new ApiCallback<List<PublicRoom>>() {
                     @Override
                     public void onSuccess(List<PublicRoom> publicRooms) {
-                        if (null != getActivity()) {
+                        if (isAdded()) {
                             mAdapter.setNoMorePublicRooms(publicRooms.size() < PublicRoomsManager.PUBLIC_ROOMS_LIMIT);
                             mAdapter.setPublicRooms(publicRooms);
                             addPublicRoomsListener();
@@ -516,7 +517,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
                     }
 
                     private void onError(String message) {
-                        if (null != getActivity()) {
+                        if (isAdded()) {
                             Log.e(LOG_TAG, "## startPublicRoomsSearch() failed " + message);
                             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                             hidePublicRoomsLoadingView();
@@ -551,7 +552,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
         boolean isForwarding = PublicRoomsManager.getInstance().forwardPaginate(new ApiCallback<List<PublicRoom>>() {
             @Override
             public void onSuccess(final List<PublicRoom> publicRooms) {
-                if (null != getActivity()) {
+                if (isAdded()) {
                     // unplug the scroll listener if there is no more data to find
                     if (!PublicRoomsManager.getInstance().hasMoreResults()) {
                         mAdapter.setNoMorePublicRooms(true);
@@ -564,12 +565,12 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             }
 
             private void onError(String message) {
-                if (null != getActivity()) {
+                if (isAdded()) {
                     Log.e(LOG_TAG, "## forwardPaginate() failed " + message);
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                }
 
-                hidePublicRoomsLoadingView();
+                    hidePublicRoomsLoadingView();
+                }
             }
 
             @Override
@@ -606,7 +607,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      * Remove the public rooms listener
      */
     private void removePublicRoomsListener() {
-        mRecycler.removeOnScrollListener(null);
+        mRecycler.removeOnScrollListener(mPublicRoomScrollListener);
     }
 
     /*

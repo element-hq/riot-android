@@ -21,7 +21,6 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -56,6 +55,7 @@ import im.vector.VectorApp;
 import im.vector.activity.BugReportActivity;
 import im.vector.extensions.BasicExtensionsKt;
 import im.vector.settings.VectorLocale;
+import im.vector.ui.themes.ThemeUtils;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -68,6 +68,12 @@ import okhttp3.Response;
  */
 public class BugReporter {
     private static final String LOG_TAG = BugReporter.class.getSimpleName();
+
+    private static boolean sInMultiWindowMode;
+
+    public static void setMultiWindowMode(boolean inMultiWindowMode) {
+        sInMultiWindowMode = inMultiWindowMode;
+    }
 
     /**
      * Bug report upload listener
@@ -217,11 +223,13 @@ public class BugReporter {
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("lazy_loading", BasicExtensionsKt.toOnOff(PreferencesManager.useLazyLoading(context)))
+                            .addFormDataPart("multi_window", BasicExtensionsKt.toOnOff(sInMultiWindowMode))
                             .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorLocale.INSTANCE.getApplicationLocale().toString())
-                            .addFormDataPart("default_app_language", SystemUtilsKt.getDeviceLocale(context).toString());
+                            .addFormDataPart("default_app_language", SystemUtilsKt.getDeviceLocale(context).toString())
+                            .addFormDataPart("theme", ThemeUtils.INSTANCE.getApplicationTheme(context));
 
                     String buildNumber = context.getString(R.string.build_number);
                     if (!TextUtils.isEmpty(buildNumber) && !buildNumber.equals("0")) {
@@ -254,21 +262,15 @@ public class BugReporter {
                                 builder.addFormDataPart("file",
                                         logCatScreenshotFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile));
                             } catch (Exception e) {
-                                Log.e(LOG_TAG, "## saveLogCat() : fail to write logcat" + e.toString(), e);
+                                Log.e(LOG_TAG, "## sendBugReport() : fail to write screenshot" + e.toString(), e);
                             }
                         }
                     }
 
                     mScreenshot = null;
 
-                    // add some github tags
-                    try {
-                        PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-                        builder.addFormDataPart("label", pInfo.versionName);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## sendBugReport() : cannot retrieve the appname " + e.getMessage(), e);
-                    }
-
+                    // add some github labels
+                    builder.addFormDataPart("label", BuildConfig.VERSION_NAME);
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION);
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name));
 
@@ -470,6 +472,9 @@ public class BugReporter {
         if (crashFile.exists()) {
             crashFile.delete();
         }
+
+        // Also reset the screenshot
+        mScreenshot = null;
     }
 
     /**
@@ -560,7 +565,12 @@ public class BugReporter {
         rootView.setDrawingCacheEnabled(true);
 
         try {
-            return rootView.getDrawingCache();
+            Bitmap bitmap = rootView.getDrawingCache();
+
+            // Make a copy, because if Activity is destroyed, the bitmap will be recycled
+            bitmap = Bitmap.createBitmap(bitmap);
+
+            return bitmap;
         } catch (OutOfMemoryError oom) {
             Log.e(LOG_TAG, "Cannot get drawing cache for " + VectorApp.getCurrentActivity() + " OOM.", oom);
         } catch (Exception e) {

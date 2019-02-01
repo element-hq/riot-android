@@ -101,7 +101,7 @@ Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Mandar informes de fallas</string>
     <string name="send_bug_report_include_screenshot">Enviar una captura de pantalla</string>
-    <string name="send_bug_report">Informe de Error</string>
+    <string name="send_bug_report">Reporte de Error</string>
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera, qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
     <string name="send_bug_report_logs_description">Para diagnosticar problemas, informes de este cliente se enviarán junto a este reporte de error. Este informe, inclusive los registros y la captura de pantalla, no será visible públicamente. Si prefieres solamente enviar el texto de arriba, por favor desmarca:</string>
@@ -629,8 +629,8 @@ Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrad
     <string name="encryption_export_room_keys">Exportar claves de salas</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Escribir Contraseña</string>
-    <string name="encryption_export_confirm_passphrase">Confirmar Contraseña</string>
+    <string name="passphrase_enter_passphrase">Escribir Contraseña</string>
+    <string name="passphrase_confirm_passphrase">Confirmar Contraseña</string>
     <string name="encryption_export_saved_as">Las claves de cifración de Persona-a-Persona se guardaron en \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Importar claves de cifrado de E2E de las salas</string>
@@ -752,7 +752,6 @@ Dispositivos desconocidos:</string>
     <string name="community_name">Nombre de la comunidad</string>
     <string name="encrypted_message">Mensaje cifrado</string>
 
-    <string name="notification_on">Activado</string>
     <string name="notification_off">Desactivado</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="light_theme">Tema Claro</string>

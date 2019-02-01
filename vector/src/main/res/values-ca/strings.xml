@@ -46,7 +46,7 @@
     <string name="rename">Reanomena</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call"> Conferència en curs. Uneix-te per veu o vídeo.</string>
+    <string name="ongoing_conference_call">Conferència en curs. Uniu-vos per veu o vídeo.</string>
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
@@ -126,7 +126,7 @@
     <string name="send_bug_report_description">Descriviu l\'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
     <string name="send_bug_report_placeholder">Descriviu el problema aquí</string>
     <string name="send_bug_report_logs_description">Els registres d\'aquest client s\'enviaran amb aquest informe d\'error per tal de diagnosticar problemes. Aquest informe d\'errors, així com també els registres i la captura de pantalla, no seran visibles de forma pública. Desmarqueu si preferiu enviar només el text:</string>
-    <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat com per estar sacsejant el telèfon. Voleu enviar un informe d\'error?</string>
+    <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat per a estar sacsejant el telèfon. Voleu enviar un informe d\'error?</string>
     <string name="send_bug_report_app_crashed">En l\'última execució l\'aplicació va fallar. Voleu enviar un informe d\'error?</string>
 
     <string name="send_bug_report_sent">L\'informe d\'error s\'ha enviat correctament</string>
@@ -134,7 +134,7 @@
     <string name="send_bug_report_progress">En curs (%s%%)</string>
 
     <string name="send_files_in">Envia a</string>
-    <string name="read_receipt">Llegeix</string>
+    <string name="read_receipt">Llegit</string>
 
     <string name="join_room">Uneix-te a la sala</string>
     <string name="username">Nom d\'usuari</string>
@@ -160,7 +160,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Entra</string>
-    <string name="auth_register">Registra\'mr</string>
+    <string name="auth_register">Registra\'m</string>
     <string name="auth_submit">Tramet</string>
     <string name="auth_skip">Omet</string>
     <string name="auth_send_reset_email">Envia el correu de reinici</string>
@@ -263,7 +263,7 @@
     <string name="incoming_call">Trucada d\'entrada</string>
     <string name="incoming_video_call">Vídeotrucada d\'entrada</string>
     <string name="incoming_voice_call">Trucada de veu d\'entrada</string>
-    <string name="call_in_progress">Trucada en curs</string>
+    <string name="call_in_progress">Trucada en curs…</string>
 
     <string name="call_error_user_not_responding">No s\'està responent a la trucada.</string>
     <string name="call_error_ice_failed">Ha fallat la connexió de mitjans</string>
@@ -301,7 +301,7 @@
     <string name="reject">Rebutja</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Vés al primer missatge no llegit.</string>
+    <string name="room_jump_to_first_unread">Salta al primer missatge no llegit.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">L\'usuari de nom %s t\'ha convidat a unir-te a aquesta sala</string>
@@ -431,7 +431,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
 
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directpri</string>
-    <string name="directory_searching_title">Cercant al directori..</string>
+    <string name="directory_searching_title">S\'està cercant al directori…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Preferit</string>
@@ -458,7 +458,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_add_email_address">Afegeix una adreça de correu electrònic</string>
     <string name="settings_phone_number">Telèfon</string>
     <string name="settings_add_phone_number">Afegeix un número de telèfon</string>
-    <string name="settings_app_info_link_summary">Pantalla d\'informació del sistema de l\'aplicació</string>
+    <string name="settings_app_info_link_summary">Mostra la informació de l\'aplicació als paràmetres del sistema.</string>
     <string name="settings_app_info_link_title">Informació de l\'aplicació</string>
 
     <string name="settings_notification_ringtone">So de les notificación</string>
@@ -478,7 +478,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_background_sync">Sincronització en segon pla</string>
     <string name="settings_enable_background_sync">Habilita la sincronització en segon pla</string>
     <string name="settings_set_sync_timeout">Temps màxim d\'espera de la petició de sincronització</string>
-    <string name="settings_set_sync_delay">Temps entre dues peticions de sincronització</string>
+    <string name="settings_set_sync_delay">Retard entre cada petició</string>
     <string name="settings_second">segon</string>
     <string name="settings_seconds">segons</string>
 
@@ -506,7 +506,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_missed_notifications">Destaca les sales amb notificacions sense llegir</string>
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
-    <string name="settings_inline_url_preview">Habilita les previsualitzacions de les URL per defecte</string>
+    <string name="settings_inline_url_preview">Previsualitzacions dels URL en línia</string>
     <string name="settings_always_show_timestamps">Mostra sempre l\'hora dels missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores</string>
     <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
@@ -682,8 +682,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
     <string name="encryption_export_room_keys_summary">Exporta les claus a un fitxer local</string>
     <string name="encryption_export_export">Exporta</string>
-    <string name="encryption_import_enter_passphrase">Introduïu una contrasenya</string>
-    <string name="encryption_export_confirm_passphrase">Confirmeu la contrasenya</string>
+    <string name="passphrase_enter_passphrase">Introduïu una contrasenya</string>
+    <string name="passphrase_confirm_passphrase">Confirmeu la contrasenya</string>
     <string name="encryption_export_saved_as">Les claus E2E de la sala s\'han desat a \'%s\'
 
 Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</string>
@@ -753,7 +753,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="widget_integration_unable_to_create">No s\'ha pogut crear el giny.</string>
     <string name="widget_integration_failed_to_send_request">No s\'ha pogut enviar la sol·licitud.</string>
     <string name="widget_integration_positive_power_level">El nivell de potència ha de ser un enter positiu.</string>
-    <string name="widget_integration_must_be_in_room">No us tobeu a aqueta sala.</string>
+    <string name="widget_integration_must_be_in_room">No us trobeu en aquesta sala.</string>
     <string name="widget_integration_no_permission_in_room">No teniu el permis per fer això en aquesta sala.</string>
     <string name="widget_integration_missing_room_id">Falta l\'ID de la sala en la sol·licitud.</string>
     <string name="widget_integration_missing_user_id">Falta l\'ID d\'usuari en la sol·licitud.</string>
@@ -778,7 +778,6 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
-    <string name="notification_on">Encès</string>
     <string name="notification_noisy">Sorrollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>
@@ -801,7 +800,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="joined">S\'hi ha unit</string>
     <string name="invited">Ha sigut convidat</string>
     <string name="filter_group_members">Filtre de participants de grups</string>
-    <string name="filter_group_rooms">Filte de grups de sales</string>
+    <string name="filter_group_rooms">Filtra els grups de sales</string>
 
     <string name="group_no_long_description">L\'administrador de la comunitat no ha fet una descripció llarga per aquesta comunitat.</string>
 
@@ -819,10 +818,10 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <string name="room_settings_all_messages_noisy">Tots els missatges (sorollós)</string>
     <string name="room_settings_all_messages">Tots els missatges</string>
-    <string name="room_settings_mention_only">Només citacions</string>
+    <string name="room_settings_mention_only">Només mencions</string>
     <string name="room_settings_mute">Silencia</string>
     <string name="room_settings_room_notifications_title">Notificacions</string>
-    <string name="send_bug_report_rage_shake">Sacsejar amb ràbia per informar d\'un error</string>
+    <string name="send_bug_report_rage_shake">Sacseja el dispositiu amb ràbia per a informar d\'un error</string>
 
     <string name="actions">Accions</string>
     <string name="list_members">Llista de membres</string>
@@ -852,7 +851,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
         <item quantity="one">1 sala</item>
         <item quantity="other">%d sales</item>
     </plurals>
-    <string name="open_chat_header">Obrir la capçalera</string>
+    <string name="open_chat_header">Obre la capçalera</string>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 missatge de notificació sense llegir</item>
         <item quantity="other">%d missatges de notificació sense llegir</item>
@@ -903,7 +902,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="system_alerts_header">Alertes de sistema</string>
 
     <string name="send_bug_report_description_in_english">Si és possible, escriviu si us plau la descripció en anglès.</string>
-    <string name="no_sticker_application_dialog_content">Actualment no teniu cap conjunt d\'enganxines activat.
+    <string name="no_sticker_application_dialog_content">Actualment no teniu cap conjunt d\'adhesius activat.
 
 En voleu afegir algun?</string>
 
@@ -972,8 +971,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="settings_without_flair">No sou ara mateix membre de cap comunitat.</string>
 
     <string name="encryption_export_notice">Si us plau creeu una frase de pas per encriptar les claus exportades. Haureu d\'introduir la mateixa frase de pas per poder importar les claus.</string>
-    <string name="encryption_export_create_passphrase">Crea frase de pas</string>
-    <string name="encryption_export_passphrase_dont_match">Les frases de pas han de coincidir</string>
+    <string name="passphrase_create_passphrase">Crea frase de pas</string>
+    <string name="passphrase_passphrase_does_not_match">Les frases de pas han de coincidir</string>
     <string name="lock_screen_hint">Escriviu aquí…</string>
 
     <string name="widget_integration_missing_parameter">Falta un paràmetre necessari.</string>
@@ -1069,4 +1068,73 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="settings_send_markdown_summary">Doneu format a missatges usant la sintaxi Markdown abans d\'enviar-los. Això us permetrà l\'ús de format avançat com ara usar asteriscs per mostrar text en cursiva.</string>
     <string name="settings_show_join_leave_messages_summary">No afecta invitacions, expulsions i bloquejos.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
+    <string name="call_anyway">Truca de totes maneres</string>
+    <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor personal:</string>
+
+    <string name="video_call_in_progress">Trucada de vídeo en procés…</string>
+
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Executa les proves</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">S\'està executant… (%1$d de %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">El diagnòstic bàsic és correcte. Si encara no rebeu notificacions, envieu un informe d\'error per ajudar-nos a investigar.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ha fallat una o més proves, proveu les solucions proposades.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Paràmetres del sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Les notificacions són habilitades als paràmetres del sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Les notificacions són inhabilitades als paràmetres del sistema.
+Comproveu els paràmetres del sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">Obre els paràmetres</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Paràmetres del compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Les notificacions són habilitades per al vostre compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Les notificacions són inhabilitades per al vostre compte.
+Comproveu els paràmetres del compte.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Habilita</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Paràmetres del dispositiu.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Les notificacions són habilitades per a aquest dispositiu.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Habilita</string>
+
+    <string name="settings_troubleshoot_test_play_services_quickfix">Repara els serveis de Google Play</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Servei de notificacions</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">El servei de notificacions s\'està executant.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">El servei de notificacions s\'està executant.
+Proveu de reiniciar l\'aplicació.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Inicia el servei</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">Inicia\'l a l\'arrencada</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
+    <string name="settings_troubleshoot_test_battery_success">El Riot no està afectat per l\'optimització de bateria.</string>
+    <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'entrada i sortida</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis d\'avatar i àlies.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Connexió al rerefons</string>
+    <string name="startup_notification_fdroid_battery_optim_message">El Riot necessita mantenir una connexió de baix impacte al rerefons, per tal de tindre notificacions fiables.
+A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre al rerefons, si us plau, accepteu-ho.</string>
+    <string name="settings_password">Contrasenya</string>
+    <string name="account_additional_info">Informació addicional: %s</string>
+
+    <string name="encryption_import_room_keys_success">S\'ha importat %1$d/%2$d claus amb èxit.</string>
+
+    <string name="markdown_has_been_enabled">S\'ha habilitat el Markdown.</string>
+    <string name="markdown_has_been_disabled">S\'ha inhabilitat el Markdown.</string>
+
+    <string name="receipt_avatar">Avatar de recepció</string>
+    <string name="notice_avatar">Avatar de notificació</string>
+    <string name="settings_info_area_show">Mostra l\'àrea d\'informació</string>
+    <string name="show_info_area_always">Sempre</string>
+    <string name="show_info_area_messages_and_errors">Per als missatges i errors</string>
+    <string name="show_info_area_only_errors">Només per als errors</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
+
+    <string name="store_title">Riot.im - col·laboració en equips oberts</string>
+    <string name="store_whats_new">Sempre hi som fent canvis i millores al Riot.im.
+Podeu trobar el registre de canvis complet aquí: %1$s.
+Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
+    <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
 </resources>

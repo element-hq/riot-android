@@ -3,110 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/login_actions_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/vector_silver_color" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/vector_silver_color" />
-
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="94dp"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?attr/colorAccent"
-            android:text="@string/auth_login"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/button_register"
-            android:layout_width="94dp"
-            android:layout_height="36dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/white"
-            android:text="@string/auth_register"
-            android:textColor="?attr/colorAccent" />
-
-        <Button
-            android:id="@+id/button_reset_password"
-            android:layout_width="150dp"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?attr/colorAccent"
-            android:text="@string/auth_send_reset_email"
-            android:textColor="@android:color/white"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/button_forgot_email_validate"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?attr/colorAccent"
-            android:text="@string/auth_send_reset_email"
-            android:textColor="@android:color/white"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/button_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?attr/colorAccent"
-            android:minWidth="94dp"
-            android:text="@string/auth_submit"
-            android:textColor="@android:color/white"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/button_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_toStartOf="@id/button_submit"
-            android:layout_toLeftOf="@id/button_submit"
-            android:background="?attr/colorAccent"
-            android:minWidth="94dp"
-            android:text="@string/auth_skip"
-            android:textColor="@android:color/white"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
     <!-- the main body is defined in a scroll view to avoid split items -->
     <ScrollView
         android:layout_width="match_parent"
@@ -128,7 +24,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/logo_login" />
+                    android:src="@drawable/riot_splash_1" />
             </RelativeLayout>
 
             <LinearLayout
@@ -147,10 +43,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <EditText
                         android:id="@+id/login_user_name"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_user_id_placeholder"
@@ -174,6 +72,7 @@
 
                         <EditText
                             android:id="@+id/login_phone_number_country"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
@@ -184,10 +83,12 @@
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
-                            tools:text="FR" />
+                            tools:text="FR"
+                            tools:visibility="visible" />
 
                         <EditText
                             android:id="@+id/login_phone_number_value"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
@@ -198,6 +99,7 @@
 
                     <EditText
                         android:id="@+id/login_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -220,6 +122,7 @@
 
                     <EditText
                         android:id="@+id/forget_email_address"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_email_placeholder"
@@ -228,9 +131,9 @@
 
                     <EditText
                         android:id="@+id/forget_new_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_new_password_placeholder"
                         android:inputType="textPassword"
@@ -238,9 +141,9 @@
 
                     <EditText
                         android:id="@+id/forget_confirm_new_password"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:ems="10"
                         android:hint="@string/auth_repeat_new_password_placeholder"
                         android:inputType="textPassword"
@@ -257,6 +160,7 @@
 
                     <EditText
                         android:id="@+id/creation_your_name"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/auth_user_name_placeholder"
@@ -265,6 +169,7 @@
 
                     <EditText
                         android:id="@+id/creation_password1"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -274,6 +179,7 @@
 
                     <EditText
                         android:id="@+id/creation_password2"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -299,6 +205,7 @@
 
                     <EditText
                         android:id="@+id/registration_email"
+                        style="@style/LoginEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -314,6 +221,7 @@
 
                         <EditText
                             android:id="@+id/registration_phone_number_country"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
@@ -324,10 +232,12 @@
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
-                            tools:text="FR" />
+                            tools:text="FR"
+                            tools:visibility="visible" />
 
                         <EditText
                             android:id="@+id/registration_phone_number_value"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_phone_number_placeholder"
@@ -378,6 +288,7 @@
 
                         <EditText
                             android:id="@+id/login_matrix_server_url"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hs_url"
@@ -394,6 +305,7 @@
 
                         <EditText
                             android:id="@+id/login_identity_url"
+                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/identity_url"
@@ -421,10 +333,96 @@
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:visibility="gone"
-                tools:text="A text here" />
+                tools:text="A text here"
+                tools:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/login_actions_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/vector_silver_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/button_login"
+                style="@style/LoginButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/auth_login" />
+
+            <Button
+                android:id="@+id/button_register"
+                style="@style/LoginButtonStyle"
+                android:layout_toStartOf="@+id/button_login"
+                android:layout_toLeftOf="@+id/button_login"
+                android:background="@android:color/white"
+                android:text="@string/auth_register"
+                android:textColor="?attr/colorAccent" />
+
+            <Button
+                android:id="@+id/button_reset_password"
+                style="@style/LoginButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/auth_send_reset_email"
+                android:visibility="gone"
+                tools:layout_marginTop="46dp"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_forgot_email_validate"
+                style="@style/LoginButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/auth_send_reset_email"
+                android:visibility="gone"
+                tools:layout_marginTop="92dp"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_submit_three_pid"
+                style="@style/LoginButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:minWidth="94dp"
+                android:text="@string/auth_submit"
+                android:visibility="gone"
+                tools:layout_marginTop="138dp"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_skip_three_pid"
+                style="@style/LoginButtonStyle"
+                android:layout_toStartOf="@id/button_submit_three_pid"
+                android:layout_toLeftOf="@id/button_submit_three_pid"
+                android:minWidth="94dp"
+                android:text="@string/auth_skip"
+                android:visibility="gone"
+                tools:layout_marginTop="138dp"
+                tools:visibility="visible" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/vector_silver_color" />
+
+    </LinearLayout>
 
     <!-- flow mask view: to be displayed above the entire screen -->
     <RelativeLayout

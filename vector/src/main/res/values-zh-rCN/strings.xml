@@ -69,7 +69,7 @@
     <string name="ongoing_conference_call_video">视频</string>
     <string name="or">或</string>
 
-    <string name="action_sign_out">注销</string>
+    <string name="action_sign_out">登出</string>
     <string name="disable">禁用</string>
 
     <string name="dialog_title_warning">警告</string>
@@ -80,11 +80,11 @@
 
     <string name="hs_url">主服务器 URL</string>
     <string name="identity_url">身份服务器 URL</string>
-    <string name="auth_login">登录</string>
+    <string name="auth_login">登入</string>
     <string name="auth_register">注册</string>
     <string name="auth_submit">提交</string>
     <string name="auth_skip">跳过</string>
-    <string name="auth_send_reset_email">发送密码重设电子邮件</string>
+    <string name="auth_send_reset_email">发送密码重置电子邮件</string>
     <string name="auth_return_to_login">返回登录页面</string>
     <string name="auth_user_id_placeholder">电子邮箱或用户名</string>
     <string name="auth_password_placeholder">密码</string>
@@ -92,24 +92,24 @@
     <string name="auth_user_name_placeholder">用户名</string>
     <string name="auth_email_placeholder">电子邮箱地址</string>
     <string name="auth_opt_email_placeholder">电子邮箱地址（可选）</string>
-    <string name="auth_phone_number_placeholder">电话号码</string>
-    <string name="auth_opt_phone_number_placeholder">电话号码（可选）</string>
+    <string name="auth_phone_number_placeholder">手机号码</string>
+    <string name="auth_opt_phone_number_placeholder">手机号码（可选）</string>
     <string name="auth_repeat_new_password_placeholder">确认您的新密码</string>
     <string name="auth_invalid_login_param">用户名和/或密码错误</string>
     <string name="auth_invalid_user_name">用户名仅可由字母、数字、点、连字符与下划线组成</string>
     <string name="auth_invalid_password">密码太短（至少 6 位）</string>
     <string name="auth_missing_password">缺少密码</string>
     <string name="auth_invalid_email">此电子邮箱地址似乎无效</string>
-    <string name="auth_invalid_phone">此电话号码似乎无效</string>
+    <string name="auth_invalid_phone">此手机号码似乎无效</string>
     <string name="auth_email_already_defined">此电子邮箱地址已被使用。</string>
     <string name="auth_missing_email">缺少电子邮箱地址</string>
-    <string name="auth_missing_phone">缺少电话号码</string>
-    <string name="auth_missing_email_or_phone">缺少电子邮箱地址或电话号码</string>
+    <string name="auth_missing_phone">缺少手机号码</string>
+    <string name="auth_missing_email_or_phone">缺少电子邮箱地址或手机号码</string>
     <string name="auth_password_dont_match">密码不匹配</string>
     <string name="auth_forgot_password">忘记密码？</string>
     <string name="auth_home_server">主服务器：</string>
     <string name="auth_identity_server">身份服务器：</string>
-    <string name="auth_reset_password_next_step_button">我已验证我的电子邮箱地址</string>
+    <string name="auth_reset_password_next_step_button">我已验证了我的电子邮箱地址</string>
     <string name="auth_reset_password_message">要重置您的密码，请输入与您的帐号关联的电子邮箱地址：</string>
     <string name="auth_reset_password_missing_email">必须输入与您账号关联的电子邮箱地址。</string>
     <string name="auth_reset_password_missing_password">必须输入新密码。</string>
@@ -156,7 +156,7 @@
     <string name="room_sliding_menu_version">版本</string>
     <string name="settings_email_address">电子邮箱</string>
     <string name="settings_add_email_address">添加电子邮箱地址</string>
-    <string name="settings_add_phone_number">添加电话号码</string>
+    <string name="settings_add_phone_number">添加手机号码</string>
     <string name="settings_version">版本</string>
     <string name="settings_olm_version">olm 版本</string>
     <string name="settings_advanced">高级</string>
@@ -171,9 +171,9 @@
     <string name="settings_change_password">修改密码</string>
     <string name="settings_new_password">新密码</string>
     <string name="settings_confirm_password">确认密码</string>
-    <string name="settings_fail_to_update_password">更新密码失败</string>
+    <string name="settings_fail_to_update_password">密码更新失败</string>
     <string name="settings_password_updated">您的密码已更新</string>
-    <string name="settings_phone_number_label">电话号码</string>
+    <string name="settings_phone_number_label">手机号码</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519 认证密钥</string>
     <string name="encryption_information_algorithm">算法</string>
     <string name="encryption_information_session_id">会话 ID</string>
@@ -194,26 +194,26 @@
     <string name="missing_permissions_warning">由于缺少权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
     <string name="device_information">设备信息</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">电话会议在启用加密的聊天室中不受支持</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">加密的聊天室不支持电话会议</string>
     <string name="action_sign_out_confirmation">为保证安全，退出登录将会删除任何端对端加密密钥。重新登录后将无法阅读之前的已加密的聊天历史。
 在登出之前，请导出并备份端对端加密密钥。</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
     <string name="dialog_title_confirmation">确认</string>
     <string name="send_bug_report_include_crash_logs">发送崩溃日志</string>
-    <string name="send_bug_report_app_crashed">上次启动后本应用发生了崩溃。是否发送崩溃报告？</string>
+    <string name="send_bug_report_app_crashed">上次启动后本应用发生了崩溃。是否打开崩溃报告页面？</string>
 
     <string name="start_voice_call">开始语音通话</string>
     <string name="start_video_call">开始视频通话</string>
 
     <string name="option_take_photo_video">拍摄照片或视频</string>
 
-    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重设密码。</string>
-    <string name="auth_add_phone_message">为您的账户添加一个电话号码以便其他用户发现您。</string>
-    <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或电话号码到您的账户来让用户发现您。
+    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重置密码。</string>
+    <string name="auth_add_phone_message">为您的账户添加一个手机号码以便其他用户发现您。</string>
+    <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或手机号码到您的账户来让用户发现您。
 
 电子邮箱地址也可以让您重设您的密码。</string>
-    <string name="auth_add_email_and_phone_message">添加一个电子邮箱地址和电话号码到您的账户来让用户发现您。
+    <string name="auth_add_email_and_phone_message">添加一个电子邮箱地址和手机号码到您的账户来让用户发现您。
 
 电子邮箱地址也可以让您重设您的密码。</string>
     <string name="auth_repeat_password_placeholder">重复密码</string>
@@ -296,20 +296,20 @@
     <string name="room_sliding_menu_copyright">版权</string>
     <string name="room_sliding_menu_privacy_policy">隐私政策</string>
 
-    <string name="settings_phone_number">电话号码</string>
+    <string name="settings_phone_number">手机号码</string>
     <string name="settings_app_info_link_title">应用信息</string>
 
     <string name="settings_enable_all_notif">启用这个账户的通知</string>
     <string name="settings_enable_this_device">启用这个设备的通知</string>
     <string name="settings_messages_in_one_to_one">来自私聊的消息</string>
     <string name="settings_messages_in_group_chat">来自群聊的消息</string>
-    <string name="settings_invited_to_room">聊天室邀请</string>
+    <string name="settings_invited_to_room">当我被邀请加入聊天室时</string>
     <string name="settings_messages_sent_by_bot">来自机器人的消息</string>
 
     <string name="settings_background_sync">后台同步</string>
     <string name="settings_enable_background_sync">启用后台同步</string>
     <string name="settings_set_sync_timeout">同步请求超时</string>
-    <string name="settings_set_sync_delay">两次同步请求之间的延时</string>
+    <string name="settings_set_sync_delay">每次同步请求之间的间隔</string>
     <string name="settings_second">秒</string>
     <string name="settings_seconds">秒</string>
 
@@ -324,7 +324,7 @@
 请输入您的密码以继续。</string>
     <string name="devices_delete_dialog_title">身份认证</string>
     <string name="settings_old_password">旧密码</string>
-    <string name="settings_unignore_user">显示所有来自 %s 的消息？
+    <string name="settings_unignore_user">是否重新显示所有来自 %s 的消息？
 
 注意，此操作会重启应用并将花费一些时间。</string>
 
@@ -332,10 +332,10 @@
 
     <string name="settings_phone_number_country_label">国家</string>
     <string name="settings_phone_number_country_error">请选择一个国家</string>
-    <string name="settings_phone_number_verification">电话验证</string>
+    <string name="settings_phone_number_verification">手机验证</string>
     <string name="settings_phone_number_verification_instruction">我们已经发送了一条含有一个激活码的短信。请在下面输入这个激活码。</string>
     <string name="settings_phone_number_verification_error_empty_code">输入激活码</string>
-    <string name="settings_phone_number_verification_error">在验证您的电话号码的时候发生了错误</string>
+    <string name="settings_phone_number_verification_error">在验证您的手机号码的时候发生了错误</string>
     <string name="room_settings_room_name">聊天室名称</string>
     <string name="room_settings_topic">主题</string>
     <string name="room_settings_directory_visibility">把这个聊天室列在聊天室目录中</string>
@@ -357,10 +357,10 @@
     <string name="room_settings_category_advanced_title">高级</string>
     <string name="room_settings_room_internal_id">聊天室的内部 ID</string>
     <string name="room_settings_addresses_pref_title">地址</string>
-    <string name="room_settings_labs_warning_message">这些是可能意外坏掉的实验性特性。请谨慎使用。</string>
+    <string name="room_settings_labs_warning_message">这些是实验性功能，可能会出现不可预料的错误。请谨慎使用。</string>
     <string name="room_settings_labs_end_to_end">端对端加密</string>
     <string name="room_settings_labs_end_to_end_warnings">您需要注销来启用加密。</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">在这个聊天室永不从这个设备发送加密消息到未验证的设备。</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">在此聊天室中、使用本设备时，从不向未验证的设备发送加密消息。</string>
 
     <string name="room_settings_addresses_no_local_addresses">这个聊天室没有本地地址</string>
     <string name="room_settings_addresses_add_new_address">新地址（如 #foo:matrix.org）</string>
@@ -382,8 +382,8 @@
     <string name="encryption_export_room_keys">导出聊天室密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="encryption_import_enter_passphrase">输入密码</string>
-    <string name="encryption_export_confirm_passphrase">确认密码</string>
+    <string name="passphrase_enter_passphrase">输入密码</string>
+    <string name="passphrase_confirm_passphrase">确认密码</string>
     <string name="encryption_export_saved_as">聊天室的端对端密钥已经被保存到“%s”。
 
 注意：如果本应用程式被卸载，此文件可能将会被移除。</string>
@@ -391,8 +391,8 @@
     <string name="encryption_import_e2e_room_keys">导入聊天室端对端加密密钥</string>
     <string name="encryption_import_room_keys">导入聊天室密钥</string>
     <string name="encryption_import_room_keys_summary">从本地文件导入密钥</string>
-    <string name="encryption_never_send_to_unverified_devices_title">仅对已验证的设备加密</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">永不从这个设备发送加密消息到未验证的设备</string>
+    <string name="encryption_never_send_to_unverified_devices_title">仅向已验证的设备发送加密消息</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">使用本设备时，从不向未验证的设备发送加密消息。</string>
 
     <string name="encryption_information_not_verified">未验证</string>
     <string name="encryption_information_unknown_device">未知设备</string>
@@ -409,8 +409,8 @@
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
     <string name="ongoing_conference_call_voice">语音</string>
-    <string name="missing_permissions_to_start_conf_call">您需要权限才可在此聊天室中发起会议</string>
-    <string name="send_anyway">依然发送</string>
+    <string name="missing_permissions_to_start_conf_call">您需要在此聊天室中发起会议的权限</string>
+    <string name="send_anyway">仍然发送</string>
     <string name="send_bug_report">问题反馈</string>
     <string name="send_bug_report_logs_description">为分析此问题，本客户端的日志将会随此问题反馈发送。本问题反馈，包括日志与截图，将不会被公开显示。若您希望仅发送上面的文字，请取消选择：</string>
     <string name="send_bug_report_sent">问题反馈发送成功</string>
@@ -418,7 +418,7 @@
     <string name="read_receipt">阅读</string>
 
     <string name="auth_invalid_token">无效令牌</string>
-    <string name="auth_threepid_warning_message">直到出现相应的 API，暂不支持同时使用电子邮箱地址与电话号码注册。只有电话号码会被添加到此帐户。
+    <string name="auth_threepid_warning_message">在出现相应的 API 前，暂不支持同时使用电子邮箱地址与手机号码注册。只有手机号码会被添加到此帐户。
 
 您可在设置中将电子邮箱添加到你的账户。</string>
     <string name="auth_username_in_use">用户名已被使用</string>
@@ -433,7 +433,7 @@
     <string name="incoming_call">呼入的通话</string>
     <string name="incoming_video_call">呼入的视频通话</string>
     <string name="incoming_voice_call">呼入的语音通话</string>
-    <string name="call_in_progress">呼叫进行中</string>
+    <string name="call_in_progress">通话中…</string>
 
     <string name="call_error_user_not_responding">通话未被接听。</string>
     <string name="call_error_ice_failed">媒体连接失败</string>
@@ -450,7 +450,7 @@
     <string name="permissions_rationale_msg_camera_and_audio">为了进行视频通话，Riot 需要访问您的相机和麦克风。
 
 请在接下来弹出的窗口中授权允许访问。</string>
-    <string name="permissions_action_not_performed_missing_permissions">对不起… 因为缺少权限，操作已取消</string>
+    <string name="permissions_action_not_performed_missing_permissions">对不起。因为权限不足，操作已取消</string>
 
     <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
@@ -476,12 +476,12 @@
     <string name="room_recents_directory">目录</string>
     <string name="room_recents_invites">邀请</string>
     <string name="directory_search_results_title">浏览目录</string>
-    <string name="directory_searching_title">搜索目录..</string>
+    <string name="directory_searching_title">正在搜索目录…</string>
 
     <string name="room_settings_favourite">收藏夹</string>
     <string name="room_sliding_menu_term_and_conditions">使用条款</string>
     <string name="settings_display_name">昵称</string>
-    <string name="settings_app_info_link_summary">应用程序系统信息窗口</string>
+    <string name="settings_app_info_link_summary">显示系统设置中的应用程序信息。</string>
     <string name="settings_turn_screen_on">点亮屏幕 3 秒</string>
 
     <string name="settings_call_invitations">通话请求</string>
@@ -490,17 +490,17 @@
     <string name="settings_notifications_targets">通知目标</string>
     <string name="settings_logged_in">登录为</string>
     <string name="account_email_validation_message">请检查您的电子邮箱并点击里面包含的链接。完成时请点击继续。</string>
-    <string name="account_email_validation_error">无法验证电子邮箱地址。请检查您的邮件并点击里面包含的链接。完成时请点击继续</string>
+    <string name="account_email_validation_error">无法验证电子邮箱地址。请检查您的邮件并点击其中的链接。完成后，请点击“继续”。</string>
 
-    <string name="account_email_already_used_error">此电子邮箱地址已被占用</string>
-    <string name="account_email_not_found_error">发送电子邮件失败：未找到此电子邮箱地址</string>
-    <string name="account_phone_number_already_used_error">此电话号码已被使用</string>
+    <string name="account_email_already_used_error">此电子邮箱地址已被使用。</string>
+    <string name="account_email_not_found_error">找不到此电子邮箱地址。</string>
+    <string name="account_phone_number_already_used_error">此手机号码已被使用。</string>
 
-    <string name="settings_delete_notification_targets_confirmation">您确认您要移除这个通知目标吗？</string>
+    <string name="settings_delete_notification_targets_confirmation">您确认要移除此通知目标吗？</string>
 
     <string name="settings_delete_threepid_confirmation">您确认要移除 %1$s %2$s 吗?</string>
 
-    <string name="settings_phone_number_error">无效的已选国家的电话号码</string>
+    <string name="settings_phone_number_error">无效的已选国家的手机号码</string>
     <string name="room_settings_room_photo">聊天室图片</string>
     <string name="room_settings_room_tag">聊天室标签</string>
     <string name="room_settings_tag_pref_dialog_title">标签为：</string>
@@ -510,8 +510,8 @@
     <string name="room_settings_tag_pref_entry_none">无</string>
 
     <string name="room_settings_room_access_warning">要链接一个聊天室，必须有一个地址。</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">仅对已验证的设备加密</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">您没有指定主地址。会随机选取这个聊天室的默认主地址</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">仅向已验证的设备发送加密消息</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">您没有指定此房间的主地址。</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">主地址警告</string>
 
     <string name="room_settings_set_main_address">设置为主地址</string>
@@ -543,26 +543,26 @@
 
     <string name="ok">确认</string>
     <string name="redact">撤回</string>
-    <string name="send_bug_report_alert_message">您似乎沮丧地摇了摇手机。您想反馈问题吗？</string>
+    <string name="send_bug_report_alert_message">您似乎沮丧地摇了摇手机。您想打开问题反馈界面吗？</string>
     <string name="send_files_in">发送至</string>
     <string name="e2e_need_log_in_again">您需要重新登录才能为此设备生成端对端加密密钥，并将公钥提交给您的主服务器。
 这只会发生一次。
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">已读标签清单</string>
     <string name="compression_options">"发送为 "</string>
-    <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录，才能根据电子邮箱地址和电话号码查找其他 Matrix 用户。
+    <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
 
 请在接下来的弹出窗口中授权允许访问。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要访问您的通讯录，才能根据电子邮箱地址和电话号码查找其他 Matrix 用户。
+    <string name="permissions_msg_contacts_warning_other_androids">Riot 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
 
 允许 Riot 访问您的通讯录？</string>
 
     <string name="room_participants_idle">空闲</string>
 
     <string name="people_search_filter_text">仅 Matrix 用户</string>
-    <string name="ssl_unexpected_existing_expl">您的手机曾信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
+    <string name="ssl_unexpected_existing_expl">您的手机信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
     <string name="ssl_expected_existing_expl">证书已从以前受信任的更改为不受信任的证书。服务器可能已更新其证书。请联系管理员并核对服务器的指纹。</string>
-    <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述相匹配的指纹的情况下接受该证书。</string>
+    <string name="ssl_only_accept">请仅在服务器管理员已经发布了与上述指纹相匹配的指纹的情况下接受该证书。</string>
     <string name="room_details_people">成员</string>
     <string name="malformed_id">ID 的格式不正确。应该是一个电子邮箱地址或 Matrix ID，如 “@localpart:domain”</string>
     <string name="tab_title_search_people">联系人</string>
@@ -576,11 +576,11 @@
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="settings_home_server">主服务器</string>
     <string name="settings_identity_server">身份服务器</string>
-    <string name="account_email_validation_title">验证待定中</string>
+    <string name="account_email_validation_title">正在等待验证</string>
     <string name="settings_phone_number_code">代码</string>
     <string name="room_settings_category_access_visibility_title">访问和可见性</string>
     <string name="room_settings_room_access_rules_pref_title">聊天室访问</string>
-    <string name="room_settings_labs_pref_title">实验性特性</string>
+    <string name="room_settings_labs_pref_title">实验室</string>
     <string name="room_settings_labs_end_to_end_is_active">端对端加密已激活</string>
     <string name="failed_to_load_timeline_position">%s 正在尝试在这个聊天室加载一个特定的时间点，但无法找到它。</string>
     <string name="encryption_information_name">名称</string>
@@ -654,8 +654,8 @@
     <string name="settings_pin_missed_notifications">置顶含有错过的通知的聊天室</string>
     <string name="settings_pin_unread_messages">置顶含有未读消息的聊天室</string>
     <string name="settings_user_interface">用户界面</string>
-    <string name="settings_interface_language">界面语言</string>
-    <string name="settings_select_language">选择语言</string>
+    <string name="settings_interface_language">语言</string>
+    <string name="settings_select_language">请选择语言</string>
 
     <string name="offline">离线</string>
 
@@ -665,7 +665,7 @@
     <string name="settings_clear_media_cache">清空缓存的媒体文件</string>
     <string name="settings_keep_media">保留媒体文件</string>
 
-    <string name="settings_always_show_timestamps">总是显示消息时间戳</string>
+    <string name="settings_always_show_timestamps">为所有消息显示时间戳</string>
     <string name="settings_data_save_mode">省流量模式</string>
 
     <string name="media_saving_period_3_days">3天</string>
@@ -690,7 +690,7 @@
     <string name="login_mobile_device">移动设备</string>
 
     <string name="settings_notification_ringtone">通知声音</string>
-    <string name="settings_12_24_timestamps">用12小时制显示时间戳（如：下午 2:30）</string>
+    <string name="settings_12_24_timestamps">使用12小时制显示时间戳</string>
 
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>
     <string name="widget_creation_failure">创建小部件失败</string>
@@ -716,7 +716,7 @@
     <string name="settings_containing_my_display_name">包含我昵称的消息</string>
     <string name="settings_containing_my_user_name">包含我用户名的消息</string>
     <string name="you_added_a_new_device">您添加了一个新设备 “%s”，它正在请求加密密钥。</string>
-    <string name="your_unverified_device_requesting">您的未验证设备 “%s” 正在请求加密密钥。</string>
+    <string name="your_unverified_device_requesting">您有一台未验证设备 “%s” 正在请求加密密钥。</string>
     <string name="start_verification">开始验证</string>
     <string name="share_without_verifying">不验证而分享</string>
     <string name="ignore_request">忽略请求</string>
@@ -738,7 +738,6 @@
 
     <!-- notification statuses -->
     <string name="notification_off">关闭</string>
-    <string name="notification_on">打开</string>
     <string name="encrypted_message">已加密消息</string>
 
     <string name="notification_noisy_notifications">铃声通知</string>
@@ -763,8 +762,8 @@
     <string name="room_settings_mute">静音</string>
     <string name="room_settings_add_homescreen_shortcut">添加主屏幕快捷方式</string>
 
-    <string name="settings_inline_url_preview">默认启用链接预览</string>
-    <string name="settings_vibrate_on_mention">提及他人时震动</string>
+    <string name="settings_inline_url_preview">启用链接预览</string>
+    <string name="settings_vibrate_on_mention">使用 @ 时震动</string>
 
     <string name="room_settings_room_notifications_title">通知</string>
     <string name="create">创建</string>
@@ -909,7 +908,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
-    <string name="dialog_title_third_party_licences">第三方开源协议</string>
+    <string name="dialog_title_third_party_licences">第三方协议</string>
 
     <string name="download">下载</string>
     <string name="clear">清除</string>
@@ -927,7 +926,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 
     <string name="lock_screen_hint">在此输入…</string>
 
-    <string name="settings_labs_enable_send_voice">发送语音消息（需要可录制语音的第三方应用）</string>
+    <string name="settings_labs_enable_send_voice">发送语音消息</string>
 
     <string name="error_empty_field_your_password">请输入您的密码。</string>
 
@@ -940,7 +939,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="room_message_placeholder_reply_to_not_encrypted">发送回复（未加密）…</string>
     <string name="settings_preview_media_before_sending">发送前预览媒体文件</string>
 
-    <string name="settings_labs_keyboard_options_to_send_message">使用键盘回车键发送消息</string>
+    <string name="settings_labs_keyboard_options_to_send_message">使用键盘的回车键发送消息</string>
     <string name="command_description_emote">显示动作</string>
     <string name="command_description_ban_user">依照 ID 封禁用户</string>
     <string name="command_description_unban_user">依照 ID 解禁用户</string>
@@ -1013,4 +1012,159 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
 
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
+    <string name="encryption_import_room_keys_success">导入了 %2$d 个密钥，其中 %1$d 个导入成功。</string>
+
+    <string name="status_theme">Status.im 主题</string>
+
+    <string name="call_anyway">仍然呼叫</string>
+    <string name="accept">接受</string>
+
+    <string name="dialog_title_error">错误</string>
+
+    <string name="auth_accept_policies">请审阅并接受此主服务器的政策：</string>
+
+    <string name="settings_call_category">通话</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">为来电使用 Riot 的默认铃声</string>
+    <string name="settings_call_ringtone_title">来电铃声</string>
+    <string name="settings_call_ringtone_dialog_title">请选择来电铃声：</string>
+
+    <string name="room_participants_action_kick">移除</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="other">您确定要从此聊天室中移除这些用户吗？</item>
+    </plurals>
+    <string name="reason_hint">理由</string>
+
+    <string name="room_sliding_menu_version_x">版本 %s</string>
+    <string name="settings_notification_troubleshoot">通知故障排除</string>
+    <string name="settings_troubleshoot_diagnostic">故障排除诊断</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">运行测试</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">正在测试…（%2$d 中的 %1$d）</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本诊断结果正常。若您还是沒有收到通知，请提交错误报告以协助我们调查此问题。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">一个或多个测试没有通过，请尝试建议的修复方法。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">一个或多个测试没有通过，请提交错误反馈以协助我们调查此问题。</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">系统设置。</string>
+    <string name="settings_troubleshoot_test_system_settings_success">通知已在系统设置中启用。</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">通知已在系统设置中禁用。
+请检查系统设置。</string>
+    <string name="settings_troubleshoot_test_system_settings_quickfix">打开设置</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">帐号设置。</string>
+    <string name="settings_troubleshoot_test_account_settings_success">您的帐号已启用通知。</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">您的帐号已禁用通知。
+请检查帐号设置。</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">启用</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">设备设置。</string>
+    <string name="settings_troubleshoot_test_device_settings_success">已为此设备启用通知。</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">已为此设备禁用通知。
+请检查 Riot 设置。</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">启用</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play 服务检查</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play 服务的 APK 文件可用且为最新版本。</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot 使用 Google Play 服务来推送通知，但它似乎并未正确设置：
+%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">修复 Play 服务</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
+    <string name="settings_troubleshoot_test_fcm_success">成功获取 FCM Token：
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM Token 获取失败：
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">注册 Token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM Token 已成功注册至主服务器。</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">将 FCM Token 注册至主服务器时失败：
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">通知服务</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服务正在运行。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服务尚未运行。
+请尝试重启本应用程序。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
+
+    <string name="settings_labs_native_camera_summary">调用系统相机应用而不是打开 Riot 内置的相机界面。</string>
+    <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用程序来录制语音消息。</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">启用开机时启动</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">检查后台限制</string>
+    <string name="settings_troubleshoot_test_battery_title">电池优化</string>
+    <string name="settings_inline_url_preview_summary">若主服务器支持本功能，在聊天时预览链接内容。</string>
+    <string name="settings_send_typing_notifs">发送正在输入通知</string>
+    <string name="settings_send_typing_notifs_summary">让聊天室中的其他用户知道您正在输入。</string>
+    <string name="settings_send_markdown">Markdown 格式化</string>
+    <string name="settings_send_markdown_summary">在消息发出之前使用 Markdown 语法格式化消息。这允许您使用高级的文字格式，例如使用星号显示斜体文字。</string>
+    <string name="settings_show_read_receipts">显示已阅回执</string>
+    <string name="settings_show_read_receipts_summary">点击已阅回执以显示所有已经阅读过某条消息的用户。</string>
+    <string name="settings_show_join_leave_messages">显示加入与离开事件</string>
+    <string name="settings_show_join_leave_messages_summary">邀请、移除与封禁事件不受影响。</string>
+    <string name="settings_show_avatar_display_name_changes_messages">显示账户变动事件</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">包括头像与显示名称的变动。</string>
+    <string name="startup_notification_fdroid_battery_optim_title">后台连接</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot需要保持一个低影响的后台连接才能保证可靠的通知。
+在下一个弹出窗口中，系统将提示您允许 Riot 始终在后台运行，请点击“允许“。</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">授予权限</string>
+
+    <string name="account_email_error">在验证您的电子邮件地址时发生了一个错误。</string>
+
+    <string name="settings_password">密码</string>
+    <string name="account_phone_number_error">在验证您的手机号码时发生了一个错误。</string>
+    <string name="account_additional_info">额外信息：%s</string>
+
+    <string name="x_plus">%d+</string>
+    <string name="plus_x">+%d</string>
+    <string name="generic_label_and_value">%1$s：%2$s</string>
+    <string name="generic_label">%1$s：</string>
+    <string name="store_title">Riot.im - 开放的团队协作工具</string>
+    <string name="store_short_description">欢迎使用 Riot.im：进入开放式沟通的新世界！</string>
+    <string name="show_info_area_always">总是</string>
+    <string name="show_info_area_messages_and_errors">消息与错误</string>
+    <string name="show_info_area_only_errors">仅错误</string>
+
+    <string name="settings_info_area_show">显示信息区域</string>
+    <string name="merged_events_collapse">收起</string>
+
+    <string name="merged_events_expand">展开</string>
+    <string name="unknown_error">抱歉，发生了一个错误</string>
+
+    <string name="error_lazy_loading_not_supported_by_home_server">您的主服务器尚未支持延迟加载聊天室成员，请稍候再试。</string>
+
+    <string name="settings_lazy_loading_description">通过仅载入最近聊天中出现的聊天室成员来提升性能。</string>
+    <string name="settings_lazy_loading_title">延迟加载聊天室成员</string>
+    <string name="markdown_has_been_disabled">已停用 Markdown。</string>
+
+    <string name="markdown_has_been_enabled">已启用 Markdown。</string>
+    <string name="video_call_in_progress">视频通话中…</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">自动重启通知服务</string>
+    <string name="settings_troubleshoot_test_service_restart_success">服务被停止，并已自动重启。</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">服务重启失败</string>
+
+    <string name="settings_troubleshoot_test_service_boot_success">服务将在设备重启后启动。</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">服务不会在设备重启后启动，在您打开 Riot 一次之前您将不会收到消息通知。</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">对 Riot 的后台限制已被关闭。此测试应在移动数据（无Wi-Fi）环境下进行。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">对 Riot 的后台限制已开启。
+Riot 在后台时的工作将被显著的限制，这可能会影响消息通知。
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">关闭后台限制</string>
+
+    <string name="settings_troubleshoot_test_battery_success">Riot 未被电池优化影响。</string>
+    <string name="settings_troubleshoot_test_battery_failed">"如果设备在未充电的情况下关屏静置一段时间，其将进入 Doze 模式。这将阻止应用访问网络并延后其运行、同步、与响铃。 "</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
+
+    <string name="encryption_export_notice">请输入用于加密密钥备份的密码。您在恢复此备份时需要使用此密码。</string>
+    <string name="passphrase_create_passphrase">创建密码</string>
+    <string name="passphrase_passphrase_does_not_match">密码必须对应</string>
+    <string name="command_problem_with_parameters">指令 %s 需要更多参数，或者有些参数不正确。</string>
+    <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
+
+    <string name="store_whats_new">我们在持续改进 Riot.im 的体验。
+完整的 changelog 在这里：%1$s
+为了不错过新改进，请保持更新开启。</string>
+    <string name="store_full_description" />
+
 </resources>

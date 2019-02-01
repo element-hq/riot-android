@@ -64,6 +64,7 @@ import im.vector.analytics.MetricsListenerProxy;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
+import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.util.PreferencesManager;
 import im.vector.widgets.WidgetsManager;
 
@@ -306,7 +307,7 @@ public class Matrix {
             return null;
         }
 
-        boolean appDidCrash = VectorApp.getInstance().didAppCrash();
+        boolean appDidCrash = VectorUncaughtExceptionHandler.INSTANCE.didAppCrash(mAppContext);
 
         Set<String> matrixIds = new HashSet<>();
         sessions = new ArrayList<>();
@@ -758,6 +759,12 @@ public class Matrix {
 
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
+
+                            if (context instanceof SplashActivity) {
+                                // Avoid bad visual effect, due to check of lazy loading status
+                                ((SplashActivity) context).overridePendingTransition(0, 0);
+                            }
+
                         }
                     }
                 });

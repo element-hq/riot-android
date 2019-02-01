@@ -465,7 +465,7 @@ class VectorMessagesAdapterMediasHelper {
             if (message instanceof VideoMessage) {
                 uploadingUrl = ((VideoMessage) message).getUrl();
                 isUploadingContent = ((VideoMessage) message).isLocalContent();
-            } else if (message instanceof ImageMessage){
+            } else if (message instanceof ImageMessage) {
                 uploadingUrl = ((ImageMessage) message).getUrl();
                 isUploadingContent = ((ImageMessage) message).isLocalContent();
             }

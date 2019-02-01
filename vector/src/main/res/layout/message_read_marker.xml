@@ -9,5 +9,9 @@
         android:layout_marginBottom="2dp"
         android:background="?attr/vctr_unread_marker_line_color"
         android:visibility="gone"
+        tools:layout_marginLeft="40dp"
+        tools:layout_marginRight="40dp"
+        tools:layout_marginTop="20dp"
         tools:visibility="visible" />
+
 </merge>

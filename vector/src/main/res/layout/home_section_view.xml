@@ -31,6 +31,7 @@
         android:paddingEnd="6dp"
         android:paddingRight="6dp"
         android:paddingBottom="3dp"
+        android:textColor="?vctr_list_header_secondary_text_color"
         android:textSize="12sp"
         android:textStyle="bold"
         tools:text="12" />
@@ -49,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_header"
         android:padding="16dp"
-        android:textColor="?attr/vctr_default_text_light_color"
+        android:textColor="?android:textColorSecondary"
         android:textSize="14sp"
         tools:text="No items" />
 </merge>

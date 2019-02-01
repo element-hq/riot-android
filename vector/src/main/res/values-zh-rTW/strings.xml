@@ -118,7 +118,7 @@
     <string name="send_bug_report_placeholder">在這裡描述你的問題</string>
     <string name="send_bug_report_logs_description">為了診斷問題，客戶端的紀錄將會同錯誤回報一起送出。這個包含了紀錄與螢幕截圖的錯誤回報將不會公開可見。如果您只想送出上方的文字，請取消勾選：</string>
     <string name="send_bug_report_alert_message">您似乎沮喪的搖晃著手機。您要開啟錯誤回報畫面嗎？</string>
-    <string name="send_bug_report_app_crashed">此應用程式在上次當機。您想送出錯誤回報？</string>
+    <string name="send_bug_report_app_crashed">這個應用程式上次當掉了。您想要開啟錯誤回報畫面嗎？</string>
     <string name="send_bug_report_rage_shake">憤怒搖晃來回報臭蟲</string>
 
     <string name="send_bug_report_sent">此錯誤回報已成功送出</string>
@@ -161,11 +161,11 @@
     <string name="auth_new_password_placeholder">新密碼</string>
     <string name="auth_user_name_placeholder">使用者名稱</string>
     <string name="auth_add_email_message">輸入電子郵件位址來讓其他人找到您，以及方便您重設密碼。</string>
-    <string name="auth_add_phone_message">輸入電話號碼來讓其他人找到您。</string>
-    <string name="auth_add_email_phone_message">輸入電子郵件位址或電話號碼來讓其他人找到您。
+    <string name="auth_add_phone_message">新增電話號碼來讓其他人找到您。</string>
+    <string name="auth_add_email_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
 
 電子郵件位址也可以用來重設密碼。</string>
-    <string name="auth_add_email_and_phone_message">輸入電子郵件位址或電話號碼來讓其他人找到您。
+    <string name="auth_add_email_and_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
 
 電子郵件位址也可以用來重設密碼。</string>
     <string name="auth_email_placeholder">電子郵件地址</string>
@@ -256,7 +256,7 @@
     <string name="incoming_call">來電</string>
     <string name="incoming_video_call">視訊來電</string>
     <string name="incoming_voice_call">語音來電</string>
-    <string name="call_in_progress">通話進行中</string>
+    <string name="call_in_progress">通話進行中……</string>
 
     <string name="call_error_user_not_responding">遠端未能接聽。</string>
     <string name="call_error_ice_failed">媒體連線失敗</string>
@@ -288,7 +288,7 @@
 
 是否允許 Riot 存取聯絡人？</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">抱歉.. 由於缺少權限，動作沒被執行</string>
+    <string name="permissions_action_not_performed_missing_permissions">抱歉。由於缺少權限，所以無法執行動作</string>
 
     <string name="media_slider_saved">已儲存</string>
     <string name="media_slider_saved_message">儲存到下載?</string>
@@ -475,7 +475,7 @@
     <plurals name="directory_search_rooms_for">
         <item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
     </plurals>
-    <string name="directory_searching_title">搜尋目錄..</string>
+    <string name="directory_searching_title">正在搜尋目錄……</string>
 
     <string name="room_settings_all_messages_noisy">所有訊息（通知並震動）</string>
     <string name="room_settings_all_messages">所有訊息</string>
@@ -501,7 +501,7 @@
     <string name="settings_email_address">電子郵件地址</string>
     <string name="settings_add_email_address">新增電子郵件地址</string>
     <string name="settings_phone_number">電話號碼</string>
-    <string name="settings_add_phone_number">添加電話號碼</string>
+    <string name="settings_add_phone_number">新增電話號碼</string>
     <string name="settings_app_info_link_summary">顯示在系統設定中的應用程式資訊。</string>
     <string name="settings_app_info_link_title">應用程式資訊</string>
 
@@ -521,7 +521,7 @@
 
     <string name="settings_notification_ringtone">通知音效</string>
     <string name="settings_enable_all_notif">啟用這個帳號的通知</string>
-    <string name="settings_enable_this_device">啓用這個裝置的通知</string>
+    <string name="settings_enable_this_device">啟用這個裝置的通知</string>
     <string name="settings_turn_screen_on">將螢幕開啟 3 秒</string>
 
     <string name="settings_containing_my_display_name">包含我顯示名稱的訊息</string>
@@ -748,8 +748,8 @@
     <string name="encryption_export_room_keys">匯出聊天室的加密金鑰</string>
     <string name="encryption_export_room_keys_summary">匯出金鑰到本機檔案</string>
     <string name="encryption_export_export">匯出</string>
-    <string name="encryption_import_enter_passphrase">輸入通關密語</string>
-    <string name="encryption_export_confirm_passphrase">確認通關密語</string>
+    <string name="passphrase_enter_passphrase">輸入通關密語</string>
+    <string name="passphrase_confirm_passphrase">確認通關密語</string>
     <string name="encryption_export_saved_as">聊天室的端到端加密金鑰已儲存爲「%s」。
 
 警告：如果應用程式被解除安裝，這個檔案可能會被刪除。</string>
@@ -825,7 +825,7 @@
     <string name="event_formatter_widget_added">%1$s 已由 %2$s 新增</string>
     <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
     <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議電話</string>
-    <string name="widget_delete_message_confirmation">您確定要移除此小部件嗎？</string>
+    <string name="widget_delete_message_confirmation">您確定要從聊天室刪除小工具嗎？</string>
     <plurals name="active_widgets">
         <item quantity="other">已啓用 %d 個小部件</item>
     </plurals>
@@ -857,7 +857,6 @@
     <string name="unrecognized_command">無法辨識的指令：%s</string>
 
     <string name="notification_off">關閉</string>
-    <string name="notification_on">打開</string>
     <string name="notification_noisy">通知並震動</string>
 
     <string name="encrypted_message">已加密的訊息</string>
@@ -996,8 +995,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="room_sliding_menu_version_x">版本 %s</string>
     <string name="encryption_export_notice">請建立密語以加密您匯出的金鑰。您將需要輸入這些密語以匯入金鑰。</string>
-    <string name="encryption_export_create_passphrase">建立密語</string>
-    <string name="encryption_export_passphrase_dont_match">密語必須符合</string>
+    <string name="passphrase_create_passphrase">建立密語</string>
+    <string name="passphrase_passphrase_does_not_match">密語必須符合</string>
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
 
@@ -1052,7 +1051,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">執行測試</string>
     <string name="settings_troubleshoot_diagnostic_running_status">正在執行……（%2$d 中的 %1$d）</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">基本診斷正常。如果您仍然沒有燒到通知，請遞交錯誤回報以協助我們調查原因。</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本診斷正常。如果您仍然沒有收到通知，請遞交錯誤回報以協助我們調查原因。</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">一個或更多的測試失敗，嘗試建議的修復。</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">一個或更多的測試失敗，請遞交錯誤回報以協助我們調查原因。</string>
 
@@ -1164,4 +1163,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 與 Riot.im 探索真正有效與開放的協作！</string>
 
+    <string name="video_call_in_progress">視訊通話進行中……</string>
+
+    <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
+完整的變更紀錄可以在此找到：%1$s。
+為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
 </resources>

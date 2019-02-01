@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="74dp"
-    android:background="?attr/vctr_riot_primary_background_color">
+    android:background="?android:attr/colorBackground">
 
     <ImageView
         android:id="@+id/filtered_list_avatar"
@@ -30,7 +30,6 @@
         android:layout_toRightOf="@id/filtered_list_avatar"
         android:singleLine="true"
         android:text="@string/room_creation_add_member"
-        android:textColor="?attr/vctr_default_text_dark_color"
         android:textSize="16sp"
         android:textStyle="bold" />
 

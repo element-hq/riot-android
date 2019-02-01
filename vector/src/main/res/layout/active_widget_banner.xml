@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_view"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="@color/vector_fuchsia_color">
-
-    <RelativeLayout
-        android:id="@+id/close_widget_icon_container"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical">
-
-        <ImageView
-            android:id="@+id/close_widget_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/vector_close_widget"
-            android:tint="@android:color/white" />
-    </RelativeLayout>
+    android:background="?vctr_widget_banner_background">
 
     <TextView
         android:id="@+id/widget_type_text_view"
@@ -30,7 +13,18 @@
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:fontFamily="sans-serif-bold"
-        android:textColor="@android:color/white"
         android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Widget name" />
+
+    <ImageView
+        android:id="@+id/close_widget_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_material_delete_white"
+        android:tint="@color/vector_fuchsia_color" />
+
 </RelativeLayout>
