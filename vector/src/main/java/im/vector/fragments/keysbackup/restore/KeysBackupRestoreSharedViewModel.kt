@@ -26,7 +26,6 @@ import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
-import java.lang.Exception
 
 class KeysBackupRestoreSharedViewModel : ViewModel() {
 

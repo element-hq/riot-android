@@ -63,7 +63,7 @@ public abstract class MXCActionBarActivity extends VectorAppCompatActivity {
     /**
      * Return the used MXSession from an intent.
      *
-     * @param intent  the intent
+     * @param intent the intent
      * @return the MXSession if it exists, or null.
      */
     @Nullable

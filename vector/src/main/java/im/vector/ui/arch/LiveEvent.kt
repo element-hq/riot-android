@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package im.vector.ui.arch
+
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
  */

@@ -816,7 +816,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             context?.let {
-                startActivity(KeysBackupManageActivity.intent(it,mSession.myUserId))
+                startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
             }
             false
         }

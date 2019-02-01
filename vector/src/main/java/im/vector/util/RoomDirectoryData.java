@@ -55,7 +55,7 @@ public class RoomDirectoryData implements Serializable {
     /**
      * Creator
      *
-     * @param server        the home server (optional). Set null when the server is the current user's home server.
+     * @param server            the home server (optional). Set null when the server is the current user's home server.
      * @param serverDisplayName the home server displayname
      * @return a new instance
      */

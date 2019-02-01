@@ -95,7 +95,7 @@ public class VectorReferrerReceiver extends BroadcastReceiver {
 
                 if ((null != VectorApp.getCurrentActivity()) && (VectorApp.getCurrentActivity() instanceof LoginActivity)) {
                     Log.d(LOG_TAG, "## onReceive() : warn loginactivity");
-                    ((LoginActivity)VectorApp.getCurrentActivity()).onServerUrlsUpdateFromReferrer();
+                    ((LoginActivity) VectorApp.getCurrentActivity()).onServerUrlsUpdateFromReferrer();
                 }
             }
         }

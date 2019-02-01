@@ -1445,13 +1445,13 @@ public class EventStreamService extends Service {
         MXSession session = Matrix.getInstance(getBaseContext()).getDefaultSession();
 
         if (session == null) {
-            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: Failed session is null");
+            Log.e(LOG_TAG, "## refreshNotifiedMessagesList: Failed session is null");
             return false;
         }
 
         // not yet loaded
         if (!session.getDataHandler().getBingRulesManager().isReady()) {
-            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: bing rules manager not ready");
+            Log.e(LOG_TAG, "## refreshNotifiedMessagesList: bing rules manager not ready");
             workAroundBingRulesNotReadyRetryOnce(session);
             return false;
         }
@@ -1459,12 +1459,12 @@ public class EventStreamService extends Service {
         IMXStore store = session.getDataHandler().getStore();
 
         if (null == store) {
-            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: Failed MXStore is null");
+            Log.e(LOG_TAG, "## refreshNotifiedMessagesList: Failed MXStore is null");
             return false;
         }
 
         if (!store.areReceiptsReady()) {
-            Log.e(LOG_TAG,"## refreshNotifiedMessagesList: Failed receipts not ready");
+            Log.e(LOG_TAG, "## refreshNotifiedMessagesList: Failed receipts not ready");
             return false;
         }
 
@@ -1613,17 +1613,17 @@ public class EventStreamService extends Service {
         session.getDataHandler().getBingRulesManager().loadRules(new ApiCallback<Void>() {
             @Override
             public void onNetworkError(Exception e) {
-                Log.e(LOG_TAG,"Failed to load bing rules",e);
+                Log.e(LOG_TAG, "Failed to load bing rules", e);
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-                Log.e(LOG_TAG,"Failed to load bing rules: " + e.getLocalizedMessage() );
+                Log.e(LOG_TAG, "Failed to load bing rules: " + e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-                Log.e(LOG_TAG,"Failed to load bing rules",e);
+                Log.e(LOG_TAG, "Failed to load bing rules", e);
             }
 
             @Override

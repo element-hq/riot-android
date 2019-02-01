@@ -37,7 +37,8 @@ import im.vector.R
 class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        @LayoutRes const val resId = R.layout.item_generic_list
+        @LayoutRes
+        const val resId = R.layout.item_generic_list
     }
 
     @BindView(R.id.item_generic_title_text)

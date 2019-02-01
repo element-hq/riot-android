@@ -170,6 +170,7 @@ public class GroupAdapter extends AbsAdapter {
 
     public interface OnGroupSelectItemListener {
         void onSelectItem(Group item, int position);
+
         boolean onLongPressItem(Group item, int position);
     }
 }

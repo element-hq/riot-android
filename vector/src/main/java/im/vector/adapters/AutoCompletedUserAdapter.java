@@ -125,11 +125,10 @@ public class AutoCompletedUserAdapter extends ArrayAdapter<User> {
     /**
      * Get the updated view for a specified position.
      *
-     * @param position the position
+     * @param position    the position
      * @param convertView the convert view
-     * @param parent the parent view
-     * @param loadAvatar true to refresh the avatar
-     *
+     * @param parent      the parent view
+     * @param loadAvatar  true to refresh the avatar
      * @return the view
      */
     public View getView(int position, View convertView, ViewGroup parent, boolean loadAvatar) {
