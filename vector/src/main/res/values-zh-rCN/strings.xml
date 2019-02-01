@@ -1157,8 +1157,8 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
 
     <string name="encryption_export_notice">请输入用于加密密钥备份的密码。您在恢复此备份时需要使用此密码。</string>
-    <string name="encryption_export_create_passphrase">创建密码</string>
-    <string name="encryption_export_passphrase_dont_match">密码必须对应</string>
+    <string name="passphrase_create_passphrase">创建密码</string>
+    <string name="passphrase_passphrase_does_not_match">密码必须对应</string>
     <string name="command_problem_with_parameters">指令 %s 需要更多参数，或者有些参数不正确。</string>
     <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
 

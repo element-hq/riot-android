@@ -1120,5 +1120,5 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>
     <string name="settings_troubleshoot_diagnostic">Diagnóstico de fallas</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Inicia pruebas</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Haciendo... (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Haciendo… (%1$d of %2$d)</string>
 </resources>

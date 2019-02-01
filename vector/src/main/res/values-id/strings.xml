@@ -1008,7 +1008,7 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="settings_notification_troubleshoot">Periksa Keadaan Pemberitahuan</string>
     <string name="settings_troubleshoot_diagnostic">Hasil diagnosa pemeriksaan keadaan</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lansungkan Ujicoba</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Berlangsung... (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Berlangsung… (%1$d of %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Diagnosa dasar berlangsung lancar. Apabila Anda masih belum dapat menerima pemberitahuan, mohon kirim laporan bug untuk kami selidiki.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Satu atau beberapa ujicoba gagal, coba sugesti yang kami tawarkan.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Satu atau beberapa ujicoba gagal, mohon kirim laporan bug untuk kami selidiki.</string>

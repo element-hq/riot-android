@@ -1074,7 +1074,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="video_call_in_progress">Trucada de vídeo en procés…</string>
 
     <string name="settings_troubleshoot_diagnostic_run_button_title">Executa les proves</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">S\'està executant... (%1$d de %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">S\'està executant… (%1$d de %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">El diagnòstic bàsic és correcte. Si encara no rebeu notificacions, envieu un informe d\'error per ajudar-nos a investigar.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ha fallat una o més proves, proveu les solucions proposades.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Paràmetres del sistema.</string>

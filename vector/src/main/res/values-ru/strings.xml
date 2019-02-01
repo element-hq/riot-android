@@ -1160,7 +1160,7 @@ Email также позволит вам при необходимости во�
 
     <string name="settings_labs_enable_send_voice_summary">Эта опция требует стороннего приложения для записи сообщений.</string>
 
-    <string name="command_problem_with_parameters">Команде \"% s\" нужно больше параметров, или некоторые параметры неверны.</string>
+    <string name="command_problem_with_parameters">Команде \"%s\" нужно больше параметров, или некоторые параметры неверны.</string>
     <string name="markdown_has_been_enabled">Markdown включен.</string>
     <string name="markdown_has_been_disabled">Markdown выключен.</string>
 
