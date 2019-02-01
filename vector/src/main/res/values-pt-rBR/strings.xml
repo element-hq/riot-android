@@ -109,7 +109,7 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente na última vez. Gostaria de abrir a tela de relatos de falhas?</string>
 
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Ler</string>
@@ -230,10 +230,10 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="call_connecting">Conectando chamada…</string>
     <string name="call_ended">Chamada terminada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Chamada recebida</string>
-    <string name="incoming_video_call">Chamada de vídeo recebida</string>
-    <string name="incoming_voice_call">Chamada de voz recebida</string>
-    <string name="call_in_progress">Chamada em andamento</string>
+    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_video_call">Recebendo chamada de vídeo</string>
+    <string name="incoming_voice_call">Recebendo chamada de voz</string>
+    <string name="call_in_progress">Chamada em andamento…</string>
 
     <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
@@ -771,7 +771,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
-    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
@@ -1224,4 +1224,9 @@ Para desenvolvedores:
 
 Descubra uma colaboração verdadeiramente eficiente e aberta com o Riot.im!</string>
 
-</resources>
+<string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+
+    <string name="store_whats_new">Estamos sempre fazendo alterações e melhorias no Riot.im.
+O changelog completo pode ser encontrado aqui: %1$s.
+Para garantir que você não perca nada, mantenha suas atualizações ativadas.</string>
+    </resources>

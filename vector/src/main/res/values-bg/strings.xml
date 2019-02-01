@@ -35,7 +35,7 @@
     <string name="incoming_call">Входящо повикване</string>
     <string name="incoming_video_call">Входящо видео повикване</string>
     <string name="incoming_voice_call">Входящо гласово повикване</string>
-    <string name="call_in_progress">В момента тече разговор</string>
+    <string name="call_in_progress">В момента тече разговор…</string>
 
     <string name="call_connecting">Свързване…</string>
     <string name="call_ended">Разговорът приключи</string>
@@ -185,7 +185,7 @@
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
     <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Доклада, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
     <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
-    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да изпратите съобщение за забиване?</string>
+    <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да отворите екрана за изпращане на грешки?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
 
     <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
@@ -678,7 +678,7 @@
     <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
     <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
-    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението?</string>
+    <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението от тази стая?</string>
     <plurals name="active_widgets">
         <item quantity="one">1 активно приспособление</item>
         <item quantity="other">%d активни приспособления</item>
@@ -1190,4 +1190,9 @@
 
 Открийте истински ефективна и отворена колаборация с Riot.im!</string>
 
-</resources>
+<string name="video_call_in_progress">В момента тече видео разговор…</string>
+
+    <string name="store_whats_new">Постоянно правим промени и подобрения по Riot.im.
+Пълният списък с промени може да бъде намерен тук: %1$s.
+За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
+    </resources>

@@ -109,7 +109,7 @@ Selezionare esporta per fare un backup delle chat prima di disconnettersi.</stri
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
     <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
     <string name="send_bug_report_alert_message">Sembra che tu stia scuotendo il dispositivo con frustrazione. Desideri aprire la schermata di segnalazione errore?</string>
-    <string name="send_bug_report_app_crashed">L\'applicazione è crashata l\'ultima volta. Desideri inviare un rapporto del crash?</string>
+    <string name="send_bug_report_app_crashed">L\'applicazione è andata in crash l\'ultima volta. Desideri aprire la schermata di segnalazione del crash?</string>
 
     <string name="send_bug_report_sent">La segnalazione dell\'errore è stata spedita con successo</string>
     <string name="send_bug_report_failed">Fallito l\'invio della segnalazione di errore (%s)</string>
@@ -247,7 +247,7 @@ Ci scusiamo per l\'inconveniente.</string>
     <string name="incoming_call">Chiamata in arrivo</string>
     <string name="incoming_video_call">Videochiamata in arrivo</string>
     <string name="incoming_voice_call">Chiamata voce in arrivo</string>
-    <string name="call_in_progress">Chiamata in corso</string>
+    <string name="call_in_progress">Chiamata in corso…</string>
 
     <string name="call_error_user_not_responding">Ricezione fallita da parte del destinatario.</string>
     <string name="call_error_ice_failed">Fallita connessione al supporto multimediale</string>
@@ -741,7 +741,7 @@ In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
-    <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget?</string>
+    <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget da questa stanza?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
@@ -1254,4 +1254,9 @@ Per gli sviluppatori:
 
 Scopri una collaborazione davvero efficiente e aperta con Riot.im!</string>
 
-</resources>
+<string name="video_call_in_progress">Videochiamata in corso…</string>
+
+    <string name="store_whats_new">Apportiamo continuamente cambiamenti e migliorie a Riot.im.
+Il registro completo delle modifiche si può trovare qui: %1$s.
+Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
+    </resources>

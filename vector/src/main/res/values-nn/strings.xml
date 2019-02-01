@@ -56,7 +56,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i krypterte rom</string>
-    <string name="send_anyway">Send Likevel</string>
+    <string name="send_anyway"></string>
     <string name="or">eller</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>
@@ -996,4 +996,11 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
     <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
 
-</resources>
+<string name="status_theme">Status.im Tema</string>
+
+    <string name="call_anyway"/>
+    <string name="accept">Aksepter</string>
+
+    <string name="dialog_title_error">Feil</string>
+
+    </resources>

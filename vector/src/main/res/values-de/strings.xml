@@ -108,7 +108,7 @@
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du eine Fehlermeldung übermitteln?</string>
+    <string name="send_bug_report_app_crashed">Die Anwendung ist während der letzten Benutzung abgestürzt. Möchtest du das Fehler-melden-Fenster öffnen?</string>
 
     <string name="send_files_in">Sende Datei nach</string>
     <string name="read_receipt">Gelesen</string>
@@ -238,7 +238,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="incoming_call">Eingehender Anruf</string>
     <string name="incoming_video_call">Eingehender Video-Anruf</string>
     <string name="incoming_voice_call">Eingehender Sprachanruf</string>
-    <string name="call_in_progress">Anruf aktiv</string>
+    <string name="call_in_progress">Anruf aktiv…</string>
 
     <string name="call_error_user_not_responding">Die Gegenseite hat den Anruf nicht angenommen.</string>
     <string name="call_error_ice_failed">Medien-Verbindung fehlgeschlagen</string>
@@ -732,7 +732,7 @@ Unbekannte Geräte:</string>
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
-    <string name="widget_delete_message_confirmation">Soll das Widget wirklich gelöscht werden?</string>
+    <string name="widget_delete_message_confirmation">Soll das Widget wirklich aus diesem Raum gelöscht werden?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Widget konnte nicht erstellt werden.</string>
@@ -1244,4 +1244,9 @@ Für Entwickler:
 
 Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
 
-</resources>
+<string name="video_call_in_progress">Videogespräch aktiv…</string>
+
+    <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
+Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
+Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
+    </resources>
