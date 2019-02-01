@@ -1,8 +1,8 @@
-Changes in Riot 0.8.22 (2019-XX-XX)
+Changes in Riot 0.8.22 (2019-02-01)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.16.
 
 Features:
  - keys backup: Implement setup screen (#2883)
@@ -38,12 +38,6 @@ Bugfix:
  - Fix issues with Tombstone events (#2866 && #2867)
  - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
  - Key share request does not go away when user select "verify" (#2781)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.21 (2019-01-02)
 ===================================================
