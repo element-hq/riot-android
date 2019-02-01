@@ -334,6 +334,22 @@
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"
             android:title="@string/encryption_information_device_key" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
+            android:summary="@string/encryption_never_send_to_unverified_devices_summary"
+            android:title="@string/encryption_never_send_to_unverified_devices_title" />
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider />
+
+    <PreferenceCategory android:title="@string/settings_cryptography_manage_keys">
+
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/encryption_settings_manage_message_recovery_summary"
+            android:title="@string/encryption_settings_manage_message_recovery" />
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_export_room_keys_summary"
@@ -344,14 +360,9 @@
             android:summary="@string/encryption_import_room_keys_summary"
             android:title="@string/encryption_import_e2e_room_keys" />
 
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
-            android:summary="@string/encryption_never_send_to_unverified_devices_summary"
-            android:title="@string/encryption_never_send_to_unverified_devices_title" />
-
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <!-- devices list: device ids + device names -->
     <PreferenceCategory
