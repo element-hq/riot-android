@@ -1137,7 +1137,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="markdown_has_been_disabled">已停用 Markdown。</string>
 
     <string name="markdown_has_been_enabled">已启用 Markdown。</string>
-<string name="video_call_in_progress">视频通话中…</string>
+    <string name="video_call_in_progress">视频通话中…</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">自动重启通知服务</string>
     <string name="settings_troubleshoot_test_service_restart_success">服务被停止，并已自动重启。</string>
@@ -1165,6 +1165,6 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="store_whats_new">我们在持续改进 Riot.im 的体验。
 完整的 changelog 在这里：%1$s
 为了不错过新改进，请保持更新开启。</string>
-    <string name="store_full_description"/>
+    <string name="store_full_description" />
 
 </resources>

@@ -1052,7 +1052,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1202,9 +1202,9 @@ Fejlesztőknek:
 
 Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Riot.im-mel!"</string>
 
-<string name="video_call_in_progress">Videóhívás folyamatban…</string>
+    <string name="video_call_in_progress">Videóhívás folyamatban…</string>
 
     <string name="store_whats_new">Folyamatosan változtatjuk és javítjuk a Riot.im-et.
 A változások teljes listája itt található: %1$s.
 Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket.</string>
-    </resources>
+</resources>

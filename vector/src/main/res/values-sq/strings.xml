@@ -1165,9 +1165,9 @@ Për zhvilluesit:
 
 Zbuloni bashkëpunimin vërtet efikas dhe të hapur, me Riot.im!</string>
 
-<string name="video_call_in_progress">Thirrje Video Në Kryerje e Sipër…</string>
+    <string name="video_call_in_progress">Thirrje Video Në Kryerje e Sipër…</string>
 
     <string name="store_whats_new">Bëjmë përherë ndryshime dhe përmirësime te Riot.im.
 Regjistri i plotë i ndryshimeve mund të gjendet këtu: %1$s.
 Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekanizmin e përditësimeve.</string>
-    </resources>
+</resources>

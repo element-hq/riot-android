@@ -1254,9 +1254,9 @@ Per gli sviluppatori:
 
 Scopri una collaborazione davvero efficiente e aperta con Riot.im!</string>
 
-<string name="video_call_in_progress">Videochiamata in corso…</string>
+    <string name="video_call_in_progress">Videochiamata in corso…</string>
 
     <string name="store_whats_new">Apportiamo continuamente cambiamenti e migliorie a Riot.im.
 Il registro completo delle modifiche si può trovare qui: %1$s.
 Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
-    </resources>
+</resources>

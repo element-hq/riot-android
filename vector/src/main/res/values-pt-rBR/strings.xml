@@ -1224,9 +1224,9 @@ Para desenvolvedores:
 
 Descubra uma colaboração verdadeiramente eficiente e aberta com o Riot.im!</string>
 
-<string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+    <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
 
     <string name="store_whats_new">Estamos sempre fazendo alterações e melhorias no Riot.im.
 O changelog completo pode ser encontrado aqui: %1$s.
 Para garantir que você não perca nada, mantenha suas atualizações ativadas.</string>
-    </resources>
+</resources>

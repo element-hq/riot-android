@@ -58,7 +58,7 @@
     <string name="save">Αποθήκευση</string>
     <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
 
-<string name="light_theme">Ανοιχτόχρωμο θέμα</string>
+    <string name="light_theme">Ανοιχτόχρωμο θέμα</string>
     <string name="dark_theme">Σκουρόχρωμο θέμα</string>
     <string name="black_them">Μαύρο θέμα</string>
     <string name="status_theme">Θέμα Status.im</string>
@@ -120,9 +120,9 @@
     <string name="no_room_placeholder">Δεν υπάρχουν δωμάτια</string>
     <string name="no_public_room_placeholder">Δεν υπάρχουν δημόσια δωμάτια</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 χρήστης</item>
-	<item quantity="other">%d χρήστες</item>
-</plurals>
+        <item quantity="one">1 χρήστης</item>
+        <item quantity="other">%d χρήστες</item>
+    </plurals>
 
     <string name="groups_invite_header">Πρόσκληση</string>
     <string name="groups_header">Κοινότητες</string>
@@ -289,9 +289,9 @@
     <string name="select_room_directory">Επιλέξτε ένα ευρετήριο δωματίων</string>
     <string name="directory_server_all_rooms_on_server">Όλα τα δωμάτια στον διακομιστή %s</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 δωμάτιο</item>
-	<item quantity="other">%d δωμάτια</item>
-</plurals>
+        <item quantity="one">1 δωμάτιο</item>
+        <item quantity="other">%d δωμάτια</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s στο %2$s</string>
 
     <string name="font_size">Μέγεθος γραμματοσειράς</string>
@@ -302,9 +302,9 @@
     <string name="huge">Τεράστιο</string>
 
     <plurals name="active_widgets">
-	<item quantity="one">1 ενεργό widget</item>
-	<item quantity="other">%d ενεργά widget</item>
-</plurals>
+        <item quantity="one">1 ενεργό widget</item>
+        <item quantity="other">%d ενεργά widget</item>
+    </plurals>
 
     <string name="widget_integration_room_not_visible">Το δωμάτιο %s δεν είναι ορατό.</string>
     <string name="conference_call_warning_title">Προσοχή!</string>
@@ -319,14 +319,14 @@
     <string name="group_details_rooms">Δωμάτια</string>
     <string name="rooms">Δωμάτια</string>
     <plurals name="group_members">
-	<item quantity="one">1 μέλος</item>
-	<item quantity="other">%d μέλη</item>
-</plurals>
+        <item quantity="one">1 μέλος</item>
+        <item quantity="other">%d μέλη</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 δωμάτιο</item>
-	<item quantity="other">%d δωμάτια</item>
-</plurals>
+        <item quantity="one">1 δωμάτιο</item>
+        <item quantity="other">%d δωμάτια</item>
+    </plurals>
     <string name="reason_colon">Λόγος: %1$s</string>
     <string name="deactivate_account_title">Απενεργοποίηση λογαριασμού</string>
     <string name="deactivate_account_prompt_password">Για να συνεχίσετε παρακαλώ εισάγετε τον κωδικό σας:</string>
@@ -341,4 +341,4 @@
     <string name="bottom_action_people">Άτομα</string>
     <string name="home_filter_placeholder_people">Αναζήτηση ατόμων</string>
     <string name="tab_title_search_people">ΑΤΟΜΑ</string>
-    </resources>
+</resources>

@@ -1163,9 +1163,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 與 Riot.im 探索真正有效與開放的協作！</string>
 
-<string name="video_call_in_progress">視訊通話進行中……</string>
+    <string name="video_call_in_progress">視訊通話進行中……</string>
 
     <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
 完整的變更紀錄可以在此找到：%1$s。
 為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
-    </resources>
+</resources>

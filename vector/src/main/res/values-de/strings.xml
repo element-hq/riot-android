@@ -1244,9 +1244,9 @@ Für Entwickler:
 
 Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
 
-<string name="video_call_in_progress">Videogespräch aktiv…</string>
+    <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
     <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
 Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
-    </resources>
+</resources>

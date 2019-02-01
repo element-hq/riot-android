@@ -1206,9 +1206,9 @@ Pour les développeurs :
 
 Découvrez une collaboration libre et vraiment efficace avec Riot.im !</string>
 
-<string name="video_call_in_progress">Appel vidéo en cours…</string>
+    <string name="video_call_in_progress">Appel vidéo en cours…</string>
 
     <string name="store_whats_new">Nous sommes constamment en train de modifier et d\'améliorer Riot.im.
 Le journal des modifications peut être consulté ici : %1$s.
 Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
-    </resources>
+</resources>

@@ -129,7 +129,7 @@
     <string name="today">امروز</string>
 
     <string name="room_info_room_name">نام اتاق</string>
-<string name="notification_sync_in_progress">همگام‌سازی</string>
+    <string name="notification_sync_in_progress">همگام‌سازی</string>
     <string name="call_anyway">به هر حال تماس بگیر</string>
     <string name="missing_permissions_title_to_start_conf_call">نمی‌توان تماس را شروع کرد</string>
     <string name="cannot_start_call">نمی‌توان تماس را شروع کرد، لطفاً بعداً تلاش نمایید</string>
@@ -225,4 +225,4 @@
     <string name="reject">رد کردن</string>
 
     <string name="list_members">اعضای لیست</string>
-    </resources>
+</resources>

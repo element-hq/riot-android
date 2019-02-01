@@ -1098,7 +1098,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="merged_events_expand">expandir</string>
     <string name="merged_events_collapse">colapsar</string>
 
-<string name="call_anyway">llamar de cada manera</string>
+    <string name="call_anyway">llamar de cada manera</string>
     <string name="accept">Acceptar</string>
 
     <string name="auth_accept_policies">Por favor revisar y aceptar las reglas de este servidor doméstico:</string>
@@ -1112,13 +1112,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="room_participants_action_kick">Expulsar</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">¿Seguro que quieres expulsar este usuario de esta conversación?</item>
-	<item quantity="other">¿Seguro que quieres expulsar estos usuarios de esta conversación?</item>
-</plurals>
+        <item quantity="one">¿Seguro que quieres expulsar este usuario de esta conversación?</item>
+        <item quantity="other">¿Seguro que quieres expulsar estos usuarios de esta conversación?</item>
+    </plurals>
     <string name="reason_hint">Razón</string>
 
     <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>
     <string name="settings_troubleshoot_diagnostic">Diagnóstico de fallas</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Inicia pruebas</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Haciendo... (%1$d of %2$d)</string>
-    </resources>
+</resources>

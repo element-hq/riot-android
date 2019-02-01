@@ -1203,9 +1203,9 @@ Garatzaileentzat:
 
 Ezagutu benetako kolaborazio ireki eta eraginkorra Riot.im erabiliz!</string>
 
-<string name="video_call_in_progress">Bide-deia abioan…</string>
+    <string name="video_call_in_progress">Bide-deia abioan…</string>
 
     <string name="store_whats_new">Etengabe egiten dizkiogu hobekuntzak eta aldaketak Riot.im aplikazioari.
 Aldaketen zerrenda osoa hemen aurkitu daiteke: %1$s.
 Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta.</string>
-    </resources>
+</resources>
