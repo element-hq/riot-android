@@ -1,3 +1,27 @@
+Changes in Riot 0.8.23 (2019-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in Riot 0.8.22 (2019-02-01)
 ===================================================
 
