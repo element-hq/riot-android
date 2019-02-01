@@ -19,7 +19,6 @@ package im.vector.activity.signout
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
-import android.content.Intent
 import android.support.design.widget.TextInputEditText
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -35,7 +34,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
-import im.vector.activity.KeysBackupSetupActivity
+import im.vector.activity.KeysBackupManageActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.PERMISSIONS_FOR_WRITING_FILES
@@ -147,7 +146,7 @@ class SignOutActivity : MXCActionBarActivity() {
 
     @OnClick(R.id.sign_out_backup_start)
     fun startBackup() {
-        startActivity(Intent(this, KeysBackupSetupActivity::class.java))
+        startActivity(KeysBackupManageActivity.intent(this, mSession.myUserId))
     }
 
     @OnClick(R.id.sign_out_sign_out)
