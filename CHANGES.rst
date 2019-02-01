@@ -25,6 +25,7 @@ Improvements:
 Other changes:
  - Update of Light and Dark themes (#2710)
  - Restore the crash report dialog after a crash
+ - New application icon! (#2905)
 
 Bugfix:
  - Fix crash when taking picture for user avatar on old device (#2818)

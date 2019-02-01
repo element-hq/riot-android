@@ -18,12 +18,12 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
@@ -166,10 +166,10 @@ public class SplashActivity extends MXCActionBarActivity {
             return;
         }
 
-        // Load the Gif logo
-        Glide.with(this)
-                .load(R.drawable.riot_splash)
-                .into(animatedLogo);
+        Drawable background = animatedLogo.getBackground();
+        if (background instanceof AnimationDrawable) {
+            ((AnimationDrawable) background).start();
+        }
 
         // Check the lazy loading status
         checkLazyLoadingStatus(sessions);

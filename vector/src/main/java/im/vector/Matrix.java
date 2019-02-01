@@ -759,6 +759,12 @@ public class Matrix {
 
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
+
+                            if (context instanceof SplashActivity) {
+                                // Avoid bad visual effect, due to check of lazy loading status
+                                ((SplashActivity) context).overridePendingTransition(0, 0);
+                            }
+
                         }
                     }
                 });

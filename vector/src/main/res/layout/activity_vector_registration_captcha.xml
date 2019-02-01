@@ -20,10 +20,10 @@
 
         <ImageView
             android:id="@+id/login_large_logo"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/logo_login" />
+            android:src="@drawable/riot_splash_1" />
 
     </RelativeLayout>
 
