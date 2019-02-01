@@ -15,10 +15,12 @@
  */
 package im.vector.activity
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AlertDialog
 import im.vector.R
+import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep2Fragment
 
@@ -33,6 +35,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     .replace(R.id.container, KeysBackupSetupStep1Fragment.newInstance())
                     .commitNow()
         }
+        ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java).initSession(mSession)
     }
 
     override fun onBackPressed() {

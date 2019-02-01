@@ -62,26 +62,30 @@
 
     <Button
         android:id="@+id/keys_backup_setup_step3_copy_button"
+        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"
-        android:background="?attr/colorAccent"
         android:minWidth="200dp"
-        android:padding="8dp"
-        android:text="@string/keys_backup_setup_step3_copy_button_title"
-        android:textColor="@android:color/white" />
+        android:text="@string/keys_backup_setup_step3_copy_button_title" />
+
+    <Button
+        android:id="@+id/keys_backup_setup_step3_save_button"
+        style="@style/VectorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minWidth="200dp"
+        android:text="@string/keys_backup_setup_step3_save_button_title" />
 
     <Button
         android:id="@+id/keys_backup_setup_step3_button"
+        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="?attr/colorAccent"
         android:minWidth="200dp"
-        android:padding="8dp"
-        android:text="@string/keys_backup_setup_step3_button_title"
-        android:textColor="@android:color/white" />
+        android:text="@string/keys_backup_setup_step3_button_title" />
 
 </LinearLayout>
