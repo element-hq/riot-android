@@ -341,16 +341,15 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <PreferenceCategory android:title="@string/settings_cryptography_manage_keys">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/encryption_settings_manage_message_recovery"
             android:summary="@string/encryption_settings_manage_message_recovery_summary"
-            />
+            android:title="@string/encryption_settings_manage_message_recovery" />
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_export_room_keys_summary"

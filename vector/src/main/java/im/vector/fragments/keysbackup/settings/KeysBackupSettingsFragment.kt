@@ -79,7 +79,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     else -> {
                         viewModel.loadingEvent.value = null
                         //All this cases will be manage by looking at the backup trust object
-                        viewModel.session.crypto?.keysBackup?.mKeysBackupVersion?.let {
+                        viewModel.session?.crypto?.keysBackup?.mKeysBackupVersion?.let {
                             viewModel.getKeysBackupTrust(it)
                         } ?: run {
                             viewModel.keyVersionTrust.value = null
@@ -90,20 +90,22 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
         })
 
         viewModel.keyVersionTrust.observe(this, Observer {
-            recyclerViewAdapter?.updateWithTrust(viewModel.session, it)
+            viewModel.session?.let { session ->
+                recyclerViewAdapter?.updateWithTrust(session, it)
+            }
         })
 
     }
 
     override fun didSelectSetupMessageRecovery() {
         context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session.myUserId))
+            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: ""))
         }
     }
 
     override fun didSelectRestoreMessageRecovery() {
         context?.let {
-            startActivity(KeysBackupRestoreActivity.intent(it, viewModel.session.myUserId))
+            startActivity(KeysBackupRestoreActivity.intent(it, viewModel.session?.myUserId ?: ""))
         }
     }
 
@@ -115,7 +117,8 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     .setCancelable(false)
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
                         viewModel.deleteCurrentBackup(it)
-                    }.setNegativeButton(R.string.cancel, null)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
                     .setCancelable(true)
                     .show()
         }

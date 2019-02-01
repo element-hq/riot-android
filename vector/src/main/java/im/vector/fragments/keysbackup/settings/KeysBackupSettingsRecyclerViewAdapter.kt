@@ -33,7 +33,7 @@ import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
-class KeysBackupSettingsRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class KeysBackupSettingsRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     var context: Context? = null
@@ -51,10 +51,10 @@ class KeysBackupSettingsRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerVie
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position < infoList.size) {
-            return GenericItemViewHolder.resId
+        return if (position < infoList.size) {
+            GenericItemViewHolder.resId
         } else {
-            return R.layout.item_keys_backup_settings_button_footer
+            R.layout.item_keys_backup_settings_button_footer
         }
     }
 
@@ -108,39 +108,37 @@ class KeysBackupSettingsRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerVie
         val infos = ArrayList<GenericRecyclerViewItem>()
         var itemSummary: GenericRecyclerViewItem? = null
 
-        keyBackupState?.let {
-            when (it) {
-                KeysBackupStateManager.KeysBackupState.Unknown,
-                KeysBackupStateManager.KeysBackupState.CheckingBackUpOnHomeserver -> {
-                    //In this cases recycler view is hidden any way
-                    //so do nothing
-                }
-                KeysBackupStateManager.KeysBackupState.Disabled -> {
-                    itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_not_setup)
-                            ?: "",
-                            style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                    infos.add(itemSummary!!)
-                    isBackupAlreadySetup = false
-                }
-                KeysBackupStateManager.KeysBackupState.WrongBackUpVersion,
-                KeysBackupStateManager.KeysBackupState.NotTrusted,
-                KeysBackupStateManager.KeysBackupState.Enabling -> {
-                    itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ko)
-                            ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                    itemSummary!!.description = keyBackupState.toString()
-                    itemSummary!!.endIconResourceId = R.drawable.unit_test_ko
-                    infos.add(itemSummary!!)
-                    isBackupAlreadySetup = true
-                }
-                KeysBackupStateManager.KeysBackupState.ReadyToBackUp,
-                KeysBackupStateManager.KeysBackupState.WillBackUp,
-                KeysBackupStateManager.KeysBackupState.BackingUp -> {
-                    itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ok)
-                            ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                    itemSummary!!.endIconResourceId = R.drawable.unit_test_ok
-                    infos.add(itemSummary!!)
-                    isBackupAlreadySetup = true
-                }
+        when (keyBackupState) {
+            KeysBackupStateManager.KeysBackupState.Unknown,
+            KeysBackupStateManager.KeysBackupState.CheckingBackUpOnHomeserver -> {
+                //In this cases recycler view is hidden any way
+                //so do nothing
+            }
+            KeysBackupStateManager.KeysBackupState.Disabled -> {
+                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_not_setup)
+                        ?: "",
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
+                infos.add(itemSummary)
+                isBackupAlreadySetup = false
+            }
+            KeysBackupStateManager.KeysBackupState.WrongBackUpVersion,
+            KeysBackupStateManager.KeysBackupState.NotTrusted,
+            KeysBackupStateManager.KeysBackupState.Enabling -> {
+                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ko)
+                        ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
+                itemSummary.description = keyBackupState.toString()
+                itemSummary.endIconResourceId = R.drawable.unit_test_ko
+                infos.add(itemSummary)
+                isBackupAlreadySetup = true
+            }
+            KeysBackupStateManager.KeysBackupState.ReadyToBackUp,
+            KeysBackupStateManager.KeysBackupState.WillBackUp,
+            KeysBackupStateManager.KeysBackupState.BackingUp -> {
+                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ok)
+                        ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
+                itemSummary.endIconResourceId = R.drawable.unit_test_ok
+                infos.add(itemSummary)
+                isBackupAlreadySetup = true
             }
         }
 
@@ -162,9 +160,7 @@ class KeysBackupSettingsRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerVie
                 if (!isDeviceKnown) {
                     signatureInfo.description = context?.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
                     signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                    signatureInfo.buttonAction = getVerifySignatureAction(it)
-                    itemSummary?.description = context?.getString(R.string.keys_backup_settings_verify_device_now, it.deviceId
-                            ?: "")
+                    itemSummary?.description = context?.getString(R.string.keys_backup_settings_unverifiable_device)
                 } else {
                     if (isSignatureValid) {
                         if (session.credentials.deviceId == it.deviceId) {

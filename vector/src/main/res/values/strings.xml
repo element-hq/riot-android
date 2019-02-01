@@ -1320,6 +1320,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_get_trust_error">Failed to get trust info for backup (%s).</string>
 
     <string name="keys_backup_settings_setup_button">Setup Message Recovery</string>
+    <string name="keys_backup_settings_unverifiable_device">To use Secure Message Recovery on this device, provide your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_verify_device_now">To use Secure Message Recovery on this device, verify Device [%s] now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>

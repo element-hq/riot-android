@@ -53,18 +53,19 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                     .replace(R.id.container, KeysBackupSettingsFragment.newInstance())
                     .commitNow()
 
-            mSession.crypto?.keysBackup?.let {
-                it.forceRefresh(object : ApiCallback<Boolean> {
-                    override fun onSuccess(info: Boolean?) {}
+            mSession.crypto
+                    ?.keysBackup
+                    ?.forceRefresh(object : ApiCallback<Boolean> {
+                        override fun onSuccess(info: Boolean?) {}
 
-                    override fun onUnexpectedError(e: java.lang.Exception?) {}
+                        override fun onUnexpectedError(e: java.lang.Exception?) {}
 
-                    override fun onNetworkError(e: java.lang.Exception?) {}
+                        override fun onNetworkError(e: java.lang.Exception?) {}
 
-                    override fun onMatrixError(e: MatrixError?) {}
+                        override fun onMatrixError(e: MatrixError?) {}
 
-                })
-            }
+                    })
+
         }
 
         viewModel.loadingEvent.observe(this, Observer {
@@ -86,9 +87,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                         .setTitle(R.string.unknown_error)
                         .setMessage(it)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
-                        }
+                        .setPositiveButton(R.string.ok, null)
                         .show()
             }
         })

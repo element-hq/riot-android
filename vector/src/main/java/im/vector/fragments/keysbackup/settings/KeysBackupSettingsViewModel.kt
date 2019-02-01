@@ -32,7 +32,7 @@ import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 class KeysBackupSettingsViewModel : ViewModel(),
         KeysBackupStateManager.KeysBackupStateListener {
 
-    lateinit var session: MXSession
+    var session: MXSession? = null
 
     var keyVersionTrust: MutableLiveData<KeysBackupVersionTrust> = MutableLiveData()
     var keyBackupState: MutableLiveData<KeysBackupStateManager.KeysBackupState> = MutableLiveData()
@@ -44,13 +44,17 @@ class KeysBackupSettingsViewModel : ViewModel(),
     var loadingEvent: MutableLiveData<LiveEvent<Int>> = MutableLiveData()
 
     fun initSession(session: MXSession) {
-        this.session = session
         keyBackupState.value = session.crypto?.keysBackup?.state
-        session.crypto?.keysBackup?.addListener(this)
+        if (this.session == null) {
+            this.session = session
+            session.crypto
+                    ?.keysBackup
+                    ?.addListener(this)
+        }
     }
 
     fun getKeysBackupTrust(versionResult: KeysVersionResult) {
-        val keysBackup = session.crypto?.keysBackup
+        val keysBackup = session?.crypto?.keysBackup
         keysBackup?.getKeysBackupTrust(versionResult, SuccessCallback { info ->
             keyVersionTrust.value = info
         })
@@ -58,7 +62,7 @@ class KeysBackupSettingsViewModel : ViewModel(),
 
     override fun onCleared() {
         super.onCleared()
-        session.crypto?.keysBackup?.removeListener(this)
+        session?.crypto?.keysBackup?.removeListener(this)
     }
 
     override fun onStateChange(newState: KeysBackupStateManager.KeysBackupState) {
@@ -66,30 +70,32 @@ class KeysBackupSettingsViewModel : ViewModel(),
     }
 
     fun deleteCurrentBackup(context: Context) {
-        session.crypto?.keysBackup?.run {
+        session?.crypto?.keysBackup?.run {
             loadingEvent.value = LiveEvent(R.string.keys_backup_settings_deleting_backup)
-            if (currentBackupVersion != null) deleteBackup(currentBackupVersion!!, object : ApiCallback<Void> {
-                override fun onSuccess(info: Void?) {
-                    //mmmm if state is stil unknown/checking..
-                    loadingEvent.value = null
-                }
+            if (currentBackupVersion != null) {
+                deleteBackup(currentBackupVersion!!, object : ApiCallback<Void> {
+                    override fun onSuccess(info: Void?) {
+                        //mmmm if state is stil unknown/checking..
+                        loadingEvent.value = null
+                    }
 
-                override fun onUnexpectedError(e: java.lang.Exception) {
-                    loadingEvent.value = null
-                    _apiResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, e.localizedMessage))
-                }
+                    override fun onUnexpectedError(e: java.lang.Exception) {
+                        loadingEvent.value = null
+                        _apiResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, e.localizedMessage))
+                    }
 
-                override fun onNetworkError(e: java.lang.Exception) {
-                    loadingEvent.value = null
-                    _apiResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
-                }
+                    override fun onNetworkError(e: java.lang.Exception) {
+                        loadingEvent.value = null
+                        _apiResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
+                    }
 
-                override fun onMatrixError(e: MatrixError) {
-                    loadingEvent.value = null
-                    _apiResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, e.localizedMessage))
-                }
+                    override fun onMatrixError(e: MatrixError) {
+                        loadingEvent.value = null
+                        _apiResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, e.localizedMessage))
+                    }
 
-            })
+                })
+            }
         }
     }
 }
