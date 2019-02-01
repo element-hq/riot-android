@@ -109,7 +109,7 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="option_take_photo_video">Prendre une photo ou une vidéo</string>
 
     <string name="auth_login">Se connecter</string>
-    <string name="auth_register">S\'inscrire</string>
+    <string name="auth_register">Créer un compte</string>
     <string name="auth_submit">Valider</string>
     <string name="auth_skip">Ignorer</string>
     <string name="auth_send_reset_email">Envoyer l\'e-mail de réinitialisation</string>
@@ -597,8 +597,8 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="room_settings_read_history_entry_members_only_invited">Uniquement les membres (depuis leur invitation)</string>
     <string name="room_settings_room_access_warning">Pour faire référence à un salon, il doit avoir une adresse.</string>
     <string name="room_settings_room_access_entry_only_invited">Seules les personnes qui ont été invitées</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Tous ceux qui connaissent le lien du salon, à part les visiteurs</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Tous ceux qui connaissent le lien du salon, y compris les visiteurs</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Tous ceux qui connaissent le lien du salon, à part les invités</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Tous ceux qui connaissent le lien du salon, y compris les invités</string>
 
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
     <string name="room_settings_labs_end_to_end_warnings">Vous devez vous déconnecter pour pouvoir activer le chiffrement.</string>
@@ -1211,4 +1211,155 @@ Découvrez une collaboration libre et vraiment efficace avec Riot.im !</string>
     <string name="store_whats_new">Nous sommes constamment en train de modifier et d\'améliorer Riot.im.
 Le journal des modifications peut être consulté ici : %1$s.
 Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
+<string name="title_activity_keys_backup_setup">Récupération de messages</string>
+    <string name="title_activity_keys_backup_restore">Messages sécurisés</string>
+    <string name="title_activity_keys_backup_manage">Récupération de messages sécurisée</string>
+
+    <string name="title_activity_sign_out">Déconnexion</string>
+    <string name="sign_out_activity_warning">Par mesure de sécurité, la déconnexion supprimera toutes les clés de chiffrement, rendant l\'historique des discussions chiffrées illisible si vous vous reconnectez.</string>
+    <string name="sign_out_activity_backup_title">Récupération de messages sécurisée</string>
+    <string name="sign_out_activity_backup_status_backuping">La sauvegarde des clés n\'est pas terminée, veuillez patienter…</string>
+    <string name="sign_out_activity_backup_status_up_to_date">Votre récupération de messages est configurée et toutes les clés ont été sauvegardées sur votre serveur d\'accueil.</string>
+    <string name="sign_out_activity_backup_status_no_backup">La récupération des messages n\'est pas configurée. Vous pouvez le faire maintenant.</string>
+    <string name="sign_out_activity_backup_manage_backup">Gérer la récupération des messages</string>
+    <string name="sign_out_activity_export_to_file_title">Exporter les clés de chiffrement</string>
+    <string name="sign_out_activity_export_to_file">Vous pouvez aussi choisir d\'exporter vos clés de chiffrement de bout en bout vers un fichier et de gérer la sauvegarde de ce fichier vous-même.</string>
+    <string name="sign_out_activity_sign_out_warning">Vous perdrez vos messages sécurisés si vous vous déconnectez maintenant.</string>
+    <string name="sign_out_activity_sign_out_ok">Vous pouvez vous déconnecter sans risque.</string>
+    <string name="sign_out_activity_export_to_file_action">Exporter vers un fichier</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_content">Vous ne pourrez peut-être pas lire l\'historique des discussions chiffrées si vous vous reconnectez.</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_action">Se déconnecter quand même</string>
+
+    <string name="skip">Passer</string>
+    <string name="done">Effectué</string>
+
+    <string name="settings_notification_advanced">Paramètres de notification avancés</string>
+    <string name="settings_notification_advanced_summary">Régler l\'importance des notifications par évènement, configurer le son, les led, les vibrations</string>
+    <string name="settings_notification_by_event">Importance des notifications par évènement</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Paramètres personnalisés.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Remarquez que certains messages sont réglés pour être silencieux (ils produiront une notification sans son).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Certaines notifications sont désactivées dans vos paramètres personnalisés.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Échec du chargement de vos règles personnalisées, veuillez réessayer.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Vérifier les paramètres</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Cette erreur est indépendante de Riot et, selon Google, cette erreur indique que l\'appareil a enregistré trop d\'applications avec FCM. Cette erreur ne survient que s\'il y a un nombre d\'applications extrême, et ne devrait donc pas affecter un utilisateur normal.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+Cette erreur est indépendante de Riot. Elle peut survenir pour plusieurs raisons. Cela peut fonctionner si vous réessayez plus tard. Vous pouvez aussi vérifier que le Service Google Play n\'a pas un usage limité de données dans les paramètres système. Cela peut aussi arriver sur une ROM personnalisée.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+Cette erreur est indépendante de Riot. Il n\'y pas de compte Google sur l\'appareil. Veuillez ouvrir le gestionnaire de comptes et ajouter un compte Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Ajouter un compte</string>
+
+    <string name="settings_noisy_notifications_preferences">Configurer les notifications sonores</string>
+    <string name="settings_call_notifications_preferences">Configurer les notifications d\'appel</string>
+    <string name="settings_silent_notifications_preferences">Configurer les notifications silencieuses</string>
+    <string name="settings_system_preferences_summary">Choisir la couleur de la LED, les vibrations, le son…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Gestion des clés cryptographiques</string>
+    <string name="encryption_settings_manage_message_recovery">Récupération de messages</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Gérer la sauvegarde de clés</string>
+
+    <string name="notification_silent">Silencieuse</string>
+    <string name="passphrase_empty_error_message">Veuillez saisir une phrase de passe</string>
+    <string name="passphrase_passphrase_too_weak">La phrase de passe est trop faible</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase de passe si vous voulez ignorer cette étape.</string>
+    <string name="keys_backup_no_session_error">Aucune session Matrix n\'est disponible</string>
+
+    <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
+    <string name="keys_backup_setup_step1_description">Configurer la récupération de messages sécurisée au cas où vous perdriez cet appareil ou que vous vous déconnecteriez.</string>
+    <string name="keys_backup_setup_step1_button_title">Configurer</string>
+    <string name="keys_backup_setup_step2_text">Protégez votre historique de messages sécurisés avec une phrase de passe de récupération.
+
+Vous en aurez besoin si vous vous déconnectez ou si vous n\'avez plus accès à cet appareil.</string>
+    <string name="keys_backup_setup_step2_button_title">Définir la phrase de passe de récupération</string>
+    <string name="keys_backup_setup_step3_text">Faites une copie de cette clé de récupération et conservez-la en lieu sûr.
+
+Par mesure de précaution, vous pourrez l\'utiliser pour restaurer votre historique de messages chiffrés si vous oubliez votre phrase de passe de récupération.</string>
+    <string name="keys_backup_setup_step3_button_title">Créer la sauvegarde</string>
+    <string name="keys_backup_setup_step3_copy_button_title">En faire une copie</string>
+    <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
+    <string name="recovery_key_export_saved_as_warning">La clé de récupération a bien été enregistrée vers « %s ».
+
+Attention : ce fichier pourrait être supprimé si l\'application est désinstallée.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager la clé de récupération avec…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Génération de la clé de récupération utilisant la phrase de passe. Cette opération peut prendre plusieurs secondes.</string>
+    <string name="recovery_key">Clé de récupération</string>
+    <string name="unexpected_error">Erreur inattendue</string>
+    <string name="keys_backup_setup_backup_started_title">La sauvegarde a commencé</string>
+    <string name="keys_backup_setup_backup_started_message">Vos clés de chiffrement sont sauvegardées en arrière-plan vers votre serveur d\'accueil. La sauvegarde initiale peut prendre plusieurs minutes.</string>
+
+
+    <string name="keys_backup_setup_skip_title">En êtes-vous certain(e) ?</string>
+    <string name="keys_backup_setup_skip_msg">Vous pourriez perdre vos messages sécurisés si vous vous déconnectez ou si vous perdez votre appareil.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Récupération de la version de la sauvegarde…</string>
+    <string name="keys_backup_restore_with_passphrase">Utilisez votre phrase de passe de récupération pour déverrouiller l\'historique de vos messages sécurisés</string>
+    <string name="keys_backup_restore_use_recovery_key">utiliser votre clé de récupération</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Si vous ne connaissez pas votre phrase de passe de récupération, vous pouvez %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Utilisez votre clé de récupération pour déverrouiller l\'historique de vos messages sécurisés</string>
+    <string name="keys_backup_restore_key_enter_hint">Saisir la clé de récupération</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Récupération des messages</string>
+
+    <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre clé de récupération ? Vous pouvez en configurer une autre dans les paramètres.</string>
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération (%s).</string>
+    <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer (%s).</string>
+
+    <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde…</string>
+    <string name="keys_backup_unlock_button">Déverrouiller l\'historique</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir une clé de récupération</string>
+    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération (%s).</string>
+
+    <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
+    <string name="keys_backup_restore_success_description">%1$d clés de session restaurées et %2$d nouvelles clés ajoutées qui étaient inconnues à cet appareil</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+	<item quantity="one">Sauvegarde restaurée avec %d clé.</item>
+	<item quantity="other">Sauvegarde restaurée avec %d clés.</item>
+</plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+	<item quantity="one">%d nouvelle clé a été ajoutée à cet appareil.</item>
+	<item quantity="other">%d nouvelles clés ont été ajoutées à cet appareil.</item>
+</plurals>
+
+    <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">La cryptographie de la session n\'est pas activée</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Restaurer</string>
+    <string name="keys_backup_settings_delete_backup_button">Supprimer</string>
+
+    <string name="keys_backup_settings_status_ok">La récupération de messages sécurisée a été correctement configurée pour cet appareil.</string>
+    <string name="keys_backup_settings_status_ko">La récupération de messages sécurisée n\'est pas activée sur cet appareil.</string>
+    <string name="keys_backup_settings_status_not_setup">La récupération de messages sécurisée n\'a pas été configurée.</string>
+
+
+    <string name="keys_backup_settings_signature_from_unknown_device">La sauvegarde a une signature d\'un appareil inconnu ayant pour identifiant %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">La sauvegarde a une signature valide de cet appareil.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">La sauvegarde a une signature valide de l\'appareil vérifié %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">La sauvegarde a une signature valide de l\'appareil non vérifié %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">La sauvegarde a une signature non valide de l\'appareil vérifié %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l\'appareil non vérifié %s</string>
+    <string name="keys_backup_get_trust_error">Échec de la récupération des informations de confiance de la sauvegarde (%s).</string>
+
+    <string name="keys_backup_settings_setup_button">Configurer la récupération des messages</string>
+    <string name="keys_backup_settings_unverifiable_device">Pour utiliser la récupération de messages sécurisée sur cet appareil, fournissez votre phrase de passe ou votre clé de récupération maintenant.</string>
+    <string name="keys_backup_settings_verify_device_now">Pour utiliser la récupération de messages sécurisée sur cet appareil, vérifiez l\'appareil [%s] maintenant.</string>
+    <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
+    <string name="keys_backup_settings_delete_backup_error">Échec lors de la suppression de la sauvegarde (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Supprimer la sauvegarde</string>
+    <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur ? Vous ne pourrez plus utiliser votre clé de récupération pour lire l\'historique des messages chiffrés.</string>
+
+    <string name="keys_backup_banner_setup">%s pour ne jamais perdre vos messages chiffrés</string>
+    <string name="keys_backup_banner_setup_colored_part">Configurer la récupération de messages sécurisée</string>
+
+    <string name="keys_backup_banner_recover">Déverrouiller l\'historique de vos messages sécurisés avec %s</string>
+    <string name="keys_backup_banner_recover_colored_part">votre clé ou votre phrase de passe de récupération</string>
+
 </resources>
