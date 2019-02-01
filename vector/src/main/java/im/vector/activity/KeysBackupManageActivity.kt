@@ -55,7 +55,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
 
             mSession.crypto
                     ?.keysBackup
-                    ?.forceRefresh(object : ApiCallback<Boolean> {
+                    ?.forceUsingLastVersion(object : ApiCallback<Boolean> {
                         override fun onSuccess(info: Boolean?) {}
 
                         override fun onUnexpectedError(e: java.lang.Exception?) {}
@@ -63,9 +63,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                         override fun onNetworkError(e: java.lang.Exception?) {}
 
                         override fun onMatrixError(e: MatrixError?) {}
-
                     })
-
         }
 
         viewModel.loadingEvent.observe(this, Observer {

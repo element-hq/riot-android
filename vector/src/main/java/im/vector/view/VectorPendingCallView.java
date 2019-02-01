@@ -119,6 +119,10 @@ public class VectorPendingCallView extends RelativeLayout {
     private void initView() {
         View.inflate(getContext(), R.layout.vector_pending_call_view, this);
 
+        if (isInEditMode()) {
+            return;
+        }
+
         // retrieve the UI items
         mMainView = findViewById(R.id.main_view);
 

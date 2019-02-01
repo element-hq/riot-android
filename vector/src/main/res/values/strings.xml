@@ -1325,7 +1325,14 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
 
+    <!-- Keys backup banner -->
+    <!-- %s will be replaced by keys_backup_banner_setup_colored_part value -->
+    <string name="keys_backup_banner_setup">%s to never lose encrypted messages</string>
+    <string name="keys_backup_banner_setup_colored_part">Set up Secure Message Recovery</string>
 
+    <!-- %s will be replaced by keys_backup_banner_recover_colored_part value -->
+    <string name="keys_backup_banner_recover">Unlock your secure message history with %s</string>
+    <string name="keys_backup_banner_recover_colored_part">your recovery key or passphrase</string>
 
 
 </resources>

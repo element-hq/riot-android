@@ -22,6 +22,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -115,6 +116,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.signout.SignOutActivity;
+import im.vector.activity.signout.SignOutViewModel;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
@@ -136,6 +138,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
+import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 
@@ -143,7 +146,8 @@ import im.vector.view.VectorPendingCallView;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
+public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener,
+        KeysBackupBanner.Delegate {
 
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
@@ -197,6 +201,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private String mMemberIdToOpen = null;
 
     private String mGroupIdToOpen = null;
+
+    @BindView(R.id.home_keys_backup_banner)
+    KeysBackupBanner mKeysBackupBanner;
 
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
@@ -335,6 +342,32 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     .putInt(PreferencesManager.VERSION_BUILD, BuildConfig.VERSION_CODE)
                     .apply();
         }
+
+        // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
+        SignOutViewModel model = ViewModelProviders.of(this).get(SignOutViewModel.class);
+
+        model.init(mSession);
+
+        model.getKeysBackupState().observe(this, keysBackupState -> {
+            if (keysBackupState == null) {
+                mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
+            } else {
+                switch (keysBackupState) {
+                    case Disabled:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Setup.INSTANCE, false);
+                        break;
+                    case NotTrusted:
+                    case WrongBackUpVersion:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Recover.INSTANCE, false);
+                        break;
+                    default:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
+                        break;
+                }
+            }
+        });
+
+        mKeysBackupBanner.setDelegate(this);
 
         // Check whether the user has agreed to the use of analytics tracking
 
@@ -2411,5 +2444,20 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
+    }
+
+    /* ==========================================================================================
+     * KeysBackupBanner Listener
+     * ========================================================================================== */
+
+    @Override
+    public void setupKeysBackup() {
+        startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
+    }
+
+    @Override
+    public void recoverKeysBackup() {
+        // Same than for setup
+        setupKeysBackup();
     }
 }
