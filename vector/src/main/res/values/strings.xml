@@ -961,9 +961,6 @@
     <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
-    <string name="encryption_export_create_passphrase">Create passphrase</string>
-    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Passphrases must match</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
     <string name="encryption_settings_manage_message_recovery">Message Recovery</string>
@@ -973,7 +970,6 @@
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
@@ -1247,9 +1243,16 @@ For developers:
 Discover truly efficient and open collaboration with Riot.im!"</string>
 
 
+    <!-- Passphrase -->
+    <string name="passphrase_create_passphrase">Create passphrase</string>
+    <string name="passphrase_confirm_passphrase">Confirm passphrase</string>
+    <string name="passphrase_enter_passphrase">Enter passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrase doesn’t match</string>
+    <string name="passphrase_empty_error_message">Please enter a passphrase</string>
+    <string name="passphrase_passphrase_too_weak">Passphrase is too weak</string>
+
     <!-- Key Backup -->
 
-    <string name="keys_backup_passphrase_empty_error_message">Please enter a passphrase</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want to skip this step.</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
@@ -1258,12 +1261,6 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_setup_step1_button_title">Set up</string>
     <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you sign out, or lose access to this device.</string>
     <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>
-    <string name="keys_backup_setup_step2_passphrase_enter">Enter</string>
-    <string name="keys_backup_setup_step2_passphrase_confirm">Confirm</string>
-    <string name="keys_backup_setup_step2_passphrase_enter_hint">Enter Passphrase</string>
-    <string name="keys_backup_setup_step2_passphrase_confirm_hint">Confirm Passphrase</string>
-    <string name="keys_backup_setup_step2_passphrase_no_match">Passphrase doesn’t match</string>
-    <string name="keys_backup_setup_step2_passphrase_too_weak">Passphrase is too weak</string>
     <string name="keys_backup_setup_step3_text">Make a copy of this Recovery Key and keep it safe.\n\nAs a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
     <string name="keys_backup_setup_step3_button_title">I’ve made a copy</string>
     <string name="keys_backup_setup_step3_copy_button_title">Make a Copy</string>
@@ -1328,7 +1325,14 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
 
+    <!-- Keys backup banner -->
+    <!-- %s will be replaced by keys_backup_banner_setup_colored_part value -->
+    <string name="keys_backup_banner_setup">%s to never lose encrypted messages</string>
+    <string name="keys_backup_banner_setup_colored_part">Set up Secure Message Recovery</string>
 
+    <!-- %s will be replaced by keys_backup_banner_recover_colored_part value -->
+    <string name="keys_backup_banner_recover">Unlock your secure message history with %s</string>
+    <string name="keys_backup_banner_recover_colored_part">your recovery key or passphrase</string>
 
 
 </resources>

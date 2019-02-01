@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".activity.VectorHomeActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        tools:context="org.matrix.vector.activity.VectorHomeActivity">
+        android:focusableInTouchMode="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/home_toolbar"
@@ -52,7 +52,18 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_recents_sync_in_progress" />
+            app:layout_constraintTop_toBottomOf="@+id/home_recents_sync_in_progress"
+            tools:visibility="visible" />
+
+        <im.vector.view.KeysBackupBanner
+            android:id="@+id/home_keys_backup_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listView_pending_callview"
+            tools:visibility="visible" />
 
         <!-- The main content view -->
         <FrameLayout
@@ -63,7 +74,7 @@
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview" />
+            app:layout_constraintTop_toBottomOf="@id/home_keys_backup_banner" />
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"

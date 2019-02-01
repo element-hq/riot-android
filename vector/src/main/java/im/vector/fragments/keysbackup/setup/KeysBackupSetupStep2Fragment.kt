@@ -185,13 +185,13 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     fun doNext() {
         when {
             TextUtils.isEmpty(viewModel.passphrase.value) -> {
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_empty_error_message)
+                viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
-                viewModel.confirmPassphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_no_match)
+                viewModel.confirmPassphraseError.value = context?.getString(R.string.passphrase_passphrase_does_not_match)
             }
             viewModel.passwordStrength.value?.score ?: 0 < 4 -> {
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_setup_step2_passphrase_too_weak)
+                viewModel.passphraseError.value = context?.getString(R.string.passphrase_passphrase_too_weak)
             }
             else -> {
                 viewModel.megolmBackupCreationInfo = null

@@ -7,8 +7,9 @@ MatrixSdk:
 Features:
  - keys backup: Implement setup screen (#2883)
  - keys backup: Display a warning on new sign out screen (#2885)
- - keys backup: recover screen #2887
- - keys backup: Add a dedicated section to settings #251
+ - keys backup: recover screen (#2887)
+ - keys backup: Add a dedicated section to settings (#2884)
+ - keys backup: Add a banner on Home to setup or recover backup (#2884)
 
 Improvements:
  - Support Split-screen mode (#1832)

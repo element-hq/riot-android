@@ -671,8 +671,8 @@ I messaggi criptati non saranno visibili ai riceventi che non hanno ancora imple
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="encryption_import_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
+    <string name="passphrase_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
+    <string name="passphrase_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
     <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
 
 Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
@@ -1084,8 +1084,8 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <string name="room_sliding_menu_version_x">Versione %s</string>
     <string name="encryption_export_notice">Crea una passphrase (frase d\'ordine) per crittografare le chiavi esportate. Dovrai inserire la stessa passphrase per poter importare le chiavi.</string>
-    <string name="encryption_export_create_passphrase">Crea passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Le passphrase devono corrispondere</string>
+    <string name="passphrase_create_passphrase">Crea passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Le passphrase devono corrispondere</string>
     <string name="merged_events_expand">espandi</string>
     <string name="merged_events_collapse">collassa</string>
 

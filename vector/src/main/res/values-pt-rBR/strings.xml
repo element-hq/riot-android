@@ -629,8 +629,8 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Entre com a \'passphrase\'</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
+    <string name="passphrase_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="passphrase_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
 
 Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
@@ -1190,8 +1190,8 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="store_title">Riot.im - colaboração aberta em equipe</string>
     <string name="store_short_description">Bem-vindo ao Riot.im: um novo mundo de comunicação aberta!</string>
     <string name="settings_troubleshoot_test_battery_failed">"Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão. "</string>
-    <string name="encryption_export_create_passphrase">Criar passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Passphrases devem corresponder</string>
+    <string name="passphrase_create_passphrase">Criar passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
     <string name="store_full_description">O Riot.im é um ambiente de colaboração simples e elegante que reúne todas as suas diferentes conversas e integrações de aplicativos em um único aplicativo.
 

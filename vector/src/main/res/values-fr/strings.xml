@@ -404,8 +404,8 @@ Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_export">Exporter</string>
-    <string name="encryption_import_enter_passphrase">Saisir la phrase secrète</string>
-    <string name="encryption_export_confirm_passphrase">Confirmer la phrase secrète</string>
+    <string name="passphrase_enter_passphrase">Saisir la phrase secrète</string>
+    <string name="passphrase_confirm_passphrase">Confirmer la phrase secrète</string>
     <string name="encryption_import_e2e_room_keys">Importer les clés E2E des salons</string>
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
     <string name="encryption_import_import">Importer</string>
@@ -1037,8 +1037,8 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
 
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">Veuillez créer une phrase secrète pour chiffrer les clés exportées. Vous devrez saisir cette même phrase secrète afin de pouvoir importer les clés.</string>
-    <string name="encryption_export_create_passphrase">Créer la phrase secrète</string>
-    <string name="encryption_export_passphrase_dont_match">Les phrases secrètes doivent concorder</string>
+    <string name="passphrase_create_passphrase">Créer la phrase secrète</string>
+    <string name="passphrase_passphrase_does_not_match">Les phrases secrètes doivent concorder</string>
     <string name="merged_events_expand">développer</string>
     <string name="merged_events_collapse">réduire</string>
 

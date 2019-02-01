@@ -713,8 +713,8 @@ Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pag
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
     <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
     <string name="encryption_export_export">Eksports</string>
-    <string name="encryption_import_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
-    <string name="encryption_export_confirm_passphrase">Apstiprināt paroli</string>
+    <string name="passphrase_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
+    <string name="passphrase_confirm_passphrase">Apstiprināt paroli</string>
     <string name="encryption_export_saved_as">E2E istabas atslēgas ir saglabātas failā \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Importēt E2E istabas atslēgas</string>
