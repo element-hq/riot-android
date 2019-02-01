@@ -39,7 +39,7 @@ import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.fragments.VectorBaseFragment
-import im.vector.util.startSharePlainTextIntent
+import im.vector.util.*
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -216,25 +216,40 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     @OnClick(R.id.keys_backup_setup_step3_save_button)
     fun onSaveToFileClicked() {
-        viewModel.recoveryKey.value?.let {
-            val stream = ByteArrayInputStream(it.toByteArray())
-            val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
-            stream.close()
-            CommonActivityUtils.saveMediaIntoDownloads(context,
-                    File(Uri.parse(url).path!!), "recovery-key.txt", "text/plain", object : SimpleApiCallback<String>() {
-                override fun onSuccess(path: String) {
-                    context?.let {
-                        AlertDialog.Builder(it)
-                                .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.ok, null)
-                                .show()
-                    }
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            viewModel.recoveryKey.value?.let {
+                exportRecoveryKeyToFile(it)
+            }
+        }
+    }
 
-                    viewModel.copyHasBeenMade = true
+    fun exportRecoveryKeyToFile(it: String) {
+        val stream = ByteArrayInputStream(it.toByteArray())
+        val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
+        stream.close()
+        CommonActivityUtils.saveMediaIntoDownloads(context,
+                File(Uri.parse(url).path!!), "recovery-key.txt", "text/plain", object : SimpleApiCallback<String>() {
+            override fun onSuccess(path: String) {
+                context?.let {
+                    AlertDialog.Builder(it)
+                            .setMessage(getString(R.string.recovery_key_export_saved_as_warning, path))
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
                 }
-            })
 
+                viewModel.copyHasBeenMade = true
+            }
+        })
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (allGranted(grantResults)) {
+            if (requestCode == PERMISSION_REQUEST_CODE_EXPORT_KEYS) {
+                viewModel.recoveryKey.value?.let {
+                    exportRecoveryKeyToFile(it)
+                }
+            }
         }
     }
 }
