@@ -126,6 +126,15 @@ android {
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
+
+        saba {
+            applicationId "com.sabaos.messaging"
+            versionCode rootProject.ext.versionCodeProp
+            versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"Saba\""
+        }
     }
 
     lintOptions {
@@ -197,7 +206,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:0.3'
 
     // Kotlin coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.2-eap13'
     implementation "org.jetbrains.anko:anko-commons:0.10.8"
 
     implementation 'com.android.support:multidex:1.0.0'
@@ -285,6 +294,7 @@ dependencies {
 }
 
 
-if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")) {
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid") &&
+        !getGradle().getStartParameter().getTaskRequests().toString().contains("Saba")) {
     apply plugin: 'com.google.gms.google-services'
 }
