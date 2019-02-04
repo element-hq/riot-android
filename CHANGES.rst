@@ -62,6 +62,7 @@ Bugfix:
  - Fix issues with Tombstone events (#2866 && #2867)
  - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
  - Key share request does not go away when user select "verify" (#2781)
+ - Fix crash when entering the settings due to missing push rules (#2893)
 
 Changes in Riot 0.8.21 (2019-01-02)
 ===================================================

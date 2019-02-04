@@ -1021,8 +1021,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // The others notifications settings have to be disable too
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
-        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && (pushManager?.areDeviceNotificationsAllowed()
-                ?: true) && pushManager?.useFcm() ?: true
+        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed
+                && (pushManager?.areDeviceNotificationsAllowed() ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
