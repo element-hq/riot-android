@@ -78,3 +78,7 @@ layout_constraintLeft_
 
 ### Use im.vector.preference.VectorPreference to support multiline of the title
 <Preference\n
+
+### Will crash on API < 21. Use ?colorAccent instead
+\?android:colorAccent
+\?android:attr/colorAccent
