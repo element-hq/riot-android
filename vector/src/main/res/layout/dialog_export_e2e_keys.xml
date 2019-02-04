@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,10 +36,12 @@
 
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/dialog_e2e_keys_confirm_passphrase_til"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColorHint="?attr/vctr_default_text_hint_color">
+        android:textColorHint="?attr/vctr_default_text_hint_color"
+        app:errorEnabled="true">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/dialog_e2e_keys_confirm_passphrase_edit_text"
@@ -54,7 +57,6 @@
         android:id="@+id/dialog_e2e_keys_export_button"
         style="@style/VectorButtonStyle"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
         android:enabled="false"
         android:text="@string/encryption_export_export" />
 </LinearLayout>

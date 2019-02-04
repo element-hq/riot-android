@@ -53,6 +53,7 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.contacts.ContactsManager
+import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.withArgs
 import im.vector.preference.ProgressBarPreference
@@ -2496,77 +2497,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // We need WRITE_EXTERNAL permission
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
             activity?.let { activity ->
+                ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                    override fun onPassphrase(passphrase: String) {
+                        displayLoadingView()
 
-                val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
-                val builder = AlertDialog.Builder(activity)
-                        .setTitle(R.string.encryption_export_room_keys)
-                        .setView(dialogLayout)
+                        CommonActivityUtils.exportKeys(mSession, passphrase, object : SimpleApiCallback<String>(activity) {
+                            override fun onSuccess(filename: String) {
+                                hideLoadingView()
 
-                val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-                val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
-                val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
-                val textWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-                    }
-
-                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-                    }
-
-                    override fun afterTextChanged(s: Editable) {
-                        when {
-                            TextUtils.isEmpty(passPhrase1EditText.text) -> {
-                                exportButton.isEnabled = false
-                                passPhrase2EditText.error = null
+                                AlertDialog.Builder(activity)
+                                        .setMessage(getString(R.string.encryption_export_saved_as, filename))
+                                        .setCancelable(false)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .show()
                             }
-                            TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
-                                exportButton.isEnabled = true
-                                passPhrase2EditText.error = null
+
+                            override fun onNetworkError(e: Exception) {
+                                super.onNetworkError(e)
+                                hideLoadingView()
                             }
-                            else -> {
-                                exportButton.isEnabled = false
-                                passPhrase2EditText.error = getString(R.string.passphrase_passphrase_does_not_match)
+
+                            override fun onMatrixError(e: MatrixError) {
+                                super.onMatrixError(e)
+                                hideLoadingView()
                             }
-                        }
+
+                            override fun onUnexpectedError(e: Exception) {
+                                super.onUnexpectedError(e)
+                                hideLoadingView()
+                            }
+                        })
                     }
-                }
-
-                passPhrase1EditText.addTextChangedListener(textWatcher)
-                passPhrase2EditText.addTextChangedListener(textWatcher)
-
-                exportButton.isEnabled = false
-
-                val exportDialog = builder.show()
-
-                exportButton.setOnClickListener {
-                    displayLoadingView()
-
-                    CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
-                        override fun onSuccess(filename: String) {
-                            hideLoadingView()
-
-                            AlertDialog.Builder(activity)
-                                    .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            hideLoadingView()
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            hideLoadingView()
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            hideLoadingView()
-                        }
-                    })
-
-                    exportDialog.dismiss()
-                }
+                })
             }
         }
     }
