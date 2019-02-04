@@ -136,6 +136,17 @@ class NotificationDrawerManager(val context: Context) {
         }
     }
 
+    fun clearMemberShipNotificationForRoom(roomId: String) {
+        synchronized(this) {
+            eventList.removeAll { e ->
+                if (e is InviteNotifiableEvent) {
+                    return@removeAll e.roomId == roomId
+                }
+                return@removeAll false
+            }
+        }
+    }
+
 
     fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
         synchronized(this) {

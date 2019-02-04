@@ -19,6 +19,7 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.ImageView
+import im.vector.BuildConfig
 import im.vector.R
 import im.vector.util.RiotEventDisplay
 import org.matrix.androidsdk.MXSession
@@ -138,7 +139,7 @@ class NotifiableEventResolver(val context: Context) {
     }
 
     private fun resolveStateRoomEvent(event: Event, bingRule: BingRule?, session: MXSession, store: IMXStore): NotifiableEvent? {
-        if ("invite" == event.contentAsJsonObject?.getAsJsonPrimitive(RoomMember.MEMBERSHIP_INVITE)?.asString) {
+        if (RoomMember.MEMBERSHIP_INVITE == event.contentAsJsonObject?.getAsJsonPrimitive("membership")?.asString) {
             val room = store.getRoom(event.roomId /*roomID cannot be null (see Matrix SDK code)*/)
             val body = eventDisplay.getTextualDisplay(event, room.state)?.toString() ?: context.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
@@ -154,6 +155,9 @@ class NotifiableEventResolver(val context: Context) {
                     isPushGatewayEvent = false)
         } else {
             Log.e(LOG_TAG, "## unsupported notifiable event for eventId [${event.eventId}]")
+            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                Log.e(LOG_TAG, "## unsupported notifiable event for event [${event}]")
+            }
             //TODO generic handling?
         }
         return null
