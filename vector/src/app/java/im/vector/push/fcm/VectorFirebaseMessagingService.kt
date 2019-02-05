@@ -221,6 +221,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
                 if (notifiableEvent == null) {
                     Log.e(LOG_TAG, "Unsupported notifiable event ${eventId}")
+                    if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                        Log.e(LOG_TAG, "--> ${event}")
+                    }
                 } else {
 
 

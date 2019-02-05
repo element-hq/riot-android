@@ -580,9 +580,8 @@ object NotificationUtils {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = DISMISS_SUMMARY_ACTION
         intent.data = Uri.parse("foobar://deleteSummary")
-        val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
+        return PendingIntent.getBroadcast(context.applicationContext,
                 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        return pendingIntent
     }
 
     fun showNotificationMessage(context: Context, tag: String?, id: Int, notification: Notification) {
