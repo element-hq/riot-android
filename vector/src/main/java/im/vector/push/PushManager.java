@@ -1036,7 +1036,7 @@ public final class PushManager {
          * Notifications are displayed with low detail (X messages in RoomY).
          * Only message metadata is sent through the push service.
          */
-        LOW_DETAIL,
+       // LOW_DETAIL,
 
         /**
          * Normal: full detailed notifications by keeping user privacy.
@@ -1075,18 +1075,23 @@ public final class PushManager {
      * @return the current notification privacy setting as displayed to the end user.
      */
     public NotificationPrivacy getNotificationPrivacy() {
-        NotificationPrivacy notificationPrivacy = NotificationPrivacy.LOW_DETAIL;
+//        NotificationPrivacy notificationPrivacy = NotificationPrivacy.NORMAL;
 
-        boolean isContentSendingAllowed = isContentSendingAllowed();
+//        boolean isContentSendingAllowed = isContentSendingAllowed();
         boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
 
-        if (isContentSendingAllowed && !isBackgroundSyncAllowed) {
-            notificationPrivacy = NotificationPrivacy.REDUCED;
-        } else if (!isContentSendingAllowed && isBackgroundSyncAllowed) {
-            notificationPrivacy = NotificationPrivacy.NORMAL;
+        if (isBackgroundSyncAllowed) {
+            //in this case always use normal privacy
+            return NotificationPrivacy.NORMAL;
         }
 
-        return notificationPrivacy;
+//        if (isContentSendingAllowed && !isBackgroundSyncAllowed) {
+//            notificationPrivacy = NotificationPrivacy.REDUCED;
+//        } else if (!isContentSendingAllowed && isBackgroundSyncAllowed) {
+//            notificationPrivacy = NotificationPrivacy.NORMAL;
+//        }
+
+        return NotificationPrivacy.REDUCED;
     }
 
     /**
@@ -1104,10 +1109,10 @@ public final class PushManager {
                 setContentSendingAllowed(true);
                 setBackgroundSyncAllowed(false);
                 break;
-            case LOW_DETAIL:
-                setContentSendingAllowed(false);
-                setBackgroundSyncAllowed(false);
-                break;
+//            case LOW_DETAIL:
+//                setContentSendingAllowed(false);
+//                setBackgroundSyncAllowed(false);
+//                break;
             case NORMAL:
                 setContentSendingAllowed(false);
                 setBackgroundSyncAllowed(true);
@@ -1171,10 +1176,10 @@ public final class PushManager {
     public boolean isBackgroundSyncAllowed() {
         // If using FCM, first check if the application has the "run in background" permission.
         // No permission, no background sync
-        if (hasRegistrationToken()
-                && !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)) {
-            return false;
-        }
+//        if (hasRegistrationToken()
+//                /*&& !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)*/) {
+//            return true;
+//        }
 
         // then, this depends on the user setting
         return getPushSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);

@@ -668,71 +668,37 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         checkNotificationPrivacySetting();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE) {
-                // Ok, we can set the NORMAL privacy setting
-                Matrix.getInstance(this)
-                        .getPushManager()
-                        .setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
-            }
-        }
-    }
-
     /**
      * Ask the user to choose a notification privacy policy.
      */
     private void checkNotificationPrivacySetting() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // The "Run in background" permission exists from android 6
-            return;
-        }
+
 
         final PushManager pushManager = Matrix.getInstance(VectorHomeActivity.this).getPushManager();
 
         if (pushManager.useFcm()) {
-            // ask user what notification privacy they want. Ask it once
-            if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
-                PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
+            if (!PreferencesManager.didMigrateToNotificationRework(this)) {
+                PreferencesManager.setDidMigrateToNotificationRework(this);
+                //By default we want to move users to NORMAL privacy, but if they were in reduced privacy we let them as is
+                boolean backgroundSyncAllowed = pushManager.isBackgroundSyncAllowed();
+                boolean contentSendingAllowed = pushManager.isContentSendingAllowed();
 
-                if (SystemUtilsKt.isIgnoringBatteryOptimizations(this)) {
-                    // No need to ask permission, we already have it
-                    // Set the NORMAL privacy setting
-                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
+                if (contentSendingAllowed && !backgroundSyncAllowed) {
+                    //former reduced, so stick with it (call to enforce)
+                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.REDUCED, null);
                 } else {
-                    // by default, use FCM and low detail notifications
-                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.LOW_DETAIL, null);
-
-                    new AlertDialog.Builder(this)
-                            .setCancelable(false)
-                            .setTitle(R.string.startup_notification_privacy_title)
-                            .setMessage(R.string.startup_notification_privacy_message)
-                            .setPositiveButton(R.string.startup_notification_privacy_button_grant, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user wants to grant the IgnoreBatteryOptimizations permission");
-
-                                    // Request the battery optimization cancellation to the user
-                                    SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
-                                            RequestCodesKt.BATTERY_OPTIMIZATION_FCM_REQUEST_CODE);
-                                }
-                            })
-                            .setNegativeButton(R.string.startup_notification_privacy_button_other, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d(LOG_TAG, "checkNotificationPrivacySetting: user opens notification policy setting screen");
-
-                                    // open the notification policy setting screen
-                                    startActivity(NotificationPrivacyActivity.getIntent(VectorHomeActivity.this));
-                                }
-                            })
-                            .show();
+                    // default force to normal
+                    pushManager.setNotificationPrivacy(PushManager.NotificationPrivacy.NORMAL, null);
                 }
+
             }
         } else {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                // The "Run in background" permission exists from android 6
+                return;
+            }
+
             if (!PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
                 PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
@@ -917,7 +883,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             hideWaitingView();
         }
         intent.removeExtra(EXTRA_WAITING_VIEW_STATUS);
-
 
         if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
             VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
