@@ -336,13 +336,12 @@ public class CommonActivityUtils {
             // display a dummy activity until the logout is done
             Matrix.getInstance(context).getPushManager().clearPreferences();
 
+            Intent intent = new Intent(activity, LoggingOutActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
             if (null != activity) {
-                // go to login page
-                activity.startActivity(new Intent(activity, LoggingOutActivity.class));
-                activity.finish();
+                activity.startActivity(intent);
             } else {
-                Intent intent = new Intent(context, LoggingOutActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
             }
         }
@@ -365,13 +364,14 @@ public class CommonActivityUtils {
 
                 if (goToLoginPage) {
                     Activity activeActivity = VectorApp.getCurrentActivity();
+
+                    // go to login page
+                    Intent intent = new Intent(activeActivity, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                     if (null != activeActivity) {
-                        // go to login page
-                        activeActivity.startActivity(new Intent(activeActivity, LoginActivity.class));
-                        activeActivity.finish();
+                        activeActivity.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
                     }
                 }

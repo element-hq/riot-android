@@ -79,6 +79,7 @@ class SignOutActivity : MXCActionBarActivity() {
 
         if (mSession == null) {
             finish()
+            return
         }
 
         viewModel = ViewModelProviders.of(this).get(SignOutViewModel::class.java)
