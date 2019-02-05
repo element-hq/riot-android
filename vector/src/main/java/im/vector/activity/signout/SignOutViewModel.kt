@@ -43,6 +43,17 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
                 ?.state
     }
 
+    /**
+     * Safe way to get the current KeysBackup version
+     */
+    fun getCurrentBackupVersion(): String {
+        return mxSession
+                ?.crypto
+                ?.keysBackup
+                ?.currentBackupVersion
+                ?: ""
+    }
+
     override fun onCleared() {
         super.onCleared()
 

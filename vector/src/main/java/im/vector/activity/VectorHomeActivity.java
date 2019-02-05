@@ -358,7 +358,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         break;
                     case NotTrusted:
                     case WrongBackUpVersion:
-                        mKeysBackupBanner.render(KeysBackupBanner.State.Recover.INSTANCE, false);
+                        // In this case, getCurrentBackupVersion() should not return ""
+                        mKeysBackupBanner.render(new KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false);
                         break;
                     default:
                         mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
