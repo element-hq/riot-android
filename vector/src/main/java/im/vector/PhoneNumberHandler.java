@@ -66,8 +66,10 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
      * *********************************************************************************************
      */
 
-    public PhoneNumberHandler(@NonNull final Activity activity, @NonNull final EditText phoneNumberInput,
-                              @NonNull final EditText countryCodeInput, @DisplayMode final int displayMode,
+    public PhoneNumberHandler(@NonNull final Activity activity,
+                              @NonNull final EditText phoneNumberInput,
+                              @NonNull final EditText countryCodeInput,
+                              @DisplayMode final int displayMode,
                               final int requestCode) {
         mPhoneNumberInput = phoneNumberInput;
         mCountryCodeInput = countryCodeInput;
