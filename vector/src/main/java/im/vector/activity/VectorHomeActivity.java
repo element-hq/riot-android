@@ -208,7 +208,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
 
-    @BindView(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+    @BindView(R.id.fab_expand_menu_button)
     AddFloatingActionButton mFabMain;
 
     @BindView(R.id.button_start_chat)
