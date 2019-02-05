@@ -265,4 +265,5 @@ public class RoomAdapter extends AbsAdapter {
 
         void onSelectItem(PublicRoom publicRoom);
     }
+
 }
