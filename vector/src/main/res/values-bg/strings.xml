@@ -106,10 +106,10 @@
     <string name="ongoing_conference_call_voice">гласов</string>
     <string name="ongoing_conference_call_video">видео</string>
     <string name="notification_listening_for_events">Следете за събития</string>
-    <string name="notification_noisy_notifications">Известия със звук</string>
-    <string name="notification_silent_notifications">Известия без звук</string>
+    <string name="notification_noisy_notifications">Шумни известия</string>
+    <string name="notification_silent_notifications">Уведомления без звук</string>
 
-    <string name="title_activity_member_details">Информация</string>
+    <string name="title_activity_member_details">Членове</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
     <string name="ongoing_conference_call">Тече групов разговор. Присъедини се с глас или видео.</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
@@ -180,7 +180,7 @@
     <string name="send_bug_report_include_logs">Изпращане на логове</string>
     <string name="send_bug_report_include_crash_logs">Изпращане на логове за забивания</string>
     <string name="send_bug_report_include_screenshot">Изпращане на снимка на екрана</string>
-    <string name="send_bug_report">Съобщение за грешка</string>
+    <string name="send_bug_report">Съобщи за грешка</string>
     <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
     <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Доклада, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
@@ -262,7 +262,7 @@
     <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
     <string name="auth_reset_password_success_message">Вашата парола беше възстановена.
 
-Вие сте излязли от профила си от всички устройства и вече няма да получавате известия. За да включите известията отново, влезте в профила си от всички устройства.</string>
+Бяхте изхвърлени от профила Ви на всички устройства и вече няма да получавате известия на тях. За да ги включите отново, влезте в профила си от всяко едно устройство.</string>
 
     <string name="login_error_must_start_http">URL адресът трябва да започва с http[s]://</string>
     <string name="login_error_network_error">Неуспешно влизане в профила: Грешка в мрежата</string>
@@ -427,7 +427,7 @@
     <string name="settings_phone_number">Телефон</string>
     <string name="settings_add_phone_number">Добави телефонен номер</string>
     <string name="settings_enable_all_notif">Включване на известия за този профил</string>
-    <string name="settings_enable_this_device">Включване на известия за това устройство</string>
+    <string name="settings_enable_this_device">Включване на известията за това устройство</string>
     <string name="settings_containing_my_display_name">Съобщения, съдържащи моя псевдоним</string>
     <string name="settings_containing_my_user_name">Съобщения, съдържащи моето потребителско име</string>
     <string name="settings_messages_in_one_to_one">Съобщения в индивидуални чатове</string>
@@ -447,7 +447,7 @@
     <string name="settings_privacy_policy">Политика за поверителност</string>
     <string name="settings_clear_cache">Изчисти кеша</string>
     <string name="settings_user_settings">Настройки на потребителя</string>
-    <string name="settings_notifications">Известия</string>
+    <string name="settings_notifications">Уведомления</string>
     <string name="settings_ignored_users">Игнорирани потребители</string>
     <string name="settings_other">Други</string>
     <string name="settings_advanced">Разширени</string>
@@ -509,7 +509,7 @@
     <string name="settings_phone_number_label">Телефонен номер</string>
     <string name="settings_phone_number_error">Невалиден телефонен номер за избраната държава</string>
     <string name="settings_phone_number_verification_instruction">Изпратихме Ви SMS с код за активиране. Моля, въведете този код по-долу.</string>
-    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активиране</string>
+    <string name="settings_phone_number_verification_error_empty_code">Въведете код за активация</string>
     <string name="settings_phone_number_verification_error">Грешка по време на проверката на телефонния Ви номер</string>
     <string name="settings_phone_number_code">Код</string>
 
@@ -519,7 +519,7 @@
     <string name="media_saving_period_3_days">3 дни</string>
     <string name="media_saving_period_1_week">1 седмица</string>
     <string name="media_saving_period_1_month">1 месец</string>
-    <string name="media_saving_period_forever">Постоянно</string>
+    <string name="media_saving_period_forever">Вечно</string>
 
     <string name="room_settings_room_photo">Снимка на стаята</string>
     <string name="room_settings_room_name">Име на стаята</string>
@@ -711,7 +711,7 @@
     <string name="permissions_rationale_msg_contacts">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
 
 Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да намирате потребители на Riot от Вашите контакти.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot иска разшерение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
+    <string name="permissions_msg_contacts_warning_other_androids">Riot иска разрешение за достъп до контактите Ви, за да намери други Matrix потребители по имейл или телефонен номер.
 
 Позволяване на достъп до контактите Ви?</string>
 
@@ -761,14 +761,14 @@
     <string name="room_menu_search">Търсене</string>
     <string name="room_details_people_present_group_name">УЧАСТНИЦИ</string>
 
-    <string name="room_sync_in_progress">Синхронизиране…</string>
+    <string name="room_sync_in_progress">Синхронизация…</string>
     <string name="settings_app_info_link_summary">Покажи системния екран с информация за приложението.</string>
     <string name="settings_app_info_link_title">Информация за приложението</string>
 
     <string name="settings_notification_ringtone">Звук на известията</string>
     <string name="settings_turn_screen_on">Включи екрана за 3 секунди</string>
 
-    <string name="settings_start_on_boot">Пускане при включване на телефона</string>
+    <string name="settings_start_on_boot">Стартиране при включване на телефона</string>
     <string name="settings_background_sync">Фонова синхронизация</string>
     <string name="settings_enable_background_sync">Включване на фонова синхронизация</string>
     <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
@@ -777,9 +777,9 @@
     <string name="settings_home_display">Начало</string>
     <string name="settings_vibrate_on_mention">Вибрация при споменаване на потребител</string>
 
-    <string name="settings_data_save_mode">Режим запазване на данни</string>
+    <string name="settings_data_save_mode">Режим икономия на данни</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Сигурни ли сте, че искате да премахнете това устройство, получаващо известия?</string>
+    <string name="settings_delete_notification_targets_confirmation">Сигурни ли сте, че искате да премахнете това устройство от получаването на известия?</string>
 
     <string name="settings_phone_number_verification">Потвърждение на номер</string>
     <string name="room_settings_room_read_history_rules_pref_title">Достъп до историята на стаята</string>
@@ -853,24 +853,24 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
-    <string name="settings_notification_privacy_warning">Riot.im работи във фонов режим за да е конфиденциално съдържанието на уведомленията. Може да смените тази настройка, за да намалите консумацията на енергия.</string>
+    <string name="settings_notification_privacy_warning">Riot.im работи във фонов режим за да е конфиденциално съдържанието на известията. Може да смените тази настройка, за да намалите консумацията на енергия.</string>
     <string name="settings_notification_privacy_power_saving">Настройки за енергоспестяване</string>
-    <string name="settings_notification_privacy_low_detail">Не-подробни уведомления</string>
+    <string name="settings_notification_privacy_low_detail">Известия без подробности</string>
     <string name="settings_notification_privacy_reduced">Намалена конфиденциалност</string>
     <string name="settings_notification_privacy_need_permission">Приложението се нуждае от достъп за работа във фонов режим</string>
     <string name="settings_notification_privacy_no_permission">Приложението <b>не</b> се нуждае от достъп за работа във фонов режим</string>
-    <string name="settings_notification_privacy_fcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Известията се изпращат чрез Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Уведомленията съдържат само метаданни</string>
-    <string name="settings_notification_privacy_secure_message_content">• Съдържанието на уведомленията се <b>извлича по защитен път директно от Matrix сървъра</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Съдържанието на известията се <b>извлича по защитен път директно от Matrix сървъра</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомленията съдържат <b>метаданни и съдържания на съобщения</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомленията <b>няма да показват съдържания на съобщения</b></string>
 
-    <string name="startup_notification_privacy_title">Конфиденциалност на уведомленията</string>
-    <string name="startup_notification_privacy_message">Riot може да работи във фонов режим за да получава уведомления по защитен начин. Може да повлияе на използването на енергия.</string>
+    <string name="startup_notification_privacy_title">Конфиденциалност на известията</string>
+    <string name="startup_notification_privacy_message">Riot може да работи във фонов режим за да получава известия по защитен начин. Може да повлияе на консумацията на енергия.</string>
     <string name="startup_notification_privacy_button_grant">Разреши достъп</string>
     <string name="startup_notification_privacy_button_other">Избери друг вариант</string>
 
-    <string name="settings_notification_privacy">Конфиденциалност на уведомленията</string>
+    <string name="settings_notification_privacy">Конфиденциалност на известията</string>
     <string name="settings_notification_privacy_normal">Нормална</string>
     <string name="title_activity_choose_sticker">Изпращане на стикер</string>
 
@@ -1077,12 +1077,12 @@
     <string name="settings_troubleshoot_diagnostic">Диагностика на проблеми</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Изпълни тестовете</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Изпълняване… (%1$d от %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Основната диагностика не откри проблеми. Ако все още не получавате уведомления, изпратете съобщение за грешка за да проучим случая.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Основната диагностика не откри проблеми. Ако все още не получавате известия, изпратете съобщение за грешка за да проучим случая.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Една или повече проверки откриха проблем. Пробвайте предложените поправки.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Една или повече проверки откриха проблем. Моля, изпратете съобщение за грешка за да проучим случая.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Системни настройки.</string>
-    <string name="settings_notification_troubleshoot">Диагностика на проблеми с уведомления</string>
+    <string name="settings_notification_troubleshoot">Диагностика на проблеми с известията</string>
     <string name="settings_troubleshoot_test_system_settings_success">Уведомленията са разрешени в системните настройки.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Уведомленията са забранени в системните настройки.
 Моля, проверете системните настройки.</string>
@@ -1102,7 +1102,7 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Проверка на Google Play услугите</string>
     <string name="settings_troubleshoot_test_play_services_success">APK пакет за Google Play услугите е наличен и с актуална версия.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot използва Google Play услугите за да доставя уведомления за съобщения, но изглежда те не са конфигурирани правилно:
+    <string name="settings_troubleshoot_test_play_services_failed">Riot използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:
 %1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Поправи Google Play услугите</string>
 
@@ -1117,26 +1117,26 @@
     <string name="settings_troubleshoot_test_token_registration_failed">Неуспешна регистрация на FCM токена със сървъра:
 %1$s</string>
 
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Услуга за уведомления</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Услугата за уведомления работи.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Услугата за уведомления не работи.
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Услуга за известия</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Услугата за известия работи.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Услугата за известия не работи.
 Опитайте да рестартирате приложението.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Стартирай услугата</string>
 
-    <string name="settings_troubleshoot_test_service_restart_title">Автоматично рестартиране на услугата за уведомления</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Автоматично рестартиране на услугата за известия</string>
     <string name="settings_troubleshoot_test_service_restart_success">Услугата беше спряна и рестартирана автоматично.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Услугата не успя да се рестартира</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Стартирай при старт на системата</string>
     <string name="settings_troubleshoot_test_service_boot_success">Услугата ще стартира когато устройството се рестартира.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Услугата няма да стартира когато устройството се рестартира. Няма да получавате уведомления докато Riot не бъде отворен поне веднъж.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Услугата няма да стартира когато устройството се рестартира. Няма да получавате известия докато Riot не бъде отворен поне веднъж.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Стартирай при старт на системата</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Проверка на фоновите ограничения</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Ограниченията във фонов режим са изключени за Riot. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Активирани са ограничения във фонов режим за Riot.
-Работата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на уведомленията.
+Работата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Премахни ограниченията</string>
 
@@ -1146,8 +1146,8 @@
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорирай оптимизацията</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Връзка във фонов режим</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot трябва да поддържа ниско-натоварваща връзка във фонов режим, за да може уведомленията да пристигат надеждно.
-На следващия екран, ще бъдете попитани да позволите на Riot винаги да работи във фонов режим. Моля приемете.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot трябва да поддържа ниско-натоварваща връзка във фонов режим, за да може известията да пристигат надеждно.
+На следващия екран, ще бъдете попитани дали да позволите на Riot винаги да работи във фонов режим. Моля, приемете.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Разреши</string>
 
     <string name="account_email_error">Възникна грешка при проверката на имейл адреса Ви.</string>
@@ -1176,7 +1176,7 @@
 • Участвайте в публични стаи достъпни за гости
 • Висока скалируемост - поддържа стотици стаи и хиляди потребители
 • Напълно синхронизирана история на чат съобщенията на множество устройства и уеб браузъри
-• Фино-конфигурируеми настройки за уведомление, синхронизирани измежду всички устройства
+• Фино-конфигурируеми настройки за известяване, синхронизирани измежду всички устройства
 • Неограничен период на търсене в чат хронологията
 • Директни връзки към съобщения (Permalinks)
 • Пълно търсене на съобщения
@@ -1217,27 +1217,27 @@
     <string name="skip">Пропусни</string>
     <string name="done">Готово</string>
 
-    <string name="settings_notification_advanced">Разширени настройки за уведомление</string>
+    <string name="settings_notification_advanced">Разширени настройки за известия</string>
     <string name="settings_notification_advanced_summary">Настройка на важност според тип събитие, настройка на звук, LED, вибрация</string>
-    <string name="settings_notification_by_event">Важност на уведомление според тип събитие</string>
+    <string name="settings_notification_by_event">Важност на известията според типа събитие</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Собствени настройки.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Забележете, че някои типове съобщения са настроени да бъдат безшумни (има уведомление, но без звук).</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed">Някои уведомления са изключени в собствените Ви настройки.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Забележете, че някои типове съобщения са настроени да бъдат безшумни (има известие, но без звук).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Някои известия са изключени в собствените Ви настройки.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Неуспешно зареждане на собствените правила. Опитайте пак.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Провери настройките</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Тази грешка е извън контрола на Riot. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за уведомления FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
+Тази грешка е извън контрола на Riot. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 Тази грешка е извън контрола на Riot. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 Тази грешка е извън контрола на Riot. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Добави акаунт</string>
 
-    <string name="settings_noisy_notifications_preferences">Настройка на шумни уведомления</string>
-    <string name="settings_call_notifications_preferences">Настройка на уведомления за разговори</string>
-    <string name="settings_silent_notifications_preferences">Настройка на безшумни уведомления</string>
+    <string name="settings_noisy_notifications_preferences">Настройка на шумни известия</string>
+    <string name="settings_call_notifications_preferences">Настройка на известия за разговори</string>
+    <string name="settings_silent_notifications_preferences">Настройка на безшумни известия</string>
     <string name="settings_system_preferences_summary">Избор на LED цвят, вибрация, звук…</string>
 
 
@@ -1344,6 +1344,6 @@
     <string name="keys_backup_banner_setup_colored_part">Настрой Възстановяване на Защитени Съобщения</string>
 
     <string name="keys_backup_banner_recover">Отключете историята на защитените съобщения с</string>
-    <string name="keys_backup_banner_recover_colored_part">вашият ключ за възстановяване или парола</string>
+    <string name="keys_backup_banner_recover_colored_part">вашия ключ за възстановяване или парола</string>
 
 </resources>
