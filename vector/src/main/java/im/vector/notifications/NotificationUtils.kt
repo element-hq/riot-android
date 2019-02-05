@@ -58,12 +58,6 @@ object NotificationUtils {
      * ========================================================================================== */
 
     /**
-     * Identifier of the notification used to display messages.
-     * Those messages are merged into a single notification.
-     */
-    private const val NOTIFICATION_ID_MESSAGES = 60
-
-    /**
      * Identifier of the foreground notification used to keep the application alive
      * when it runs in background.
      * This notification, which is not removable by the end user, displays what
@@ -134,7 +128,6 @@ object NotificationUtils {
          * Default notification importance: shows everywhere, makes noise, but does not visually
          * intrude.
          */
-
         val noisyChannel = NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
                 context.getString(R.string.notification_noisy_notifications),
                 NotificationManager.IMPORTANCE_DEFAULT)
@@ -429,10 +422,11 @@ object NotificationUtils {
 
         val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         // Build the pending intent for when the notification is clicked
-//        val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
         val smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
-        val builder = NotificationCompat.Builder(context, channelID(simpleNotifiableEvent))
+
+        val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
+        val builder = NotificationCompat.Builder(context, channelID)
         builder.apply {
             setContentTitle(context.getString(R.string.riot_app_name))
             setContentText(simpleNotifiableEvent.description)
@@ -493,19 +487,9 @@ object NotificationUtils {
                 priority = NotificationCompat.PRIORITY_LOW
             }
             setAutoCancel(true)
-//            val intent = Intent(context, ReplyNotificationBroadcastReceiver::class.java)
-//            intent.putExtra(ReplyNotificationBroadcastReceiver.KEY_ROOM_ID,roomInfo.roomId)
-//            intent.action = DISMISS_ROOM_NOTIF_ACTION
-//            val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
-//                    System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-//            setDeleteIntent(pendingIntent)
         }
         return builder.build()
     }
-
-    fun channelID(simpleNotifiableEvent: NotifiableEvent) =
-            if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-
 
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
         val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
@@ -599,15 +583,6 @@ object NotificationUtils {
         val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
                 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         return pendingIntent
-    }
-
-    /**
-     * Show a notification containing messages
-     */
-    fun showNotificationMessage(context: Context, notification: Notification) {
-        with(NotificationManagerCompat.from(context)) {
-            notify(NOTIFICATION_ID_MESSAGES, notification)
-        }
     }
 
     fun showNotificationMessage(context: Context, tag: String?, id: Int, notification: Notification) {
