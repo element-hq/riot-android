@@ -472,7 +472,7 @@
                 style="@style/LoginButtonStyle"
                 android:layout_toStartOf="@+id/button_login"
                 android:layout_toLeftOf="@+id/button_login"
-                android:background="@android:color/white"
+                android:background="@android:color/transparent"
                 android:text="@string/auth_register"
                 android:textColor="?attr/colorAccent" />
 
