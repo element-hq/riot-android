@@ -86,18 +86,21 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+        <!-- Orientation is set in the style, depending on screen width -->
         <LinearLayout
+            style="@style/VectorLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="4dp"
+            android:gravity="end">
 
             <Button
                 android:id="@+id/keys_backup_setup_step3_copy_button"
                 style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:minWidth="160dp"
@@ -110,6 +113,7 @@
                 style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:minWidth="160dp"
