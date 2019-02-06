@@ -67,8 +67,6 @@
     <string name="action_exit">Çık</string>
     <string name="actions">Aksiyonlar</string>
     <string name="action_sign_out">Hesaptan çık</string>
-    <string name="action_sign_out_confirmation">Güvenlik için, hesaptan çıkmak uçtan uca şifrelenmiş anahtarı siler. Bu da tekrar giriş yapıldığında önceki şifrelenmiş sohbet geçmişini okunamaz hale getirir.
-Yedekleme için çıkmadan önce, dışa aktarı seçin.</string>
     <string name="action_voice_call">Görüntülü Görüşme</string>
     <string name="action_video_call">Görüntülü Görüşme</string>
     <string name="action_global_search">Global arama</string>

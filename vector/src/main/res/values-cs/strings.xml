@@ -59,8 +59,6 @@
     <string name="action_exit">Ukončit</string>
     <string name="actions">Akce</string>
     <string name="action_sign_out">Odhlásit</string>
-    <string name="action_sign_out_confirmation">Pro zabezpečení se při odhlašování odstraní všechny šifrovací klíče typu end-to-end, a i po přihlašení bude historie šifrovaných kanálů nečitelná.
-Zvolte export, chcete-li je zálohovat, než se odhlásíte.</string>
     <string name="action_voice_call">Hlasový hovor</string>
     <string name="action_video_call">Video hovor</string>
     <string name="action_global_search">Globální vyhledávání</string>

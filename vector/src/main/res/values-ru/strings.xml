@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Выйти из учётной записи</string>
-    <string name="action_sign_out_confirmation">Для обеспечения безопасности, выход из системы удалит все ключи сквозного шифрования, сделав зашифрованную историю чата нечитаемой, если вы снова осуществите вход.
-Можно экспортировать ключи для последующей дешифровки истории.</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
     <string name="action_global_search">Глобальный поиск</string>

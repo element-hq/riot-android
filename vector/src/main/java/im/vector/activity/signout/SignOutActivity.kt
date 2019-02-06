@@ -37,6 +37,7 @@ import im.vector.util.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.util.PERMISSION_REQUEST_CODE
 import im.vector.util.allGranted
 import im.vector.util.checkPermissions
+import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -226,6 +227,23 @@ class SignOutActivity : MXCActionBarActivity() {
             if (requestCode == PERMISSION_REQUEST_CODE) {
                 doExportKeysToFile()
             }
+        }
+    }
+
+    companion object {
+        /**
+         * This Activity has to be displayed if there are keys in the store, and the keys backup state is not Ready
+         */
+        fun doYouNeedToBeDisplayed(session: MXSession?): Boolean {
+            return session
+                    ?.crypto
+                    ?.cryptoStore
+                    ?.inboundGroupSessionsCount(false)
+                    ?: 0 > 0
+                    && session
+                    ?.crypto
+                    ?.keysBackup
+                    ?.state != KeysBackupStateManager.KeysBackupState.ReadyToBackUp
         }
     }
 }

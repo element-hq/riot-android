@@ -126,8 +126,6 @@
     <string name="action_exit">Излез</string>
     <string name="actions">Действия</string>
     <string name="action_sign_out">Изход</string>
-    <string name="action_sign_out_confirmation">За сигурност, излизането ще изтрие ключовете за шифроване от край до край и ако влезете отново в профила си, ще направи преднишната шифрована история на чата нечетима.
-Експортирайте Вашите ключове, преди да излезете от профила.</string>
     <string name="action_voice_call">Гласов разговор</string>
     <string name="action_video_call">Видео разговор</string>
     <string name="action_global_search">Глобално търсене</string>

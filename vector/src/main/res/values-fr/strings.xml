@@ -39,8 +39,6 @@
     <string name="invite">Inviter</string>
 
     <string name="action_sign_out">Se déconnecter</string>
-    <string name="action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l\'historique des discussions chiffrées inaccessible lorsque vous vous reconnecterez. 
-Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
     <string name="action_voice_call">Appel vocal</string>
     <string name="action_video_call">Appel vidéo</string>
     <string name="action_global_search">Recherche globale</string>

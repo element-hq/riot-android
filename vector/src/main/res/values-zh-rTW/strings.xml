@@ -59,8 +59,6 @@
     <string name="action_exit">離開</string>
     <string name="actions">動作</string>
     <string name="action_sign_out">登出</string>
-    <string name="action_sign_out_confirmation">為了安全，登出將會刪除任何的端對端加密金鑰。在您重新登入後將無法讀取先前已加密的聊天歷史。
-在登出前請選取匯出以備份加密金鑰。</string>
     <string name="action_voice_call">語音通話</string>
     <string name="action_video_call">視訊通話</string>
     <string name="action_global_search">全域搜尋</string>

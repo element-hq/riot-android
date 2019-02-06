@@ -58,8 +58,6 @@
     <string name="action_exit">Saír</string>
     <string name="actions">Accións</string>
     <string name="action_sign_out">Saír</string>
-    <string name="action_sign_out_confirmation">Por seguridade, a desconexión eliminará calquera chave de cifrado extremo-a-extremo facendo o historial de conversas cifradas ilexible si volta a conectarse.
-Escolla exportar para facer copia de seguridade das chaves antes de desconectar.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>

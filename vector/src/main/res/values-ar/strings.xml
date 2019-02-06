@@ -41,8 +41,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">مكالمات الاجتماعات ليست مدعومة في الغرفة المعمّاة</string>
     <string name="send_anyway">أرسِل بأي حال</string>
     <string name="action_sign_out">اخرج</string>
-    <string name="action_sign_out_confirmation">كنوع من الأمان، عند خروجك ستُحذف أية مفاتيح تعمية طرفين ما يجعل تأريخ الدردشة المعمّى السابق محال القراءة إن ولجت ثانيةً.
-اختر ”صدّر“ إن أردت نسخها احتياطيا قبل الخروج.</string>
     <string name="action_voice_call">مكالمة صورية</string>
     <string name="action_video_call">مكالمة صوتية</string>
     <string name="action_global_search">بحث عمومي</string>

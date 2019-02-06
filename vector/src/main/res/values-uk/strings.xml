@@ -59,8 +59,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Вийти з облікового запису</string>
-    <string name="action_sign_out_confirmation">З міркувань безпеки, всі ключі шифрування видаляються при виході з системи, що унеможливить перегляд попередньої історії чату коли Ви зайдете в систему знову.
-Експортуйте її, перш ніж вийти.</string>
     <string name="action_voice_call">Голосовий виклик</string>
     <string name="action_video_call">Відеовиклик</string>
     <string name="action_global_search">Глообальний пошук</string>

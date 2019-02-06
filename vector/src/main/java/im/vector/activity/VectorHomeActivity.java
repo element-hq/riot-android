@@ -1796,7 +1796,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        startActivity(new Intent(VectorHomeActivity.this, SignOutActivity.class));
+                        signOut();
                         break;
                     }
 
@@ -1852,6 +1852,27 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
+        }
+    }
+
+    private void signOut() {
+        if (SignOutActivity.Companion.doYouNeedToBeDisplayed(mSession)) {
+            startActivity(new Intent(this, SignOutActivity.class));
+        } else {
+            // Display a simple confirmation dialog
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.action_sign_out)
+                    .setMessage(R.string.action_sign_out_confirmation_simple)
+                    .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showWaitingView();
+
+                            CommonActivityUtils.logout(VectorHomeActivity.this);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
         }
     }
 

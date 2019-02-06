@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar sesión</string>
-    <string name="action_sign_out_confirmation">Por seguridad, cerrar la sesión eliminará todas las claves de cifrado de extremo a extremo, haciendo ilegible todo el historial de conversación cifrado si vuelves a iniciar sesión.
-Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>

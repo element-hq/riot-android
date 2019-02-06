@@ -53,8 +53,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Odjavi se</string>
-    <string name="action_sign_out_confirmation">Zbog sigurnosti, odjava će izbrisati sve krajnje ključeve za šifriranje, čime se prethodna šifrirana istorija razgovora ne može čitati ako se ponovo prijavite.
-Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="action_voice_call">Glasovni Poziv</string>
     <string name="action_video_call">Video Poziv</string>
     <string name="action_global_search">Globalna pretraga</string>

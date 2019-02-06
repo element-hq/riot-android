@@ -50,8 +50,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Log ud</string>
-    <string name="action_sign_out_confirmation">Af sikkerhedshensyn vil alle krypteringsnøgler blive slettet når du logger ud, hvilket vil gøre din i forvejen krypterede chathistorik ulæselig hvis du logger ind igen.
-Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="action_voice_call">Stemmeopkald</string>
     <string name="action_video_call">Videoopkald</string>
     <string name="action_global_search">Global søgning</string>
