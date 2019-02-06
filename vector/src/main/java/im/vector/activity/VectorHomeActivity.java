@@ -2474,7 +2474,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void setupKeysBackup() {
-        startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
+        startActivity(KeysBackupSetupActivity.Companion.intent(this, mSession.getMyUserId()));
     }
 
     @Override
