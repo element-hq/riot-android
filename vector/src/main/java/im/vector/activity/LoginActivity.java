@@ -2220,9 +2220,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (mRegistrationManager.supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);
             if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-                mEmailAddress.setHint(R.string.auth_opt_email_placeholder);
+                mEmailAddressTil.setHint(getString(R.string.auth_opt_email_placeholder));
             } else {
-                mEmailAddress.setHint(R.string.auth_email_placeholder);
+                mEmailAddressTil.setHint(getString(R.string.auth_email_placeholder));
             }
         } else {
             mEmailAddress.setVisibility(View.GONE);
@@ -2232,9 +2232,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mRegistrationPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
             mPhoneNumberLayout.setVisibility(View.VISIBLE);
             if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
-                mRegistrationPhoneNumber.setHint(R.string.auth_opt_phone_number_placeholder);
+                mRegistrationPhoneNumberTil.setHint(getString(R.string.auth_opt_phone_number_placeholder));
             } else {
-                mRegistrationPhoneNumber.setHint(R.string.auth_phone_number_placeholder);
+                mRegistrationPhoneNumberTil.setHint(getString(R.string.auth_phone_number_placeholder));
             }
         } else {
             mPhoneNumberLayout.setVisibility(View.GONE);
