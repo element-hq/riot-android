@@ -234,6 +234,15 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         }
     }
 
+    @OnClick(R.id.keys_backup_recovery_key_text)
+    fun onRecoveryKeyClicked() {
+        viewModel.recoveryKey.value?.let {
+            viewModel.copyHasBeenMade = true
+
+            copyToClipboard(activity!!, it)
+        }
+    }
+
     fun exportRecoveryKeyToFile(it: String) {
         val stream = ByteArrayInputStream(it.toByteArray())
         val url = viewModel.session.mediaCache.saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain")
