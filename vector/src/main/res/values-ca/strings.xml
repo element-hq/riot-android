@@ -34,7 +34,7 @@
     <string name="send">Envia</string>
     <string name="copy">Còpia</string>
     <string name="resend">Reenvia</string>
-    <string name="redact">Elimina</string>
+    <string name="redact">Suprimeix</string>
     <string name="quote">Cita</string>
     <string name="share">Comparteix</string>
     <string name="later">Més tard</string>
@@ -62,7 +62,7 @@
 
     <!-- actions -->
     <string name="action_sign_out">Surt</string>
-    <string name="action_sign_out_confirmation">Per motius de seguretat, en sortir s\'eliminaran totes les claus d\'encriptació d\'extrem a extrem, amb això l\'històric del xat encriptat quedarà il·legible si es torna a entrar. Seleccioneu l\'acció d\'exportar abans de sortir per tal de fer una còpia de seguretat.</string>
+    <string name="action_sign_out_confirmation">Per motius de seguretat, en sortir s\'eliminaran totes les claus de xifratge d\'extrem a extrem i en conseqüència, l\'històric del xat xifrat quedarà il·legible si es torna a entrar. Seleccioneu l\'acció d\'exportar abans de sortir per tal de fer una còpia de seguretat.</string>
     <string name="action_voice_call">Trucada de veu</string>
     <string name="action_video_call">Vídeotrucada</string>
     <string name="action_global_search">Cerca global</string>
@@ -101,7 +101,7 @@
     <string name="user_directory_header">Directori de l\'usuari</string>
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_conversation_placeholder">Cap conversa</string>
-    <string name="no_contact_access_placeholder">No es va donar permís a Riot per accedir als contactes locals</string>
+    <string name="no_contact_access_placeholder">No vau donar permís al Riot per accedir als contactes locals</string>
     <string name="no_result_placeholder">Cap resultat</string>
 
     <!-- Rooms fragment -->
@@ -140,7 +140,7 @@
     <string name="username">Nom d\'usuari</string>
     <string name="create_account">Registra\'m</string>
     <string name="login">Entra</string>
-    <string name="logout">Surt</string>
+    <string name="logout">Surt de la sessió</string>
     <string name="hs_url">URL del servidor</string>
     <string name="identity_url">URL de la identitat del servidor</string>
     <string name="search">Cerca</string>
@@ -160,7 +160,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Entra</string>
-    <string name="auth_register">Registra\'m</string>
+    <string name="auth_register">Crea un compte</string>
     <string name="auth_submit">Tramet</string>
     <string name="auth_skip">Omet</string>
     <string name="auth_send_reset_email">Envia el correu de reinici</string>
@@ -184,7 +184,7 @@
     <string name="auth_invalid_password">La contrasenya és massa curta (mín 6)</string>
     <string name="auth_missing_password">Falta la contrasenya</string>
     <string name="auth_invalid_email">"El correu electrònic no és vàlid"</string>
-    <string name="auth_invalid_phone">"El número de telefon no és vàlid"</string>
+    <string name="auth_invalid_phone">El número de telèfon no és vàlid</string>
     <string name="auth_email_already_defined">Aquest correu electrònic ja existeix.</string>
     <string name="auth_missing_email">Falta el correu electrònic</string>
     <string name="auth_missing_phone">Falta el número de telefon</string>
@@ -203,7 +203,7 @@
     <string name="auth_reset_password_message">Introduïu el correu electrònic associat al compte per reiniciar la contrasenya:</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_missing_password">S\'ha d\'introduir una contrasenya nova.</string>
-    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Seguiu l\'enllaç que conté i feu click aquí sota.</string>
+    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Seguiu l\'enllaç que conté i feu clic a sota.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
     <string name="auth_reset_password_success_message">La contrasenya s\'ha reiniciat.\n\nLes sessions de tots els dispositius han estat tancades i no rebreu més notificacions automàtiques. Per tal de reactivar les notificacions, torneu a entrar en cada dispositiu.</string>
 
@@ -778,7 +778,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
-    <string name="notification_noisy">Sorrollós</string>
+    <string name="notification_noisy">Sorollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>
 
@@ -1137,4 +1137,64 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
 Podeu trobar el registre de canvis complet aquí: %1$s.
 Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
     <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
-</resources>
+<string name="title_activity_keys_backup_setup">Recuperació de missatges</string>
+    <string name="title_activity_keys_backup_restore">Missatges segurs</string>
+    <string name="title_activity_keys_backup_manage">Recuperació de missatges segurs</string>
+
+    <string name="title_activity_sign_out">S\'està sortint de la sessió</string>
+    <string name="sign_out_activity_warning">Per seguretat, sortir de la sessió suprimirà qualsevol clau de xifratge extrem a extrem, fent que tot historial de converses existent deixe de ser llegible quan torneu a entrar.</string>
+    <string name="sign_out_activity_backup_title">Recuperació del missatge segur</string>
+    <string name="sign_out_activity_backup_status_backuping">La còpia de seguretat de les claus no ha acabat, espereu…</string>
+    <string name="sign_out_activity_backup_status_up_to_date">La recuperació dels vostres missatges està configurada i s\'ha fet una còpia de seguretat de les vostres claus al vostre servidor personal.</string>
+    <string name="sign_out_activity_backup_status_no_backup">La recuperació dels missatges no està configurada. Ho podeu fer ara.</string>
+    <string name="sign_out_activity_backup_manage_backup">Gestiona la recuperació de missatges</string>
+    <string name="sign_out_activity_export_to_file_title">Exporta les claus de xifratge</string>
+    <string name="sign_out_activity_export_to_file">També podeu exportar les vostres claus e2e a un fitxer i gestionar l\'emmagatzemament d\'aquest fitxer pel vostre compte.</string>
+    <string name="sign_out_activity_sign_out_warning">Perdreu els vostres missatges segurs si sortiu ara de la sessió.</string>
+    <string name="sign_out_activity_sign_out_ok">Podeu sortir amb seguretat.</string>
+    <string name="sign_out_activity_export_to_file_action">Exporta a un fitxer</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_content">És possible que pugueu llegir l\'historial del xat xifrat quan torneu a entrar al compte.</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_action">Surt de la sessió igualment</string>
+
+    <string name="skip">Omet</string>
+    <string name="done">Fet</string>
+
+    <string name="settings_notification_advanced">Paràmetres avançats de notificacions</string>
+    <string name="settings_notification_advanced_summary">Estableix la importància de les notificacions per tipus d\'esdeveniment, configura el so, led i vibració</string>
+    <string name="settings_notification_by_event">Importància de les notificacions per esdeveniment</string>
+
+    <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnòstic de la resolució de problemes</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envieu un informe d\'error per ajudar-nos a investigar-ho.</string>
+
+    <string name="settings_troubleshoot_test_device_settings_failed">Les notificacions no són permeses per a aquest dispositiu.
+Comproveu els paràmetres del Riot.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Paràmetres personalitzats.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Teniu en compte que alguns tipus de missatge estan configurats per a ser silenciosos (això produirà una notificació sense so).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algunes notificacions estan inhabilitades als vostres paràmetres personalitzats.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">No s\'ha pogut carregar les regles personalitzades, torneu-ho a provar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Comproveu els paràmetres</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Comprovació dels serveis de Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">L\'APK dels serveis de Google Play és disponible i al dia.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">El Riot empra els serveis de Google Play per a lliurar les notificacions, però no sembla que estiguen configurats correctament.
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Testimoni del Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">S\'ha recuperat el testimoni FCM correctament.
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">No s\'ha pogut recuperar el testimonu FCM:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Aquest error és fora del control del Riot i segons Google aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions, i no hauria d\'afectar un usuari normal.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registre del testimoni</string>
+    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor personal.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor personal.
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Reinici automàtic del servei de notificacions</string>
+    <string name="settings_troubleshoot_test_service_restart_success">El servei s\'ha parat i tornat a iniciar automàticament.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">No s\'ha pogut iniciar el servei</string>
+
+    </resources>
