@@ -56,7 +56,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        recyclerViewAdapter = KeysBackupSettingsRecyclerViewAdapter()
+        recyclerViewAdapter = KeysBackupSettingsRecyclerViewAdapter(activity!!)
         recyclerView.adapter = recyclerViewAdapter
         recyclerViewAdapter?.adapterListener = this
 
