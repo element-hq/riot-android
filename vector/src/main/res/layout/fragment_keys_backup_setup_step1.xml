@@ -32,10 +32,8 @@
     <!-- Centered button -->
     <Button
         android:id="@+id/keys_backup_setup_step1_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/VectorButtonStyle"
         android:layout_margin="16dp"
-        android:background="?attr/colorAccent"
         android:minWidth="200dp"
         android:padding="8dp"
         android:text="@string/keys_backup_setup_step1_button_title"

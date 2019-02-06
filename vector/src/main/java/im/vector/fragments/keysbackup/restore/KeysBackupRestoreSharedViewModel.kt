@@ -105,7 +105,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_RECOVER_WITH_KEY)
     }
 
-    fun didSucceedWithKey(result: ImportRoomKeysResult) {
+    fun didRecoverSucceed(result: ImportRoomKeysResult) {
         importKeyResult = result
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_SUCCESS)
     }

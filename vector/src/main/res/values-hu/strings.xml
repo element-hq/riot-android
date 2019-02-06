@@ -42,8 +42,6 @@
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
-    <string name="action_sign_out_confirmation">Biztonsági okból kijelentkezéskor törlődnek a végtől végig való titkosítás kulcsai, emiatt a következő bejelentkezéskor a korábban titkosított üzenetek olvashatatlanok lesznek.
-A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</string>
     <string name="action_voice_call">Hanghívás</string>
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>

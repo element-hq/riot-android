@@ -188,4 +188,9 @@
         <item name="background">@drawable/vector_tabbar_background_group_light</item>
     </style>
 
+    <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
+    <style name="VectorLinearLayout">
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>

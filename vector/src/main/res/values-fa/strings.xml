@@ -136,8 +136,6 @@
     <string name="accept">پذیرفتن</string>
 
     <string name="actions">عملیات</string>
-    <string name="action_sign_out_confirmation">برای حفظ امنیت شما، خروج از حساب باعث حذف کلیدهای رمزنگاری شما می‌شود و در نتیجه حتی پس از ورود دوباره، پیام‌های رمز قبلی شما برایتان قابل مشاهده نخواهد بود.
-برای ذخیره‌سازی پیام‌ها، پیش از خروج از حساب از آن‌ها توسط همین برنامه پشتیبان بگیرید.</string>
     <string name="dialog_title_confirmation">تایید</string>
     <string name="dialog_title_error">خطا</string>
 

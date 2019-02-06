@@ -354,11 +354,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } else {
                 switch (keysBackupState) {
                     case Disabled:
-                        mKeysBackupBanner.render(KeysBackupBanner.State.Setup.INSTANCE, false);
+                        mKeysBackupBanner.render(new KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false);
                         break;
                     case NotTrusted:
                     case WrongBackUpVersion:
-                        mKeysBackupBanner.render(KeysBackupBanner.State.Recover.INSTANCE, false);
+                        // In this case, getCurrentBackupVersion() should not return ""
+                        mKeysBackupBanner.render(new KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false);
                         break;
                     default:
                         mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
@@ -1795,7 +1796,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        startActivity(new Intent(VectorHomeActivity.this, SignOutActivity.class));
+                        signOut();
                         break;
                     }
 
@@ -1851,6 +1852,27 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_material_menu_white));
+        }
+    }
+
+    private void signOut() {
+        if (SignOutActivity.Companion.doYouNeedToBeDisplayed(mSession)) {
+            startActivity(new Intent(this, SignOutActivity.class));
+        } else {
+            // Display a simple confirmation dialog
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.action_sign_out)
+                    .setMessage(R.string.action_sign_out_confirmation_simple)
+                    .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showWaitingView();
+
+                            CommonActivityUtils.logout(VectorHomeActivity.this);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
         }
     }
 
@@ -2452,12 +2474,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void setupKeysBackup() {
-        startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
+        startActivity(KeysBackupSetupActivity.Companion.intent(this, mSession.getMyUserId()));
     }
 
     @Override
     public void recoverKeysBackup() {
-        // Same than for setup
-        setupKeysBackup();
+        startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
     }
 }

@@ -37,12 +37,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Trick to align the close picto to top of text -->
-    <android.support.constraint.Group
-        android:id="@+id/view_keys_backup_banner_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_close_image" />
-
     <View
         android:id="@+id/view_keys_backup_banner_close"
         android:layout_width="@dimen/layout_touch_size"

@@ -47,7 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Abmelden</string>
-    <string name="action_sign_out_confirmation">Aus Sicherheitsgründen werden beim Abmelden alle Verschlüsselungsschlüssel gelöscht. Dadurch werden die vorher verschlüsselten Chats für dich unlesbar, wenn du dich wieder anmeldest.\nWähle Exportieren um die Schlüssel zu sichern bevor du dich abmeldest.</string>
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>

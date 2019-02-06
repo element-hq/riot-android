@@ -40,8 +40,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Wyloguj się</string>
-    <string name="action_sign_out_confirmation">Ze względów bezpieczeństwa, po wylogowaniu się zostaną usunięte wszystkie klucze szyfrowania end-to-end, przez co nie będziesz mógł czytać zaszyfrowanych wiadomości po zalogowaniu.
-Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="action_voice_call">Połączenie głosowe</string>
     <string name="action_video_call">Połączenie wideo</string>
     <string name="action_global_search">Wyszukiwanie globalne</string>

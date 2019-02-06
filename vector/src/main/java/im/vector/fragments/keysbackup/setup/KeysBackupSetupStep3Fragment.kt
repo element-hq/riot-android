@@ -23,7 +23,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.app.AlertDialog
-import android.view.View
+import android.text.TextUtils
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
@@ -50,15 +50,21 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_setup_step3_copy_button)
     lateinit var mCopyButton: Button
+
     @BindView(R.id.keys_backup_setup_step3_save_button)
     lateinit var mSaveButton: Button
-
 
     @BindView(R.id.keys_backup_setup_step3_button)
     lateinit var mFinishButton: Button
 
     @BindView(R.id.keys_backup_recovery_key_text)
     lateinit var mRecoveryKeyTextView: TextView
+
+    @BindView(R.id.keys_backup_setup_step3_line1_text)
+    lateinit var mRecoveryKeyLabel1TextView: TextView
+
+    @BindView(R.id.keys_backup_setup_step3_line2_text)
+    lateinit var mRecoveryKeyLabel2TextView: TextView
 
     @BindView(R.id.keys_backup_recovery_key_progress)
     lateinit var mProgress: ProgressBar
@@ -117,15 +123,20 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             TransitionManager.beginDelayedTransition(mRootLayout)
             if (newValue == null || newValue.isEmpty()) {
                 mProgress.isVisible = true
-                mSpinnerStatusText.visibility = View.VISIBLE
+                mSpinnerStatusText.isVisible = true
                 mRecoveryKeyTextView.text = null
-                mRecoveryKeyTextView.visibility = View.GONE
+                mRecoveryKeyTextView.isVisible = false
+                mRecoveryKeyLabel1TextView.isVisible = false
+                mRecoveryKeyLabel2TextView.isVisible = false
                 mCopyButton.isVisible = false
                 mFinishButton.isVisible = false
                 mSaveButton.isVisible = false
             } else {
                 mProgress.isVisible = false
-                mSpinnerStatusText.visibility = View.GONE
+                mSpinnerStatusText.isVisible = false
+                mRecoveryKeyLabel1TextView.isVisible = true
+                // Line 2 is visible only if user has entered a passphrase
+                mRecoveryKeyLabel2TextView.isVisible = !TextUtils.isEmpty(viewModel.passphrase.value)
 
                 mRecoveryKeyTextView.text = newValue
                         .replace(" ", "")
@@ -161,15 +172,16 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
         viewModel.keysVersion.observe(this, Observer { keysVersion ->
             if (keysVersion != null) {
-                activity?.let {
-                    AlertDialog.Builder(it)
+                activity?.let { activity ->
+                    AlertDialog.Builder(activity)
                             .setTitle(R.string.keys_backup_setup_backup_started_title)
                             .setMessage(R.string.keys_backup_setup_backup_started_message)
-                            .setPositiveButton(R.string.ok) { _, _ ->
+                            .setPositiveButton(R.string.ok, null)
+                            .setOnDismissListener {
                                 val resultIntent = Intent()
                                 resultIntent.putExtra(KeysBackupSetupActivity.KEYS_VERSION, keysVersion.version)
-                                it.setResult(Activity.RESULT_OK, resultIntent)
-                                it.finish()
+                                activity.setResult(Activity.RESULT_OK, resultIntent)
+                                activity.finish()
                             }
                             .show()
                 }
@@ -220,6 +232,15 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             viewModel.recoveryKey.value?.let {
                 exportRecoveryKeyToFile(it)
             }
+        }
+    }
+
+    @OnClick(R.id.keys_backup_recovery_key_text)
+    fun onRecoveryKeyClicked() {
+        viewModel.recoveryKey.value?.let {
+            viewModel.copyHasBeenMade = true
+
+            copyToClipboard(activity!!, it)
         }
     }
 

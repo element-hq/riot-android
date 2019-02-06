@@ -45,6 +45,7 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_passphrase_enter_til)
     lateinit var mPassphraseInputLayout: TextInputLayout
+
     @BindView(R.id.keys_backup_passphrase_enter_edittext)
     lateinit var mPassphraseTextEdit: EditText
 
@@ -78,11 +79,6 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
 
         helperTextWithLink.text = spannableStringForHelperText(context!!)
 
-        helperTextWithLink.setOnClickListener {
-            sharedViewModel.moveToRecoverWithKey()
-        }
-
-
         viewModel.showPasswordMode.observe(this, Observer {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
@@ -100,17 +96,17 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
     }
 
     private fun spannableStringForHelperText(context: Context): SpannableString {
-        val tapableText = context.getString(R.string.keys_backup_restore_use_recovery_key)
-        val helperText = context.getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, tapableText)
+        val clickableText = context.getString(R.string.keys_backup_restore_use_recovery_key)
+        val helperText = context.getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
 
         val spanString = SpannableString(helperText)
 
-        //used just to have default link representation
+        // used just to have default link representation
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View?) {}
         }
-        val start = helperText.indexOf(tapableText)
-        val end = start + tapableText.length
+        val start = helperText.indexOf(clickableText)
+        val end = start + clickableText.length
         spanString[start, end] = clickableSpan
         return spanString
     }
@@ -120,7 +116,12 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         s?.toString()?.let { viewModel.updatePassphrase(it) }
     }
 
-    @OnClick(R.id.keys_backup_setup_step2_button)
+    @OnClick(R.id.keys_backup_passphrase_help_with_link)
+    fun onUseRecoveryKey() {
+        sharedViewModel.moveToRecoverWithKey()
+    }
+
+    @OnClick(R.id.keys_backup_restore_with_passphrase_submit)
     fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {

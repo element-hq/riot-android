@@ -44,7 +44,6 @@
     <string name="invite">Uzaicināt</string>
 
     <string name="action_sign_out">Izrakstīties</string>
-    <string name="action_sign_out_confirmation">Drošības nolūkos, pierakstīšanās dzēsīs visas ierīce-ierīce šifrēšanas atslēgas, padarot iepriekšējo šifrēto čata ziņu vēsturi nelasāmu, ja Tu pierakstīsies atkārtoti. Izvēlies eksportēšanas iespēju, lai saglabātu atslēgu rezerves kopijas pirms izrakstīšanās.</string>
     <string name="action_voice_call">Balss zvans</string>
     <string name="action_video_call">Video zvans</string>
     <string name="action_global_search">Globālā meklēšana</string>

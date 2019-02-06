@@ -94,17 +94,30 @@
 
         <Button
             android:id="@+id/keys_backup_setup_step2_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            style="@style/VectorButtonStyle"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:background="?attr/colorAccent"
             android:padding="16dp"
             android:text="@string/keys_backup_setup_step2_button_title"
             android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_confirm_til" />
+
+        <Button
+            android:id="@+id/keys_backup_setup_step2_skip_button"
+            style="@style/VectorButtonStyle"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:text="@string/keys_backup_setup_step2_skip_button_title"
+            android:textColor="?colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_confirm_til" />
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_button" />
 
     </android.support.constraint.ConstraintLayout>
 

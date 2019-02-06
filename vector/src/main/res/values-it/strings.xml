@@ -49,8 +49,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Disconnetti</string>
-    <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione causerà l\'eliminazione di qualsiasi chiave di crittografia da-utente-a-utente rendendo illeggibile la storia delle chat precedentemente criptate qualora ci si riconnettesse.
-Selezionare esporta per fare un backup delle chat prima di disconnettersi.</string>
     <string name="action_voice_call">Chiamata voce</string>
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>

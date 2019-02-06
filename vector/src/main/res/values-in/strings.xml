@@ -176,8 +176,6 @@
     <string name="missing_permissions_warning">Beberapa fitur tidak dapat digunakan karena aplikasi belum mendapat ijin…</string>
     <string name="missing_permissions_to_start_conf_call">Anda membutuhkan ijin mengundang untuk memulai panggilan massal di ruang ini</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Panggilan massal tidak dapat diselenggarakan di ruang terenkripsi</string>
-    <string name="action_sign_out_confirmation">Demi keamanan, semua kunci enkripsi ujung-ke-ujung akan dihapus ketika Anda keluar yang berakibat pada sejarah percakapan terenkripsi tidak lagi dapat dibaca ketika Anda masuk kembali.
-Lakukan export agar tercadangkan sebelum Anda keluar.</string>
     <string name="action_historical">Jejak Percakapan</string>
     <string name="copied_to_clipboard">Gandakan ke clipboard</string>
     <string name="bottom_action_home">Tampilan Awal</string>

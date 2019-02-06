@@ -64,8 +64,6 @@
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logg av</string>
-    <string name="action_sign_out_confirmation">Av sikkerheitsmessige grunner, slettar det å logga av alle ende-til-ende-krypteringsnyklar slik at tidligare pratehistorie vert uleseleg viss du loggar inn att.
-Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="action_voice_call">Røystsamtale</string>
     <string name="action_video_call">Videosamtale</string>
     <string name="action_global_search">Søk over alt</string>

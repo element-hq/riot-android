@@ -1830,42 +1830,43 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.room_settings_addresses_e2e_prompt_title)
                                     .setMessage(R.string.room_settings_addresses_e2e_prompt_message)
-                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            displayLoadingView();
-
-                                            mRoom.enableEncryptionWithAlgorithm(CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
-
-                                                private void onDone() {
-                                                    hideLoadingView(false);
-                                                    refreshEndToEnd();
-                                                }
-
+                                    .setPositiveButton(R.string.room_settings_addresses_e2e_encryption_enable_encryption,
+                                            new DialogInterface.OnClickListener() {
                                                 @Override
-                                                public void onSuccess(Void info) {
-                                                    onDone();
-                                                }
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    displayLoadingView();
 
-                                                @Override
-                                                public void onNetworkError(Exception e) {
-                                                    onDone();
-                                                }
+                                                    mRoom.enableEncryptionWithAlgorithm(CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
 
-                                                @Override
-                                                public void onMatrixError(MatrixError e) {
-                                                    onDone();
-                                                }
+                                                        private void onDone() {
+                                                            hideLoadingView(false);
+                                                            refreshEndToEnd();
+                                                        }
 
-                                                @Override
-                                                public void onUnexpectedError(Exception e) {
-                                                    onDone();
-                                                }
-                                            });
+                                                        @Override
+                                                        public void onSuccess(Void info) {
+                                                            onDone();
+                                                        }
 
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onNetworkError(Exception e) {
+                                                            onDone();
+                                                        }
+
+                                                        @Override
+                                                        public void onMatrixError(MatrixError e) {
+                                                            onDone();
+                                                        }
+
+                                                        @Override
+                                                        public void onUnexpectedError(Exception e) {
+                                                            onDone();
+                                                        }
+                                                    });
+
+                                                }
+                                            })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             encryptSwitchPreference.setChecked(false);

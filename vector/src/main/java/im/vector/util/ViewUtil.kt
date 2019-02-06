@@ -16,6 +16,12 @@
 
 package im.vector.util
 
+import android.support.design.widget.TextInputLayout
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.ViewGroup
+import androidx.core.view.children
+
 /**
  * The view is visible
  */
@@ -28,3 +34,48 @@ const val UTILS_OPACITY_HALF = 0.5f
  * The view is hidden
  */
 const val UTILS_OPACITY_NONE = 0f
+
+/**
+ * Find all TextInputLayout in a ViewGroup and in all its descendants
+ */
+fun ViewGroup.findAllTextInputLayout(): List<TextInputLayout> {
+    val res = ArrayList<TextInputLayout>()
+
+    children.forEach {
+        if (it is TextInputLayout) {
+            res.add(it)
+        } else if (it is ViewGroup) {
+            // Recursive call
+            res.addAll(it.findAllTextInputLayout())
+        }
+    }
+
+    return res
+}
+
+/**
+ * Add a text change listener to all TextInputEditText to reset error on its TextInputLayout when the text is changed
+ */
+fun autoResetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
+    textInputLayouts.forEach {
+        it.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Reset the error
+                it.error = null
+            }
+        })
+    }
+}
+
+/**
+ * Reset error for all TextInputLayout
+ */
+fun resetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
+    textInputLayouts.forEach { it.error = null }
+}

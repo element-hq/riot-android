@@ -842,8 +842,6 @@ Pajisje të panjohura:</string>
     <string name="missing_permissions_error">Ky veprim s’është i mundur, për shkak lejesh që mungojnë.</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Thirrjet konferencë nuk mbulohen në dhoma të fshehtëzuara</string>
     <string name="or">ose</string>
-    <string name="action_sign_out_confirmation">Për arsye sigurie, dalja nga llogaria do të sjellë fshirjen e çfarëdo kyçesh fshehtëzimi skaj-më-skaj, duke e bërë të palexueshëm historikun e dikurshëm të fjalosjes së fshehtëzuar, nëse rihyni.
-Përzgjidhni eksportimin që të bëni një kopjeruajtje të tyre përpara se të dilni.</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">1 përdorues</item>
         <item quantity="other">%d përdorues</item>
