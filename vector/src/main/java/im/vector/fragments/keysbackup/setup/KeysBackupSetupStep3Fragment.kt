@@ -172,15 +172,16 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
         viewModel.keysVersion.observe(this, Observer { keysVersion ->
             if (keysVersion != null) {
-                activity?.let {
-                    AlertDialog.Builder(it)
+                activity?.let { activity ->
+                    AlertDialog.Builder(activity)
                             .setTitle(R.string.keys_backup_setup_backup_started_title)
                             .setMessage(R.string.keys_backup_setup_backup_started_message)
-                            .setPositiveButton(R.string.ok) { _, _ ->
+                            .setPositiveButton(R.string.ok, null)
+                            .setOnDismissListener {
                                 val resultIntent = Intent()
                                 resultIntent.putExtra(KeysBackupSetupActivity.KEYS_VERSION, keysVersion.version)
-                                it.setResult(Activity.RESULT_OK, resultIntent)
-                                it.finish()
+                                activity.setResult(Activity.RESULT_OK, resultIntent)
+                                activity.finish()
                             }
                             .show()
                 }

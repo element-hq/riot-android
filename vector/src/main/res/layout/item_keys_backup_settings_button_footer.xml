@@ -13,7 +13,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:minWidth="200dp"
-        tools:text="@string/keys_backup_settings_restore_backup_button" />
+        android:visibility="gone"
+        tools:text="@string/keys_backup_settings_restore_backup_button"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/keys_backup_settings_footer_button2"

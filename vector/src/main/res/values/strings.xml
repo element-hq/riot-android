@@ -1355,6 +1355,12 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_banner_recover_colored_part">your recovery key or passphrase</string>
 
     <!-- Keys backup info -->
+    <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Backing up %d key…</item>
+        <item quantity="other">Backing up %d keys…</item>
+    </plurals>
+
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithm</string>
     <string name="keys_backup_info_title_signature">Signature</string>

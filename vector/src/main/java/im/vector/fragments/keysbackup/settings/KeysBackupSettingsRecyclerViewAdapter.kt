@@ -61,15 +61,7 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
         if (holder is GenericItemViewHolder) {
             holder.bind(infoList[position])
         } else if (holder is FooterViewHolder) {
-            if (!isBackupAlreadySetup) {
-                holder.button1.setText(R.string.keys_backup_settings_setup_button)
-                holder.button1.isVisible = true
-                holder.button1.setOnClickListener {
-                    adapterListener?.didSelectSetupMessageRecovery()
-                }
-
-                holder.button2.isVisible = false
-            } else {
+            if (isBackupAlreadySetup) {
                 holder.button1.setText(R.string.keys_backup_settings_restore_backup_button)
                 holder.button1.isVisible = true
                 holder.button1.setOnClickListener {
@@ -81,6 +73,14 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                 holder.button2.setOnClickListener {
                     adapterListener?.didSelectDeleteSetupMessageRecovery()
                 }
+            } else {
+                holder.button1.setText(R.string.keys_backup_settings_setup_button)
+                holder.button1.isVisible = true
+                holder.button1.setOnClickListener {
+                    adapterListener?.didSelectSetupMessageRecovery()
+                }
+
+                holder.button2.isVisible = false
             }
         }
     }
@@ -106,28 +106,49 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
             KeysBackupStateManager.KeysBackupState.Disabled -> {
                 itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_not_setup),
                         style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                infos.add(itemSummary)
+
                 isBackupAlreadySetup = false
             }
             KeysBackupStateManager.KeysBackupState.WrongBackUpVersion,
             KeysBackupStateManager.KeysBackupState.NotTrusted,
             KeysBackupStateManager.KeysBackupState.Enabling -> {
                 itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ko),
-                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                itemSummary.description = keyBackupState.toString()
-                itemSummary.endIconResourceId = R.drawable.unit_test_ko
-                infos.add(itemSummary)
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    description = keyBackupState.toString()
+                    endIconResourceId = R.drawable.unit_test_ko
+                }
+
                 isBackupAlreadySetup = true
             }
-            KeysBackupStateManager.KeysBackupState.ReadyToBackUp,
+            KeysBackupStateManager.KeysBackupState.ReadyToBackUp -> {
+                itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ok),
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    endIconResourceId = R.drawable.unit_test_ok
+                    description = context.getString(R.string.keys_backup_info_keys_all_backup_up)
+                }
+
+                isBackupAlreadySetup = true
+            }
             KeysBackupStateManager.KeysBackupState.WillBackUp,
             KeysBackupStateManager.KeysBackupState.BackingUp -> {
                 itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ok),
-                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                itemSummary.endIconResourceId = R.drawable.unit_test_ok
-                infos.add(itemSummary)
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    hasIndeterminateProcess = true
+
+                    val totalKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(false) ?: 0
+                    val backedUpKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(true) ?: 0
+
+                    val remainingKeysToBackup = totalKeys - backedUpKeys
+
+                    description = context.resources.getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                }
+
                 isBackupAlreadySetup = true
             }
+        }
+
+        itemSummary?.let {
+            infos.add(it)
         }
 
         if (keyBackupVersionTrust != null) {
@@ -179,7 +200,9 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
             } //end for each
 
         }
+
         infoList = infos
+
         notifyDataSetChanged()
     }
 

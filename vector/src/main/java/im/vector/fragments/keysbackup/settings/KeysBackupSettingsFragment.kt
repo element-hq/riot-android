@@ -87,6 +87,11 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     }
                 }
             }
+
+            // Update the adapter for each state change
+            viewModel.session?.let { session ->
+                recyclerViewAdapter?.updateWithTrust(session, viewModel.keyVersionTrust.value)
+            }
         })
 
         viewModel.keyVersionTrust.observe(this, Observer {
