@@ -354,7 +354,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } else {
                 switch (keysBackupState) {
                     case Disabled:
-                        mKeysBackupBanner.render(KeysBackupBanner.State.Setup.INSTANCE, false);
+                        mKeysBackupBanner.render(new KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false);
                         break;
                     case NotTrusted:
                     case WrongBackUpVersion:

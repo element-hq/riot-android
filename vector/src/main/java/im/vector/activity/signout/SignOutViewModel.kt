@@ -54,6 +54,17 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
                 ?: ""
     }
 
+    /**
+     * Safe way to get the number of keys to backup
+     */
+    fun getNumberOfKeysToBackup(): Int {
+        return mxSession
+                ?.crypto
+                ?.cryptoStore
+                ?.inboundGroupSessionsCount(false)
+                ?: 0
+    }
+
     override fun onCleared() {
         super.onCleared()
 

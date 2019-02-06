@@ -87,7 +87,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         when (newState) {
             State.Initial -> renderInitial()
             State.Hidden -> renderHidden()
-            State.Setup -> renderSetup()
+            is State.Setup -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
         }
     }
@@ -110,7 +110,7 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (state) {
-            State.Setup -> {
+            is State.Setup -> {
                 delegate?.setupKeysBackup()
             }
             is State.Recover -> {
@@ -123,7 +123,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     internal fun onCloseClicked() {
         state.let {
             when (it) {
-                State.Setup -> {
+                is State.Setup -> {
                     context.defaultSharedPreferences.edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
@@ -157,8 +157,10 @@ class KeysBackupBanner @JvmOverloads constructor(
         isVisible = false
     }
 
-    private fun renderSetup() {
-        if (context.defaultSharedPreferences.getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+    private fun renderSetup(nbOfKeys: Int) {
+        if (nbOfKeys == 0
+                || context.defaultSharedPreferences.getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+            // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {
             isVisible = true
@@ -199,7 +201,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         object Hidden : State()
 
         // Keys backup is not setup
-        object Setup : State()
+        data class Setup(val numberOfKeys: Int) : State()
 
         // Keys backup can be recovered
         data class Recover(val version: String) : State()
