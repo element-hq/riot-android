@@ -473,22 +473,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         setWaitingView(mWaitingView);
 
-        // bind UI widgets
         // login
-        mLoginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
-                null,
-                ThemeUtils.INSTANCE.tintDrawable(this,
-                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.vctr_settings_icon_tint_color),
-                null);
+        ViewUtilKt.tintDrawableCompat(mLoginPhoneNumberCountryCode, R.attr.vctr_settings_icon_tint_color);
 
         // account creation - three pid
-        mRegistrationPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
-                null,
-                ThemeUtils.INSTANCE.tintDrawable(this,
-                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.vctr_settings_icon_tint_color),
-                null);
+        ViewUtilKt.tintDrawableCompat(mRegistrationPhoneNumberCountryCode, R.attr.vctr_settings_icon_tint_color);
 
         if (isFirstCreation()) {
             mRegistrationManager = new RegistrationManager(null);

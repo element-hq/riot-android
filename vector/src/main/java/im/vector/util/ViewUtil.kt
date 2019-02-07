@@ -16,11 +16,16 @@
 
 package im.vector.util
 
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.support.annotation.AttrRes
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.children
+import im.vector.ui.themes.ThemeUtils
 
 /**
  * The view is visible
@@ -78,4 +83,27 @@ fun autoResetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
  */
 fun resetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
     textInputLayouts.forEach { it.error = null }
+}
+
+
+/**
+ * Tint all drawables of a TextView.
+ *
+ * Note: this method has no effect on API < 23. Please also set the android:drawableTint attribute in the layout or in the style
+ */
+@Suppress("LocalVariableName")
+fun TextView.tintDrawableCompat(@AttrRes colorAttribute: Int) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        // No op
+        return
+    }
+
+    val drs: Array<out Drawable?> = compoundDrawables
+
+    val drawableLeft__ = drs[0]?.let { ThemeUtils.tintDrawable(context, it, colorAttribute) }
+    val drawableTop___ = drs[1]?.let { ThemeUtils.tintDrawable(context, it, colorAttribute) }
+    val drawableRight_ = drs[2]?.let { ThemeUtils.tintDrawable(context, it, colorAttribute) }
+    val drawableBottom = drs[3]?.let { ThemeUtils.tintDrawable(context, it, colorAttribute) }
+
+    setCompoundDrawablesWithIntrinsicBounds(drawableLeft__, drawableTop___, drawableRight_, drawableBottom)
 }

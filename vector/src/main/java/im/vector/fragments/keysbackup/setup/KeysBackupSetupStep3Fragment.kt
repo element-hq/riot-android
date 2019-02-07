@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
@@ -80,6 +81,13 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mCopyButton.tintDrawableCompat(R.attr.colorAccent)
+        mSaveButton.tintDrawableCompat(R.attr.colorAccent)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

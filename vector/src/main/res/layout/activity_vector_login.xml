@@ -91,9 +91,11 @@
                             android:clickable="false"
                             android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:drawableTint="?vctr_settings_icon_tint_color"
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
+                            tools:ignore="UnusedAttribute"
                             tools:text="FR"
                             tools:visibility="visible" />
 
@@ -318,9 +320,11 @@
                             android:clickable="false"
                             android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:drawableTint="?vctr_settings_icon_tint_color"
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
+                            tools:ignore="UnusedAttribute"
                             tools:text="FR"
                             tools:visibility="visible" />
 
