@@ -99,6 +99,11 @@
         <item name="android:textColor">@color/button_text_color_selector</item>
     </style>
 
+    <style name="VectorButtonStyle.NoBackground">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">?colorAccent</item>
+    </style>
+
     <style name="LoginButtonStyleBase" parent="VectorButtonStyle">
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_height">36dp</item>
@@ -190,6 +195,7 @@
 
     <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
     <style name="VectorLinearLayout">
+        <item name="android:gravity">end</item>
         <item name="android:orientation">vertical</item>
     </style>
 
