@@ -1075,21 +1075,12 @@ public final class PushManager {
      * @return the current notification privacy setting as displayed to the end user.
      */
     public NotificationPrivacy getNotificationPrivacy() {
-//        NotificationPrivacy notificationPrivacy = NotificationPrivacy.NORMAL;
-
-//        boolean isContentSendingAllowed = isContentSendingAllowed();
         boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
 
         if (isBackgroundSyncAllowed) {
             //in this case always use normal privacy
             return NotificationPrivacy.NORMAL;
         }
-
-//        if (isContentSendingAllowed && !isBackgroundSyncAllowed) {
-//            notificationPrivacy = NotificationPrivacy.REDUCED;
-//        } else if (!isContentSendingAllowed && isBackgroundSyncAllowed) {
-//            notificationPrivacy = NotificationPrivacy.NORMAL;
-//        }
 
         return NotificationPrivacy.REDUCED;
     }
@@ -1109,10 +1100,6 @@ public final class PushManager {
                 setContentSendingAllowed(true);
                 setBackgroundSyncAllowed(false);
                 break;
-//            case LOW_DETAIL:
-//                setContentSendingAllowed(false);
-//                setBackgroundSyncAllowed(false);
-//                break;
             case NORMAL:
                 setContentSendingAllowed(false);
                 setBackgroundSyncAllowed(true);
@@ -1174,13 +1161,6 @@ public final class PushManager {
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // If using FCM, first check if the application has the "run in background" permission.
-        // No permission, no background sync
-//        if (hasRegistrationToken()
-//                /*&& !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)*/) {
-//            return true;
-//        }
-
         // then, this depends on the user setting
         return getPushSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
