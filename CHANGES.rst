@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix warning "Attribute value must be constant" in VectorHomeActivity
 
 Translations:
  -
