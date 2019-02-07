@@ -296,6 +296,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
+            android:summary="@string/settings_data_save_mode_summary"
             android:title="@string/settings_data_save_mode" />
 
         <im.vector.preference.VectorSwitchPreference
