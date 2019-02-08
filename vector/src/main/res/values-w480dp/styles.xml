@@ -3,6 +3,7 @@
 
     <!-- Linear Layout orientation, depending on screen size, horizontal for width >= 480dp -->
     <style name="VectorLinearLayout">
+        <item name="android:gravity">end</item>
         <item name="android:orientation">horizontal</item>
     </style>
 

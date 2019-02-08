@@ -59,7 +59,7 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:visibility="gone"
-            tools:text="HHWJ Y8DK OD04\nBQEN FQ4V M4O8\nBQEN FQ4V M4O8"
+            tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8"
             tools:visibility="visible" />
 
         <TextView
@@ -86,39 +86,42 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <!-- Orientation is set in the style, depending on screen width -->
+        <!-- gravity center_vertical for small screens -->
         <LinearLayout
-            style="@style/VectorLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp"
-            android:gravity="end">
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:layout_marginRight="@dimen/layout_horizontal_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <!-- Drawable will be tinted in the code for API < 23 -->
             <Button
                 android:id="@+id/keys_backup_setup_step3_copy_button"
-                style="@style/VectorButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
+                style="@style/VectorButtonStyle.NoBackground"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:minWidth="160dp"
+                android:drawableStart="@drawable/ic_material_share"
+                android:drawableLeft="@drawable/ic_material_share"
+                android:drawablePadding="8dp"
+                android:drawableTint="?colorAccent"
                 android:text="@string/keys_backup_setup_step3_copy_button_title"
                 android:visibility="gone"
+                tools:ignore="UnusedAttribute"
                 tools:visibility="visible" />
 
             <Button
                 android:id="@+id/keys_backup_setup_step3_save_button"
-                style="@style/VectorButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:layout_marginEnd="@dimen/layout_horizontal_margin"
-                android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:minWidth="160dp"
+                style="@style/VectorButtonStyle.NoBackground"
+                android:drawableStart="@drawable/ic_material_save"
+                android:drawableLeft="@drawable/ic_material_save"
+                android:drawablePadding="8dp"
+                android:drawableTint="?colorAccent"
                 android:text="@string/keys_backup_setup_step3_save_button_title"
                 android:visibility="gone"
+                tools:ignore="UnusedAttribute"
                 tools:visibility="visible" />
 
         </LinearLayout>
@@ -126,8 +129,6 @@
         <Button
             android:id="@+id/keys_backup_setup_step3_button"
             style="@style/VectorButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
