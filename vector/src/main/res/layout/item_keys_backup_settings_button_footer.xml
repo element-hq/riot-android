@@ -23,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/vector_warning_color"
+        android:backgroundTint="@color/vector_warning_color"
         android:minWidth="200dp"
         android:visibility="gone"
         tools:text="@string/keys_backup_settings_delete_backup_button"

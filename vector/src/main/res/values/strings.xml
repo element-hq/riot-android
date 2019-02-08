@@ -27,7 +27,7 @@
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
-    <string name="title_activity_keys_backup_setup">Message Recovery</string>
+    <string name="title_activity_keys_backup_setup">Key Backup</string>
     <string name="title_activity_keys_backup_restore">Secure Messages</string>
     <string name="title_activity_keys_backup_manage">Secure Messages Recovery</string>
 
@@ -93,6 +93,7 @@
     <string name="accept">Accept</string>
     <string name="skip">Skip</string>
     <string name="done">Done</string>
+    <string name="abort">Abort</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -965,8 +966,8 @@
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
-    <string name="encryption_settings_manage_message_recovery">Message Recovery</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Manage Keys Backup</string>
+    <string name="encryption_settings_manage_message_recovery">Secure Message Recovery</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
@@ -1259,18 +1260,28 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want Riot to generate a recovery key.</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
-    <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
-    <string name="keys_backup_setup_step1_description">Set up Secure Message Recovery in case you lose or sign out of this device.</string>
-    <string name="keys_backup_setup_step1_button_title">Set up</string>
-    <string name="keys_backup_setup_step2_text">Secure your encrypted message history with a Recovery Passphrase.\n\nYou’ll need it if you sign out, or lose access to this device.</string>
+    <string name="keys_backup_setup_step1_title">Never lose secured messages</string>
+    <string name="keys_backup_setup_step1_description">Secure messages are secured with locks and only you and the recipient have the keys needed to unlock them.\nBack up your keys to avoid losing them.</string>
+    <string name="keys_backup_setup_step1_button_title">Set Up Key Backup</string>
+    <string name="keys_backup_setup_step2_text_title">Secure your backup with a Passphrase.</string>
+    <string name="keys_backup_setup_step2_text_description">For maximum security, this should be different to your account password.</string>
     <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>
-    <string name="keys_backup_setup_step2_skip_button_title">or generate a Recovery Key</string>
-    <string name="keys_backup_setup_step3_text_line1">Make a copy of this Recovery Key and keep it safe.</string>
-    <string name="keys_backup_setup_step3_text_line2">As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.</string>
-    <string name="keys_backup_setup_step3_button_title">Create Backup</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Make a Copy</string>
+    <string name="keys_backup_setup_creating_backup">Creating Backup</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Or, secure your backup with a Recovery Key, saving it somewhere safe.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Advanced) Set up with Recovery Key</string>
+    <string name="keys_backup_setup_step3_success_title">Success !</string>
+    <string name="keys_backup_setup_step3_text_line1">Your keys are now backing up.</string>
+    <string name="keys_backup_setup_step3_text_line2">As a safety net, in case you forget your passphrase, save this recovery key somewhere safe.</string>>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Make a copy of this recovery key and keep it safe.</string>
+    <string name="keys_backup_setup_step3_button_title">Done</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">I’ve made a copy</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Save Recovery Key</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Share</string>
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+
+
+    <string name="keys_backup_setup_abort">Save as File</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
