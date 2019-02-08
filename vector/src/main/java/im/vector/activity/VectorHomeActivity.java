@@ -361,6 +361,17 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         // In this case, getCurrentBackupVersion() should not return ""
                         mKeysBackupBanner.render(new KeysBackupBanner.State.Recover(model.getCurrentBackupVersion()), false);
                         break;
+                    case WillBackUp:
+                    case BackingUp:
+                        mKeysBackupBanner.render(KeysBackupBanner.State.BackingUp.INSTANCE, false);
+                        break;
+                    case ReadyToBackUp:
+                        if(model.canRestoreKeys()) {
+                            mKeysBackupBanner.render(KeysBackupBanner.State.Update.INSTANCE, false);
+                        } else {
+                            mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
+                        }
+                        break;
                     default:
                         mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
                         break;
