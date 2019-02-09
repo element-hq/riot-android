@@ -146,6 +146,8 @@
 
         <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
