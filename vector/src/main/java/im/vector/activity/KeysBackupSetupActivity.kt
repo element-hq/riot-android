@@ -22,6 +22,7 @@ import android.content.Intent
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import im.vector.R
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
@@ -127,10 +128,11 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun onBackPressed() {
         if (viewModel.shouldPromptOnBack) {
+            if (waitingView?.isVisible == true) { return }
             AlertDialog.Builder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
-                    .setNegativeButton(R.string.keys_backup_setup_step1_button_title, null)
+                    .setNegativeButton(R.string.stay, null)
                     .setPositiveButton(R.string.abort) { _, _ ->
                         finish()
                     }
@@ -140,14 +142,15 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
+//    I think this code is useful, but it violates the code quality rules
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == android .R. id.  home) {
+//            onBackPressed()
+//            return true
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
     companion object {

@@ -8,7 +8,8 @@ Features:
  -
 
 Improvements:
- -
+ - keys backup: Setup screen UX improvement
+ - Improved button styles (states, ripple effect)
 
 Other changes:
  -
