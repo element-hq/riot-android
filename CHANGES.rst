@@ -61,6 +61,7 @@ Features:
  - keys backup: Add a banner on Home to setup or recover backup (#2884)
 
 Improvements:
+ - Make Change Password Settings More User friendly (#2898)
  - Support Split-screen mode (#1832)
  - Enable auto focus when taking picture with the camera (#2831)
  - Better wording in notification for video call (#1421)

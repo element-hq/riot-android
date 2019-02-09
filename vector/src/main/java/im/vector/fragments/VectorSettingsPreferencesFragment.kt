@@ -28,10 +28,12 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.TextInputEditText
 import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.*
 import android.text.Editable
@@ -44,6 +46,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.edit
+import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import com.bumptech.glide.Glide
 import com.google.i18n.phonenumbers.NumberParseException
@@ -742,13 +746,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { it ->
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
 
                 val task = ClearMediaCacheAsyncTask(
                         backgroundTask = {
                             mSession.mediaCache.clear()
-                            activity?.let { it -> Glide.get(it).clearDiskCache() }
+                            activity?.let { activity -> Glide.get(activity).clearDiskCache() }
                         },
                         onCompleteTask = {
                             hideLoadingView()
@@ -1003,11 +1007,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 if (preference is SwitchPreference) {
                     when (preferenceKey) {
                         PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY ->
-                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
 
                         PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                             preference.isChecked = pushManager?.isScreenTurnedOn ?: false
-                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
                         }
                         else -> {
                             preference.isEnabled = null != rules && isConnected
@@ -1023,7 +1029,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
         mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed
-                && (pushManager?.areDeviceNotificationsAllowed() ?: true) && pushManager?.useFcm() ?: true
+                && (pushManager?.areDeviceNotificationsAllowed()
+                ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
@@ -1036,50 +1043,27 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun onPasswordUpdateClick() {
 
         val thisActivity = activity
+
+        val successDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_success, null)
+        val alertDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_warning, null)
+
+        val errorColor = ResourcesCompat.getColor(resources, R.color.vector_error_color, null)
+        val successColor = ResourcesCompat.getColor(resources, R.color.vector_success_color, null)
+
         thisActivity?.let { activity ->
             val view = activity.layoutInflater.inflate(R.layout.dialog_change_password, null)
             val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
             val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
             val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
+            val passwordMatchLabel = view.findViewById<TextView>(R.id.pass_match_label)
+            val changePasswordLoader = view.findViewById<ProgressBar>(R.id.change_password_loader)
+
+            changePasswordLoader.isVisible = false
 
             val dialog = AlertDialog.Builder(activity)
                     .setTitle(R.string.settings_change_password)
                     .setView(view)
-                    .setPositiveButton(R.string.save) { _, _ ->
-
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-
-                        val oldPwd = oldPasswordText.text.toString().trim()
-                        val newPwd = newPasswordText.text.toString().trim()
-
-                        displayLoadingView()
-
-                        mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
-                            private fun onDone(textId: Int) {
-                                activity.runOnUiThread {
-                                    hideLoadingView()
-                                    activity.toast(textId, Toast.LENGTH_LONG)
-                                }
-                            }
-
-                            override fun onSuccess(info: Void?) {
-                                onDone(R.string.settings_password_updated)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-                        })
-                    }
+                    .setPositiveButton(R.string.update_password, null)
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
@@ -1088,10 +1072,92 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
-                    .show()
+                    .create()
 
-            val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            saveButton.isEnabled = false
+            dialog.setOnShowListener { thisDialog ->
+                val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+                fun showPasswordLoadingView(toShow: Boolean) {
+                    if (toShow) {
+                        changePasswordLoader.isVisible = true
+                        oldPasswordText.isEnabled = false
+                        newPasswordText.isEnabled = false
+                        confirmNewPasswordText.isEnabled = false
+                        passwordMatchLabel.isVisible = false
+                        updateButton.isEnabled = false
+                    } else {
+                        changePasswordLoader.isVisible = false
+                        oldPasswordText.isEnabled = true
+                        newPasswordText.isEnabled = true
+                        confirmNewPasswordText.isEnabled = true
+                        passwordMatchLabel.isVisible = true
+                        updateButton.isEnabled = true
+
+                    }
+                }
+
+                fun displayInvalidError() {
+                    passwordMatchLabel.apply {
+                        isVisible = true
+                        text = getString(R.string.invalid_pass_error)
+                        setTextColor(errorColor)
+                        setCompoundDrawablesWithIntrinsicBounds(null, null, alertDrawable, null)
+                    }
+                    Handler().postDelayed(delayInMillis = 3000) {
+                        passwordMatchLabel.isVisible = false
+                    }
+                }
+
+                updateButton.setOnClickListener {
+                    updateButton.isEnabled = false
+                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+
+                    showPasswordLoadingView(true)
+
+                    mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
+                        private fun onDone(textId: Int) {
+                            showPasswordLoadingView(false)
+                            activity.runOnUiThread {
+                                if (textId != R.string.invalid_pass_error) {
+                                    thisDialog.dismiss()
+                                    activity.toast(textId, Toast.LENGTH_LONG)
+                                } else {
+                                    displayInvalidError()
+                                }
+                            }
+                        }
+
+                        override fun onSuccess(info: Void?) {
+                            onDone(R.string.settings_password_updated)
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            if (e.error == "Invalid password") {
+                                onDone(R.string.invalid_pass_error)
+                            } else {
+                                thisDialog.dismiss()
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+                    })
+                }
+            }
+            dialog.show()
+
+            val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            updateButton.isEnabled = false
 
             confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -1101,7 +1167,29 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+
+                    confirmNewPasswordText.apply {
+                        if (s.isNotEmpty()) {
+                            passwordMatchLabel.isVisible = true
+                            if (s.toString() == newPasswordText.text.toString()) {
+                                passwordMatchLabel.apply {
+                                    text = getString(R.string.passwords_match)
+                                    setTextColor(successColor)
+                                    setCompoundDrawablesWithIntrinsicBounds(null, null, successDrawable, null)
+
+                                }
+                            } else {
+                                passwordMatchLabel.apply {
+                                    text = getString(R.string.passwords_not_match)
+                                    setTextColor(errorColor)
+                                    setCompoundDrawablesWithIntrinsicBounds(null, null, alertDrawable, null)
+                                }
+                            }
+                        } else {
+                            passwordMatchLabel.isVisible = false
+                        }
+                    }
                 }
 
                 override fun afterTextChanged(s: Editable) {}
@@ -2610,38 +2698,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         password,
                         null,
                         object : ApiCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult?) {
-                        if (!isAdded) {
-                            return
-                        }
+                            override fun onSuccess(info: ImportRoomKeysResult?) {
+                                if (!isAdded) {
+                                    return
+                                }
 
-                        hideLoadingView()
+                                hideLoadingView()
 
-                        info?.let {
-                            AlertDialog.Builder(thisActivity)
-                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                            it.successfullyNumberOfImportedKeys,
-                                            it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                        }
-                    }
+                                info?.let {
+                                    AlertDialog.Builder(thisActivity)
+                                            .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                    it.successfullyNumberOfImportedKeys,
+                                                    it.totalNumberOfKeys))
+                                            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                            .show()
+                                }
+                            }
 
-                    override fun onNetworkError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onNetworkError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onMatrixError(e: MatrixError) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onMatrixError(e: MatrixError) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onUnexpectedError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
-                })
+                            override fun onUnexpectedError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
+                        })
 
                 importDialog.dismiss()
             })
@@ -2832,4 +2920,5 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     putString(ARG_MATRIX_ID, matrixId)
                 }
     }
+
 }

@@ -92,6 +92,8 @@
     <string name="done">Done</string>
     <string name="abort">Abort</string>
     <string name="ignore">Ignore</string>
+    <string name="update_password">Update Password</string>
+
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -1186,6 +1188,7 @@
 
     <!-- Other errors -->
     <string name="unknown_error">Sorry, an error occurred</string>
+    <string name="invalid_pass_error">Old Invalid Password!</string>
 
     <!-- Expand/Collapse room member changes -->
     <string name="merged_events_expand">expand</string>
@@ -1366,4 +1369,7 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
+    <!--Information Labels text-->
+    <string name="passwords_not_match">Passwords do not match</string>
+    <string name="passwords_match">Passwords match</string>
 </resources>
