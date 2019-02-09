@@ -20,46 +20,6 @@
             android:layout_marginTop="60dp"
             android:src="@drawable/backup_keys" />
 
-
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/layout_vertical_margin_big"-->
-        <!--android:text="@string/recovery_key"-->
-        <!--android:textSize="17sp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textStyle="bold" />-->
-
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:layout_margin="6dp"-->
-        <!--android:background="?vctr_list_divider_color" />-->
-
-        <!--<ProgressBar-->
-        <!--android:id="@+id/keys_backup_recovery_key_progress"-->
-        <!--style="?android:attr/progressBarStyleHorizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="20dp"-->
-        <!--android:layout_marginLeft="@dimen/layout_horizontal_margin"-->
-        <!--android:layout_marginRight="@dimen/layout_horizontal_margin"-->
-        <!--android:visibility="gone"-->
-        <!--tools:max="100"-->
-        <!--tools:progress="30"-->
-        <!--tools:visibility="visible" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/keys_backup_recovery_key_spinner_text"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="@dimen/layout_horizontal_margin"-->
-        <!--android:layout_marginRight="@dimen/layout_horizontal_margin"-->
-        <!--android:text="@string/keys_backup_setup_step3_generating_key_status"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="?attr/colorAccent"-->
-        <!--android:visibility="gone"-->
-        <!--tools:visibility="visible" />-->
-
         <TextView
             android:id="@+id/keys_backup_setup_step3_success_title"
             android:layout_width="match_parent"
