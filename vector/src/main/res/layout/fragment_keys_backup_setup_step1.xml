@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:src="@drawable/backup_keys"
+        android:tint="?android:attr/textColorTertiary"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
