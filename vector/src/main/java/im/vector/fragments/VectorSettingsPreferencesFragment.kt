@@ -32,6 +32,7 @@ import android.provider.Settings
 import android.support.design.widget.TextInputEditText
 import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.*
 import android.text.Editable
@@ -1003,11 +1004,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 if (preference is SwitchPreference) {
                     when (preferenceKey) {
                         PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY ->
-                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
 
                         PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                             preference.isChecked = pushManager?.isScreenTurnedOn ?: false
-                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
                         }
                         else -> {
                             preference.isEnabled = null != rules && isConnected
@@ -1023,7 +1026,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
         mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed
-                && (pushManager?.areDeviceNotificationsAllowed() ?: true) && pushManager?.useFcm() ?: true
+                && (pushManager?.areDeviceNotificationsAllowed()
+                ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
@@ -1053,8 +1057,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         val oldPwd = oldPasswordText.text.toString().trim()
                         val newPwd = newPasswordText.text.toString().trim()
 
-                        displayLoadingView()
 
+                        displayLoadingView()
                         mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
                             private fun onDone(textId: Int) {
                                 activity.runOnUiThread {
@@ -1072,13 +1076,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             }
 
                             override fun onMatrixError(e: MatrixError) {
-                                onDone(R.string.settings_fail_to_update_password)
+                                if (e.error == "Invalid password")
+                                    onDone(R.string.invalid_pass_error)
+                                else
+                                    onDone(R.string.settings_fail_to_update_password)
                             }
 
                             override fun onUnexpectedError(e: Exception) {
                                 onDone(R.string.settings_fail_to_update_password)
                             }
                         })
+
                     }
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -1093,6 +1101,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveButton.isEnabled = false
 
+
+            val successDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_success, null)
+            val alertDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alert_mark, null)
+
             confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
@@ -1102,6 +1114,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
                     saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+
+                    confirmNewPasswordText.apply {
+                        if (s.isNotEmpty()) {
+                            if (s.toString() == newPasswordText.text.toString()) {
+                                setCompoundDrawablesWithIntrinsicBounds(null, null, successDrawable, null)
+                            } else {
+                                setCompoundDrawablesWithIntrinsicBounds(null, null, alertDrawable, null)
+                            }
+                        } else {
+                            setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+                        }
+                    }
                 }
 
                 override fun afterTextChanged(s: Editable) {}

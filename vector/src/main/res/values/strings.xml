@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
 
@@ -819,7 +821,7 @@
     <string name="account_phone_number_already_used_error">This phone number is already in use.</string>
     <string name="account_email_error">An error occurred while verifying your email address.</string>
 
-    <string name="settings_password">Password</string>
+    <string name="settings_password">Change Password on Server</string>
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">Old password</string>
     <string name="settings_new_password">New password</string>
@@ -1192,6 +1194,7 @@
 
     <!-- Other errors -->
     <string name="unknown_error">Sorry, an error occurred</string>
+    <string name="invalid_pass_error">Old Invalid Password!</string>
 
     <!-- Expand/Collapse room member changes -->
     <string name="merged_events_expand">expand</string>
