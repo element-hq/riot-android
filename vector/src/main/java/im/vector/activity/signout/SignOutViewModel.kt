@@ -76,4 +76,21 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
     override fun onStateChange(newState: KeysBackupStateManager.KeysBackupState) {
         keysBackupState.value = newState
     }
+
+    companion object {
+        /**
+         * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
+         */
+        fun doYouNeedToBeDisplayed(session: MXSession?): Boolean {
+            return session
+                    ?.crypto
+                    ?.cryptoStore
+                    ?.inboundGroupSessionsCount(false)
+                    ?: 0 > 0
+                    && session
+                    ?.crypto
+                    ?.keysBackup
+                    ?.state != KeysBackupStateManager.KeysBackupState.ReadyToBackUp
+        }
+    }
 }

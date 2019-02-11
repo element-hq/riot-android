@@ -116,6 +116,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.signout.SignOutActivity;
+import im.vector.activity.signout.SignOutBottomSheetDialog;
 import im.vector.activity.signout.SignOutViewModel;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
@@ -1856,8 +1857,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     private void signOut() {
-        if (SignOutActivity.Companion.doYouNeedToBeDisplayed(mSession)) {
-            startActivity(new Intent(this, SignOutActivity.class));
+
+        if (SignOutViewModel.Companion.doYouNeedToBeDisplayed(mSession)) {
+            SignOutBottomSheetDialog signoutDialog = SignOutBottomSheetDialog.Companion.newInstance(mSession.getMyUserId());
+            signoutDialog.setOnSignOut(() -> {
+                showWaitingView();
+                CommonActivityUtils.logout(VectorHomeActivity.this);
+            });
+            signoutDialog.show(getSupportFragmentManager(), "SO");
         } else {
             // Display a simple confirmation dialog
             new AlertDialog.Builder(this)
@@ -1874,6 +1881,25 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         }
+
+//        if (SignOutActivity.Companion.doYouNeedToBeDisplayed(mSession)) {
+//            startActivity(new Intent(this, SignOutActivity.class));
+//        } else {
+//            // Display a simple confirmation dialog
+//            new AlertDialog.Builder(this)
+//                    .setTitle(R.string.action_sign_out)
+//                    .setMessage(R.string.action_sign_out_confirmation_simple)
+//                    .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            showWaitingView();
+//
+//                            CommonActivityUtils.logout(VectorHomeActivity.this);
+//                        }
+//                    })
+//                    .setNegativeButton(R.string.cancel, null)
+//                    .show();
+//        }
     }
 
     private void refreshSlidingMenu() {
@@ -2474,7 +2500,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void setupKeysBackup() {
-        startActivity(KeysBackupSetupActivity.Companion.intent(this, mSession.getMyUserId()));
+        startActivity(KeysBackupSetupActivity.Companion.intent(this, mSession.getMyUserId(), false));
     }
 
     @Override
