@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.activity.signout
+package im.vector.fragments.signout
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

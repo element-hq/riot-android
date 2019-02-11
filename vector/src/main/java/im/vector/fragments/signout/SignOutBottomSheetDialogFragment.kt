@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.activity.signout
+package im.vector.fragments.signout
 
 import android.app.Activity
 import android.app.Dialog
@@ -30,10 +30,7 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -46,7 +43,7 @@ import im.vector.extensions.withArgs
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 
 
-class SignOutBottomSheetDialog : BottomSheetDialogFragment() {
+class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
@@ -84,7 +81,7 @@ class SignOutBottomSheetDialog : BottomSheetDialogFragment() {
     var onSignOut: Runnable? = null
 
     companion object {
-        fun newInstance(matrixId: String) = SignOutBottomSheetDialog()
+        fun newInstance(matrixId: String) = SignOutBottomSheetDialogFragment()
                 .withArgs {
                     putString(MXCActionBarActivity.EXTRA_MATRIX_ID, matrixId)
                 }
@@ -128,14 +125,24 @@ class SignOutBottomSheetDialog : BottomSheetDialogFragment() {
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
                         .setPositiveButton(R.string.backup) { _, _ ->
-                            val currentState = viewModel.keysBackupState.value
-                            if (KeysBackupStateManager.KeysBackupState.NotTrusted == currentState) {
-                                context?.let { context ->
-                                    startActivity(KeysBackupManageActivity.intent(context, getExtraMatrixID()))
+                            when (viewModel.keysBackupState.value) {
+                                KeysBackupStateManager.KeysBackupState.NotTrusted -> {
+                                    context?.let { context ->
+                                        startActivity(KeysBackupManageActivity.intent(context, getExtraMatrixID()))
+                                    }
                                 }
-                            } else if (KeysBackupStateManager.KeysBackupState.Disabled == currentState) {
-                                context?.let { context ->
-                                    startActivityForResult(KeysBackupSetupActivity.intent(context, getExtraMatrixID(), true), EXPORT_REQ)
+                                KeysBackupStateManager.KeysBackupState.Disabled -> {
+                                    context?.let { context ->
+                                        startActivityForResult(KeysBackupSetupActivity.intent(context, getExtraMatrixID(), true), EXPORT_REQ)
+                                    }
+                                }
+                                KeysBackupStateManager.KeysBackupState.BackingUp,
+                                KeysBackupStateManager.KeysBackupState.WillBackUp -> {
+                                    //keys are already backing up please wait
+                                    Toast.makeText(context,R.string.sign_out_activity_backup_status_backuping,Toast.LENGTH_LONG)
+                                }
+                                else -> {
+                                    //nop
                                 }
                             }
                         }
@@ -186,7 +193,7 @@ class SignOutBottomSheetDialog : BottomSheetDialogFragment() {
                 KeysBackupStateManager.KeysBackupState.WillBackUp -> {
                     backingUpStatusGroup.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
-                    dontWantClickableView.isVisible = false
+                    dontWantClickableView.isVisible = true
                     setupClickableView.isVisible = false
                     activateClickableView.isVisible = false
 

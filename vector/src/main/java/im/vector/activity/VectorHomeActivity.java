@@ -115,9 +115,8 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.signout.SignOutActivity;
-import im.vector.activity.signout.SignOutBottomSheetDialog;
-import im.vector.activity.signout.SignOutViewModel;
+import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
+import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
@@ -1859,7 +1858,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private void signOut() {
 
         if (SignOutViewModel.Companion.doYouNeedToBeDisplayed(mSession)) {
-            SignOutBottomSheetDialog signoutDialog = SignOutBottomSheetDialog.Companion.newInstance(mSession.getMyUserId());
+            SignOutBottomSheetDialogFragment signoutDialog = SignOutBottomSheetDialogFragment.Companion.newInstance(mSession.getMyUserId());
             signoutDialog.setOnSignOut(() -> {
                 showWaitingView();
                 CommonActivityUtils.logout(VectorHomeActivity.this);

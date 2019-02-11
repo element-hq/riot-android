@@ -32,21 +32,8 @@
     <string name="title_activity_keys_backup_manage">Secure Messages Recovery</string>
 
     <!-- Signing out screen -->
-    <string name="title_activity_sign_out">Signing out</string>
-    <string name="sign_out_activity_warning">For security, signing out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.</string>
-    <string name="sign_out_activity_backup_title">Secure Message recovery</string>
-    <string name="sign_out_activity_backup_status_backuping">Keys backup is not finished, please wait…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">Your message recovery is configured and all keys has been backed up on your homeserver.</string>
-    <string name="sign_out_activity_backup_status_no_backup">Message recovery has not been set up. You can set it up now.</string>
-    <string name="sign_out_activity_backup_manage_backup">Manage message recovery</string>
-    <string name="sign_out_activity_export_to_file_title">Export encryption keys</string>
-    <string name="sign_out_activity_export_to_file">You can also choose to export your e2e keys to a file and manage saving this file by yourself.</string>
-    <string name="sign_out_activity_sign_out_warning">You’ll lose your secure messages if you sign out now.</string>
-    <string name="sign_out_activity_sign_out_ok">You can sign out safely.</string>
-    <string name="sign_out_activity_export_to_file_action">Export to file</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">You may not be able to read encrypted chat history if you log back in.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Sign out anyway</string>
 
+    <string name="sign_out_activity_backup_status_backuping">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose access to your secure messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to secure messages</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your devices to avoid losing access to your encrypted messages.</string>
@@ -1276,7 +1263,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_setup">Set Up Key Backup</string>
 
     <string name="keys_backup_setup_step1_advanced">(Advanced)</string>
-    <string name="keys_backup_setup_step1_manual_expor">Manually export keys</string>
+    <string name="keys_backup_setup_step1_manual_export">Manually export keys</string>
     <string name="keys_backup_setup_step2_text_title">Secure your backup with a Passphrase.</string>
     <string name="keys_backup_setup_step2_text_description">For maximum security, this should be different to your account password.</string>
     <string name="keys_backup_setup_step2_button_title">Set Recovery Passphrase</string>

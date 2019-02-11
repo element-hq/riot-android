@@ -75,7 +75,7 @@
         android:layout_margin="16dp"
         android:minWidth="200dp"
         android:padding="8dp"
-        android:text="@string/keys_backup_setup"
+        android:text="@string/keys_backup_setup_step1_manual_export"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
