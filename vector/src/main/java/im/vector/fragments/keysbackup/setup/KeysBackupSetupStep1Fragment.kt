@@ -16,24 +16,34 @@
 
 package im.vector.fragments.keysbackup.setup
 
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
 import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
+import im.vector.ui.arch.LiveEvent
 
 class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
-
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
 
     companion object {
         fun newInstance() = KeysBackupSetupStep1Fragment()
     }
 
+    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
+
+    private lateinit var viewModel: KeysBackupSetupSharedViewModel
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+    }
+
     @OnClick(R.id.keys_backup_setup_step1_button)
     fun onButtonClick() {
-        activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
-                ?.addToBackStack(null)
-                ?.commit()
+        viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2)
     }
 }
