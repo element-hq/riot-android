@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - keys backup: Setup screen UX improvement
+ - keys backup: Sign Out flow improvement
  - Improved button styles (states, ripple effect)
 
 Other changes:

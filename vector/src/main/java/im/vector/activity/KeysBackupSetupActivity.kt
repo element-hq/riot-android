@@ -21,13 +21,15 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
-import android.view.MenuItem
 import androidx.core.view.isVisible
 import im.vector.R
+import im.vector.dialogs.ExportKeysDialog
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep3Fragment
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import org.matrix.androidsdk.rest.model.MatrixError
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
@@ -42,7 +44,9 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     .replace(R.id.container, KeysBackupSetupStep1Fragment.newInstance())
                     .commitNow()
         }
+
         viewModel = ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
+        viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT,false)
         viewModel.initSession(mSession)
 
 
@@ -94,6 +98,9 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     setResult(RESULT_OK, resultIntent)
                     finish()
                 }
+                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
+                    exportKeysManually()
+                }
             }
         })
 
@@ -123,6 +130,48 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         .show()
             }
         })
+    }
+
+    fun exportKeysManually() {
+        ExportKeysDialog().show(this, object : ExportKeysDialog.ExportKeyDialogListener {
+            override fun onPassphrase(passphrase: String) {
+                showWaitingView()
+
+                CommonActivityUtils.exportKeys(mSession, passphrase, object : SimpleApiCallback<String>(this@KeysBackupSetupActivity) {
+                    override fun onSuccess(filename: String) {
+                        hideWaitingView()
+
+                        AlertDialog.Builder(this@KeysBackupSetupActivity)
+                                .setMessage(getString(R.string.encryption_export_saved_as, filename))
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok) { dialog, which ->
+                                    val resultIntent = Intent()
+                                    resultIntent.putExtra(MANUAL_EXPORT, true)
+                                    setResult(RESULT_OK, resultIntent)
+                                    finish()
+                                }
+                                .show()
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        super.onNetworkError(e)
+                        hideWaitingView()
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        super.onMatrixError(e)
+                        hideWaitingView()
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        super.onUnexpectedError(e)
+                        hideWaitingView()
+                    }
+                })
+            }
+        })
+
+
     }
 
 
@@ -155,10 +204,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"
+        const val MANUAL_EXPORT = "MANUAL_EXPORT"
+        const val EXTRA_SHOW_MANUAL_EXPORT = "SHOW_MANUAL_EXPORT"
 
-        fun intent(context: Context, matrixID: String): Intent {
+        fun intent(context: Context, matrixID: String, showManualExport: Boolean): Intent {
             val intent = Intent(context, KeysBackupSetupActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
+            intent.putExtra(EXTRA_SHOW_MANUAL_EXPORT, showManualExport)
             return intent
         }
     }

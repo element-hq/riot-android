@@ -40,10 +40,13 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
         const val NAVIGATE_TO_STEP_3 = "NAVIGATE_TO_STEP_3"
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
+        const val NAVIGATE_MANUAL_EXPORT = "NAVIGATE_MANUAL_EXPORT"
         private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
     }
 
     lateinit var session: MXSession
+
+    var showManualExport : MutableLiveData<Boolean> = MutableLiveData()
 
     var navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     var shouldPromptOnBack = true

@@ -104,7 +104,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
 
     override fun didSelectSetupMessageRecovery() {
         context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: ""))
+            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: "", false))
         }
     }
 
