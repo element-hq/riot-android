@@ -46,7 +46,7 @@
     <string name="rename">Reanomena</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call">Conferència en curs. Uniu-vos per veu o vídeo.</string>
+    <string name="ongoing_conference_call">" Conferència en curs. Uniu-vos hi per veu o vídeo."</string>
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
