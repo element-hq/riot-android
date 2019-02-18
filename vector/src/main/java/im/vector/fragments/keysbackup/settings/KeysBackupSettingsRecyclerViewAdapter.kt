@@ -74,7 +74,7 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                     adapterListener?.didSelectDeleteSetupMessageRecovery()
                 }
             } else {
-                holder.button1.setText(R.string.keys_backup_settings_setup_button)
+                holder.button1.setText(R.string.keys_backup_setup)
                 holder.button1.isVisible = true
                 holder.button1.setOnClickListener {
                     adapterListener?.didSelectSetupMessageRecovery()
