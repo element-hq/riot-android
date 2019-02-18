@@ -316,14 +316,6 @@ Tu vari pierakstīties ar citu kontu vai arī pievienot šo epastu šim kontam.<
     <string name="room_creation_title">Jauns čats</string>
     <string name="room_creation_add_member">Pievienots dalībnieku</string>
     <string name="room_title_one_member">1 dalībnieks</string>
-    <string name="room_e2e_alert_title">Uzmanību!</string>
-    <string name="room_e2e_alert_message">\"End-to-end\" šifrēšana ir beta stadijā un var nestrādāt stabili.
-
-Pagaidām tai nevar uzticēties, ja vēlaties būt pārliecināti par datu drošību.
-
-Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienotas istabai.
-
-Šifrētās ziņas nebūs redzamas Riot klientos, kuros nav iedzīvināta šī iespēja.</string>
 
     <string name="room_participants_leave_prompt_title">Atstāt istabu</string>
     <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies atstāt istabu?</string>

@@ -400,8 +400,6 @@
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
-    <string name="room_e2e_alert_title">Warning!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!--  Time -->
     <plurals name="format_time_s">

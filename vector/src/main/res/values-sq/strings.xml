@@ -240,7 +240,6 @@
     <string name="room_creation_title">Fjalosje e Re</string>
     <string name="room_creation_add_member">Shtoni anëtar</string>
     <string name="room_title_one_member">1 anëtar</string>
-    <string name="room_e2e_alert_title">Sinjalizim!</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
         <item quantity="other">%ds</item>
@@ -771,14 +770,6 @@ Email-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>
 Mund të doni të hyni me një llogari tjetër, ose ta shtoni këtë email te kjo llogari.</string>
     <string name="room_preview_try_join_an_unknown_room">Po përpiqeni të hyni në %s. Do të donit të bëheni pjesë, që të mundni të merrni pjesë te diskutimi?</string>
     <string name="room_preview_room_interactions_disabled">Kjo është një paraparje e kësaj dhome. Ndërveprimet në dhomë janë çaktivizuar.</string>
-
-    <string name="room_e2e_alert_message">Fshehtëzimi skaj-më-skaj është në fazën beta dhe mund të mos jetë i qëndrueshëm.
-
-S’duhet t’i zini ende besë për sigurim të dhënash.
-
-Pajisjet s’do të jenë ende në gjendje të shfshehtëzojnë historik nga periudha përpara se të merrnin pjesë te dhomë.
-
-Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk sendërtojnë ende fshehtëzimin.</string>
 
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; të tjerë po shtypin…</string>
     <string name="room_unsent_messages_notification">Mesazhet s’u dërguan. %1$s ose %2$s tani?</string>

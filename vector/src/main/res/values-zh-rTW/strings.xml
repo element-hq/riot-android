@@ -320,14 +320,6 @@
         <item quantity="other">%d 個成員</item>
     </plurals>
     <string name="room_title_one_member">1 個成員</string>
-    <string name="room_e2e_alert_title">警告！</string>
-    <string name="room_e2e_alert_message">端對端加密處於測試狀態，它並不完全可靠。
-
-您仍不應該信任它會保護資料。
-
-裝置將無法解密聊天室的歷史訊息。
-
-尚未啓用加密的客戶端上將無法顯示加密消息。</string>
 
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>

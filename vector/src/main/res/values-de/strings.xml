@@ -299,8 +299,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_creation_title">Neuer Chat</string>
     <string name="room_creation_add_member">Mitglied hinzufügen</string>
     <string name="room_title_one_member">1 Mitglied</string>
-    <string name="room_e2e_alert_title">Achtung!</string>
-    <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
