@@ -199,7 +199,6 @@
 
     <string name="room_creation_title">دردشة جديدة</string>
     <string name="room_creation_add_member">أضِف عضوا</string>
-    <string name="room_e2e_alert_title">تحذير!</string>
 
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>
@@ -707,13 +706,6 @@
 
     <string name="call">مكالمة</string>
     <string name="open_chat_header">افتح الترويسة</string>
-    <string name="room_e2e_alert_message">تعمية الطرفين في نسخة بيتا وقد لا يُعتمد عليها.
-
-عليك ألا تثق بها لتأمين البيانات.
-
-لا تستطيع الأجهزة بعد فك تعمية التأريخ الذي حصل قبل انضمامهم للغرف.
-
-لن تظهر الرسائل المعماة للبرمجيات التي لا تدعم التعمية بعد.</string>
 
     <string name="room_participants_header_call">المكالمة</string>
     <string name="settings_set_sync_delay">التأخير بين كل طلبي مزامنة</string>

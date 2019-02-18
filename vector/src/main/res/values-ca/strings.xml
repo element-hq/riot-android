@@ -313,8 +313,6 @@
     <string name="room_creation_title">Xat nou</string>
     <string name="room_creation_add_member">Afegeix un participant</string>
     <string name="room_title_one_member">1 participant</string>
-    <string name="room_e2e_alert_title">Avís</string>
-    <string name="room_e2e_alert_message">El xifrat d\'extrem a extrem està en beta i no és del tot fiable.\n\nNo s\'hi ha de confiar per a dades segures.\n\nEls dispositius encara no poden desxifrar l\'històric de tot allò que ha passat abans d\'unir-te a una sala.\n\nEls missatges xifrats no són visibles per aquells clients que no implementen xifratge.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Surt de la sala</string>

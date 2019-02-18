@@ -364,7 +364,6 @@ Prosím, povolte přístup na následující hlášce pro možnost uskutečňova
         <item quantity="other" />
     </plurals>
     <string name="room_title_one_member">1 člen</string>
-    <string name="room_e2e_alert_title">Varování!</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
         <item quantity="few">%ds</item>
@@ -421,14 +420,6 @@ Prosím, povolte přístup na následující hlášce pro možnost uskutečňova
     <string name="room_participants_action_mention">Zmínit</string>
     <string name="room_participants_action_devices_list">Zobrazit seznam zařízení</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
-
-    <string name="room_e2e_alert_message">E2E šifrování je v beta verzi a může být nespolehlivé.
-
-Neměli byste mu zatím důvěřovat v zabezpečení dat.
-
-Zařízení nebudou zatím schopna dešifrovat historii z doby předtím, nežli vstoupila do místnosti.
-
-Šifrované zprávy nebudou viditelné v klientech, které nemají implementováno šifrování.</string>
 
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Jste si jisti, že chcete vyhodit tohoto uživatele z této konverzace?</item>

@@ -49,14 +49,6 @@
         <item quantity="other">%d членове</item>
     </plurals>
     <string name="room_title_one_member">1 член</string>
-    <string name="room_e2e_alert_title">Внимание!</string>
-    <string name="room_e2e_alert_message">Шифроване от край до край е в бета версия и може да не е надеждно.
-
-Все още не трябва да се доверявате на това, че ще защити Вашите данни.
-
-Устройства все още не могат да разшифроват история от преди присъединяването към стая.
-
-Шифровани съобщения не са видими за клиенти, които все още не поддържат шифроване.</string>
 
     <string name="room_participants_leave_prompt_msg">Сигурни ли сте, че искате да напуснете стаята?</string>
     <string name="room_participants_online">Онлайн</string>

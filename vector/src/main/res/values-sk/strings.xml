@@ -290,14 +290,6 @@ Môžete sa prihlásiť k inému účtu, alebo pridať emailovú adresu do práv
     <string name="room_creation_title">Nová konverzácia</string>
     <string name="room_creation_add_member">Pridať člena</string>
     <string name="room_title_one_member">1 člen</string>
-    <string name="room_e2e_alert_title">Pozor!</string>
-    <string name="room_e2e_alert_message">E2E šifrovanie je v štádiu beta a nemusí byť úplne spoľahlivé.
-
-Nemali by ste zatiaľ spoliehať, že vám toto šifrovanie dokáže zabezpečiť vaše údaje.
-
-Zariadenia zatiaľ nedokážu dešifrovať správy poslané skôr, než ste na nich vstúpili do miestnosti.
-
-Šifrované správy nebudú vôbec zobrazené v klientoch, ktorí zatiaľ nepodporujú šifrovanie.</string>
 
     <string name="room_participants_leave_prompt_title">Opustiť miestnosť</string>
     <string name="room_participants_leave_prompt_msg">Ste si istí, že chcete opustiť miestnosť?</string>

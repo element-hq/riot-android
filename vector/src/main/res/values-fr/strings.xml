@@ -187,7 +187,6 @@
     <string name="room_creation_title">Nouvelle discussion</string>
     <string name="room_creation_add_member">Ajouter un membre</string>
     <string name="room_title_one_member">1 membre</string>
-    <string name="room_e2e_alert_title">Attention !</string>
 
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_participants_create">Créer</string>
@@ -519,14 +518,6 @@ Autorisez-vous Riot à accéder à vos contacts ?</string>
 Vous pouvez vous identifier avec un compte différent ou ajouter cette adresse e-mail à votre compte.</string>
     <string name="room_preview_try_join_an_unknown_room">Vous essayez d\'accéder à %s. Souhaitez-vous rejoindre le salon pour participer à la discussion ?</string>
     <string name="room_preview_room_interactions_disabled">Ceci est un aperçu du salon. Vous ne pouvez pas interagir.</string>
-
-    <string name="room_e2e_alert_message">Le chiffrement de bout en bout est en version bêta et peut ne pas être fiable.
-
-Il ne doit pas être considéré comme fiable pour sécuriser des données.
-
-Les appareils ne pourront pas encore déchiffrer l\'historique de messages d\'avant leur arrivée sur le salon.
-
-Les messages chiffrés ne seront pas visibles sur les clients qui n\'ont pas encore implémenté le chiffrement.</string>
 
     <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter le salon ?</string>
     <string name="room_participants_remove_prompt_msg">Voulez-vous vraiment exclure %s de cette discussion ?</string>

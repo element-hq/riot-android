@@ -13,7 +13,7 @@ Improvements:
  - Improved button styles (states, ripple effect)
 
 Other changes:
- -
+ - Remove beta e2e warning (#2946)
 
 Bugfix:
  - Fix warning "Attribute value must be constant" in VectorHomeActivity

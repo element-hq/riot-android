@@ -191,7 +191,6 @@
         <item quantity="other">%d meðlimir</item>
     </plurals>
     <string name="room_title_one_member">1 meðlimur</string>
-    <string name="room_e2e_alert_title">Aðvörun!</string>
 
     <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
     <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út spjallrásinni?</string>

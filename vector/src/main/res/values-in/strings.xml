@@ -368,14 +368,6 @@ Anda mungkin ingin masuk dengan akun lain, atau tambahkan email ini ke akun Anda
         <item quantity="other">%d anggota</item>
     </plurals>
     <string name="room_title_one_member">1 anggota</string>
-    <string name="room_e2e_alert_title">Peringatan!</string>
-    <string name="room_e2e_alert_message">Enkripsi ujung-ke-ujung masih tahap beta dan mungkin belum dapat diandalkan.
-
-Anda diharapkan untuk tidak dulu mengandalkan fitur ini untuk mengamankan data.
-
-Perangkat tidak akan dapat mendekripsi sejarah yang mendahului masa bergabung.
-
-Pesan terenkripsi tidak akan tersingkap untuk klien yang belum mengimplementasikan enkripsi.</string>
 
     <plurals name="format_time_s">
         <item quantity="other">%dd</item>
