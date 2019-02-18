@@ -11,6 +11,7 @@ Improvements:
  - keys backup: Setup screen UX improvement
  - keys backup: Sign Out flow improvement
  - Improved button styles (states, ripple effect)
+ - Show direct chat section in user details only for other users, not self
 
 Other changes:
  -
