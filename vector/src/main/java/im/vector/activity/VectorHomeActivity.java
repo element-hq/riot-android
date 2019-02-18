@@ -115,8 +115,6 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
-import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
@@ -125,6 +123,8 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
+import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -366,8 +366,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         mKeysBackupBanner.render(KeysBackupBanner.State.BackingUp.INSTANCE, false);
                         break;
                     case ReadyToBackUp:
-                        if(model.canRestoreKeys()) {
-                            mKeysBackupBanner.render(KeysBackupBanner.State.Update.INSTANCE, false);
+                        if (model.canRestoreKeys()) {
+                            mKeysBackupBanner.render(new KeysBackupBanner.State.Update(model.getCurrentBackupVersion()), false);
                         } else {
                             mKeysBackupBanner.render(KeysBackupBanner.State.Hidden.INSTANCE, false);
                         }

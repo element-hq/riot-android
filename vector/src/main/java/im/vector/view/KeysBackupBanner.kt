@@ -31,7 +31,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.toast
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -98,7 +97,7 @@ class KeysBackupBanner @JvmOverloads constructor(
             State.Hidden -> renderHidden()
             is State.Setup -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
-            State.Update -> renderUpdate()
+            is State.Update -> renderUpdate(newState.version)
             State.BackingUp -> renderBackingUp()
         }
     }
@@ -144,9 +143,10 @@ class KeysBackupBanner @JvmOverloads constructor(
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                State.Update -> {
-                    // TODO
-                    context.toast("TODO")
+                is State.Update -> {
+                    context.defaultSharedPreferences.edit {
+                        putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
+                    }
                 }
                 else -> {
                     // Should not happen, close button is not displayed in other cases
@@ -203,14 +203,17 @@ class KeysBackupBanner @JvmOverloads constructor(
         }
     }
 
-    // TODO Take into account close button persistence
-    private fun renderUpdate() {
-        isVisible = true
+    private fun renderUpdate(version: String) {
+        if (version == context.defaultSharedPreferences.getString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, null)) {
+            isVisible = false
+        } else {
+            isVisible = true
 
-        textView1.setText(R.string.keys_backup_banner_update_line1)
-        textView2.isVisible = true
-        textView2.setText(R.string.keys_backup_banner_update_line2)
-        close.isVisible = true
+            textView1.setText(R.string.keys_backup_banner_update_line1)
+            textView2.isVisible = true
+            textView2.setText(R.string.keys_backup_banner_update_line2)
+            close.isVisible = true
+        }
     }
 
     private fun renderBackingUp() {
@@ -247,7 +250,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         data class Recover(val version: String) : State()
 
         // Keys backup can be updated
-        object Update : State()
+        data class Update(val version: String) : State()
 
         // Keys are backing up
         object BackingUp : State()
@@ -273,6 +276,11 @@ class KeysBackupBanner @JvmOverloads constructor(
          * Preference key for recover. Value is a backup version (String).
          */
         private const val BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION = "BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION"
+
+        /**
+         * Preference key for update. Value is a backup version (String).
+         */
+        private const val BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION = "BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION"
 
         /**
          * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version
