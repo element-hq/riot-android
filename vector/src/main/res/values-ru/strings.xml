@@ -78,7 +78,7 @@
 
     <!-- Home fragment -->
     <string name="invitations_header">Приглашения</string>
-    <string name="low_priority_header">Низкий приоритет</string>
+    <string name="low_priority_header">Маловажные</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Диалоги</string>
@@ -412,7 +412,7 @@ Email также позволит вам при необходимости во�
     <string name="room_recents_directory">КАТАЛОГ</string>
     <string name="room_recents_favourites">ИЗБРАННОЕ</string>
     <string name="room_recents_conversations">КОМНАТЫ</string>
-    <string name="room_recents_low_priority">НИЗКИЙ ПРИОРИТЕТ</string>
+    <string name="room_recents_low_priority">МАЛОВАЖНЫЕ</string>
     <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
     <string name="room_recents_start_chat">Начать чат</string>
     <string name="room_recents_create_room">Создать комнату</string>
@@ -553,7 +553,7 @@ Email также позволит вам при необходимости во�
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Избранное</string>
-    <string name="room_settings_tag_pref_entry_low_priority">Низкий приоритет</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Маловажные</string>
     <string name="room_settings_tag_pref_entry_none">Нет</string>
 
     <!-- room settings : access and visibility -->
