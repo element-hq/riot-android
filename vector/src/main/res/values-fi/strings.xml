@@ -432,7 +432,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Keskustelut</string>
     <string name="room_sliding_menu_settings">Asetukset</string>
-    <string name="room_sliding_menu_version">Versio: </string>
+    <string name="room_sliding_menu_version">Versio</string>
     <string name="room_sliding_menu_term_and_conditions">Käyttöehdot</string>
     <string name="room_sliding_menu_third_party_notices">Kolmannen osapuolen tiedot</string>
     <string name="room_sliding_menu_copyright">Tekijänoikeustiedot</string>
@@ -514,10 +514,10 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="account_phone_number_already_used_error">Kyseinen puhelinnumero on jo käytössä</string>
 
     <string name="settings_change_password">Vaihda salasana</string>
-    <string name="settings_old_password">vanha salasana</string>
-    <string name="settings_new_password">uusi salasana</string>
-    <string name="settings_confirm_password">toista uusi salasana</string>
-    <string name="settings_fail_to_update_password">Salasanan vaihtaminen epäonnistui</string>
+    <string name="settings_old_password">Vanha salasana</string>
+    <string name="settings_new_password">Uusi salasana</string>
+    <string name="settings_confirm_password">Vahvista uusi salasana</string>
+    <string name="settings_fail_to_update_password">Salasanan päivittäminen epäonnistui</string>
     <string name="settings_password_updated">Salasanasi on vaihdettu</string>
     <string name="settings_unignore_user">Näytä kaikki viestit käyttäjältä %s?</string>
 
@@ -847,4 +847,33 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
     <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
-</resources>
+<string name="settings_send_markdown">Markdown-muotoilu</string>
+    <string name="markdown_has_been_enabled">Markdown on käytössä.</string>
+    <string name="markdown_has_been_disabled">Markdown on pois käytöstä.</string>
+
+    <string name="settings_call_category">Puhelut</string>
+    <string name="settings_call_ringtone_dialog_title">Valitse soittoääni puheluille:</string>
+
+    <string name="room_sliding_menu_version_x">Versio %s</string>
+    <string name="settings_password">Salasana</string>
+    <string name="deactivate_account_prompt_password">Kirjoita salasanasi jatkaaksesi:</string>
+    <string name="error_empty_field_your_password">Kirjoita salasanasi.</string>
+    <string name="status_theme">Status.im-teema</string>
+
+    <string name="settings_send_typing_notifs">Lähetä kirjoitusilmoitukset</string>
+    <string name="settings_show_read_receipts">Näytä lukukuittaukset</string>
+    <string name="settings_show_join_leave_messages">Näytä liittymiset ja poistumiset</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Näytä tilitapahtumat</string>
+    <string name="settings_preview_media_before_sending">Esikatsele media ennen lähettämistä</string>
+
+    <string name="settings_labs_enable_send_voice">Lähetä ääniviestejä</string>
+    <string name="settings_opt_in_of_analytics">Lähetä analytiikkatietoja</string>
+    <string name="send_bug_report_rage_shake">Ravista raivokkaasti ilmoittaaksesi ongelmasta</string>
+
+    <string name="settings_deactivate_account_section">Deaktivoi tili</string>
+    <string name="settings_deactivate_my_account">Deaktivoi tilini</string>
+
+    <string name="deactivate_account_title">Deaktivoi tili</string>
+    <string name="deactivate_account_submit">Deaktivoi tili</string>
+
+    </resources>
