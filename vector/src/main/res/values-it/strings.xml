@@ -49,8 +49,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Disconnetti</string>
-    <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione causerà l\'eliminazione di qualsiasi chiave di crittografia da-utente-a-utente rendendo illeggibile la storia delle chat precedentemente criptate qualora ci si riconnettesse.
-Selezionare esporta per fare un backup delle chat prima di disconnettersi.</string>
     <string name="action_voice_call">Chiamata voce</string>
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>
@@ -311,14 +309,6 @@ Consentire a Riot di accedere ai tuoi contatti?</string>
     <string name="room_creation_title">Nuova chat</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
     <string name="room_title_one_member">1 membro</string>
-    <string name="room_e2e_alert_title">Attenzione!</string>
-    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.
-
-Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
-
-I dispositivi non saranno in grado di decriptare la cronologia prima del loro ingresso nella stanza.
-
-I messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Lascia stanza</string>

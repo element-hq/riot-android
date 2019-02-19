@@ -50,8 +50,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Kirjaudu ulos</string>
-    <string name="action_sign_out_confirmation">Turvallisuussyistä uloskirjautuminen poistaa salausavaimet. Ilman salausavaimia et voi lukea viestihistoriaa salatuissa huoneissa.
-Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="action_voice_call">Äänipuhelu</string>
     <string name="action_video_call">Videopuhelu</string>
     <string name="action_global_search">Laaja haku</string>
@@ -300,14 +298,6 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_creation_title">Uusi keskustelu</string>
     <string name="room_creation_add_member">Lisää jäsen</string>
     <string name="room_title_one_member">1 jäsen</string>
-    <string name="room_e2e_alert_title">Varoitus!</string>
-    <string name="room_e2e_alert_message">Salaus on testikäytössä, eikä välttämättä toimi luotettavasti.
-
-Älä käytä sitä salaista tietoa varten.
-
-Laitteet eivät voi näyttää salattuja viestejä ajalta ennen huoneeseen liittymistä.
-
-Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <!-- ??? -->
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>

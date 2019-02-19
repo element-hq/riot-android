@@ -56,7 +56,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        recyclerViewAdapter = KeysBackupSettingsRecyclerViewAdapter()
+        recyclerViewAdapter = KeysBackupSettingsRecyclerViewAdapter(activity!!)
         recyclerView.adapter = recyclerViewAdapter
         recyclerViewAdapter?.adapterListener = this
 
@@ -87,6 +87,11 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                     }
                 }
             }
+
+            // Update the adapter for each state change
+            viewModel.session?.let { session ->
+                recyclerViewAdapter?.updateWithTrust(session, viewModel.keyVersionTrust.value)
+            }
         })
 
         viewModel.keyVersionTrust.observe(this, Observer {
@@ -99,7 +104,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
 
     override fun didSelectSetupMessageRecovery() {
         context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: ""))
+            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: "", false))
         }
     }
 

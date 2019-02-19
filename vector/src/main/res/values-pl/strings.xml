@@ -40,8 +40,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Wyloguj się</string>
-    <string name="action_sign_out_confirmation">Ze względów bezpieczeństwa, po wylogowaniu się zostaną usunięte wszystkie klucze szyfrowania end-to-end, przez co nie będziesz mógł czytać zaszyfrowanych wiadomości po zalogowaniu.
-Utwórz kopię zapasową, zanim się wylogujesz.</string>
     <string name="action_voice_call">Połączenie głosowe</string>
     <string name="action_video_call">Połączenie wideo</string>
     <string name="action_global_search">Wyszukiwanie globalne</string>
@@ -241,7 +239,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_creation_title">Nowa rozmowa</string>
     <string name="room_creation_add_member">Dodaj członka</string>
     <string name="room_title_one_member">1 członek</string>
-    <string name="room_e2e_alert_title">Ostrzeżenie!</string>
 
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
@@ -641,13 +638,6 @@ Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-m
         <item quantity="many">%d członków</item>
         <item quantity="other"/>
     </plurals>
-    <string name="room_e2e_alert_message">Szyfrowanie End-to-End jest w fazie beta i nie jest pewne. 
-
-Nie powinieneś ufać mu w celu zabezpieczenia danych.
-
-Urządzenia nie będą w stanie na razie odszyfrować historii sprzed momentu dołączenia do pokoju.
-
-Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają jeszcze szyfrowania.</string>
 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
 Jesteś pewien?</string>

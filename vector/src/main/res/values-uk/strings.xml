@@ -59,8 +59,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Вийти з облікового запису</string>
-    <string name="action_sign_out_confirmation">З міркувань безпеки, всі ключі шифрування видаляються при виході з системи, що унеможливить перегляд попередньої історії чату коли Ви зайдете в систему знову.
-Експортуйте її, перш ніж вийти.</string>
     <string name="action_voice_call">Голосовий виклик</string>
     <string name="action_video_call">Відеовиклик</string>
     <string name="action_global_search">Глообальний пошук</string>
@@ -302,8 +300,6 @@
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
     <string name="room_title_one_member">1 учасник</string>
-    <string name="room_e2e_alert_title">Увага!</string>
-    <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Залишити кімнату</string>

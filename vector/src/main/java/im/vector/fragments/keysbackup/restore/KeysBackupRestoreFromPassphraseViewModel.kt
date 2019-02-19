@@ -20,6 +20,7 @@ import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
 import im.vector.ui.arch.LiveEvent
+import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -50,14 +51,19 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
         if (keysBackup != null) {
             sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
             passphraseErrorText.value = null
-            keysBackup.restoreKeyBackupWithPassword(sharedViewModel.keyVersionResult.value!!.version!!,
+
+            val version = sharedViewModel.keyVersionResult.value!!.version!!
+
+            keysBackup.restoreKeyBackupWithPassword(version,
                     passphrase.value!!,
                     null,
                     sharedViewModel.session.myUserId,
                     object : ApiCallback<ImportRoomKeysResult> {
                         override fun onSuccess(info: ImportRoomKeysResult) {
                             sharedViewModel.loadingEvent.value = null
-                            sharedViewModel.didSucceedWithKey(info)
+                            sharedViewModel.didRecoverSucceed(info)
+
+                            KeysBackupBanner.onRecoverDoneForVersion(context, version)
                         }
 
                         override fun onUnexpectedError(e: Exception) {

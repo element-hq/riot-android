@@ -33,13 +33,16 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -128,6 +131,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private int mMode = MODE_LOGIN;
 
     // graphical items
+    @BindView(R.id.login_form_container)
+    ViewGroup mFormContainer;
+
+    // Will contain all the TextInputLayout of the layout
+    List<TextInputLayout> mTextInputLayouts;
+
     // Layouts
     @BindView(R.id.login_inputs_layout)
     View mLoginLayout;
@@ -158,10 +167,26 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     Button mForgotValidateEmailButton;
 
     // the login account name
+    @BindView(R.id.login_user_name_til)
+    TextInputLayout mLoginEmailTextViewTil;
+
     @BindView(R.id.login_user_name)
     EditText mLoginEmailTextView;
 
+    // Login phone number
+    @BindView(R.id.login_phone_number_value_til)
+    TextInputLayout mLoginPhoneNumberTil;
+
+    @BindView(R.id.login_phone_number_value)
+    EditText mLoginPhoneNumber;
+
+    @BindView(R.id.login_phone_number_country)
+    EditText mLoginPhoneNumberCountryCode;
+
     // the login password
+    @BindView(R.id.login_password_til)
+    TextInputLayout mLoginPasswordTextViewTil;
+
     @BindView(R.id.login_password)
     EditText mLoginPasswordTextView;
 
@@ -176,14 +201,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean mIsPendingLogin;
 
     // the creation user name
+    @BindView(R.id.creation_your_name_til)
+    TextInputLayout mCreationUsernameTextViewTil;
+
     @BindView(R.id.creation_your_name)
     EditText mCreationUsernameTextView;
 
     // the password 1 name
+    @BindView(R.id.creation_password1_til)
+    TextInputLayout mCreationPassword1TextViewTil;
+
     @BindView(R.id.creation_password1)
     EditText mCreationPassword1TextView;
 
     // the password 2 name
+    @BindView(R.id.creation_password2_til)
+    TextInputLayout mCreationPassword2TextViewTil;
+
     @BindView(R.id.creation_password2)
     EditText mCreationPassword2TextView;
 
@@ -192,22 +226,37 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     TextView mPasswordForgottenTxtView;
 
     // the forgot password email text view
+    @BindView(R.id.forget_email_address_til)
+    TextInputLayout mForgotEmailTextViewTil;
+
     @BindView(R.id.forget_email_address)
-    TextView mForgotEmailTextView;
+    EditText mForgotEmailTextView;
 
     // the password 1 name
+    @BindView(R.id.forget_new_password_til)
+    TextInputLayout mForgotPassword1TextViewTil;
+
     @BindView(R.id.forget_new_password)
     EditText mForgotPassword1TextView;
 
     // the password 2 name
+    @BindView(R.id.forget_confirm_new_password_til)
+    TextInputLayout mForgotPassword2TextViewTil;
+
     @BindView(R.id.forget_confirm_new_password)
     EditText mForgotPassword2TextView;
 
     // the home server text
+    @BindView(R.id.login_matrix_server_url_til)
+    TextInputLayout mHomeServerTextTil;
+
     @BindView(R.id.login_matrix_server_url)
     EditText mHomeServerText;
 
     // the identity server text
+    @BindView(R.id.login_identity_url_til)
+    TextInputLayout mIdentityServerTextTil;
+
     @BindView(R.id.login_identity_url)
     EditText mIdentityServerText;
 
@@ -241,14 +290,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.instructions)
     TextView mThreePidInstructions;
 
+    @BindView(R.id.registration_email_til)
+    TextInputLayout mEmailAddressTil;
+
     @BindView(R.id.registration_email)
     EditText mEmailAddress;
 
     @BindView(R.id.registration_phone_number)
     View mPhoneNumberLayout;
 
+    @BindView(R.id.registration_phone_number_country)
+    EditText mRegistrationPhoneNumberCountryCode;
+
+    @BindView(R.id.registration_phone_number_value_til)
+    TextInputLayout mRegistrationPhoneNumberTil;
+
     @BindView(R.id.registration_phone_number_value)
-    EditText mPhoneNumber;
+    EditText mRegistrationPhoneNumber;
 
     @BindView(R.id.button_submit_three_pid)
     Button mSubmitThreePidButton;
@@ -415,25 +473,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         setWaitingView(mWaitingView);
 
-        // bind UI widgets
         // login
-        EditText loginPhoneNumber = findViewById(R.id.login_phone_number_value);
-        EditText loginPhoneNumberCountryCode = findViewById(R.id.login_phone_number_country);
-        loginPhoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
-                null,
-                ThemeUtils.INSTANCE.tintDrawable(this,
-                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.vctr_settings_icon_tint_color),
-                null);
+        ViewUtilKt.tintDrawableCompat(mLoginPhoneNumberCountryCode, R.attr.vctr_settings_icon_tint_color);
 
         // account creation - three pid
-        EditText phoneNumberCountryCode = findViewById(R.id.registration_phone_number_country);
-        phoneNumberCountryCode.setCompoundDrawablesWithIntrinsicBounds(null,
-                null,
-                ThemeUtils.INSTANCE.tintDrawable(this,
-                        ContextCompat.getDrawable(this, R.drawable.ic_material_expand_more_black),
-                        R.attr.vctr_settings_icon_tint_color),
-                null);
+        ViewUtilKt.tintDrawableCompat(mRegistrationPhoneNumberCountryCode, R.attr.vctr_settings_icon_tint_color);
 
         if (isFirstCreation()) {
             mRegistrationManager = new RegistrationManager(null);
@@ -525,11 +569,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         });
 
-        mLoginPhoneNumberHandler = new PhoneNumberHandler(this, loginPhoneNumber, loginPhoneNumberCountryCode,
-                PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE, REQUEST_LOGIN_COUNTRY);
+        mLoginPhoneNumberHandler = new PhoneNumberHandler(this,
+                mLoginPhoneNumber,
+                mLoginPhoneNumberCountryCode,
+                PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE,
+                REQUEST_LOGIN_COUNTRY);
         mLoginPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
-        mRegistrationPhoneNumberHandler = new PhoneNumberHandler(this, mPhoneNumber, phoneNumberCountryCode,
-                PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE, REQUEST_REGISTRATION_COUNTRY);
+
+        mRegistrationPhoneNumberHandler = new PhoneNumberHandler(this,
+                mRegistrationPhoneNumber,
+                mRegistrationPhoneNumberCountryCode,
+                PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE,
+                REQUEST_REGISTRATION_COUNTRY);
 
         // reset the badge counter
         CommonActivityUtils.updateBadgeCount(this, 0);
@@ -615,6 +666,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 onWaitingEmailValidation();
             }
         }
+
+        mTextInputLayouts = ViewUtilKt.findAllTextInputLayout(mFormContainer);
+        ViewUtilKt.autoResetTextInputLayoutErrors(mTextInputLayouts);
     }
 
     /**
@@ -907,20 +961,30 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final String password = mForgotPassword1TextView.getText().toString().trim();
         final String passwordCheck = mForgotPassword2TextView.getText().toString().trim();
 
+        boolean hasError = false;
+
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_email), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_password), Toast.LENGTH_SHORT).show();
-            return;
+            mForgotEmailTextViewTil.setError(getString(R.string.auth_reset_password_missing_email));
+            hasError = true;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mForgotEmailTextViewTil.setError(getString(R.string.auth_invalid_email));
+            hasError = true;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            mForgotPassword1TextViewTil.setError(getString(R.string.auth_reset_password_missing_password));
+            hasError = true;
         } else if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!TextUtils.equals(password, passwordCheck)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+            mForgotPassword1TextViewTil.setError(getString(R.string.auth_invalid_password));
+            hasError = true;
+        }
+
+        if (!TextUtils.equals(password, passwordCheck)) {
+            mForgotPassword2TextViewTil.setError(getString(R.string.auth_password_dont_match));
+            hasError = true;
+        }
+
+        if (hasError) {
             return;
         }
 
@@ -1123,9 +1187,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mResourceLimitDialogHelper.displayDialog(matrixError);
         } else {
             final String message;
+            boolean displayInTil = false;
 
             if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
                 message = getString(R.string.login_error_forbidden);
+                displayInTil = true;
             } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
                 message = getString(R.string.login_error_unknown_token);
             } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
@@ -1143,7 +1209,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
 
             Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \"" + message + "\"");
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+            if (displayInTil) {
+                mLoginPasswordTextViewTil.setError(message);
+            } else {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -1223,7 +1294,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Uri.parse(homeServer);
                 Uri.parse(identityServer);
             } catch (Exception e) {
-                Toast.makeText(LoginActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.login_error_invalid_home_server, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -1530,27 +1601,37 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final String password = mCreationPassword1TextView.getText().toString().trim();
         final String passwordCheck = mCreationPassword2TextView.getText().toString().trim();
 
+        boolean hasError = false;
+
         if (TextUtils.isEmpty(name)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_missing_password), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!TextUtils.equals(password, passwordCheck)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
-            return;
+            mCreationUsernameTextViewTil.setError(getString(R.string.error_empty_field_enter_user_name));
+            hasError = true;
         } else {
             String expression = "^[a-z0-9.\\-_]+$";
 
             Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(name);
             if (!matcher.matches()) {
-                Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
-                return;
+                mCreationUsernameTextViewTil.setError(getString(R.string.auth_invalid_user_name));
+                hasError = true;
             }
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            mCreationPassword1TextViewTil.setError(getString(R.string.auth_missing_password));
+            hasError = true;
+        } else if (password.length() < 6) {
+            mCreationPassword1TextViewTil.setError(getString(R.string.auth_invalid_password));
+            hasError = true;
+        }
+
+        if (!TextUtils.equals(password, passwordCheck)) {
+            mCreationPassword2TextViewTil.setError(getString(R.string.auth_password_dont_match));
+            hasError = true;
+        }
+
+        if (hasError) {
+            return;
         }
 
         enableLoadingScreen(true);
@@ -1572,6 +1653,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
+
+        resetAllErrorsInForm();
+    }
+
+    /**
+     * Reset all errors displayed in the textInputLayouts
+     */
+    private void resetAllErrorsInForm() {
+        // Reset all inlined errors
+        ViewUtilKt.resetTextInputLayoutErrors(mTextInputLayouts);
     }
 
     /**
@@ -1605,12 +1696,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // --------------------- sanity tests for input values.. ---------------------
         if (!hsUrlString.startsWith("http")) {
-            Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+            displayErrorOnUrl(mHomeServerTextTil, getString(R.string.login_error_must_start_http));
             return;
         }
 
         if (!identityUrlString.startsWith("http") && !TextUtils.isEmpty(identityUrlString)) {
-            Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+            displayErrorOnUrl(mIdentityServerTextTil, getString(R.string.login_error_must_start_http));
             return;
         }
 
@@ -1619,20 +1710,26 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final String phoneNumberCountry = mLoginPhoneNumberHandler.getCountryCode();
         final String password = mLoginPasswordTextView.getText().toString().trim();
 
+        boolean hasError = false;
+
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, getString(R.string.auth_invalid_login_param), Toast.LENGTH_SHORT).show();
-            return;
+            mLoginPasswordTextViewTil.setError(getString(R.string.error_empty_field_your_password));
+            hasError = true;
         }
 
         if (TextUtils.isEmpty(username) && !mLoginPhoneNumberHandler.isPhoneNumberValidForCountry()) {
             // Check if phone number is empty or just invalid
             if (mLoginPhoneNumberHandler.getPhoneNumber() != null) {
-                Toast.makeText(this, R.string.auth_invalid_phone, Toast.LENGTH_SHORT).show();
+                mLoginPhoneNumberTil.setError(getString(R.string.auth_invalid_phone));
                 return;
             } else {
-                Toast.makeText(this, getString(R.string.auth_invalid_login_param), Toast.LENGTH_SHORT).show();
+                mLoginEmailTextViewTil.setError(getString(R.string.auth_invalid_login_param));
                 return;
             }
+        }
+
+        if (hasError) {
+            return;
         }
 
         // disable UI actions
@@ -1964,7 +2061,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     || !hsUrlString.startsWith("http")
                     || TextUtils.equals(hsUrlString, "http://")
                     || TextUtils.equals(hsUrlString, "https://")) {
-                Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+                displayErrorOnUrl(mHomeServerTextTil, getString(R.string.login_error_must_start_http));
                 return null;
             }
 
@@ -1976,7 +2073,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if ((!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http"))
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
-                Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+                displayErrorOnUrl(mIdentityServerTextTil, getString(R.string.login_error_must_start_http));
                 return null;
             }
 
@@ -1997,6 +2094,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mRegistrationManager.setHsConfig(mHomeserverConnectionConfig);
         return mHomeserverConnectionConfig;
+    }
+
+    private void displayErrorOnUrl(TextInputLayout textInputLayout, String error) {
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            // Inline display
+            textInputLayout.setError(error);
+        } else {
+            // Toast
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     //==============================================================================================================
@@ -2102,9 +2209,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (mRegistrationManager.supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);
             if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-                mEmailAddress.setHint(R.string.auth_opt_email_placeholder);
+                mEmailAddressTil.setHint(getString(R.string.auth_opt_email_placeholder));
             } else {
-                mEmailAddress.setHint(R.string.auth_email_placeholder);
+                mEmailAddressTil.setHint(getString(R.string.auth_email_placeholder));
             }
         } else {
             mEmailAddress.setVisibility(View.GONE);
@@ -2114,9 +2221,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mRegistrationPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
             mPhoneNumberLayout.setVisibility(View.VISIBLE);
             if (mRegistrationManager.isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
-                mPhoneNumber.setHint(R.string.auth_opt_phone_number_placeholder);
+                mRegistrationPhoneNumberTil.setHint(getString(R.string.auth_opt_phone_number_placeholder));
             } else {
-                mPhoneNumber.setHint(R.string.auth_phone_number_placeholder);
+                mRegistrationPhoneNumberTil.setHint(getString(R.string.auth_phone_number_placeholder));
             }
         } else {
             mPhoneNumberLayout.setVisibility(View.GONE);
@@ -2153,28 +2260,29 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final String email = mEmailAddress.getText().toString();
         if (!TextUtils.isEmpty(email)) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, R.string.auth_invalid_email, Toast.LENGTH_SHORT).show();
+                mEmailAddressTil.setError(getString(R.string.auth_invalid_email));
                 return;
             }
         } else if (mRegistrationManager.isEmailRequired()) {
-            Toast.makeText(this, R.string.auth_missing_email, Toast.LENGTH_SHORT).show();
+            mEmailAddressTil.setError(getString(R.string.auth_missing_email));
             return;
         }
 
         // Check that phone number format is valid and not empty if field is required
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
             if (!mRegistrationPhoneNumberHandler.isPhoneNumberValidForCountry()) {
-                Toast.makeText(this, R.string.auth_invalid_phone, Toast.LENGTH_SHORT).show();
+                mRegistrationPhoneNumberTil.setError(getString(R.string.auth_invalid_phone));
                 return;
             }
         } else if (mRegistrationManager.isPhoneNumberRequired()) {
-            Toast.makeText(this, R.string.auth_missing_phone, Toast.LENGTH_SHORT).show();
+            mRegistrationPhoneNumberTil.setError(getString(R.string.auth_missing_phone));
             return;
         }
 
         if (!mRegistrationManager.canSkipThreePid() && mRegistrationPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
-            // Both are required and empty
-            Toast.makeText(this, R.string.auth_missing_email_or_phone, Toast.LENGTH_SHORT).show();
+            // Both are required and empty (previous error was R.string.auth_missing_email_or_phone)
+            mEmailAddressTil.setError(getString(R.string.auth_missing_email));
+            mRegistrationPhoneNumberTil.setError(getString(R.string.auth_missing_phone));
             return;
         }
 
@@ -2247,6 +2355,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void submitPhoneNumber(final String token, final ThreePid pid) {
         if (TextUtils.isEmpty(token)) {
+            // TODO Display this error in the dialog
             Toast.makeText(LoginActivity.this, R.string.auth_invalid_token, Toast.LENGTH_SHORT).show();
         } else {
             mRegistrationManager.submitValidationToken(token, pid,
@@ -2389,7 +2498,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
         if (!isAvailable) {
             showMainLayout();
-            Toast.makeText(this, R.string.auth_username_in_use, Toast.LENGTH_LONG).show();
+            mCreationUsernameTextViewTil.setError(getString(R.string.auth_username_in_use));
         } else {
             if (mRegistrationManager.canAddThreePid()) {
                 // Show next screen with email/phone number

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.activity.signout
+package im.vector.fragments.signout
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -43,6 +43,38 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
                 ?.state
     }
 
+    /**
+     * Safe way to get the current KeysBackup version
+     */
+    fun getCurrentBackupVersion(): String {
+        return mxSession
+                ?.crypto
+                ?.keysBackup
+                ?.currentBackupVersion
+                ?: ""
+    }
+
+    /**
+     * Safe way to get the number of keys to backup
+     */
+    fun getNumberOfKeysToBackup(): Int {
+        return mxSession
+                ?.crypto
+                ?.cryptoStore
+                ?.inboundGroupSessionsCount(false)
+                ?: 0
+    }
+
+    /**
+     * Safe way to tell if there are more keys on the server
+     */
+    fun canRestoreKeys(): Boolean {
+        return mxSession
+                ?.crypto
+                ?.keysBackup
+                ?.canRestoreKeys() == true
+    }
+
     override fun onCleared() {
         super.onCleared()
 
@@ -53,5 +85,22 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
 
     override fun onStateChange(newState: KeysBackupStateManager.KeysBackupState) {
         keysBackupState.value = newState
+    }
+
+    companion object {
+        /**
+         * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
+         */
+        fun doYouNeedToBeDisplayed(session: MXSession?): Boolean {
+            return session
+                    ?.crypto
+                    ?.cryptoStore
+                    ?.inboundGroupSessionsCount(false)
+                    ?: 0 > 0
+                    && session
+                    ?.crypto
+                    ?.keysBackup
+                    ?.state != KeysBackupStateManager.KeysBackupState.ReadyToBackUp
+        }
     }
 }

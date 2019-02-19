@@ -296,6 +296,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
+            android:summary="@string/settings_data_save_mode_summary"
             android:title="@string/settings_data_save_mode" />
 
         <im.vector.preference.VectorSwitchPreference
@@ -349,7 +350,7 @@
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
             android:persistent="false"
             android:summary="@string/encryption_settings_manage_message_recovery_summary"
-            android:title="@string/encryption_settings_manage_message_recovery" />
+            android:title="@string/encryption_message_recovery" />
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_export_room_keys_summary"

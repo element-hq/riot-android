@@ -1,8 +1,35 @@
-Changes in Riot 0.8.22 (2019-XX-XX)
+Changes in Riot 0.8.23 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ - keys backup: Setup screen UX improvement
+ - keys backup: Sign Out flow improvement
+ - Improved button styles (states, ripple effect)
+ - Show direct chat section in user details only for other users, not self
+
+Other changes:
+ - Remove beta e2e warning (#2946)
+
+Bugfix:
+ - Fix warning "Attribute value must be constant" in VectorHomeActivity
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.8.22 (2019-02-01)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.16.
 
 Features:
  - keys backup: Implement setup screen (#2883)
@@ -38,12 +65,7 @@ Bugfix:
  - Fix issues with Tombstone events (#2866 && #2867)
  - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
  - Key share request does not go away when user select "verify" (#2781)
-
-Translations:
- -
-
-Build:
- -
+ - Fix crash when entering the settings due to missing push rules (#2893)
 
 Changes in Riot 0.8.21 (2019-01-02)
 ===================================================

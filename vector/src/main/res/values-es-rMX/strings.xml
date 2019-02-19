@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
-    <string name="action_sign_out_confirmation">Por seguridad, al cerrar la sesión, las claves de cifrado de extremo-a-extremo serán borradas haciendo que el historial sea ilegible.
-Seleccione exportar para crear un archivo de respaldo antes de cerrar la sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -289,14 +287,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_title_one_member">1 miembro</string>
-    <string name="room_e2e_alert_title">¡Aviso!</string>
-    <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo esta en beta y puede ser poco fiable.
-
-No debe usarlo para proteger información.
-
-Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
-
-Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>

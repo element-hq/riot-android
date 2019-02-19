@@ -86,17 +86,30 @@
     </style>
 
     <!-- Styles for button -->
-    <style name="VectorButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+    <!--
+        Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
+         using colorControlHighlight as an overlay for focused and pressed states.
+    -->
+    <style name="VectorButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:background">?colorAccent</item>
         <item name="android:textColor">@color/button_text_color_selector</item>
+    </style>
+
+    <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
+        using colorControlHighlight as an overlay for focused and pressed states.-->
+    <style name="VectorButtonStyleFlat" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
     <style name="LoginButtonStyleBase" parent="VectorButtonStyle">
@@ -186,6 +199,12 @@
     <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
         <item name="background">@drawable/vector_tabbar_background_group_light</item>
+    </style>
+
+    <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
+    <style name="VectorLinearLayout">
+        <item name="android:gravity">end</item>
+        <item name="android:orientation">vertical</item>
     </style>
 
 </resources>

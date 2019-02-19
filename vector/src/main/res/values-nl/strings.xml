@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Uitloggen</string>
-    <string name="action_sign_out_confirmation">Voor veiligheidsredenen zal het uitloggen alle eind-tot-eind versleutelingssleutels verwijderen. Dit zal ervoor zorgen dat gespreksgeschiedenis onleesbaar is als je weer terug in logt.
-Selecteer exporteren om de versleutelingssleutels op te slaan voordat je uitlogt.</string>
     <string name="action_voice_call">Spraakoproep</string>
     <string name="action_video_call">Videogesprek</string>
     <string name="action_global_search">Globaal zoeken</string>
@@ -288,14 +286,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
     <string name="room_title_one_member">1 deelnemer</string>
-    <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">End-to-endbeveiliging is in bèta en kan onbetrouwbaar zijn.
-
-Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
-
-Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
-
-Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Ruimte verlaten</string>

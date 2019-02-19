@@ -42,8 +42,6 @@
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
-    <string name="action_sign_out_confirmation">Biztonsági okból kijelentkezéskor törlődnek a végtől végig való titkosítás kulcsai, emiatt a következő bejelentkezéskor a korábban titkosított üzenetek olvashatatlanok lesznek.
-A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</string>
     <string name="action_voice_call">Hanghívás</string>
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>
@@ -281,14 +279,6 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-
     <string name="room_creation_title">Új csevegés</string>
     <string name="room_creation_add_member">Új tag hozzáadása</string>
     <string name="room_title_one_member">1 tag</string>
-    <string name="room_e2e_alert_title">Figyelem!</string>
-    <string name="room_e2e_alert_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
-
-Még nem kéne megbíznod az adataid megtartásával.
-
-A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
-
-A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
     <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
     <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>

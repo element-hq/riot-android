@@ -112,8 +112,6 @@
 
     <string name="room_jump_to_first_unread">最初の未読位置へ移動.</string>
 
-    <string name="room_e2e_alert_title">警告！</string>
-
     <string name="room_participants_leave_prompt_title">部屋を退室</string>
     <string name="room_participants_leave_prompt_msg">本当にこの部屋を退室しますか？</string>
     <string name="room_participants_create">作成</string>
@@ -336,8 +334,6 @@
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
     <string name="action_sign_out">ログアウト</string>
-    <string name="action_sign_out_confirmation">セキュリティを確保するため、ログアウトするとエンドツーエンド暗号鍵がすべて削除され、再度ログインすると暗号化された発言履歴が読み取れなくなります。
-ログアウトする前に暗号鍵を端末の記憶装置へ出力し、保管をしてください。</string>
     <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
     <string name="no_contact_access_placeholder">端末の電話帳をRiotアプリが読み取ることは許可されていません</string>
@@ -609,14 +605,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_preview_try_join_an_unknown_room">あなたは%sにアクセスしようとしています。話し合いに参加しますか？</string>
     <string name="room_preview_try_join_an_unknown_room_default">部屋</string>
     <string name="room_preview_room_interactions_disabled">これは部屋のプレビューです。部屋でのやりとりはできません。</string>
-
-    <string name="room_e2e_alert_message">エンドツーエンド暗号化はベータ版であり、確実でない可能性があります。
-
-データの安全性を確保するために使わないでください。
-
-部屋に参加する前の履歴を復号することができない可能性があります。
-
-暗号化未対応のクライアントでは、暗号化されたメッセージを見れない可能性があります。</string>
 
     <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与える変更は取り消せません。
 よろしいですか？</string>

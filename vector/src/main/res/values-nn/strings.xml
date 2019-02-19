@@ -64,8 +64,6 @@
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logg av</string>
-    <string name="action_sign_out_confirmation">Av sikkerheitsmessige grunner, slettar det å logga av alle ende-til-ende-krypteringsnyklar slik at tidligare pratehistorie vert uleseleg viss du loggar inn att.
-Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="action_voice_call">Røystsamtale</string>
     <string name="action_video_call">Videosamtale</string>
     <string name="action_global_search">Søk over alt</string>
@@ -349,14 +347,6 @@ Du bør kanskje logga inn med ein annan brukar, eller leggja eposten din til den
         <item quantity="other">%d medlemer</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
-    <string name="room_e2e_alert_title">Åtvaring!</string>
-    <string name="room_e2e_alert_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
-
-Du bør ikkje stola på at ho kan sikra data enno.
-
-Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
-
-Krypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="room_participants_leave_prompt_title">Far frå rom</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil fara frå rommet?</string>

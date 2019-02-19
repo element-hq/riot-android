@@ -17,10 +17,8 @@
 package im.vector.view
 
 import android.content.Context
-import android.support.annotation.StringRes
 import android.support.constraint.ConstraintLayout
 import android.support.transition.TransitionManager
-import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +29,7 @@ import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.binaryfork.spanny.Spanny
 import im.vector.R
-import im.vector.ui.themes.ThemeUtils
 import org.jetbrains.anko.defaultSharedPreferences
 import org.matrix.androidsdk.util.Log
 
@@ -47,10 +43,17 @@ class KeysBackupBanner @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
-    @BindView(R.id.view_keys_backup_banner_text)
-    lateinit var textView: TextView
-    @BindView(R.id.view_keys_backup_banner_group)
-    lateinit var closeGroup: View
+    @BindView(R.id.view_keys_backup_banner_text_1)
+    lateinit var textView1: TextView
+
+    @BindView(R.id.view_keys_backup_banner_text_2)
+    lateinit var textView2: TextView
+
+    @BindView(R.id.view_keys_backup_banner_close_group)
+    lateinit var close: View
+
+    @BindView(R.id.view_keys_backup_banner_loading)
+    lateinit var loading: View
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -86,11 +89,16 @@ class KeysBackupBanner @JvmOverloads constructor(
         Log.d(LOG_TAG, "Rendering $newState")
 
         state = newState
+
+        hideAll()
+
         when (newState) {
             State.Initial -> renderInitial()
             State.Hidden -> renderHidden()
-            State.Setup -> renderSetup()
-            State.Recover -> renderRecover()
+            is State.Setup -> renderSetup(newState.numberOfKeys)
+            is State.Recover -> renderRecover(newState.version)
+            is State.Update -> renderUpdate(newState.version)
+            State.BackingUp -> renderBackingUp()
         }
     }
 
@@ -112,10 +120,10 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (state) {
-            State.Setup -> {
+            is State.Setup -> {
                 delegate?.setupKeysBackup()
             }
-            State.Recover -> {
+            is State.Recover -> {
                 delegate?.recoverKeysBackup()
             }
         }
@@ -123,8 +131,27 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     @OnClick(R.id.view_keys_backup_banner_close)
     internal fun onCloseClicked() {
-        context.defaultSharedPreferences.edit {
-            putBoolean(DO_NOT_SHOW_AGAIN_REMINDER_KEY, true)
+        state.let {
+            when (it) {
+                is State.Setup -> {
+                    context.defaultSharedPreferences.edit {
+                        putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
+                    }
+                }
+                is State.Recover -> {
+                    context.defaultSharedPreferences.edit {
+                        putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
+                    }
+                }
+                is State.Update -> {
+                    context.defaultSharedPreferences.edit {
+                        putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
+                    }
+                }
+                else -> {
+                    // Should not happen, close button is not displayed in other cases
+                }
+            }
         }
 
         // Force refresh
@@ -148,32 +175,61 @@ class KeysBackupBanner @JvmOverloads constructor(
         isVisible = false
     }
 
-    private fun renderSetup() {
-        if (context.defaultSharedPreferences.getBoolean(DO_NOT_SHOW_AGAIN_REMINDER_KEY, false)) {
+    private fun renderSetup(nbOfKeys: Int) {
+        if (nbOfKeys == 0
+                || context.defaultSharedPreferences.getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+            // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {
             isVisible = true
-            closeGroup.isVisible = true
 
-            setText(R.string.keys_backup_banner_setup, R.string.keys_backup_banner_setup_colored_part)
+            textView1.setText(R.string.keys_backup_banner_setup_line1)
+            textView2.isVisible = true
+            textView2.setText(R.string.keys_backup_banner_setup_line2)
+            close.isVisible = true
         }
     }
 
-    private fun renderRecover() {
-        isVisible = true
-        closeGroup.isVisible = false
+    private fun renderRecover(version: String) {
+        if (version == context.defaultSharedPreferences.getString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, null)) {
+            isVisible = false
+        } else {
+            isVisible = true
 
-        setText(R.string.keys_backup_banner_recover, R.string.keys_backup_banner_recover_colored_part)
+            textView1.setText(R.string.keys_backup_banner_recover_line1)
+            textView2.isVisible = true
+            textView2.setText(R.string.keys_backup_banner_recover_line2)
+            close.isVisible = true
+        }
     }
 
-    private fun setText(@StringRes fullTextRes: Int, @StringRes colorTextRes: Int) {
-        val coloredPart = resources.getString(colorTextRes)
-        val fullText = resources.getString(fullTextRes, coloredPart)
+    private fun renderUpdate(version: String) {
+        if (version == context.defaultSharedPreferences.getString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, null)) {
+            isVisible = false
+        } else {
+            isVisible = true
 
-        val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
+            textView1.setText(R.string.keys_backup_banner_update_line1)
+            textView2.isVisible = true
+            textView2.setText(R.string.keys_backup_banner_update_line2)
+            close.isVisible = true
+        }
+    }
 
-        // Color colored part
-        textView.text = Spanny(fullText).apply { findAndSpan(coloredPart) { ForegroundColorSpan(accentColor) } }
+    private fun renderBackingUp() {
+        isVisible = true
+
+        textView1.setText(R.string.keys_backup_banner_in_progress)
+        loading.isVisible = true
+    }
+
+    /**
+     * Hide all views that are not visible in all state
+     */
+    private fun hideAll() {
+        textView2.isVisible = false
+        close.isVisible = false
+        loading.isVisible = false
     }
 
     /**
@@ -187,12 +243,17 @@ class KeysBackupBanner @JvmOverloads constructor(
         // View will be Gone
         object Hidden : State()
 
-        // Keys backup is not setup
-        object Setup : State()
+        // Keys backup is not setup, numberOfKeys is the number of locally stored keys
+        data class Setup(val numberOfKeys: Int) : State()
 
-        // Keys backup can be recovered
-        object Recover : State()
+        // Keys backup can be recovered, with version from the server
+        data class Recover(val version: String) : State()
 
+        // Keys backup can be updated
+        data class Update(val version: String) : State()
+
+        // Keys are backing up
+        object BackingUp : State()
     }
 
     /**
@@ -207,10 +268,28 @@ class KeysBackupBanner @JvmOverloads constructor(
         private const val LOG_TAG = "KeysBackupBanner"
 
         /**
-         * Preference key.
+         * Preference key for setup. Value is a boolean.
          */
-        private const val DO_NOT_SHOW_AGAIN_REMINDER_KEY = "DO_NOT_SHOW_AGAIN_REMINDER_KEY"
+        private const val BANNER_SETUP_DO_NOT_SHOW_AGAIN = "BANNER_SETUP_DO_NOT_SHOW_AGAIN"
 
+        /**
+         * Preference key for recover. Value is a backup version (String).
+         */
+        private const val BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION = "BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION"
+
+        /**
+         * Preference key for update. Value is a backup version (String).
+         */
+        private const val BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION = "BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION"
+
+        /**
+         * Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version
+         */
+        fun onRecoverDoneForVersion(context: Context, version: String) {
+            context.defaultSharedPreferences.edit {
+                putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, version)
+            }
+        }
     }
 }
 

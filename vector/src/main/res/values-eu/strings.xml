@@ -42,8 +42,6 @@
     <string name="invite">Gonbidatu</string>
 
     <string name="action_sign_out">Amaitu saioa</string>
-    <string name="action_sign_out_confirmation">Segurtasunagatik, saioa amaitzean muturretik muturrerako zifratze gako guztiak ezabatuko dira, eta ezin izango duzu aurreko txat historia osoa irakurri berriro hasten baduzu.
-Hautatu esportatu babes-kopia bat egiteko saioa amaitu aurretik.</string>
     <string name="action_voice_call">Ahots deia</string>
     <string name="action_video_call">Bideo deia</string>
     <string name="action_global_search">Bilaketa globala</string>
@@ -279,14 +277,6 @@ Beste kontu batekin hasi dezakezu saioa, edo e-mail hau kontu honetara gehitu.</
     <string name="room_creation_title">Txat berria</string>
     <string name="room_creation_add_member">Gehitu kidea</string>
     <string name="room_title_one_member">kide 1</string>
-    <string name="room_e2e_alert_title">Abisua!</string>
-    <string name="room_e2e_alert_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
-
-Ez zenuke datuak babesteko erabili behar oraindik.
-
-Gailuek ezin izango dute gelara elkartu aurreko historiala deszifratu.
-
-Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan ikusiko.</string>
 
     <string name="room_participants_leave_prompt_title">Atera gelatik</string>
     <string name="room_participants_leave_prompt_msg">Ziur gelatik atera nahi duzula?</string>

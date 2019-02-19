@@ -299,9 +299,9 @@ object NotificationUtils {
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
                 .apply {
                     if (isVideo) {
-                        setContentText(context.getString(R.string.call_in_progress))
-                    } else {
                         setContentText(context.getString(R.string.video_call_in_progress))
+                    } else {
+                        setContentText(context.getString(R.string.call_in_progress))
                     }
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)

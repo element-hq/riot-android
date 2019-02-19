@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Sair</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao terminar a sessão, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas cifradas não seja legível se iniciar a sessão novamente.
-Seleccione exportar para criar uma cópia de segurança antes de terminar a sessão.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Pesquisa global</string>
@@ -307,14 +305,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar membro</string>
     <string name="room_title_one_member">1 membro</string>
-    <string name="room_e2e_alert_title">Atenção!</string>
-    <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em beta e pode ainda não ser fiável.
-
-Ainda não deve depositar a sua confiança para proteger os seus dados.
-
-Dispositivos ainda não podem decifrar o histórico de mensagens anteriores ao momento em que estes entraram na sala.
-
-Mensagens cifradas não serão visíveis em clientes que ainda não implementaram criptografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Sair da sala</string>
