@@ -34,7 +34,7 @@
     <string name="send">Envia</string>
     <string name="copy">Còpia</string>
     <string name="resend">Reenvia</string>
-    <string name="redact">Elimina</string>
+    <string name="redact">Suprimeix</string>
     <string name="quote">Cita</string>
     <string name="share">Comparteix</string>
     <string name="later">Més tard</string>
@@ -46,7 +46,7 @@
     <string name="rename">Reanomena</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call">Conferència en curs. Uniu-vos per veu o vídeo.</string>
+    <string name="ongoing_conference_call">" Conferència en curs. Uniu-vos hi per veu o vídeo."</string>
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
@@ -100,7 +100,7 @@
     <string name="user_directory_header">Directori de l\'usuari</string>
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_conversation_placeholder">Cap conversa</string>
-    <string name="no_contact_access_placeholder">No es va donar permís a Riot per accedir als contactes locals</string>
+    <string name="no_contact_access_placeholder">No vau donar permís al Riot per accedir als contactes locals</string>
     <string name="no_result_placeholder">Cap resultat</string>
 
     <!-- Rooms fragment -->
@@ -139,7 +139,7 @@
     <string name="username">Nom d\'usuari</string>
     <string name="create_account">Registra\'m</string>
     <string name="login">Entra</string>
-    <string name="logout">Surt</string>
+    <string name="logout">Surt de la sessió</string>
     <string name="hs_url">URL del servidor</string>
     <string name="identity_url">URL de la identitat del servidor</string>
     <string name="search">Cerca</string>
@@ -159,7 +159,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Entra</string>
-    <string name="auth_register">Registra\'m</string>
+    <string name="auth_register">Crea un compte</string>
     <string name="auth_submit">Tramet</string>
     <string name="auth_skip">Omet</string>
     <string name="auth_send_reset_email">Envia el correu de reinici</string>
@@ -183,7 +183,7 @@
     <string name="auth_invalid_password">La contrasenya és massa curta (mín 6)</string>
     <string name="auth_missing_password">Falta la contrasenya</string>
     <string name="auth_invalid_email">"El correu electrònic no és vàlid"</string>
-    <string name="auth_invalid_phone">"El número de telefon no és vàlid"</string>
+    <string name="auth_invalid_phone">El número de telèfon no és vàlid</string>
     <string name="auth_email_already_defined">Aquest correu electrònic ja existeix.</string>
     <string name="auth_missing_email">Falta el correu electrònic</string>
     <string name="auth_missing_phone">Falta el número de telefon</string>
@@ -202,7 +202,7 @@
     <string name="auth_reset_password_message">Introduïu el correu electrònic associat al compte per reiniciar la contrasenya:</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_missing_password">S\'ha d\'introduir una contrasenya nova.</string>
-    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Seguiu l\'enllaç que conté i feu click aquí sota.</string>
+    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Seguiu l\'enllaç que conté i feu clic a sota.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
     <string name="auth_reset_password_success_message">La contrasenya s\'ha reiniciat.\n\nLes sessions de tots els dispositius han estat tancades i no rebreu més notificacions automàtiques. Per tal de reactivar les notificacions, torneu a entrar en cada dispositiu.</string>
 
@@ -504,9 +504,9 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Previsualitzacions dels URL en línia</string>
-    <string name="settings_always_show_timestamps">Mostra sempre l\'hora dels missatges</string>
+    <string name="settings_always_show_timestamps">Mostra les marques horàries per a tots els missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores</string>
-    <string name="settings_vibrate_on_mention">Vibra quan et mencionin</string>
+    <string name="settings_vibrate_on_mention">Vibra quan mencionin un usuari</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
@@ -529,15 +529,15 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_identity_server">Identitat del servidor</string>
 
     <string name="settings_user_interface">Interfície d\'usuari</string>
-    <string name="settings_interface_language">Idioma de la interfície</string>
-    <string name="settings_select_language">Tria un idioma</string>
+    <string name="settings_interface_language">Llengua</string>
+    <string name="settings_select_language">Seleccioneu una llengua</string>
 
     <string name="account_email_validation_title">Verificació pendent</string>
     <string name="account_email_validation_message">Mireu el correu electrònic feu clic en l\'enllaç que s\'ha enviat. Un cop fet això, feu clic per continuar.</string>
-    <string name="account_email_validation_error">No ha estat possible verificar l\'adreça de correu electrònic. Mireu el correu electrònic feu clic en l\'enllaç que s\'ha enviat. Un cop fet això, feu clic per continuar</string>
-    <string name="account_email_already_used_error">Aquest correu electrònic ja està en us</string>
-    <string name="account_email_not_found_error">No s\'ha pogut enviar el missatge: no s\'ha trobat el destinatari</string>
-    <string name="account_phone_number_already_used_error">Aquest número de telèfon ja està en us</string>
+    <string name="account_email_validation_error">No s\'ha pogut verificar l\'adreça de correu electrònic. Comproveu el correu electrònic i feu clic en l\'enllaç que s\'ha enviat. Una vegada fet això, feu clic per continuar.</string>
+    <string name="account_email_already_used_error">Aquest correu electrònic ja està en ús.</string>
+    <string name="account_email_not_found_error">No s\'ha trobat aquesta adreça de correu electrònic.</string>
+    <string name="account_phone_number_already_used_error">Aquest número de telèfon ja està en ús.</string>
 
     <string name="settings_change_password">Canvia la contrasenya</string>
     <string name="settings_old_password">Contrasenya antiga</string>
@@ -560,7 +560,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_phone_number_label">Número de telèfon</string>
     <string name="settings_phone_number_error">El número de telèfon no és vàlid per al país escollit</string>
     <string name="settings_phone_number_verification">Verificació del telèfon</string>
-    <string name="settings_phone_number_verification_instruction">"S\'ha enviat un SMS amb un codi d\'activació. Introduïu aquest a continuació."</string>
+    <string name="settings_phone_number_verification_instruction">S\'ha enviat un SMS amb un codi d\'activació. Introduïu-lo a continuació.</string>
     <string name="settings_phone_number_verification_error_empty_code">Introduïu un codi d\'activació</string>
     <string name="settings_phone_number_verification_error">S\'ha produït un error mentre es validava el número de telèfon</string>
     <string name="settings_phone_number_code">Codi</string>
@@ -613,7 +613,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avançat</string>
-    <string name="room_settings_room_internal_id">Id intern de la sala</string>
+    <string name="room_settings_room_internal_id">ID intern d\'aquesta sala</string>
     <string name="room_settings_addresses_pref_title">Adreces</string>
     <string name="room_settings_labs_pref_title">Laboratori</string>
     <string name="room_settings_labs_warning_message">Aquestes característiques són experimentals i poden fallar de forma inesperada. Useu amb precaució.</string>
@@ -690,7 +690,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="encryption_import_room_keys_summary">Importa les claus de la sala des d\'un fitxer local</string>
     <string name="encryption_import_import">Importa</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encripta només per a dispositius verificats</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">No enviïs mai missatges encriptats a dispositius no verificats des d\'aquest dispositiu</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">No enviïs mai missatges encriptats a dispositius no verificats des d\'aquest dispositiu.</string>
 
     <string name="encryption_information_not_verified">NO verificat</string>
     <string name="encryption_information_verified">Verificat</string>
@@ -706,9 +706,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
 
     <string name="encryption_information_verify_device">Verifica el dispositiu</string>
     <string name="encryption_information_verify_device_warning">Per tal de verificar que es pot confiar amb aquest dispositiu, contacteu amb el seu propietari per algun altre mitjà (per exemple en persona o trucant-lo) i pregunteu-li si la clau que veu a les seves preferències d\'usuari coincideix amb la clau següent:</string>
-    <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar.
-Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo.
-En un futur aquest procés de verificació serà més sofisticat.</string>
+    <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
 
     <string name="e2e_enabling_on_app_update">El Riot ara permet l\'ús d\'encriptació d\'extrem a extrem però us heu de tronar a connectar per tal d\'activar-la.\n\nHo podeu fer ara o més tard des de les preferències de l\'aplicació.</string>
@@ -744,7 +742,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
     <string name="event_formatter_widget_added">%1$s afegit per %2$s</string>
     <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
-    <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny?</string>
+    <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny d\'aquesta sala?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">No s\'ha pogut crear el giny.</string>
@@ -775,7 +773,7 @@ En un futur aquest procés de verificació serà més sofisticat.</string>
 
     <!-- notification statuses -->
     <string name="notification_off">Apagat</string>
-    <string name="notification_noisy">Sorrollós</string>
+    <string name="notification_noisy">Sorollós</string>
 
     <string name="encrypted_message">Missatge encriptat</string>
 
@@ -956,7 +954,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="settings_deactivate_my_account">Desactivar el meu compte</string>
 
     <string name="startup_notification_privacy_title">Notificació de privacitat</string>
-    <string name="startup_notification_privacy_message">Riot pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada (això podria afectar el consum de bateria).</string>
+    <string name="startup_notification_privacy_message">El Riot pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada. Això podria afectar el consum de bateria.</string>
     <string name="startup_notification_privacy_button_grant">Concedir permís</string>
     <string name="startup_notification_privacy_button_other">Escolliu una altra opció</string>
 
@@ -967,7 +965,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
 
     <string name="settings_without_flair">No sou ara mateix membre de cap comunitat.</string>
 
-    <string name="encryption_export_notice">Si us plau creeu una frase de pas per encriptar les claus exportades. Haureu d\'introduir la mateixa frase de pas per poder importar les claus.</string>
+    <string name="encryption_export_notice">Creeu una frase de pas per xifrar les claus exportades. Haureu d\'introduir la mateixa frase de pas per poder importar les claus.</string>
     <string name="passphrase_create_passphrase">Crea frase de pas</string>
     <string name="passphrase_passphrase_does_not_match">Les frases de pas han de coincidir</string>
     <string name="lock_screen_hint">Escriviu aquí…</string>
@@ -975,7 +973,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="widget_integration_missing_parameter">Falta un paràmetre necessari.</string>
     <string name="widget_integration_invalid_parameter">Un paràmetre no és vàlid.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Premeu \"Enter\" per enviar el missatge</string>
-    <string name="settings_labs_enable_send_voice">Enviar un missatge de veu (cal que una aplicació de tercers enregistri missatges de veu)</string>
+    <string name="settings_labs_enable_send_voice">Envia missatges de veu</string>
 
     <string name="command_description_emote">Mostra l\'acció</string>
     <string name="command_description_ban_user">Veta l\'usuari amb l\'ID proporcionat</string>
@@ -1036,7 +1034,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="resource_limit_hard_contact">"Si us plau %s  per continuar usant aquest servei."</string>
 
     <string name="settings_lazy_loading_title">Torna a carregar els membres de la sala</string>
-    <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista</string>
+    <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
 
     <string name="unknown_error">Ho sentim, s\'ha produït un error</string>
@@ -1058,7 +1056,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     </plurals>
     <string name="reason_hint">Motiu</string>
 
-    <string name="settings_inline_url_preview_summary">Mostra al vista prèvia dels enllaços dins del xat en cas que el vostre homeserver suporti aquesta funcionalitat.</string>
+    <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre homeserver suporti aquesta funcionalitat.</string>
     <string name="settings_send_typing_notifs">Envia notificacions d\'escriptura</string>
     <string name="settings_send_typing_notifs_summary">Feu saber a altres usuaris que esteu escrivint.</string>
     <string name="settings_send_markdown">Format en Markdown</string>
@@ -1134,4 +1132,235 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
 Podeu trobar el registre de canvis complet aquí: %1$s.
 Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
     <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
-</resources>
+<string name="title_activity_keys_backup_setup">Recuperació de missatges</string>
+    <string name="title_activity_keys_backup_restore">Missatges segurs</string>
+    <string name="title_activity_keys_backup_manage">Recuperació de missatges segurs</string>
+
+    <string name="title_activity_sign_out">S\'està sortint de la sessió</string>
+    <string name="sign_out_activity_warning">Per seguretat, sortir de la sessió suprimirà qualsevol clau de xifratge extrem a extrem, fent que tot historial de converses existent deixe de ser llegible quan torneu a entrar.</string>
+    <string name="sign_out_activity_backup_title">Recuperació del missatge segur</string>
+    <string name="sign_out_activity_backup_status_backuping">La còpia de seguretat de les claus no ha acabat, espereu…</string>
+    <string name="sign_out_activity_backup_status_up_to_date">La recuperació dels vostres missatges està configurada i s\'ha fet una còpia de seguretat de les vostres claus al vostre servidor personal.</string>
+    <string name="sign_out_activity_backup_status_no_backup">La recuperació dels missatges no està configurada. Ho podeu fer ara.</string>
+    <string name="sign_out_activity_backup_manage_backup">Gestiona la recuperació de missatges</string>
+    <string name="sign_out_activity_export_to_file_title">Exporta les claus de xifratge</string>
+    <string name="sign_out_activity_export_to_file">També podeu exportar les vostres claus e2e a un fitxer i gestionar l\'emmagatzemament d\'aquest fitxer pel vostre compte.</string>
+    <string name="sign_out_activity_sign_out_warning">Perdreu els vostres missatges segurs si sortiu ara de la sessió.</string>
+    <string name="sign_out_activity_sign_out_ok">Podeu sortir amb seguretat.</string>
+    <string name="sign_out_activity_export_to_file_action">Exporta a un fitxer</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_content">És possible que pugueu llegir l\'historial del xat xifrat quan torneu a entrar al compte.</string>
+    <string name="sign_out_activity_sign_out_anyway_dialog_action">Surt de la sessió igualment</string>
+
+    <string name="skip">Omet</string>
+    <string name="done">Fet</string>
+
+    <string name="settings_notification_advanced">Paràmetres avançats de notificacions</string>
+    <string name="settings_notification_advanced_summary">Estableix la importància de les notificacions per tipus d\'esdeveniment, configura el so, led i vibració</string>
+    <string name="settings_notification_by_event">Importància de les notificacions per esdeveniment</string>
+
+    <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnòstic de la resolució de problemes</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envieu un informe d\'error per ajudar-nos a investigar-ho.</string>
+
+    <string name="settings_troubleshoot_test_device_settings_failed">Les notificacions no són permeses per a aquest dispositiu.
+Comproveu els paràmetres del Riot.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Paràmetres personalitzats.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Teniu en compte que alguns tipus de missatge estan configurats per a ser silenciosos (això produirà una notificació sense so).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algunes notificacions estan inhabilitades als vostres paràmetres personalitzats.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">No s\'ha pogut carregar les regles personalitzades, torneu-ho a provar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Comproveu els paràmetres</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Comprovació dels serveis de Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">L\'APK dels serveis de Google Play és disponible i al dia.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">El Riot empra els serveis de Google Play per a lliurar les notificacions, però no sembla que estiguen configurats correctament.
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Testimoni del Firebase</string>
+    <string name="settings_troubleshoot_test_fcm_success">S\'ha recuperat el testimoni FCM correctament.
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">No s\'ha pogut recuperar el testimonu FCM:
+%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Aquest error és fora del control del Riot i segons Google aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions, i no hauria d\'afectar un usuari normal.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registre del testimoni</string>
+    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor personal.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor personal.
+%1$s</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Reinici automàtic del servei de notificacions</string>
+    <string name="settings_troubleshoot_test_service_restart_success">El servei s\'ha parat i tornat a iniciar automàticament.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">No s\'ha pogut iniciar el servei</string>
+
+    <string name="settings_troubleshoot_test_service_boot_success">El servei s\'iniciarà quan s\'iniciï el dispositiu.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu s\'iniciï, per la qual cosa no rebreu notificacions fins que el Riot s\'haja obert una vegada.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Habilita l\'inici durant l\'arrencada</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Comprova les restriccions del rerefons</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'optimització</string>
+
+    <string name="settings_noisy_notifications_preferences">Configura les notificacions sorolloses</string>
+    <string name="settings_call_notifications_preferences">Configura les notificacions de les trucades</string>
+    <string name="settings_silent_notifications_preferences">Configura les notificacions silencioses</string>
+    <string name="settings_system_preferences_summary">Seleccioneu el color de LED, la vibració, so…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Gestió de claus criptogràfiques</string>
+    <string name="settings_show_read_receipts">Mostra les confirmacions de lectura</string>
+    <string name="settings_show_read_receipts_summary">Feu clic en les confirmacions de lectura per obtenir una llista detallada.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Concedeix el permís</string>
+
+    <string name="account_email_error">S\'ha produït un error en verificar la vostra adreça de correu electrònic.</string>
+
+    <string name="account_phone_number_error">S\'ha produït un error en verificar el vostre número de telèfon.</string>
+    <string name="encryption_settings_manage_message_recovery">Recuperació de missatges</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Gestiona les còpies de seguretat de les claus</string>
+
+    <string name="settings_labs_native_camera_summary">Inicia la càmera del sistema en lloc de la pantalla personalitzada de la càmera.</string>
+    <string name="settings_labs_enable_send_voice_summary">Aquesta opció requereix una aplicació de tercers per enregistrar els missatges.</string>
+
+    <string name="command_problem_with_parameters">L\'ordre «%s» necessita més paràmetres, o alguns paràmetres no són correctes.</string>
+    <string name="notification_silent">Silenciós</string>
+    <string name="passphrase_empty_error_message">Introduïu una frase de pas</string>
+    <string name="passphrase_passphrase_too_weak">La frase de pas és massa feble</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase de pas si voleu ometre aquest pas.</string>
+    <string name="keys_backup_no_session_error">No hi ha cap sessió de Matrix disponible</string>
+
+    <string name="keys_backup_setup_step1_title">No perdeu mai els missatges xifrats</string>
+    <string name="keys_backup_setup_step1_description">Configureu la recuperació de missatges segura en cas que perdeu o tanqueu la sessió en aquest dispositiu.</string>
+    <string name="keys_backup_setup_step1_button_title">Configura</string>
+    <string name="keys_backup_setup_step2_text">Protegiu el vostre historial de missatges xifrat amb una frase de pas de recuperació.
+
+La necessitareu si sortiu de la sessió, o perdeu l\'accés a aquest dispositiu.</string>
+    <string name="keys_backup_setup_step2_button_title">Estableix la frase de pas de recuperació</string>
+    <string name="keys_backup_setup_step3_text">Feu una còpia d\'aquesta clau de recuperació i conserveu-la en un lloc segur.
+
+Com a mesura de precaució, podeu emprar-la per restaurar el vostre historial de missatges xifrat si oblideu la vostra contrasenya de recuperació.</string>
+    <string name="keys_backup_setup_step3_button_title">Crea una còpia de seguretat</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Fes una còpia</string>
+    <string name="keys_backup_setup_step3_save_button_title">Desa dins d\'un fitxer</string>
+    <string name="recovery_key_export_saved_as_warning">S\'ha desat la clau de recuperació a «%s».
+
+Avís: és possible que calgui suprimir el fitxer si es desinstal·la l\'aplicació.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Feu una còpia</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Comparteix la clau de recuperació amb…</string>
+    <string name="recovery_key">Clau de recuperació</string>
+    <string name="unexpected_error">Error inesperat</string>
+    <string name="keys_backup_setup_backup_started_title">S\'ha iniciat la còpia de seguretat</string>
+    <string name="keys_backup_setup_skip_title">N\'esteu segur?</string>
+    <string name="keys_backup_setup_skip_msg">És possible que perdeu missatges segurs si sortiu de la sessió o perdeu el dispositiu.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">S\'està recuperant la versió de la còpia de seguretat…</string>
+    <string name="keys_backup_restore_with_passphrase">Empreu la vostra frase de pas de recuperació per desblocar el vostre historial de missatges segur</string>
+    <string name="keys_backup_restore_use_recovery_key">empreu la clau de recuperació</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Si no coneixeu la vostra contrasenya de recuperació, podeu %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Empreu la vostra clau de recuperació per desblocar el vostre historial de missatges segur</string>
+    <string name="keys_backup_restore_key_enter_hint">Introduïu la clau de recuperació</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Recuperació de missatges</string>
+
+    <string name="keys_backup_restore_with_key_helper">Heu perdut la vostra clau de recuperació? Podeu establir una nova a les preferències.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">"[%1$s]
+Aquest error és fora del control del Riot. Pot ocórrer per diferents raons. És possible que funcioni si ho torneu a provar més endavant. També podeu comprovar que el servei de Google Play no està restringit a l\'ús  de dades a les preferències del sistema, o que el rellotge del dispositiu marca l\'hora correcta. També pot passar amb ROM personalitzades."</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+Aquest error és fora del control del Riot. No hi ha cap compte de Google al telèfon. Obrir el gestor de comptes i afegiu un compte de Google.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Les restriccions de rerefons són inhabilitades per al Riot. Aquesta prova s\'hauria d\'executar emprant dades mòbils (sense wifi).
+%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions de rerefons són habilitades per al Riot.
+Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
+%1$s</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode Doze. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard. "</string>
+    <string name="store_full_description">El Riot.im és un entorn de col·laboració simple i elegant que reuneix totes les vostres conversacions i integracions d\'aplicacions en una sola aplicació.
+
+Construït al voltant de sales de conversa, el Riot.im us permet compartir missatges, imatges, vídeos i fitxers; interactuar amb les vostres eines i accedir a les vostres comunitats tot sota el mateix sostre. Una sola identitat i lloc per als vostres equips: no cal canviar de comptes, treballeu i xategeu amb gent de diferents organitzacions en sales públiques o privades: des de projectes professionals a excursions escolars, el Riot.im esdevindrà el centre de totes les vostres discussions!
+
+Ara amb xifratge punt a punt!
+
+Les funcionalitats que implementa inclouen:
+
+• Compartiu missatges, imatges, vídeos i fitxers de qualsevol classe instantàniament, en grups de qualsevol mida.
+• Trucades de veu i vídeo individuals i de conferència via WebRTC
+• Xifratge punt a punt emprant Olm (https://matrix.org/git/olm)
+• Veieu qui llegeix els vostres missatges amb els informes de lectura
+• Comuniqueu-vos amb usuaris arreu de l\'ecosistema Matrix.org — no només usuaris del Riot.im!
+• Descobriu i convideu usuaris per adreça de correu
+• Participeu en sales públiques obertes a convidats
+• Molt escalable — suporta centenars de sales i milers d\'usuaris
+• Historial de missatges totalment sincronitzat entre diferents dispositius i navegadors
+• Paràmetres de notificació molt personalitzable, sincronitzat entre dispositius
+• Historial de missatges amb cerca sense límit
+• Enllaços permanents als missatges
+• Cerca de missatges sencers
+• Suport per a llengües escrites de dreta a esquerra, com l\'àrab
+
+Per als desenvolupadors:
+• El Riot.im és un client de Matrix — està construït al voltant de l\'estàndard obert i ecosistema de Matrix.org, proveint interoperabilitat amb la resta d\'aplicacions, servidors i integracions compatibles amb Matrix
+• Totalment lliure, sota la llicència permissiva Apache — aconseguiu el codi des de https://github.com/vector-im/vector-android. Els «pull requests» són benvinguts!
+• Molt fàcil d\'estendre via l\'API Client-Server de Matrix (https://matrix.org/docs/spec)
+• Executeu el vostre servidor propi! Podeu emprar el servidor per defecte matrix.org o emprar el vostre servidor de Matrix propi. (per exemple https://matrix.org/docs/projects/server/synapse.html)
+
+Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
+
+
+    <string name="keys_backup_setup_step3_generating_key_status">S\'està generant la clau de recuperació emprant una frase de pas. Aquest procés pot trigar uns segons.</string>
+    <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor personal. La còpia inicial pot trigar alguns minuts.</string>
+
+
+    <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase de pas: verifiqueu que la frase de pas que heu introduït és la correcta (%s).</string>
+    <string name="network_error_please_check_and_retry">Error de xarxa: comproveu la vostra connectivitat i torneu-ho a provar (%s).</string>
+
+    <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat…</string>
+    <string name="keys_backup_unlock_button">Desbloca l\'historial</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Introduïu una clau de recuperació</string>
+    <string name="keys_backup_recovery_code_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta clau de recuperació: verifiqueu que heu introduït la clau correcta (%s).</string>
+
+    <string name="keys_backup_restore_success_title">S\'ha restaurat la còpia de seguretat %s!</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+	<item quantity="one">S\'ha restaurat una còpia amb %d clau.</item>
+	<item quantity="other">S\'ha restaurat una còpia amb %d claus.</item>
+</plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+	<item quantity="one">S\'ha afegit %d clau nova a aquest dispositiu.</item>
+	<item quantity="other">S\'ha afegit %d claus noves a aquest dispositiu.</item>
+</plurals>
+
+    <string name="keys_backup_get_version_error">No s\'ha pogut obtenir la versió de les claus de recuperació més recents (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">La criptografia de la sessió no és activa</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Restaura</string>
+    <string name="keys_backup_settings_delete_backup_button">Suprimeix</string>
+
+    <string name="keys_backup_settings_status_ok">S\'ha configurat la recuperació segura de missatges correctament per a aquest dispositiu.</string>
+    <string name="keys_backup_settings_status_ko">La recuperació segura de missatges no és activa en aquest dispositiu.</string>
+    <string name="keys_backup_settings_status_not_setup">La recuperació segura de missatges no s\'ha configurat.</string>
+
+
+    <string name="keys_backup_settings_setup_button">Configura la recuperació de missatges</string>
+    <string name="keys_backup_settings_deleting_backup">S\'està suprimint la còpia de seguretat…</string>
+    <string name="keys_backup_settings_delete_backup_error">No s\'ha pogut suprimir la còpia de seguretat (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Suprimeix la còpia de seguretat</string>
+    <string name="keys_backup_banner_setup">%s per a no perdre mai els missatges xifrats</string>
+    <string name="keys_backup_banner_setup_colored_part">Configureu la recuperació segura de missatges</string>
+
+    <string name="keys_backup_banner_recover">Desbloqueu el vostre historial de missatges segurs amb %s</string>
+    <string name="keys_backup_banner_recover_colored_part">la vostra clau o frase de pas de recuperació</string>
+
+<string name="keys_backup_restore_success_description">S\'ha restaurat %1$d claus de sessió, i afegit %2$d claus noves que no eren conegudes per aquest dispositiu</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">La còpia de seguretat té una signatura d\'un dispositiu desconegut amb ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">La còpia de seguretat té una signatura vàlida d\'aquest dispositiu.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">La còpia de seguretat té una signatura vàlida del dispositiu verificat %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">La còpia de seguretat té una signatura vàlida del dispositiu no verificat %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">La còpia de seguretat té una signatura no vàlida del dispositiu verificat %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La còpia de seguretat té una signatura no vàlida del dispositiu no verificat %s</string>
+    <string name="keys_backup_get_trust_error">No s\'ha pogut obtenir la informació de confiança per a la còpia de seguretat (%s).</string>
+
+    <string name="keys_backup_settings_unverifiable_device">Per a emprar la recuperació segura de missatges en aquest dispositiu, proveïu ara la vostra frase de pas o clau de recuperació.</string>
+    <string name="keys_backup_settings_verify_device_now">Per a emprar la recuperació segura de missatges en aquest dispositiu, verifiqueu ara el dispositiu [%s].</string>
+    <string name="keys_backup_settings_delete_confirm_message">Voleu suprimir la còpia de les vostres claus de xifratge del servidor? Ja no podreu emprar la vostra clau de recuperació per llegir el vostre historial de missatges xifrats.</string>
+
+    </resources>
