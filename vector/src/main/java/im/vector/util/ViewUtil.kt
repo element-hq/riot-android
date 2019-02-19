@@ -19,12 +19,15 @@ package im.vector.util
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.AttrRes
+import android.support.annotation.StringRes
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
+import com.binaryfork.spanny.Spanny
 import im.vector.ui.themes.ThemeUtils
 
 /**
@@ -106,4 +109,19 @@ fun TextView.tintDrawableCompat(@AttrRes colorAttribute: Int) {
     val drawableBottom = drs[3]?.let { ThemeUtils.tintDrawable(context, it, colorAttribute) }
 
     setCompoundDrawablesWithIntrinsicBounds(drawableLeft__, drawableTop___, drawableRight_, drawableBottom)
+}
+
+/**
+ * Set text with a colored part
+ */
+fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
+                                    @StringRes colorTextRes: Int,
+                                    @AttrRes colorAttribute: Int) {
+    val coloredPart = resources.getString(colorTextRes)
+    val fullText = resources.getString(fullTextRes, coloredPart)
+
+    val accentColor = ThemeUtils.getColor(context, colorAttribute)
+
+    // Color colored part
+    text = Spanny(fullText).apply { findAndSpan(coloredPart) { ForegroundColorSpan(accentColor) } }
 }

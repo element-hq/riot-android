@@ -65,6 +65,16 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
                 ?: 0
     }
 
+    /**
+     * Safe way to tell if there are more keys on the server
+     */
+    fun canRestoreKeys(): Boolean {
+        return mxSession
+                ?.crypto
+                ?.keysBackup
+                ?.canRestoreKeys() == true
+    }
+
     override fun onCleared() {
         super.onCleared()
 
