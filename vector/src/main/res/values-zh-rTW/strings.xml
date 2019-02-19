@@ -1158,7 +1158,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
 完整的變更紀錄可以在此找到：%1$s。
 為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
-<string name="title_activity_keys_backup_setup">訊息復原</string>
+    <string name="title_activity_keys_backup_setup">訊息復原</string>
     <string name="title_activity_keys_backup_restore">安全訊息</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
 
@@ -1243,11 +1243,11 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_restore_success_title">備份已復原 %s！</string>
     <string name="keys_backup_restore_success_description">已復原 %1$d 工作階段金鑰，並已加入未被此裝置知道的 %2$d 新的金鑰</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="other">使用 %d 金鑰復原備份。</item>
-</plurals>
+        <item quantity="other">使用 %d 金鑰復原備份。</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="other">%d 新的金鑰已加入到此裝置。</item>
-</plurals>
+        <item quantity="other">%d 新的金鑰已加入到此裝置。</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">取得最新的復原金鑰版本 (%s0。</string>
     <string name="keys_backup_no_keysbackup_sdk_error">工作階段加密未啟用</string>

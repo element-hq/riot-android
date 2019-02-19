@@ -34,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_margin="@dimen/layout_horizontal_margin"
             android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical"
-            android:layout_margin="@dimen/layout_horizontal_margin"
             android:padding="@dimen/layout_horizontal_margin">
 
             <LinearLayout

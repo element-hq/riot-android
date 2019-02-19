@@ -1185,7 +1185,7 @@
     <string name="store_whats_new">Постоянно правим промени и подобрения по Riot.im.
 Пълният списък с промени може да бъде намерен тук: %1$s.
 За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
-<string name="title_activity_keys_backup_setup">Възстановяване на Съобщения</string>
+    <string name="title_activity_keys_backup_setup">Възстановяване на Съобщения</string>
     <string name="title_activity_keys_backup_restore">Защитени Съобщения</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервното копие на ключовете не е завършило. Моля почакайте…</string>
 
@@ -1270,13 +1270,13 @@
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
     <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Възстановено резервно копие с %d ключ.</item>
-	<item quantity="other">Възстановено резервно копие с %d ключа.</item>
-</plurals>
+        <item quantity="one">Възстановено резервно копие с %d ключ.</item>
+        <item quantity="other">Възстановено резервно копие с %d ключа.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d нов ключ бе добавен към това устройство.</item>
-	<item quantity="other">%d нови ключа бяха добавени към това устройство.</item>
-</plurals>
+        <item quantity="one">%d нов ключ бе добавен към това устройство.</item>
+        <item quantity="other">%d нови ключа бяха добавени към това устройство.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Неуспешно установяване на версията на най-новите ключове за възстановяване (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Сесията за шифроване не е активирана</string>

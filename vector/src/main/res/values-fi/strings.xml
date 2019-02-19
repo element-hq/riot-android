@@ -837,7 +837,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
     <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
-<string name="settings_send_markdown">Markdown-muotoilu</string>
+    <string name="settings_send_markdown">Markdown-muotoilu</string>
     <string name="markdown_has_been_enabled">Markdown on käytössä.</string>
     <string name="markdown_has_been_disabled">Markdown on pois käytöstä.</string>
 
@@ -866,4 +866,4 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="deactivate_account_title">Deaktivoi tili</string>
     <string name="deactivate_account_submit">Deaktivoi tili</string>
 
-    </resources>
+</resources>

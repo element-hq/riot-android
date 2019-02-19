@@ -18,8 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:tint="?android:attr/textColorTertiary"
-            android:src="@drawable/backup_keys" />
+            android:src="@drawable/backup_keys"
+            android:tint="?android:attr/textColorTertiary" />
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_success_title"
