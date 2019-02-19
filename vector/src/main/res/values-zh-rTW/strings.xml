@@ -1160,22 +1160,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
 <string name="title_activity_keys_backup_setup">訊息復原</string>
     <string name="title_activity_keys_backup_restore">安全訊息</string>
-    <string name="title_activity_keys_backup_manage">安全訊息復原</string>
-
-    <string name="title_activity_sign_out">登出</string>
-    <string name="sign_out_activity_warning">安全起見，登出將會刪除任何端到端加密金鑰，如果您重新登入的話，這也會讓先前已加密的聊天歷史紀錄無法讀取。</string>
-    <string name="sign_out_activity_backup_title">安全訊息復原</string>
-    <string name="sign_out_activity_backup_status_backuping">金鑰備份尚未完成，請稍候……</string>
-    <string name="sign_out_activity_backup_status_up_to_date">您的訊息復原已經設定好了，所有的金鑰都會被備份到您的家伺服器上。</string>
-    <string name="sign_out_activity_backup_status_no_backup">訊息復原尚未設定完成。您可以立刻設定。</string>
-    <string name="sign_out_activity_backup_manage_backup">管理訊息復原</string>
-    <string name="sign_out_activity_export_to_file_title">匯出加密金鑰</string>
-    <string name="sign_out_activity_export_to_file">您也可以選擇匯出您的端到端金鑰到檔案，並自行管理儲存檔案。</string>
-    <string name="sign_out_activity_sign_out_warning">如果您現在登出的話，您將會遺失您的安全訊息。</string>
-    <string name="sign_out_activity_sign_out_ok">您可以安全登出。</string>
-    <string name="sign_out_activity_export_to_file_action">匯出到檔案</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">若您重新登入，您可能無法讀取已加密的聊天歷史紀錄。</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">無論如何都要登出</string>
+    <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
 
     <string name="skip">略過</string>
     <string name="done">完成</string>
@@ -1205,7 +1190,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 
     <string name="settings_cryptography_manage_keys">加密金鑰管理</string>
-    <string name="encryption_settings_manage_message_recovery">訊息復原</string>
     <string name="encryption_settings_manage_message_recovery_summary">管理金鑰備份</string>
 
     <string name="notification_silent">安靜</string>
@@ -1217,14 +1201,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_setup_step1_title">永不遺失已加密的訊息</string>
     <string name="keys_backup_setup_step1_description">如果您遺失或登出此裝置，請設定安全訊息復原。</string>
-    <string name="keys_backup_setup_step1_button_title">設定</string>
-    <string name="keys_backup_setup_step2_text">使用復原通關密語確保您的加密訊息歷史。
-
-如果您登出或是遺失對此裝致的存取權的話就會需要它。</string>
     <string name="keys_backup_setup_step2_button_title">設定復原通關密語</string>
-    <string name="keys_backup_setup_step3_text">複製此復原金鑰並保證其安全。
-
-作為安全網，如果您忘記您的復原通關密語的話，您還可以使用它來復原加密的訊息歷史。</string>
     <string name="keys_backup_setup_step3_button_title">建立備份</string>
     <string name="keys_backup_setup_step3_copy_button_title">複製</string>
     <string name="keys_backup_setup_step3_save_button_title">儲存為檔案</string>
@@ -1292,7 +1269,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">備份有從未驗證的 %s 裝置而來的無效簽章</string>
     <string name="keys_backup_get_trust_error">取得備份的信任資訊失敗 (%s)。</string>
 
-    <string name="keys_backup_settings_setup_button">設定訊息復原</string>
     <string name="keys_backup_settings_unverifiable_device">要在此裝置上使用安全訊息復原，請提供您的通關密語或復原金鑰。</string>
     <string name="keys_backup_settings_verify_device_now">要在此裝置上使用安全訊息復原，請驗證裝置 [%s]。</string>
     <string name="keys_backup_settings_deleting_backup">請刪除備份……</string>
@@ -1300,11 +1276,5 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="keys_backup_settings_delete_confirm_title">刪除備份</string>
     <string name="keys_backup_settings_delete_confirm_message">要從伺服器刪除您已備份的加密金鑰？您將無法使用您的復原金鑰來讀取已加密的訊息歷史。</string>
-
-    <string name="keys_backup_banner_setup">%s 以永不遺失已加密的訊息</string>
-    <string name="keys_backup_banner_setup_colored_part">設定安全訊息復原</string>
-
-    <string name="keys_backup_banner_recover">使用 %s 解鎖您的安全訊息歷史</string>
-    <string name="keys_backup_banner_recover_colored_part">您的復原金鑰或通關密語</string>
 
 </resources>

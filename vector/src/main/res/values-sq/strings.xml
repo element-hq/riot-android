@@ -1161,22 +1161,7 @@ Regjistri i plotë i ndryshimeve mund të gjendet këtu: %1$s.
 Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekanizmin e përditësimeve.</string>
 <string name="title_activity_keys_backup_setup">Rikthim Mesazhesh</string>
     <string name="title_activity_keys_backup_restore">Mesazhe të Sigurt</string>
-    <string name="title_activity_keys_backup_manage">Rikthim Mesazhesh të Sigurt</string>
-
-    <string name="title_activity_sign_out">Po dilet</string>
-    <string name="sign_out_activity_warning">Për arsye sigurie, dalja nga llogaria do të sjellë fshirjen e çfarëdo kyçesh fshehtëzimi skaj-më-skaj, duke e bërë të palexueshëm historikun e dikurshëm të fjalosjes së fshehtëzuar, nëse rihyni.</string>
-    <string name="sign_out_activity_backup_title">Rikthim Mesazhesh të Sigurt</string>
-    <string name="sign_out_activity_backup_status_backuping">Kopjeruajtja e kyçeve s’ka përfunduar, ju lutemi, pritni…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">Rikthimi i mesazheve tuaj është formësuar dhe krejt kyçet janë kopjeruajtur në shërbyesin tuaj Home.</string>
-    <string name="sign_out_activity_backup_status_no_backup">Rikthimi i mesazheve s’është ujdisur. Mund ta ujdisni tani.</string>
-    <string name="sign_out_activity_backup_manage_backup">Administroni rikthim mesazhesh</string>
-    <string name="sign_out_activity_export_to_file_title">Eksportoni kyçe fshehtëzimi</string>
-    <string name="sign_out_activity_export_to_file">Mund të zgjidhni edhe eksportimin e kyçeve e2e te një kartelë dhe të bëni ruajtjen e kësaj kartele ju vetë.</string>
-    <string name="sign_out_activity_sign_out_warning">Nëse dilni tani nga llogaria, do të humbni mesazhet tuaj të sigurt.</string>
-    <string name="sign_out_activity_sign_out_ok">Mund të dilni pa rrezik.</string>
-    <string name="sign_out_activity_export_to_file_action">Eksportoji në kartelë</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">Mund të mos jeni në gjendje të lexoni historikun e fjalosjeve të fshehtëzuara, nëse ribëni hyrjen.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Bëje daljen sido qoftë</string>
+    <string name="keys_backup_is_not_finished_please_wait">Kopjeruajtja e kyçeve s’ka përfunduar, ju lutemi, pritni…</string>
 
     <string name="skip">Anashkaloje</string>
     <string name="done">U bë</string>
@@ -1206,7 +1191,6 @@ Ky gabim është jashtë kontrollit të Riot-it. S’ka llogari Google te telefo
 
 
     <string name="settings_cryptography_manage_keys">Administrim Kyçesh Kriptografie</string>
-    <string name="encryption_settings_manage_message_recovery">Rikthim Mesazhesh</string>
     <string name="encryption_settings_manage_message_recovery_summary">Administroni Kopjeruajtje Kyçesh</string>
 
     <string name="notification_silent">I heshtur</string>
@@ -1218,14 +1202,7 @@ Ky gabim është jashtë kontrollit të Riot-it. S’ka llogari Google te telefo
 
     <string name="keys_backup_setup_step1_title">Mos humbni kurrë mesazhe të fshehtëzuar</string>
     <string name="keys_backup_setup_step1_description">Ujdisni Rikthim të Mesazheve të Sigurt, për raste kur humbni ose bëni daljen nga kjo pajisje.</string>
-    <string name="keys_backup_setup_step1_button_title">Rregulloje</string>
-    <string name="keys_backup_setup_step2_text">Sigurojeni historikun tuaj të mesazheve të fshehtëzuar me një Frazëkalim Rikthimesh.
-
-Do t’ju duhet, nëse dilni nga llogaria, ose nëse nuk hyni dot në pajisje.</string>
     <string name="keys_backup_setup_step2_button_title">Caktoni Frazëkalim Rikthimesh</string>
-    <string name="keys_backup_setup_step3_text">Bëni një kopje të këtij Kyçi Rikthimesh dhe ruajeni diku pa rrezik.
-
-Si rrjet sigurie, mund ta përdorni për të rikthyer historikun e mesazheve tuaj të fshehtëzuar, nëse harroni Frazëkalimin e Rikthimeve.</string>
     <string name="keys_backup_setup_step3_button_title">Krijo Kopjeruajtje</string>
     <string name="keys_backup_setup_step3_copy_button_title">Bëni një Kopje</string>
     <string name="keys_backup_setup_step3_save_button_title">Ruaje si Skedë</string>
@@ -1295,7 +1272,6 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Kopjeruajtja ka një nënshkrim të pavlefshëm prej pajisjes së paverifikuar %s</string>
     <string name="keys_backup_get_trust_error">S’u arrit të merreshin të dhëna besimi për kopjeruajtjen (%s).</string>
 
-    <string name="keys_backup_settings_setup_button">Rregulloni Rikthim Mesazhesh</string>
     <string name="keys_backup_settings_unverifiable_device">Për të përdorur Rikthim Mesazhesh të Sigurt në këtë pajisje, jepni tani një frazëkalim ose një kyç rikthimesh.</string>
     <string name="keys_backup_settings_verify_device_now">Për të përdorur Rikthim Mesazhesh të Sigurt në këtë pajisje, verifikoni tani Pajisjen [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Po fshihet kopjeruajtje…</string>
@@ -1303,11 +1279,5 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Fshije Kopjeruajtjen</string>
     <string name="keys_backup_settings_delete_confirm_message">Të fshihen nga shërbyesi kyçet tuaj të kopjeruajtur të fshehtëzimit? S’do të jeni më në gjendje të përdorni kyçin tuaj të rikthimeve për lexim historiku mesazhesh të fshehtëzuar.</string>
-
-    <string name="keys_backup_banner_setup">%s që të mos humbni kurrë mesazhe të fshehtëzuar</string>
-    <string name="keys_backup_banner_setup_colored_part">Rregulloni Rikthim Mesazhesh të Sigurta</string>
-
-    <string name="keys_backup_banner_recover">Shkyçeni historikun e mesazheve tuaj të fshehtëzuar me %s</string>
-    <string name="keys_backup_banner_recover_colored_part">përdorni kyçin ose frazëkalimin tuaj të rikthimeve</string>
 
 </resources>

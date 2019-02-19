@@ -32,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
+import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.Matrix
@@ -139,7 +140,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                 KeysBackupStateManager.KeysBackupState.BackingUp,
                                 KeysBackupStateManager.KeysBackupState.WillBackUp -> {
                                     //keys are already backing up please wait
-                                    Toast.makeText(context,R.string.sign_out_activity_backup_status_backuping,Toast.LENGTH_LONG)
+                                    context?.toast(R.string.keys_backup_is_not_finished_please_wait)
                                 }
                                 else -> {
                                     //nop

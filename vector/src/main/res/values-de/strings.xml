@@ -1248,22 +1248,7 @@ Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
 <string name="title_activity_keys_backup_setup">Nachrichten-Wiederherstellung</string>
     <string name="title_activity_keys_backup_restore">Sichere Nachrichten</string>
-    <string name="title_activity_keys_backup_manage">Sichere Nachrichtenwiederherstellung</string>
-
-    <string name="title_activity_sign_out">Abmelden</string>
-    <string name="sign_out_activity_warning">Aus Sicherheitsgründen wird das Abmelden alle Schlüssel der Ende-zu-Ende-Verschlüsselung löschen und die Verschlüsselte Chathistorie unlesbar machen, wenn du dich erneut anmeldest.</string>
-    <string name="sign_out_activity_backup_title">Sichere Nachrichten-Wiederherstellung</string>
-    <string name="sign_out_activity_backup_status_backuping">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">Deine Nachrichtenwiederherstellung ist eingerichtet und alle Schlüssel wurden auf deinem Heimserver gesichert.</string>
-    <string name="sign_out_activity_backup_status_no_backup">Nachrichtensicherung wurde noch nicht eingerichtet. Du kannst diese jetzt einrichten.</string>
-    <string name="sign_out_activity_backup_manage_backup">Verwalte Nachrichtenwiederherstellung</string>
-    <string name="sign_out_activity_export_to_file_title">Exportiere Verschlüsselungsschlüssel</string>
-    <string name="sign_out_activity_export_to_file">Du kannst auch auswählen, deine E2E-Schlüssel in eine Datei zu exportieren und dich um das Sichern der Datei selbst zu kümmern.</string>
-    <string name="sign_out_activity_sign_out_warning">Du wirst deine sicheren Nachrichten verlieren, wenn du dich jetzt abmeldest.</string>
-    <string name="sign_out_activity_sign_out_ok">Du kannst dich sicher abmelden.</string>
-    <string name="sign_out_activity_export_to_file_action">In eine Datei exportieren</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">Wenn du dich erneut anmeldest, könntest du nicht in der Lage sein, deine verschlüsselte Chathistorie zu lesen.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Trotzdem abmelden</string>
+    <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
 
     <string name="skip">Überspringen</string>
     <string name="done">Erledigt</string>
@@ -1283,7 +1268,6 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="settings_system_preferences_summary">Wähle LED-Farbe, Vibration, Ton…</string>
 
 
-    <string name="encryption_settings_manage_message_recovery">Nachrichtenwiederherstellung</string>
     <string name="notification_silent">Stumm</string>
     <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
     <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
@@ -1292,7 +1276,6 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
 
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
-    <string name="keys_backup_setup_step1_button_title">Einrichten</string>
     <string name="keys_backup_setup_step2_button_title">Setze Wiederherstellungspassphrase</string>
     <string name="keys_backup_setup_step3_button_title">Sicherung anlegen</string>
     <string name="keys_backup_setup_step3_copy_button_title">Mache eine Kopie</string>
@@ -1312,12 +1295,10 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="keys_backup_settings_restore_backup_button">Wiederherstellen</string>
     <string name="keys_backup_settings_delete_backup_button">Löschen</string>
 
-    <string name="keys_backup_settings_setup_button">Nachrichtenwiederherstellung einrichten</string>
     <string name="keys_backup_settings_deleting_backup">Lösche Sicherung…</string>
     <string name="keys_backup_settings_delete_backup_error">Konnte Sicherung nicht löschen (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
-    <string name="keys_backup_banner_setup_colored_part">Richte sichere Nachrichtenwiederherstellung ein</string>
 
     <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere den Ton, LED, Vibration</string>
     <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
@@ -1332,12 +1313,6 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="encryption_settings_manage_message_recovery_summary">Verwalte Schlüsselsicherung</string>
 
     <string name="keys_backup_setup_step1_description">Richte die Sichere Nachrichtenwiederherstellung für den Fall, dass du das Gerät verlierst oder dich abmeldest ein.</string>
-    <string name="keys_backup_setup_step2_text">Sichere deinen verschlüsselten Chatverlauf mit einer Wiederherstellungspassphrase.
-
-Du wirst es brauchen, wenn du dich abmeldest oder den Zugang zu diesem Gerät verlierst.</string>
-    <string name="keys_backup_setup_step3_text">Mache eine Kopie dieses Wiederherstellungsschlüssels und bewahre ihn sicher auf.
-
-Als ein Sicherheitsnetz kannst du ihn benutzen um deinen verschlüsselten Chatverlauf wiederherstellen falls du die Wiederherstellungspassphrase vergisst.</string>
     <string name="recovery_key_export_saved_as_warning">Dieser Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert.
 
 Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</string>
@@ -1392,9 +1367,5 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_settings_unverifiable_device">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
     <string name="keys_backup_settings_verify_device_now">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, verifizierte jetzt das Gerät %s.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
-
-    <string name="keys_backup_banner_setup">%s um verschlüsselte Nachrichten nicht mehr zu verlieren</string>
-    <string name="keys_backup_banner_recover">Entschlüsselte deinen sicheren Chatverlauf mit %s</string>
-    <string name="keys_backup_banner_recover_colored_part">deinem Wiederherstellungsschlüssel oder -passphrase</string>
 
 </resources>

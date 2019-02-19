@@ -1202,22 +1202,7 @@ Le journal des modifications peut être consulté ici : %1$s.
 Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
 <string name="title_activity_keys_backup_setup">Récupération de messages</string>
     <string name="title_activity_keys_backup_restore">Messages sécurisés</string>
-    <string name="title_activity_keys_backup_manage">Récupération de messages sécurisée</string>
-
-    <string name="title_activity_sign_out">Déconnexion</string>
-    <string name="sign_out_activity_warning">Par mesure de sécurité, la déconnexion supprimera toutes les clés de chiffrement, rendant l\'historique des discussions chiffrées illisible si vous vous reconnectez.</string>
-    <string name="sign_out_activity_backup_title">Récupération de messages sécurisée</string>
-    <string name="sign_out_activity_backup_status_backuping">La sauvegarde des clés n\'est pas terminée, veuillez patienter…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">Votre récupération de messages est configurée et toutes les clés ont été sauvegardées sur votre serveur d\'accueil.</string>
-    <string name="sign_out_activity_backup_status_no_backup">La récupération des messages n\'est pas configurée. Vous pouvez le faire maintenant.</string>
-    <string name="sign_out_activity_backup_manage_backup">Gérer la récupération des messages</string>
-    <string name="sign_out_activity_export_to_file_title">Exporter les clés de chiffrement</string>
-    <string name="sign_out_activity_export_to_file">Vous pouvez aussi choisir d\'exporter vos clés de chiffrement de bout en bout vers un fichier et de gérer la sauvegarde de ce fichier vous-même.</string>
-    <string name="sign_out_activity_sign_out_warning">Vous perdrez vos messages sécurisés si vous vous déconnectez maintenant.</string>
-    <string name="sign_out_activity_sign_out_ok">Vous pouvez vous déconnecter sans risque.</string>
-    <string name="sign_out_activity_export_to_file_action">Exporter vers un fichier</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">Vous ne pourrez peut-être pas lire l\'historique des discussions chiffrées si vous vous reconnectez.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Se déconnecter quand même</string>
+    <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n\'est pas terminée, veuillez patienter…</string>
 
     <string name="skip">Passer</string>
     <string name="done">Effectué</string>
@@ -1247,7 +1232,6 @@ Cette erreur est indépendante de Riot. Il n\'y pas de compte Google sur l\'appa
 
 
     <string name="settings_cryptography_manage_keys">Gestion des clés cryptographiques</string>
-    <string name="encryption_settings_manage_message_recovery">Récupération de messages</string>
     <string name="encryption_settings_manage_message_recovery_summary">Gérer la sauvegarde de clés</string>
 
     <string name="notification_silent">Silencieuse</string>
@@ -1259,14 +1243,7 @@ Cette erreur est indépendante de Riot. Il n\'y pas de compte Google sur l\'appa
 
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_setup_step1_description">Configurer la récupération de messages sécurisée au cas où vous perdriez cet appareil ou que vous vous déconnecteriez.</string>
-    <string name="keys_backup_setup_step1_button_title">Configurer</string>
-    <string name="keys_backup_setup_step2_text">Protégez votre historique de messages sécurisés avec une phrase de passe de récupération.
-
-Vous en aurez besoin si vous vous déconnectez ou si vous n\'avez plus accès à cet appareil.</string>
     <string name="keys_backup_setup_step2_button_title">Définir la phrase de passe de récupération</string>
-    <string name="keys_backup_setup_step3_text">Faites une copie de cette clé de récupération et conservez-la en lieu sûr.
-
-Par mesure de précaution, vous pourrez l\'utiliser pour restaurer votre historique de messages chiffrés si vous oubliez votre phrase de passe de récupération.</string>
     <string name="keys_backup_setup_step3_button_title">Créer la sauvegarde</string>
     <string name="keys_backup_setup_step3_copy_button_title">En faire une copie</string>
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
@@ -1336,7 +1313,6 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l\'appareil non vérifié %s</string>
     <string name="keys_backup_get_trust_error">Échec de la récupération des informations de confiance de la sauvegarde (%s).</string>
 
-    <string name="keys_backup_settings_setup_button">Configurer la récupération des messages</string>
     <string name="keys_backup_settings_unverifiable_device">Pour utiliser la récupération de messages sécurisée sur cet appareil, fournissez votre phrase de passe ou votre clé de récupération maintenant.</string>
     <string name="keys_backup_settings_verify_device_now">Pour utiliser la récupération de messages sécurisée sur cet appareil, vérifiez l\'appareil [%s] maintenant.</string>
     <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
@@ -1344,11 +1320,5 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
 
     <string name="keys_backup_settings_delete_confirm_title">Supprimer la sauvegarde</string>
     <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur ? Vous ne pourrez plus utiliser votre clé de récupération pour lire l\'historique des messages chiffrés.</string>
-
-    <string name="keys_backup_banner_setup">%s pour ne jamais perdre vos messages chiffrés</string>
-    <string name="keys_backup_banner_setup_colored_part">Configurer la récupération de messages sécurisée</string>
-
-    <string name="keys_backup_banner_recover">Déverrouiller l\'historique de vos messages sécurisés avec %s</string>
-    <string name="keys_backup_banner_recover_colored_part">votre clé ou votre phrase de passe de récupération</string>
 
 </resources>

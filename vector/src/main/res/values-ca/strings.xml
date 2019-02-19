@@ -1134,22 +1134,6 @@ Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacio
     <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
 <string name="title_activity_keys_backup_setup">Recuperació de missatges</string>
     <string name="title_activity_keys_backup_restore">Missatges segurs</string>
-    <string name="title_activity_keys_backup_manage">Recuperació de missatges segurs</string>
-
-    <string name="title_activity_sign_out">S\'està sortint de la sessió</string>
-    <string name="sign_out_activity_warning">Per seguretat, sortir de la sessió suprimirà qualsevol clau de xifratge extrem a extrem, fent que tot historial de converses existent deixe de ser llegible quan torneu a entrar.</string>
-    <string name="sign_out_activity_backup_title">Recuperació del missatge segur</string>
-    <string name="sign_out_activity_backup_status_backuping">La còpia de seguretat de les claus no ha acabat, espereu…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">La recuperació dels vostres missatges està configurada i s\'ha fet una còpia de seguretat de les vostres claus al vostre servidor personal.</string>
-    <string name="sign_out_activity_backup_status_no_backup">La recuperació dels missatges no està configurada. Ho podeu fer ara.</string>
-    <string name="sign_out_activity_backup_manage_backup">Gestiona la recuperació de missatges</string>
-    <string name="sign_out_activity_export_to_file_title">Exporta les claus de xifratge</string>
-    <string name="sign_out_activity_export_to_file">També podeu exportar les vostres claus e2e a un fitxer i gestionar l\'emmagatzemament d\'aquest fitxer pel vostre compte.</string>
-    <string name="sign_out_activity_sign_out_warning">Perdreu els vostres missatges segurs si sortiu ara de la sessió.</string>
-    <string name="sign_out_activity_sign_out_ok">Podeu sortir amb seguretat.</string>
-    <string name="sign_out_activity_export_to_file_action">Exporta a un fitxer</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">És possible que pugueu llegir l\'historial del xat xifrat quan torneu a entrar al compte.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Surt de la sessió igualment</string>
 
     <string name="skip">Omet</string>
     <string name="done">Fet</string>
@@ -1213,7 +1197,6 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
     <string name="account_email_error">S\'ha produït un error en verificar la vostra adreça de correu electrònic.</string>
 
     <string name="account_phone_number_error">S\'ha produït un error en verificar el vostre número de telèfon.</string>
-    <string name="encryption_settings_manage_message_recovery">Recuperació de missatges</string>
     <string name="encryption_settings_manage_message_recovery_summary">Gestiona les còpies de seguretat de les claus</string>
 
     <string name="settings_labs_native_camera_summary">Inicia la càmera del sistema en lloc de la pantalla personalitzada de la càmera.</string>
@@ -1229,14 +1212,7 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
 
     <string name="keys_backup_setup_step1_title">No perdeu mai els missatges xifrats</string>
     <string name="keys_backup_setup_step1_description">Configureu la recuperació de missatges segura en cas que perdeu o tanqueu la sessió en aquest dispositiu.</string>
-    <string name="keys_backup_setup_step1_button_title">Configura</string>
-    <string name="keys_backup_setup_step2_text">Protegiu el vostre historial de missatges xifrat amb una frase de pas de recuperació.
-
-La necessitareu si sortiu de la sessió, o perdeu l\'accés a aquest dispositiu.</string>
     <string name="keys_backup_setup_step2_button_title">Estableix la frase de pas de recuperació</string>
-    <string name="keys_backup_setup_step3_text">Feu una còpia d\'aquesta clau de recuperació i conserveu-la en un lloc segur.
-
-Com a mesura de precaució, podeu emprar-la per restaurar el vostre historial de missatges xifrat si oblideu la vostra contrasenya de recuperació.</string>
     <string name="keys_backup_setup_step3_button_title">Crea una còpia de seguretat</string>
     <string name="keys_backup_setup_step3_copy_button_title">Fes una còpia</string>
     <string name="keys_backup_setup_step3_save_button_title">Desa dins d\'un fitxer</string>
@@ -1339,16 +1315,10 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_settings_status_not_setup">La recuperació segura de missatges no s\'ha configurat.</string>
 
 
-    <string name="keys_backup_settings_setup_button">Configura la recuperació de missatges</string>
     <string name="keys_backup_settings_deleting_backup">S\'està suprimint la còpia de seguretat…</string>
     <string name="keys_backup_settings_delete_backup_error">No s\'ha pogut suprimir la còpia de seguretat (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Suprimeix la còpia de seguretat</string>
-    <string name="keys_backup_banner_setup">%s per a no perdre mai els missatges xifrats</string>
-    <string name="keys_backup_banner_setup_colored_part">Configureu la recuperació segura de missatges</string>
-
-    <string name="keys_backup_banner_recover">Desbloqueu el vostre historial de missatges segurs amb %s</string>
-    <string name="keys_backup_banner_recover_colored_part">la vostra clau o frase de pas de recuperació</string>
 
 <string name="keys_backup_restore_success_description">S\'ha restaurat %1$d claus de sessió, i afegit %2$d claus noves que no eren conegudes per aquest dispositiu</string>
     <string name="keys_backup_settings_signature_from_unknown_device">La còpia de seguretat té una signatura d\'un dispositiu desconegut amb ID %s.</string>

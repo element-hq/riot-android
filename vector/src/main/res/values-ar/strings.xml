@@ -1084,7 +1084,6 @@
 ظهور الرسائل في «ماترِكس» شبيه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">طُلب مفتاح البصمة Ed25519</string>
 <string name="title_activity_keys_backup_restore">الرسائل الآمنة</string>
-    <string name="sign_out_activity_export_to_file_action">التصدير نحو ملف</string>
     <string name="skip">تخطي</string>
     <string name="done">تم</string>
 

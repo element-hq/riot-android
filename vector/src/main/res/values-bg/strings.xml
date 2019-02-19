@@ -1187,22 +1187,7 @@
 За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
 <string name="title_activity_keys_backup_setup">Възстановяване на Съобщения</string>
     <string name="title_activity_keys_backup_restore">Защитени Съобщения</string>
-    <string name="title_activity_keys_backup_manage">Възстановяване на Защитени Съобщения</string>
-
-    <string name="title_activity_sign_out">Изход</string>
-    <string name="sign_out_activity_warning">От съображения за сигурност, излизането от профила ще изтрие всички ключове за шифроване от край-до-край, правейки предишната история на чата нечетима.</string>
-    <string name="sign_out_activity_backup_title">Възстановяване на Защитени Съобщения</string>
-    <string name="sign_out_activity_backup_status_backuping">Резервното копие на ключовете не е завършило. Моля почакайте…</string>
-    <string name="sign_out_activity_backup_status_up_to_date">Възстановяването на съобщения е настроено и беше направено резервно копие на всички ключове върху сървъра.</string>
-    <string name="sign_out_activity_backup_status_no_backup">Функцията възстановяване на съобщения не настроена. Може да я настройте сега.</string>
-    <string name="sign_out_activity_backup_manage_backup">Настрой възстановяването на съобщения</string>
-    <string name="sign_out_activity_export_to_file_title">Експортирай ключовете за шифроване</string>
-    <string name="sign_out_activity_export_to_file">Също така, може да експортирате ключовете за шифроване във файл и сами да се погрижите за съхранението му.</string>
-    <string name="sign_out_activity_sign_out_warning">Ако излезете, ще загубите достъпа до защитените съобщения.</string>
-    <string name="sign_out_activity_sign_out_ok">Може да излезете безопасно.</string>
-    <string name="sign_out_activity_export_to_file_action">Експортирай във файл</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_content">Ще може да прочетете шифрованата история на чата, ако влезете пак в профила.</string>
-    <string name="sign_out_activity_sign_out_anyway_dialog_action">Излез въпреки това</string>
+    <string name="keys_backup_is_not_finished_please_wait">Резервното копие на ключовете не е завършило. Моля почакайте…</string>
 
     <string name="skip">Пропусни</string>
     <string name="done">Готово</string>
@@ -1232,7 +1217,6 @@
 
 
     <string name="settings_cryptography_manage_keys">Управление на ключовете за шифроване</string>
-    <string name="encryption_settings_manage_message_recovery">Възстановяване на Съобщения</string>
     <string name="encryption_settings_manage_message_recovery_summary">Управление на резервните копия на ключовете</string>
 
     <string name="notification_silent">Безшумно</string>
@@ -1244,14 +1228,7 @@
 
     <string name="keys_backup_setup_step1_title">Никога не губете шифровани съобщения</string>
     <string name="keys_backup_setup_step1_description">Настройте Възстановяване на Защитени Съобщения, в случай че излезете от профила или загубите това устройство.</string>
-    <string name="keys_backup_setup_step1_button_title">Настройка</string>
-    <string name="keys_backup_setup_step2_text">Защитете историята на шифрованите съобщения с парола за възстановяване.
-
-Ще ви е нужна, ако излезете от профила или загубите достъпа до това устройство.</string>
     <string name="keys_backup_setup_step2_button_title">Настройка на парола за възстановяване</string>
-    <string name="keys_backup_setup_step3_text">Направете копие на ключа за възстановяване и го пазете на безопасно място.
-
-Може да го използвате за да възстановите историята на шифрованите съобщения или ако забравите паролата за възстановяване.</string>
     <string name="keys_backup_setup_step3_button_title">Създай резервно копие</string>
     <string name="keys_backup_setup_step3_copy_button_title">Направи копие</string>
     <string name="keys_backup_setup_step3_save_button_title">Запази като файл</string>
@@ -1321,7 +1298,6 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервното копие има невалиден подпис от непотвърдено устройство %s</string>
     <string name="keys_backup_get_trust_error">Неуспешно получаване на информация за довереността към резервното копие (%s).</string>
 
-    <string name="keys_backup_settings_setup_button">Настройка на Възстановяване на Съобщения</string>
     <string name="keys_backup_settings_unverifiable_device">За да използвате Възстановяване на Защитени Съобщения на това устройство, въведете паролата или ключа за възстановяване.</string>
     <string name="keys_backup_settings_verify_device_now">За да използвате Възстановяване на Защитени Съобщения на това устройство, потвърдете устройство [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Изтриване на резервно копие…</string>
@@ -1329,11 +1305,5 @@
 
     <string name="keys_backup_settings_delete_confirm_title">Изтриване на резервно копие</string>
     <string name="keys_backup_settings_delete_confirm_message">Изтриване на ключовете за шифроване от сървъра? Повече няма да може да използвате ключа за възстановяване за да прочетете шифрованата история на съобщенията.</string>
-
-    <string name="keys_backup_banner_setup">%s, за да може никога да не губите шифровани съобщения</string>
-    <string name="keys_backup_banner_setup_colored_part">Настрой Възстановяване на Защитени Съобщения</string>
-
-    <string name="keys_backup_banner_recover">Отключете историята на защитените съобщения с</string>
-    <string name="keys_backup_banner_recover_colored_part">вашия ключ за възстановяване или парола</string>
 
 </resources>
