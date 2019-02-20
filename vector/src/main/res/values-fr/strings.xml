@@ -1313,8 +1313,7 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l\'appareil non vérifié %s</string>
     <string name="keys_backup_get_trust_error">Échec de la récupération des informations de confiance de la sauvegarde (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Pour utiliser la récupération de messages sécurisée sur cet appareil, fournissez votre phrase de passe ou votre clé de récupération maintenant.</string>
-    <string name="keys_backup_settings_verify_device_now">Pour utiliser la récupération de messages sécurisée sur cet appareil, vérifiez l\'appareil [%s] maintenant.</string>
+    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la récupération de messages sécurisée sur cet appareil, fournissez votre phrase de passe ou votre clé de récupération maintenant.</string>
     <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
     <string name="keys_backup_settings_delete_backup_error">Échec lors de la suppression de la sauvegarde (%s)</string>
 

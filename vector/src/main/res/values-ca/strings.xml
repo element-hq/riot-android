@@ -1329,8 +1329,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La còpia de seguretat té una signatura no vàlida del dispositiu no verificat %s</string>
     <string name="keys_backup_get_trust_error">No s\'ha pogut obtenir la informació de confiança per a la còpia de seguretat (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Per a emprar la recuperació segura de missatges en aquest dispositiu, proveïu ara la vostra frase de pas o clau de recuperació.</string>
-    <string name="keys_backup_settings_verify_device_now">Per a emprar la recuperació segura de missatges en aquest dispositiu, verifiqueu ara el dispositiu [%s].</string>
+    <string name="keys_backup_settings_untrusted_backup">Per a emprar la recuperació segura de missatges en aquest dispositiu, proveïu ara la vostra frase de pas o clau de recuperació.</string>
     <string name="keys_backup_settings_delete_confirm_message">Voleu suprimir la còpia de les vostres claus de xifratge del servidor? Ja no podreu emprar la vostra clau de recuperació per llegir el vostre historial de missatges xifrats.</string>
 
 </resources>

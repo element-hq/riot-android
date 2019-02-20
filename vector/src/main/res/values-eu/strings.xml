@@ -1311,8 +1311,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Babes-kopiak egiaztatu gabeko %s gailuaren baliogabeko sinadura bat du</string>
     <string name="keys_backup_get_trust_error">Hutsegitea babes-kopiaren fidagarritasun informazioa jasotzean (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Mezu seguruen berreskuratzea gailu honetan erabiltzeko, sartu pasaesaldia eta berreskuratze gakoa orain.</string>
-    <string name="keys_backup_settings_verify_device_now">Mezu seguruen berreskuratzea gailu honetan erabiltzeko, egiaztatu gailua [%s] orain.</string>
+    <string name="keys_backup_settings_untrusted_backup">Mezu seguruen berreskuratzea gailu honetan erabiltzeko, sartu pasaesaldia eta berreskuratze gakoa orain.</string>
     <string name="keys_backup_settings_deleting_backup">Babes-kopia ezabatzen…</string>
     <string name="keys_backup_settings_delete_backup_error">Babes-kopia ezabatzean huts egin du (%s)</string>
 
