@@ -1328,7 +1328,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
 
 
     <string name="keys_backup_settings_restore_backup_button">Restore from Backup</string>
-    <string name="keys_backup_settings_delete_backup_button">Delete</string>
+    <string name="keys_backup_settings_delete_backup_button">Delete Backup</string>
 
     <string name="keys_backup_settings_status_ok">Key Backup has been correctly set up for this device.</string>
     <string name="keys_backup_settings_status_ko">Key Backup is not active on this device.</string>
