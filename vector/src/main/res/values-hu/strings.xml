@@ -1271,8 +1271,8 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_setup_recovery_key">Üzenet Visszaállítás</string>
 
     <string name="keys_backup_restore_with_key_helper">Elvesztetted a visszaállítási kulcsod? Készíts újat a beállításokban.</string>
-    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot (%s).</string>
-    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
+    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra.</string>
 
     <string name="keys_backup_restoring_waiting_message">Mentés visszaállítása…</string>
     <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>

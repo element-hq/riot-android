@@ -1286,12 +1286,12 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
 
     <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase de pas: verifiqueu que la frase de pas que heu introduït és la correcta (%s).</string>
-    <string name="network_error_please_check_and_retry">Error de xarxa: comproveu la vostra connectivitat i torneu-ho a provar (%s).</string>
+    <string name="network_error_please_check_and_retry">Error de xarxa: comproveu la vostra connectivitat i torneu-ho a provar.</string>
 
     <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat…</string>
     <string name="keys_backup_unlock_button">Desbloca l\'historial</string>
     <string name="keys_backup_recovery_code_empty_error_message">Introduïu una clau de recuperació</string>
-    <string name="keys_backup_recovery_code_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta clau de recuperació: verifiqueu que heu introduït la clau correcta (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta clau de recuperació: verifiqueu que heu introduït la clau correcta.</string>
 
     <string name="keys_backup_restore_success_title">S\'ha restaurat la còpia de seguretat %s!</string>
     <plurals name="keys_backup_restore_success_description_part1">

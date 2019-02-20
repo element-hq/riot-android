@@ -1259,8 +1259,8 @@
     <string name="keys_backup_restore_setup_recovery_key">Възстановяване на съобщения</string>
 
     <string name="keys_backup_restore_with_key_helper">Загубихте ключа за възстановяване? Може да настройте нов от Настройки.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола (%s).</string>
-    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола.</string>
+    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак.</string>
 
     <string name="keys_backup_restoring_waiting_message">Възстановяване от резервно копие…</string>
     <string name="keys_backup_unlock_button">Отключи историята</string>

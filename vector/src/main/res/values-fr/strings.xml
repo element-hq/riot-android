@@ -1274,8 +1274,8 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_restore_setup_recovery_key">Récupération des messages</string>
 
     <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre clé de récupération ? Vous pouvez en configurer une autre dans les paramètres.</string>
-    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération (%s).</string>
-    <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération.</string>
+    <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde…</string>
     <string name="keys_backup_unlock_button">Déverrouiller l\'historique</string>

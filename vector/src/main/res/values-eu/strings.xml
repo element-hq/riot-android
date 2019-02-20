@@ -1252,7 +1252,7 @@ Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta.</string>
     <string name="keys_backup_restore_setup_recovery_key">Mezuen berreskuratzea</string>
 
     <string name="keys_backup_restore_with_key_helper">Berreskuratze gakoa galdu duzu? Berria sortu dezakezu ezarpenetan.</string>
-    <string name="network_error_please_check_and_retry">Sare errorea: Egiaztatu konexioa eta saiatu berriro (%s).</string>
+    <string name="network_error_please_check_and_retry">Sare errorea: Egiaztatu konexioa eta saiatu berriro.</string>
 
     <string name="keys_backup_restoring_waiting_message">Babes-kopia berrezartzen…</string>
     <string name="keys_backup_unlock_button">Desblokeatu historiala</string>
@@ -1284,8 +1284,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Babes-kopiaren bertsioa eskuratzen…</string>
     <string name="keys_backup_restore_with_passphrase">Erabili zure berreskuratze pasaesaldia zure mezu seguruen historiala desblokeatzeko</string>
-    <string name="keys_backup_passphrase_error_decrypt">Ezin izan da babes-kopia deszifratu pasaesaldi honekin: egiaztatu pasaesaldi zuzena idatzi duzula (%s).</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Ezin izan da babes-kopia deszifratu berreskuratze gako honekin: egiaztatu berreskuratze gako egokia sartu duzula (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">Ezin izan da babes-kopia deszifratu pasaesaldi honekin: egiaztatu pasaesaldi zuzena idatzi duzula.</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Ezin izan da babes-kopia deszifratu berreskuratze gako honekin: egiaztatu berreskuratze gako egokia sartu duzula.</string>
 
     <string name="keys_backup_restore_success_description">"%1$d  saio gako berrezarri dira, eta gailu honek ezagutzen ez zituen %2$d gako berri gehitu dira"</string>
     <plurals name="keys_backup_restore_success_description_part1">
