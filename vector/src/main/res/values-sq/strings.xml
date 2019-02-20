@@ -1050,7 +1050,7 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="settings_troubleshoot_test_system_settings_success">Njoftimet janë të aktivizuara te rregullimet e sistemit.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Njoftimet janë të çaktivizuara te rregullimet e sistemit.
 Ju lutemi, kontrolloni rregullimet e sistemit.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Hap Rregullimet</string>
+    <string name="open_settings">Hap Rregullimet</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Rregullime Llogarie.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>

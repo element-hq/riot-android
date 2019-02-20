@@ -1049,7 +1049,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系統設定中啟用。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">通知已在系統設定中停用。
 請檢查系統設定。</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">開啟設定</string>
+    <string name="open_settings">開啟設定</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_success">通知已為您的帳號啟用。</string>

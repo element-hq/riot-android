@@ -1089,7 +1089,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_troubleshoot_test_system_settings_success">Jakinarazpenak aktibatuta daude sistemaren ezarpenetan.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Jakinarazpenak desaktibatuta daude sistemaren ezarpenetan.
 Egiaztatu sistemaren ezarpenak.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Ireki ezarpenak</string>
+    <string name="open_settings">Ireki ezarpenak</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Kontuaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Jakinarazpenak aktibatuta daude zure kontuarentzat.</string>

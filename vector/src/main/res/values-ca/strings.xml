@@ -1076,7 +1076,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="settings_troubleshoot_test_system_settings_success">Les notificacions són habilitades als paràmetres del sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Les notificacions són inhabilitades als paràmetres del sistema.
 Comproveu els paràmetres del sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Obre els paràmetres</string>
+    <string name="open_settings">Obre els paràmetres</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Paràmetres del compte.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Les notificacions són habilitades per al vostre compte.</string>

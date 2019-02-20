@@ -1069,7 +1069,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
 Por favor revise as configurações do sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Abra as Configurações</string>
+    <string name="open_settings">Abra as Configurações</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>
