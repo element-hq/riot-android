@@ -1298,8 +1298,7 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервното копие има невалиден подпис от непотвърдено устройство %s</string>
     <string name="keys_backup_get_trust_error">Неуспешно получаване на информация за довереността към резервното копие (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">За да използвате Възстановяване на Защитени Съобщения на това устройство, въведете паролата или ключа за възстановяване.</string>
-    <string name="keys_backup_settings_verify_device_now">За да използвате Възстановяване на Защитени Съобщения на това устройство, потвърдете устройство [%s].</string>
+    <string name="keys_backup_settings_untrusted_backup">За да използвате Възстановяване на Защитени Съобщения на това устройство, въведете паролата или ключа за възстановяване.</string>
     <string name="keys_backup_settings_deleting_backup">Изтриване на резервно копие…</string>
     <string name="keys_backup_settings_delete_backup_error">Неуспешно изтриване на резервно копие (%s)</string>
 

@@ -22,8 +22,11 @@ import im.vector.R
 import im.vector.ui.arch.LiveEvent
 import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 import org.matrix.androidsdk.util.Log
 
 class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
@@ -52,7 +55,8 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
             sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
             passphraseErrorText.value = null
 
-            val version = sharedViewModel.keyVersionResult.value!!.version!!
+            val keysVersionResult = sharedViewModel.keyVersionResult.value!!
+            val version = keysVersionResult.version!!
 
             keysBackup.restoreKeyBackupWithPassword(version,
                     passphrase.value!!,
@@ -64,6 +68,7 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
                             sharedViewModel.didRecoverSucceed(info)
 
                             KeysBackupBanner.onRecoverDoneForVersion(context, version)
+                            trustOnDecrypt(keysBackup, keysVersionResult)
                         }
 
                         override fun onUnexpectedError(e: Exception) {
@@ -85,5 +90,16 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
             //Can this happen?
             Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name, "Cannot find keys backup")
         }
+    }
+
+    private fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
+        keysBackup.trustKeysBackupVersion(keysVersionResult, true,
+                object : SimpleApiCallback<Void>() {
+
+                    override fun onSuccess(info: Void?) {
+                        Log.d(this@KeysBackupRestoreFromPassphraseViewModel::class.java.name, "##### trustKeysBackupVersion onSuccess")
+                    }
+
+                })
     }
 }

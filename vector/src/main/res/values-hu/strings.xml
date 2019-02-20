@@ -1310,8 +1310,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen eszköztől: %s</string>
     <string name="keys_backup_get_trust_error">Megbízhatósági információ nem nyerhető ki a mentésből (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Biztonságos Üzenet Visszaállítás használatához ezen az eszközön add meg most a visszaállítási jelmondatot vagy visszaállítási kulcsot.</string>
-    <string name="keys_backup_settings_verify_device_now">Biztonságos Üzenet Visszaállítás használatához ellenőrizd most ezt az eszközt: [%s].</string>
+    <string name="keys_backup_settings_untrusted_backup">Biztonságos Üzenet Visszaállítás használatához ezen az eszközön add meg most a visszaállítási jelmondatot vagy visszaállítási kulcsot.</string>
     <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
     <string name="keys_backup_settings_delete_backup_error">A mentés törlése sikertelen (%s)</string>
 

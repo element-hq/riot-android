@@ -96,5 +96,9 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             }
             actionButton.isVisible = true
         }
+
+        itemView?.setOnClickListener {
+            item.itemClickAction?.perform?.run()
+        }
     }
 }

@@ -1364,8 +1364,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Sicherung hat eine invalide Signatur vom unverifiziertem Gerät %s</string>
     <string name="keys_backup_get_trust_error">Konnte Vertrauensinformationen für die Sicherung nicht abrufen (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
-    <string name="keys_backup_settings_verify_device_now">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, verifizierte jetzt das Gerät %s.</string>
+    <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
 </resources>

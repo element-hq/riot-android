@@ -135,8 +135,10 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                         style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
                     hasIndeterminateProcess = true
 
-                    val totalKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(false) ?: 0
-                    val backedUpKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(true) ?: 0
+                    val totalKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(false)
+                            ?: 0
+                    val backedUpKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(true)
+                            ?: 0
 
                     val remainingKeysToBackup = totalKeys - backedUpKeys
 
@@ -153,9 +155,15 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
 
         if (keyBackupVersionTrust != null) {
 
+            if (!keyBackupVersionTrust.usable) {
+                itemSummary?.description = context.getString(R.string.keys_backup_settings_untrusted_backup)
+            }
+
             //Add infos
-            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_version), keyVersionResult?.version ?: ""))
-            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_algorithm), keyVersionResult?.algorithm ?: ""))
+            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_version), keyVersionResult?.version
+                    ?: ""))
+            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_algorithm), keyVersionResult?.algorithm
+                    ?: ""))
 
             keyBackupVersionTrust.signatures.forEach {
                 val signatureInfo = GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_signature))
@@ -167,7 +175,6 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                 if (!isDeviceKnown) {
                     signatureInfo.description = context.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
                     signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                    itemSummary?.description = context.getString(R.string.keys_backup_settings_unverifiable_device)
                 } else {
                     if (isSignatureValid) {
                         if (session.credentials.deviceId == it.deviceId) {
@@ -180,9 +187,6 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                             } else {
                                 signatureInfo.description = context.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
                                 signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                                val action = getVerifySignatureAction(it)
-                                signatureInfo.buttonAction = action
-                                itemSummary?.description = context.getString(R.string.keys_backup_settings_verify_device_now, it.device!!.displayName())
                             }
                         }
                     } else {
@@ -198,18 +202,11 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
 
                 infos.add(signatureInfo)
             } //end for each
-
         }
 
         infoList = infos
 
         notifyDataSetChanged()
-    }
-
-    private fun getVerifySignatureAction(signature: KeysBackupVersionTrustSignature): GenericRecyclerViewItem.Action {
-        val action = GenericRecyclerViewItem.Action(context.getString(R.string.encryption_information_verify))
-        action.perform = Runnable { adapterListener?.displayDeviceVerificationDialog(signature) }
-        return action
     }
 
     class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
