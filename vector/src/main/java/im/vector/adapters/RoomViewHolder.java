@@ -152,7 +152,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (isInvitation || (0 != highlightCount)) {
             bingUnreadColor = ContextCompat.getColor(context, R.color.vector_fuchsia_color);
         } else if (0 != notificationCount) {
-            bingUnreadColor = ThemeUtils.INSTANCE.getColor(context, R.attr.colorAccent);
+            bingUnreadColor = ThemeUtils.INSTANCE.getColor(context, R.attr.vctr_notice_secondary);
         } else if (0 != unreadMsgCount) {
             bingUnreadColor = ThemeUtils.INSTANCE.getColor(context, R.attr.vctr_unread_room_indent_color);
         } else {

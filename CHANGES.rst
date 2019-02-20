@@ -12,6 +12,7 @@ Improvements:
  - keys backup: Sign Out flow improvement
  - Improved button styles (states, ripple effect)
  - Show direct chat section in user details only for other users, not self
+ - Sender name colors in rooms
 
 Other changes:
  - Remove beta e2e warning (#2946)
