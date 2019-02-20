@@ -30,11 +30,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -92,7 +90,6 @@ import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
-import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.UrlUtilKt;
 import im.vector.util.ViewUtilKt;
@@ -154,9 +151,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.button_login)
     Button mLoginButton;
 
+    @BindView(R.id.button_switch_to_login)
+    Button mSwitchToLoginButton;
+
     // create account button
     @BindView(R.id.button_register)
     Button mRegisterButton;
+
+    @BindView(R.id.button_switch_to_register)
+    Button mSwitchToRegisterButton;
 
     // forgot password button
     @BindView(R.id.button_reset_password)
@@ -761,7 +764,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
             // the account creation is not always supported so ensure that the dedicated button is always displayed.
-            mRegisterButton.setVisibility(View.VISIBLE);
+            if (mMode == MODE_ACCOUNT_CREATION) {
+                mRegisterButton.setVisibility(View.VISIBLE);
+            } else if (mMode == MODE_LOGIN) {
+                mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+            }
 
             if (checkFlowOnUpdate) {
                 checkFlows();
@@ -787,7 +794,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
             // the account creation is not always supported so ensure that the dedicated button is always displayed.
-            mRegisterButton.setVisibility(View.VISIBLE);
+            if (mMode == MODE_ACCOUNT_CREATION) {
+                mRegisterButton.setVisibility(View.VISIBLE);
+            } else if (mMode == MODE_LOGIN) {
+                mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+            }
 
             if (checkFlowOnUpdate) {
                 checkFlows();
@@ -1525,10 +1536,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                             Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                                         }
                                     } else if (e.mStatus == 403) {
-                                        // not supported by the server
-                                        mRegisterButton.setVisibility(View.GONE);
+                                        // Registration not supported by the server
                                         mMode = MODE_LOGIN;
                                         refreshDisplay();
+
+                                        mSwitchToRegisterButton.setVisibility(View.GONE);
                                     }
                                 }
 
@@ -1576,19 +1588,27 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /**
-     * The user clicks on the register button.
+     * The user clicks on the switch to register button.
      */
-    @OnClick(R.id.button_register)
-    void onRegisterClick() {
-        Log.d(LOG_TAG, "## onRegisterClick(): IN");
+    @OnClick(R.id.button_switch_to_register)
+    void onSwitchToRegisterClick() {
+        Log.d(LOG_TAG, "## onSwitchToRegisterClick(): IN");
         onClick();
 
         // the user switches to another mode
         if (mMode != MODE_ACCOUNT_CREATION) {
             mMode = MODE_ACCOUNT_CREATION;
             refreshDisplay();
-            return;
         }
+    }
+
+    /**
+     * The user clicks on the register button.
+     */
+    @OnClick(R.id.button_register)
+    void onRegisterClick() {
+        Log.d(LOG_TAG, "## onRegisterClick(): IN");
+        onClick();
 
         // sanity check
         if (!mRegistrationManager.hasRegistrationResponse()) {
@@ -1668,14 +1688,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * The user clicks on the login button
      */
-    @OnClick(R.id.button_login)
-    void onLoginClick() {
-        if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
-            mIsPendingLogin = true;
-            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
-            return;
-        }
-
+    @OnClick(R.id.button_switch_to_login)
+    void onSwitchToLoginClick() {
         onClick();
 
         // the user switches to another mode
@@ -1685,8 +1699,21 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             mMode = MODE_LOGIN;
             refreshDisplay();
+        }
+    }
+
+    /**
+     * The user clicks on the login button
+     */
+    @OnClick(R.id.button_login)
+    void onLoginClick() {
+        if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
+            mIsPendingLogin = true;
+            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
             return;
         }
+
+        onClick();
 
         mIsPendingLogin = false;
 
@@ -1965,26 +1992,49 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         boolean isLoginMode = mMode == MODE_LOGIN;
 
         mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
-        mLoginButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
-        mRegisterButton.setVisibility(mMode == MODE_LOGIN || mMode == MODE_ACCOUNT_CREATION ? View.VISIBLE : View.GONE);
-        mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
-        mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
-        mSubmitThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.VISIBLE : View.GONE);
-        mSkipThreePidButton.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID && mRegistrationManager.canSkipThreePid() ? View.VISIBLE : View.GONE);
-        mHomeServerOptionLayout.setVisibility(mMode == MODE_ACCOUNT_CREATION_THREE_PID ? View.GONE : View.VISIBLE);
+
+        // Hide all buttons
+        mLoginButton.setVisibility(View.GONE);
+        mSwitchToRegisterButton.setVisibility(View.GONE);
+        mRegisterButton.setVisibility(View.GONE);
+        mSwitchToLoginButton.setVisibility(View.GONE);
+        mForgotPasswordButton.setVisibility(View.GONE);
+        mForgotValidateEmailButton.setVisibility(View.GONE);
+        mSubmitThreePidButton.setVisibility(View.GONE);
+        mSkipThreePidButton.setVisibility(View.GONE);
+
+        mHomeServerOptionLayout.setVisibility(View.VISIBLE);
+
+        // Then show them depending on mode
+        switch (mMode) {
+            case MODE_LOGIN:
+                mLoginButton.setVisibility(View.VISIBLE);
+                mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+                break;
+            case MODE_ACCOUNT_CREATION:
+                mRegisterButton.setVisibility(View.VISIBLE);
+                mSwitchToLoginButton.setVisibility(View.VISIBLE);
+                break;
+            case MODE_FORGOT_PASSWORD:
+                mForgotPasswordButton.setVisibility(View.VISIBLE);
+                break;
+            case MODE_FORGOT_PASSWORD_WAITING_VALIDATION:
+                mForgotValidateEmailButton.setVisibility(View.VISIBLE);
+                break;
+            case MODE_ACCOUNT_CREATION_THREE_PID:
+                mSubmitThreePidButton.setVisibility(View.VISIBLE);
+                if (mRegistrationManager.canSkipThreePid()) {
+                    mSkipThreePidButton.setVisibility(View.VISIBLE);
+                }
+                mHomeServerOptionLayout.setVisibility(View.GONE);
+                break;
+        }
+
 
         // update the button text to the current status
         // 1 - the user does not warn that he clicks on the email validation
-        // 2 - the password has been resetted and the user is invited to switch to the login screen
+        // 2 - the password has been reset and the user is invited to switch to the login screen
         mForgotValidateEmailButton.setText(mIsPasswordReset ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
-
-        @ColorInt final int accent = ThemeUtils.INSTANCE.getColor(this, R.attr.colorAccent);
-        @ColorInt final int white = ContextCompat.getColor(this, android.R.color.white);
-
-        mLoginButton.setBackgroundColor(isLoginMode ? accent : white);
-        mLoginButton.setTextColor(!isLoginMode ? accent : white);
-        mRegisterButton.setBackgroundColor(!isLoginMode ? accent : white);
-        mRegisterButton.setTextColor(isLoginMode ? accent : white);
     }
 
     /**
@@ -2007,29 +2057,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * @param enabled enabled/disabled the action buttons
      */
     private void setActionButtonsEnabled(boolean enabled) {
-        boolean isForgotPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
-
-        // forgot password mode
-        // the register and the login buttons are hidden
-        mRegisterButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
-        mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
-
-        mForgotPasswordButton.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        mForgotPasswordButton.setAlpha(enabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
+        mLoginButton.setEnabled(enabled);
+        mSwitchToRegisterButton.setEnabled(enabled);
+        mRegisterButton.setEnabled(enabled);
+        mSwitchToLoginButton.setEnabled(enabled);
         mForgotPasswordButton.setEnabled(enabled);
-
-        mForgotValidateEmailButton.setVisibility((mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) ? View.VISIBLE : View.GONE);
-        mForgotValidateEmailButton.setAlpha(enabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
         mForgotValidateEmailButton.setEnabled(enabled);
-
-        // other mode : display the login password button
-        boolean loginEnabled = enabled || (mMode == MODE_ACCOUNT_CREATION);
-        boolean registerEnabled = enabled || (mMode == MODE_LOGIN);
-        mLoginButton.setEnabled(loginEnabled);
-        mRegisterButton.setEnabled(registerEnabled);
-
-        mLoginButton.setAlpha(loginEnabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
-        mRegisterButton.setAlpha(registerEnabled ? ViewUtilKt.UTILS_OPACITY_FULL : ViewUtilKt.UTILS_OPACITY_HALF);
+        mSubmitThreePidButton.setEnabled(enabled);
+        mSkipThreePidButton.setEnabled(enabled);
     }
 
     //==============================================================================================================

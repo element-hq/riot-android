@@ -112,13 +112,6 @@
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
-    <style name="LoginButtonStyleBase" parent="VectorButtonStyle">
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:layout_height">36dp</item>
-    </style>
-
-    <style name="LoginButtonStyle" parent="LoginButtonStyleBase" />
-
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
         <item name="android:background">@android:color/transparent</item>
