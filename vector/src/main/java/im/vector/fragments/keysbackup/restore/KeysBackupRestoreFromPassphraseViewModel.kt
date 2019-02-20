@@ -24,6 +24,7 @@ import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 import org.matrix.androidsdk.util.Log
@@ -93,22 +94,10 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
 
     private fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
-                object : ApiCallback<Void> {
+                object : SimpleApiCallback<Void>() {
 
                     override fun onSuccess(info: Void?) {
-                        Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name,"##### trustKeysBackupVersion onSuccess")
-                    }
-
-                    override fun onMatrixError(e: MatrixError?) {
-                        Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name,"##### trustKeysBackupVersion onMatrixError")
-                    }
-
-                    override fun onNetworkError(e: java.lang.Exception?) {
-                        Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name,"##### trustKeysBackupVersion onNetworkError")
-                    }
-
-                    override fun onUnexpectedError(e: java.lang.Exception?) {
-                        Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name,"##### trustKeysBackupVersion onUnexpectedError")
+                        Log.d(this@KeysBackupRestoreFromPassphraseViewModel::class.java.name, "##### trustKeysBackupVersion onSuccess")
                     }
 
                 })
