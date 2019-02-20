@@ -283,23 +283,45 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             return;
         }
 
-        mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
-            @Override
-            public void onSearchEnd(final int count) {
-                if (mListView == null) {
-                    // Activity is dead
-                    return;
-                }
-
-                mListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideWaitingView();
+        // By default the user will see all Matrix users, but if he/she enters anything, the program will search for that value
+        if (pattern.isEmpty()) {
+            mAdapter.setSearchedPattern("saba", null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+                @Override
+                public void onSearchEnd(final int count) {
+                    if (mListView == null) {
+                        // Activity is dead
+                        return;
                     }
-                });
-            }
-        });
-    }
+
+                    mListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
+                        }
+                    });
+                }
+            });
+        } else {
+            mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+                @Override
+                public void onSearchEnd(final int count) {
+                    if (mListView == null) {
+                        // Activity is dead
+                        return;
+                    }
+
+                    mListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
+                        }
+                    });
+                }
+            });
+        }
+        }
+
+
 
     /**
      * Display a selection confirmation dialog.

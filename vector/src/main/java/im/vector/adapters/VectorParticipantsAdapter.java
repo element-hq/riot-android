@@ -901,8 +901,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
 
             // matrix user checkbox
+            // Saba Modification: the Default value which was initially set to "false", is passed as true
             CheckBox checkBox = convertView.findViewById(R.id.contacts_filter_checkbox);
-            checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
+            checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, true));
+
+            // Checks to see if default value is checked (which is true) and if so, refreshes
+            //  the screen, causing the user to see only Matrix users
+            if (checkBox.isChecked()) {
+                mShowMatrixUserOnly = true;
+                refresh(mFirstEntry, null);
+            }
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
