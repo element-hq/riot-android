@@ -6,6 +6,7 @@ MatrixSdk:
 
 Features:
  - key backup: Trust on Decrypt #2921
+ - key backup: new recover method detected #2926
 
 Improvements:
  - keys backup: Setup screen UX improvement
