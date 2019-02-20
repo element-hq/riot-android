@@ -167,7 +167,6 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                 if (!isDeviceKnown) {
                     signatureInfo.description = context.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
                     signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                    itemSummary?.description = context.getString(R.string.keys_backup_settings_unverifiable_device)
                 } else {
                     if (isSignatureValid) {
                         if (session.credentials.deviceId == it.deviceId) {
@@ -181,8 +180,7 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
                                 signatureInfo.description = context.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
                                 signatureInfo.endIconResourceId = R.drawable.e2e_warning
                                 val action = getVerifySignatureAction(it)
-                                signatureInfo.buttonAction = action
-                                itemSummary?.description = context.getString(R.string.keys_backup_settings_verify_device_now, it.device!!.displayName())
+                                signatureInfo.itemClickAction = action
                             }
                         }
                     } else {
