@@ -91,7 +91,7 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
         }
     }
 
-    fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
+    private fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
                 object : ApiCallback<Void> {
 
