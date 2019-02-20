@@ -456,7 +456,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/vector_silver_color" />
+            android:background="?vctr_list_divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -527,7 +527,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
-            android:background="@color/vector_silver_color" />
+            android:background="?vctr_list_divider_color" />
 
     </LinearLayout>
 

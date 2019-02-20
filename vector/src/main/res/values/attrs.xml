@@ -2,6 +2,9 @@
 <resources>
 
     <declare-styleable name="VectorStyles">
+
+        <attr name="vctr_bottom_nav_background_color" format="color" />
+
         <!-- waiting view background -->
         <attr name="vctr_waiting_background_color" format="color" />
 
@@ -20,6 +23,7 @@
         <attr name="vctr_unsent_message_text_color" format="color" />
         <attr name="vctr_message_text_color" format="color" />
         <attr name="vctr_notice_text_color" format="color" />
+        <attr name="vctr_notice_secondary" format="color" />
         <attr name="vctr_encrypting_message_text_color" format="color" />
         <attr name="vctr_sending_message_text_color" format="color" />
         <attr name="vctr_highlighted_message_text_color" format="color" />
