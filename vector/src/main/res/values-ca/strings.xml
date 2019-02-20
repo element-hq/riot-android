@@ -1132,8 +1132,8 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
 Podeu trobar el registre de canvis complet aquí: %1$s.
 Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
     <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
-    <string name="title_activity_keys_backup_setup">Recuperació de missatges</string>
-    <string name="title_activity_keys_backup_restore">Missatges segurs</string>
+    <string name="title_activity_keys_backup_setup">Còpia de seguretat de la clau</string>
+    <string name="title_activity_keys_backup_restore">Empra una còpia de seguretat de la clau</string>
 
     <string name="skip">Omet</string>
     <string name="done">Fet</string>
@@ -1197,7 +1197,7 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
     <string name="account_email_error">S\'ha produït un error en verificar la vostra adreça de correu electrònic.</string>
 
     <string name="account_phone_number_error">S\'ha produït un error en verificar el vostre número de telèfon.</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Gestiona les còpies de seguretat de les claus</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Gestiona les còpies de seguretat de la clau</string>
 
     <string name="settings_labs_native_camera_summary">Inicia la càmera del sistema en lloc de la pantalla personalitzada de la càmera.</string>
     <string name="settings_labs_enable_send_voice_summary">Aquesta opció requereix una aplicació de tercers per enregistrar els missatges.</string>
@@ -1207,14 +1207,16 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
     <string name="passphrase_empty_error_message">Introduïu una frase de pas</string>
     <string name="passphrase_passphrase_too_weak">La frase de pas és massa feble</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase de pas si voleu ometre aquest pas.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase de pas si voleu que el Riot generi una clau de recuperació.</string>
     <string name="keys_backup_no_session_error">No hi ha cap sessió de Matrix disponible</string>
 
     <string name="keys_backup_setup_step1_title">No perdeu mai els missatges xifrats</string>
-    <string name="keys_backup_setup_step1_description">Configureu la recuperació de missatges segura en cas que perdeu o tanqueu la sessió en aquest dispositiu.</string>
-    <string name="keys_backup_setup_step2_button_title">Estableix la frase de pas de recuperació</string>
-    <string name="keys_backup_setup_step3_button_title">Crea una còpia de seguretat</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Fes una còpia</string>
+    <string name="keys_backup_setup_step1_description">Els missatges en sales xifrades estan assegurats amb xifratge punt a punt. Només tu i els destinaris tenen les claus per a llegir aquests missatges.
+
+Feu una còpia de seguretat de manera segura per evitar perdre-les.</string>
+    <string name="keys_backup_setup_step2_button_title">Estableix la frase de pas</string>
+    <string name="keys_backup_setup_step3_button_title">Fet</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Desa la clau de recuperació</string>
     <string name="keys_backup_setup_step3_save_button_title">Desa dins d\'un fitxer</string>
     <string name="recovery_key_export_saved_as_warning">S\'ha desat la clau de recuperació a «%s».
 
@@ -1226,14 +1228,14 @@ Avís: és possible que calgui suprimir el fitxer si es desinstal·la l\'aplicac
     <string name="unexpected_error">Error inesperat</string>
     <string name="keys_backup_setup_backup_started_title">S\'ha iniciat la còpia de seguretat</string>
     <string name="keys_backup_setup_skip_title">N\'esteu segur?</string>
-    <string name="keys_backup_setup_skip_msg">És possible que perdeu missatges segurs si sortiu de la sessió o perdeu el dispositiu.</string>
+    <string name="keys_backup_setup_skip_msg">És possible que perdeu l\'accés als vostres missatges si sortiu de la sessió o perdeu el dispositiu.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">S\'està recuperant la versió de la còpia de seguretat…</string>
-    <string name="keys_backup_restore_with_passphrase">Empreu la vostra frase de pas de recuperació per desblocar el vostre historial de missatges segur</string>
+    <string name="keys_backup_restore_with_passphrase">Empreu la vostra frase de pas de recuperació per desblocar el vostre historial de missatges xifrat</string>
     <string name="keys_backup_restore_use_recovery_key">empreu la clau de recuperació</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Si no coneixeu la vostra contrasenya de recuperació, podeu %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Empreu la vostra clau de recuperació per desblocar el vostre historial de missatges segur</string>
+    <string name="keys_backup_restore_with_recovery_key">Empreu la vostra clau de recuperació per desblocar el vostre historial de missatges xifrat</string>
     <string name="keys_backup_restore_key_enter_hint">Introduïu la clau de recuperació</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Recuperació de missatges</string>
@@ -1310,9 +1312,9 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_settings_restore_backup_button">Restaura</string>
     <string name="keys_backup_settings_delete_backup_button">Suprimeix</string>
 
-    <string name="keys_backup_settings_status_ok">S\'ha configurat la recuperació segura de missatges correctament per a aquest dispositiu.</string>
-    <string name="keys_backup_settings_status_ko">La recuperació segura de missatges no és activa en aquest dispositiu.</string>
-    <string name="keys_backup_settings_status_not_setup">La recuperació segura de missatges no s\'ha configurat.</string>
+    <string name="keys_backup_settings_status_ok">S\'ha configurat la còpia de seguretat de la clau correctament per a aquest dispositiu.</string>
+    <string name="keys_backup_settings_status_ko">La còpia de seguretat de la clau no és activa en aquest dispositiu.</string>
+    <string name="keys_backup_settings_status_not_setup">No s\'està fent còpia de seguretat de les vostres claus en aquest dispositiu.</string>
 
 
     <string name="keys_backup_settings_deleting_backup">S\'està suprimint la còpia de seguretat…</string>
@@ -1329,8 +1331,54 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La còpia de seguretat té una signatura no vàlida del dispositiu no verificat %s</string>
     <string name="keys_backup_get_trust_error">No s\'ha pogut obtenir la informació de confiança per a la còpia de seguretat (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Per a emprar la recuperació segura de missatges en aquest dispositiu, proveïu ara la vostra frase de pas o clau de recuperació.</string>
-    <string name="keys_backup_settings_verify_device_now">Per a emprar la recuperació segura de missatges en aquest dispositiu, verifiqueu ara el dispositiu [%s].</string>
+    <string name="keys_backup_settings_unverifiable_device">Per a emprar la còpia de seguretat de la clau en aquest dispositiu, proveïu ara la vostra frase de pas o clau de recuperació.</string>
+    <string name="keys_backup_settings_verify_device_now">Per a emprar còpia de seguretat de la clau en aquest dispositiu, verifiqueu ara el dispositiu [%s].</string>
     <string name="keys_backup_settings_delete_confirm_message">Voleu suprimir la còpia de les vostres claus de xifratge del servidor? Ja no podreu emprar la vostra clau de recuperació per llegir el vostre historial de missatges xifrats.</string>
 
-</resources>
+<string name="keys_backup_is_not_finished_please_wait">La còpia de seguretat de les claus no ha finalitzat, espereu…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Perdreu els vostres missatges xifrats si sortiu ara</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">S\'està fent la còpia de seguretat de les claus. Si sortiu ara, perdreu accés als vostres missatges xifrats.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">No vull els meus missatges xifrats</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">S\'està fent una còpia de les claus…</string>
+    <string name="keys_backup_activate">Empra la còpia de la clau</string>
+    <string name="are_you_sure">N\'esteu segur?</string>
+    <string name="backup">Fes una còpia</string>
+    <string name="stay">Roman</string>
+    <string name="abort">Avorta</string>
+
+    <string name="action_sign_out_confirmation_simple">Esteu segur de voler sortir?</string>
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Habilita el xifratge</string>
+
+    <string name="encryption_message_recovery">Recuperació de missatges xifrats</string>
+    <string name="error_empty_field_enter_user_name">Introduïu un nom d\'usuari.</string>
+    <string name="keys_backup_setup">Comenceu a emprar la còpia de la clau</string>
+    <string name="keys_backup_setup_step1_advanced">(Avançat)</string>
+    <string name="keys_backup_setup_step1_manual_export">Exporta les claus manualment</string>
+
+    <string name="keys_backup_setup_step2_text_title">Assegureu la vostra còpia amb una frase de pas.</string>
+    <string name="keys_backup_setup_creating_backup">S\'està creant una còpia de seguretat</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">O, assegureu la vostra còpia amb una clau de recuperació, desant-la en un lloc segur.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avançat) Configura-ho amb una clau de recuperació</string>
+    <string name="keys_backup_setup_step3_success_title">Èxit!</string>
+    <string name="keys_backup_setup_step3_text_line1">S\'està fent una còpia de seguretat de les vostres claus.</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">He fet una còpia</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Comparteix</string>
+    <string name="keys_backup_banner_setup_line1">No perdeu mai els missatges xifrats</string>
+    <string name="keys_backup_banner_setup_line2">Comenceu a emprar la còpia de seguretat de les claus</string>
+
+    <string name="keys_backup_banner_recover_line1">No perdeu mai els missatges xifrats</string>
+    <string name="keys_backup_banner_recover_line2">Empra la còpia de seguretat de la clau</string>
+
+    <string name="keys_backup_banner_update_line1">Claus de missatges xifrats noves</string>
+    <string name="keys_backup_banner_update_line2">Gestiona en la còpia de la clau</string>
+
+    <string name="keys_backup_banner_in_progress">S\'està fent una còpia de seguretat de les claus…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">S\'ha fet una còpia de seguretat de totes les claus</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="one">S\'està fent una còpia de seguretat d\'%d clau…</item>
+	<item quantity="other">S\'està fent una còpia de seguretat de %d claus…</item>
+</plurals>
+
+    <string name="keys_backup_info_title_version">Versió</string>
+    </resources>
