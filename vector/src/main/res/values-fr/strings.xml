@@ -1091,7 +1091,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_troubleshoot_test_system_settings_success">Les notifications sont activées dans les paramètres système.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Les notifications sont désactivées dans les paramètres systèmes.
 Veuillez vérifier les paramètres système.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Ouvrir les paramètres</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Paramètres du compte.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Les notifications sont activées pour votre compte.</string>

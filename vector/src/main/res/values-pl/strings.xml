@@ -1103,7 +1103,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
     <string name="settings_troubleshoot_test_system_settings_title">Ustawienia Systemowe.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Powiadomienia są włączone w ustawieniach systemowych.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Otwórz Ustawienia</string>
+    <string name="open_settings">Otwórz Ustawienia</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Ustawienia Konta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Powiadomienia są właczone dla twojego konta.</string>

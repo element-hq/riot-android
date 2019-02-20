@@ -1036,7 +1036,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系统设置中启用。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">通知已在系统设置中禁用。
 请检查系统设置。</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">打开设置</string>
+    <string name="open_settings">打开设置</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">帐号设置。</string>
     <string name="settings_troubleshoot_test_account_settings_success">您的帐号已启用通知。</string>

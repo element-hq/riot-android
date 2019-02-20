@@ -1174,7 +1174,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_troubleshoot_test_system_settings_success">Уведомления включены в настройках системы.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Уведомления отключены в настройках системы.
 Пожалуйста, проверьте настройки системы.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Открыть настройки</string>
+    <string name="open_settings">Открыть настройки</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Настройки аккаунта.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Уведомления включены для вашей учетной записи.</string>

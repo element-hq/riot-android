@@ -1139,7 +1139,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_troubleshoot_test_system_settings_success">Le notifiche sono abilitate nelle impostazioni di sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Le notifiche sono disabilitate nelle impostazioni di sistema.
 Controlla le impostazioni di sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Apri le impostazioni</string>
+    <string name="open_settings">Apri le impostazioni</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Impostazioni account.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Le notifiche sono abilitate per il tuo account.</string>

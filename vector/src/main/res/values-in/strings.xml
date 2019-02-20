@@ -1007,7 +1007,7 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="settings_troubleshoot_test_system_settings_success">Pemberitahuan diperbolehkan dalam pengaturan sistem.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Pemberitahuan tidak diperbolehkan dalam pengaturan sistem.
 Silakan periksa pengaturan sistem.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Buka Pengaturan</string>
+    <string name="open_settings">Buka Pengaturan</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Pengaturan Akun.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Pemberitahuan diperbolehkan dalam pengaturan akun Anda.</string>
