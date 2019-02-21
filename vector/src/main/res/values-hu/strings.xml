@@ -1034,7 +1034,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1277,19 +1277,19 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">Visszaállítás</string>
-    <string name="keys_backup_settings_delete_backup_button">Törlés</string>
+    <string name="keys_backup_settings_restore_backup_button">Visszaállítás mentésből</string>
+    <string name="keys_backup_settings_delete_backup_button">Mentés törlése</string>
 
     <string name="keys_backup_settings_status_ok">A Kulcs mentés megfelelően be van állítva ezen az eszközön.</string>
     <string name="keys_backup_settings_status_ko">A Kulcs mentés nincs engedélyezve ezen az eszközön.</string>
@@ -1360,11 +1360,17 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
     <string name="keys_backup_info_title_algorithm">Algoritmus</string>
     <string name="keys_backup_info_title_signature">Aláírás</string>
 
-</resources>
+<string name="keys_backup_settings_untrusted_backup">A Kulcs Mentés eszközön való felhasználáshoz, állítsd vissza jelmondattal vagy Visszaállítási Kulcssal.</string>
+    <string name="new_recovery_method_popup_title">Új Kulcs Mentés</string>
+    <string name="new_recovery_method_popup_description">Új biztonságos üzenet kulcs mentés észlelve.
+
+Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
+    <string name="new_recovery_method_popup_was_me">Én voltam</string>
+    </resources>

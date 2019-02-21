@@ -1236,8 +1236,8 @@ Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
     <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
 Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
-    <string name="title_activity_keys_backup_setup">Nachrichten-Wiederherstellung</string>
-    <string name="title_activity_keys_backup_restore">Sichere Nachrichten</string>
+    <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
+    <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
 
     <string name="skip">Überspringen</string>
@@ -1262,7 +1262,7 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
     <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn du diesen Schritt überspringen möchtest.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn Riot einen Wiederherstellungs-Schlüssel erzeugen soll.</string>
     <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
 
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
@@ -1300,7 +1300,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Er kann aus einer vielzahl von G
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verschlüsselungsschlüsselverwaltung</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Verwalte Schlüsselsicherung</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
     <string name="keys_backup_setup_step1_description">Richte die Sichere Nachrichtenwiederherstellung für den Fall, dass du das Gerät verlierst oder dich abmeldest ein.</string>
     <string name="recovery_key_export_saved_as_warning">Dieser Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert.
@@ -1357,4 +1357,22 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
-</resources>
+<string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn sie sich jetzt ausloggen, dann gehen ihre verschlüsselten Nachrichten verloren.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte auf all deinen Geräten aktiviert sein um einen Verlust deiner verschlüsselten Nachrichten zu verhindern.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel…</string>
+    <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
+    <string name="are_you_sure">Sind Sie sicher?</string>
+    <string name="backup">Sicherung</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren wenn Sie sich ausloggen ohne diese vorher zu sichern.</string>
+
+    <string name="stay">Bleiben</string>
+    <string name="abort">Abbrechen</string>
+
+    <string name="action_sign_out_confirmation_simple">Sind Sie sicher, dass sie sich ausloggen möchten?</string>
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Verschlüsselung aktivieren</string>
+
+    <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
+    <string name="error_empty_field_enter_user_name">Bitte geben Sie einen Benutzernamen ein.</string>
+    </resources>
