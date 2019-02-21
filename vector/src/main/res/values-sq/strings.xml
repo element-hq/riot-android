@@ -1280,7 +1280,7 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="keys_backup_settings_delete_confirm_title">Fshije Kopjeruajtjen</string>
     <string name="keys_backup_settings_delete_confirm_message">Të fshihen nga shërbyesi kyçet tuaj të kopjeruajtur të fshehtëzimit? S’do të jeni më në gjendje të përdorni kyçin tuaj të rikthimeve për lexim historiku mesazhesh të fshehtëzuar.</string>
 
-<string name="sign_out_bottom_sheet_warning_no_backup">Nëse dilni tani nga llogaria, do të humbni mesazhet tuaj të fshehtëzuar</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Nëse dilni tani nga llogaria, do të humbni mesazhet tuaj të fshehtëzuar</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Kopjeruajtja e kyçeve po kryhet. Nëse dilni tani nga llogaria, do të humbni hyrjen te mesazhet tuaj të fshehtëzuar.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Për të shmangur humbje të hyrjes në mesazhet tuaj të fshehtëzuar, Kopjeruajtja e Sigurt e Kyçeve duhet të jetë aktive në krejt pajisjet tuaja.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nuk i dua mesazhet e mia të fshehtëzuar</string>
@@ -1332,9 +1332,9 @@ Mbajeni kyçin tuaj të rikthimeve diku shumë të sigurt, bie fjala, nën një 
 
     <string name="keys_backup_info_keys_all_backup_up">U kopjeruajtën krejt kyçet</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Po kopjeruhet %d kyç…</item>
-	<item quantity="other">Po kopjeruhen %d kyçe…</item>
-</plurals>
+        <item quantity="one">Po kopjeruhet %d kyç…</item>
+        <item quantity="other">Po kopjeruhen %d kyçe…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algoritëm</string>

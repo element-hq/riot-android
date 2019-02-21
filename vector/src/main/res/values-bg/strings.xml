@@ -1306,7 +1306,7 @@
     <string name="keys_backup_settings_delete_confirm_title">Изтриване на резервно копие</string>
     <string name="keys_backup_settings_delete_confirm_message">Изтриване на ключовете за шифроване от сървъра? Повече няма да може да използвате ключа за възстановяване за да прочетете шифрованата история на съобщенията.</string>
 
-<string name="sign_out_bottom_sheet_warning_no_backup">Ако излезете сега, ще загубите шифрованите съобщения</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ако излезете сега, ще загубите шифрованите съобщения</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">В момента се прави резервно копие на ключовете. Ако излезете сега, ще загубите достъп до шифрованите съобщения.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Добре е да се прави резервно копие на ключовете от всяко Ваше устройство, за да се предпазите от загуба на шифровани съобщения.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Не ми трябват шифрованите съобщения</string>
@@ -1358,9 +1358,9 @@
 
     <string name="keys_backup_info_keys_all_backup_up">Има резервно копие на всички ключове</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Правене на резервно копие на %d ключ…</item>
-	<item quantity="other">Правене на резервно копие на %d ключа…</item>
-</plurals>
+        <item quantity="one">Правене на резервно копие на %d ключ…</item>
+        <item quantity="other">Правене на резервно копие на %d ключа…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Версия</string>
     <string name="keys_backup_info_title_algorithm">Алгоритъм</string>

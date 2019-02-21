@@ -866,7 +866,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="deactivate_account_title">Deaktivoi tili</string>
     <string name="deactivate_account_submit">Deaktivoi tili</string>
 
-<string name="title_activity_choose_sticker">Lähetä tarra</string>
+    <string name="title_activity_choose_sticker">Lähetä tarra</string>
     <string name="are_you_sure">Oletko varma?</string>
     <string name="dialog_title_third_party_licences">Kolmannen osapuolen lisenssit</string>
 
@@ -884,4 +884,4 @@ Haluatko lisätä paketteja?</string>
 
     <string name="auth_accept_policies">Tarkista ja hyväksy tämän kotipalvelimen käytännöt:</string>
 
-    </resources>
+</resources>

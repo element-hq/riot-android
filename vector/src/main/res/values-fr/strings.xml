@@ -1321,7 +1321,7 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_settings_delete_confirm_title">Supprimer la sauvegarde</string>
     <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur ? Vous ne pourrez plus utiliser votre clé de récupération pour lire l\'historique des messages chiffrés.</string>
 
-<string name="sign_out_bottom_sheet_warning_no_backup">Vous perdrez vos messages chiffrés si vous vous déconnectez maintenant</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Vous perdrez vos messages chiffrés si vous vous déconnectez maintenant</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Sauvegarde de clés en cours. Si vous vous déconnectez maintenant, vous perdrez accès à vos messages chiffrés.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">La sauvegarde de clés sécurisées devrait être activée sur tous vos appareils pour éviter de perdre l’accès à vos messages chiffrés.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Je ne veux pas de mes messages chiffrés</string>
@@ -1372,9 +1372,9 @@ Conservez votre clé de récupération en lieu sûr, comme un gestionnaire de mo
 
     <string name="keys_backup_info_keys_all_backup_up">Toutes les clés sont sauvegardées</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Sauvegarde d’%d clé…</item>
-	<item quantity="other">Sauvegarde de %d clés…</item>
-</plurals>
+        <item quantity="one">Sauvegarde d’%d clé…</item>
+        <item quantity="other">Sauvegarde de %d clés…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithme</string>

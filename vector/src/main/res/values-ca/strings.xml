@@ -1333,7 +1333,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
     <string name="keys_backup_settings_delete_confirm_message">Voleu suprimir la còpia de les vostres claus de xifratge del servidor? Ja no podreu emprar la vostra clau de recuperació per llegir el vostre historial de missatges xifrats.</string>
 
-<string name="keys_backup_is_not_finished_please_wait">La còpia de seguretat de les claus no ha finalitzat, espereu…</string>
+    <string name="keys_backup_is_not_finished_please_wait">La còpia de seguretat de les claus no ha finalitzat, espereu…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Perdreu els vostres missatges xifrats si sortiu ara</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">S\'està fent la còpia de seguretat de les claus. Si sortiu ara, perdreu accés als vostres missatges xifrats.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">No vull els meus missatges xifrats</string>
@@ -1374,9 +1374,9 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
     <string name="keys_backup_info_keys_all_backup_up">S\'ha fet una còpia de seguretat de totes les claus</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">S\'està fent una còpia de seguretat d\'%d clau…</item>
-	<item quantity="other">S\'està fent una còpia de seguretat de %d claus…</item>
-</plurals>
+        <item quantity="one">S\'està fent una còpia de seguretat d\'%d clau…</item>
+        <item quantity="other">S\'està fent una còpia de seguretat de %d claus…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versió</string>
-    </resources>
+</resources>
