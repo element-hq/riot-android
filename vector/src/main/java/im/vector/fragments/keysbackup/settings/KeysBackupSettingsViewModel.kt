@@ -86,7 +86,7 @@ class KeysBackupSettingsViewModel : ViewModel(),
 
                     override fun onNetworkError(e: java.lang.Exception) {
                         loadingEvent.value = null
-                        _apiResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
+                        _apiResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry))
                     }
 
                     override fun onMatrixError(e: MatrixError) {
