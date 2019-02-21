@@ -1106,13 +1106,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val successDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_success, null)
             val alertDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alert_mark, null)
 
-            val errorColor = context?.let {
-                ContextCompat.getColor(it, R.color.vector_error_color)
-            } ?: Color.RED
+            val errorColor =ResourcesCompat.getColor(resources,R.color.vector_error_color,null)
+            val successColor = ResourcesCompat.getColor(resources,R.color.vector_success_color,null)
 
-            val successColor = context?.let {
-                ContextCompat.getColor(it,R.color.vector_success_color)
-            }?:Color.GREEN
             confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 

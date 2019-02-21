@@ -822,7 +822,7 @@
     <string name="account_phone_number_already_used_error">This phone number is already in use.</string>
     <string name="account_email_error">An error occurred while verifying your email address.</string>
 
-    <string name="settings_password">Change Password on Server</string>
+    <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">Old password</string>
     <string name="settings_new_password">New password</string>
