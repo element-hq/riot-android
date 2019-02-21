@@ -37,7 +37,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         }
     }
 
-    override fun getTitleRes() = R.string.title_activity_keys_backup_manage
+    override fun getTitleRes() = R.string.encryption_message_recovery
 
 
     private lateinit var viewModel: KeysBackupSettingsViewModel

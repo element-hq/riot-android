@@ -39,6 +39,8 @@ class GenericRecyclerViewItem(val title: String,
 
     var buttonAction: Action? = null
 
+    var itemClickAction: Action? = null
+
     class Action(var title: String) {
         var perform: Runnable? = null
     }

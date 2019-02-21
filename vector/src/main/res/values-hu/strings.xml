@@ -17,7 +17,7 @@
     <string name="send">Küldés</string>
     <string name="copy">Másolás</string>
     <string name="resend">Újraküldés</string>
-    <string name="redact">Kitakarás</string>
+    <string name="redact">Törlés</string>
     <string name="quote">Idézés</string>
     <string name="share">Megosztás</string>
     <string name="later">Később</string>
@@ -119,7 +119,7 @@
     <string name="option_take_photo_video">Kép- vagy videókészítés</string>
 
     <string name="auth_login">Bejelentkezés</string>
-    <string name="auth_register">Regisztráció</string>
+    <string name="auth_register">Fiók létrehozása</string>
     <string name="auth_submit">Beküldés</string>
     <string name="auth_skip">Kihagyás</string>
     <string name="auth_send_reset_email">Visszaállító e-mail küldése</string>
@@ -279,14 +279,6 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-
     <string name="room_creation_title">Új csevegés</string>
     <string name="room_creation_add_member">Új tag hozzáadása</string>
     <string name="room_title_one_member">1 tag</string>
-    <string name="room_e2e_alert_title">Figyelem!</string>
-    <string name="room_e2e_alert_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
-
-Még nem kéne megbíznod az adataid megtartásával.
-
-A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
-
-A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
     <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
     <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>
@@ -526,7 +518,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_room_access_warning">Hogy linkelhess egy szobához, mindenféleképp névvel kell rendelkeznie.</string>
     <string name="room_settings_room_access_entry_only_invited">Csak meghívott emberek</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bárki aki tudja a szoba linkjét, a vendégeket leszámítva</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bárki aki tudja a szoba linkjét, beleszámítva a vendékek</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bárki aki tudja a szoba linkjét, beleszámítva a vendégek</string>
 
     <string name="room_settings_banned_users_title">Tiltott felhasználók</string>
 
@@ -1096,7 +1088,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
 Kérlek ellenőrizd a rendszerbeállításokat.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Beállítások megnyitása</string>
+    <string name="open_settings">Beállítások megnyitása</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Fiók beállítások.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Az értesítések engedélyezve vannak a felhasználói fiókhoz.</string>
@@ -1205,4 +1197,184 @@ Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Rio
     <string name="store_whats_new">Folyamatosan változtatjuk és javítjuk a Riot.im-et.
 A változások teljes listája itt található: %1$s.
 Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket.</string>
+    <string name="title_activity_keys_backup_setup">Kulcs Mentés</string>
+    <string name="title_activity_keys_backup_restore">Kulcs mentés felhasználása</string>
+    <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kérlek várj…</string>
+
+    <string name="skip">Kihagy</string>
+    <string name="done">Kész</string>
+
+    <string name="settings_notification_advanced">Haladó Értesítés beállítások</string>
+    <string name="settings_notification_advanced_summary">Értesítés fontosságának beállítása eseménynél. Hang, led, vibráció beállítása</string>
+    <string name="settings_notification_by_event">Értesítés fontosságának beállítása eseménynél</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Egyedi beállítások.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Figyelj rá, hogy néhány üzenet típus csendesre van állítva (csak hang nélkül fog értesíteni).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Az egyedi beállításaidban néhány értesítés ki van kapcsolva.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Az egyedi szabályokat nem sikerült betölteni, kérlek próbáld újra.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Beállítások ellenőrzése</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Ez a hiba a Rioton kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+Ez a hiba a Rioton kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+Ez a hiba a Rioton kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Fiók hozzáadása</string>
+
+    <string name="settings_noisy_notifications_preferences">Hangos értesítések beállítása</string>
+    <string name="settings_call_notifications_preferences">Hívás értesítések beállítása</string>
+    <string name="settings_silent_notifications_preferences">Csendes értesítések beállítása</string>
+    <string name="settings_system_preferences_summary">Led szín, vibráció és hang kiválasztása…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Titkosítási kulcsok kezelése</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Kulcs mentések kezelése</string>
+
+    <string name="notification_silent">Csendes</string>
+    <string name="passphrase_empty_error_message">Kérlek adj meg egy jelmondatot</string>
+    <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Riot Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
+    <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
+
+    <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
+
+Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
+    <string name="keys_backup_setup_step2_button_title">Jelmondat beállítása</string>
+    <string name="keys_backup_setup_step3_button_title">Kész</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Visszaállítási Kulcs mentése</string>
+    <string name="keys_backup_setup_step3_save_button_title">Mentés fájlba</string>
+    <string name="recovery_key_export_saved_as_warning">A Visszaállítási Kulcs ide lett mentve: \'%s\'.
+
+Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Kérlek készíts egy másolatot</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Visszaállítási Kulcs megosztása…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Visszaállítási Kulcs készítése jelmondatból, ez néhány másodpercet is igénybe vehet.</string>
+    <string name="recovery_key">Visszaállítási Kulcs</string>
+    <string name="unexpected_error">Váratlan hiba</string>
+    <string name="keys_backup_setup_backup_started_title">Mentés elkezdődött</string>
+    <string name="keys_backup_setup_backup_started_message">A titkosítási kulcsait biztonsági mentése a Matrix szerveredre a háttérben folyamatban van. Az első mentés perceket is igénybe vehet.</string>
+
+
+    <string name="keys_backup_setup_skip_title">Biztos?</string>
+    <string name="keys_backup_setup_skip_msg">Elvesztheted a biztonságos üzeneteidet, ha kijelentkezel vagy elveszted az eszközödet.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Mentés verzió lekérdezése…</string>
+    <string name="keys_backup_restore_with_passphrase">Használd a visszaállítási jelmondatot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
+    <string name="keys_backup_restore_use_recovery_key">visszaállítási kulcs használata</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Nem tudod a visszaállítási jelmondatot, használhatod a %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Használd a Visszaállítási Kulcsot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
+    <string name="keys_backup_restore_key_enter_hint">Visszaállítási Kulcs megadása</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Üzenet Visszaállítás</string>
+
+    <string name="keys_backup_restore_with_key_helper">Elvesztetted a visszaállítási kulcsod? Készíts újat a beállításokban.</string>
+    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
+    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Mentés visszaállítása…</string>
+    <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
+    <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
+
+    <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
+    <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Visszaállított mentés %d kulccsal.</item>
+        <item quantity="other" />
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
+        <item quantity="other" />
+    </plurals>
+
+    <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Visszaállítás</string>
+    <string name="keys_backup_settings_delete_backup_button">Törlés</string>
+
+    <string name="keys_backup_settings_status_ok">A Kulcs mentés megfelelően be van állítva ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_ko">A Kulcs mentés nincs engedélyezve ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_not_setup">A kulcsaid erről az eszközről nem lesznek elmentve.</string>
+
+
+    <string name="keys_backup_settings_signature_from_unknown_device">A mentésnek ismeretlen eszköztől származó aláírása van: %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">A mentésnek érvényes aláírása van ettől az eszköztől.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Mentésnek érvényes aláírása van ellenőrzött eszköztől: %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Mentésnek érvényes aláírása van ellenőrizetlen eszköztől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Mentésnek érvénytelen aláírása van ellenőrzött eszköztől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen eszköztől: %s</string>
+    <string name="keys_backup_get_trust_error">Megbízhatósági információ nem nyerhető ki a mentésből (%s).</string>
+
+    <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
+    <string name="keys_backup_settings_delete_backup_error">A mentés törlése sikertelen (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Mentés törlése</string>
+    <string name="keys_backup_settings_delete_confirm_message">Törlöd a titkosítási kulcsaidat a szerverről? Utána a titkosított üzenetek visszaállítására már nem fogod tudni a visszaállítási kulcsot használni.</string>
+
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ha most kijelentkezel elveszted minden titkosított üzenetedet</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">A kulcsok mentése folyamatban van. Ha most kijelentkezel elveszted minden titkosított üzenetedet.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">A Biztonsági Kulcs Mentést minden eszközön be kell kapcsolni, hogy ne veszítsd el a hozzáférésedet a titkosított üzeneteidhez.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nincs szükségem a titkosított üzeneteimre</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Kulcsok mentése…</string>
+    <string name="keys_backup_activate">Kulcs Mentés felhasználása</string>
+    <string name="are_you_sure">Biztos vagy benne?</string>
+    <string name="backup">Mentsd el</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem mented el a titkosítási kulcsaidat kilépés előtt.</string>
+
+    <string name="stay">Maradok</string>
+    <string name="abort">Névjegy</string>
+
+    <string name="action_sign_out_confirmation_simple">Biztos, hogy ki akarsz lépni?</string>
+    <string name="settings_data_save_mode_summary">Az adatkímélő mód kiszűri az állapotjelentéseket és a gépelés jelentést az adatfolyamból.</string>
+
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Titkosítás engedélyezése</string>
+
+    <string name="encryption_message_recovery">Titkosított Üzenetek Visszaállítása</string>
+    <string name="error_empty_field_enter_user_name">Kérlek add meg a felhasználói nevedet.</string>
+    <string name="keys_backup_setup">Kulcs Mentés használatának megkezdése</string>
+    <string name="keys_backup_setup_step1_advanced">(Haladó)</string>
+    <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
+
+    <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
+    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a Matrix szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
+
+A maximális biztonság eléréséhez, használja más jelmondatot mint amit a felhasználói fiókhoz használtál."</string>
+    <string name="keys_backup_setup_creating_backup">Mentés készítése</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Vagy védd a mentésedet egy Visszaállítási Kulccsal amit tárolj biztonságos helyen.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Haladó) Beállítás Visszaállítási Kulccsal</string>
+    <string name="keys_backup_setup_step3_success_title">Sikerült!</string>
+    <string name="keys_backup_setup_step3_text_line1">A kulcsaid mentésre kerülnek.</string>
+    <string name="keys_backup_setup_step3_text_line2">A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.
+A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Készítettem másolatot</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Megosztás</string>
+    <string name="keys_backup_banner_setup_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_setup_line2">Kulcs Mentés használatának megkezdése</string>
+
+    <string name="keys_backup_banner_recover_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_recover_line2">Kulcs Mentés használata</string>
+
+    <string name="keys_backup_banner_update_line1">Új titkosítási kulcsok</string>
+    <string name="keys_backup_banner_update_line2">Kulcs Mentések kezelése</string>
+
+    <string name="keys_backup_banner_in_progress">Kulcsok mentése…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">%d kulcs mentése…</item>
+        <item quantity="other" />
+    </plurals>
+
+    <string name="keys_backup_info_title_version">Verzió</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmus</string>
+    <string name="keys_backup_info_title_signature">Aláírás</string>
+
 </resources>

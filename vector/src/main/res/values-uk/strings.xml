@@ -300,8 +300,6 @@
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
     <string name="room_title_one_member">1 учасник</string>
-    <string name="room_e2e_alert_title">Увага!</string>
-    <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Залишити кімнату</string>

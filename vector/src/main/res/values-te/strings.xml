@@ -205,7 +205,6 @@
     <string name="room_creation_title">కొత్త మాటామంతి</string>
     <string name="room_creation_add_member">సభ్యుని జోడించు</string>
     <string name="room_title_one_member">1 సభ్యుడు</string>
-    <string name="room_e2e_alert_title">హెచ్చరిక!</string>
 
     <string name="room_participants_leave_prompt_title">గదిని వదలండి</string>
     <string name="room_participants_leave_prompt_msg">మీరు ఖచ్చితంగా గదిని వదిలేయాలనుకుంటున్నారా?</string>

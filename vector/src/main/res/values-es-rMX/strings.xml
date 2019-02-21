@@ -287,14 +287,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_title_one_member">1 miembro</string>
-    <string name="room_e2e_alert_title">¡Aviso!</string>
-    <string name="room_e2e_alert_message">El cifrado de extremo-a-extremo esta en beta y puede ser poco fiable.
-
-No debe usarlo para proteger información.
-
-Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
-
-Mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>

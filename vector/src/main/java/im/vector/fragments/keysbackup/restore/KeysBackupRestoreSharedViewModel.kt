@@ -90,7 +90,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
 
                 override fun onNetworkError(e: Exception) {
                     loadingEvent.value = null
-                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
+                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry))
                 }
 
                 override fun onMatrixError(e: MatrixError) {
