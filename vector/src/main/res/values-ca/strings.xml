@@ -1376,9 +1376,9 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     </plurals>
 
     <string name="keys_backup_info_title_version">Versió</string>
-<string name="keys_backup_info_title_algorithm">Algoritme</string>
+    <string name="keys_backup_info_title_algorithm">Algoritme</string>
     <string name="keys_backup_info_title_signature">Signatura</string>
 
-<string name="new_recovery_method_popup_was_me">He sigut jo</string>
+    <string name="new_recovery_method_popup_was_me">He sigut jo</string>
     <string name="new_recovery_method_popup_title">Còpia de seguretat de la clau nova</string>
-    </resources>
+</resources>
