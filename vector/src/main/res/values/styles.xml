@@ -2,6 +2,13 @@
 
     <!-- ************************ Common items ************************ -->
 
+    <!-- Launcher Theme, only used for LauncherActivity (will be use even before the Activity is started) -->
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+    </style>
+
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?colorPrimary</item>
