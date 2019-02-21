@@ -1284,8 +1284,8 @@
     <string name="keys_backup_no_keysbackup_sdk_error">Сесията за шифроване не е активирана</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">Възстанови</string>
-    <string name="keys_backup_settings_delete_backup_button">Изтрий</string>
+    <string name="keys_backup_settings_restore_backup_button">Възстанови от резервно копие</string>
+    <string name="keys_backup_settings_delete_backup_button">Изтрий резервното копие</string>
 
     <string name="keys_backup_settings_status_ok">Резервното копиране на ключовете е успешно настроено на това устройство.</string>
     <string name="keys_backup_settings_status_ko">Резервното копиране на ключовете не е активно на това устройство.</string>
@@ -1366,4 +1366,10 @@
     <string name="keys_backup_info_title_algorithm">Алгоритъм</string>
     <string name="keys_backup_info_title_signature">Подпис</string>
 
-</resources>
+<string name="keys_backup_settings_untrusted_backup">За да използвате резервно копие на ключовете, възстановете с паролата или ключа за възстановяване.</string>
+    <string name="new_recovery_method_popup_title">Ново резервно копие на ключовете</string>
+    <string name="new_recovery_method_popup_description">Беше открито ново резервно копие на ключовете.
+
+Ако не сте конфигурирали нов метод за възстановяване, е възможно някой да се опитва да достъпи акаунта Ви. Веднага сменете паролата на акаунта и настройте нов метод за възстановяване в Настройки.</string>
+    <string name="new_recovery_method_popup_was_me">Бях аз</string>
+    </resources>
