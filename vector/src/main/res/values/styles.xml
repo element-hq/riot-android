@@ -2,6 +2,13 @@
 
     <!-- ************************ Common items ************************ -->
 
+    <!-- Launcher Theme, only used for LauncherActivity (will be use even before the Activity is started) -->
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+    </style>
+
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?colorPrimary</item>
@@ -34,11 +41,20 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Vector.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+
+    <style name="Vector.PopupMenuBase" parent="Widget.AppCompat.PopupMenu">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
+    </style>
+
+    <style name="Vector.PopupMenu" parent="Vector.PopupMenuBase">
+        <!--
+            Before Lollipop the popup background is white on dark theme, so force color here.
+            (v21 will revert back to default drawable)
+        -->
+        <item name="android:popupBackground">?colorBackgroundFloating</item>
     </style>
 
     <!-- actionbar icons color -->

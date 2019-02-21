@@ -1076,7 +1076,7 @@
     <string name="settings_troubleshoot_test_system_settings_success">Уведомленията са разрешени в системните настройки.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Уведомленията са забранени в системните настройки.
 Моля, проверете системните настройки.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Отвори настройки</string>
+    <string name="open_settings">Отвори настройки</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Настройки на профила.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Уведомленията са разрешени за този профил.</string>
@@ -1185,8 +1185,8 @@
     <string name="store_whats_new">Постоянно правим промени и подобрения по Riot.im.
 Пълният списък с промени може да бъде намерен тук: %1$s.
 За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
-    <string name="title_activity_keys_backup_setup">Възстановяване на Съобщения</string>
-    <string name="title_activity_keys_backup_restore">Защитени Съобщения</string>
+    <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
+    <string name="title_activity_keys_backup_restore">Използвай резервно копие на ключовете</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервното копие на ключовете не е завършило. Моля почакайте…</string>
 
     <string name="skip">Пропусни</string>
@@ -1223,14 +1223,16 @@
     <string name="passphrase_empty_error_message">Моля, въведете парола</string>
     <string name="passphrase_passphrase_too_weak">Паролата е прекалено слаба</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Моля, изтрийте паролата, ако искате да пропуснете тази стъпка.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Моля, изтрийте паролата, ако искате Riot да генерира ключ за възстановяване.</string>
     <string name="keys_backup_no_session_error">Не беше открита Matrix сесия</string>
 
     <string name="keys_backup_setup_step1_title">Никога не губете шифровани съобщения</string>
-    <string name="keys_backup_setup_step1_description">Настройте Възстановяване на Защитени Съобщения, в случай че излезете от профила или загубите това устройство.</string>
-    <string name="keys_backup_setup_step2_button_title">Настройка на парола за възстановяване</string>
-    <string name="keys_backup_setup_step3_button_title">Създай резервно копие</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Направи копие</string>
+    <string name="keys_backup_setup_step1_description">Съобщения в шифровани стаи са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключовете за прочитането им.
+
+Правете резервно копие на ключовете, за да не ги загубите.</string>
+    <string name="keys_backup_setup_step2_button_title">Настройка на парола</string>
+    <string name="keys_backup_setup_step3_button_title">Готово</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Запази ключа за възстановяване</string>
     <string name="keys_backup_setup_step3_save_button_title">Запази като файл</string>
     <string name="recovery_key_export_saved_as_warning">Ключът за възстановяване беше запазен в \'%s\'.
 
@@ -1246,26 +1248,26 @@
 
 
     <string name="keys_backup_setup_skip_title">Сигурни ли сте?</string>
-    <string name="keys_backup_setup_skip_msg">Може да загубите защитени съобщения, ако излезете от профила или загубите устройството си.</string>
+    <string name="keys_backup_setup_skip_msg">Ако излезете от профила или загубите това устройство, ще загубите достъп до шифрованите съобщения.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Установяване на версията на резервното копие…</string>
-    <string name="keys_backup_restore_with_passphrase">Използвайте паролата за възстановяване за да отключите защитената история на съобщенията</string>
+    <string name="keys_backup_restore_with_passphrase">Използвайте паролата за възстановяване за да отключите достъпа до шифрованите съобщения</string>
     <string name="keys_backup_restore_use_recovery_key">използвайте ключа за възстановяване</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Не помните паролата си за възстановяване? Вместо това, %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Използвайте ключа за възстановяване за да отключите защитената история на съобщенията</string>
+    <string name="keys_backup_restore_with_recovery_key">Използвайте ключа за възстановяване за да отключите достъпа до шифрованите съобщения</string>
     <string name="keys_backup_restore_key_enter_hint">Въведете ключ за възстановяване</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Възстановяване на съобщения</string>
 
     <string name="keys_backup_restore_with_key_helper">Загубихте ключа за възстановяване? Може да настройте нов от Настройки.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола (%s).</string>
-    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола.</string>
+    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак.</string>
 
     <string name="keys_backup_restoring_waiting_message">Възстановяване от резервно копие…</string>
     <string name="keys_backup_unlock_button">Отключи историята</string>
     <string name="keys_backup_recovery_code_empty_error_message">Въведете ключ за възстановяване</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
 
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
     <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
@@ -1285,9 +1287,9 @@
     <string name="keys_backup_settings_restore_backup_button">Възстанови</string>
     <string name="keys_backup_settings_delete_backup_button">Изтрий</string>
 
-    <string name="keys_backup_settings_status_ok">Възстановяване на Защитени Съобщения е успешно настроено на това устройство.</string>
-    <string name="keys_backup_settings_status_ko">Възстановяване на Защитени Съобщения не е активно на това устройство.</string>
-    <string name="keys_backup_settings_status_not_setup">Възстановяване на Защитени Съобщения не е настроено.</string>
+    <string name="keys_backup_settings_status_ok">Резервното копиране на ключовете е успешно настроено на това устройство.</string>
+    <string name="keys_backup_settings_status_ko">Резервното копиране на ключовете не е активно на това устройство.</string>
+    <string name="keys_backup_settings_status_not_setup">Не се извършва резервно копиране на ключовете от това устройство.</string>
 
 
     <string name="keys_backup_settings_signature_from_unknown_device">Резервното копие има подпис от непознато устройство с идентификатор %s.</string>
@@ -1298,12 +1300,70 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервното копие има невалиден подпис от непотвърдено устройство %s</string>
     <string name="keys_backup_get_trust_error">Неуспешно получаване на информация за довереността към резервното копие (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">За да използвате Възстановяване на Защитени Съобщения на това устройство, въведете паролата или ключа за възстановяване.</string>
-    <string name="keys_backup_settings_verify_device_now">За да използвате Възстановяване на Защитени Съобщения на това устройство, потвърдете устройство [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Изтриване на резервно копие…</string>
     <string name="keys_backup_settings_delete_backup_error">Неуспешно изтриване на резервно копие (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Изтриване на резервно копие</string>
     <string name="keys_backup_settings_delete_confirm_message">Изтриване на ключовете за шифроване от сървъра? Повече няма да може да използвате ключа за възстановяване за да прочетете шифрованата история на съобщенията.</string>
+
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ако излезете сега, ще загубите шифрованите съобщения</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">В момента се прави резервно копие на ключовете. Ако излезете сега, ще загубите достъп до шифрованите съобщения.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Добре е да се прави резервно копие на ключовете от всяко Ваше устройство, за да се предпазите от загуба на шифровани съобщения.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Не ми трябват шифрованите съобщения</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Създаване на резервно копие на ключовете…</string>
+    <string name="keys_backup_activate">Използвай резервно копие на ключовете</string>
+    <string name="are_you_sure">Сигурни ли сте?</string>
+    <string name="backup">Направи резервно копие</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ако не направите резервно копие на ключовете преди да излезете, ще загубите достъп до шифрованите съобщения.</string>
+
+    <string name="stay">Остани</string>
+    <string name="abort">Прекрати</string>
+
+    <string name="action_sign_out_confirmation_simple">Сигурни ли сте, че искате да излезете?</string>
+    <string name="settings_data_save_mode_summary">Режим икономия на данни игнорира уведомленията за пишещи хора, както и информация за онлайн статуса на потребители.</string>
+
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Включи шифроване</string>
+
+    <string name="encryption_message_recovery">Възстановяване на шифровани съобщения</string>
+    <string name="error_empty_field_enter_user_name">Моля, въведете потребителско име.</string>
+    <string name="keys_backup_setup">Започни използването на резервни копия на ключовете</string>
+    <string name="keys_backup_setup_step1_advanced">(За напреднали)</string>
+    <string name="keys_backup_setup_step1_manual_export">Ръчно експортиране на ключовете</string>
+
+    <string name="keys_backup_setup_step2_text_title">Защитете резервното копие с парола.</string>
+    <string name="keys_backup_setup_step2_text_description">Ще съхраним резервно копие на ключовете Ви на сървъра. Защитете резервното копие с парола.
+
+За максимална защита, паролата е добре да е различна от тази за акаунта Ви.</string>
+    <string name="keys_backup_setup_creating_backup">Създаване на резервно копие</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Или защитете резервното копие с ключ за възстановяване, който ще трябва да пазите на безопасно място.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(За напреднали) Настройка с ключ за възстановяване</string>
+    <string name="keys_backup_setup_step3_success_title">Успешно!</string>
+    <string name="keys_backup_setup_step3_text_line1">Прави се резервно копие на ключовете Ви.</string>
+    <string name="keys_backup_setup_step3_text_line2">Ключът за възстановяване е допълнителна застраховка - ако забравите паролата, може да използвате ключа за да възстановите достъпа до шифрованите съобщения.
+
+Пазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Пазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Направих копие</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Сподели</string>
+    <string name="keys_backup_banner_setup_line1">Никога не губете шифровани съобщения</string>
+    <string name="keys_backup_banner_setup_line2">Настрой създаването на резервни копия на ключовете</string>
+
+    <string name="keys_backup_banner_recover_line1">Никога не губете шифровани съобщения</string>
+    <string name="keys_backup_banner_recover_line2">Използвай резервно копие на ключовете</string>
+
+    <string name="keys_backup_banner_update_line1">Нови ключове за шифровани съобщения</string>
+    <string name="keys_backup_banner_update_line2">Управлявай в раздел резервно копие на ключовете</string>
+
+    <string name="keys_backup_banner_in_progress">Създаване на резервно копие на ключовете…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Има резервно копие на всички ключове</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Правене на резервно копие на %d ключ…</item>
+        <item quantity="other">Правене на резервно копие на %d ключа…</item>
+    </plurals>
+
+    <string name="keys_backup_info_title_version">Версия</string>
+    <string name="keys_backup_info_title_algorithm">Алгоритъм</string>
+    <string name="keys_backup_info_title_signature">Подпис</string>
 
 </resources>

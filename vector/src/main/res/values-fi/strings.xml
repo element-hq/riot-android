@@ -866,4 +866,22 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="deactivate_account_title">Deaktivoi tili</string>
     <string name="deactivate_account_submit">Deaktivoi tili</string>
 
+    <string name="title_activity_choose_sticker">Lähetä tarra</string>
+    <string name="are_you_sure">Oletko varma?</string>
+    <string name="dialog_title_third_party_licences">Kolmannen osapuolen lisenssit</string>
+
+    <string name="download">Lataa</string>
+    <string name="accept">Hyväksy</string>
+    <string name="skip">Ohita</string>
+    <string name="action_sign_out_confirmation_simple">Oletko varma, että haluat kirjautua ulos?</string>
+    <string name="dialog_title_error">Virhe</string>
+
+    <string name="send_bug_report_description_in_english">Jos mahdollista, kirjoita kuvaus englanniksi.</string>
+    <string name="option_send_sticker">Lähetä tarra</string>
+    <string name="no_sticker_application_dialog_content">Sinulla ei ole yhtään tarrapakettia käytössä.
+
+Haluatko lisätä paketteja?</string>
+
+    <string name="auth_accept_policies">Tarkista ja hyväksy tämän kotipalvelimen käytännöt:</string>
+
 </resources>

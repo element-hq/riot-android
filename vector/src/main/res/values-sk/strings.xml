@@ -1107,7 +1107,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_troubleshoot_test_system_settings_success">Oznámenia sú v systémových nastaveniach povolené.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Oznámenia nie sú v systémových nastaveniach povolené.
 Prosím, skontrolujte systémové nastavenia.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Otvoriť nastavenia</string>
+    <string name="open_settings">Otvoriť nastavenia</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Nastavenia účtu.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Oznámenia pre váš účet sú povolené.</string>
