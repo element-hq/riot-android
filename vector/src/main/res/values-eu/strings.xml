@@ -569,7 +569,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="room_settings_addresses_e2e_disabled">Zifratzea desgaituta dago gela honetan.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Gaitu zifratzea
 (Abisua: ezin da desgaitu gero!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Abisua!</string>
     <string name="directory_title">Direktorioa</string>
 
     <string name="failed_to_load_timeline_position">%s gela honetako denbora-lerroko puntu zehatz kargatzen saiatu da baina ezin izan du aurkitu.</string>
@@ -643,16 +642,6 @@ Gailu ezezagunak:</string>
     <string name="directory_server_native_rooms">%s gela natibo guztiak</string>
 
     <string name="historical_placeholder">Bilatu historiala</string>
-
-    <string name="room_settings_addresses_e2e_prompt_message">Muturretik muturrera zifratzea beta egoeran dago eta agian ez dabil behar bezala.
-
-Ez zenuke datuak babesteko erabili behar oraindik.
-
-Gailuek ezin izango dute gelara elkartu aurreko historiala deszifratu.
-
-Behin gela bateko zifratzea gaituta ezin da gero desgaitu (oraingoz)
-
-Zifratutako mezuak ez dira zifratzea oraindik ezarrita ez duten beste gailuetan ikusiko.</string>
 
     <string name="offline">Deskonektatuta</string>
 

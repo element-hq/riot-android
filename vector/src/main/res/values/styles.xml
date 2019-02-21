@@ -237,5 +237,5 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
     </style>
-    
+
 </resources>

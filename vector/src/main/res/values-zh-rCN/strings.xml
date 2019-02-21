@@ -368,7 +368,6 @@
     <string name="room_settings_addresses_e2e_disabled">这个聊天室已禁用加密。</string>
     <string name="room_settings_addresses_e2e_encryption_warning">启用加密
 （警告：无法再禁用！）</string>
-    <string name="room_settings_addresses_e2e_prompt_title">警告！</string>
     <string name="directory_title">目录</string>
 
     <string name="encryption_information_title">端对端加密信息</string>
@@ -507,16 +506,6 @@
     <string name="room_settings_unset_main_address">取消设置为主地址</string>
     <string name="room_settings_copy_room_id">复制聊天室 ID</string>
     <string name="room_settings_copy_room_address">复制聊天室地址</string>
-
-    <string name="room_settings_addresses_e2e_prompt_message">端对端加密依然在测试阶段，可能不可靠。
-
-您不应该相信它来保护您的数据。
-
-设备暂时将无法解密其加入聊天室之前的历史记录。
-
-一旦聊天室启用了加密，它不能再被关闭（暂时）。
-
-加密消息对还没有实现加密的客户端将会不可见。</string>
 
     <string name="encryption_information_claimed_ed25519_fingerprint_key">声称的 Ed25519 指纹密钥</string>
     <string name="encryption_information_blocked">已列入黑名单</string>

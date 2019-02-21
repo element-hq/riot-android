@@ -475,7 +475,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="room_settings_addresses_e2e_disabled">Szyfrowanie jest wyłączone w tym pokoju.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Włącz szyfrowanie 
 (ostrzeżenie: nie może zostać wyłączone!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Ostrzeżenie!</string>
     <string name="directory_title">Katalog</string>
     <string name="settings_theme">Motyw</string>
 
@@ -785,15 +784,6 @@ Jesteś pewien?</string>
     <string name="settings_delete_notification_targets_confirmation">Czy na pewno chcesz usunąć ten cel powiadomień?</string>
 
     <string name="room_settings_room_access_warning">Aby móc stworzyć link do pokoju musi on mieć swój adres.</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Szyfrowanie end-to-end jest w fazie beta i nie jest pewne.
-
-Nie powinieneś ufać mu w celu zabezpieczenia danych.
-
-Urządzenia nie będą w stanie na razie odszyfrować historii sprzed momentu dołączenia do pokoju.
-
-Raz włączone szyfrowanie pokoju nie może zostać wyłączone (na razie).
-
-Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają jeszcze szyfrowania.</string>
 
     <string name="failed_to_load_timeline_position">%s próbował załadować konkretny punkt na osi czasu tego pokoju, ale nie był w stanie go znaleźć.</string>
 

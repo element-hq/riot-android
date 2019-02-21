@@ -382,7 +382,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_copy_room_id">Copiar a ID da sala</string>
     <string name="room_settings_copy_room_address">Copiar a dirección da sala</string>
 
-    <string name="room_settings_addresses_e2e_prompt_title">Aviso!</string>
     <string name="directory_title">Directorio</string>
     <string name="settings_theme">Tema</string>
 

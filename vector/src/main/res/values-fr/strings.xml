@@ -377,7 +377,6 @@
     <string name="room_settings_copy_room_id">Copier l’identifiant du salon</string>
     <string name="room_settings_copy_room_address">Copier l’adresse du salon</string>
 
-    <string name="room_settings_addresses_e2e_prompt_title">Attention !</string>
     <string name="directory_title">Répertoire</string>
 
     <string name="encryption_information_title">Informations sur le chiffrement de bout en bout</string>
@@ -600,15 +599,6 @@ Veuillez noter que cette action redémarrera l’application et pourra prendre u
     <string name="room_settings_addresses_e2e_disabled">Le chiffrement est désactivé sur ce salon.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Activer le chiffrement
 (attention : ne peut pas être désactivé ensuite !)</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Le chiffrement de bout en bout est en version bêta et peut ne pas être fiable.
-
-Il ne doit pas être considéré comme fiable pour sécuriser des données.
-
-Les appareils ne pourront pas encore déchiffrer l’historique de messages d’avant leur arrivée sur le salon.
-
-Une fois le chiffrement activé pour un salon, il ne peut plus être désactivé (pour l’instant).
-
-Les messages chiffrés ne seront pas visibles sur les clients qui n’ont pas encore implémenté le chiffrement.</string>
 
     <string name="failed_to_load_timeline_position">%s a essayé de charger un point précis dans l’historique du salon mais ne l’a pas trouvé.</string>
 
@@ -1336,8 +1326,6 @@ Attention : ce fichier pourrait être supprimé si l’application est désinsta
 
     <string name="action_sign_out_confirmation_simple">Voulez-vous vraiment vous déconnecter ?</string>
     <string name="settings_data_save_mode_summary">Le mode d’économie de données utilise un filtre spécifique qui ignore les notifications de présence et de saisie.</string>
-
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Activer le chiffrement</string>
 
     <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
     <string name="error_empty_field_enter_user_name">Veuillez renseigner un nom d’utilisateur.</string>

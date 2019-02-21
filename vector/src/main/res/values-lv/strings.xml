@@ -666,16 +666,6 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_addresses_e2e_disabled">Šajā istabā nav ieslēgta šifrēšana.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ieslēgt šifrēšanu 
 (brīdinājums: vēlāk to nav iespējams izslēgt!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Brīdinājums!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end šifrēšana atrodas beta stadijā un nevar tikt uzskatīta kā uzticama.
-
-Tu tai nevari uzticēties kā datu drošību nodrošinošai.
-
-Ierīces nebūs spējīgas atšifrēt sarakstes vēsturi, kura bijusi pirms Tavas pievienošanās istabai.
-
-Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pagaidām).
-
-Šifrētās ziņas nebūs redzamas/salasāmas klientos (ierīcēs), kuros tā pagaidām nav ieviesta.</string>
 
     <string name="directory_title">Katalogs</string>
     <string name="settings_theme">Ādiņa</string>

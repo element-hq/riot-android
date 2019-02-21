@@ -572,16 +572,6 @@
     <string name="room_settings_addresses_e2e_disabled">Шифроването е изключено в тази стая.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване 
 (не може да се изключи в последствие!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Внимание!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Шифроване от край до край е експериментално и може да не е надеждно.
-
-Все още не трябва да се доверявате на това, че ще защити Вашите данни.
-
-Устройства все още не могат да разшифроват история от преди присъединяването към стая.
-
-Веднъж включено, шифроването в стаята не може да бъде изключено (за сега).
-
-Шифровани съобщения не са видими за клиенти, които все още не поддържат шифроване.</string>
 
     <string name="directory_title">Директория</string>
     <string name="settings_theme">Тема</string>
@@ -1321,8 +1311,6 @@
 
     <string name="action_sign_out_confirmation_simple">Сигурни ли сте, че искате да излезете?</string>
     <string name="settings_data_save_mode_summary">Режим икономия на данни игнорира уведомленията за пишещи хора, както и информация за онлайн статуса на потребители.</string>
-
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Включи шифроване</string>
 
     <string name="encryption_message_recovery">Възстановяване на шифровани съобщения</string>
     <string name="error_empty_field_enter_user_name">Моля, въведете потребителско име.</string>

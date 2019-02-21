@@ -550,14 +550,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_addresses_e2e_disabled">Titkosítás ki van kapcsolva ebben a szobában.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Titkosítás bekapcsolása
 (figyelmeztetés: nem lehet többé kikapcsolni)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Figyelmeztetés!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
-
-Még nem kéne megbíznod az adataid megtartásával.
-
-A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
-
-A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
     <string name="directory_title">Könyvtár</string>
 
@@ -1333,8 +1325,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
 
     <string name="action_sign_out_confirmation_simple">Biztos, hogy ki akarsz lépni?</string>
     <string name="settings_data_save_mode_summary">Az adatkímélő mód kiszűri az állapotjelentéseket és a gépelés jelentést az adatfolyamból.</string>
-
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Titkosítás engedélyezése</string>
 
     <string name="encryption_message_recovery">Titkosított Üzenetek Visszaállítása</string>
     <string name="error_empty_field_enter_user_name">Kérlek add meg a felhasználói nevedet.</string>

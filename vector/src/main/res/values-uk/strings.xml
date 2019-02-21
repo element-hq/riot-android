@@ -620,8 +620,6 @@
     <string name="room_settings_addresses_e2e_enabled">У цій кімнаті увімкнено шифрування.</string>
     <string name="room_settings_addresses_e2e_disabled">У цій кімнаті вимкнено шифрування.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Увімкнути шифрування \n(увага: вимкнути його неможливо!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Увага!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Наскрізне шифрування знаходиться в бета-версії та може бути ненадійним.\n\nПоки не варто довіряти йому безпеку секретних даних.\n\nПристрої поки не здатні розшифровувати написане до їх вступу у кімнату.\n\nШифрування у кімнаті (поки що) можна лише увімкнути, але не вимкнути.\n\nШифровані повідомлення невидимі для клієнтів, що не підтримують цю функцію.</string>
 
     <!-- Directory -->
     <string name="directory_title">Каталог</string>

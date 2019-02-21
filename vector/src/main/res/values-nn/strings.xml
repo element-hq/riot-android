@@ -711,16 +711,6 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_addresses_e2e_disabled">Kryptering er skrudd av i dette rommet.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Skru kryptering på
 (åtvaring: kan ikkje skruast av att!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Åtvaring!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
-
-Du bør ikkje stola på at ho kan sikra data enno.
-
-Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
-
-Når kryptering er skrudd på kan det (førebels) ikkje skruast av att.
-
-Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>

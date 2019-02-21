@@ -924,9 +924,6 @@
     <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
     <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warning!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Enable encryption</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>

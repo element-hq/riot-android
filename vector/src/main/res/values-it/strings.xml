@@ -622,14 +622,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_addresses_e2e_enabled">Crittografia abilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_disabled">Crittografia disabilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Abilita crittografia\n(attenzione: non può più essere disabilitata!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Attenzione!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in fase beta e potrebbe non essere affidabile.
-
-Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
-
-I dispositivi non potranno decriptare la cronologia da prima dell\'ingresso nella stanza.
-
-I messaggi criptati non saranno visibili ai riceventi che non hanno ancora implementato la crittografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Elenco</string>
