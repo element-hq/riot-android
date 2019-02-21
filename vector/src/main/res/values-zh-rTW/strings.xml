@@ -1158,8 +1158,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
 完整的變更紀錄可以在此找到：%1$s。
 為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
-    <string name="title_activity_keys_backup_setup">訊息復原</string>
-    <string name="title_activity_keys_backup_restore">安全訊息</string>
+    <string name="title_activity_keys_backup_setup">金鑰備份</string>
+    <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
 
     <string name="skip">略過</string>
@@ -1196,14 +1196,16 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="passphrase_empty_error_message">請輸入通關密語</string>
     <string name="passphrase_passphrase_too_weak">通關密語太弱了</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要略過此步驟的話，請刪除通關密語。</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要讓 Riot 生成復原金鑰的話，請刪除通關密語。</string>
     <string name="keys_backup_no_session_error">沒有可用的 Matrix 工作階段</string>
 
     <string name="keys_backup_setup_step1_title">永不遺失已加密的訊息</string>
-    <string name="keys_backup_setup_step1_description">如果您遺失或登出此裝置，請設定安全訊息復原。</string>
-    <string name="keys_backup_setup_step2_button_title">設定復原通關密語</string>
-    <string name="keys_backup_setup_step3_button_title">建立備份</string>
-    <string name="keys_backup_setup_step3_copy_button_title">複製</string>
+    <string name="keys_backup_setup_step1_description">在加密聊天室裡的訊息是使用端到端加密。只有您和接收者有金鑰可以閱讀這些訊息。
+
+安全備份您的金鑰以避免失去它們。</string>
+    <string name="keys_backup_setup_step2_button_title">設定通關密語</string>
+    <string name="keys_backup_setup_step3_button_title">完成</string>
+    <string name="keys_backup_setup_step3_copy_button_title">儲存復原金鑰</string>
     <string name="keys_backup_setup_step3_save_button_title">儲存為檔案</string>
     <string name="recovery_key_export_saved_as_warning">復原金鑰已被儲存為「%s」。
 
@@ -1219,14 +1221,14 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 
     <string name="keys_backup_setup_skip_title">您確定嗎？</string>
-    <string name="keys_backup_setup_skip_msg">如果您登出或遺失您的裝置的話，您可能會遺失安全訊息。</string>
+    <string name="keys_backup_setup_skip_msg">如果您登出或遺失您的裝置的話，您可能會失去對您的訊息的存取權。</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">正在擷取……</string>
-    <string name="keys_backup_restore_with_passphrase">使用您的復原通關密語以解鎖您的安全訊息歷史</string>
+    <string name="keys_backup_restore_with_passphrase">使用您的復原通關密語以解鎖您的加密訊息歷史</string>
     <string name="keys_backup_restore_use_recovery_key">使用您的復原金鑰</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">不知道您的復原通關密語，您可以 %s。</string>
 
-    <string name="keys_backup_restore_with_recovery_key">使用您的復原金鑰以解鎖您的安全訊息歷史</string>
+    <string name="keys_backup_restore_with_recovery_key">使用您的復原金鑰以解鎖您的加密訊息歷史</string>
     <string name="keys_backup_restore_key_enter_hint">輸入復原金鑰</string>
 
     <string name="keys_backup_restore_setup_recovery_key">訊息復原</string>
@@ -1256,9 +1258,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_settings_restore_backup_button">復原</string>
     <string name="keys_backup_settings_delete_backup_button">刪除</string>
 
-    <string name="keys_backup_settings_status_ok">安全訊息復原已為此裝置正確設定。</string>
-    <string name="keys_backup_settings_status_ko">安全訊息復原未在此裝置上啟用。</string>
-    <string name="keys_backup_settings_status_not_setup">安全訊息復原尚未設定。</string>
+    <string name="keys_backup_settings_status_ok">金鑰備份已為此裝置正確設定。</string>
+    <string name="keys_backup_settings_status_ko">金鑰備份未在此裝置上啟用。</string>
+    <string name="keys_backup_settings_status_not_setup">您的金鑰尚未從此裝置中備份。</string>
 
 
     <string name="keys_backup_settings_signature_from_unknown_device">備份有從 ID %s 的未知裝置而來的簽章。</string>
@@ -1269,11 +1271,68 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">備份有從未驗證的 %s 裝置而來的無效簽章</string>
     <string name="keys_backup_get_trust_error">取得備份的信任資訊失敗 (%s)。</string>
 
-    <string name="keys_backup_settings_untrusted_backup">要在此裝置上使用安全訊息復原，請提供您的通關密語或復原金鑰。</string>
     <string name="keys_backup_settings_deleting_backup">請刪除備份……</string>
     <string name="keys_backup_settings_delete_backup_error">刪除備份失敗 (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">刪除備份</string>
     <string name="keys_backup_settings_delete_confirm_message">要從伺服器刪除您已備份的加密金鑰？您將無法使用您的復原金鑰來讀取已加密的訊息歷史。</string>
+
+<string name="sign_out_bottom_sheet_warning_no_backup">如果您現在登出的話，您將會失去您的加密訊息</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">金鑰備份進行中。如果您現在登出，您將會失去您的加密訊息。</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">安全金鑰備份應該在您所有的裝置上啟用以避免失去對您的加密訊息的存取權。</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">我不想要我的加密訊息</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">正在備份金鑰……</string>
+    <string name="keys_backup_activate">使用金鑰備份</string>
+    <string name="are_you_sure">您確定嗎？</string>
+    <string name="backup">備份</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">除非您在登出前備份您的金鑰，否則您將會失去對您的加密訊息的存取權。</string>
+
+    <string name="stay">保留</string>
+    <string name="abort">放棄</string>
+
+    <string name="action_sign_out_confirmation_simple">您想要登出嗎？</string>
+    <string name="settings_data_save_mode_summary">數據節省模式會套用特定的過濾器，這樣狀態更新與輸入通知就會被過濾掉。</string>
+
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">啟用加密</string>
+
+    <string name="encryption_message_recovery">加密訊息復原</string>
+    <string name="error_empty_field_enter_user_name">請輸入使用者名稱。</string>
+    <string name="keys_backup_setup">開始使用金鑰備份</string>
+    <string name="keys_backup_setup_step1_advanced">（進階）</string>
+    <string name="keys_backup_setup_step1_manual_export">手動匯出金鑰</string>
+
+    <string name="keys_backup_setup_step2_text_title">以通關密語保護您的備份。</string>
+    <string name="keys_backup_setup_step2_text_description">我們將會在我們的伺服器上儲存一份加密過的您的金鑰副本。使用通關密語保護您的備份以確保其安全。
+
+要有最大的安全性，這個應該要與您的帳號密碼不一樣。</string>
+    <string name="keys_backup_setup_creating_backup">正在建立備份</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">或是使用復原金鑰來保障您的備份安全，將其儲存在安全的地方。</string>
+    <string name="keys_backup_setup_step2_skip_button_title">（進階）使用復原金鑰設定</string>
+    <string name="keys_backup_setup_step3_success_title">成功！</string>
+    <string name="keys_backup_setup_step3_text_line1">您的金鑰正在備份。</string>
+    <string name="keys_backup_setup_step3_text_line2">您的復原金鑰是安全網，如果您忘記您的通關密語，您可以使用它來復原您對您的加密訊息的存取權。
+確保您的復原金鑰放在非常安全的地方，如密碼管理員（或保險箱）</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">確保您的復原金鑰放在非常安全的地方，如密碼管理員（或保險箱）</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">我已經複製完了</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">分享</string>
+    <string name="keys_backup_banner_setup_line1">永遠不失去加密訊息</string>
+    <string name="keys_backup_banner_setup_line2">開始使用金鑰備份</string>
+
+    <string name="keys_backup_banner_recover_line1">永遠不失去加密訊息</string>
+    <string name="keys_backup_banner_recover_line2">使用金鑰備份</string>
+
+    <string name="keys_backup_banner_update_line1">新加密訊息金鑰</string>
+    <string name="keys_backup_banner_update_line2">管理金鑰備份</string>
+
+    <string name="keys_backup_banner_in_progress">正在備份金鑰……</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">所有金鑰都已備份</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="other">正在備份 %d 金鑰……</item>
+</plurals>
+
+    <string name="keys_backup_info_title_version">版本</string>
+    <string name="keys_backup_info_title_algorithm">演算法</string>
+    <string name="keys_backup_info_title_signature">簽章</string>
 
 </resources>

@@ -1042,7 +1042,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1197,8 +1197,8 @@ Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Rio
     <string name="store_whats_new">Folyamatosan változtatjuk és javítjuk a Riot.im-et.
 A változások teljes listája itt található: %1$s.
 Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket.</string>
-    <string name="title_activity_keys_backup_setup">Üzenet Visszaállítás</string>
-    <string name="title_activity_keys_backup_restore">Biztonságos Üzenetek</string>
+    <string name="title_activity_keys_backup_setup">Kulcs Mentés</string>
+    <string name="title_activity_keys_backup_restore">Kulcs mentés felhasználása</string>
     <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kérlek várj…</string>
 
     <string name="skip">Kihagy</string>
@@ -1229,20 +1229,22 @@ Ez a hiba a Rioton kívül van. Nincs Google fiók az eszközön. Kérlek nyisd 
 
 
     <string name="settings_cryptography_manage_keys">Titkosítási kulcsok kezelése</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Kulcsok mentésének kezelése</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Kulcs mentések kezelése</string>
 
     <string name="notification_silent">Csendes</string>
     <string name="passphrase_empty_error_message">Kérlek adj meg egy jelmondatot</string>
     <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Ha ki akarod hagyni ezt a lépést, kérlek töröld ki a jelmondatot.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Riot Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
     <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
 
     <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
-    <string name="keys_backup_setup_step1_description">Biztonságos Üzenet Visszaállítás beállítása arra az esetre, ha elvesztenéd ezt az eszközt vagy kijelentkeznél.</string>
-    <string name="keys_backup_setup_step2_button_title">Visszaállítási Jelmondat beállítása</string>
-    <string name="keys_backup_setup_step3_button_title">Mentés készítése</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Másolat készítése</string>
+    <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
+
+Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
+    <string name="keys_backup_setup_step2_button_title">Jelmondat beállítása</string>
+    <string name="keys_backup_setup_step3_button_title">Kész</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Visszaállítási Kulcs mentése</string>
     <string name="keys_backup_setup_step3_save_button_title">Mentés fájlba</string>
     <string name="recovery_key_export_saved_as_warning">A Visszaállítási Kulcs ide lett mentve: \'%s\'.
 
@@ -1261,11 +1263,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_setup_skip_msg">Elvesztheted a biztonságos üzeneteidet, ha kijelentkezel vagy elveszted az eszközödet.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Mentés verzió lekérdezése…</string>
-    <string name="keys_backup_restore_with_passphrase">Használd a visszaállítási jelmondatot, hogy hozzáférj a régi biztonságos üzeneteidhez</string>
+    <string name="keys_backup_restore_with_passphrase">Használd a visszaállítási jelmondatot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
     <string name="keys_backup_restore_use_recovery_key">visszaállítási kulcs használata</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Nem tudod a visszaállítási jelmondatot, használhatod a %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Használd a Visszaállítási Kulcsot, hogy hozzáférj a régi biztonságos üzeneteidhez</string>
+    <string name="keys_backup_restore_with_recovery_key">Használd a Visszaállítási Kulcsot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
     <string name="keys_backup_restore_key_enter_hint">Visszaállítási Kulcs megadása</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Üzenet Visszaállítás</string>
@@ -1283,11 +1285,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1297,9 +1299,9 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_settings_restore_backup_button">Visszaállítás</string>
     <string name="keys_backup_settings_delete_backup_button">Törlés</string>
 
-    <string name="keys_backup_settings_status_ok">Biztonságos Üzenet Visszaállítás megfelelően be van állítva ezen az eszközön.</string>
-    <string name="keys_backup_settings_status_ko">Biztonságos Üzenet Visszaállítás nincs engedélyezve ezen az eszközön.</string>
-    <string name="keys_backup_settings_status_not_setup">Biztonságos Üzenet Visszaállítás nincs beállítva ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_ok">A Kulcs mentés megfelelően be van állítva ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_ko">A Kulcs mentés nincs engedélyezve ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_not_setup">A kulcsaid erről az eszközről nem lesznek elmentve.</string>
 
 
     <string name="keys_backup_settings_signature_from_unknown_device">A mentésnek ismeretlen eszköztől származó aláírása van: %s.</string>
@@ -1310,11 +1312,69 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen eszköztől: %s</string>
     <string name="keys_backup_get_trust_error">Megbízhatósági információ nem nyerhető ki a mentésből (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Biztonságos Üzenet Visszaállítás használatához ezen az eszközön add meg most a visszaállítási jelmondatot vagy visszaállítási kulcsot.</string>
     <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
     <string name="keys_backup_settings_delete_backup_error">A mentés törlése sikertelen (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Mentés törlése</string>
     <string name="keys_backup_settings_delete_confirm_message">Törlöd a titkosítási kulcsaidat a szerverről? Utána a titkosított üzenetek visszaállítására már nem fogod tudni a visszaállítási kulcsot használni.</string>
+
+<string name="sign_out_bottom_sheet_warning_no_backup">Ha most kijelentkezel elveszted minden titkosított üzenetedet</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">A kulcsok mentése folyamatban van. Ha most kijelentkezel elveszted minden titkosított üzenetedet.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">A Biztonsági Kulcs Mentést minden eszközön be kell kapcsolni, hogy ne veszítsd el a hozzáférésedet a titkosított üzeneteidhez.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nincs szükségem a titkosított üzeneteimre</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Kulcsok mentése…</string>
+    <string name="keys_backup_activate">Kulcs Mentés felhasználása</string>
+    <string name="are_you_sure">Biztos vagy benne?</string>
+    <string name="backup">Mentsd el</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem mented el a titkosítási kulcsaidat kilépés előtt.</string>
+
+    <string name="stay">Maradok</string>
+    <string name="abort">Névjegy</string>
+
+    <string name="action_sign_out_confirmation_simple">Biztos, hogy ki akarsz lépni?</string>
+    <string name="settings_data_save_mode_summary">Az adatkímélő mód kiszűri az állapotjelentéseket és a gépelés jelentést az adatfolyamból.</string>
+
+    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Titkosítás engedélyezése</string>
+
+    <string name="encryption_message_recovery">Titkosított Üzenetek Visszaállítása</string>
+    <string name="error_empty_field_enter_user_name">Kérlek add meg a felhasználói nevedet.</string>
+    <string name="keys_backup_setup">Kulcs Mentés használatának megkezdése</string>
+    <string name="keys_backup_setup_step1_advanced">(Haladó)</string>
+    <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
+
+    <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
+    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a Matrix szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
+
+A maximális biztonság eléréséhez, használja más jelmondatot mint amit a felhasználói fiókhoz használtál."</string>
+    <string name="keys_backup_setup_creating_backup">Mentés készítése</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Vagy védd a mentésedet egy Visszaállítási Kulccsal amit tárolj biztonságos helyen.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Haladó) Beállítás Visszaállítási Kulccsal</string>
+    <string name="keys_backup_setup_step3_success_title">Sikerült!</string>
+    <string name="keys_backup_setup_step3_text_line1">A kulcsaid mentésre kerülnek.</string>
+    <string name="keys_backup_setup_step3_text_line2">A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.
+A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Készítettem másolatot</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Megosztás</string>
+    <string name="keys_backup_banner_setup_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_setup_line2">Kulcs Mentés használatának megkezdése</string>
+
+    <string name="keys_backup_banner_recover_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_recover_line2">Kulcs Mentés használata</string>
+
+    <string name="keys_backup_banner_update_line1">Új titkosítási kulcsok</string>
+    <string name="keys_backup_banner_update_line2">Kulcs Mentések kezelése</string>
+
+    <string name="keys_backup_banner_in_progress">Kulcsok mentése…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="one">%d kulcs mentése…</item>
+	<item quantity="other"/>
+</plurals>
+
+    <string name="keys_backup_info_title_version">Verzió</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmus</string>
+    <string name="keys_backup_info_title_signature">Aláírás</string>
 
 </resources>
