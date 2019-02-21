@@ -1200,36 +1200,23 @@ Auf dem nächsten Bildschirm wirst du gefragt ob du Riot erlauben möchtest im H
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Riot.im - Offene Team-Zusammenarbeit</string>
-    <string name="store_short_description">Willkommen zu Riot.im: Einer neuen Welt der offenen Kommunikation!</string>
-    <string name="store_full_description">Riot.im ist eine einfache und elegante Umgebung der Zusammenarbeit, die alle Deine verschiedenen Konversationen nimmt und sie in einer einzigen App zusammenfasst.
+    <string name="store_title">Riot.im - Kommunizierte auf deine Weise.</string>
+    <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
+    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 
-Gebaut um Gruppenchats herum lässt Riot.im dich Nachrichten, Bilder und Dateien teilen. Interagiere mit Deinen Werkzeugen und greife auf deine verschiedenen Communities zu - alles unter einer Haube. Eine Identität und Platz für alle Deine Teams: Du brauchst nicht mehr die Konten zu wechseln. Arbeite und chatte mit Personen von verschiedenen Organisationen in öffentlichen und privaten Räumen - von professionellen Projekten bis zu Schulausflügen: Riot.im wird das Zentrum all Deiner Diskussionen werden!
+Hole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
 
-Jetzt auch mit Ende-zu-Ende-Verschlüsselung!
+Warum solltest du Riot.im wählen?
 
-Die Funktionen sind unter anderem die Folgenden:
-• Teile Nachrichten, Bilder, Videos und Dateien jeder Art in Gruppen jeder Größe
-• Sprache und Video in 1:1- und Konferenzgesprächen über WebRTC
-• Ende-zu-Ende-Verschlüsselung mittels Olm (https://matrix.org/git/olm)
-• Sehe, wer Deine Nachrichten liest mit Lesebestätigungen
-• Kommuniziere mit Benutzern überall im Matrix.org-Ökosystem - nicht nur Nutzer von Riot.im!
-• Entdecke und lade Benutzer ein mittels E-Mail-Adresse
-• Beteilige dich in öffentlichen Räumen, die auch für Gäste erreichbar sein können
-• Hoch skalierbar: Unterstützt hunderte Räume mit tausenden von Benutzern
-• Volle Synchronisierung deiner Nachrichtenhistorie zwischen mehreren Geräten und Browsern
-• Fein konfigurierbare Benachrichtigungseinstellungen - synchronisiert zwischen allen Geräten
-• Endlos durchsuchbare Chat-Historie
-• Permanente Links zu Nachrichten
-• Unterstützung von RTL-Sprachen wie Arabisch
+• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
 
-Für Entwickler:
-• Riot.im ist ein Matrix-Client - gebaut auf dem offenen Standard von Matrix.org. Er erlaubt einen Austausch mit allen anderen Matrix-Kompatiblen Apps, Servern und Integrationen
-• Komplett Open-Source und der Apache Lizenz. Hol dir den Code von https://github.com/vector-im/vector-android. Pull Requests sind willkommen!
-• Einfach zu erweitern mit der offenen Matrix Client-Server API (https://matrix.org/docs/spec)
-• Betreibe deinen eigenen Server! Du kannst den Standard matrix.org-Server benutzen oder deinen eigenen Matrix-Heimserver betreiben (z.B. https://matrix.org/docs/projects/server/synapse.html)
+• MÄCHTIGE INTEGRATIONEN: Benutze Riot.im mit den Werkzeugen die du kennst und liebst. Mit Riot.im kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
 
-Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
+• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
+
+• OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
+
+• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist wobei deine Nachrichtenhistorie zwischen all deinen Geräten synchronisiert wird. Das andere \"Gerät\" kann auch ein Browser sein. Schau dir dazu auch riot.im an.</string>
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
@@ -1266,9 +1253,9 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
 
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
-    <string name="keys_backup_setup_step2_button_title">Setze Wiederherstellungspassphrase</string>
-    <string name="keys_backup_setup_step3_button_title">Sicherung anlegen</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Mache eine Kopie</string>
+    <string name="keys_backup_setup_step2_button_title">Setze Passphrase</string>
+    <string name="keys_backup_setup_step3_button_title">Erledigt</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Speichere Wiederherstellungsschlüsse</string>
     <string name="keys_backup_setup_step3_save_button_title">Sichere als Datei</string>
     <string name="keys_backup_setup_step3_please_make_copy">Bitte mache eine Kopie</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Teile den Wiederherstellungsschlüssel mit…</string>
@@ -1282,8 +1269,8 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
 
     <string name="keys_backup_restoring_waiting_message">Stelle Backup wieder her…</string>
     <string name="keys_backup_unlock_button">Historie entschlüsseln</string>
-    <string name="keys_backup_settings_restore_backup_button">Wiederherstellen</string>
-    <string name="keys_backup_settings_delete_backup_button">Löschen</string>
+    <string name="keys_backup_settings_restore_backup_button">Von Sicherung wiederherstellen</string>
+    <string name="keys_backup_settings_delete_backup_button">Sicherung löschen</string>
 
     <string name="keys_backup_settings_deleting_backup">Lösche Sicherung…</string>
     <string name="keys_backup_settings_delete_backup_error">Konnte Sicherung nicht löschen (%s)</string>
@@ -1302,7 +1289,9 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="settings_cryptography_manage_keys">Verschlüsselungsschlüsselverwaltung</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
-    <string name="keys_backup_setup_step1_description">Richte die Sichere Nachrichtenwiederherstellung für den Fall, dass du das Gerät verlierst oder dich abmeldest ein.</string>
+    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
+
+Sichere deine Schlüssel um sie nicht zu verlieren.</string>
     <string name="recovery_key_export_saved_as_warning">Dieser Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert.
 
 Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</string>
@@ -1311,7 +1300,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Homeserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
-    <string name="keys_backup_setup_skip_msg">Du kannst sichere Nachrichten verlieren, wenn du dich abmeldest oder das Gerät verlierst.</string>
+    <string name="keys_backup_setup_skip_msg">Du kannst den Zugang zu deinen Nachrichten verlieren wenn du dich abmeldest oder das Gerät verlierst.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backupversion ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase um deinen sicheren Chatverlauf zu entschlüsseln</string>
@@ -1341,9 +1330,9 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_no_keysbackup_sdk_error">Sitzungsverschlüsselung ist nicht aktiviert</string>
 
 
-    <string name="keys_backup_settings_status_ok">Sichere Nachrichtenwiederherstellung wurde auf diesem Gerät korrekt eingerichtet.</string>
-    <string name="keys_backup_settings_status_ko">Sichere Nachrichtenwiederherstellung ist auf diesem Gerät nicht aktiv.</string>
-    <string name="keys_backup_settings_status_not_setup">Sichere Nachrichtenwiederherstellung wurde nicht eingerichtet.</string>
+    <string name="keys_backup_settings_status_ok">Schlüsselsicherung wurde auf diesem Gerät korrekt eingerichtet.</string>
+    <string name="keys_backup_settings_status_ko">Schlüsselsicherung ist auf diesem Gerät nicht aktiv.</string>
+    <string name="keys_backup_settings_status_not_setup">Deine Schlüssel werden nicht von diesem Gerät gesichert.</string>
 
 
     <string name="keys_backup_settings_signature_from_unknown_device">Sicherung hat eine Signatur von einem unbekannten Gerät mit ID %s.</string>
@@ -1374,4 +1363,51 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
 
     <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
     <string name="error_empty_field_enter_user_name">Bitte geben Sie einen Benutzernamen ein.</string>
+<string name="settings_data_save_mode_summary">Der datensparsame Modus sorgt dafür, dass die Präsenz- und Tipp-Benachrichtigungen ausgefiltert werden.</string>
+
+    <string name="keys_backup_setup">Richte Schlüsselsicherung ein</string>
+    <string name="keys_backup_setup_step1_advanced">(Erweitert)</string>
+    <string name="keys_backup_setup_step1_manual_export">Schlüssel manuell exportieren</string>
+
+    <string name="keys_backup_setup_step2_text_title">Verschlüssele deine Sicherung mit einer Passphrase.</string>
+    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Server gespeichert. Schütze deine Sicherung mit einer Passphrase.
+
+Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
+    <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Oder schütze deine Sicherung mit einem Wiederherstellungsschlüssel den du sicher verwahrst.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Richte Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_setup_step3_success_title">Erfolgreich!</string>
+    <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
+    <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
+Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Teile</string>
+    <string name="keys_backup_restoring_from_passphrase_waiting_message">Stelle Sicherung wieder her. Das kann ein paar Sekunden dauern.</string>
+    <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
+    <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
+
+Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein Angreifer versuchen Zugriff auf dein Konto zu erhalten. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
+    <string name="new_recovery_method_popup_was_me">Ich war es</string>
+    <string name="keys_backup_banner_setup_line1">Verliere nie mehr verschlüsselte Nachrichten</string>
+    <string name="keys_backup_banner_setup_line2">Richte Schlüsselsicherung ein</string>
+
+    <string name="keys_backup_banner_recover_line1">Verliere nie wieder verschlüsselte Nachrichten</string>
+    <string name="keys_backup_banner_recover_line2">Benutze Schlüsselsicherung</string>
+
+    <string name="keys_backup_banner_update_line1">Neue Schlüssel für verschlüsselte Nachrichten</string>
+    <string name="keys_backup_banner_update_line2">Verwalte Schlüsselsicherung</string>
+
+    <string name="keys_backup_banner_in_progress">Sichere Schlüssel…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel gesichert</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="one">Sichere %d Schlüssel…</item>
+	<item quantity="other">Sichere %d Schlüssel…</item>
+</plurals>
+
+    <string name="keys_backup_info_title_version">Version</string>
+    <string name="keys_backup_info_title_algorithm">Algorithmus</string>
+    <string name="keys_backup_info_title_signature">Signatur</string>
+
 </resources>
