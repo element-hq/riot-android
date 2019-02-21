@@ -1205,7 +1205,7 @@ Afin d\'être sûr de ne rien manquer, continuez à installer les mises à jour.
     <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n\'est pas terminée, veuillez patienter…</string>
 
     <string name="skip">Passer</string>
-    <string name="done">Effectué</string>
+    <string name="done">Terminé</string>
 
     <string name="settings_notification_advanced">Paramètres de notification avancés</string>
     <string name="settings_notification_advanced_summary">Régler l\'importance des notifications par évènement, configurer le son, les led, les vibrations</string>
