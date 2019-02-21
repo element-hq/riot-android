@@ -2165,9 +2165,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
                 mRegistrationManager.reset();
-                showMainLayout();
-                enableLoadingScreen(false);
-                refreshDisplay();
+                fallbackToRegistrationMode();
             }
         } else if (RequestCodesKt.TERMS_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
@@ -2178,9 +2176,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): TERMS_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
                 mRegistrationManager.reset();
-                showMainLayout();
-                enableLoadingScreen(false);
-                refreshDisplay();
+                fallbackToRegistrationMode();
             }
         } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode
                 || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
