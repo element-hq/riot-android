@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="27dp"
-        android:src="@drawable/riot_splash_1"
+        android:src="@drawable/riot_splash_0_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -48,9 +48,8 @@
 
     <Button
         android:id="@+id/account_creation_policy_button_accept"
-        style="@style/LoginButtonStyle"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        style="@style/VectorButtonStyle"
+        android:layout_margin="16dp"
         android:text="@string/accept"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

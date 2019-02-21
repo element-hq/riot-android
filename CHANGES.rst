@@ -1,3 +1,28 @@
+Changes in Riot 0.8.23 (2019-02-21)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.17.
+
+Features:
+ - key backup: Trust on Decrypt (#2921)
+ - key backup: new recover method detected (#2926)
+
+Improvements:
+ - keys backup: Setup screen UX improvement
+ - keys backup: Sign Out flow improvement
+ - Improved button styles (states, ripple effect)
+ - Show direct chat section in user details only for other users, not self
+ - Sender name colors in rooms
+
+Other changes:
+ - Remove beta e2e warning (#2946)
+
+Bugfix:
+ - Fix warning "Attribute value must be constant" in VectorHomeActivity
+ - Fix key backup banner doesn't go away after you have restored from backup. (#2943)
+ - Fix issue with registration on some HomeServer (#2985)
+
 Changes in Riot 0.8.22 (2019-02-01)
 ===================================================
 
@@ -38,6 +63,7 @@ Bugfix:
  - Fix issues with Tombstone events (#2866 && #2867)
  - Fix crash on BugReportActivity if previous Activity is destroyed (#2876)
  - Key share request does not go away when user select "verify" (#2781)
+ - Fix crash when entering the settings due to missing push rules (#2893)
 
 Changes in Riot 0.8.21 (2019-01-02)
 ===================================================

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
@@ -185,6 +186,10 @@ class VectorMessagesAdapterHelper {
 
                     final String fSenderId = event.getSender();
                     final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();
+
+                    Context context = senderTextView.getContext();
+                    int textColor = colorIndexForSender(fSenderId);
+                    senderTextView.setTextColor(context.getResources().getColor(textColor));
 
                     senderTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1266,6 +1271,41 @@ class VectorMessagesAdapterHelper {
                 previewView.setUrlPreview(mContext, mSession, mUrlsPreviews.get(downloadKey), displayKey);
                 urlsPreviewLayout.addView(previewView);
             }
+        }
+    }
+
+    //Based on riot-web implementation
+    @ColorRes
+    private static int colorIndexForSender(String sender) {
+        int hash = 0;
+        int i;
+        char chr;
+        if (sender.length() == 0) {
+            return R.color.username_1;
+        }
+        for (i = 0; i < sender.length(); i++) {
+            chr = sender.charAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        int cI = (Math.abs(hash) % 8) + 1;
+        switch (cI) {
+            case 1:
+                return R.color.username_1;
+            case 2:
+                return R.color.username_2;
+            case 3:
+                return R.color.username_3;
+            case 4:
+                return R.color.username_4;
+            case 5:
+                return R.color.username_5;
+            case 6:
+                return R.color.username_6;
+            case 7:
+                return R.color.username_7;
+            default:
+                return R.color.username_8;
         }
     }
 }

@@ -20,9 +20,13 @@ import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
 import im.vector.ui.arch.LiveEvent
+import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 import org.matrix.androidsdk.util.Log
 
 class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
@@ -48,36 +52,60 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
 
         val keysBackup = sharedViewModel.session.crypto?.keysBackup
         if (keysBackup != null) {
-            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
+            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_from_passphrase_waiting_message)
             passphraseErrorText.value = null
-            keysBackup.restoreKeyBackupWithPassword(sharedViewModel.keyVersionResult.value!!.version!!,
+
+            val keysVersionResult = sharedViewModel.keyVersionResult.value!!
+            val version = keysVersionResult.version!!
+
+            keysBackup.restoreKeyBackupWithPassword(version,
                     passphrase.value!!,
                     null,
                     sharedViewModel.session.myUserId,
                     object : ApiCallback<ImportRoomKeysResult> {
                         override fun onSuccess(info: ImportRoomKeysResult) {
                             sharedViewModel.loadingEvent.value = null
-                            sharedViewModel.didSucceedWithKey(info)
+                            sharedViewModel.didRecoverSucceed(info)
+
+                            KeysBackupBanner.onRecoverDoneForVersion(context, version)
+                            trustOnDecrypt(keysBackup, keysVersionResult)
                         }
 
                         override fun onUnexpectedError(e: Exception) {
                             sharedViewModel.loadingEvent.value = null
-                            passphraseErrorText.value = context.getString(R.string.keys_backup_passphrase_error_decrypt, e.localizedMessage)
+                            passphraseErrorText.value = context.getString(R.string.keys_backup_passphrase_error_decrypt)
+                            Log.e(LOG_TAG, "## onUnexpectedError ${e.localizedMessage}", e)
                         }
 
                         override fun onNetworkError(e: Exception) {
                             sharedViewModel.loadingEvent.value = null
-                            passphraseErrorText.value = context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage)
+                            passphraseErrorText.value = context.getString(R.string.network_error_please_check_and_retry)
                         }
 
                         override fun onMatrixError(e: MatrixError) {
                             sharedViewModel.loadingEvent.value = null
-                            passphraseErrorText.value = context.getString(R.string.keys_backup_passphrase_error_decrypt, e.localizedMessage)
+                            passphraseErrorText.value = context.getString(R.string.keys_backup_passphrase_error_decrypt)
+                            Log.e(LOG_TAG, "## onMatrixError ${e.localizedMessage}")
                         }
                     })
         } else {
             //Can this happen?
             Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name, "Cannot find keys backup")
         }
+    }
+
+    private fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
+        keysBackup.trustKeysBackupVersion(keysVersionResult, true,
+                object : SimpleApiCallback<Void>() {
+
+                    override fun onSuccess(info: Void?) {
+                        Log.d(LOG_TAG, "##### trustKeysBackupVersion onSuccess")
+                    }
+
+                })
+    }
+
+    companion object {
+        private val LOG_TAG = KeysBackupRestoreFromPassphraseViewModel::class.java.name
     }
 }

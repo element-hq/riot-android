@@ -18,6 +18,7 @@
 
         <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_status</item>
+        <item name="vctr_bottom_nav_background_color">@color/riot_primary_background_color_status</item>
 
         <!-- waiting view background -->
         <item name="vctr_waiting_background_color">#AAAAAAAA</item>
@@ -37,6 +38,7 @@
 
         <!-- room message colors -->
         <item name="vctr_unread_room_indent_color">?colorAccent</item>
+        <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">#FFFF4444</item>
         <item name="vctr_message_text_color">#70879d</item>
         <item name="vctr_notice_text_color">#adadbe</item>
@@ -84,7 +86,7 @@
         <item name="vctr_preference_divider_color">#e1e1e1</item>
 
         <!-- icon colors -->
-        <item name="vctr_settings_icon_tint_color">@android:color/black</item>
+        <item name="vctr_settings_icon_tint_color">@color/accent_color_status</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@android:color/white</item>
         <item name="vctr_icon_tint_on_dark_action_bar_color">@android:color/white</item>
 
@@ -146,6 +148,8 @@
 
         <!-- Preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Status</item>
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />

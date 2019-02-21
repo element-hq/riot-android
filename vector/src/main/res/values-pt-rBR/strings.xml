@@ -20,7 +20,7 @@
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Apagar</string>
+    <string name="redact">Remover</string>
     <string name="quote">Citar</string>
     <string name="share">Compartilhar</string>
     <string name="later">Depois</string>
@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Sair da Conta</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair da Conta, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.
-Exporte estas conversas para o backup antes de sair da Conta se quiser armazená-las.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
@@ -296,8 +294,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
     <string name="room_title_one_member">1 integrante</string>
-    <string name="room_e2e_alert_title">Atenção!</string>
-    <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
@@ -596,8 +592,6 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_addresses_e2e_enabled">Criptografia está habilitada nesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">Criptografia está desabilitada nesta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia \n(atenção: não é possível desabilitar depois!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Atenção!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">A criptografia ponta-a-ponta está ainda em estágio beta de desenvolvimento e portanto pode não ser totalmente confiável.\n\nVocê não deve ainda confiar totalmente neste mecanismo para proteger seus dados.\n\nOs dispositivos ainda não conseguem decriptografar o histórico de mensagens anteriores ao momento em que você entrou na sala.\n\nQuando a criptografia está habilitada em uma sala, ela não pode mais ser desabilitada (por enquanto).\n\nMensagens criptografadas não serão visíveis para clientes que não implementaram criptografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Diretório</string>
@@ -1073,7 +1067,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
 Por favor revise as configurações do sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Abra as Configurações</string>
+    <string name="open_settings">Abra as Configurações</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>

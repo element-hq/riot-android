@@ -19,6 +19,8 @@ package im.vector.fragments.keysbackup.setup
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.nulabinc.zxcvbn.Strength
+import im.vector.R
+import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
@@ -34,9 +36,20 @@ import org.matrix.androidsdk.util.Log
  */
 class KeysBackupSetupSharedViewModel : ViewModel() {
 
+    companion object {
+        const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
+        const val NAVIGATE_TO_STEP_3 = "NAVIGATE_TO_STEP_3"
+        const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
+        const val NAVIGATE_MANUAL_EXPORT = "NAVIGATE_MANUAL_EXPORT"
+        private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
+    }
 
     lateinit var session: MXSession
 
+    var showManualExport: MutableLiveData<Boolean> = MutableLiveData()
+
+    var navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
+    var shouldPromptOnBack = true
 
     // Step 2
     var passphrase: MutableLiveData<String> = MutableLiveData()
@@ -61,12 +74,16 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     var creatingBackupError: MutableLiveData<Exception> = MutableLiveData()
     var keysVersion: MutableLiveData<KeysVersion> = MutableLiveData()
 
+
+    var loadingStatus: MutableLiveData<Int> = MutableLiveData()
+
     init {
         showPasswordMode.value = false
         recoveryKey.value = null
         isCreatingBackupVersion.value = false
         prepareRecoverFailError.value = null
         creatingBackupError.value = null
+        loadingStatus.value = null
     }
 
     fun initSession(session: MXSession) {
@@ -76,6 +93,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     fun prepareRecoveryKey(session: MXSession?, withPassphrase: String?) {
         // Update requestId
         currentRequestId.value = System.currentTimeMillis()
+        isCreatingBackupVersion.value = true
 
         recoveryKey.value = null
         prepareRecoverFailError.value = null
@@ -83,6 +101,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
             val requestedId = currentRequestId.value!!
 
             prepareRecoveryProgressProgress.value = -1
+            loadingStatus.value = R.string.keys_backup_setup_step3_generating_key_status
 
             mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(withPassphrase,
                     object : ProgressListener {
@@ -104,6 +123,15 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                             recoveryKey.value = info.recoveryKey
                             megolmBackupCreationInfo = info
                             copyHasBeenMade = false
+
+                            prepareRecoveryProgressProgress.value = -1
+                            val keyBackup = session?.crypto?.keysBackup
+                            if (keyBackup != null) {
+                                createKeysBackup(keyBackup)
+                            } else {
+                                isCreatingBackupVersion.value = false
+                                prepareRecoverFailError.value = Exception()
+                            }
                         }
 
                         override fun onUnexpectedError(e: java.lang.Exception?) {
@@ -111,20 +139,22 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                                 //this is an old request, we can't cancel but we can ignore
                                 return
                             }
+                            isCreatingBackupVersion.value = false
                             prepareRecoverFailError.value = e ?: Exception()
                         }
                     })
         }
     }
 
-    fun createKeysBackup(keysBackup: KeysBackup) {
-        isCreatingBackupVersion.value = true
+    private fun createKeysBackup(keysBackup: KeysBackup) {
+        loadingStatus.value = R.string.keys_backup_setup_creating_backup
         creatingBackupError.value = null
         keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
 
             override fun onSuccess(info: KeysVersion) {
                 isCreatingBackupVersion.value = false
                 keysVersion.value = info
+                navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -147,7 +177,4 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         })
     }
 
-    companion object {
-        private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
-    }
 }

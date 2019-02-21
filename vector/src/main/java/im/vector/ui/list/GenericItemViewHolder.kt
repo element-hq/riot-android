@@ -22,7 +22,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -43,12 +42,16 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     @BindView(R.id.item_generic_title_text)
     lateinit var titleText: TextView
+
     @BindView(R.id.item_generic_description_text)
     lateinit var descriptionText: TextView
+
     @BindView(R.id.item_generic_accessory_image)
     lateinit var accessoryImage: ImageView
+
     @BindView(R.id.item_generic_progress_bar)
     lateinit var progressBar: ProgressBar
+
     @BindView(R.id.item_generic_action_button)
     lateinit var actionButton: Button
 
@@ -66,14 +69,14 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
         item.description?.let {
             descriptionText.isVisible = true
-            descriptionText.text = item.description
-        } ?: run { descriptionText.isGone = true }
+            descriptionText.text = it
+        } ?: run { descriptionText.isVisible = false }
 
         if (item.hasIndeterminateProcess) {
             progressBar.isVisible = true
             accessoryImage.isVisible = false
         } else {
-            progressBar.isGone = true
+            progressBar.isVisible = false
             if (item.endIconResourceId != -1) {
                 accessoryImage.setImageResource(item.endIconResourceId)
                 accessoryImage.isVisible = true
@@ -83,8 +86,9 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
 
         val buttonAction = item.buttonAction
+
         if (buttonAction == null) {
-            actionButton.isGone = true
+            actionButton.isVisible = false
         } else {
             actionButton.text = buttonAction.title
             actionButton.setOnClickListener {
@@ -92,6 +96,9 @@ class GenericItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             }
             actionButton.isVisible = true
         }
-    }
 
+        itemView?.setOnClickListener {
+            item.itemClickAction?.perform?.run()
+        }
+    }
 }

@@ -199,7 +199,7 @@
     <string name="settings_app_info_link_title">Πληροφορίες εφαρμογής</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Εκτελείται… (%1$d από %2$d)</string>
     <string name="settings_troubleshoot_test_system_settings_title">Ρυθμίσεις συστήματος.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Άνοιγμα ρυθμίσεων</string>
+    <string name="open_settings">Άνοιγμα ρυθμίσεων</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Ρυθμίσεις λογαριασμού.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Οι ειδοποιήσεις είναι ενεργοποιημένες για τον λογαριασμό σας.</string>
@@ -272,7 +272,6 @@
     <string name="room_settings_read_history_entry_anyone">Οποιοσδήποτε</string>
     <string name="room_settings_category_advanced_title">Προχωρημένες</string>
     <string name="room_settings_addresses_pref_title">Διευθύνσεις</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Προσοχή!</string>
     <string name="settings_theme">Θέμα</string>
 
     <string name="encryption_information_algorithm">Αλγόριθμος</string>

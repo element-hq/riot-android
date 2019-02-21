@@ -25,7 +25,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -37,7 +36,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -1236,8 +1234,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mVectorOngoingConferenceCallView.onActivityResume();
             mActiveWidgetsBanner.onActivityResume();
         }
-
-        displayE2eRoomAlert();
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletions(mSession, mRoom);
@@ -3772,31 +3768,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     void onRoomMemberInviteClick() {
         launchInvitePeople();
     }
-
-    private static final String E2E_WARNINGS_PREFERENCES = "E2E_WARNINGS_PREFERENCES";
-
-    /**
-     * Display an e2e alert for the first opened room.
-     */
-    private void displayE2eRoomAlert() {
-        if (!isFinishing()) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-            if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
-                preferences
-                        .edit()
-                        .putBoolean(E2E_WARNINGS_PREFERENCES, false)
-                        .apply();
-
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.room_e2e_alert_title)
-                        .setMessage(R.string.room_e2e_alert_message)
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
-            }
-        }
-    }
-
 
     /* ==========================================================================================
      * Interface VectorReadReceiptsDialogFragmentListener

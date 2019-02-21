@@ -6,6 +6,10 @@ Android support can be found in this [![Android Matrix room #riot-android:matrix
 
 # Specific rules for Matrix Android projects
 
+## Android Studio settings
+
+Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
+
 ## Compilation
 
 Riot Android uses by default the Matrix Android SDK library (file `matrix-sdk.aar`).

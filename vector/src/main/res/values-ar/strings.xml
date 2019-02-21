@@ -41,8 +41,6 @@
     <string name="room_no_conference_call_in_encrypted_rooms">مكالمات الاجتماعات ليست مدعومة في الغرفة المعمّاة</string>
     <string name="send_anyway">أرسِل بأي حال</string>
     <string name="action_sign_out">اخرج</string>
-    <string name="action_sign_out_confirmation">كنوع من الأمان، عند خروجك ستُحذف أية مفاتيح تعمية طرفين ما يجعل تأريخ الدردشة المعمّى السابق محال القراءة إن ولجت ثانيةً.
-اختر ”صدّر“ إن أردت نسخها احتياطيا قبل الخروج.</string>
     <string name="action_voice_call">مكالمة صورية</string>
     <string name="action_video_call">مكالمة صوتية</string>
     <string name="action_global_search">بحث عمومي</string>
@@ -201,7 +199,6 @@
 
     <string name="room_creation_title">دردشة جديدة</string>
     <string name="room_creation_add_member">أضِف عضوا</string>
-    <string name="room_e2e_alert_title">تحذير!</string>
 
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>
@@ -392,7 +389,6 @@
     <string name="room_settings_addresses_e2e_disabled">التعمية معطّلة في هذه الغرفة.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">فعّل التعمية
 (احترس: لا يمكنك تعطيلها ثانيةً!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">تحذير!</string>
     <string name="directory_title">الدليل</string>
     <string name="settings_theme">السمة</string>
 
@@ -709,13 +705,6 @@
 
     <string name="call">مكالمة</string>
     <string name="open_chat_header">افتح الترويسة</string>
-    <string name="room_e2e_alert_message">تعمية الطرفين في نسخة بيتا وقد لا يُعتمد عليها.
-
-عليك ألا تثق بها لتأمين البيانات.
-
-لا تستطيع الأجهزة بعد فك تعمية التأريخ الذي حصل قبل انضمامهم للغرف.
-
-لن تظهر الرسائل المعماة للبرمجيات التي لا تدعم التعمية بعد.</string>
 
     <string name="room_participants_header_call">المكالمة</string>
     <string name="settings_set_sync_delay">التأخير بين كل طلبي مزامنة</string>
@@ -833,15 +822,6 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة في هذه الغرفة إلى الأجهزة غير المؤكّدة.</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">تنسيق الاسم المختصر غير صالح</string>
-    <string name="room_settings_addresses_e2e_prompt_message">تعمية الطرفين في نسخة بيتا وقد لا يُعتمد عليها.
-
-عليك ألا تثق بها لتأمين البيانات.
-
-لا تستطيع الأجهزة بعد فك تعمية التأريخ الذي حصل قبل انضمامهم للغرف.
-
-يستحيل إلغاء التعمية ما إن تُفعّل في إحدى الغرفة (حاليا على الأقل).
-
-لن تظهر الرسائل المعماة للبرمجيات التي لا تدعم التعمية بعد.</string>
 
     <string name="encryption_information_curve25519_identity_key">مفتاح تعريف Curve25519</string>
     <string name="encryption_information_ed25519_fingerprint">بصمة Ed25519</string>
@@ -1093,4 +1073,16 @@
 
 ظهور الرسائل في «ماترِكس» شبيه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">طُلب مفتاح البصمة Ed25519</string>
+    <string name="title_activity_keys_backup_restore">الرسائل الآمنة</string>
+    <string name="skip">تخطي</string>
+    <string name="done">تم</string>
+
+    <string name="dialog_title_error">خطأ</string>
+
+    <string name="settings_call_category">المكالمات</string>
+    <string name="room_participants_action_kick">طرد</string>
+    <string name="reason_hint">السبب</string>
+
+    <string name="room_sliding_menu_version_x">الإصدار %s</string>
+    <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
 </resources>

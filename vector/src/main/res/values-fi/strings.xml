@@ -50,8 +50,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Kirjaudu ulos</string>
-    <string name="action_sign_out_confirmation">Turvallisuussyistä uloskirjautuminen poistaa salausavaimet. Ilman salausavaimia et voi lukea viestihistoriaa salatuissa huoneissa.
-Valitse \"vie\" varmuuskopioidaksesi avaimet ennen uloskirjautumista.</string>
     <string name="action_voice_call">Äänipuhelu</string>
     <string name="action_video_call">Videopuhelu</string>
     <string name="action_global_search">Laaja haku</string>
@@ -300,14 +298,6 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_creation_title">Uusi keskustelu</string>
     <string name="room_creation_add_member">Lisää jäsen</string>
     <string name="room_title_one_member">1 jäsen</string>
-    <string name="room_e2e_alert_title">Varoitus!</string>
-    <string name="room_e2e_alert_message">Salaus on testikäytössä, eikä välttämättä toimi luotettavasti.
-
-Älä käytä sitä salaista tietoa varten.
-
-Laitteet eivät voi näyttää salattuja viestejä ajalta ennen huoneeseen liittymistä.
-
-Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <!-- ??? -->
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>
@@ -432,7 +422,7 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Keskustelut</string>
     <string name="room_sliding_menu_settings">Asetukset</string>
-    <string name="room_sliding_menu_version">Versio: </string>
+    <string name="room_sliding_menu_version">Versio</string>
     <string name="room_sliding_menu_term_and_conditions">Käyttöehdot</string>
     <string name="room_sliding_menu_third_party_notices">Kolmannen osapuolen tiedot</string>
     <string name="room_sliding_menu_copyright">Tekijänoikeustiedot</string>
@@ -514,10 +504,10 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="account_phone_number_already_used_error">Kyseinen puhelinnumero on jo käytössä</string>
 
     <string name="settings_change_password">Vaihda salasana</string>
-    <string name="settings_old_password">vanha salasana</string>
-    <string name="settings_new_password">uusi salasana</string>
-    <string name="settings_confirm_password">toista uusi salasana</string>
-    <string name="settings_fail_to_update_password">Salasanan vaihtaminen epäonnistui</string>
+    <string name="settings_old_password">Vanha salasana</string>
+    <string name="settings_new_password">Uusi salasana</string>
+    <string name="settings_confirm_password">Vahvista uusi salasana</string>
+    <string name="settings_fail_to_update_password">Salasanan päivittäminen epäonnistui</string>
     <string name="settings_password_updated">Salasanasi on vaihdettu</string>
     <string name="settings_unignore_user">Näytä kaikki viestit käyttäjältä %s?</string>
 
@@ -604,14 +594,6 @@ Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <
     <string name="room_settings_addresses_e2e_disabled">Tämä huone ei ole salattu.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Käytä salausta
 (HUOM! Salausta ei voi poistaa käytöstä!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Varoitus!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Salaus on testikäytössä, eikä välttämättä toimi luotettavasti.
-
-Älä käytä sitä salaista tietoa varten.
-
-Laitteet eivät voi näyttää salattuja viestejä ajalta ennen huoneeseen liittymistä.
-
-Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <!-- ??? -->
 
     <!-- Directory -->
     <string name="directory_title">Luettelo</string>
@@ -847,4 +829,51 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="rejoin">Liity uudelleen</string>
     <string name="forget_room">Unohda huone</string>
     <string name="room_settings_no_flair">" Tälle huoneelle ei näytetä tyyliä millekään yhteisölle"</string>
+    <string name="settings_send_markdown">Markdown-muotoilu</string>
+    <string name="markdown_has_been_enabled">Markdown on käytössä.</string>
+    <string name="markdown_has_been_disabled">Markdown on pois käytöstä.</string>
+
+    <string name="settings_call_category">Puhelut</string>
+    <string name="settings_call_ringtone_dialog_title">Valitse soittoääni puheluille:</string>
+
+    <string name="room_sliding_menu_version_x">Versio %s</string>
+    <string name="settings_password">Salasana</string>
+    <string name="deactivate_account_prompt_password">Kirjoita salasanasi jatkaaksesi:</string>
+    <string name="error_empty_field_your_password">Kirjoita salasanasi.</string>
+    <string name="status_theme">Status.im-teema</string>
+
+    <string name="settings_send_typing_notifs">Lähetä kirjoitusilmoitukset</string>
+    <string name="settings_show_read_receipts">Näytä lukukuittaukset</string>
+    <string name="settings_show_join_leave_messages">Näytä liittymiset ja poistumiset</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Näytä tilitapahtumat</string>
+    <string name="settings_preview_media_before_sending">Esikatsele media ennen lähettämistä</string>
+
+    <string name="settings_labs_enable_send_voice">Lähetä ääniviestejä</string>
+    <string name="settings_opt_in_of_analytics">Lähetä analytiikkatietoja</string>
+    <string name="send_bug_report_rage_shake">Ravista raivokkaasti ilmoittaaksesi ongelmasta</string>
+
+    <string name="settings_deactivate_account_section">Deaktivoi tili</string>
+    <string name="settings_deactivate_my_account">Deaktivoi tilini</string>
+
+    <string name="deactivate_account_title">Deaktivoi tili</string>
+    <string name="deactivate_account_submit">Deaktivoi tili</string>
+
+    <string name="title_activity_choose_sticker">Lähetä tarra</string>
+    <string name="are_you_sure">Oletko varma?</string>
+    <string name="dialog_title_third_party_licences">Kolmannen osapuolen lisenssit</string>
+
+    <string name="download">Lataa</string>
+    <string name="accept">Hyväksy</string>
+    <string name="skip">Ohita</string>
+    <string name="action_sign_out_confirmation_simple">Oletko varma, että haluat kirjautua ulos?</string>
+    <string name="dialog_title_error">Virhe</string>
+
+    <string name="send_bug_report_description_in_english">Jos mahdollista, kirjoita kuvaus englanniksi.</string>
+    <string name="option_send_sticker">Lähetä tarra</string>
+    <string name="no_sticker_application_dialog_content">Sinulla ei ole yhtään tarrapakettia käytössä.
+
+Haluatko lisätä paketteja?</string>
+
+    <string name="auth_accept_policies">Tarkista ja hyväksy tämän kotipalvelimen käytännöt:</string>
+
 </resources>

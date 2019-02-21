@@ -90,7 +90,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
 
                 override fun onNetworkError(e: Exception) {
                     loadingEvent.value = null
-                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage))
+                    _keyVersionResultError.value = LiveEvent(context.getString(R.string.network_error_please_check_and_retry))
                 }
 
                 override fun onMatrixError(e: MatrixError) {
@@ -105,7 +105,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_RECOVER_WITH_KEY)
     }
 
-    fun didSucceedWithKey(result: ImportRoomKeysResult) {
+    fun didRecoverSucceed(result: ImportRoomKeysResult) {
         importKeyResult = result
         _navigateEvent.value = LiveEvent(NAVIGATE_TO_SUCCESS)
     }

@@ -47,7 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Abmelden</string>
-    <string name="action_sign_out_confirmation">Aus Sicherheitsgründen werden beim Abmelden alle Verschlüsselungsschlüssel gelöscht. Dadurch werden die vorher verschlüsselten Chats für dich unlesbar, wenn du dich wieder anmeldest.\nWähle Exportieren um die Schlüssel zu sichern bevor du dich abmeldest.</string>
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>
@@ -131,7 +130,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Anmelden</string>
-    <string name="auth_register">Registrieren</string>
+    <string name="auth_register">Konto erstellen</string>
     <string name="auth_submit">Absenden</string>
     <string name="auth_skip">Überspringen</string>
     <string name="auth_send_reset_email">Rücksetz-E-Mail senden</string>
@@ -300,8 +299,6 @@ Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adr
     <string name="room_creation_title">Neuer Chat</string>
     <string name="room_creation_add_member">Mitglied hinzufügen</string>
     <string name="room_title_one_member">1 Mitglied</string>
-    <string name="room_e2e_alert_title">Achtung!</string>
-    <string name="room_e2e_alert_message">Ende-zu-Ende-Verschlüsselung ist im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.\n\nDu solltest noch nicht darauf vertrauen, dass deine Daten richtig abgesichert werden.\n\nGeräte sind noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.\n\nVerschlüsselte Nachrichten werden auf Geräten, die Verschlüsselung noch nicht implementiert haben, nicht sichtbar sein.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
@@ -601,16 +598,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_addresses_e2e_enabled">Verschlüsselung ist in diesem Raum aktiviert.</string>
     <string name="room_settings_addresses_e2e_disabled">Verschlüsselung ist in diesem Raum deaktiviert.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Verschlüsselung aktivieren \n(Warnung: Kann nicht wieder deaktiviert werden!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warnung!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Die Ende-zu-Ende-Verschlüsselung befindet sich aktuell im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.
-
-Du solltest noch nicht darauf vertrauen, dass deine Daten auch zuverlässig verschlüsselt werden.
-
-Geräte sind aktuell noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.
-
-Wenn die Verschlüsselung für einen Raum einmal aktiviert wurde, kann sie (aktuell) nicht wieder deaktiviert werden.
-
-Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüsselung noch nicht implementiert wurde, nicht sichtbar sein.</string>
 
     <!-- Directory -->
     <string name="directory_title">Verzeichnis</string>
@@ -1139,7 +1126,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_troubleshoot_test_system_settings_success">Benachrichtigungen sind in den Systemeinstellungen aktiviert.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications sind in den Systemeinstellungen deaktiviert.
 Bitte überprüfe die Systemeinstellungen.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Öffne Einstellungen</string>
+    <string name="open_settings">Öffne Einstellungen</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Benachrichtigungen sind für dein Konto eingeschaltet.</string>
@@ -1249,4 +1236,125 @@ Entdecke wahre Effizienz und offene Zusammenarbeit mit Riot.im!</string>
     <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
 Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
+    <string name="title_activity_keys_backup_setup">Nachrichten-Wiederherstellung</string>
+    <string name="title_activity_keys_backup_restore">Sichere Nachrichten</string>
+    <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
+
+    <string name="skip">Überspringen</string>
+    <string name="done">Erledigt</string>
+
+    <string name="settings_notification_advanced">Erweiterte Benachrichtigungseinstellungen</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Angepasste Einstellungen.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Beachte, dass einige Nachrichtentypen leise sind (erzeugen eine Benachrichtigung aber keinen Ton).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Einige Benachrichtigungen sind in deinen erweiterten Einstellungen deaktiviert.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Konnte angepasste Regeln nicht laden. Bitte erneut versuchen.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Einstellungen überprüfen</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Konto hinzufügen</string>
+
+    <string name="settings_noisy_notifications_preferences">Laute Benachrichtigungen einstellen</string>
+    <string name="settings_call_notifications_preferences">Anrufbenachrichtigung einstellen</string>
+    <string name="settings_silent_notifications_preferences">Stumme Benachrichtigungen einstellen</string>
+    <string name="settings_system_preferences_summary">Wähle LED-Farbe, Vibration, Ton…</string>
+
+
+    <string name="notification_silent">Stumm</string>
+    <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
+    <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn du diesen Schritt überspringen möchtest.</string>
+    <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
+
+    <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
+    <string name="keys_backup_setup_step2_button_title">Setze Wiederherstellungspassphrase</string>
+    <string name="keys_backup_setup_step3_button_title">Sicherung anlegen</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Mache eine Kopie</string>
+    <string name="keys_backup_setup_step3_save_button_title">Sichere als Datei</string>
+    <string name="keys_backup_setup_step3_please_make_copy">Bitte mache eine Kopie</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Teile den Wiederherstellungsschlüssel mit…</string>
+    <string name="recovery_key">Wiederherstellungsschlüssel</string>
+    <string name="unexpected_error">Unerwarteter Fehler</string>
+    <string name="keys_backup_setup_backup_started_title">Sicherung gestartet</string>
+    <string name="keys_backup_setup_skip_title">Bist du sicher?</string>
+    <string name="keys_backup_restore_key_enter_hint">Gebe Wiederherstellungsschlüssel ein</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Nachrichtenwiederherstellung</string>
+
+    <string name="keys_backup_restoring_waiting_message">Stelle Backup wieder her…</string>
+    <string name="keys_backup_unlock_button">Historie entschlüsseln</string>
+    <string name="keys_backup_settings_restore_backup_button">Wiederherstellen</string>
+    <string name="keys_backup_settings_delete_backup_button">Löschen</string>
+
+    <string name="keys_backup_settings_deleting_backup">Lösche Sicherung…</string>
+    <string name="keys_backup_settings_delete_backup_error">Konnte Sicherung nicht löschen (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
+
+    <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere den Ton, LED, Vibration</string>
+    <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Dieser Fehler ist außerhalb von Riot passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+Dieser Fehler ist außerhalb von Riot passiert. Er kann aus einer vielzahl von Gründen passieren. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Du kannst sicherstellen, dass die Datennutzung von Google Play Dienste nicht eingeschränkt sind und dass deine Geräteuhr richtig eingestellt ist. Es kann aber auch auf Custom ROM\'s passieren.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
+    <string name="settings_cryptography_manage_keys">Verschlüsselungsschlüsselverwaltung</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Verwalte Schlüsselsicherung</string>
+
+    <string name="keys_backup_setup_step1_description">Richte die Sichere Nachrichtenwiederherstellung für den Fall, dass du das Gerät verlierst oder dich abmeldest ein.</string>
+    <string name="recovery_key_export_saved_as_warning">Dieser Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert.
+
+Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</string>
+
+    <string name="keys_backup_setup_step3_generating_key_status">Generiere Wiederherstellungsschlüssel aus der Passphrase. Dies kann mehrere Sekunden brauchen.</string>
+    <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Homeserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
+
+
+    <string name="keys_backup_setup_skip_msg">Du kannst sichere Nachrichten verlieren, wenn du dich abmeldest oder das Gerät verlierst.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Rufe Backupversion ab…</string>
+    <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase um deinen sicheren Chatverlauf zu entschlüsseln</string>
+    <string name="keys_backup_restore_use_recovery_key">nutze deinen Wiederherstellungsschlüssel</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Wen du deine Wiederherstellungspassphrase nicht weißt, kannst du %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Nutze deinen Wiederherstellungsschlüssel um deinen sicheren Chatverlauf zu entschlüsseln</string>
+    <string name="keys_backup_restore_with_key_helper">Hast du deinen Wiederherstellungsschlüssel verloren? Du kannst einen neuen in den Einstellungen einrichten.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Sicherung konnte mit dieser Passphrase nicht entschlüsselt werden. Bitte stelle sicher, dass du die korrekte Wiederherstellungspassphrase eingegeben hast.</string>
+    <string name="network_error_please_check_and_retry">Netzwerkfehler: Bitte überprüfe deine Verbindung und versuche es erneut.</string>
+
+    <string name="keys_backup_recovery_code_empty_error_message">Bitte gebe deinen Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
+
+    <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
+    <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurden wiederhergestellt und %2$d vorher unbekannte Schlüssel wurden hinzugefügt</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
+        <item quantity="other">Backup mit %d Schlüssel wiederhergestellt.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d neuer Schlüssel wurde diesem Gerät hinzugefügt.</item>
+        <item quantity="other">%d neue Schlüssel wurde diesem Gerät hinzugefügt.</item>
+    </plurals>
+
+    <string name="keys_backup_get_version_error">Konnte letzte Version der Wiederherstellungsschlüssel nicht laden (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Sitzungsverschlüsselung ist nicht aktiviert</string>
+
+
+    <string name="keys_backup_settings_status_ok">Sichere Nachrichtenwiederherstellung wurde auf diesem Gerät korrekt eingerichtet.</string>
+    <string name="keys_backup_settings_status_ko">Sichere Nachrichtenwiederherstellung ist auf diesem Gerät nicht aktiv.</string>
+    <string name="keys_backup_settings_status_not_setup">Sichere Nachrichtenwiederherstellung wurde nicht eingerichtet.</string>
+
+
+    <string name="keys_backup_settings_signature_from_unknown_device">Sicherung hat eine Signatur von einem unbekannten Gerät mit ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Sicherung hat eine valide Sicherung von diesem Gerät.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Sicherung hat eine valide Signatur vom verifiziertem Gerät %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Sicherung hat eine valide Signatur vom unverifiziertem Gerät %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Sicherung hat eine invalide Signatur vom verifiziertem Gerät %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Sicherung hat eine invalide Signatur vom unverifiziertem Gerät %s</string>
+    <string name="keys_backup_get_trust_error">Konnte Vertrauensinformationen für die Sicherung nicht abrufen (%s).</string>
+
+    <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
+
 </resources>

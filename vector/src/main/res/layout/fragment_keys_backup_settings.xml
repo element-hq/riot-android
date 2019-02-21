@@ -4,6 +4,7 @@
     android:id="@+id/keys_backup_settings_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:listitem="@layout/item_notification_troubleshoot">
-
-</android.support.v7.widget.RecyclerView>
+    android:clipToPadding="false"
+    android:paddingTop="@dimen/layout_vertical_margin"
+    android:paddingBottom="@dimen/layout_vertical_margin_big"
+    tools:listitem="@layout/item_notification_troubleshoot" />

@@ -15,30 +15,23 @@
  */
 package im.vector.fragments.keysbackup.setup
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.transition.TransitionManager
+import android.support.design.widget.BottomSheetDialog
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.OnClick
-import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
-import im.vector.activity.KeysBackupSetupActivity
-import im.vector.activity.MXCActionBarActivity
-import im.vector.activity.VectorAppCompatActivity
 import im.vector.fragments.VectorBaseFragment
+import im.vector.ui.arch.LiveEvent
 import im.vector.util.*
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import java.io.ByteArrayInputStream
@@ -48,26 +41,14 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
-    @BindView(R.id.keys_backup_setup_step3_copy_button)
-    lateinit var mCopyButton: Button
-    @BindView(R.id.keys_backup_setup_step3_save_button)
-    lateinit var mSaveButton: Button
-
-
     @BindView(R.id.keys_backup_setup_step3_button)
     lateinit var mFinishButton: Button
 
     @BindView(R.id.keys_backup_recovery_key_text)
     lateinit var mRecoveryKeyTextView: TextView
 
-    @BindView(R.id.keys_backup_recovery_key_progress)
-    lateinit var mProgress: ProgressBar
-
-    @BindView(R.id.keys_backup_recovery_key_spinner_text)
-    lateinit var mSpinnerStatusText: TextView
-
-    @BindView(R.id.keys_backup_setup_step3_root)
-    lateinit var mRootLayout: ViewGroup
+    @BindView(R.id.keys_backup_setup_step3_line2_text)
+    lateinit var mRecoveryKeyLabel2TextView: TextView
 
     companion object {
         fun newInstance() = KeysBackupSetupStep3Fragment()
@@ -82,52 +63,15 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         } ?: throw Exception("Invalid Activity")
 
 
-        viewModel.prepareRecoverFailError.observe(this, Observer { error ->
-            if (error != null) {
-                activity?.run {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.unknown_error)
-                            .setMessage(error.localizedMessage)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                //nop
-                                viewModel.prepareRecoverFailError.value = null
-                                activity?.onBackPressed()
-                            }
-                            .show()
-                }
-            }
-        })
+        viewModel.shouldPromptOnBack = false
 
-        viewModel.prepareRecoveryProgressProgress.observe(this, Observer { newValue ->
-            if (newValue == -1) {
-                // It can happen when a previous recovery key is still in computation
-                mProgress.progress = 0
-                mProgress.isIndeterminate = true
-            } else {
-                mProgress.isIndeterminate = false
-                mProgress.progress = newValue ?: 0
-            }
-        })
+        viewModel.passphrase.observe(this, Observer {
+            if (it.isNullOrBlank()) {
+                //Recovery was generated, so show key and options to save
+                mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
+                mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
-        viewModel.prepareRecoveryProgressTotal.observe(this, Observer { newValue ->
-            mProgress.max = newValue ?: 100
-        })
-
-        viewModel.recoveryKey.observe(this, Observer { newValue ->
-            TransitionManager.beginDelayedTransition(mRootLayout)
-            if (newValue == null || newValue.isEmpty()) {
-                mProgress.isVisible = true
-                mSpinnerStatusText.visibility = View.VISIBLE
-                mRecoveryKeyTextView.text = null
-                mRecoveryKeyTextView.visibility = View.GONE
-                mCopyButton.isVisible = false
-                mFinishButton.isVisible = false
-                mSaveButton.isVisible = false
-            } else {
-                mProgress.isVisible = false
-                mSpinnerStatusText.visibility = View.GONE
-
-                mRecoveryKeyTextView.text = newValue
+                mRecoveryKeyTextView.text = viewModel.recoveryKey.value!!
                         .replace(" ", "")
                         .chunked(16)
                         .joinToString("\n") {
@@ -135,91 +79,77 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                                     .chunked(4)
                                     .joinToString(" ")
                         }
-
                 mRecoveryKeyTextView.isVisible = true
-                mCopyButton.isVisible = true
-                mFinishButton.isVisible = true
-                mSaveButton.isVisible = true
-            }
-        })
 
-        viewModel.creatingBackupError.observe(this, Observer { error ->
-            if (error != null) {
-                activity?.let {
-                    AlertDialog.Builder(it)
-                            .setTitle(R.string.unexpected_error)
-                            .setMessage(error.localizedMessage)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                //nop
-                                viewModel.creatingBackupError.value = null
-                                activity?.onBackPressed()
-                            }
-                            .show()
-                }
-            }
-        })
-
-        viewModel.keysVersion.observe(this, Observer { keysVersion ->
-            if (keysVersion != null) {
-                activity?.let {
-                    AlertDialog.Builder(it)
-                            .setTitle(R.string.keys_backup_setup_backup_started_title)
-                            .setMessage(R.string.keys_backup_setup_backup_started_message)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                val resultIntent = Intent()
-                                resultIntent.putExtra(KeysBackupSetupActivity.KEYS_VERSION, keysVersion.version)
-                                it.setResult(Activity.RESULT_OK, resultIntent)
-                                it.finish()
-                            }
-                            .show()
-                }
-            }
-        })
-
-        viewModel.isCreatingBackupVersion.observe(this, Observer { newValue ->
-            val isLoading = newValue ?: false
-            if (isLoading) {
-                (activity as? VectorAppCompatActivity)?.showWaitingView()
             } else {
-                (activity as? VectorAppCompatActivity)?.hideWaitingView()
+                mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2)
+                mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
+                mRecoveryKeyTextView.isVisible = false
             }
         })
+
     }
 
     @OnClick(R.id.keys_backup_setup_step3_button)
     fun onFinishButtonClicked() {
         if (viewModel.megolmBackupCreationInfo == null) {
             //nothing
-        } else if (viewModel.copyHasBeenMade) {
-            val session = (activity as? MXCActionBarActivity)?.session
-                    ?: Matrix.getInstance(context)?.getSession(null)
-            val keysBackup = session?.crypto?.keysBackup
-            if (keysBackup != null) {
-                viewModel.createKeysBackup(keysBackup)
-            }
         } else {
-            Toast.makeText(context, R.string.keys_backup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
+            if (viewModel.passphrase.value.isNullOrBlank() && !viewModel.copyHasBeenMade) {
+                Toast.makeText(context, R.string.keys_backup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
+            } else {
+                viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_FINISH)
+            }
         }
     }
 
     @OnClick(R.id.keys_backup_setup_step3_copy_button)
     fun onCopyButtonClicked() {
-        val recoveryKey = viewModel.recoveryKey.value
-        if (recoveryKey != null) {
+        val dialog = BottomSheetDialog(activity!!)
+        dialog.setContentView(R.layout.bottom_sheet_save_recovery_key)
+        dialog.setCanceledOnTouchOutside(true)
+        val recoveryKey = viewModel.recoveryKey.value!!
+
+        if (viewModel.passphrase.value.isNullOrBlank()) {
+            dialog.findViewById<TextView>(R.id.keys_backup_recovery_key_text)?.isVisible = false
+        } else {
+            dialog.findViewById<TextView>(R.id.keys_backup_recovery_key_text)?.let {
+                it.isVisible = true
+                it.text = recoveryKey.replace(" ", "")
+                        .chunked(16)
+                        .joinToString("\n") {
+                            it
+                                    .chunked(4)
+                                    .joinToString(" ")
+                        }
+            }
+        }
+
+        dialog.findViewById<View>(R.id.keys_backup_setup_save)?.setOnClickListener {
+            if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+                exportRecoveryKeyToFile(recoveryKey)
+            }
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<View>(R.id.keys_backup_setup_share)?.setOnClickListener {
             startSharePlainTextIntent(this,
                     context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                     recoveryKey,
                     context?.getString(R.string.recovery_key))
             viewModel.copyHasBeenMade = true
+            dialog.dismiss()
         }
+
+        dialog.show()
     }
 
-    @OnClick(R.id.keys_backup_setup_step3_save_button)
-    fun onSaveToFileClicked() {
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
-            viewModel.recoveryKey.value?.let {
-                exportRecoveryKeyToFile(it)
-            }
+    @OnClick(R.id.keys_backup_recovery_key_text)
+    fun onRecoveryKeyClicked() {
+        viewModel.recoveryKey.value?.let {
+            viewModel.copyHasBeenMade = true
+
+            copyToClipboard(activity!!, it)
         }
     }
 

@@ -46,7 +46,6 @@
     <string name="room_preview_invitation_format">%s 邀请您加入这个聊天室</string>
     <string name="room_creation_title">新的聊天</string>
     <string name="room_creation_add_member">添加成员</string>
-    <string name="room_e2e_alert_title">警告！</string>
 
     <string name="room_participants_leave_prompt_title">退出聊天室</string>
     <string name="room_participants_leave_prompt_msg">您确定要退出聊天室吗？</string>
@@ -195,8 +194,6 @@
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
     <string name="device_information">设备信息</string>
     <string name="room_no_conference_call_in_encrypted_rooms">加密的聊天室不支持电话会议</string>
-    <string name="action_sign_out_confirmation">为保证安全，退出登录将会删除任何端对端加密密钥。重新登录后将无法阅读之前的已加密的聊天历史。
-在登出之前，请导出并备份端对端加密密钥。</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
     <string name="dialog_title_confirmation">确认</string>
@@ -371,7 +368,6 @@
     <string name="room_settings_addresses_e2e_disabled">这个聊天室已禁用加密。</string>
     <string name="room_settings_addresses_e2e_encryption_warning">启用加密
 （警告：无法再禁用！）</string>
-    <string name="room_settings_addresses_e2e_prompt_title">警告！</string>
     <string name="directory_title">目录</string>
 
     <string name="encryption_information_title">端对端加密信息</string>
@@ -458,14 +454,6 @@
 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
 
-    <string name="room_e2e_alert_message">端对端加密依然处于测试阶段，可能并不可靠。
-
-您不应信任或者依靠它保护您的数据。
-
-它还将导致新设备无法解密它们加入聊天室之前的历史消息。
-
-加密消息对尚未实现加密的客户端不可见。</string>
-
     <string name="room_participants_header_call">通话</string>
     <string name="room_participants_power_level_prompt">您将不能撤销这个修改，因为您正在让这个用户和您拥有相同的特权级别。
 您确定吗？</string>
@@ -518,16 +506,6 @@
     <string name="room_settings_unset_main_address">取消设置为主地址</string>
     <string name="room_settings_copy_room_id">复制聊天室 ID</string>
     <string name="room_settings_copy_room_address">复制聊天室地址</string>
-
-    <string name="room_settings_addresses_e2e_prompt_message">端对端加密依然在测试阶段，可能不可靠。
-
-您不应该相信它来保护您的数据。
-
-设备暂时将无法解密其加入聊天室之前的历史记录。
-
-一旦聊天室启用了加密，它不能再被关闭（暂时）。
-
-加密消息对还没有实现加密的客户端将会不可见。</string>
 
     <string name="encryption_information_claimed_ed25519_fingerprint_key">声称的 Ed25519 指纹密钥</string>
     <string name="encryption_information_blocked">已列入黑名单</string>
@@ -1047,7 +1025,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系统设置中启用。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">通知已在系统设置中禁用。
 请检查系统设置。</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">打开设置</string>
+    <string name="open_settings">打开设置</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">帐号设置。</string>
     <string name="settings_troubleshoot_test_account_settings_success">您的帐号已启用通知。</string>

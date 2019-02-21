@@ -47,8 +47,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar sesión</string>
-    <string name="action_sign_out_confirmation">Por seguridad, cerrar la sesión eliminará todas las claves de cifrado de extremo a extremo, haciendo ilegible todo el historial de conversación cifrado si vuelves a iniciar sesión.
-Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -308,14 +306,6 @@ Quizás quieras iniciar sesión con otra cuenta, o añadir este correo electrón
     <string name="room_creation_title">Nueva Conversación</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_title_one_member">1 miembro</string>
-    <string name="room_e2e_alert_title">¡Advertencia!</string>
-    <string name="room_e2e_alert_message">El cifrado de extremo a extremo está en beta y puede no ser confiable.
-
-Aún no deberías confiar en él para proteger tus datos.
-
-Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
-
-Los mensajes cifrados no serán visibles en los clientes que aún no implementen el cifrado.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
@@ -617,16 +607,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_settings_addresses_e2e_disabled">El cifrado está deshabilitado en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Habilitar cifrado
 (advertencia: ¡no se puede volver a deshabilitar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">¡Advertencia!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo a extremo está en beta y puede no ser confiable.
-
-Aún no deberías confiar en él para proteger tus datos.
-
-Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
-
-Una vez que se habilita el cifrado en una sala no se puede volver a desactivar (por ahora).
-
-Los mensajes cifrados no serán visibles en clientes que aún no implementen el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>

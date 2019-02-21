@@ -191,7 +191,6 @@
         <item quantity="other">%d meðlimir</item>
     </plurals>
     <string name="room_title_one_member">1 meðlimur</string>
-    <string name="room_e2e_alert_title">Aðvörun!</string>
 
     <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
     <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út spjallrásinni?</string>
@@ -354,7 +353,6 @@
     <string name="room_settings_category_advanced_title">Ítarlegt</string>
     <string name="room_settings_addresses_pref_title">Vistföng</string>
     <string name="room_settings_labs_end_to_end">Enda-í-enda dulritun</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Aðvörun!</string>
     <string name="directory_title">Mappa</string>
     <string name="settings_theme">Þema</string>
 

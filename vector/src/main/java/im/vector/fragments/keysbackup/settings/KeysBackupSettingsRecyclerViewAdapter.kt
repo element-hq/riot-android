@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -33,17 +32,17 @@ import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
-class KeysBackupSettingsRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
-    var context: Context? = null
+    val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private var infoList: List<GenericRecyclerViewItem> = ArrayList()
+
     private var isBackupAlreadySetup = false
+
     var adapterListener: AdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             GenericItemViewHolder.resId -> GenericItemViewHolder(inflater.inflate(viewType, parent, false))
             else -> FooterViewHolder(inflater.inflate(viewType, parent, false))
@@ -59,27 +58,29 @@ class KeysBackupSettingsRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position < infoList.size) {
-            (holder as? GenericItemViewHolder)?.bind(infoList[position])
+        if (holder is GenericItemViewHolder) {
+            holder.bind(infoList[position])
         } else if (holder is FooterViewHolder) {
-            if (!isBackupAlreadySetup) {
-                holder.button2.isGone = true
-                holder.button1.setText(R.string.keys_backup_settings_setup_button)
-                holder.button1.isVisible = true
-                holder.button1.setOnClickListener {
-                    adapterListener?.didSelectSetupMessageRecovery()
-                }
-            } else {
+            if (isBackupAlreadySetup) {
                 holder.button1.setText(R.string.keys_backup_settings_restore_backup_button)
                 holder.button1.isVisible = true
                 holder.button1.setOnClickListener {
                     adapterListener?.didSelectRestoreMessageRecovery()
                 }
+
                 holder.button2.setText(R.string.keys_backup_settings_delete_backup_button)
                 holder.button2.isVisible = true
                 holder.button2.setOnClickListener {
                     adapterListener?.didSelectDeleteSetupMessageRecovery()
                 }
+            } else {
+                holder.button1.setText(R.string.keys_backup_setup)
+                holder.button1.isVisible = true
+                holder.button1.setOnClickListener {
+                    adapterListener?.didSelectSetupMessageRecovery()
+                }
+
+                holder.button2.isVisible = false
             }
         }
     }
@@ -89,21 +90,9 @@ class KeysBackupSettingsRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.
     }
 
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        context = recyclerView.context
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        context = null
-    }
-
     fun updateWithTrust(session: MXSession, keyBackupVersionTrust: KeysBackupVersionTrust?) {
-
         val keyBackupState = session.crypto?.keysBackup?.state
         val keyVersionResult = session.crypto?.keysBackup?.mKeysBackupVersion
-
 
         val infos = ArrayList<GenericRecyclerViewItem>()
         var itemSummary: GenericRecyclerViewItem? = null
@@ -115,92 +104,109 @@ class KeysBackupSettingsRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.
                 //so do nothing
             }
             KeysBackupStateManager.KeysBackupState.Disabled -> {
-                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_not_setup)
-                        ?: "",
+                itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_not_setup),
                         style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                infos.add(itemSummary)
+
                 isBackupAlreadySetup = false
             }
             KeysBackupStateManager.KeysBackupState.WrongBackUpVersion,
             KeysBackupStateManager.KeysBackupState.NotTrusted,
             KeysBackupStateManager.KeysBackupState.Enabling -> {
-                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ko)
-                        ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                itemSummary.description = keyBackupState.toString()
-                itemSummary.endIconResourceId = R.drawable.unit_test_ko
-                infos.add(itemSummary)
+                itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ko),
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    description = keyBackupState.toString()
+                    endIconResourceId = R.drawable.unit_test_ko
+                }
+
                 isBackupAlreadySetup = true
             }
-            KeysBackupStateManager.KeysBackupState.ReadyToBackUp,
+            KeysBackupStateManager.KeysBackupState.ReadyToBackUp -> {
+                itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ok),
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    endIconResourceId = R.drawable.unit_test_ok
+                    description = context.getString(R.string.keys_backup_info_keys_all_backup_up)
+                }
+
+                isBackupAlreadySetup = true
+            }
             KeysBackupStateManager.KeysBackupState.WillBackUp,
             KeysBackupStateManager.KeysBackupState.BackingUp -> {
-                itemSummary = GenericRecyclerViewItem(context?.getString(R.string.keys_backup_settings_status_ok)
-                        ?: "", style = GenericRecyclerViewItem.STYLE.BIG_TEXT)
-                itemSummary.endIconResourceId = R.drawable.unit_test_ok
-                infos.add(itemSummary)
+                itemSummary = GenericRecyclerViewItem(context.getString(R.string.keys_backup_settings_status_ok),
+                        style = GenericRecyclerViewItem.STYLE.BIG_TEXT).apply {
+                    hasIndeterminateProcess = true
+
+                    val totalKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(false)
+                            ?: 0
+                    val backedUpKeys = session.crypto?.cryptoStore?.inboundGroupSessionsCount(true)
+                            ?: 0
+
+                    val remainingKeysToBackup = totalKeys - backedUpKeys
+
+                    description = context.resources.getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                }
+
                 isBackupAlreadySetup = true
             }
         }
 
+        itemSummary?.let {
+            infos.add(it)
+        }
+
         if (keyBackupVersionTrust != null) {
 
+            if (!keyBackupVersionTrust.usable) {
+                itemSummary?.description = context.getString(R.string.keys_backup_settings_untrusted_backup)
+            }
+
             //Add infos
-            infos.add(GenericRecyclerViewItem("Version", keyVersionResult?.version
+            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_version), keyVersionResult?.version
                     ?: ""))
-            infos.add(GenericRecyclerViewItem("Algorithm", keyVersionResult?.algorithm
+            infos.add(GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_algorithm), keyVersionResult?.algorithm
                     ?: ""))
 
             keyBackupVersionTrust.signatures.forEach {
-                val signatureInfo = GenericRecyclerViewItem("Signature")
+                val signatureInfo = GenericRecyclerViewItem(context.getString(R.string.keys_backup_info_title_signature))
                 val isDeviceKnown = it.device != null
                 val isDeviceVerified = it.device?.isVerified ?: false
                 val isSignatureValid = it.valid
                 val deviceId: String = it.deviceId ?: ""
 
                 if (!isDeviceKnown) {
-                    signatureInfo.description = context?.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                    signatureInfo.description = context.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
                     signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                    itemSummary?.description = context?.getString(R.string.keys_backup_settings_unverifiable_device)
                 } else {
                     if (isSignatureValid) {
                         if (session.credentials.deviceId == it.deviceId) {
-                            signatureInfo.description = context?.getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                            signatureInfo.description = context.getString(R.string.keys_backup_settings_valid_signature_from_this_device)
                             signatureInfo.endIconResourceId = R.drawable.e2e_verified
                         } else {
                             if (isDeviceVerified) {
-                                signatureInfo.description = context?.getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId)
+                                signatureInfo.description = context.getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId)
                                 signatureInfo.endIconResourceId = R.drawable.e2e_verified
                             } else {
-                                signatureInfo.description = context?.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
+                                signatureInfo.description = context.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
                                 signatureInfo.endIconResourceId = R.drawable.e2e_warning
-                                val action = getVerifySignatureAction(it)
-                                signatureInfo.buttonAction = action
-                                itemSummary?.description = context?.getString(R.string.keys_backup_settings_verify_device_now, it.device!!.displayName())
                             }
                         }
                     } else {
                         //Invalid signature
                         signatureInfo.endIconResourceId = R.drawable.e2e_warning
                         if (isDeviceVerified) {
-                            signatureInfo.description = context?.getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId)
+                            signatureInfo.description = context.getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId)
                         } else {
-                            signatureInfo.description = context?.getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId)
+                            signatureInfo.description = context.getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId)
                         }
                     }
                 }
 
                 infos.add(signatureInfo)
-            } //and for each
-
+            } //end for each
         }
-        infoList = infos
-        notifyDataSetChanged()
-    }
 
-    private fun getVerifySignatureAction(signature: KeysBackupVersionTrustSignature): GenericRecyclerViewItem.Action {
-        val action = GenericRecyclerViewItem.Action("Verify")
-        action.perform = Runnable { adapterListener?.displayDeviceVerificationDialog(signature) }
-        return action
+        infoList = infos
+
+        notifyDataSetChanged()
     }
 
     class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

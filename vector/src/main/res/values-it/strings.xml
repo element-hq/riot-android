@@ -49,8 +49,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Disconnetti</string>
-    <string name="action_sign_out_confirmation">Per ragioni di sicurezza, la disconnessione causerà l\'eliminazione di qualsiasi chiave di crittografia da-utente-a-utente rendendo illeggibile la storia delle chat precedentemente criptate qualora ci si riconnettesse.
-Selezionare esporta per fare un backup delle chat prima di disconnettersi.</string>
     <string name="action_voice_call">Chiamata voce</string>
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>
@@ -311,14 +309,6 @@ Consentire a Riot di accedere ai tuoi contatti?</string>
     <string name="room_creation_title">Nuova chat</string>
     <string name="room_creation_add_member">Aggiungi membro</string>
     <string name="room_title_one_member">1 membro</string>
-    <string name="room_e2e_alert_title">Attenzione!</string>
-    <string name="room_e2e_alert_message">La crittografia da-utente-a-utente è in beta e potrebbe non essere affidabile.
-
-Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
-
-I dispositivi non saranno in grado di decriptare la cronologia prima del loro ingresso nella stanza.
-
-I messaggi criptati non saranno visibili ai riceventi (client) che non hanno ancora implementato la crittografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Lascia stanza</string>
@@ -632,14 +622,6 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_addresses_e2e_enabled">Crittografia abilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_disabled">Crittografia disabilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Abilita crittografia\n(attenzione: non può più essere disabilitata!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Attenzione!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">La crittografia da-utente-a-utente è in fase beta e potrebbe non essere affidabile.
-
-Non dovresti ancora fidarti di essa per proteggere i tuoi dati.
-
-I dispositivi non potranno decriptare la cronologia da prima dell\'ingresso nella stanza.
-
-I messaggi criptati non saranno visibili ai riceventi che non hanno ancora implementato la crittografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Elenco</string>
@@ -1149,7 +1131,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_troubleshoot_test_system_settings_success">Le notifiche sono abilitate nelle impostazioni di sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Le notifiche sono disabilitate nelle impostazioni di sistema.
 Controlla le impostazioni di sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Apri le impostazioni</string>
+    <string name="open_settings">Apri le impostazioni</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Impostazioni account.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Le notifiche sono abilitate per il tuo account.</string>
@@ -1259,4 +1241,12 @@ Scopri una collaborazione davvero efficiente e aperta con Riot.im!</string>
     <string name="store_whats_new">Apportiamo continuamente cambiamenti e migliorie a Riot.im.
 Il registro completo delle modifiche si può trovare qui: %1$s.
 Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
+    <string name="title_activity_keys_backup_setup">Ripristino messaggi</string>
+    <string name="title_activity_keys_backup_restore">Messaggi sicuri</string>
+    <string name="keys_backup_is_not_finished_please_wait">Il backup delle chiavi non è concluso, attendere prego…</string>
+
+    <string name="skip">Salta</string>
+    <string name="done">Fatto</string>
+
+    <string name="settings_notification_advanced">Impostazioni di notifica avanzate</string>
 </resources>
