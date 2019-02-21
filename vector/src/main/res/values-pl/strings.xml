@@ -239,7 +239,6 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_creation_title">Nowa rozmowa</string>
     <string name="room_creation_add_member">Dodaj członka</string>
     <string name="room_title_one_member">1 członek</string>
-    <string name="room_e2e_alert_title">Ostrzeżenie!</string>
 
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
@@ -364,7 +363,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
 
     <string name="settings_messages_in_one_to_one">Wiadomości bezpośrednie</string>
     <string name="settings_messages_in_group_chat">Wiadomości w rozmowach grupowych</string>
-    <string name="settings_invited_to_room">Kiedy zostanę zaproszony do pokoju</string>
+    <string name="settings_invited_to_room">Kiedy zostanę zaproszony(-a) do pokoju</string>
     <string name="settings_call_invitations">Zaproszenia do rozmów</string>
     <string name="settings_messages_sent_by_bot">Wiadomości od botów</string>
 
@@ -639,13 +638,6 @@ Możesz zalogować się z wykorzystaniem innego konta, albo dodać ten adres e-m
         <item quantity="many">%d członków</item>
         <item quantity="other" />
     </plurals>
-    <string name="room_e2e_alert_message">Szyfrowanie End-to-End jest w fazie beta i nie jest pewne. 
-
-Nie powinieneś ufać mu w celu zabezpieczenia danych.
-
-Urządzenia nie będą w stanie na razie odszyfrować historii sprzed momentu dołączenia do pokoju.
-
-Szyfrowane wiadomości nie będą widoczne dla klientów którzy nie wspierają jeszcze szyfrowania.</string>
 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
 Jesteś pewien?</string>
@@ -887,7 +879,7 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="event_formatter_widget_added">%1$s został dodany przez %2$s</string>
     <string name="event_formatter_widget_removed">%1$s został usunięty przez %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Utwórz połączenia konferencyjne za pomocą jitsi</string>
-    <string name="widget_delete_message_confirmation">Czy na pewno chcesz usunąć ten widżet?</string>
+    <string name="widget_delete_message_confirmation">Czy na pewno chcesz usunąć widżet z tego pokoju?</string>
     <string name="widget_integration_unable_to_create">Nie można utworzyć widżetu.</string>
     <string name="widget_integration_failed_to_send_request">Nie udało się wysłać prośby.</string>
     <string name="widget_integration_positive_power_level">Poziom uprawnień musi być liczbą dodatnią.</string>
@@ -1111,7 +1103,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
     <string name="settings_troubleshoot_test_system_settings_title">Ustawienia Systemowe.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Powiadomienia są włączone w ustawieniach systemowych.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Otwórz Ustawienia</string>
+    <string name="open_settings">Otwórz Ustawienia</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Ustawienia Konta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Powiadomienia są właczone dla twojego konta.</string>
@@ -1155,4 +1147,16 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
 Spróbuj uruchomić ponownie aplikację.</string>
     <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
 
+    <string name="title_activity_keys_backup_setup">Przywracanie wiadomości</string>
+    <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
+    <string name="skip">Pomiń</string>
+    <string name="settings_notification_advanced">Zaawansowane ustawienia powiadomień</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Sprawdź ustawienia</string>
+
+    <string name="keys_backup_info_title_algorithm">Algorytm</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Stracisz zaszyfrowane wiadomości, jeśli się teraz wylogujesz</string>
+    <string name="are_you_sure">Jesteś pewien?</string>
+    <string name="abort">Przerwij</string>
+
+    <string name="action_sign_out_confirmation_simple">Czy na pewno chcesz się wylogować?</string>
 </resources>

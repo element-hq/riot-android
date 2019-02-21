@@ -22,8 +22,11 @@ import im.vector.R
 import im.vector.ui.arch.LiveEvent
 import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 import org.matrix.androidsdk.util.Log
 
 class KeysBackupRestoreFromKeyViewModel : ViewModel() {
@@ -50,7 +53,8 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
             recoveryCodeErrorText.value = null
             val recoveryKey = recoveryCode.value!!
 
-            val version = sharedViewModel.keyVersionResult.value!!.version!!
+            val keysVersionResult = sharedViewModel.keyVersionResult.value
+            val version = keysVersionResult!!.version!!
 
             keysBackup.restoreKeysWithRecoveryKey(version,
                     recoveryKey,
@@ -62,27 +66,44 @@ class KeysBackupRestoreFromKeyViewModel : ViewModel() {
                             sharedViewModel.didRecoverSucceed(info)
 
                             KeysBackupBanner.onRecoverDoneForVersion(context, version)
+                            trustOnDecrypt(keysBackup, keysVersionResult)
                         }
 
                         override fun onUnexpectedError(e: Exception) {
                             sharedViewModel.loadingEvent.value = null
-                            recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt, e.localizedMessage)
+                            recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt)
+                            Log.e(LOG_TAG, "## onUnexpectedError ${e.localizedMessage}", e)
                         }
 
                         override fun onNetworkError(e: Exception) {
                             sharedViewModel.loadingEvent.value = null
-                            recoveryCodeErrorText.value = context.getString(R.string.network_error_please_check_and_retry, e.localizedMessage)
+                            recoveryCodeErrorText.value = context.getString(R.string.network_error_please_check_and_retry)
                         }
 
                         override fun onMatrixError(e: MatrixError) {
                             sharedViewModel.loadingEvent.value = null
-                            recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt, e.localizedMessage)
+                            recoveryCodeErrorText.value = context.getString(R.string.keys_backup_recovery_code_error_decrypt)
+                            Log.e(LOG_TAG, "## onMatrixError ${e.localizedMessage}")
                         }
                     })
         } else {
             //Can this happen?
-            Log.e(KeysBackupRestoreFromPassphraseViewModel::class.java.name, "Cannot find keysBackup")
+            Log.e(LOG_TAG, "Cannot find keysBackup")
         }
     }
 
+    private fun trustOnDecrypt(keysBackup: KeysBackup, keysVersionResult: KeysVersionResult) {
+        keysBackup.trustKeysBackupVersion(keysVersionResult, true,
+                object : SimpleApiCallback<Void>() {
+
+                    override fun onSuccess(info: Void?) {
+                        Log.d(LOG_TAG, "##### trustKeysBackupVersion onSuccess")
+                    }
+
+                })
+    }
+
+    companion object {
+        private val LOG_TAG = KeysBackupRestoreFromKeyViewModel::class.java.name
+    }
 }

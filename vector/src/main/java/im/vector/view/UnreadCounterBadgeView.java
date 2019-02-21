@@ -96,9 +96,9 @@ public class UnreadCounterBadgeView extends FrameLayout {
             if (status == HIGHLIGHTED) {
                 shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color));
             } else if (status == NOTIFIED) {
-                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.colorAccent));
+                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary));
             } else { //if (status == DEFAULT)
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_silver_color));
+                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_unread_room_indent_color));
             }
             mCounterTextView.setBackground(shape);
         } else {

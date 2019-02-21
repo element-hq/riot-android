@@ -32,7 +32,7 @@ class TestSystemSettings(val fragment: Fragment) : TroubleshootTest(R.string.set
             status = TestStatus.SUCCESS
         } else {
             description = fragment.getString(R.string.settings_troubleshoot_test_system_settings_failed)
-            quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_system_settings_quickfix) {
+            quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
                 override fun doFix() {
                     if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
                     startNotificationSettingsIntent(fragment, NotificationTroubleshootTestManager.REQ_CODE_FIX)

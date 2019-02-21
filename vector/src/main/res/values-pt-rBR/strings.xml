@@ -20,7 +20,7 @@
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Apagar</string>
+    <string name="redact">Remover</string>
     <string name="quote">Citar</string>
     <string name="share">Compartilhar</string>
     <string name="later">Depois</string>
@@ -294,8 +294,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
     <string name="room_title_one_member">1 integrante</string>
-    <string name="room_e2e_alert_title">Atenção!</string>
-    <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
@@ -1071,7 +1069,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
 Por favor revise as configurações do sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Abra as Configurações</string>
+    <string name="open_settings">Abra as Configurações</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>

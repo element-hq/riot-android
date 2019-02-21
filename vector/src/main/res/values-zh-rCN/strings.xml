@@ -46,7 +46,6 @@
     <string name="room_preview_invitation_format">%s 邀请您加入这个聊天室</string>
     <string name="room_creation_title">新的聊天</string>
     <string name="room_creation_add_member">添加成员</string>
-    <string name="room_e2e_alert_title">警告！</string>
 
     <string name="room_participants_leave_prompt_title">退出聊天室</string>
     <string name="room_participants_leave_prompt_msg">您确定要退出聊天室吗？</string>
@@ -455,14 +454,6 @@
     <string name="room_preview_unlinked_email_warning">此邀请已发送至未这个账户关联的 %s。
 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
-
-    <string name="room_e2e_alert_message">端对端加密依然处于测试阶段，可能并不可靠。
-
-您不应信任或者依靠它保护您的数据。
-
-它还将导致新设备无法解密它们加入聊天室之前的历史消息。
-
-加密消息对尚未实现加密的客户端不可见。</string>
 
     <string name="room_participants_header_call">通话</string>
     <string name="room_participants_power_level_prompt">您将不能撤销这个修改，因为您正在让这个用户和您拥有相同的特权级别。
@@ -1045,7 +1036,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系统设置中启用。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">通知已在系统设置中禁用。
 请检查系统设置。</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">打开设置</string>
+    <string name="open_settings">打开设置</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">帐号设置。</string>
     <string name="settings_troubleshoot_test_account_settings_success">您的帐号已启用通知。</string>

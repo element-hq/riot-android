@@ -36,7 +36,7 @@
     <string name="ongoing_conference_call_voice">microfoon</string>
     <string name="ongoing_conference_call_video">camera</string>
     <string name="cannot_start_call">Kan het gesprek niet starten, probeer later nog eens</string>
-    <string name="missing_permissions_warning">Sommige functies zijn misschien afwezig door missende permissies…</string>
+    <string name="missing_permissions_warning">Sommige functies zijn misschien afwezig door ontbrekende rechten…</string>
     <string name="missing_permissions_to_start_conf_call">Je moet de uitnodigingspermissie hebben om een vergadering in deze ruimte te starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kan het gesprek niet starten</string>
     <string name="device_information">Toestel informatie</string>
@@ -103,11 +103,11 @@
     <string name="send_bug_report_description">Beschrijf de fout. Wat deed je? Wat verwachtte je dat er zou gebeuren? Wat gebeurde er echt?</string>
     <string name="send_bug_report_placeholder">Beschrijf hier je probleem</string>
     <string name="send_bug_report_logs_description">Om het probleem te kunnen diagnosticeren, worden logboeken van deze applicatie met de foutmelding verstuurd. Deze foutmelding, inclusief de logboeken en schermafbeelding, zullen niet publiekelijk zichtbaar zijn. Als je liever alleen de bovenstaande tekst verstuurt, haal dan het vinkje weg:</string>
-    <string name="send_bug_report_alert_message">Het ziet er naar uit dat je de telefoon in frustratie schudt. Wil je een foutmelding indienen?</string>
+    <string name="send_bug_report_alert_message">Het ziet er naar uit dat je de telefoon in frustratie schudt. Wil je een probleem melden?</string>
     <string name="send_bug_report_sent">De foutmelding is succesvol verstuurd</string>
     <string name="send_bug_report_failed">Het is niet gelukt de foutmelding te versturen (%s)</string>
     <string name="send_bug_report_progress">Progressie (%s%%)</string>
-    <string name="send_bug_report_app_crashed">De applicatie was de vorige keer gecrasht. Wil je een foutmelding indienen?</string>
+    <string name="send_bug_report_app_crashed">De applicatie was de vorige keer gecrasht. Wil je dit melden?</string>
 
     <string name="send_files_in">Versturen als</string>
     <string name="read_receipt">Gelezen</string>
@@ -130,7 +130,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Inloggen</string>
-    <string name="auth_register">Registreren</string>
+    <string name="auth_register">Account aanmaken</string>
     <string name="auth_submit">Indienen</string>
     <string name="auth_skip">Overslaan</string>
     <string name="auth_send_reset_email">Verstuur reset e-mail</string>
@@ -153,14 +153,14 @@
     <string name="auth_invalid_user_name">Gebruikersnamen mogen alleen letters, cijfers, punten en afbreek- en lage streepjes bevatten</string>
     <string name="auth_invalid_password">Wachtwoord te kort (min 6)</string>
     <string name="auth_missing_password">Het wachtwoord mist</string>
-    <string name="auth_invalid_email">Incorrect e-mailadres</string>
+    <string name="auth_invalid_email">Dit is geen geldig e-mailadres</string>
     <string name="auth_invalid_phone">"Dit is geen geldig telefoonnummer"</string>
     <string name="auth_email_already_defined">Dit e-mailadres is al in gebruik.</string>
     <string name="auth_missing_email">Het e-mailadres mist</string>
     <string name="auth_missing_phone">Het telefoonnummer mist</string>
     <string name="auth_missing_email_or_phone">Het e-mailadres of telefoonnummer mist</string>
     <string name="auth_invalid_token">Ongeldig bewijs</string>
-    <string name="auth_password_dont_match">Wachtwoorden komen niet overeen</string>
+    <string name="auth_password_dont_match">De wachtwoorden komen niet overeen</string>
     <string name="auth_forgot_password">Wachtwoord vergeten?</string>
     <string name="auth_use_server_options">Gebruik aangepaste serverinstellingen (geavanceerd)</string>
     <string name="auth_email_validation_message">Bekijk je e-mail om verder te gaan met het registreren</string>
@@ -173,7 +173,7 @@
     <string name="auth_reset_password_message">Om het wachtwoord te resetten moet je het e-mailadres dat aan uw account gekoppeld is invoeren:</string>
     <string name="auth_reset_password_missing_email">Het e-mailadres dat aan uw account gekoppeld is moet worden ingevoerd.</string>
     <string name="auth_reset_password_missing_password">Een nieuw wachtwoord moet worden ingevoerd.</string>
-    <string name="auth_reset_password_email_validation_message">Een e-mail is naar  %s verstuurd. Zodra je op de link in de e-mail hebt geklikt, klik hieronder.</string>
+    <string name="auth_reset_password_email_validation_message">Er is een e-mail verstuurd naar %s. Klik hieronder zodra je de link in de e-mail hebt bezocht.</string>
     <string name="auth_reset_password_error_unauthorized">Het verifiëren is mislukt: wees er zeker van dat je op de link in de e-mail hebt geklikt</string>
     <string name="auth_reset_password_success_message">Je wachtwoord is gereset.\n\nJe bent op alle apparaten uitgelogd en zal niet langer push notificaties ontvangen. Om notificaties op nieuw aan te zetten, log op elk apparaat opnieuw in.</string>
 
@@ -233,7 +233,7 @@ Excuses voor het ongemak.</string>
     <string name="incoming_call">Inkomende oproep</string>
     <string name="incoming_video_call">Inkomend videogesprek</string>
     <string name="incoming_voice_call">Inkomende spraakoproep</string>
-    <string name="call_in_progress">Oproep in verloop</string>
+    <string name="call_in_progress">Oproep gaande…</string>
 
     <string name="call_error_user_not_responding">Het is de andere kant niet gelukt om op te nemen.</string>
     <string name="call_error_ice_failed">Media verbinding is mislukt</string>
@@ -257,7 +257,7 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="permissions_rationale_msg_contacts">Je adresboek e-mails worden geupload om matrix IDs te zoeken.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Je adresboek e-mails zijn geupload voor het zoeken van matix IDs.\nGeef je Riot toegang tot je contacten ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Sorry.. De actie is niet ondernomen door missende permissies</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Opgeslagen</string>
@@ -286,14 +286,6 @@ Sta toegang toe op de volgende pop-up om bestanden vanaf je telefoon te sturen.<
     <string name="room_creation_title">Nieuwe Chat</string>
     <string name="room_creation_add_member">Deelnemer toevoegen</string>
     <string name="room_title_one_member">1 deelnemer</string>
-    <string name="room_e2e_alert_title">Waarschuwing!</string>
-    <string name="room_e2e_alert_message">End-to-endbeveiliging is in bèta en kan onbetrouwbaar zijn.
-
-Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
-
-Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
-
-Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Ruimte verlaten</string>
@@ -407,7 +399,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <!-- Directory -->
     <string name="directory_search_results_title">Adresboek doorbladeren</string>
-    <string name="directory_searching_title">Adresboek doorzoeken..</string>
+    <string name="directory_searching_title">Adresboek doorzoeken…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Favoriet</string>
@@ -442,7 +434,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
 
     <string name="settings_messages_in_one_to_one">Berichten in privé-chats</string>
     <string name="settings_messages_in_group_chat">Berichten in groepchats</string>
-    <string name="settings_invited_to_room">Wanneer ik voor een groep ben uitgenodigd</string>
+    <string name="settings_invited_to_room">Wanneer ik voor een groep uitgenodigd word</string>
     <string name="settings_call_invitations">Gesprek uitnodigingen</string>
     <string name="settings_messages_sent_by_bot">Door de robot verstuurde berichten</string>
 
@@ -477,7 +469,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="settings_pin_missed_notifications">Pin ruimtes met gemiste notificaties</string>
     <string name="settings_pin_unread_messages">Pin ruimtes met ongelezen berichten</string>
     <string name="settings_devices_list">Apparaten</string>
-    <string name="devices_details_dialog_title">Apparaat details</string>
+    <string name="devices_details_dialog_title">Apparaatdetails</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Naam</string>
     <string name="devices_details_device_name">Apparaatnaam</string>
@@ -616,16 +608,16 @@ Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen v
     <string name="encryption_information_device_info">Evenementsinformatie</string>
     <string name="encryption_information_user_id">Gebruikers-ID</string>
     <string name="encryption_information_curve25519_identity_key">Curve25519-identiteitssleutel</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519-sleutel-vingerafdruk</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Geclaimde Ed25519-sleutelvingerafdruk</string>
     <string name="encryption_information_algorithm">Algoritme</string>
     <string name="encryption_information_session_id">Sessie ID</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
 
-    <string name="encryption_information_sender_device_information">Verstuurder apparaat informatie</string>
+    <string name="encryption_information_sender_device_information">Afzenderapparaatinformatie</string>
     <string name="encryption_information_device_name">Apparaatnaam</string>
     <string name="encryption_information_name">Naam</string>
-    <string name="encryption_information_device_id">Apparaat ID</string>
-    <string name="encryption_information_device_key">Apparaat sleutel</string>
+    <string name="encryption_information_device_id">Apparaat-ID</string>
+    <string name="encryption_information_device_key">Apparaatsleutel</string>
     <string name="encryption_information_verification">Verificatie</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 vingerafdruk</string>
 
@@ -658,7 +650,7 @@ Waarschuwing: dit bestand kan worden verwijderd als de applicatie verwijderd is.
     <string name="encryption_information_block">Blokkeringslijst</string>
     <string name="encryption_information_unblock">Deblokkeringslijst</string>
 
-    <string name="encryption_information_verify_device">Verifïeer apparaat</string>
+    <string name="encryption_information_verify_device">Verifieer apparaat</string>
     <string name="encryption_information_verify_device_warning">Om te verifiëren dat dit apparaat vertrouwd kan worden, contacteer de eigenaar via een andere methode (bijv. persoonlijk of via een telefoontje) en vraag diegene of de sleutel die ze zien in hun Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
     <string name="encryption_information_verify_device_warning2">Als het overeenkomt, druk op de knop \'verifiëren\' hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en hoor je deze te blokkeren.
 In de toekomst zal dit verificatieproces wat makkelijker gemaakt worden.</string>
@@ -952,17 +944,17 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
 
     <string name="download">Download</string>
     <string name="speak">Spreek</string>
-    <string name="e2e_re_request_encryption_key"><u>Vraag beveiligingssleutels opnieuw aan</u> van je andere apparaten.</string>
+    <string name="e2e_re_request_encryption_key"><u>Beveiligingssleutels van je andere apparaten opnieuw aanvragen</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Sleutel aanvraag verstuurd.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot alstublieft op een ander apparaat dat het bericht kan ontsleutelen zodat deze de sleutels kan sturen naar dit apparaat.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot op een ander apparaat dat het bericht kan ontsleutelen, zodat die de sleutels naar dit apparaat kan sturen.</string>
 
     <string name="lock_screen_hint">Typ hier…</string>
 
-    <string name="clear">Opschonen</string>
-    <string name="option_send_voice">Stembericht versturen</string>
+    <string name="clear">Wissen</string>
+    <string name="option_send_voice">Spraakbericht versturen</string>
 
     <string name="go_on_with">doorgaan met…</string>
     <string name="error_no_external_application_found">Sorry, er is geen externe applicatie gevonden om deze actie te voltooien.</string>
@@ -971,9 +963,9 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
 
     <string name="error_empty_field_your_password">Vul alstublieft uw wachtwoord in.</string>
 
-    <string name="send_bug_report_description_in_english">Indien mogelijk, schrijf alstublieft een omschrijving in het engels.</string>
+    <string name="send_bug_report_description_in_english">Schrijf de omschrijving in het Engels, indien mogelijk.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Verstuur een versleutelde reactie…</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">Verstuur een reactie (onversleuteld)…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Stuur een reactie (onversleuteld)…</string>
     <string name="settings_preview_media_before_sending">Bekijk media voor het versturen</string>
 
     <string name="settings_without_flair">Je bent momenteel geen lid van een community.</string>
@@ -982,7 +974,7 @@ De zichtbaarheid van berichten in Matrix is hetzelfde als in e-mail. Het vergete
     <string name="command_description_emote">Vertoon actie</string>
     <string name="room_participants_action_unignore_prompt">Alle berichten van deze gebruiker tonen?
 
-Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</string>
+Let op: de app zal voor deze actie opnieuw opgestart worden, wat enige tijd kan kosten.</string>
     <string name="command_description_ban_user">Gebruiker met gegeven ID verbannen</string>
     <string name="command_description_unban_user">Heft de verbanning van de gebruiker met gegeven ID op</string>
     <string name="command_description_op_user">Machtsniveau van gebruiker instellen</string>
@@ -1000,7 +992,7 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
 
     <string name="missing_permissions_error">Door missende permissies is deze actie niet mogelijk.</string>
-    <string name="system_alerts_header">Systeem Waarschuwingen</string>
+    <string name="system_alerts_header">Systeemmeldingen</string>
 
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
@@ -1077,15 +1069,15 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="reason_hint">Reden</string>
 
     <string name="room_sliding_menu_version_x">Versie %s</string>
-    <string name="settings_inline_url_preview_summary">Links voorvertonen in het gesprek (als je thuisserver deze functie ondersteunt).</string>
+    <string name="settings_inline_url_preview_summary">Preview van links in het gesprek tonen (als je thuisserver deze functie ondersteunt).</string>
     <string name="settings_send_typing_notifs">Stuur typnotificaties</string>
     <string name="settings_send_typing_notifs_summary">Laat andere gebruikers weten dat je aan het typen bent.</string>
     <string name="settings_send_markdown">Markdown-opmaak</string>
-    <string name="settings_send_markdown_summary">Maak berichten op in Markdown-syntax voordat ze verstuurd worden. Hiermee kun je uitgebreide opmaak gebruiken, zoals sterretjes voor schuingedrukte tekst.</string>
+    <string name="settings_send_markdown_summary">Berichten opmaken met Markdownsyntax voordat ze verstuurd worden. Hiermee kun je uitgebreide opmaak gebruiken, zoals sterretjes voor schuingedrukte tekst.</string>
     <string name="settings_show_read_receipts">Laat leesbevestigingen zien</string>
     <string name="settings_show_read_receipts_summary">Klik op de leesbevestigingen voor een uitgebreide lijst.</string>
     <string name="settings_show_join_leave_messages">Laat toetredingen en verlatingen zien</string>
-    <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigen, eruit sturen en verbannen worden altijd weergegeven.</string>
+    <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigingen, kicks en bans worden altijd weergegeven.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Laat accountgebeurtenissen zien</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Omvat veranderingen in avatar en weergavenaam.</string>
 </resources>

@@ -30,28 +30,46 @@
         tools:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/waiting_view_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_margin="@dimen/layout_horizontal_margin"
             android:background="?attr/colorBackgroundFloating"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:padding="@dimen/layout_horizontal_margin">
 
-            <ProgressBar
-                android:id="@+id/progress_bar_view"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/waiting_view_status_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_view"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/waiting_view_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:visibility="gone"
+                    tools:text="Waiting status..."
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/waiting_view_status_horizontal_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
                 android:visibility="gone"
-                tools:text="Waiting status..."
+                tools:max="100"
+                tools:progress="30"
                 tools:visibility="visible" />
 
         </LinearLayout>

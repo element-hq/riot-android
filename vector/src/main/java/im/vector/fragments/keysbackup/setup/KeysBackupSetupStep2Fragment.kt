@@ -86,6 +86,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        viewModel.shouldPromptOnBack = true
         bindViewToViewModel()
     }
 
@@ -162,6 +163,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             }
             return@setOnEditorActionListener false
         }
+
     }
 
     @OnClick(R.id.keys_backup_view_show_password)
@@ -189,12 +191,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
                 viewModel.prepareRecoveryKey(session, viewModel.passphrase.value)
 
-                activity
-                        ?.supportFragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
-                        ?.addToBackStack(null)
-                        ?.commit()
             }
         }
     }
@@ -210,12 +206,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                         ?: Matrix.getInstance(context)?.getSession(null)
 
                 viewModel.prepareRecoveryKey(session, null)
-                activity
-                        ?.supportFragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
-                        ?.addToBackStack(null)
-                        ?.commit()
             }
             else -> {
                 // User has entered a passphrase but want to skip this step.
