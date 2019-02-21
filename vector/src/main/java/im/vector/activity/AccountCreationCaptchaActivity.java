@@ -184,7 +184,7 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
             public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                 super.onReceivedHttpError(view, request, errorResponse);
 
-                if(request.getUrl().toString().endsWith("favicon.ico")) {
+                if (request.getUrl().toString().endsWith("favicon.ico")) {
                     // Ignore this error
                     return;
                 }

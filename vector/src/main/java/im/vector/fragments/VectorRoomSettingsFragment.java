@@ -248,7 +248,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                             || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES.equals(eventType)    // room access rules
                             || Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS.equals(eventType)  // room access rules
-                            ) {
+                    ) {
                         Log.d(LOG_TAG, "## onLiveEvent() event = " + eventType);
                         updateUi();
                     }
@@ -261,7 +261,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                     if (Event.EVENT_TYPE_STATE_CANONICAL_ALIAS.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
                             || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)
-                            ) {
+                    ) {
                         Log.d(LOG_TAG, "## onLiveEvent() refresh the addresses list");
                         refreshAddresses();
                     }
