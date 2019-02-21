@@ -1235,17 +1235,17 @@ Cette erreur est indépendante de Riot. Il n\'y pas de compte Google sur l\'appa
     <string name="encryption_settings_manage_message_recovery_summary">Gérer la sauvegarde de clés</string>
 
     <string name="notification_silent">Silencieuse</string>
-    <string name="passphrase_empty_error_message">Veuillez saisir une phrase de passe</string>
-    <string name="passphrase_passphrase_too_weak">La phrase de passe est trop faible</string>
+    <string name="passphrase_empty_error_message">Veuillez saisir une phrase secrète</string>
+    <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase de passe si vous voulez que Riot génère une clé de récupération.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que Riot génère une clé de récupération.</string>
     <string name="keys_backup_no_session_error">Aucune session Matrix n\'est disponible</string>
 
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_setup_step1_description">Les messages dans les salons chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) avez les clés pour lire ces messages.
 
 Sauvegardez vos clés de façon sécurisée pour éviter de les perdre.</string>
-    <string name="keys_backup_setup_step2_button_title">Définir la phrase de passe</string>
+    <string name="keys_backup_setup_step2_button_title">Définir la phrase secrète</string>
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
     <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
@@ -1255,7 +1255,7 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
 
     <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager la clé de récupération avec…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Génération de la clé de récupération utilisant la phrase de passe. Cette opération peut prendre plusieurs secondes.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Génération de la clé de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string>
     <string name="recovery_key">Clé de récupération</string>
     <string name="unexpected_error">Erreur inattendue</string>
     <string name="keys_backup_setup_backup_started_title">La sauvegarde a commencé</string>
@@ -1266,9 +1266,9 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_setup_skip_msg">Vous pourriez perdre l’accès vos messages si vous vous déconnectez ou si vous perdez votre appareil.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Récupération de la version de la sauvegarde…</string>
-    <string name="keys_backup_restore_with_passphrase">Utilisez votre phrase de passe de récupération pour déverrouiller l\'historique de vos messages chiffrés</string>
+    <string name="keys_backup_restore_with_passphrase">Utilisez votre phrase secrète de récupération pour déverrouiller l\'historique de vos messages chiffrés</string>
     <string name="keys_backup_restore_use_recovery_key">utiliser votre clé de récupération</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Si vous ne connaissez pas votre phrase de passe de récupération, vous pouvez %s.</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Si vous ne connaissez pas votre phrase secrète de récupération, vous pouvez %s.</string>
 
     <string name="keys_backup_restore_with_recovery_key">Utilisez votre clé de récupération pour déverrouiller l\'historique de vos messages chiffrés</string>
     <string name="keys_backup_restore_key_enter_hint">Saisir la clé de récupération</string>
@@ -1276,7 +1276,7 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_restore_setup_recovery_key">Récupération des messages</string>
 
     <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre clé de récupération ? Vous pouvez en configurer une autre dans les paramètres.</string>
-    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération.</string>
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase secrète. Veuillez vérifier que vous avez saisi la bonne phrase secrète de récupération.</string>
     <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde…</string>
@@ -1345,8 +1345,8 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_setup_step1_advanced">(Avancé)</string>
     <string name="keys_backup_setup_step1_manual_export">Exporter les clés manuellement</string>
 
-    <string name="keys_backup_setup_step2_text_title">Protégez votre sauvegarde avec une phrase de passe.</string>
-    <string name="keys_backup_setup_step2_text_description">Nous conserverons une copie chiffrée de vos clés sur notre serveur. Protégez votre sauvegarde avec une phrase de passe pour la sécuriser.
+    <string name="keys_backup_setup_step2_text_title">Protégez votre sauvegarde avec une phrase secrète.</string>
+    <string name="keys_backup_setup_step2_text_description">Nous conserverons une copie chiffrée de vos clés sur notre serveur. Protégez votre sauvegarde avec une phrase secrète pour la sécuriser.
 
 Pour une sécurité maximale, elle devrait être différente du mot de passe de votre compte.</string>
     <string name="keys_backup_setup_creating_backup">Création de la sauvegarde</string>
@@ -1354,7 +1354,7 @@ Pour une sécurité maximale, elle devrait être différente du mot de passe de 
     <string name="keys_backup_setup_step2_skip_button_title">(Avancé) Configurer une clé de récupération</string>
     <string name="keys_backup_setup_step3_success_title">Bien joué !</string>
     <string name="keys_backup_setup_step3_text_line1">Vos clés sont en cours de sauvegarde.</string>
-    <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l\'utiliser pour restaurer l\'accès à vos messages chiffrés si vous oubliez votre phrase de passe.
+    <string name="keys_backup_setup_step3_text_line2">Votre clé de récupération est une mesure de précaution. Vous pouvez l\'utiliser pour restaurer l\'accès à vos messages chiffrés si vous oubliez votre phrase secrète.
 Conservez votre clé de récupération en lieu sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Conservez votre clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe (ou un coffre-fort)</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">J\'ai fait une copie</string>
