@@ -1088,7 +1088,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
 Kérlek ellenőrizd a rendszerbeállításokat.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Beállítások megnyitása</string>
+    <string name="open_settings">Beállítások megnyitása</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Fiók beállítások.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Az értesítések engedélyezve vannak a felhasználói fiókhoz.</string>
@@ -1273,13 +1273,13 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_setup_recovery_key">Üzenet Visszaállítás</string>
 
     <string name="keys_backup_restore_with_key_helper">Elvesztetted a visszaállítási kulcsod? Készíts újat a beállításokban.</string>
-    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot (%s).</string>
-    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
+    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra.</string>
 
     <string name="keys_backup_restoring_waiting_message">Mentés visszaállítása…</string>
     <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>
     <string name="keys_backup_recovery_code_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
-    <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
 
     <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
@@ -1312,8 +1312,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen eszköztől: %s</string>
     <string name="keys_backup_get_trust_error">Megbízhatósági információ nem nyerhető ki a mentésből (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">A Kulcs Mentés használatához add meg most a jelmondatot vagy Visszaállítási Kulcsot ezen az eszközön.</string>
-    <string name="keys_backup_settings_verify_device_now">A Kulcs Mentés használatához ezen az eszközön ellenőrizd ezt a klienst: [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
     <string name="keys_backup_settings_delete_backup_error">A mentés törlése sikertelen (%s)</string>
 

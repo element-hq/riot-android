@@ -1050,7 +1050,7 @@ Kini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të 
     <string name="settings_troubleshoot_test_system_settings_success">Njoftimet janë të aktivizuara te rregullimet e sistemit.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Njoftimet janë të çaktivizuara te rregullimet e sistemit.
 Ju lutemi, kontrolloni rregullimet e sistemit.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Hap Rregullimet</string>
+    <string name="open_settings">Hap Rregullimet</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Rregullime Llogarie.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Njoftimet janë të aktivizuara për llogarinë tuaj.</string>
@@ -1235,13 +1235,13 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="keys_backup_restore_setup_recovery_key">Rikthim Mesazhesh</string>
 
     <string name="keys_backup_restore_with_key_helper">Humbët kyçin tuaj të rikthimeve? Te rregullimet mund të caktoni një të ri.</string>
-    <string name="keys_backup_passphrase_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë frazëkalim: ju lutemi, verifikoni që dhatë frazëkalimin e duhur të rikthimeve (%s).</string>
-    <string name="network_error_please_check_and_retry">Gabim lidhjeje: ju lutemi, kontrolloni lidhjen tuaj dhe riprovoni (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë frazëkalim: ju lutemi, verifikoni që dhatë frazëkalimin e duhur të rikthimeve.</string>
+    <string name="network_error_please_check_and_retry">Gabim lidhjeje: ju lutemi, kontrolloni lidhjen tuaj dhe riprovoni.</string>
 
     <string name="keys_backup_restoring_waiting_message">Po rikthehet kopjeruajtja…</string>
     <string name="keys_backup_unlock_button">Shkyçeni Historikun</string>
     <string name="keys_backup_recovery_code_empty_error_message">Ju lutemi, jepni një kyç rikthimesh</string>
-    <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rikthimeve (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rikthimeve.</string>
 
     <string name="keys_backup_restore_success_title">Kopjeruajtja u Rikthye %s !</string>
     <string name="keys_backup_restore_success_description">U rikthyen %1$d kyçe sesioni, dhe u shtuan %2$d kyç(e) të rinj që nuk njiheshin nga kjo pajisje</string>
@@ -1274,8 +1274,6 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Kopjeruajtja ka një nënshkrim të pavlefshëm prej pajisjes së paverifikuar %s</string>
     <string name="keys_backup_get_trust_error">S’u arrit të merreshin të dhëna besimi për kopjeruajtjen (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Për të përdorur Kopjeruajtje Kyçesh në këtë pajisje, jepni tani një frazëkalim ose një kyç rikthimesh.</string>
-    <string name="keys_backup_settings_verify_device_now">Për të përdorur Kopjeruajtje Kyçesh në këtë pajisje verifikoni tani Pajisjen [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Po fshihet kopjeruajtje…</string>
     <string name="keys_backup_settings_delete_backup_error">S’arrihet të fshihet kopjeruajtje (%s)</string>
 

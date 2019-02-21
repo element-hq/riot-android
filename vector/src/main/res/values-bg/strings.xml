@@ -1076,7 +1076,7 @@
     <string name="settings_troubleshoot_test_system_settings_success">Уведомленията са разрешени в системните настройки.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Уведомленията са забранени в системните настройки.
 Моля, проверете системните настройки.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Отвори настройки</string>
+    <string name="open_settings">Отвори настройки</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Настройки на профила.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Уведомленията са разрешени за този профил.</string>
@@ -1261,13 +1261,13 @@
     <string name="keys_backup_restore_setup_recovery_key">Възстановяване на съобщения</string>
 
     <string name="keys_backup_restore_with_key_helper">Загубихте ключа за възстановяване? Може да настройте нов от Настройки.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола (%s).</string>
-    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола.</string>
+    <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак.</string>
 
     <string name="keys_backup_restoring_waiting_message">Възстановяване от резервно копие…</string>
     <string name="keys_backup_unlock_button">Отключи историята</string>
     <string name="keys_backup_recovery_code_empty_error_message">Въведете ключ за възстановяване</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
 
     <string name="keys_backup_restore_success_title">Резервното копие бе възстановено %s !</string>
     <string name="keys_backup_restore_success_description">Бяха възстановени %1$d сесийни ключа и добавени %2$d нови ключа, досега непознати за това устройство</string>
@@ -1300,8 +1300,6 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервното копие има невалиден подпис от непотвърдено устройство %s</string>
     <string name="keys_backup_get_trust_error">Неуспешно получаване на информация за довереността към резервното копие (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">За да използвате резервно копиране на ключовете на това устройство, въведете паролата или ключа за възстановяване.</string>
-    <string name="keys_backup_settings_verify_device_now">За да използвате резервно копиране на ключовете на това устройство, потвърдете устройство [%s].</string>
     <string name="keys_backup_settings_deleting_backup">Изтриване на резервно копие…</string>
     <string name="keys_backup_settings_delete_backup_error">Неуспешно изтриване на резервно копие (%s)</string>
 

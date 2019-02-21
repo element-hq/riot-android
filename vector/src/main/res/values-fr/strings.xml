@@ -1091,7 +1091,7 @@ Veuillez noter que cette action redémarrera l\'application et pourra prendre un
     <string name="settings_troubleshoot_test_system_settings_success">Les notifications sont activées dans les paramètres système.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Les notifications sont désactivées dans les paramètres systèmes.
 Veuillez vérifier les paramètres système.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Ouvrir les paramètres</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Paramètres du compte.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Les notifications sont activées pour votre compte.</string>
@@ -1276,13 +1276,13 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_restore_setup_recovery_key">Récupération des messages</string>
 
     <string name="keys_backup_restore_with_key_helper">Vous avez perdu votre clé de récupération ? Vous pouvez en configurer une autre dans les paramètres.</string>
-    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération (%s).</string>
-    <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer (%s).</string>
+    <string name="keys_backup_passphrase_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette phrase de passe. Veuillez vérifier que vous avez saisi la bonne phrase de passe de récupération.</string>
+    <string name="network_error_please_check_and_retry">Erreur de réseau : veuillez vérifier votre connexion et réessayer.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde…</string>
     <string name="keys_backup_unlock_button">Déverrouiller l\'historique</string>
     <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir une clé de récupération</string>
-    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
 
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
     <string name="keys_backup_restore_success_description">%1$d clés de session restaurées et %2$d nouvelles clés ajoutées qui étaient inconnues à cet appareil</string>
@@ -1315,8 +1315,6 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l\'appareil non vérifié %s</string>
     <string name="keys_backup_get_trust_error">Échec de la récupération des informations de confiance de la sauvegarde (%s).</string>
 
-    <string name="keys_backup_settings_unverifiable_device">Pour utiliser la sauvegarde de clés sur cet appareil, fournissez votre phrase de passe ou votre clé de récupération maintenant.</string>
-    <string name="keys_backup_settings_verify_device_now">Pour utiliser la sauvegarde de clés sur cet appareil, vérifiez l\'appareil [%s] maintenant.</string>
     <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
     <string name="keys_backup_settings_delete_backup_error">Échec lors de la suppression de la sauvegarde (%s)</string>
 
