@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.Typeface
 import android.media.RingtoneManager
 import android.net.Uri
@@ -1045,11 +1046,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
             val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
             val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
-
+            val passMatchLabel = view.findViewById<TextView>(R.id.pass_match_label)
             val dialog = AlertDialog.Builder(activity)
                     .setTitle(R.string.settings_change_password)
                     .setView(view)
-                    .setPositiveButton(R.string.save) { _, _ ->
+                    .setPositiveButton(R.string.update) { _, _ ->
 
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
@@ -1098,13 +1099,20 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                     .show()
 
-            val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            saveButton.isEnabled = false
+            val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            updateButton.isEnabled = false
 
 
             val successDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_success, null)
             val alertDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_alert_mark, null)
 
+            val errorColor = context?.let {
+                ContextCompat.getColor(it, R.color.vector_error_color)
+            } ?: Color.RED
+
+            val successColor = context?.let {
+                ContextCompat.getColor(it,R.color.vector_success_color)
+            }?:Color.GREEN
             confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
@@ -1113,17 +1121,29 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
 
                     confirmNewPasswordText.apply {
                         if (s.isNotEmpty()) {
+                            passMatchLabel.visibility = View.VISIBLE
                             if (s.toString() == newPasswordText.text.toString()) {
-                                setCompoundDrawablesWithIntrinsicBounds(null, null, successDrawable, null)
+                                passMatchLabel.apply {
+                                    val formatText = getString(R.string.pass_match) + "  "
+                                    text = formatText
+                                    setTextColor(successColor)
+                                    setCompoundDrawablesWithIntrinsicBounds(null, null, successDrawable, null)
+
+                                }
                             } else {
-                                setCompoundDrawablesWithIntrinsicBounds(null, null, alertDrawable, null)
+                                passMatchLabel.apply {
+                                    val formatText = getString(R.string.pass_not_match) + "  "
+                                    text = formatText
+                                    setTextColor(errorColor)
+                                    setCompoundDrawablesWithIntrinsicBounds(null, null, alertDrawable, null)
+                                }
                             }
                         } else {
-                            setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+                            passMatchLabel.visibility = View.GONE
                         }
                     }
                 }

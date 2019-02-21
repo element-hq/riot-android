@@ -95,6 +95,7 @@
     <string name="accept">Accept</string>
     <string name="skip">Skip</string>
     <string name="done">Done</string>
+    <string name="update">Update</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -1369,4 +1370,8 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_info_title_algorithm">Algorithm</string>
     <string name="keys_backup_info_title_signature">Signature</string>
 
+
+    <!--Information Labels text-->
+    <string name="pass_not_match">Passwords do not match  </string>
+    <string name="pass_match">Passwords match  </string>
 </resources>
