@@ -439,7 +439,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_add_email_address">E-Mail-Adresse hinzufügen</string>
     <string name="settings_phone_number">Telefonnummer</string>
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
-    <string name="settings_app_info_link_summary">App-Info-Anzeige von Android</string>
+    <string name="settings_app_info_link_summary">Zeige App-Infos in den Systemeinstellungen.</string>
     <string name="settings_app_info_link_title">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
