@@ -1,3 +1,27 @@
+Changes in Riot 0.8.4 (2019-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.X.Y.
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in Riot 0.8.23 (2019-02-21)
 ===================================================
 
@@ -23,7 +47,7 @@ Bugfix:
  - Fix key backup banner doesn't go away after you have restored from backup. (#2943)
  - Fix issue with registration on some HomeServer (#2985)
 
-Changes in Riot 0.8.22 (2019-02-01)
+Changes in Riot 0.8.22-beta (2019-02-01)
 ===================================================
 
 MatrixSdk:
