@@ -5,8 +5,8 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
- - key backup: Trust on Decrypt #2921
- - key backup: new recover method detected #2926
+ - key backup: Trust on Decrypt (#2921)
+ - key backup: new recover method detected (#2926)
 
 Improvements:
  - keys backup: Setup screen UX improvement
@@ -20,7 +20,8 @@ Other changes:
 
 Bugfix:
  - Fix warning "Attribute value must be constant" in VectorHomeActivity
- - Fix key backup banner doesn't go away after you have restored from backup. #2943
+ - Fix key backup banner doesn't go away after you have restored from backup. (#2943)
+ - Fix issue with registration on some HomeServer (#2985)
 
 Translations:
  -
