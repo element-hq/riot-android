@@ -131,15 +131,18 @@
 
         <!-- activities list starts here -->
         <activity
-            android:name=".activity.LoginActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:name=".activity.LauncherActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.FallbackAccountCreationActivity"
             android:configChanges="orientation|screenSize"

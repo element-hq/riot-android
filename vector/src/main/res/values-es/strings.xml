@@ -607,16 +607,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_settings_addresses_e2e_disabled">El cifrado está deshabilitado en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Habilitar cifrado
 (advertencia: ¡no se puede volver a deshabilitar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">¡Advertencia!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo a extremo está en beta y puede no ser confiable.
-
-Aún no deberías confiar en él para proteger tus datos.
-
-Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
-
-Una vez que se habilita el cifrado en una sala no se puede volver a desactivar (por ahora).
-
-Los mensajes cifrados no serán visibles en clientes que aún no implementen el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>

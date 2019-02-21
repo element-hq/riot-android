@@ -2,6 +2,13 @@
 
     <!-- ************************ Common items ************************ -->
 
+    <!-- Launcher Theme, only used for LauncherActivity (will be use even before the Activity is started) -->
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+    </style>
+
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?colorPrimary</item>
@@ -121,13 +128,6 @@
         <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
-    <style name="LoginButtonStyleBase" parent="VectorButtonStyle">
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:layout_height">36dp</item>
-    </style>
-
-    <style name="LoginButtonStyle" parent="LoginButtonStyleBase" />
-
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
         <item name="android:background">@android:color/transparent</item>
@@ -214,6 +214,28 @@
     <style name="VectorLinearLayout">
         <item name="android:gravity">end</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- BottomSheet theming -->
+    <style name="Vector.BottomSheet.Dark" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_light</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Status" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_status</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
     </style>
 
 </resources>

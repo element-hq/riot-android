@@ -700,16 +700,6 @@
     <string name="room_settings_addresses_e2e_disabled">此聊天室未啟用加密。</string>
     <string name="room_settings_addresses_e2e_encryption_warning">啟用加密
  (警告: 啟用後無法停用)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">警告！</string>
-    <string name="room_settings_addresses_e2e_prompt_message">端到端加密仍在測試階段, 可能不可靠。
-
-您還不應該信任它來保護資料。
-
-裝置將無法解密加入前的訊息。
-
-一旦為此聊天室啟用了加密, 它就不能再次關閉。
-
-在尚未實現加密的用戶端上, 加密訊息將不可見。</string>
 
     <string name="directory_title">目錄</string>
     <string name="settings_theme">主題</string>
@@ -1292,8 +1282,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="action_sign_out_confirmation_simple">您想要登出嗎？</string>
     <string name="settings_data_save_mode_summary">數據節省模式會套用特定的過濾器，這樣狀態更新與輸入通知就會被過濾掉。</string>
-
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">啟用加密</string>
 
     <string name="encryption_message_recovery">加密訊息復原</string>
     <string name="error_empty_field_enter_user_name">請輸入使用者名稱。</string>

@@ -52,7 +52,7 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
 
         val keysBackup = sharedViewModel.session.crypto?.keysBackup
         if (keysBackup != null) {
-            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_waiting_message)
+            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_from_passphrase_waiting_message)
             passphraseErrorText.value = null
 
             val keysVersionResult = sharedViewModel.keyVersionResult.value!!

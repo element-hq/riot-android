@@ -606,16 +606,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="room_settings_addresses_e2e_disabled">Criptografia está desativada nesta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia 
 (atenção: não é possível desativar novamente!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Atenção!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">A criptografia ponta-a-ponta está em beta e pode não ser fiável.
-
-Ainda não deve confiar nela para proteger as seus dados.
-
-Os dispositivos ainda não conseguem decifrar o histórico de mensagens anteriores ao momento em que entraram na sala.
-
-Quando a criptografia está ativada numa sala, ela não pode ser desativada novamente (por enquanto).
-
-Mensagens cifradas não serão visíveis para clientes que não ainda não implementam criptografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Diretório</string>

@@ -46,7 +46,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
 
     lateinit var session: MXSession
 
-    var showManualExport : MutableLiveData<Boolean> = MutableLiveData()
+    var showManualExport: MutableLiveData<Boolean> = MutableLiveData()
 
     var navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     var shouldPromptOnBack = true

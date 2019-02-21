@@ -594,14 +594,6 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_settings_addresses_e2e_disabled">Tämä huone ei ole salattu.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Käytä salausta
 (HUOM! Salausta ei voi poistaa käytöstä!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Varoitus!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Salaus on testikäytössä, eikä välttämättä toimi luotettavasti.
-
-Älä käytä sitä salaista tietoa varten.
-
-Laitteet eivät voi näyttää salattuja viestejä ajalta ennen huoneeseen liittymistä.
-
-Salatut viestit eivät näy sovelluksissa, jotka eivät tue salausta.</string> <!-- ??? -->
 
     <!-- Directory -->
     <string name="directory_title">Luettelo</string>

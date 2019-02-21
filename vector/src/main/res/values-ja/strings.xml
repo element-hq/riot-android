@@ -301,7 +301,6 @@
     <string name="room_settings_copy_room_id">部屋固有IDをコピー</string>
     <string name="room_settings_copy_room_address">部屋の住所表記をコピー</string>
 
-    <string name="room_settings_addresses_e2e_prompt_title">警告!</string>
     <string name="encryption_information_device_id">装置固有ID</string>
     <string name="font_size">文字の大きさ</string>
     <string name="tiny">とても小さい</string>
@@ -662,16 +661,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="settings_delete_threepid_confirmation">%1$s %2$sを削除してよろしいですか？</string>
 
     <string name="settings_phone_number_code">コード</string>
-
-    <string name="room_settings_addresses_e2e_prompt_message">エンドツーエンド暗号化はベータ版であり、確実でない可能性があります。
-
-データの安全性を確保するために使わないでください。
-
-部屋に参加する前の履歴を復号できない可能性があります。
-
-一度暗号化を有効にしたら、それを再び無効にすることは今のところできません。
-
-暗号化されたメッセージは、暗号化に対応していないクライアントでは読めない可能性があります。</string>
 
     <string name="failed_to_load_timeline_position">%sはこの部屋のタイムラインのある箇所を読み込もうとしましたが、見つかりませんでした。</string>
 

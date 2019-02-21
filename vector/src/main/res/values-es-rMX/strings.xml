@@ -581,14 +581,6 @@ Disculpe por la inconveniencia.</string>
     <string name="room_settings_addresses_e2e_enabled">La cifración está encendida en esta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">La cifración está apagada en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Encender cifración \n(¡Aviso: no se puede apagar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">¡Aviso!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo-a-extremo está en beta y puede ser poco fiable.
-
-No debe usarla para proteger información.
-
-Los dispositivos no podrán descifrar el historial de la sala desde antes de entrar.
-
-Los mensajes cifrados no serán visibles en cuentas que no implementan el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>

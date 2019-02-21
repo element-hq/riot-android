@@ -586,16 +586,6 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_addresses_e2e_disabled">V tejto miestnosti nie je povolené šifrovanie.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Povoliť šifrovanie 
 (Pozor: Nie je viac možné zakázať!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Pozor!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">E2E šifrovanie je v štádiu beta a nemusí byť úplne spoľahlivé.
-
-Nemali by ste zatiaľ spoliehať, že vám toto šifrovanie dokáže zabezpečiť vaše údaje.
-
-Zariadenia zatiaľ nedokážu dešifrovať správy poslané skôr, než ste na nich vstúpili do miestnosti.
-
-Ak v miestnosti povolíte šifrovanie, šifrovanie nie je viac možné zakázať (aspoň zatiaľ nie).
-
-Šifrované správy nebudú vôbec zobrazené v klientoch, ktorí zatiaľ nepodporujú šifrovanie.</string>
 
     <string name="directory_title">Adresár</string>
     <string name="settings_theme">Vzhľad</string>

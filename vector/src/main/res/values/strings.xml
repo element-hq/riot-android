@@ -924,9 +924,6 @@
     <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
     <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warning!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Enable encryption</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
@@ -1205,42 +1202,26 @@
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- String for Play Store -->
-    <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_title">Riot.im - Communicate, your way.</string>
     <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
 The complete changelog can be found here: %1$s.
 To make sure you don’t miss a thing, just keep your updates turned on."</string>
-    <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
-    <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
+    <string name="store_short_description">A universal secure chat app entirely under your control.</string>
+    <string name="store_full_description">"A chat app, under your control and entirely flexible. Riot lets you communicate the way you want. Made for [matrix] - the standard for open, decentralised communication.
 
-Built around group chatrooms, Riot.im lets you share messages, images, videos and files - interact with your tools and access all your different communities under one roof. One single identity and place for all your teams: no need to switch accounts, work and chat with people from different organisations in public or private rooms: from professional projects to school trips, Riot.im will become the center of all your discussions!
+Get a free matrix.org account, get your own server at https://modular.im, or use another Matrix server.
 
-Now with end-to-end encryption!
+Why choose Riot.im?
 
-Features include:
+• COMPLETE COMMUNICATION: Build rooms around your teams, your friends, your community - however you like! Chat, share files, add widgets and make voice and video calls - all free of charge.
 
-• Instantly share messages, images, videos and files of any kind within groups of any size
-• Voice and video 1-1 and conference calling via WebRTC
-• End-to-end encryption using Olm (https://matrix.org/git/olm)
-• See who’s reading your messages with read receipts
-• Communicate with users anywhere in the Matrix.org ecosystem - not just Riot.im users!
-• Discover and invite users by email address
-• Participate in guest-accessible public rooms
-• Highly scalable - supports hundreds of rooms and thousands of users
-• Fully synchronised message history across multiple devices and browsers
-• Finely configurable notification settings, synchronised over all devices
-• Infinite searchable chat history
-• Permalinks to messages
-• Full message search
-• Support for RTL languages such as Arabic
+• POWERFUL INTEGRATIONS: Use Riot.im with the tools you know and love. With Riot.im you can even chat with users and groups on other chat apps.
 
-For developers:
-• Riot.im is a Matrix client - built on the Matrix.org open standard and ecosystem, providing interoperability with all other Matrix compatible apps, servers and integrations
-• Entirely open sourced under the permissive Apache License - get the code from https://github.com/vector-im/vector-android. Pull requests welcome!
-• Trivially extensible via the open Matrix Client-Server API (https://matrix.org/docs/spec)
-• Run your own server! You can use the default matrix.org server or run your own Matrix home server (e.g. https://matrix.org/docs/projects/server/synapse.html)
+• PRIVATE AND SECURE: Keep your conversations secret. State of the art end-to-end encryption ensures that private communication stays private.
 
-Discover truly efficient and open collaboration with Riot.im!"</string>
+• OPEN, NOT CLOSED: Open source, and built on Matrix. Own your own data by hosting your own server, or selecting one you trust.
 
+• EVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and online at https://riot.im."</string>
 
     <!-- Passphrase -->
     <string name="passphrase_create_passphrase">Create passphrase</string>
@@ -1306,6 +1287,7 @@ Discover truly efficient and open collaboration with Riot.im!"</string>
     <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
     <string name="network_error_please_check_and_retry">Network error: please check your connection and retry.</string>
 
+    <string name="keys_backup_restoring_from_passphrase_waiting_message">Restoring backup, this process can take several seconds.</string>
     <string name="keys_backup_restoring_waiting_message">Restoring backup…</string>
     <string name="keys_backup_unlock_button">Unlock History</string>
     <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
