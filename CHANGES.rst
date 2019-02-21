@@ -1,8 +1,8 @@
-Changes in Riot 0.8.23 (2019-XX-XX)
+Changes in Riot 0.8.23 (2019-02-21)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.17.
 
 Features:
  - key backup: Trust on Decrypt (#2921)
@@ -22,12 +22,6 @@ Bugfix:
  - Fix warning "Attribute value must be constant" in VectorHomeActivity
  - Fix key backup banner doesn't go away after you have restored from backup. (#2943)
  - Fix issue with registration on some HomeServer (#2985)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.22 (2019-02-01)
 ===================================================
