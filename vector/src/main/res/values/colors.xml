@@ -37,7 +37,7 @@
     <color name="riot_primary_background_color_status">#FFEEF2F5</color>
 
     <!--Default/Android Status Bar-->
-    <color name="primary_color_dark_light">#FF2E3648</color>
+    <color name="primary_color_dark_light">#FF1A2027</color>
     <!--Default/Base-->
     <color name="primary_color_light">#FF27303A</color>
     <!--Default/Accent-->
