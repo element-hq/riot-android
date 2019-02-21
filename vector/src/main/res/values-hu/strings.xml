@@ -1034,7 +1034,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1151,38 +1151,23 @@ A következő képernyőn el kell fogadnod, hogy a Riot folyamatosan fusson a h�
 
     <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
 
-    <string name="store_title">Riot.im - open team collaboration</string>
-    <string name="store_short_description">Üdvözöllek a Riot.im-nél: a szabad kommunikáció új világa!</string>
-    <string name="store_full_description">"Riot.im egyszerű és elegáns környezetet biztosít együttműködéshez ami egy alkalmazásba gyűjti valamennyi beszélgetését.
+    <string name="store_title">Riot.im - Beszélgess, ahogy tetszik.</string>
+    <string name="store_short_description">Egy biztonságos és univerzális csevegő alkalmazás az irányításod alatt.</string>
+    <string name="store_full_description">A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Riot megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
 
-A szolgáltatás csoportos csevegőszobák köré épül. Riot.im-mel üzeneteket, képeket, videókat és fájlokat oszthatsz meg - összekapcsolódhatsz az eszközeiddel és a csatlakozhatsz különböző közösségekhez egy tető alatt. Egy fiók és hely minden csoportod számára: nem kell felhasználót váltanod, dolgozz és csevegj bárkivel - legyen az akár más szervezetnél - nyilvános vagy privát szobákban: professzionális projektekről vagy iskolai kirándulásokról. Riot.im lesz a közepe  a beszélgetéseidnek!
+Készíts egy ingyenes matrix.org fiókot vagy igényelj egy saját szervert a https://modular.im -től, de üzemeltethetsz is saját Matrix szervert.
 
-Most végponttól végpontig titkosítással!
+Miért válaszd a Riot.im-et?
 
-Lehetőségek:
+TELJES KOMMUNIKÁCIÓ: Nyiss szobákat a csoportod, barátaid, közösséged vagy bárkiknek akiknek szeretnél! Beszélgess, ossz meg fájlokat, adj hozzá kisalkalmazásokat és indíts hang és videóhívásokat - teljesen ingyen.
 
-• Azonnal megoszthatsz üzenetet, képet, videót vagy bármilyen fájlt a csoporton belül akármilyen méretben
-• Hang és videóhívás privát szobákban vagy konferenciahívás WebRTC-vel
-• Végponttól végpontig való titkosítás Olm (https://matrix.org/git/olm) felhasználásával
-• Láthatod, hogy ki olvasta az üzenetedet olvasás visszaigazolással
-• A Matrix rendszerében bárkivel tarthatod a kapcsolatot - nem csak a Riot.im-et használó felhasználókkal!
-• Keress és hívj meg bárkit e-mail cím megadásával
-• Részt vehetsz vendég felhasználóval látogatható nyílt szobákban
-• Nagyon jól skálázható - több száz szobát és több ezer felhasználót támogat
-• Teljesen egységes üzenet napló minden eszközön és böngészőben
-• Finoman állítható egységes értesítési beállítások minden eszközön
-• Korlátlanul kereshető csevegés naplók
-• Közvetlen hivatkozások üzenetekhez
-• Teljes szöveges keresés az üzenetekben
-• Jobbról balra irányban írt nyelvek, mint az Arab, támogatása
+ERŐS KAPCSOLATOK: Használd a Riot-ot a kedvenc eszközeiddel. A Riottal még másik rendszerekben lévő emberekkel és csoportokkal is képes lehetsz beszélgetni.
 
-Fejlesztőknek:
-• Riot.im egy Matrix kliens - a Matrix.org nyílt szabványára és környezet köré épült, együttműködést biztosít minden Matrix kompatibilis alkalmazással, szerverrel és más összekötésekkel
-• Teljesen nyílt forráskódú a megengedő Apache licence alatt - a kódot letöltheted innen: https://github.com/vector-im/vector-android . A „Pull request”-eket szívesen vesszük!
-• Egyszerűen bővíthető a nyílt Matrix Client-Server API (https://matrix.org/docs/spec) alapján.
-• Futtass saját szervert! Használhatod az alapértelmezett matrix.org szervert vagy üzemeltethetsz saját Matrix szervert (pl. https://matrix.org/docs/projects/server/synapse.html)
+SZEMÉLYES ÉS BIZTONSÁGOS: Tartsd a beszélgetéseidet titokban. A végponttól-végpontig titkosítás biztosítja, hogy a személyes beszélgetések személyesek maradnak.
 
-Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Riot.im-mel!"</string>
+NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a [matrix]-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
+
+MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en.</string>
 
     <string name="video_call_in_progress">Videóhívás folyamatban…</string>
 
@@ -1277,11 +1262,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1360,7 +1345,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1373,4 +1358,5 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 
 Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
     <string name="new_recovery_method_popup_was_me">Én voltam</string>
-</resources>
+<string name="keys_backup_restoring_from_passphrase_waiting_message">A mentés visszaállítása több másodpercig is eltarthat.</string>
+    </resources>
