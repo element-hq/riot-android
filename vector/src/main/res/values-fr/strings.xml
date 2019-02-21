@@ -1280,7 +1280,7 @@ Attention : ce fichier pourrait être supprimé si l\'application est désinstal
     <string name="keys_backup_restoring_waiting_message">Restauration de la sauvegarde…</string>
     <string name="keys_backup_unlock_button">Déverrouiller l\'historique</string>
     <string name="keys_backup_recovery_code_empty_error_message">Veuillez saisir une clé de récupération</string>
-    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération (%s).</string>
+    <string name="keys_backup_recovery_code_error_decrypt">La sauvegarde n\'a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
 
     <string name="keys_backup_restore_success_title">Sauvegarde restaurée %s !</string>
     <string name="keys_backup_restore_success_description">%1$d clés de session restaurées et %2$d nouvelles clés ajoutées qui étaient inconnues à cet appareil</string>
