@@ -598,16 +598,6 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_addresses_e2e_enabled">Verschlüsselung ist in diesem Raum aktiviert.</string>
     <string name="room_settings_addresses_e2e_disabled">Verschlüsselung ist in diesem Raum deaktiviert.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Verschlüsselung aktivieren \n(Warnung: Kann nicht wieder deaktiviert werden!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warnung!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Die Ende-zu-Ende-Verschlüsselung befindet sich aktuell im Beta-Stadium und funktioniert möglicherweise nicht zuverlässig.
-
-Du solltest noch nicht darauf vertrauen, dass deine Daten auch zuverlässig verschlüsselt werden.
-
-Geräte sind aktuell noch nicht in der Lage, den Chatverlauf vor dem Hinzufügen des Geräts zu entschlüsseln.
-
-Wenn die Verschlüsselung für einen Raum einmal aktiviert wurde, kann sie (aktuell) nicht wieder deaktiviert werden.
-
-Verschlüsselte Nachrichten werden auf Matrix-Clients, auf denen die Verschlüsselung noch nicht implementiert wurde, nicht sichtbar sein.</string>
 
     <!-- Directory -->
     <string name="directory_title">Verzeichnis</string>

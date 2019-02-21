@@ -585,16 +585,6 @@ Let op: deze actie zal de app opnieuw opstarten, en kan enige tijd kosten.</stri
     <string name="room_settings_addresses_e2e_enabled">Versleuteling is aan in deze ruimte.</string>
     <string name="room_settings_addresses_e2e_disabled">Versleuteling is uit in deze ruimte.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Zet versleuteling aan \n(waarschuwing: dit kan niet meer uitgezet worden!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Waarschuwing!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-endbeveiliging is experimenteel en kan onbetrouwbaar zijn.
-
-Het is beter om het nog niet met gevoelige gegevens te vertrouwen.
-
-Apparaten kunnen de geschiedenis van voordat ze de ruimte betraden nog niet ontsleutelen.
-
-Zodra de versleuteling aan staat kan het (voorlopig) niet worden uitgezet.
-
-Versleutelde berichten zullen nog niet zichtbaar zijn op programma\'s die geen versleuteling ondersteunen.</string>
 
     <!-- Directory -->
     <string name="directory_title">Adresboek</string>

@@ -812,16 +812,6 @@ Perangkat tak dikenal:</string>
     <string name="room_settings_addresses_e2e_disabled">Enkripsi dinonaktifkan untuk ruang ini.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Aktifkan enkripsi
 (peringatan: tidak lagi bisa dinonaktifkan!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Peringatan!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Enkripsi Ujung-ke-Ujung masih dalam beta dan mungkin belum dapat diandalkan.
-
-Anda diharapkan untuk tidak mengandalkannya untuk mengamankan data.
-
-Perangkat tidak akan dapat mendekripsi sejarah yang ada sebelum bergabung ke ruang.
-
-Enkripsi tidak lagi dapat dinonaktifkan setelah enkripsi diaktifkan (untuk sementara).
-
-Pesan terenkripsi tidak akan terlihat di klien yang belum mengimplementasikan enkripsi.</string>
 
     <string name="directory_title">Direktori</string>
     <string name="settings_theme">Tema</string>

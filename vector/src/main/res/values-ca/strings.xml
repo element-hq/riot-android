@@ -646,8 +646,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_addresses_e2e_enabled">L\'encriptació està activada en aquesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">L\'encriptació està desactivada en aquesta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Activa l\'encriptació \n(avís: no es podrà tornar a desactivar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Avís!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">L\'encriptació d\'extrem a extrem està en fase beta i no és del tot fiable.\n\nEncara no hi heu de confiar per enviar dades de manera segura.\n\nEls dispositius encara no poden desencriptar l\'històric anterior a unir-se a la sala.\n\nUn cop s\'ha activat l\'encriptació no es pot tornar a desactivar (de moment).\n\nEls missatges encriptats no són visibles en clients que encara no implementen l\'encriptació.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directori</string>
@@ -1345,7 +1343,6 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="abort">Avorta</string>
 
     <string name="action_sign_out_confirmation_simple">Esteu segur de voler sortir?</string>
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Habilita el xifratge</string>
 
     <string name="encryption_message_recovery">Recuperació de missatges xifrats</string>
     <string name="error_empty_field_enter_user_name">Introduïu un nom d\'usuari.</string>

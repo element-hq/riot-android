@@ -46,7 +46,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         }
 
         viewModel = ViewModelProviders.of(this).get(KeysBackupSetupSharedViewModel::class.java)
-        viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT,false)
+        viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(mSession)
 
 
@@ -177,7 +177,9 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun onBackPressed() {
         if (viewModel.shouldPromptOnBack) {
-            if (waitingView?.isVisible == true) { return }
+            if (waitingView?.isVisible == true) {
+                return
+            }
             AlertDialog.Builder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)

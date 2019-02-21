@@ -563,7 +563,6 @@
 
     <string name="room_settings_addresses_e2e_enabled">Fshehtëzimi në këtë dhomë është i aktivizuar.</string>
     <string name="room_settings_addresses_e2e_disabled">Fshehtëzimi në këtë dhomë është i çaktivizuar.</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Kujdes!</string>
     <string name="directory_title">Drejtori</string>
     <string name="settings_theme">Temë</string>
 
@@ -789,15 +788,6 @@ Mund të doni të hyni me një llogari tjetër, ose ta shtoni këtë email te kj
     <string name="room_settings_add_new_group">ID bashkësie të re (p.sh., +foo:matrix.org)</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Aktivizo fshehtëzim 
 (kujdes: s’mund të çaktivizohet më!)</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Fshehtëzimi skaj-më-skaj është në fazën beta dhe mund të mos jetë i qëndrueshëm.
-
-S’duhet t’i zini ende besë për sigurim të dhënash.
-
-Pajisjet s’do të jenë ende në gjendje të shfshehtëzojnë historik nga periudha përpara se të merrnin pjesë te dhomë.
-
-Pasi të jetë aktivizuar fshehtëzimi për një dhomë, s’mund të çaktivizohet më (hëpërhë).
-
-Mesazhet e fshehtëzuar s’do të jenë të dukshëm në klientë që nuk sendërtojnë ende fshehtëzimin.</string>
 
     <string name="e2e_enabling_on_app_update">Riot tani mbulon fshehtëzim skaj-më-skaj, por lypset të ribëni hyrjen që ta aktivizoni.
 
@@ -1295,8 +1285,6 @@ Kujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
 
     <string name="action_sign_out_confirmation_simple">Jeni i sigurt se doni të dilni?</string>
     <string name="settings_data_save_mode_summary">Mënyra e ruajtjes së të dhënave aplikon një filtër specifik, që kështu përditësimet rreth pranish dhe njoftime mbi shtypje në tastierë lihen jashtë.</string>
-
-    <string name="room_settings_addresses_e2e_encryption_enable_encryption">Aktivizoni fshehtëzim</string>
 
     <string name="encryption_message_recovery">Rikthim Mesazhesh të Fshehtëzuar</string>
     <string name="error_empty_field_enter_user_name">Ju lutemi, jepni emër përdoruesi.</string>

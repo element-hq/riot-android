@@ -353,7 +353,6 @@
     <string name="room_settings_category_advanced_title">Ítarlegt</string>
     <string name="room_settings_addresses_pref_title">Vistföng</string>
     <string name="room_settings_labs_end_to_end">Enda-í-enda dulritun</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Aðvörun!</string>
     <string name="directory_title">Mappa</string>
     <string name="settings_theme">Þema</string>
 
