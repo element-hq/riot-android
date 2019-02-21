@@ -2,7 +2,7 @@ Changes in Riot 0.8.23 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.17.
 
 Features:
  - key backup: Trust on Decrypt (#2921)
