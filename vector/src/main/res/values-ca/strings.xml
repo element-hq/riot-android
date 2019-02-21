@@ -1309,8 +1309,8 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La criptografia de la sessió no és activa</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">Restaura</string>
-    <string name="keys_backup_settings_delete_backup_button">Suprimeix</string>
+    <string name="keys_backup_settings_restore_backup_button">Restaura des de la còpia de seguretat</string>
+    <string name="keys_backup_settings_delete_backup_button">Suprimeix la còpia de seguretat</string>
 
     <string name="keys_backup_settings_status_ok">S\'ha configurat la còpia de seguretat de la clau correctament per a aquest dispositiu.</string>
     <string name="keys_backup_settings_status_ko">La còpia de seguretat de la clau no és activa en aquest dispositiu.</string>
@@ -1379,4 +1379,9 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     </plurals>
 
     <string name="keys_backup_info_title_version">Versió</string>
-</resources>
+<string name="keys_backup_info_title_algorithm">Algoritme</string>
+    <string name="keys_backup_info_title_signature">Signatura</string>
+
+<string name="new_recovery_method_popup_was_me">He sigut jo</string>
+    <string name="new_recovery_method_popup_title">Còpia de seguretat de la clau nova</string>
+    </resources>
