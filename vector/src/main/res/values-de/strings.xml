@@ -1017,7 +1017,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     </plurals>
 
     <string name="room_participants_now">Jetzt %1$s</string>
-    <string name="room_participants_ago">%1$s vor %2$s</string>
+    <string name="room_participants_ago">%1$s seit %2$s</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s und %2$s</string>
