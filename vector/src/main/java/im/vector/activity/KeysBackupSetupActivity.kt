@@ -61,20 +61,9 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.loadingStatus.observe(this, Observer {
             it?.let {
-                updateWaitingStatus(getString(it))
+                updateWaitingView(it)
             }
         })
-
-        viewModel.prepareRecoveryProgressProgress.observe(this, Observer {
-            val progress = it ?: -1
-            if (progress == -1) {
-                updateWaitingProgress(false, 0, 100)
-            } else {
-                updateWaitingProgress(true, progress, viewModel.prepareRecoveryProgressTotal.value
-                        ?: 100)
-            }
-        })
-
 
         viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
             when (uxStateEvent?.getContentIfNotHandled()) {

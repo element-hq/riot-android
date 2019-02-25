@@ -101,11 +101,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         })
 
         viewModel.loadingEvent.observe(this, Observer {
-            if (it == null) {
-                hideWaitingView()
-            } else {
-                showWaitingView(getString(it.peekContent()))
-            }
+            updateWaitingView(it)
         })
 
         viewModel.importRoomKeysFinishWithResult.observe(this, Observer {

@@ -67,15 +67,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         }
 
         viewModel.loadingEvent.observe(this, Observer {
-            if (it == null) {
-                hideWaitingView()
-            } else {
-                try {
-                    showWaitingView(getString(it.peekContent()))
-                } catch (e: Exception) {
-                    showWaitingView()
-                }
-            }
+            updateWaitingView(it)
         })
 
 
