@@ -1287,7 +1287,7 @@ Why choose Riot.im?
     <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
     <string name="network_error_please_check_and_retry">Network error: please check your connection and retry.</string>
 
-    <string name="keys_backup_restoring_waiting_message">Restoring backup…</string>
+    <string name="keys_backup_restoring_waiting_message">Restoring backup:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Downloading keys…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importing keys…</string>

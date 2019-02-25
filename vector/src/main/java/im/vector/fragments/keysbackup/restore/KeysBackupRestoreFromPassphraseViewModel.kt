@@ -76,10 +76,18 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
                                             isIndeterminate = true)
                                 }
                                 is StepProgressListener.Step.ImportingKey -> {
-                                    sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
-                                            + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
-                                            step.progress,
-                                            step.total)
+                                    // Progress 0 can take a while, display an indeterminate progress in this case
+                                    if (step.progress == 0) {
+                                        sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                                + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                                isIndeterminate = true)
+
+                                    } else {
+                                        sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                                + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                                step.progress,
+                                                step.total)
+                                    }
                                 }
                             }
                         }
