@@ -1,0 +1,5 @@
+<resources>
+
+    <item name="dialog_width_ratio" format="float" type="dimen">0.50</item>
+
+</resources>

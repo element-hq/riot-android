@@ -17,4 +17,7 @@
 
     <dimen name="quote_width">4dp</dimen>
     <dimen name="quote_gap">8dp</dimen>
+
+    <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>
+
 </resources>
