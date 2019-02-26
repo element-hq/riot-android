@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.login.AutoDiscovery;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -339,8 +340,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // use to reset the password when the user click on the email validation
     private ThreePidCredentials mForgotPid = null;
-
-    Boolean shouldAutodiscoverDomainBasedOnMail = false;
 
     // network state notification
     private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
@@ -682,14 +681,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             //Maybe debounce
             String candidate = mLoginEmailTextView.getText().toString();
             //Try to see if we can find a domain
-            if (!candidate.isEmpty() && candidate.startsWith("@") && candidate.contains(":")) {
+            if (!candidate.isEmpty() && MXPatterns.isUserId(candidate)) {
                 //looks like a user name with domain
-                String possibleDomain = candidate.substring(candidate.lastIndexOf(":") + 1);
-                if (possibleDomain.isEmpty()) return;
-                tryAutoDiscover(possibleDomain);
-            } else if (shouldAutodiscoverDomainBasedOnMail && Patterns.EMAIL_ADDRESS.matcher(candidate).matches()) {
-                //Ok it's a valid email, let's try to extract domain?
-                String possibleDomain = candidate.substring(candidate.lastIndexOf("@") + 1);
+                String possibleDomain = candidate.substring(candidate.indexOf(":") + 1);
                 if (possibleDomain.isEmpty()) return;
                 tryAutoDiscover(possibleDomain);
             }
