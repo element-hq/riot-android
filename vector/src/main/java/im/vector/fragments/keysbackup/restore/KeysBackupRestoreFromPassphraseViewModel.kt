@@ -19,10 +19,11 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
-import im.vector.ui.arch.LiveEvent
+import im.vector.activity.util.WaitingViewData
 import im.vector.view.KeysBackupBanner
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
+import org.matrix.androidsdk.listeners.StepProgressListener
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
@@ -49,25 +50,54 @@ class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
     }
 
     fun recoverKeys(context: Context, sharedViewModel: KeysBackupRestoreSharedViewModel) {
-
         val keysBackup = sharedViewModel.session.crypto?.keysBackup
+
         if (keysBackup != null) {
-            sharedViewModel.loadingEvent.value = LiveEvent(R.string.keys_backup_restoring_from_passphrase_waiting_message)
             passphraseErrorText.value = null
 
             val keysVersionResult = sharedViewModel.keyVersionResult.value!!
-            val version = keysVersionResult.version!!
 
-            keysBackup.restoreKeyBackupWithPassword(version,
+            keysBackup.restoreKeyBackupWithPassword(keysVersionResult,
                     passphrase.value!!,
                     null,
                     sharedViewModel.session.myUserId,
+                    object : StepProgressListener {
+                        override fun onStepProgress(step: StepProgressListener.Step) {
+                            when (step) {
+                                is StepProgressListener.Step.ComputingKey -> {
+                                    sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                            + "\n" + context.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                            step.progress,
+                                            step.total)
+                                }
+                                is StepProgressListener.Step.DownloadingKey -> {
+                                    sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                            + "\n" + context.getString(R.string.keys_backup_restoring_downloading_backup_waiting_message),
+                                            isIndeterminate = true)
+                                }
+                                is StepProgressListener.Step.ImportingKey -> {
+                                    // Progress 0 can take a while, display an indeterminate progress in this case
+                                    if (step.progress == 0) {
+                                        sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                                + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                                isIndeterminate = true)
+
+                                    } else {
+                                        sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
+                                                + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                                step.progress,
+                                                step.total)
+                                    }
+                                }
+                            }
+                        }
+                    },
                     object : ApiCallback<ImportRoomKeysResult> {
                         override fun onSuccess(info: ImportRoomKeysResult) {
                             sharedViewModel.loadingEvent.value = null
                             sharedViewModel.didRecoverSucceed(info)
 
-                            KeysBackupBanner.onRecoverDoneForVersion(context, version)
+                            KeysBackupBanner.onRecoverDoneForVersion(context, keysVersionResult.version!!)
                             trustOnDecrypt(keysBackup, keysVersionResult)
                         }
 

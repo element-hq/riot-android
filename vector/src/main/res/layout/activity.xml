@@ -10,7 +10,8 @@
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/container"
@@ -21,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/waiting_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,13 +32,17 @@
 
         <LinearLayout
             android:id="@+id/waiting_view_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_margin="@dimen/layout_horizontal_margin"
             android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical"
-            android:padding="@dimen/layout_horizontal_margin">
+            android:padding="@dimen/layout_horizontal_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="@dimen/dialog_width_ratio">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -45,21 +50,22 @@
                 android:orientation="horizontal">
 
                 <ProgressBar
-                    android:id="@+id/progress_bar_view"
+                    android:id="@+id/waiting_view_status_circular_progress"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp" />
 
                 <TextView
                     android:id="@+id/waiting_view_status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
+                    android:layout_gravity="center_vertical"
                     android:visibility="gone"
                     tools:text="Waiting status..."
                     tools:visibility="visible" />
+
             </LinearLayout>
 
             <ProgressBar
@@ -67,6 +73,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:layout_marginTop="10dp"
                 android:visibility="gone"
                 tools:max="100"
                 tools:progress="30"
@@ -74,6 +81,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

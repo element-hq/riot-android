@@ -27,9 +27,9 @@ import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.KeysBackupRestoreActivity
 import im.vector.activity.KeysBackupSetupActivity
+import im.vector.activity.util.WaitingViewData
 import im.vector.fragments.VectorBaseFragment
 import im.vector.listeners.YesNoListener
-import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
@@ -74,7 +74,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                 when (keysBackupState) {
                     KeysBackupStateManager.KeysBackupState.Unknown,
                     KeysBackupStateManager.KeysBackupState.CheckingBackUpOnHomeserver -> {
-                        viewModel.loadingEvent.value = LiveEvent(-1)
+                        viewModel.loadingEvent.value = WaitingViewData("")
                     }
                     else -> {
                         viewModel.loadingEvent.value = null

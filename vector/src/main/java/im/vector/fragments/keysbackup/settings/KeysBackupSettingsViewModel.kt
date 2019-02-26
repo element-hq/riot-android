@@ -20,6 +20,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
+import im.vector.activity.util.WaitingViewData
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
@@ -41,7 +42,7 @@ class KeysBackupSettingsViewModel : ViewModel(),
     val apiResultError: LiveData<LiveEvent<String>>
         get() = _apiResultError
 
-    var loadingEvent: MutableLiveData<LiveEvent<Int>> = MutableLiveData()
+    var loadingEvent: MutableLiveData<WaitingViewData> = MutableLiveData()
 
     fun initSession(session: MXSession) {
         keyBackupState.value = session.crypto?.keysBackup?.state
@@ -71,7 +72,7 @@ class KeysBackupSettingsViewModel : ViewModel(),
 
     fun deleteCurrentBackup(context: Context) {
         session?.crypto?.keysBackup?.run {
-            loadingEvent.value = LiveEvent(R.string.keys_backup_settings_deleting_backup)
+            loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_settings_deleting_backup))
             if (currentBackupVersion != null) {
                 deleteBackup(currentBackupVersion!!, object : ApiCallback<Void> {
                     override fun onSuccess(info: Void?) {
