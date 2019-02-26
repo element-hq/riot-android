@@ -730,7 +730,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (!TextUtils.equals(mDomain, possibleDomain)) return;
                 if (AutoDiscovery.Action.PROMPT == info.getAction()) {
                     String hs = info.getHomeServerUrl();
-                    String ids = info.getIdendityServerUrl() != null ? info.getIdendityServerUrl() : hs;
+                    String ids = !TextUtils.isEmpty(info.getIdendityServerUrl()) ? info.getIdendityServerUrl()
+                            : ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
                     if (hs != null) {
                         if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
                             if (mUseCustomHomeServersCheckbox.isChecked()) {
