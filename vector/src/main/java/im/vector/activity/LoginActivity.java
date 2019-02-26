@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.login.AutoDiscovery;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
@@ -338,6 +339,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     // use to reset the password when the user click on the email validation
     private ThreePidCredentials mForgotPid = null;
+
+    Boolean shouldAutodiscoverDomainBasedOnMail = false;
 
     // network state notification
     private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
@@ -672,6 +675,86 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mTextInputLayouts = ViewUtilKt.findAllTextInputLayout(mFormContainer);
         ViewUtilKt.autoResetTextInputLayoutErrors(mTextInputLayouts);
+
+
+        mLoginEmailTextView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) return;
+            //Maybe debounce
+            String candidate = mLoginEmailTextView.getText().toString();
+            //Try to see if we can find a domain
+            if (!candidate.isEmpty() && candidate.startsWith("@") && candidate.contains(":")) {
+                //looks like a user name with domain
+                String possibleDomain = candidate.substring(candidate.lastIndexOf(":") + 1);
+                if (possibleDomain.isEmpty()) return;
+                tryAutoDiscover(possibleDomain);
+            } else if (shouldAutodiscoverDomainBasedOnMail && Patterns.EMAIL_ADDRESS.matcher(candidate).matches()) {
+                //Ok it's a valid email, let's try to extract domain?
+                String possibleDomain = candidate.substring(candidate.lastIndexOf("@") + 1);
+                if (possibleDomain.isEmpty()) return;
+                tryAutoDiscover(possibleDomain);
+            }
+        });
+
+    }
+
+    private void tryAutoDiscover(String possibleDomain) {
+        showWaitingView();
+        AutoDiscovery.Companion.getInstance().findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
+
+            String mDomain = possibleDomain;
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                hideWaitingView();
+                Log.e(LOG_TAG, "AutoDiscovery error for domain" + mDomain, e);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                hideWaitingView();
+                Log.e(LOG_TAG, "AutoDiscovery Network error for domain " + mDomain, e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                hideWaitingView();
+                //nop
+            }
+
+            @Override
+            public void onSuccess(AutoDiscovery.DiscoveredClientConfig info) {
+                hideWaitingView();
+                Log.d(LOG_TAG, "AutoDiscovery info " + info);
+                if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                if (AutoDiscovery.Action.PROMPT == info.getAction()) {
+                    String hs = info.getHomeServerUrl();
+                    String ids = info.getIdendityServerUrl() != null ? info.getIdendityServerUrl() : hs;
+                    if (hs != null) {
+                        if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
+                            if (mUseCustomHomeServersCheckbox.isChecked()) {
+                                mHomeServerText.setText(null);
+                                mIdentityServerText.setText(null);
+                                mUseCustomHomeServersCheckbox.performClick();
+                            }
+                        } else {
+                            mHomeServerText.setText(hs);
+                            mIdentityServerText.setText(ids);
+                            if (!mUseCustomHomeServersCheckbox.isChecked()) {
+                                mUseCustomHomeServersCheckbox.performClick();
+                            } else {
+                                onHomeServerUrlUpdate(true);
+                                onIdentityServerUrlUpdate(true);
+                            }
+                        }
+                    }
+                } else if (AutoDiscovery.Action.FAIL_ERROR == info.getAction()
+                        || AutoDiscovery.Action.FAIL_PROMPT == info.getAction()) {
+                    mLoginEmailTextViewTil.setError(getString(R.string.autodiscover_invalid_response));
+                }
+            }
+        });
     }
 
     /**

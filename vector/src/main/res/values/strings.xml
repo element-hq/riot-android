@@ -1357,5 +1357,7 @@ Why choose Riot.im?
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithm</string>
     <string name="keys_backup_info_title_signature">Signature</string>
+    
+    <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
 
 </resources>
