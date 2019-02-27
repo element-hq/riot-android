@@ -1112,7 +1112,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="store_title">Riot.im - 以您的方式溝通。</string>
     <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
-    <string name="store_full_description">完全由您控制且極具彈性的聊天應用程式。Riot 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
+    <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Riot 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
 
 取得免費的 matrix.org 帳號，在 https://modular.im 取得您自己的伺服器，或是使用其他的 Matrix 伺服器。
 
@@ -1126,7 +1126,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
 • 開放，並不封閉：開放原始碼，建基於 Matrix。透過建構您自己的伺服器來擁有自己的資料，或選取您信任的。
 
-• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。</string>
+• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。"</string>
 
     <string name="video_call_in_progress">視訊通話進行中……</string>
 

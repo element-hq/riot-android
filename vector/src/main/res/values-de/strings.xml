@@ -1202,7 +1202,7 @@ Auf dem nächsten Bildschirm wirst du gefragt ob du Riot erlauben möchtest im H
 
     <string name="store_title">Riot.im - Kommunizierte auf deine Weise.</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
-    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
+    <string name="store_full_description">"Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 
 Hole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
 
@@ -1216,7 +1216,7 @@ Warum solltest du Riot.im wählen?
 
 • OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
 
-• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist wobei deine Nachrichtenhistorie zwischen all deinen Geräten synchronisiert wird. Das andere \"Gerät\" kann auch ein Browser sein. Schau dir dazu auch riot.im an.</string>
+• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist wobei deine Nachrichtenhistorie zwischen all deinen Geräten synchronisiert wird. Das andere \"Gerät\" kann auch ein Browser sein. Schau dir dazu auch riot.im an."</string>
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 

@@ -1153,7 +1153,7 @@ A következő képernyőn el kell fogadnod, hogy a Riot folyamatosan fusson a h�
 
     <string name="store_title">Riot.im - Beszélgess, ahogy tetszik.</string>
     <string name="store_short_description">Egy biztonságos és univerzális csevegő alkalmazás az irányításod alatt.</string>
-    <string name="store_full_description">A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Riot megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
+    <string name="store_full_description">"A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Riot megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
 
 Készíts egy ingyenes matrix.org fiókot vagy igényelj egy saját szervert a https://modular.im -től, de üzemeltethetsz is saját Matrix szervert.
 
@@ -1167,7 +1167,7 @@ SZEMÉLYES ÉS BIZTONSÁGOS: Tartsd a beszélgetéseidet titokban. A végponttó
 
 NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a Matrix-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
 
-MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en.</string>
+MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en."</string>
 
     <string name="video_call_in_progress">Videóhívás folyamatban…</string>
 
