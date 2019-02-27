@@ -1267,7 +1267,7 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
 
     <string name="keys_backup_restore_setup_recovery_key">Nachrichtenwiederherstellung</string>
 
-    <string name="keys_backup_restoring_waiting_message">Stelle Backup wieder her…</string>
+    <string name="keys_backup_restoring_waiting_message">Stelle Backup wieder her:</string>
     <string name="keys_backup_unlock_button">Historie entschlüsseln</string>
     <string name="keys_backup_settings_restore_backup_button">Von Sicherung wiederherstellen</string>
     <string name="keys_backup_settings_delete_backup_button">Sicherung löschen</string>
@@ -1297,7 +1297,7 @@ Sichere deine Schlüssel um sie nicht zu verlieren.</string>
 Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</string>
 
     <string name="keys_backup_setup_step3_generating_key_status">Generiere Wiederherstellungsschlüssel aus der Passphrase. Dies kann mehrere Sekunden brauchen.</string>
-    <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Homeserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
+    <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Heimserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
     <string name="keys_backup_setup_skip_msg">Du kannst den Zugang zu deinen Nachrichten verlieren wenn du dich abmeldest oder das Gerät verlierst.</string>
@@ -1370,7 +1370,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_setup_step1_manual_export">Schlüssel manuell exportieren</string>
 
     <string name="keys_backup_setup_step2_text_title">Verschlüssele deine Sicherung mit einer Passphrase.</string>
-    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Server gespeichert. Schütze deine Sicherung mit einer Passphrase.
+    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Heimserver gespeichert. Schütze deine Sicherung mit einer Passphrase.
 
 Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
     <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
@@ -1409,4 +1409,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="keys_backup_info_title_algorithm">Algorithmus</string>
     <string name="keys_backup_info_title_signature">Signatur</string>
 
-</resources>
+<string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
+    </resources>
