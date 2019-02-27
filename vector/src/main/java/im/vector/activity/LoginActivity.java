@@ -693,7 +693,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private void tryAutoDiscover(String possibleDomain) {
         showWaitingView();
-        AutoDiscovery.Companion.getInstance().findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
+        AutoDiscovery autoDiscovery = new AutoDiscovery();
+        autoDiscovery.findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
 
             String mDomain = possibleDomain;
 
