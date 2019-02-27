@@ -129,6 +129,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // activity mode
     private int mMode = MODE_LOGIN;
 
+    private HashMap<String, AutoDiscovery.DiscoveredClientConfig> autoDiscoveredDomainCache = new HashMap<>();
+
     // graphical items
     @BindView(R.id.login_form_container)
     ViewGroup mFormContainer;
@@ -407,6 +409,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     protected void onPause() {
         super.onPause();
         removeNetworkStateNotificationListener();
+        autoDiscoveredDomainCache.clear();
     }
 
     /**
@@ -681,7 +684,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             //Maybe debounce
             String candidate = mLoginEmailTextView.getText().toString();
             //Try to see if we can find a domain
-            if (!candidate.isEmpty() && MXPatterns.isUserId(candidate)) {
+            if (MXPatterns.isUserId(candidate)) {
                 //looks like a user name with domain
                 String possibleDomain = candidate.substring(candidate.indexOf(":") + 1);
                 if (possibleDomain.isEmpty()) return;
@@ -692,9 +695,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     private void tryAutoDiscover(String possibleDomain) {
-        showWaitingView();
-        AutoDiscovery autoDiscovery = new AutoDiscovery();
-        autoDiscovery.findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
+        ApiCallback<AutoDiscovery.DiscoveredClientConfig> callback = new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
 
             String mDomain = possibleDomain;
 
@@ -726,11 +727,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (AutoDiscovery.Action.PROMPT == info.getAction()) {
                     if (info.getWellKnown() == null) return;
                     if (info.getWellKnown().getHomeServer() == null) return;
-                    String hs = info.getWellKnown().getHomeServer().getBaseURL();
+                    final String hs = info.getWellKnown().getHomeServer().getBaseURL();
                     String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
                     if (info.getWellKnown().getIdentityServer() != null && !TextUtils.isEmpty(info.getWellKnown().getIdentityServer().getBaseURL())) {
                         ids = info.getWellKnown().getIdentityServer().getBaseURL();
                     }
+                    autoDiscoveredDomainCache.put(mDomain, info);
+
+                    //Do not change anything if not in login mode
+                    if (mMode != MODE_LOGIN) return;
+
                     if (hs != null) {
                         if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
                             if (mUseCustomHomeServersCheckbox.isChecked()) {
@@ -739,22 +745,46 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 mUseCustomHomeServersCheckbox.performClick();
                             }
                         } else {
-                            mHomeServerText.setText(hs);
-                            mIdentityServerText.setText(ids);
-                            if (!mUseCustomHomeServersCheckbox.isChecked()) {
-                                mUseCustomHomeServersCheckbox.performClick();
-                            } else {
-                                onHomeServerUrlUpdate(true);
-                                onIdentityServerUrlUpdate(true);
+                            if (!mUseCustomHomeServersCheckbox.isChecked()
+                                    || !hs.equals(mHomeServerUrl)
+                                    || !ids.equals(mIdentityServerUrl)
+                                    ) {
+                                String finalIds = ids;
+                                new AlertDialog.Builder(LoginActivity.this)
+                                        .setTitle(getString(R.string.autodiscover_well_known_autofill_dialog_title))
+                                        .setMessage(getString(R.string.autodiscover_well_known_autofill_dialog_message, mDomain, String.format("%s\n%s", hs, ids)))
+                                        .setPositiveButton(getString(R.string.autodiscover_well_known_autofill_confirm), (dialog, which) -> {
+                                            mHomeServerText.setText(hs);
+                                            mIdentityServerText.setText(finalIds);
+                                            if (!mUseCustomHomeServersCheckbox.isChecked()) {
+                                                mUseCustomHomeServersCheckbox.performClick();
+                                            } else {
+                                                onHomeServerUrlUpdate(true);
+                                                onIdentityServerUrlUpdate(true);
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show();
                             }
                         }
                     }
                 } else if (AutoDiscovery.Action.FAIL_ERROR == info.getAction()
                         || AutoDiscovery.Action.FAIL_PROMPT == info.getAction()) {
                     mLoginEmailTextViewTil.setError(getString(R.string.autodiscover_invalid_response));
+                } else {
+                    // ACTION.IGNORE, keep in cache
+                    autoDiscoveredDomainCache.put(mDomain, info);
                 }
             }
-        });
+        };
+
+        if (autoDiscoveredDomainCache.containsKey(possibleDomain)) {
+            callback.onSuccess(autoDiscoveredDomainCache.get(possibleDomain));
+        } else {
+            showWaitingView();
+            new AutoDiscovery().findClientConfig(possibleDomain, callback);
+        }
+
     }
 
     /**
