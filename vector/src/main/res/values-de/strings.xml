@@ -1363,7 +1363,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
 
     <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
     <string name="error_empty_field_enter_user_name">Bitte geben Sie einen Benutzernamen ein.</string>
-<string name="settings_data_save_mode_summary">Der datensparsame Modus sorgt dafür, dass die Präsenz- und Tipp-Benachrichtigungen ausgefiltert werden.</string>
+    <string name="settings_data_save_mode_summary">Der datensparsame Modus sorgt dafür, dass die Präsenz- und Tipp-Benachrichtigungen ausgefiltert werden.</string>
 
     <string name="keys_backup_setup">Richte Schlüsselsicherung ein</string>
     <string name="keys_backup_setup_step1_advanced">(Erweitert)</string>
@@ -1383,7 +1383,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Teile</string>
-    <string name="keys_backup_restoring_from_passphrase_waiting_message">Stelle Sicherung wieder her. Das kann ein paar Sekunden dauern.</string>
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
     <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
 
@@ -1402,9 +1401,9 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel gesichert</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Sichere %d Schlüssel…</item>
-	<item quantity="other">Sichere %d Schlüssel…</item>
-</plurals>
+        <item quantity="one">Sichere %d Schlüssel…</item>
+        <item quantity="other">Sichere %d Schlüssel…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithmus</string>

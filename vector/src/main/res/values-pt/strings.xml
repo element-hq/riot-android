@@ -1075,7 +1075,7 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
 
-<string name="title_activity_keys_backup_setup">backup de chaves</string>
+    <string name="title_activity_keys_backup_setup">backup de chaves</string>
     <string name="keys_backup_is_not_finished_please_wait">Backup de chaves, imcompleto. Por favor, Aguarde.</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chaves, em progresso. Caso pagina seja fechada, irá perder acesso as suas mensagens encriptadas.</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backup de chaves, em progresso …</string>
@@ -1096,11 +1096,11 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="keys_backup_info_title_signature">Assinatura</string>
 
-<string name="keys_backup_banner_update_line1">Novas chaves de mensagens encriptadas</string>
+    <string name="keys_backup_banner_update_line1">Novas chaves de mensagens encriptadas</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Uma</item>
-	<item quantity="other">Outras</item>
-</plurals>
+        <item quantity="one">Uma</item>
+        <item quantity="other">Outras</item>
+    </plurals>
 
     <string name="keys_backup_banner_recover_line2">Utilize, Backup de Chaves</string>
 
@@ -1188,4 +1188,4 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
 
 
-    </resources>
+</resources>

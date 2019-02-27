@@ -1359,5 +1359,4 @@ Conservez votre clé de récupération en lieu sûr, comme un gestionnaire de mo
 
 Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération immédiatement dans les paramètres.</string>
     <string name="new_recovery_method_popup_was_me">C’est bien moi</string>
-<string name="keys_backup_restoring_from_passphrase_waiting_message">Restauration de la sauvegarde, cette opération peut prendre plusieurs secondes.</string>
-    </resources>
+</resources>

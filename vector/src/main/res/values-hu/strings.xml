@@ -71,7 +71,7 @@
 
     <string name="direct_chats_header">Beszélgetések</string>
     <string name="local_address_book_header">Helyi címjegyzék</string>
-    <string name="matrix_only_filter">Csak [matrix] névjegyek</string>
+    <string name="matrix_only_filter">Csak Matrix névjegyek</string>
     <string name="no_conversation_placeholder">Nincs beszélgetés</string>
     <string name="no_contact_access_placeholder">Nem adtál a Riotnak hozzáférést a helyi névjegyeidhez</string>
     <string name="no_result_placeholder">Nincs találat</string>
@@ -107,7 +107,7 @@
     <string name="create_account">Regisztráció</string>
     <string name="login">Bejelentkezés</string>
     <string name="logout">Kijelentkezés</string>
-    <string name="hs_url">[Matrix] szerver URL</string>
+    <string name="hs_url">Matrix szerver URL</string>
     <string name="identity_url">Identitás szerver URL</string>
     <string name="search">Keresés</string>
 
@@ -160,9 +160,9 @@
     <string name="auth_threepid_warning_message">Nem támogatott a regisztráció e-mail címmel és telefonszámmal egyszerre, amíg az api el nem készül. Most csak a telefonszámot használjuk.
 
 Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
-    <string name="auth_recaptcha_message">A [matrix] szerver szeretné ellenőrizni, hogy nem vagy robot</string>
+    <string name="auth_recaptcha_message">A Matrix szerver szeretné ellenőrizni, hogy nem vagy robot</string>
     <string name="auth_username_in_use">A felhasználónév foglalt</string>
-    <string name="auth_home_server">[Matrix] szerver:</string>
+    <string name="auth_home_server">Matrix szerver:</string>
     <string name="auth_identity_server">Identitásszerver:</string>
     <string name="auth_reset_password_next_step_button">Ellenőriztem az e-mail címemet</string>
     <string name="auth_reset_password_message">A jelszavad visszaállításához add meg a fiókodhoz tartozó e-mail címet:</string>
@@ -190,7 +190,7 @@ Kiléptettünk az összes készülékedről, nem érkezik rájuk új értesíté
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
     <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem lett kattintva</string>
 
-    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a [matrix] szervernek.
+    <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Matrix szervernek.
 Ez egy egyszeri dolog.
 Elnézést a kellemetlenségért.</string>
 
@@ -245,10 +245,10 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
     <string name="permissions_rationale_msg_camera_and_audio">"A Riot-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
-    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj [matrix] felhasználókat találni e-mail és telefonszám alapján.
+    <string name="permissions_rationale_msg_contacts">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj címjegyzék-kapcsolatok találni a Riot-tal.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj [matrix] felhasználókat találni e-mail és telefonszám alapján.
+    <string name="permissions_msg_contacts_warning_other_androids">A Riot-nak engedély szükséges a címjegyzék-kapcsolatok eléréséhez, hogy tudj Matrix felhasználókat találni e-mail és telefonszám alapján.
 
 Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
 
@@ -314,11 +314,11 @@ Biztos vagy benne?</string>
 
     <string name="people_search_invite_by_id"><u>Meghívás azonosítóval</u></string>
     <string name="people_search_local_contacts">HELYI NÉVJEGYEK (%d)</string>
-    <string name="people_search_filter_text">Csak [matrix] felhasználók</string>
+    <string name="people_search_filter_text">Csak Matrix felhasználók</string>
 
     <string name="people_search_invite_by_id_dialog_title">Felhasználó meghívása azonosítóval</string>
-    <string name="people_search_invite_by_id_dialog_description">Kérlek adj meg egy vagy több e-mail címet vagy [matrix] azonosítót</string>
-    <string name="people_search_invite_by_id_dialog_hint">E-mail vagy [matrix] azonosító</string>
+    <string name="people_search_invite_by_id_dialog_description">Kérlek adj meg egy vagy több e-mail címet vagy Matrix azonosítót</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-mail vagy Matrix azonosító</string>
 
     <string name="room_menu_search">Keresés</string>
     <string name="room_one_user_is_typing">%s éppen ír…</string>
@@ -352,7 +352,7 @@ Biztos vagy benne?</string>
     <string name="room_details_people">Résztvevők</string>
     <string name="room_details_files">Fájlok</string>
     <string name="room_details_settings">Beállítások</string>
-    <string name="malformed_id">Rossz formátumú azonosító. Vagy e-mail cím vagy [matrix] azonosító legyen, mint például „@valakivagyok:domainnev”</string>
+    <string name="malformed_id">Rossz formátumú azonosító. Vagy e-mail cím vagy Matrix azonosító legyen, mint például „@valakivagyok:domainnev”</string>
     <string name="room_details_people_invited_group_name">MEGHÍVOTT</string>
     <string name="room_details_people_present_group_name">CSATLAKOZOTT</string>
 
@@ -460,7 +460,7 @@ A folytatáshoz írd be a jelszavad.</string>
     <string name="devices_delete_submit_button_label">Küldés</string>
 
     <string name="settings_logged_in">Bejelentkezve mint</string>
-    <string name="settings_home_server">[Matrix] szerver</string>
+    <string name="settings_home_server">Matrix szerver</string>
     <string name="settings_identity_server">Identitásszerver</string>
 
     <string name="account_email_validation_title">Hitelesítés folyamatban</string>
@@ -620,8 +620,8 @@ Ismeretlen eszközök:</string>
 
     <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
     <string name="directory_server_fail_to_retrieve_server">A szerver lehet nem elérhető vagy túltöltött</string>
-    <string name="directory_server_type_homeserver">Írj be egy [matrix] szervert hogy listázza belőle a nyilvános szobákat</string>
-    <string name="directory_server_placeholder">[Matrix] szerver URL</string>
+    <string name="directory_server_type_homeserver">Írj be egy Matrix szervert hogy listázza belőle a nyilvános szobákat</string>
+    <string name="directory_server_placeholder">Matrix szerver URL</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
 
@@ -687,7 +687,7 @@ Ismeretlen eszközök:</string>
     <string name="widget_integration_missing_room_id">Hiányzó szoba azonosító a kérésben.</string>
     <string name="widget_integration_missing_user_id">Hiányzó felhasználó azonosító a kérésben.</string>
     <string name="widget_integration_room_not_visible">%s szoba nem látható.</string>
-    <string name="room_add_matrix_apps">[Matrix] alkalmazás hozzáadása</string>
+    <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="notification_listening_for_events">Események figyelése</string>
 
     <string name="notification_sync_in_progress">Szinkronizálás</string>
@@ -854,7 +854,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy_no_permission">Az alkalmazásnak <b>nincs</b> szüksége engedélyre a háttérben való futáshoz</string>
     <string name="settings_notification_privacy_fcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
-    <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a [matrix] szerverről kerül letöltésre</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
     <string name="startup_notification_privacy_message">Riot futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez, ami hatással lehet az akkumulátor használatra.</string>
     <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
@@ -883,7 +883,7 @@ Hozzáadsz párat most?</string>
 
     <string name="widget_integration_missing_parameter">A szükséges paraméter hiányzik.</string>
     <string name="widget_integration_invalid_parameter">Nem érvényes paraméter.</string>
-    <string name="dialog_user_consent_content">A(z) %1$s [matrix] szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.</string>
+    <string name="dialog_user_consent_content">A(z) %1$s Matrix szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.</string>
     <string name="dialog_user_consent_submit">Elolvasom</string>
 
     <string name="deactivate_account_title">Fiók felfüggesztése</string>
@@ -891,7 +891,7 @@ Hozzáadsz párat most?</string>
 
 A fiók felfüggesztése <b>alapesetben nem törli azokat az üzeneteket amiket elküldtél</b>. Ha azt szeretnéd, hogy töröljük az üzeneteket, koppints a jelölőnégyzetre alul.
 
-[Matrix]-ban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlése azt jelenti, hogy az általad küldött üzeneteket nem osztjuk meg új-, vagy nem regisztrált felhasználókkal de azok a regisztrált felhasználók akik már hozzájutottak az üzenetedhez továbbra is elérik a saját másolatukat.</string>
+Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlése azt jelenti, hogy az általad küldött üzeneteket nem osztjuk meg új-, vagy nem regisztrált felhasználókkal de azok a regisztrált felhasználók akik már hozzájutottak az üzenetedhez továbbra is elérik a saját másolatukat.</string>
     <string name="deactivate_account_delete_checkbox">Kérlek töröld az elküldött üzeneteimet a fiók felfüggesztésekor (Figyelem: emiatt a felhasználók részleges beszélgetéseket látnak majd)</string>
     <string name="deactivate_account_prompt_password">A folytatáshoz add meg a jelszavadat:</string>
     <string name="deactivate_account_submit">Fiók felfüggesztése</string>
@@ -942,7 +942,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="command_description_kick_user">Megadott azonosítójú felhasználó kirúgása</string>
     <string name="command_description_nick">Becenév megváltoztatása</string>
     <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
-    <string name="command_description_clear_scalar_token">[Matrix]-kisalkalmazás-token törlése</string>
+    <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
 
     <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív</string>
     <string name="room_tombstone_continuation_link">A beszélgetés itt folytatódik</string>
@@ -994,11 +994,11 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="resource_limit_contact_admin">vedd fel a kapcsolatot a szolgáltatás adminisztrátorával</string>
 
-    <string name="resource_limit_soft_default">Ez a [matrix] szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
-    <string name="resource_limit_hard_default">Ez a [matrix] szerver túllépte egyik erőforrás korlátját.</string>
+    <string name="resource_limit_soft_default">Ez a Matrix szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
+    <string name="resource_limit_hard_default">Ez a Matrix szerver túllépte egyik erőforrás korlátját.</string>
 
-    <string name="resource_limit_soft_mau"> Ez a [matrix] szerver elérte a havi aktív felhasználói korlátját így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
-    <string name="resource_limit_hard_mau">Ez a [matrix] szerver elérte a havi aktív felhasználói korlátját.</string>
+    <string name="resource_limit_soft_mau"> Ez a Matrix szerver elérte a havi aktív felhasználói korlátját így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
+    <string name="resource_limit_hard_mau">Ez a Matrix szerver elérte a havi aktív felhasználói korlátját.</string>
 
     <string name="resource_limit_soft_contact">Kérlek %s, hogy ez a korlát megemelésre kerüljön.</string>
     <string name="resource_limit_hard_contact">Kérlek %s, hogy tovább tudd használni ezt a szolgáltatást.</string>
@@ -1007,7 +1007,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="settings_lazy_loading_title">Szoba tagság késleltetett betöltése</string>
     <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">A [matrix] szervered jelenleg nem támogatja a szoba tagság késleltetett betöltését. Próbáld meg később.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">A Matrix szervered jelenleg nem támogatja a szoba tagság késleltetett betöltését. Próbáld meg később.</string>
 
     <string name="unknown_error">Ne haragudj, hiba történt</string>
 
@@ -1034,11 +1034,11 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Ok</string>
 
-    <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a [matrix] szervered támogatja ezt a lehetőséget.</string>
+    <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
     <string name="settings_send_typing_notifs_summary">Hogy a többi felhasználó lássa, ha gépelsz.</string>
     <string name="settings_send_markdown">Markdown formázás</string>
@@ -1064,7 +1064,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="accept">Elfogad</string>
 
-    <string name="auth_accept_policies">Kérlek nézd át és fogadd el a [matrix] szerver felhasználói feltételeit:</string>
+    <string name="auth_accept_policies">Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d kulcs sikeresen betöltve.</string>
 
@@ -1107,8 +1107,8 @@ Kérlek ellenőrizd a Riot beállításokat.</string>
 %1$s</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Regisztráció</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a [matrix] szerveren.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a [matrix] szerveren:
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix szerveren.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix szerveren:
 %1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Értesítés Szolgáltatás</string>
@@ -1165,7 +1165,7 @@ ERŐS KAPCSOLATOK: Használd a Riot-ot a kedvenc eszközeiddel. A Riottal még m
 
 SZEMÉLYES ÉS BIZTONSÁGOS: Tartsd a beszélgetéseidet titokban. A végponttól-végpontig titkosítás biztosítja, hogy a személyes beszélgetések személyesek maradnak.
 
-NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a [matrix]-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
+NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a Matrix-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
 
 MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en.</string>
 
@@ -1213,7 +1213,7 @@ Ez a hiba a Rioton kívül van. Nincs Google fiók az eszközön. Kérlek nyisd 
     <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
 
     <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Riot Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
-    <string name="keys_backup_no_session_error">Jelenleg nincs [matrix] kapcsolat</string>
+    <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
 
     <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
@@ -1233,7 +1233,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="recovery_key">Visszaállítási Kulcs</string>
     <string name="unexpected_error">Váratlan hiba</string>
     <string name="keys_backup_setup_backup_started_title">Mentés elkezdődött</string>
-    <string name="keys_backup_setup_backup_started_message">A titkosítási kulcsait biztonsági mentése a [matrix] szerveredre a háttérben folyamatban van. Az első mentés perceket is igénybe vehet.</string>
+    <string name="keys_backup_setup_backup_started_message">A titkosítási kulcsait biztonsági mentése a Matrix szerveredre a háttérben folyamatban van. Az első mentés perceket is igénybe vehet.</string>
 
 
     <string name="keys_backup_setup_skip_title">Biztos?</string>
@@ -1262,11 +1262,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1318,7 +1318,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
 
     <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
-    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a [matrix] szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
+    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a Matrix szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
 
 A maximális biztonság eléréséhez, használja más jelmondatot mint amit a felhasználói fiókhoz használtál."</string>
     <string name="keys_backup_setup_creating_backup">Mentés készítése</string>
@@ -1345,7 +1345,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1358,5 +1358,4 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 
 Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
     <string name="new_recovery_method_popup_was_me">Én voltam</string>
-<string name="keys_backup_restoring_from_passphrase_waiting_message">A mentés visszaállítása több másodpercig is eltarthat.</string>
-    </resources>
+</resources>

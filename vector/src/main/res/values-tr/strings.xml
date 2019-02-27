@@ -178,7 +178,7 @@ Birkaç tane eklensin mi?</string>
     <string name="auth_user_name_placeholder">Kullanıcı adı</string>
     <string name="auth_add_email_message">Kullanıcıların seni rahatça bulabilmesi ve şifreni yeniden oluşturabilmen için bir e-posta hesabı ekle.</string>
     <string name="auth_add_phone_message">Kullanıcıların seni rahatça bulabilmesi için bir telefon numarası ekle.</string>
-<string name="status_theme">Status.im Teması</string>
+    <string name="status_theme">Status.im Teması</string>
 
     <string name="title_activity_keys_backup_setup">Anahtar Yedekleme</string>
     <string name="title_activity_keys_backup_restore">Anahtar Yedekleme\'yi Kullan</string>
@@ -252,4 +252,4 @@ Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
     <string name="auth_invalid_email">Bu, geçerli bir e-posta adresi gibi gözükmüyor</string>
     <string name="auth_invalid_phone">Bu, geçerli bir telefon numarası gibi gözükmüyor</string>
     <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
-    </resources>
+</resources>
