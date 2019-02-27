@@ -40,7 +40,7 @@
     <string name="download">İndir</string>
     <string name="share">Paylaş</string>
     <string name="speak">Konuş</string>
-    <string name="clear">Temiz</string>
+    <string name="clear">Temizle</string>
     <string name="later">Sonra</string>
     <string name="forward">İleri</string>
     <string name="permalink">Kalıcı bağlantı</string>
@@ -50,12 +50,12 @@
     <string name="rename">Yeniden Adlandır</string>
     <string name="report_content">İçeriği bildir</string>
     <string name="active_call">Şu anki görüşme</string>
-    <string name="ongoing_conference_call">" Devam eden konferans görüşmesi. Ses ile veya görüntülü olarak bağlan."</string>
+    <string name="ongoing_conference_call">Devam eden konferans görüşmesi. Sesli veya görüntülü katıl.</string>
     <string name="ongoing_conference_call_voice">ses</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
     <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir…</string>
-    <string name="missing_permissions_to_start_conf_call">Bu odada bir kişiyi davet edip, konferansa başlamak için izniniz yok</string>
+    <string name="missing_permissions_to_start_conf_call">Bu odada bir konferans başlatma davetiyesi göndermek için izniniz olması gerekmektedir</string>
     <string name="missing_permissions_title_to_start_conf_call">Arama gerçekleştirilemiyor</string>
     <string name="device_information">Cihaz ayrıntıları</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferans görüşmeleri şifreli (encrypted) odalarda desteklenmiyor</string>
@@ -67,8 +67,8 @@
     <string name="action_exit">Çık</string>
     <string name="actions">Aksiyonlar</string>
     <string name="action_sign_out">Hesaptan çık</string>
-    <string name="action_voice_call">Görüntülü Görüşme</string>
-    <string name="action_video_call">Görüntülü Görüşme</string>
+    <string name="action_voice_call">Sesli Arama</string>
+    <string name="action_video_call">Görüntülü Arama</string>
     <string name="action_global_search">Global arama</string>
     <string name="action_mark_all_as_read">Hepsini okunmuş olarak işaretle</string>
     <string name="action_historical">Tarihsel</string>
@@ -178,4 +178,78 @@ Birkaç tane eklensin mi?</string>
     <string name="auth_user_name_placeholder">Kullanıcı adı</string>
     <string name="auth_add_email_message">Kullanıcıların seni rahatça bulabilmesi ve şifreni yeniden oluşturabilmen için bir e-posta hesabı ekle.</string>
     <string name="auth_add_phone_message">Kullanıcıların seni rahatça bulabilmesi için bir telefon numarası ekle.</string>
-</resources>
+<string name="status_theme">Status.im Teması</string>
+
+    <string name="title_activity_keys_backup_setup">Anahtar Yedekleme</string>
+    <string name="title_activity_keys_backup_restore">Anahtar Yedekleme\'yi Kullan</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Anahtar yedekleme tamamlanmadı, lütfen bekleyiniz…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Oturumu şimdi kapatırsanız şifrelenmiş mesajlarınızı kaybedeceksiniz</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Anahtar yedekleme işlemi sürüyor. Şimdi oturumu kapatırsanız tüm şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Şifrelenmiş mesajlarınızı kaybetmeyi önlemek için Güvenli Anahtar Yedekleme\'nin tüm cihazlarınızda aktif olması gerekmektedir.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Şifrelenmiş mesajlarımı istemiyorum</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Anahtarlar yedekleniyor…</string>
+    <string name="keys_backup_activate">Anahtar Yedekleme Kullan</string>
+    <string name="are_you_sure">Emin misiniz?</string>
+    <string name="backup">Yedekle</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Oturumu kapatmadan önce anahtarlarınızı yedeklemezseniz şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz.</string>
+
+    <string name="stay">Kal</string>
+    <string name="missing_permissions_error">Eksik izinler nedeniyle bu eylem mümkün değil.</string>
+    <string name="call_anyway">Yine de Ara</string>
+    <string name="accept">Kabul Et</string>
+    <string name="skip">Atla</string>
+    <string name="done">Tamamlandı</string>
+    <string name="abort">İptal Et</string>
+
+    <string name="action_sign_out_confirmation_simple">Oturumunuzu kapatmak istediğinizden emin misiniz?</string>
+    <string name="keys_backup_banner_in_progress">Anahtarlar yedekleniyor…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Tüm anahtarlar yedeklendi</string>
+    <string name="keys_backup_banner_recover_line2">Anahtar Yedekleme Kullan</string>
+
+    <string name="keys_backup_banner_update_line1">Yeni şifreli mesaj anahtarları</string>
+    <string name="keys_backup_banner_update_line2">Anahtar Yedekleme\'yi Yönet</string>
+
+    <string name="keys_backup_banner_recover_line1">Şifrelenmiş mesajları asla kaybetmeyin</string>
+    <string name="new_recovery_method_popup_description">Yeni bir güvenli mesaj anahtar yedeklemesi tespit edildi.
+
+Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabınıza erişmeye çalışıyor olabilir. Hesabınızın şifresini değiştirin ve derhal Ayarlar içerisinden yeni bir kurtarma yöntemi belirleyin.</string>
+    <string name="new_recovery_method_popup_was_me">Bu bendim</string>
+    <string name="keys_backup_banner_setup_line1">Şifrelenmiş mesajları asla kaybetmeyin</string>
+    <string name="keys_backup_banner_setup_line2">Anahtar Yedekleme kullanmaya başlayın</string>
+
+    <string name="new_recovery_method_popup_title">Yeni Anahtar Yedekleme</string>
+    <string name="keys_backup_settings_deleting_backup">Yedek siliniyor…</string>
+    <string name="keys_backup_settings_delete_backup_error">Yedek silme başarısız (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Yedeği Sil</string>
+    <string name="keys_backup_settings_delete_confirm_message">Yedeklenmiş şifreleme anahtarlarınız sunucudan silinsin mi? Bundan sonra şifrelenmiş mesaj geçmişini okumak için kurtarma anahtarınızı kullanamayacaksınız.</string>
+
+    <string name="keys_backup_settings_untrusted_backup">Bu cihazda Anahtar Yedekleme özelliğini kullanmak için şimdi parolanızla veya kurtarma anahtarınızla geri yükleyin.</string>
+    <string name="dialog_title_error">Hata</string>
+
+    <string name="system_alerts_header">Sistem Uyarıları</string>
+
+    <string name="send_files_in">Gönder</string>
+    <string name="identity_url">Kimlik Sunucusu URL\'si</string>
+    <string name="auth_add_email_phone_message">Kullanıcıların sizi bulmasını sağlamak için hesabınıza bir e-posta adresi ve/veya telefon numarası ekleyin.
+
+Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
+    <string name="auth_add_email_and_phone_message">Kullanıcıların sizi bulmasını sağlamak için hesabınıza bir e-posta adresi ve/veya telefon numarası ekleyin.
+
+Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
+    <string name="auth_email_placeholder">E-posta adresi</string>
+    <string name="auth_opt_email_placeholder">E-posta adresi (isteğe bağlı)</string>
+    <string name="auth_phone_number_placeholder">Telefon numarası</string>
+    <string name="auth_opt_phone_number_placeholder">Telefon numarası (isteğe bağlı)</string>
+    <string name="auth_repeat_password_placeholder">Şifreyi tekrar girin</string>
+    <string name="auth_repeat_new_password_placeholder">Yeni şifrenizi doğrulayın</string>
+    <string name="auth_invalid_login_param">Hatalı kullanıcı adı ve/veya şifre</string>
+    <string name="auth_invalid_user_name">Kullanıcı adları yalnızca harfler, sayılar, noktalar, kısa çizgiler ve alt çizgiler içerebilir</string>
+    <string name="auth_invalid_password">Şifre çok kısa (min 6)</string>
+    <string name="auth_missing_password">Eksik şifre</string>
+    <string name="auth_invalid_email">Bu, geçerli bir e-posta adresi gibi gözükmüyor</string>
+    <string name="auth_invalid_phone">Bu, geçerli bir telefon numarası gibi gözükmüyor</string>
+    <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
+    </resources>
