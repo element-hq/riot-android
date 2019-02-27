@@ -1034,7 +1034,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1253,7 +1253,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
     <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra.</string>
 
-    <string name="keys_backup_restoring_waiting_message">Mentés visszaállítása…</string>
+    <string name="keys_backup_restoring_waiting_message">Mentés visszaállítás:</string>
     <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>
     <string name="keys_backup_recovery_code_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
     <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
@@ -1262,11 +1262,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1345,7 +1345,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1358,4 +1358,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 
 Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
     <string name="new_recovery_method_popup_was_me">Én voltam</string>
-</resources>
+<string name="keys_backup_restoring_computing_key_waiting_message">Visszaállítási kulcs kiszámítása…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Kulcsok letöltése…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Kulcsok betöltése…</string>
+    </resources>
