@@ -8,7 +8,7 @@ Features:
  -
 
 Improvements:
- -
+ - Improve UX when restoring e2e keys (#2999)
 
 Other changes:
  -
