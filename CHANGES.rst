@@ -12,7 +12,7 @@ Improvements:
  - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
 
 Other changes:
- -
+ - Change color of links (#2987)
 
 Bugfix:
  -
