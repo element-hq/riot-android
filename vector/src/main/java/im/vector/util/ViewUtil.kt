@@ -17,13 +17,16 @@
 package im.vector.util
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.support.annotation.AttrRes
+import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
@@ -124,4 +127,19 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 
     // Color colored part
     text = Spanny(fullText).apply { findAndSpan(coloredPart) { ForegroundColorSpan(accentColor) } }
+}
+
+/**
+ * Apply a rounded (sides) rectangle as a background to the view.
+ *
+ * @param backgroundColor background colour
+ */
+fun View?.setRoundBackground(@ColorInt backgroundColor: Int) {
+    if (this != null) {
+        background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 100f
+            setColor(backgroundColor)
+        }
+    }
 }

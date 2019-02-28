@@ -13,6 +13,7 @@ Improvements:
 
 Other changes:
  - Change color of links (#2987)
+ - Change color of HomeSection badge (#2987)
 
 Bugfix:
  -

@@ -17,7 +17,6 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -32,6 +31,7 @@ import java.lang.annotation.RetentionPolicy;
 import im.vector.R;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
+import im.vector.util.ViewUtilKt;
 
 /**
  * Badge for the bottom navigation bar of the Home Activity
@@ -90,17 +90,18 @@ public class UnreadCounterBadgeView extends FrameLayout {
             mCounterTextView.setText(text);
 
             setVisibility(View.VISIBLE);
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(100);
+
+            int color;
+
             if (status == HIGHLIGHTED) {
-                shape.setColor(ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color));
+                color = ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color);
             } else if (status == NOTIFIED) {
-                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary));
+                color = ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary);
             } else { //if (status == DEFAULT)
-                shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_unread_room_indent_color));
+                color = ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_unread_room_indent_color);
             }
-            mCounterTextView.setBackground(shape);
+
+            ViewUtilKt.setRoundBackground(mCounterTextView, color);
         } else {
             setVisibility(View.GONE);
         }
