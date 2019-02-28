@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
+ - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
 
 Other changes:
  -
