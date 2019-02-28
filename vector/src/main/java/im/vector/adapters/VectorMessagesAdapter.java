@@ -110,6 +110,7 @@ import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.VectorImageGetter;
+import im.vector.util.VectorLinkifyKt;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -1237,6 +1238,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 bodyTextView.setText(result);
 
                 mHelper.applyLinkMovementMethod(bodyTextView);
+                if (viewType != ROW_TYPE_NOTICE) {
+                    VectorLinkifyKt.vectorCustomLinkify(bodyTextView);
+                }
 
                 textViews = new ArrayList<>();
                 textViews.add(bodyTextView);
@@ -1444,6 +1448,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 SpannableStringBuilder strBuilder = new SpannableStringBuilder(notice);
                 MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
+                mHelper.applyLinkMovementMethod(noticeTextView);
                 noticeTextView.setText(strBuilder);
             }
 

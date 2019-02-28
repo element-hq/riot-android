@@ -8,7 +8,6 @@
     android:layout_gravity="start"
     android:layout_marginStart="4dp"
     android:layout_marginLeft="4dp"
-    android:autoLink="all"
     android:textIsSelectable="false"
     android:textSize="14sp"
     tools:text="A body" />
