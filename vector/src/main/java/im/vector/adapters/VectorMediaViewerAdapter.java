@@ -435,9 +435,8 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                     @Override
                     public void onSuccess(File mediaFile) {
                         if (null != mediaFile) {
-                            // Compute a max zoom, depending on the size of file, and min to PhotoViewAttacher.DEFAULT_MAX_SCALE (= 3)
-                            float maxZoom = Math.max(3f, mediaFile.length() / 800_000f);
-                            imageView.setMaximumScale(maxZoom);
+                            // Max zoom is PhotoViewAttacher.DEFAULT_MAX_SCALE (= 3)
+                            float maxZoom = imageView.getMaximumScale();
 
                             Glide.with(container)
                                     .load(mediaFile)
