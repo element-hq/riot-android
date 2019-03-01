@@ -15,28 +15,47 @@
  */
 package im.vector.util
 
-import android.os.Build
+import android.support.v4.text.util.LinkifyCompat
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
 import android.text.util.Linkify
 import android.widget.TextView
 
 /**
  * Better support for auto link than the default implem
  */
-fun vectorCustomLinkify(textView: TextView) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val protocols = arrayOf("http://", "https://", "rtsp://")
-        val mailProtocols = arrayOf("mailto:")
-        Linkify.addLinks(textView, Linkify.PHONE_NUMBERS)
-        Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.AUTOLINK_WEB_URL, protocols[0], protocols, urlMatchFilter, null)
-        Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.AUTOLINK_EMAIL, mailProtocols.first(), mailProtocols, null, null)
-        Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.GEO_URI, "geo:", arrayOf("geo:"), geoMatchFilter, null)
-        //order might be important (due to pruneOverlaps)
-    } else {
-        Linkify.addLinks(textView, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS)
+fun TextView.vectorCustomLinkify() {
+
+    val protocols = arrayOf("http://", "https://", "rtsp://")
+    val mailProtocols = arrayOf("mailto:")
+
+    val currentSpan = SpannableString.valueOf(text)
+    LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.AUTOLINK_WEB_URL, protocols[0], protocols, urlMatchFilter, null)
+    LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.AUTOLINK_EMAIL, mailProtocols.first(), mailProtocols, null, null)
+    LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.GEO_URI, "geo:", arrayOf("geo:"), geoMatchFilter, null)
+
+    //this is a bit hacky but for phone numbers we use the framework but it's too lenient
+    val spannable = SpannableString(text) //must be a new one
+    Linkify.addLinks(spannable, Linkify.PHONE_NUMBERS)
+    val pnSpan = spannable.getSpans(0, spannable.length, URLSpan::class.java)
+    for (span in pnSpan) {
+        val start = spannable.getSpanStart(span)
+        val end = spannable.getSpanEnd(span)
+        if (end - start > 6) { //Do not match under 7 digit
+            currentSpan.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
     }
+
+    //maybe need to prune overlaps? tried to make some but didn't find
+
+    text = currentSpan
+    addLinkMovementMethod(this)
+
 }
 
-private val urlMatchFilter = Linkify.MatchFilter { s, start, end ->
+private val urlMatchFilter = Linkify.MatchFilter { s, start, _ ->
     //    Log.d(TestLinkifyActivity::class.java.name, "FOO ${s.substring(start, end)}")
     if (start == 0) {
         return@MatchFilter true
@@ -65,4 +84,14 @@ private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
         return@MatchFilter end - start > 12
     }
     return@MatchFilter true
+}
+
+private fun addLinkMovementMethod(t: TextView) {
+    val m = t.movementMethod
+
+    if (m == null || m !is LinkMovementMethod) {
+        if (t.linksClickable) {
+            t.movementMethod = LinkMovementMethod.getInstance()
+        }
+    }
 }

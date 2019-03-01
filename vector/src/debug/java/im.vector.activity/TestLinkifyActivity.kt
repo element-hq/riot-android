@@ -62,7 +62,9 @@ class TestLinkifyActivity : AppCompatActivity() {
                 "37.786971,-122.399677;u=35",
                 "48.107864,-1.712153",
                 "synchrone peut tenir la route la",
-                "that.is.some.sexy.link"
+                "that.is.some.sexy.link",
+                "test overlap 48.107864,0673728392 geo + pn?",
+                "test overlap 0673728392,48.107864 geo + pn?"
         ).forEach {
             val layout = LayoutInflater.from(this).inflate(R.layout.item_test_linkify, scrollContent, false)
             layout.findViewById<TextView>(R.id.test_linkify_auto_text)?.let { tv ->

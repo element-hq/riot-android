@@ -1238,10 +1238,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 bodyTextView.setText(result);
 
                 mHelper.applyLinkMovementMethod(bodyTextView);
-                if (viewType != ROW_TYPE_NOTICE) {
-                    VectorLinkifyKt.vectorCustomLinkify(bodyTextView);
-                }
-
+                VectorLinkifyKt.vectorCustomLinkify(bodyTextView);
                 textViews = new ArrayList<>();
                 textViews.add(bodyTextView);
             }

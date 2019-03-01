@@ -24,11 +24,7 @@ import java.util.regex.Pattern
  * Better support for mails (mailto) as well as geo: URi
  * https://github.com/vector-im/riot-android/issues/865
  */
-class VectorAutoLinkPatterns {
-
-    companion object {
-        val instance = VectorAutoLinkPatterns()
-    }
+object VectorAutoLinkPatterns {
 
     /**
      * Regular expression to match all IANA top-level domains.
