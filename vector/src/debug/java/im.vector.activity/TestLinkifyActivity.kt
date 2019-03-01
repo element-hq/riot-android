@@ -82,14 +82,14 @@ class TestLinkifyActivity : AppCompatActivity() {
                 tv.movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
                     override fun onURLClick(uri: Uri?) {
                         Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
-                                .setAction("open", {
+                                .setAction("open") {
                                     openUrlInExternalBrowser(tv.context, uri)
-                                })
+                                }
                                 .show()
 
                     }
                 })
-                vectorCustomLinkify(tv)
+                tv.vectorCustomLinkify()
             }
 
             scrollContent.addView(layout, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
