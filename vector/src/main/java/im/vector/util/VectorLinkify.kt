@@ -29,10 +29,10 @@ fun vectorCustomLinkify(textView: TextView) {
         Linkify.addLinks(textView, Linkify.PHONE_NUMBERS)
         Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.AUTOLINK_WEB_URL, protocols[0], protocols, urlMatchFilter, null)
         Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.AUTOLINK_EMAIL, mailProtocols.first(), mailProtocols, null, null)
-        Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.GEO_URI, "geo:", arrayOf("geo:"), null, null)
+        Linkify.addLinks(textView, VectorAutoLinkPatterns.instance.GEO_URI, "geo:", arrayOf("geo:"), geoMatchFilter, null)
         //order might be important (due to pruneOverlaps)
     } else {
-        Linkify.addLinks(textView, Linkify.ALL)
+        Linkify.addLinks(textView, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS)
     }
 }
 
@@ -57,6 +57,12 @@ private val urlMatchFilter = Linkify.MatchFilter { s, start, end ->
     }
 
     return@MatchFilter true
-
 }
 
+//Exclude short match that don't have geo: prefix, e.g do not highlight things like 1,2
+private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
+    if (s[start] != 'g') { //doesn't start with geo:
+        return@MatchFilter end - start > 12
+    }
+    return@MatchFilter true
+}
