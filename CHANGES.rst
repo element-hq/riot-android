@@ -5,7 +5,7 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
 
 Features:
- -
+ - Implement server config discovery - .well-known support (#2982)
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
