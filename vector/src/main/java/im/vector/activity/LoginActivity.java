@@ -749,12 +749,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (AutoDiscovery.Action.PROMPT == info.getAction()) {
             if (info.getWellKnown() == null) return;
-            if (info.getWellKnown().getHomeServer() == null) return;
-            final String hs = info.getWellKnown().getHomeServer().getBaseURL();
+            if (info.getWellKnown().homeServer == null) return;
+            final String hs = info.getWellKnown().homeServer.baseURL;
             String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
-            if (info.getWellKnown().getIdentityServer() != null
-                    && !TextUtils.isEmpty(info.getWellKnown().getIdentityServer().getBaseURL())) {
-                ids = info.getWellKnown().getIdentityServer().getBaseURL();
+            if (info.getWellKnown().identityServer != null
+                    && !TextUtils.isEmpty(info.getWellKnown().identityServer.baseURL)) {
+                ids = info.getWellKnown().identityServer.baseURL;
             }
 
             if (hs != null) {
