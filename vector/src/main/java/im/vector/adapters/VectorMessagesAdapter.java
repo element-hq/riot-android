@@ -1515,6 +1515,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             emoteTextView.setText(strBuilder);
             mHelper.applyLinkMovementMethod(emoteTextView);
+            VectorLinkifyKt.vectorCustomLinkify(emoteTextView);
 
             int textColor;
 
