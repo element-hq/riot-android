@@ -342,7 +342,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory android:title="@string/settings_cryptography_manage_keys">
 

@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix crash in settings when cryptography is disabled (#2991)
 
 Translations:
  -
