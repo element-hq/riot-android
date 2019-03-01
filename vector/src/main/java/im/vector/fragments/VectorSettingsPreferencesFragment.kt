@@ -172,6 +172,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mCryptographyCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)
     }
+    // cryptography manage
+    private val mCryptographyManageCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY) as PreferenceCategory
+    }
+    private val mCryptographyManageCategoryDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)
+    }
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)
@@ -2067,9 +2074,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     //==============================================================================================================
 
     private fun removeCryptographyPreference() {
-        if (null != preferenceScreen) {
-            preferenceScreen.removePreference(mCryptographyCategory)
-            preferenceScreen.removePreference(mCryptographyCategoryDivider)
+        preferenceScreen.let {
+            it.removePreference(mCryptographyCategory)
+            it.removePreference(mCryptographyCategoryDivider)
+
+            // Also remove keys management section
+            it.removePreference(mCryptographyManageCategory)
+            it.removePreference(mCryptographyManageCategory)
         }
     }
 
@@ -2166,9 +2177,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     //==============================================================================================================
 
     private fun removeDevicesPreference() {
-        if (null != preferenceScreen) {
-            preferenceScreen.removePreference(mDevicesListSettingsCategory)
-            preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider)
+        preferenceScreen.let {
+            it.removePreference(mDevicesListSettingsCategory)
+            it.removePreference(mDevicesListSettingsCategoryDivider)
         }
     }
 
@@ -2610,38 +2621,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         password,
                         null,
                         object : ApiCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult?) {
-                        if (!isAdded) {
-                            return
-                        }
+                            override fun onSuccess(info: ImportRoomKeysResult?) {
+                                if (!isAdded) {
+                                    return
+                                }
 
-                        hideLoadingView()
+                                hideLoadingView()
 
-                        info?.let {
-                            AlertDialog.Builder(thisActivity)
-                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                            it.successfullyNumberOfImportedKeys,
-                                            it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                        }
-                    }
+                                info?.let {
+                                    AlertDialog.Builder(thisActivity)
+                                            .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                    it.successfullyNumberOfImportedKeys,
+                                                    it.totalNumberOfKeys))
+                                            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                            .show()
+                                }
+                            }
 
-                    override fun onNetworkError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onNetworkError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onMatrixError(e: MatrixError) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onMatrixError(e: MatrixError) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onUnexpectedError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
-                })
+                            override fun onUnexpectedError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
+                        })
 
                 importDialog.dismiss()
             })
