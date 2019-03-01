@@ -129,7 +129,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // activity mode
     private int mMode = MODE_LOGIN;
 
-    private HashMap<String, AutoDiscovery.DiscoveredClientConfig> autoDiscoveredDomainCache = new HashMap<>();
+    // Cache for Discovery results (domain -> Discovery)
+    private Map<String, AutoDiscovery.DiscoveredClientConfig> autoDiscoveredDomainCache = new HashMap<>();
 
     // graphical items
     @BindView(R.id.login_form_container)
@@ -680,111 +681,118 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
 
         mLoginEmailTextView.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) return;
-            //Maybe debounce
-            String candidate = mLoginEmailTextView.getText().toString();
-            //Try to see if we can find a domain
-            if (MXPatterns.isUserId(candidate)) {
-                //looks like a user name with domain
-                String possibleDomain = candidate.substring(candidate.indexOf(":") + 1);
-                if (possibleDomain.isEmpty()) return;
-                tryAutoDiscover(possibleDomain);
+            if (!hasFocus) {
+                String candidate = mLoginEmailTextView.getText().toString();
+                //Try to see if we can find a domain
+                if (MXPatterns.isUserId(candidate)) {
+                    //looks like a user name with domain
+                    String possibleDomain = candidate.substring(candidate.indexOf(":") + 1);
+                    if (possibleDomain.isEmpty()) return;
+                    tryAutoDiscover(possibleDomain);
+                }
             }
         });
 
     }
 
     private void tryAutoDiscover(String possibleDomain) {
-        ApiCallback<AutoDiscovery.DiscoveredClientConfig> callback = new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
-
-            String mDomain = possibleDomain;
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (!TextUtils.equals(mDomain, possibleDomain)) return;
-                hideWaitingView();
-                Log.e(LOG_TAG, "AutoDiscovery error for domain" + mDomain, e);
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                if (!TextUtils.equals(mDomain, possibleDomain)) return;
-                hideWaitingView();
-                Log.e(LOG_TAG, "AutoDiscovery Network error for domain " + mDomain, e);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                hideWaitingView();
-                //nop
-            }
-
-            @Override
-            public void onSuccess(AutoDiscovery.DiscoveredClientConfig info) {
-                hideWaitingView();
-                Log.d(LOG_TAG, "AutoDiscovery info " + info);
-                if (!TextUtils.equals(mDomain, possibleDomain)) return;
-                if (AutoDiscovery.Action.PROMPT == info.getAction()) {
-                    if (info.getWellKnown() == null) return;
-                    if (info.getWellKnown().getHomeServer() == null) return;
-                    final String hs = info.getWellKnown().getHomeServer().getBaseURL();
-                    String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
-                    if (info.getWellKnown().getIdentityServer() != null && !TextUtils.isEmpty(info.getWellKnown().getIdentityServer().getBaseURL())) {
-                        ids = info.getWellKnown().getIdentityServer().getBaseURL();
-                    }
-                    autoDiscoveredDomainCache.put(mDomain, info);
-
-                    //Do not change anything if not in login mode
-                    if (mMode != MODE_LOGIN) return;
-
-                    if (hs != null) {
-                        if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
-                            if (mUseCustomHomeServersCheckbox.isChecked()) {
-                                mHomeServerText.setText(null);
-                                mIdentityServerText.setText(null);
-                                mUseCustomHomeServersCheckbox.performClick();
-                            }
-                        } else {
-                            if (!mUseCustomHomeServersCheckbox.isChecked()
-                                    || !hs.equals(mHomeServerUrl)
-                                    || !ids.equals(mIdentityServerUrl)
-                                    ) {
-                                String finalIds = ids;
-                                new AlertDialog.Builder(LoginActivity.this)
-                                        .setTitle(getString(R.string.autodiscover_well_known_autofill_dialog_title))
-                                        .setMessage(getString(R.string.autodiscover_well_known_autofill_dialog_message, mDomain, String.format("%s\n%s", hs, ids)))
-                                        .setPositiveButton(getString(R.string.autodiscover_well_known_autofill_confirm), (dialog, which) -> {
-                                            mHomeServerText.setText(hs);
-                                            mIdentityServerText.setText(finalIds);
-                                            if (!mUseCustomHomeServersCheckbox.isChecked()) {
-                                                mUseCustomHomeServersCheckbox.performClick();
-                                            } else {
-                                                onHomeServerUrlUpdate(true);
-                                                onIdentityServerUrlUpdate(true);
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.cancel, null)
-                                        .show();
-                            }
-                        }
-                    }
-                } else if (AutoDiscovery.Action.FAIL_ERROR == info.getAction()
-                        || AutoDiscovery.Action.FAIL_PROMPT == info.getAction()) {
-                    mLoginEmailTextViewTil.setError(getString(R.string.autodiscover_invalid_response));
-                } else {
-                    // ACTION.IGNORE, keep in cache
-                    autoDiscoveredDomainCache.put(mDomain, info);
-                }
-            }
-        };
-
         if (autoDiscoveredDomainCache.containsKey(possibleDomain)) {
-            callback.onSuccess(autoDiscoveredDomainCache.get(possibleDomain));
+            onAutoDiscoveryRetrieved(possibleDomain, autoDiscoveredDomainCache.get(possibleDomain));
         } else {
             showWaitingView();
-            new AutoDiscovery().findClientConfig(possibleDomain, callback);
-        }
 
+            new AutoDiscovery().findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
+
+                String mDomain = possibleDomain;
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                    hideWaitingView();
+                    Log.e(LOG_TAG, "AutoDiscovery error for domain" + mDomain, e);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                    hideWaitingView();
+                    Log.e(LOG_TAG, "AutoDiscovery Network error for domain " + mDomain, e);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    hideWaitingView();
+                    //nop
+                }
+
+                @Override
+                public void onSuccess(AutoDiscovery.DiscoveredClientConfig info) {
+                    if (info.getAction() == AutoDiscovery.Action.PROMPT
+                            || info.getAction() == AutoDiscovery.Action.IGNORE) {
+                        // Prompt or Ignore, keep in cache
+                        autoDiscoveredDomainCache.put(mDomain, info);
+                    }
+
+                    Log.d(LOG_TAG, "AutoDiscovery info " + info);
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+
+                    hideWaitingView();
+                    onAutoDiscoveryRetrieved(mDomain, info);
+                }
+            });
+        }
+    }
+
+    private void onAutoDiscoveryRetrieved(String domain, AutoDiscovery.DiscoveredClientConfig info) {
+        // Do not change anything if not in login mode
+        if (mMode != MODE_LOGIN) return;
+
+        if (AutoDiscovery.Action.PROMPT == info.getAction()) {
+            if (info.getWellKnown() == null) return;
+            if (info.getWellKnown().getHomeServer() == null) return;
+            final String hs = info.getWellKnown().getHomeServer().getBaseURL();
+            String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
+            if (info.getWellKnown().getIdentityServer() != null
+                    && !TextUtils.isEmpty(info.getWellKnown().getIdentityServer().getBaseURL())) {
+                ids = info.getWellKnown().getIdentityServer().getBaseURL();
+            }
+
+            if (hs != null) {
+                if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
+                    if (mUseCustomHomeServersCheckbox.isChecked()) {
+                        mHomeServerText.setText(null);
+                        mIdentityServerText.setText(null);
+                        mUseCustomHomeServersCheckbox.performClick();
+                    }
+                } else {
+                    if (!mUseCustomHomeServersCheckbox.isChecked()
+                            || !hs.equals(mHomeServerUrl)
+                            || !ids.equals(mIdentityServerUrl)) {
+                        String finalIds = ids;
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle(getString(R.string.autodiscover_well_known_autofill_dialog_title))
+                                .setMessage(getString(R.string.autodiscover_well_known_autofill_dialog_message,
+                                        domain,
+                                        String.format("• %s\n• %s", hs, ids)))
+                                .setPositiveButton(getString(R.string.autodiscover_well_known_autofill_confirm), (dialog, which) -> {
+                                    mHomeServerText.setText(hs);
+                                    mIdentityServerText.setText(finalIds);
+                                    if (!mUseCustomHomeServersCheckbox.isChecked()) {
+                                        mUseCustomHomeServersCheckbox.performClick();
+                                    } else {
+                                        onHomeServerUrlUpdate(true);
+                                        onIdentityServerUrlUpdate(true);
+                                    }
+                                })
+                                .setNegativeButton(R.string.ignore, null)
+                                .show();
+                    }
+                }
+            }
+        } else if (AutoDiscovery.Action.FAIL_ERROR == info.getAction()
+                || AutoDiscovery.Action.FAIL_PROMPT == info.getAction()) {
+            mLoginEmailTextViewTil.setError(getString(R.string.autodiscover_invalid_response));
+        }
     }
 
     /**
