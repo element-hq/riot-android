@@ -458,7 +458,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_app_info_link_summary">Mostra la informació de l\'aplicació als paràmetres del sistema.</string>
     <string name="settings_app_info_link_title">Informació de l\'aplicació</string>
 
-    <string name="settings_notification_ringtone">So de les notificación</string>
+    <string name="settings_notification_ringtone">So de les notificacions</string>
     <string name="settings_enable_all_notif">Habilita les notificacions d\'aquest compte</string>
     <string name="settings_enable_this_device">Habilita les notificacions d\'aquest dispositiu</string>
     <string name="settings_turn_screen_on">Encén la pantalla durant 3 segons</string>
