@@ -289,8 +289,8 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
-    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, der nicht mit diesem Account verknüpft ist.
-Du möchtest dich evtl. mit einem anderen Account anmelden oder diese E-Mail-Adresse zu diesem Account hinzufügen.</string>
+    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet. %s ist nicht mit diesem Konto verknüpft.
+\nDu kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen.</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
     <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau dieses Raums. Raum-Interaktionen wurden deaktiviert.</string>
@@ -638,7 +638,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Nur zu verifizierten Geräten verschlüsseln</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden.</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
@@ -893,9 +893,9 @@ Unbekannte Geräte:</string>
 
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
-    <string name="open_chat_header">Öffne Chat-Kopf</string>
-    <string name="receipt_avatar">Lesebestätigungs-Profilbild</string>
-    <string name="notice_avatar">Notiz-Avatar</string>
+    <string name="open_chat_header">Öffne Header</string>
+    <string name="receipt_avatar">Profilbild für Lesebestätigungen</string>
+    <string name="notice_avatar">Profilbild für Bemerkungen</string>
     <string name="settings_notification_privacy">Datenschutz für Benachrichtigungen</string>
     <string name="settings_notification_privacy_warning">Riot.im läuft im Hintergrund um den Benachrichtigungsinhalt privat zu halten. Du kannst diese Option ändern um den Stromverbrauch zu reduzieren.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
@@ -933,15 +933,15 @@ Willst du welche hinzufügen?</string>
     <string name="widget_integration_missing_parameter">Ein benötigter Parameter fehlt.</string>
     <string name="widget_integration_invalid_parameter">Ein Parameter ist nicht valide.</string>
     <string name="dialog_user_consent_content">Um %1$s weiter zu verwenden, musst die Geschäftsbedingungen begutachten und ihnen zustimmen.</string>
-    <string name="dialog_user_consent_submit">Jetzt begutachten</string>
+    <string name="dialog_user_consent_submit">Jetzt prüfen</string>
 
     <string name="deactivate_account_title">Account deaktiveren</string>
-    <string name="deactivate_account_content">Dies wir deinen Account permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird dieselbe Nutzer-ID erneut registrieren könne. Dieser Account wird alle Räume verlassen, in denen er ist und wird deine Account-Daten vom Identitätsserver löschen. <b>Diese Aktion ist irreversibel</b>.
-
-Den Account zu deaktiveren wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du von uns möchtest, dass wir auch deine Nachrichten löschen, wähle die Option unten aus.
-
-Die Sichtbarkeit deiner Nachrichten ist ähnlich zu E-Mails: Wenn wir deine Nachrichten löschen heißt das, dass sie nicht mit neuen oder nicht registrierten Nutzer geteilt werden, aber registrierte Nutzer, die bereits Zugang zu deinen Nachrichten haben, werden Zugriff auf ihre Kopie behalten.</string>
-    <string name="deactivate_account_delete_checkbox">Bitte löscht alle Nachrichten die ich gesendet habe, wenn mein Account deaktiviert wird (Warnung: Zukünftige Nutzer werden eine unvollständige Ansicht auf Konversationen haben)</string>
+    <string name="deactivate_account_content">Dies wir dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird den selben Nutzernamen erneut registrieren können. Dies wird dein Konto aus allen Räumen austreten lassen, an denen es teilnimmt und es wird deine Kontoangaben vom Identitätsserver löschen. <b>Diese Aktion ist unumkehrbar</b>.
+\n
+\nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die untere Option.
+\n
+\nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzern geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihr Exemplar.</string>
+    <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Account deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
 
@@ -1052,9 +1052,9 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
 
-    <string name="dialog_title_error">Error</string>
+    <string name="dialog_title_error">Fehler</string>
 
-    <string name="settings_lazy_loading_title">Raummitglieder nachladen</string>
+    <string name="settings_lazy_loading_title">Raummitglieder bei Bedarf nachladen</string>
     <string name="settings_lazy_loading_description">Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Dein Heimserver unterstützt nachladen von Raummitgliedern noch nicht. Versuche es später.</string>
 
@@ -1091,7 +1091,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_send_typing_notifs">Sende Schreibbenachrichtigungen</string>
     <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
-    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie * um kursiven Text anzuzeigen.</string>
+    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen, etwa Sternchen (*) um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Zeige Lesebestätigungen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
     <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Bans bleiben unberührt.</string>
@@ -1103,9 +1103,9 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="markdown_has_been_enabled">Markdown wurde aktiviert.</string>
     <string name="markdown_has_been_disabled">Markdown wurde deaktiviert.</string>
 
-    <string name="settings_show_join_leave_messages">Zeige Betretens- und Verlassens-Ereignisse</string>
+    <string name="settings_show_join_leave_messages">Zeige Betreten- und Verlassen-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und Anzeigenamens.</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und des Anzeigenamens.</string>
     <string name="settings_call_category">Anrufe</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Nutze den Standard-Klingelton von Riot für eingehende Anrufe</string>
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
@@ -1113,14 +1113,14 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="accept">Akzeptieren</string>
 
-    <string name="auth_accept_policies">Bitte lies dir die Richtlinien auf diesem Heimserver an und akzeptiere sie:</string>
+    <string name="auth_accept_policies">Bitte prüfe und akzeptiere die Richtlinien dieses Heimservers:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d Schlüssel erfolgreich importiert.</string>
 
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Einer oder mehr Tests sind fehlgeschlagen. Bitte sende einen Fehlerbericht um uns zu helfen diese(n) zu untersuchen.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Bitte sende einen Fehlerbericht, damit dies untersucht werden kann.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Systemeinstellungen.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Benachrichtigungen sind in den Systemeinstellungen aktiviert.</string>
@@ -1136,19 +1136,19 @@ Bitte überprüfe die Kontoeinstellungen.</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Geräteeinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für dieses Gerät aktiviert.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notifications sind für dieses Gerät deaktiviert.
-Bitte überprüfe die Einstellungen für Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für dieses Gerät nicht erlaubt.
+\nBitte überprüfe die Einstellungen für Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
 
     <string name="settings_troubleshoot_test_play_services_failed">Riot benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
 %1$s</string>
-    <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play Dienste</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play-Dienste</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase-Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM-Token erfolgreich abgefragt:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Abfragen des FCM-Tokens fehlgeschlagen:
-%1$s</string>
+\n%1$s</string>
 
     <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Heimserver registriert.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Heimserver registriert werden:
@@ -1165,7 +1165,7 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst konnte nicht neugestartet werden</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Starte beim Hochfahren</string>
-    <string name="settings_troubleshoot_test_service_boot_success">Dienst wird starten, wenn das Gerät gestartet wird.</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Dienst wird starten, wenn das Gerät neu gestartet wird.</string>
     <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis Riot einmal geöffnet wurde.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiviere das Starten beim Hochfahren</string>
 
@@ -1173,24 +1173,24 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Riot deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Riot aktiviert.
-Die App wird aggressiv eingeschränkt während sie im Hintergrund ist. Dies kann Benachrichtigungen beeinflussen.
-%1$s</string>
+\nDie App wird aggressiv eingeschränkt, während sie im Hintergrund arbeiten möchte. Dies könnte Benachrichtigungen beeinflussen.
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Einschränkungen deaktivieren</string>
 
     <string name="settings_troubleshoot_test_battery_title">Batterieoptimierung</string>
     <string name="settings_troubleshoot_test_battery_success">Riot wird nicht von Batterieoptimierungen beeinflusst.</string>
     <string name="settings_notification_troubleshoot">Fehler bei Benachrichtigungen finden</string>
     <string name="settings_troubleshoot_diagnostic">Diagnose von Fehlern</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, damit wir und das anschauen können.</string>
-    <string name="settings_troubleshoot_test_play_services_title">Check der Play Dienste</string>
-    <string name="settings_troubleshoot_test_play_services_success">Google Play Dienste sind verfügbar und aktuell.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, damit dies untersucht werden kann.</string>
+    <string name="settings_troubleshoot_test_play_services_title">Prüfung der Play-Dienste</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play-Dienste-APK ist verfügbar und aktuell.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Wenn ein Benutzer das Gerät nicht lädt und für eine Weile nicht bewegt während der Bildschirm aus ist, wechselt das Gerät in den Doze-Modus. Dieser hindert Apps daran auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">"Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen. "</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot braucht eine Hintergrundverbindung um verlässliche Benachrichtigunen zu bekommen.
-Auf dem nächsten Bildschirm wirst du gefragt ob du Riot erlauben möchtest im Hintergrund zu laufen. Bitte akzeptiere.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">"Riot muss eine  Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
+\nAuf dem nächsten Bildschirm wirst Du gefragt, ob Du Riot erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren."</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Berechtigung gewähren</string>
 
     <string name="account_email_error">Beim Verifizieren deiner E-Mail-Adresse trat ein Fehler auf.</string>
@@ -1220,9 +1220,9 @@ Warum solltest du Riot.im wählen?
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
-    <string name="store_whats_new">Wir machen führen ständig Änderungen und Verbesserungen an Riot.im durch.
-Das komplette Änderungsprotokoll kann hier gefunden werden: %1$s
-Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
+    <string name="store_whats_new">An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
+\nDas vollständige Änderungsprotokoll ist hier zu finden: %1$s
+\nUm sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
@@ -1277,16 +1277,16 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
 
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
 
-    <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere den Ton, LED, Vibration</string>
+    <string name="settings_notification_advanced_summary">Setze Wichtigkeit von Benachrichtigungen nach Ereignis; konfiguriere Ton, LED, Vibration</string>
     <string name="settings_notification_by_event">Wichtigkeit der Benachrichtigung nach Ereignis</string>
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 Dieser Fehler ist außerhalb von Riot passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-Dieser Fehler ist außerhalb von Riot passiert. Er kann aus einer vielzahl von Gründen passieren. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Du kannst sicherstellen, dass die Datennutzung von Google Play Dienste nicht eingeschränkt sind und dass deine Geräteuhr richtig eingestellt ist. Es kann aber auch auf Custom ROM\'s passieren.</string>
+\nDieser Fehler liegt nicht unter der Kontrolle von Riot. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
-    <string name="settings_cryptography_manage_keys">Verschlüsselungsschlüsselverwaltung</string>
+    <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
     <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
@@ -1369,7 +1369,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_setup_step1_advanced">(Erweitert)</string>
     <string name="keys_backup_setup_step1_manual_export">Schlüssel manuell exportieren</string>
 
-    <string name="keys_backup_setup_step2_text_title">Verschlüssele deine Sicherung mit einer Passphrase.</string>
+    <string name="keys_backup_setup_step2_text_title">Schütze deine Sicherung mit einer Passphrase.</string>
     <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Heimserver gespeichert. Schütze deine Sicherung mit einer Passphrase.
 
 Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
