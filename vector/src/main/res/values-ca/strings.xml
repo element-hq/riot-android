@@ -141,7 +141,7 @@
     <string name="login">Entra</string>
     <string name="logout">Surt de la sessió</string>
     <string name="hs_url">URL del servidor</string>
-    <string name="identity_url">URL de la identitat del servidor</string>
+    <string name="identity_url">URL del servidor d\'identitat</string>
     <string name="search">Cerca</string>
 
     <string name="start_new_chat">Inicia un xat nou</string>
@@ -197,7 +197,7 @@
     <string name="auth_recaptcha_message">Aquest servidor es vol assegurar que no sou un robot</string>
     <string name="auth_username_in_use">Aquest nom d\'usuari ja existeix</string>
     <string name="auth_home_server">Servidor:</string>
-    <string name="auth_identity_server">Identitat del servidor:</string>
+    <string name="auth_identity_server">Servidor d\'identitat:</string>
     <string name="auth_reset_password_next_step_button">He verificat el correu electrònic</string>
     <string name="auth_reset_password_message">Introduïu el correu electrònic associat al compte per reiniciar la contrasenya:</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
@@ -316,7 +316,7 @@
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Surt de la sala</string>
-    <string name="room_participants_leave_prompt_msg">Esteu segur que voleu sortir de la sala?</string>
+    <string name="room_participants_leave_prompt_msg">Esteu segurs que voleu sortir de la sala\?</string>
     <string name="room_participants_remove_prompt_msg">Esteu segur que voleu eliminar %s d\'aques xat?</string>
     <string name="room_participants_create">Crea</string>
 
@@ -526,7 +526,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
 
     <string name="settings_logged_in">Registrat com a</string>
     <string name="settings_home_server">Servidor</string>
-    <string name="settings_identity_server">Identitat del servidor</string>
+    <string name="settings_identity_server">Servidor d\'identitat</string>
 
     <string name="settings_user_interface">Interfície d\'usuari</string>
     <string name="settings_interface_language">Llengua</string>
@@ -1288,7 +1288,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase de pas: verifiqueu que la frase de pas que heu introduït és la correcta.</string>
     <string name="network_error_please_check_and_retry">Error de xarxa: comproveu la vostra connectivitat i torneu-ho a provar.</string>
 
-    <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat…</string>
+    <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat:</string>
     <string name="keys_backup_unlock_button">Desbloca l\'historial</string>
     <string name="keys_backup_recovery_code_empty_error_message">Introduïu una clau de recuperació</string>
     <string name="keys_backup_recovery_code_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta clau de recuperació: verifiqueu que heu introduït la clau correcta.</string>
@@ -1342,7 +1342,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="stay">Roman</string>
     <string name="abort">Avorta</string>
 
-    <string name="action_sign_out_confirmation_simple">Esteu segur de voler sortir?</string>
+    <string name="action_sign_out_confirmation_simple">Esteu segurs que voleu tancar la sessió\?</string>
 
     <string name="encryption_message_recovery">Recuperació de missatges xifrats</string>
     <string name="error_empty_field_enter_user_name">Introduïu un nom d\'usuari.</string>
