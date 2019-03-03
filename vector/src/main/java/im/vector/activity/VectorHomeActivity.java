@@ -1872,12 +1872,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         break;
                     }
 
-                    //Saba modification: when user click on "About Saba", he/she will be ridirected to "About_Saba" activity
+                    //Saba modification: when user click on "About Saba", he/she will be ridirected to "AboutSabaActivity" activity
                     // where info about saba app is displayed from the string defined in the strings.xml file
                     case R.id.about_saba: {
-                        Intent about_saba_intent = new Intent(getApplicationContext(), About_Saba.class);
+                        Intent about_saba_intent = new Intent(getApplicationContext(), AboutSabaActivity.class);
                         getApplicationContext();
                         startActivity(about_saba_intent);
+                        break;
                     }
                 }
 
