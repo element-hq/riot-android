@@ -78,6 +78,7 @@ Other changes:
  - New application icon! (#2905)
 
 Bugfix:
+ - Fix No Visual Difference is setting if disabled (#2929)
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
  - LED notifications are not working (#2512)
