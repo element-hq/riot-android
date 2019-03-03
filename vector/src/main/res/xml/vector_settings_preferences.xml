@@ -137,6 +137,11 @@
             android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
             android:title="@string/settings_preview_media_before_sending" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
+            android:summary="@string/settings_send_message_with_enter_summary"
+            android:title="@string/settings_send_message_with_enter" />
+
         <ListPreference
             android:defaultValue="always"
             android:entries="@array/show_info_area_entries"

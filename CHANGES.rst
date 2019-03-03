@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
+ - Add option to send messages with enter button (#1070)
 
 Other changes:
  -
