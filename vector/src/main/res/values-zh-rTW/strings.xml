@@ -10,7 +10,7 @@
     <string name="notification_sync_in_progress">同步中</string>
     <string name="notification_listening_for_events">聆聽事件</string>
 
-    <string name="title_activity_home">信息</string>
+    <string name="title_activity_home">訊息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">設置</string>
     <string name="title_activity_member_details">會員訊息</string>
@@ -820,7 +820,7 @@
     <string name="widget_integration_room_not_visible">聊天室 %s 不可見。</string>
     <string name="widget_integration_missing_parameter">缺少必需的參數。</string>
     <string name="widget_integration_invalid_parameter">無效參數。</string>
-    <string name="room_add_matrix_apps">添加 Matrix 應用程式</string>
+    <string name="room_add_matrix_apps">新增 Matrix 應用程式</string>
     <string name="settings_labs_native_camera">使用原生相機</string>
     <string name="settings_labs_enable_send_voice">傳送語音訊息</string>
 
