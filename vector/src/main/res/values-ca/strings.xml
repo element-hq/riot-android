@@ -504,7 +504,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Previsualitzacions dels URL en línia</string>
-    <string name="settings_always_show_timestamps">Mostra les marques horàries per a tots els missatges</string>
+    <string name="settings_always_show_timestamps">Mostra sempre l\'hora a tots els missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores</string>
     <string name="settings_vibrate_on_mention">Vibra quan mencionin un usuari</string>
 
