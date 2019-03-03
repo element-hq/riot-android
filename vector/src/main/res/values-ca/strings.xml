@@ -225,7 +225,8 @@
     <string name="login_error_login_email_not_yet">L\'enllaç del correu electrònic que encara no heu fet clic</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al servidor.\nAixò només s\'ha de fer un cop.</string>
+    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al vostre servidor base.
+\nAixò només s\'ha de fer un cop.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
@@ -1002,11 +1003,11 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="dialog_user_consent_submit">Revisa ara</string>
 
     <string name="deactivate_account_title">Desactiva el compte</string>
-    <string name="deactivate_account_content">Això farà que no pugueu usar més el vostre compte. No podreu iniciar la sessió i ningú podrà donar-se d\'alta amb el mateix identificador d\'usuari. Això provocarà que el vostre compte abandoni totes les sales a les que estigui participant i eliminarà les vostres dades del compte al qual teniu el servidor d\'identitats. <b>Aquesta acció és irreversible</b>.
-
-Desactivar el compte <b>no implica que s\'eliminin els missatges que heu eliminat</b>. Si voleu eliminar-los, marqueu la casella a continuació.
-
-La visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que eliminem els vostres missatges significa que els missatges que hagueu enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.</string>
+    <string name="deactivate_account_content">Això farà que no pugueu usar més el vostre compte. No podreu iniciar la sessió i ningú podrà donar-se d\'alta amb el mateix identificador d\'usuari. Això provocarà que el vostre compte abandoni totes les sales a les que estigui participant i eliminarà les vostres dades del compte que hi hagi al vostre servidor d\'identitats. <b>Aquesta acció és irreversible</b>.
+\n
+\nDesactivar el compte <b>no implica que s\'eliminin els missatges que heu enviat</b>. Si voleu eliminar-los, marqueu la casella a continuació.
+\n
+\nLa visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que eliminem els vostres missatges significa que els missatges que hagueu enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.</string>
     <string name="deactivate_account_delete_checkbox">Si us plau elimina tots els missatges que he enviat mentre es desactiva el meu compte (Avís: això provocarà que els usuaris futurs tinguin una vista incompleta de les converses)</string>
     <string name="deactivate_account_prompt_password">Per a continuar, si us plau escriviu la vostra contrasenya:</string>
     <string name="deactivate_account_submit">Desactivar el compte</string>
@@ -1062,7 +1063,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="settings_show_join_leave_messages_summary">No afecta invitacions, expulsions i bloquejos.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
     <string name="call_anyway">Truca de totes maneres</string>
-    <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor personal:</string>
+    <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor base:</string>
 
     <string name="video_call_in_progress">Trucada de vídeo en procés…</string>
 
@@ -1342,7 +1343,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="stay">Roman</string>
     <string name="abort">Avorta</string>
 
-    <string name="action_sign_out_confirmation_simple">Esteu segurs que voleu tancar la sessió\?</string>
+    <string name="action_sign_out_confirmation_simple">Esteu segurs que voleu sortir de la sessió\?</string>
 
     <string name="encryption_message_recovery">Recuperació de missatges xifrats</string>
     <string name="error_empty_field_enter_user_name">Introduïu un nom d\'usuari.</string>
@@ -1381,4 +1382,10 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
     <string name="new_recovery_method_popup_was_me">He sigut jo</string>
     <string name="new_recovery_method_popup_title">Còpia de seguretat de la clau nova</string>
-</resources>
+<string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als vostres missatges encriptats, hauríeu d\'activar la còpia de seguretat encriptada a tots els vostres dispositius.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdreu accés als vostres missatges encriptats si no feu una còpia de seguretat de les vostres claus abans de sortir de la sessió.</string>
+
+    <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
+\n
+\nPer màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del vostre compte.</string>
+    </resources>
