@@ -78,6 +78,7 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import im.vector.BuildConfig;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.PhoneNumberHandler;
@@ -1537,7 +1538,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // Check whether all listed flows in this authentication session are supported
         // We suggest using the fallback page (if any), when at least one flow is not supported.
-        if (mRegistrationManager.hasNonSupportedStage()) {
+        if (mRegistrationManager.hasNonSupportedStage() || alwaysUseFallback()) {
             String hs = getHomeServerUrl();
             boolean validHomeServer = false;
 
@@ -2000,7 +2001,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             }
 
                             // if not supported, switch to the fallback login
-                            if (!isSupported) {
+                            if (!isSupported || alwaysUseFallback()) {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
                                 intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_URL, hsConfig.getHomeserverUri().toString());
                                 startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
@@ -2669,5 +2670,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public void onResourceLimitExceeded(MatrixError e) {
         enableLoadingScreen(false);
         mResourceLimitDialogHelper.displayDialog(e);
+    }
+
+    /**
+     * For test only, will always return false in production build
+     */
+    private boolean alwaysUseFallback() {
+        if (BuildConfig.DEBUG) {
+            // You can return true here, for test only, but never commit the change
+            return false;
+        }
+
+        // Never edit this line.
+        return false;
     }
 }
