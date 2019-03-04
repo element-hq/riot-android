@@ -1554,9 +1554,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             }
 
-            Intent intent = new Intent(LoginActivity.this, FallbackAccountCreationActivity.class);
-            intent.putExtra(FallbackAccountCreationActivity.EXTRA_HOME_SERVER_URL, hs);
-            startActivityForResult(intent, RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            Intent intent = FallbackAuthenticationActivity.getIntentToRegister(this, hs);
+            startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -2002,9 +2001,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             // if not supported, switch to the fallback login
                             if (!isSupported || alwaysUseFallback()) {
-                                Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
-                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_URL, hsConfig.getHomeserverUri().toString());
-                                startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                                Intent intent = FallbackAuthenticationActivity
+                                        .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
+                                startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
                                 onLoginClick();
                             }
@@ -2300,8 +2299,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mRegistrationManager.reset();
                 fallbackToRegistrationMode();
             }
-        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode
-                || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
                 String homeServer = data.getStringExtra("homeServer");
@@ -2678,7 +2676,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean alwaysUseFallback() {
         if (BuildConfig.DEBUG) {
             // You can return true here, for test only, but never commit the change
-            return false;
+            // DO NOT COMMIT
+            return true;
         }
 
         // Never edit this line.
