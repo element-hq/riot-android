@@ -89,6 +89,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.listeners.YesNoListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
+import im.vector.util.EventGroup;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.PreferencesManager;
@@ -989,6 +990,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
         for (int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
+
+            if (row.getEvent() instanceof EventGroup) {
+                // Ignore EventGroup
+                continue;
+            }
+
             Message message = JsonUtils.toMessage(row.getEvent().getContent());
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {

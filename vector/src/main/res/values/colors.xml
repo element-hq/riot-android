@@ -138,4 +138,10 @@
     <color name="username_6">#2dc2c5</color>
     <color name="username_7">#5c56f5</color>
     <color name="username_8">#74d12c</color>
+
+    <!-- Link color -->
+    <color name="link_color_light">#368BD6</color>
+    <color name="link_color_dark">#368BD6</color>
+    <color name="link_color_status">#368BD6</color>
+
 </resources>

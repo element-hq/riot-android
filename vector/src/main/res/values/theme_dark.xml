@@ -13,6 +13,8 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
 
+        <item name="android:textColorLink">@color/link_color_dark</item>
+
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">#FFFFFFFF</item>
 
@@ -26,6 +28,7 @@
         <!-- application bar text color -->
         <item name="vctr_toolbar_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_toolbar_secondary_text_color">@color/riot_secondary_text_color_dark</item>
+        <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>

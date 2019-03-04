@@ -31,6 +31,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.JsonElement;
 
@@ -368,7 +369,9 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                                                     @Override
                                                     public void run() {
                                                         Uri mediaUri = Uri.parse(newHighResUri);
-                                                        Glide.with(imageView).load(mediaUri).into((ImageView) imageView);
+                                                        Glide.with(imageView)
+                                                                .load(mediaUri)
+                                                                .into(imageView);
                                                     }
                                                 });
                                             }
@@ -432,8 +435,15 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                     @Override
                     public void onSuccess(File mediaFile) {
                         if (null != mediaFile) {
-                            final String mediaUri = "file://" + mediaFile.getPath();
-                            Glide.with(container).load(mediaUri).into(imageView);
+                            // Max zoom is PhotoViewAttacher.DEFAULT_MAX_SCALE (= 3)
+                            float maxZoom = imageView.getMaximumScale();
+
+                            Glide.with(container)
+                                    .load(mediaFile)
+                                    .apply(new RequestOptions()
+                                            // Override image wanted size, to keep good quality when image is zoomed in
+                                            .override((int) (imageView.getWidth() * maxZoom), (int) (imageView.getHeight() * maxZoom)))
+                                    .into(imageView);
                         }
                     }
                 });

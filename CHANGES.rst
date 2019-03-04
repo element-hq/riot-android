@@ -9,10 +9,12 @@ Features:
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
+ - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
  - Hide e2e keys management section in settings if crypto is disabled
 
 Other changes:
- -
+ - Change color of links (#2987)
+ - Change color of HomeSection badge (#2987)
 
 Bugfix:
  - Fix crash in settings when cryptography is disabled (#2991)

@@ -48,9 +48,9 @@
         android:gravity="center_horizontal"
         android:maxLines="3"
         android:textColor="?vctr_toolbar_primary_text_color"
-        android:textColorLink="?vctr_toolbar_secondary_text_color"
+        android:textColorLink="?vctr_toolbar_link_text_color"
         android:textSize="14sp"
-        tools:text="a topic here" />
+        tools:text="a topic here www.example.org" />
 
     <LinearLayout
         android:id="@+id/action_bar_header_room_members_layout"
