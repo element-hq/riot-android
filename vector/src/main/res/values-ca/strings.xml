@@ -427,7 +427,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_recents_join_room_prompt">Escriviu un id de sala o un àlies de sala</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Navega pel directpri</string>
+    <string name="directory_search_results_title">Navega pel directori</string>
     <string name="directory_searching_title">S\'està cercant al directori…</string>
 
     <!-- home room settings -->
