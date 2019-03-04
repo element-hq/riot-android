@@ -175,6 +175,12 @@ android {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 static def gitRevision() {
