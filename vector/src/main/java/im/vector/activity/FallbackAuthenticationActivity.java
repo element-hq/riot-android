@@ -288,22 +288,22 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                         json = URLDecoder.decode(json, "UTF-8");
                         parameters = JsonUtils.getBasicGson().fromJson(json, new TypeToken<HashMap<String, Object>>() {
                         }.getType());
-
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage(), e);
                     }
 
                     // succeeds to parse parameters
-                    if (null != parameters) {
+                    if (parameters != null) {
+                        String action = (String) parameters.get("action");
+
                         if (mMode == MODE_LOGIN) {
                             try {
-                                String action = (String) parameters.get("action");
-                                LinkedTreeMap<String, String> parametersMap = (LinkedTreeMap<String, String>) parameters.get("credentials");
+                                LinkedTreeMap<String, String> credentials = (LinkedTreeMap<String, String>) parameters.get("credentials");
 
                                 if (TextUtils.equals("onLogin", action)) {
-                                    final String userId = parametersMap.get("user_id");
-                                    final String accessToken = parametersMap.get("access_token");
-                                    final String homeServer = parametersMap.get("home_server");
+                                    final String userId = credentials.get("user_id");
+                                    final String accessToken = credentials.get("access_token");
+                                    final String homeServer = credentials.get("home_server");
 
                                     // check if the parameters are defined
                                     if ((null != homeServer) && (null != userId) && (null != accessToken)) {
@@ -311,7 +311,7 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                                             @Override
                                             public void run() {
                                                 Intent returnIntent = new Intent();
-                                                returnIntent.putExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS, JsonUtils.getBasicGson().toJson(parametersMap));
+                                                returnIntent.putExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS, JsonUtils.getBasicGson().toJson(credentials));
                                                 setResult(RESULT_OK, returnIntent);
 
                                                 finish();
@@ -325,30 +325,24 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                         } else {
                             // MODE_REGISTER
                             // check the required parameters
-                            if (parameters.containsKey("homeServer")
-                                    && parameters.containsKey("userId")
-                                    && parameters.containsKey("accessToken")
-                                    && parameters.containsKey("action")) {
-                                final String userId2 = (String) parameters.get("userId");
-                                final String accessToken2 = (String) parameters.get("accessToken");
-                                final String homeServer2 = (String) parameters.get("homeServer");
-                                String action2 = (String) parameters.get("action");
+                            if (action.equals("onRegistered")) {
+                                if (parameters.containsKey("homeServer")
+                                        && parameters.containsKey("userId")
+                                        && parameters.containsKey("accessToken")) {
 
-                                // remove the trailing /
-                                if (mHomeServerUrl.endsWith("/")) {
-                                    mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length() - 1);
-                                }
+                                    // We cannot parse Credentials here because of https://github.com/matrix-org/synapse/issues/4756
+                                    // Build on object manually
+                                    Credentials credentials = new Credentials();
 
-                                // check the action
-                                if (action2.equals("onRegistered")) {
+                                    credentials.userId = (String) parameters.get("userId");
+                                    credentials.accessToken = (String) parameters.get("accessToken");
+                                    credentials.homeServer = (String) parameters.get("homeServer");
+
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Intent returnIntent = new Intent();
-                                            returnIntent.putExtra("homeServerUrl", mHomeServerUrl);
-                                            returnIntent.putExtra("homeServer", homeServer2);
-                                            returnIntent.putExtra("userId", userId2);
-                                            returnIntent.putExtra("accessToken", accessToken2);
+                                            returnIntent.putExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS, JsonUtils.getBasicGson().toJson(credentials));
                                             setResult(RESULT_OK, returnIntent);
 
                                             finish();

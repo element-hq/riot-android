@@ -178,7 +178,7 @@
 
     <string name="join_room">Join Room</string>
     <string name="username">Username</string>
-    <string name="create_account">Register</string>
+    <string name="create_account">Create Account</string>
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
     <string name="hs_url">Home Server URL</string>

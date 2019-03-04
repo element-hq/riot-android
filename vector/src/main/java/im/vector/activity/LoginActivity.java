@@ -57,6 +57,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
+import org.matrix.androidsdk.rest.model.HttpException;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms;
@@ -75,6 +76,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -1636,7 +1639,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         @Override
                         public void onUnexpectedError(Exception e) {
                             if (mMode == MODE_ACCOUNT_CREATION) {
-                                onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                                if (e instanceof HttpException
+                                        && ((HttpException) e).getHttpError().getHttpCode() == HttpsURLConnection.HTTP_BAD_METHOD /* 405 */) {
+                                    // Registration is not allowed
+                                    onRegistrationNotAllowed();
+                                } else {
+                                    onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                                }
                             }
                         }
 
@@ -1657,11 +1666,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                             Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                                         }
                                     } else if (e.mStatus == 403) {
-                                        // Registration not supported by the server
-                                        mMode = MODE_LOGIN;
-                                        refreshDisplay();
-
-                                        mSwitchToRegisterButton.setVisibility(View.GONE);
+                                        onRegistrationNotAllowed();
                                     }
                                 }
 
@@ -1685,6 +1690,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         } else {
             setActionButtonsEnabled(true);
         }
+    }
+
+    private void onRegistrationNotAllowed() {
+        // Registration not supported by the server
+        mMode = MODE_LOGIN;
+        refreshDisplay();
+
+        mSwitchToRegisterButton.setVisibility(View.GONE);
     }
 
     /**
@@ -2325,7 +2338,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // reset the home server to let the user writes a valid one.
                 mHomeserverConnectionConfig = null;
                 mRegistrationManager.reset();
-                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
+                mHomeServerText.setText(null);
                 setActionButtonsEnabled(false);
             }
         }
