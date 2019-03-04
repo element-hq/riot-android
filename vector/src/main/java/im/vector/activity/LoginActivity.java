@@ -1557,7 +1557,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             }
 
-            Intent intent = FallbackAuthenticationActivity.getIntentToRegister(this, hs);
+            Intent intent = FallbackAuthenticationActivity.Companion.getIntentToRegister(this, hs);
             startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
         }
     }
@@ -2014,7 +2014,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             // if not supported, switch to the fallback login
                             if (!isSupported || alwaysUseFallback()) {
-                                Intent intent = FallbackAuthenticationActivity
+                                Intent intent = FallbackAuthenticationActivity.Companion
                                         .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
                                 startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
                             } else if (mIsPendingLogin) {
@@ -2317,7 +2317,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
                 final HomeServerConnectionConfig hsConfig = getHsConfig();
 
-                Credentials credentials = FallbackAuthenticationActivity.getResultCredentials(data);
+                Credentials credentials = FallbackAuthenticationActivity.Companion.getResultCredentials(data);
 
                 try {
                     hsConfig.setCredentials(credentials);
