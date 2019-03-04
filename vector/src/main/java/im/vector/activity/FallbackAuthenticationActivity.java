@@ -33,6 +33,7 @@ import android.webkit.WebViewClient;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
+import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
@@ -53,22 +54,38 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
     private static final int MODE_LOGIN = 1;
     private static final int MODE_REGISTER = 2;
 
-    private static final String EXTRA_MODE = "FallbackAuthenticationActivity.EXTRA_MODE";
-    private static final String EXTRA_HOME_SERVER_URL = "FallbackAuthenticationActivity.EXTRA_HOME_SERVER_URL";
+    private static final String EXTRA_IN_MODE = "FallbackAuthenticationActivity.EXTRA_IN_MODE";
+    private static final String EXTRA_IN_HOME_SERVER_URL = "FallbackAuthenticationActivity.EXTRA_IN_HOME_SERVER_URL";
+    private static final String EXTRA_OUT_SERIALIZED_CREDENTIALS = "FallbackAuthenticationActivity.EXTRA_OUT_SERIALIZED_CREDENTIALS";
+
+    /* ==========================================================================================
+     * IN
+     * ========================================================================================== */
 
     public static Intent getIntentToLogin(Context context, String homeserverUrl) {
         Intent intent = new Intent(context, FallbackAuthenticationActivity.class);
-        intent.putExtra(EXTRA_MODE, MODE_LOGIN);
-        intent.putExtra(EXTRA_HOME_SERVER_URL, homeserverUrl);
+        intent.putExtra(EXTRA_IN_MODE, MODE_LOGIN);
+        intent.putExtra(EXTRA_IN_HOME_SERVER_URL, homeserverUrl);
         return intent;
     }
 
     public static Intent getIntentToRegister(Context context, String homeserverUrl) {
         Intent intent = new Intent(context, FallbackAuthenticationActivity.class);
-        intent.putExtra(EXTRA_MODE, MODE_REGISTER);
-        intent.putExtra(EXTRA_HOME_SERVER_URL, homeserverUrl);
+        intent.putExtra(EXTRA_IN_MODE, MODE_REGISTER);
+        intent.putExtra(EXTRA_IN_HOME_SERVER_URL, homeserverUrl);
         return intent;
     }
+
+    /* ==========================================================================================
+     * OUT
+     * ========================================================================================== */
+
+    public static Credentials getResultCredentials(Intent data) {
+        String serializedCredentials = data.getStringExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS);
+
+        return JsonUtils.getBasicGson().fromJson(serializedCredentials, Credentials.class);
+    }
+
 
     @BindView(R.id.fallback_authentication_webview)
     WebView mWebView = null;
@@ -100,14 +117,14 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
 
         Intent intent = getIntent();
 
-        mMode = intent.getIntExtra(EXTRA_MODE, MODE_LOGIN);
+        mMode = intent.getIntExtra(EXTRA_IN_MODE, MODE_LOGIN);
 
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         mHomeServerUrl = getString(R.string.default_hs_server_url);
 
-        if (intent.hasExtra(EXTRA_HOME_SERVER_URL)) {
-            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_URL);
+        if (intent.hasExtra(EXTRA_IN_HOME_SERVER_URL)) {
+            mHomeServerUrl = intent.getStringExtra(EXTRA_IN_HOME_SERVER_URL);
         }
 
         // check the trailing slash
@@ -216,8 +233,7 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
 
                         // The function the fallback page calls when the login is complete
                         final String MXCJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(homeserverUrl, userId, accessToken" +
-                                ") { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'homeServer': homeserverUrl,'userId': userId,  'accessToken" +
-                                "': accessToken  }); };";
+                                ") { matrixLogin.sendObjectMessage({ 'action': 'onLogin', 'credentials': homeserverUrl }); };";
 
                         view.loadUrl(MXCJavascriptOnRegistered);
                     } else {
@@ -239,6 +255,28 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                 }
             }
 
+            /**
+             * Example of (formatted) url for MODE_LOGIN:
+             * <pre>
+             * js:{
+             *        "action":"onLogin",
+             *        "homeServer":{
+             *            "user_id":"@user:matrix.org",
+             *            "access_token":"[ACCESS_TOKEN]",
+             *            "home_server":"matrix.org",
+             *            "device_id":"[DEVICE_ID]",
+             *            "well_known":{
+             *                "m.homeserver":{
+             *                    "base_url":"https://matrix.org/"
+             *                }
+             *            }
+             *        }
+             *    }
+             * </pre>
+             * @param view
+             * @param url
+             * @return
+             */
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if ((null != url) && url.startsWith("js:")) {
@@ -260,17 +298,12 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                         if (mMode == MODE_LOGIN) {
                             try {
                                 String action = (String) parameters.get("action");
-                                LinkedTreeMap<String, String> parametersMap = (LinkedTreeMap<String, String>) parameters.get("homeServer");
+                                LinkedTreeMap<String, String> parametersMap = (LinkedTreeMap<String, String>) parameters.get("credentials");
 
                                 if (TextUtils.equals("onLogin", action)) {
                                     final String userId = parametersMap.get("user_id");
                                     final String accessToken = parametersMap.get("access_token");
                                     final String homeServer = parametersMap.get("home_server");
-
-                                    // remove the trailing /
-                                    if (mHomeServerUrl.endsWith("/")) {
-                                        mHomeServerUrl = mHomeServerUrl.substring(0, mHomeServerUrl.length() - 1);
-                                    }
 
                                     // check if the parameters are defined
                                     if ((null != homeServer) && (null != userId) && (null != accessToken)) {
@@ -278,10 +311,7 @@ public class FallbackAuthenticationActivity extends VectorAppCompatActivity {
                                             @Override
                                             public void run() {
                                                 Intent returnIntent = new Intent();
-                                                returnIntent.putExtra("homeServerUrl", mHomeServerUrl);
-                                                returnIntent.putExtra("homeServer", homeServer);
-                                                returnIntent.putExtra("userId", userId);
-                                                returnIntent.putExtra("accessToken", accessToken);
+                                                returnIntent.putExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS, JsonUtils.getBasicGson().toJson(parametersMap));
                                                 setResult(RESULT_OK, returnIntent);
 
                                                 finish();

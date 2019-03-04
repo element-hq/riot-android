@@ -2302,17 +2302,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         } else if (RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
-                String homeServer = data.getStringExtra("homeServer");
-                String userId = data.getStringExtra("userId");
-                String accessToken = data.getStringExtra("accessToken");
-
-                // build a credential with the provided items
-                Credentials credentials = new Credentials();
-                credentials.userId = userId;
-                credentials.homeServer = homeServer;
-                credentials.accessToken = accessToken;
-
                 final HomeServerConnectionConfig hsConfig = getHsConfig();
+
+                Credentials credentials = FallbackAuthenticationActivity.getResultCredentials(data);
 
                 try {
                     hsConfig.setCredentials(credentials);
@@ -2676,8 +2668,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean alwaysUseFallback() {
         if (BuildConfig.DEBUG) {
             // You can return true here, for test only, but never commit the change
-            // DO NOT COMMIT
-            return true;
+            return false;
         }
 
         // Never edit this line.
