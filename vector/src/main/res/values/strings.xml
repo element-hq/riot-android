@@ -91,6 +91,7 @@
     <string name="skip">Skip</string>
     <string name="done">Done</string>
     <string name="abort">Abort</string>
+    <string name="ignore">Ignore</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -1359,5 +1360,10 @@ Why choose Riot.im?
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithm</string>
     <string name="keys_backup_info_title_signature">Signature</string>
+
+    <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
 </resources>

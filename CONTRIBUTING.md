@@ -43,8 +43,7 @@ Please add a line to the top of the file `CHANGES.rst` describing your change.
 
 Make sure the following commands execute without any error:
 
-> ./tools/check/check_code_quality.sh
-> ./gradlew lintAppRelease
+> ./tools/check/check_code_quality.sh<br/>./gradlew lintAppRelease
 
 ### Unit tests
 
