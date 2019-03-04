@@ -84,26 +84,24 @@
     <!-- Text Colors -->
     <!--Default/Text Primary-->
     <color name="riot_primary_text_color_light">#FF2E2F32</color>
+    <color name="riot_primary_text_color_disabled_light">#FF9E9E9E</color>
     <!--Default/Text Secondary-->
     <color name="riot_secondary_text_color_light">#FF9E9E9E</color>
     <color name="riot_tertiary_text_color_light">@color/riot_primary_text_color_light</color>
 
     <!--Dark /Text Primary-->
     <color name="riot_primary_text_color_dark">#FFEDF3FF</color>
+    <color name="riot_primary_text_color_disabled_dark">#FFA1B2D1</color>
     <!--Dark /Text Secondary-->
     <color name="riot_secondary_text_color_dark">#FFA1B2D1</color>
     <color name="riot_tertiary_text_color_dark">@color/riot_primary_text_color_dark</color>
 
-
-    <!-- Black/Text Primary-->
-    <color name="riot_primary_text_color_black">#FFEDF3FF</color>
-    <!-- Black/Text Secondary-->
-    <color name="riot_secondary_text_color_black">#FFA1B2D1</color>
-    <color name="riot_tertiary_text_color_black">@color/riot_primary_text_color_black</color>
-
+    <!-- Status/Text Primary-->
     <color name="riot_primary_text_color_status">#FF70808D</color>
+    <color name="riot_primary_text_color_disabled_status">#7F70808D</color>
+    <!-- Status/Text Secondary-->
     <color name="riot_secondary_text_color_status">#7F70808D</color>
-    <color name="riot_tertiary_text_color_status">#FF70808D</color>
+    <color name="riot_tertiary_text_color_status">@color/riot_primary_text_color_status</color>
 
     <!-- Quote Colors -->
     <color name="quote_strip_color">#FFDDDDDD</color>

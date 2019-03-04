@@ -652,7 +652,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary);
+        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
         int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorSecondary);
         int vectorAccentColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent);
@@ -903,7 +903,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new RiotEventDisplay(mContext);
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary),
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary),
                         aChildRoomSummary.getLatestReceivedEvent(),
                         aChildRoomSummary.getLatestRoomState());
             }
