@@ -718,7 +718,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (autoDiscoveredDomainCache.containsKey(possibleDomain)) {
             onAutoDiscoveryRetrieved(possibleDomain, autoDiscoveredDomainCache.get(possibleDomain));
         } else {
-            showWaitingView();
+            enableLoadingScreen(true);
 
             new AutoDiscovery().findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
 
@@ -727,20 +727,20 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 @Override
                 public void onUnexpectedError(Exception e) {
                     if (!TextUtils.equals(mDomain, possibleDomain)) return;
-                    hideWaitingView();
+                    enableLoadingScreen(false);
                     Log.e(LOG_TAG, "AutoDiscovery error for domain" + mDomain, e);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
                     if (!TextUtils.equals(mDomain, possibleDomain)) return;
-                    hideWaitingView();
+                    enableLoadingScreen(false);
                     Log.e(LOG_TAG, "AutoDiscovery Network error for domain " + mDomain, e);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    hideWaitingView();
+                    enableLoadingScreen(false);
                     //nop
                 }
 
@@ -755,7 +755,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     Log.d(LOG_TAG, "AutoDiscovery info " + info);
                     if (!TextUtils.equals(mDomain, possibleDomain)) return;
 
-                    hideWaitingView();
+                    enableLoadingScreen(false);
                     onAutoDiscoveryRetrieved(mDomain, info);
                 }
             });
