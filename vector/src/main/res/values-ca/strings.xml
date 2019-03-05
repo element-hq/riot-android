@@ -1398,4 +1398,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">S\'estan baixant les claus…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">S\'estan important les claus…</string>
     <string name="keys_backup_settings_untrusted_backup">Per fer servir la còpia de seguretat de clau en aquest dispositiu, utilitzeu la vostra contrasenya o clau de recuperació ara.</string>
+    <string name="new_recovery_method_popup_description">Una nova còpia de seguretat de clau ha estat trobada.
+\n
+\nSi no heu configurat el nou mètode de recuperació, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un nou mètode de recuperació immediatament a la Configuració.</string>
     </resources>
