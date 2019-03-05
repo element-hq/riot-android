@@ -33,6 +33,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -97,7 +98,6 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.UrlUtilKt;
 import im.vector.util.ViewUtilKt;
 
 /**
@@ -116,10 +116,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // or creates a new account
     private static final int MODE_UNKNOWN = 0;
     private static final int MODE_LOGIN = 1;
-    private static final int MODE_ACCOUNT_CREATION = 2;
-    private static final int MODE_FORGOT_PASSWORD = 3;
-    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
-    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 5;
+    private static final int MODE_LOGIN_SSO = 2;
+    private static final int MODE_ACCOUNT_CREATION = 3;
+    private static final int MODE_FORGOT_PASSWORD = 4;
+    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 5;
+    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 6;
 
     // saved parameters index
     // creation
@@ -137,6 +138,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private Map<String, AutoDiscovery.DiscoveredClientConfig> autoDiscoveredDomainCache = new HashMap<>();
 
     // graphical items
+    @BindView(R.id.login_main_container)
+    ViewGroup mMainContainer;
+
     @BindView(R.id.login_form_container)
     ViewGroup mFormContainer;
 
@@ -162,6 +166,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @BindView(R.id.button_switch_to_register)
     Button mSwitchToRegisterButton;
+
+    // login SSO button
+    @BindView(R.id.button_login_sso)
+    Button mLoginSsoButton;
 
     // create account button
     @BindView(R.id.button_register)
@@ -571,6 +579,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mUseCustomHomeServersCheckbox.post(new Runnable() {
                     @Override
                     public void run() {
+                        // Reset SSO mode
+                        if (mMode == MODE_LOGIN_SSO) {
+                            mMode = MODE_LOGIN;
+                        }
+
                         // reset the HS urls.
                         mHomeServerUrl = null;
                         mIdentityServerUrl = null;
@@ -601,7 +614,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // Disable buttons
+                setActionButtonsEnabled(false);
             }
 
             @Override
@@ -623,7 +637,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mIdentityServerText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // Disable buttons
+                setActionButtonsEnabled(false);
             }
 
             @Override
@@ -881,6 +896,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean onHomeServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
+            // Reset SSO mode
+            if (mMode == MODE_LOGIN_SSO) {
+                mMode = MODE_LOGIN;
+            }
+
             mHomeServerUrl = getHomeServerUrl();
             mRegistrationManager.reset();
 
@@ -911,6 +931,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean onIdentityServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
+            // Reset SSO mode
+            if (mMode == MODE_LOGIN_SSO) {
+                mMode = MODE_LOGIN;
+            }
+
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationManager.reset();
 
@@ -1067,7 +1092,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * check if the current page is supported by the current implementation
      */
     private void checkFlows() {
-        if ((mMode == MODE_LOGIN) || (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION)) {
+        if (mMode == MODE_LOGIN
+                || mMode == MODE_LOGIN_SSO
+                || mMode == MODE_FORGOT_PASSWORD
+                || mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
@@ -1734,6 +1762,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
+    @OnClick(R.id.button_login_sso)
+    void openLoginFallback() {
+        final HomeServerConnectionConfig hsConfig = getHsConfig();
+
+        Intent intent = FallbackAuthenticationActivity.Companion
+                .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
+        startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
+    }
+
     /**
      * The user clicks on the register button.
      */
@@ -2003,20 +2040,37 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (mMode == MODE_LOGIN) {
                             enableLoadingScreen(false);
                             setActionButtonsEnabled(true);
-                            boolean isSupported = true;
 
-                            // supported only m.login.password by now
+                            boolean isTypePasswordDetected = false;
+                            boolean isSsoDetected = false;
+
                             for (LoginFlow flow : flows) {
-                                isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, flow.type);
+                                switch (flow.type) {
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD:
+                                        isTypePasswordDetected = true;
+                                        break;
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_SSO:
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_CAS:
+                                        isSsoDetected = true;
+                                        break;
+                                    default:
+                                        // Unsupported flow detected
+                                        Log.w(LOG_TAG, "Unsupported login flow: " + flow.type);
+                                        break;
+                                }
                             }
 
-                            // if not supported, switch to the fallback login
-                            if (!isSupported || alwaysUseFallback()) {
-                                Intent intent = FallbackAuthenticationActivity.Companion
-                                        .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
-                                startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
-                            } else if (mIsPendingLogin) {
-                                onLoginClick();
+                            if (isSsoDetected) {
+                                // SSO has priority over password
+                                mMode = MODE_LOGIN_SSO;
+                                refreshDisplay();
+                            } else if (isTypePasswordDetected) {
+                                if (mIsPendingLogin) {
+                                    onLoginClick();
+                                }
+                            } else {
+                                // if not supported, switch to the fallback login
+                                openLoginFallback();
                             }
                         }
                     }
@@ -2112,6 +2166,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // check if the device supported the dedicated mode
         checkFlows();
 
+        TransitionManager.beginDelayedTransition(mMainContainer);
+
         // home server
         mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
@@ -2127,6 +2183,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // Hide all buttons
         mLoginButton.setVisibility(View.GONE);
         mSwitchToRegisterButton.setVisibility(View.GONE);
+        mLoginSsoButton.setVisibility(View.GONE);
         mRegisterButton.setVisibility(View.GONE);
         mSwitchToLoginButton.setVisibility(View.GONE);
         mForgotPasswordButton.setVisibility(View.GONE);
@@ -2143,6 +2200,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mPasswordForgottenTxtView.setVisibility(View.VISIBLE);
                 mLoginButton.setVisibility(View.VISIBLE);
                 mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+                break;
+            case MODE_LOGIN_SSO:
+                mLoginSsoButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_ACCOUNT_CREATION:
                 mCreationLayout.setVisibility(View.VISIBLE);
@@ -2195,6 +2255,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void setActionButtonsEnabled(boolean enabled) {
         mLoginButton.setEnabled(enabled);
         mSwitchToRegisterButton.setEnabled(enabled);
+        mLoginSsoButton.setEnabled(enabled);
         mRegisterButton.setEnabled(enabled);
         mSwitchToLoginButton.setEnabled(enabled);
         mForgotPasswordButton.setEnabled(enabled);
@@ -2340,8 +2401,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 // reset the home server to let the user writes a valid one.
                 mHomeserverConnectionConfig = null;
                 mRegistrationManager.reset();
-                mHomeServerText.setText(null);
-                setActionButtonsEnabled(false);
+
+                if (mMode != MODE_LOGIN_SSO) {
+                    mHomeServerText.setText(null);
+                    setActionButtonsEnabled(false);
+                    checkFlows();
+                }
             }
         }
     }
