@@ -72,6 +72,7 @@ import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -2031,7 +2033,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else {
                 enableLoadingScreen(true);
 
-                mLoginHandler.getSupportedLoginFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
+                mLoginHandler.getSupportedLoginFlows(this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
                     @Override
                     public void onSuccess(List<LoginFlow> flows) {
                         // stop listening to network state
@@ -2079,16 +2081,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (mMode == MODE_LOGIN) {
                             enableLoadingScreen(false);
                             setActionButtonsEnabled(false);
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            displayErrorOnUrl(mHomeServerTextTil, errorMessage);
                         }
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
                         Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                        // listen to network state, to resume processing as soon as the network is back
-                        addNetworkStateNotificationListener();
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+
+                        if (e instanceof UnknownHostException) {
+                            onError(getString(R.string.login_error_unknown_host));
+                        } else if (e instanceof SSLHandshakeException) {
+                            onError(getString(R.string.login_error_ssl_handshake));
+                        } else {
+                            // listen to network state, to resume processing as soon as the network is back
+                            addNetworkStateNotificationListener();
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
