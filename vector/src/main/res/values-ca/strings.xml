@@ -226,7 +226,8 @@
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al vostre servidor base.
-\nAixò només s\'ha de fer un cop.</string>
+\nAixò només s\'ha de fer un cop.
+\nDisculpeu les molèsties.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
