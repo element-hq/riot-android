@@ -64,7 +64,19 @@ class TestLinkifyActivity : AppCompatActivity() {
                 "synchrone peut tenir la route la",
                 "that.is.some.sexy.link",
                 "test overlap 48.107864,0673728392 geo + pn?",
-                "test overlap 0673728392,48.107864 geo + pn?"
+                "test overlap 0673728392,48.107864 geo + pn?",
+                "If I add a link in brackets like (help for Riot: https://about.riot.im/help), the link is usable on Riot for Desktop",
+                "(help for Riot: https://about.riot.im/help)",
+                "http://example.com/test(1).html",
+                "http://example.com/test(1)",
+                "https://about.riot.im/help)",
+                "(http://example.com/test(1))",
+                "http://example.com/test1)",
+                "http://example.com/test1/, et ca",
+                "www.example.com/, et ca",
+                "foo.ansible.toplevel/xoxys.matrix#2c0b65eb",
+                "foo.ansible.ninja/xoxys.matrix#2c0b65eb",
+                "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable "
         ).forEach {
             val layout = LayoutInflater.from(this).inflate(R.layout.item_test_linkify, scrollContent, false)
             layout.findViewById<TextView>(R.id.test_linkify_auto_text)?.let { tv ->
@@ -101,7 +113,6 @@ class TestLinkifyActivity : AppCompatActivity() {
 
 open class MockMessageAdapterActionListener : IMessagesAdapterActionsListener {
     override fun onRowClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onRowLongClick(position: Int): Boolean {

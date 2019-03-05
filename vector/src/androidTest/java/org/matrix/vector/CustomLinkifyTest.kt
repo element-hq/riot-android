@@ -36,7 +36,7 @@ class CustomLinkifyTest {
     @Test
     fun linkify_testLinkifySimpleURL() {
         actAndAssert(
-                "this is an url with no protocol %s",
+                "this is an url with no protocol www.myserver.com",
                 arrayOf(
                         TestLinkMatch("www.myserver.com", "http://")
                 )
@@ -47,9 +47,15 @@ class CustomLinkifyTest {
     fun linkify_testLinkifyURLWithTrailingSlashAndTextAfter() {
 
         actAndAssert(
-                "with trailing slash %s | ",
+                "with trailing slash www.myserver.com/ | ",
                 arrayOf(
-                        TestLinkMatch("www.myserver.com", "http://")
+                        TestLinkMatch("www.myserver.com/", "http://")
+                )
+        )
+        actAndAssert(
+                "with trailing slash www.myserver.com/",
+                arrayOf(
+                        TestLinkMatch("www.myserver.com/", "http://")
                 )
         )
 
@@ -131,6 +137,50 @@ class CustomLinkifyTest {
 
     }
 
+    @Test
+    fun linkify_3020_roundBrackets() {
+
+        actAndAssert(
+                "in brackets like (help for Riot: https://about.riot.im/help) , the link is usable ",
+                arrayOf(TestLinkMatch("https://about.riot.im/help"))
+        )
+
+//        actAndAssert(
+//                "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable ",
+//                arrayOf(TestLinkMatch("https://www.exemple/com/find(1)"))
+//        )
+
+        actAndAssert(
+                "https://www.exemple.com/test1)",
+                arrayOf(TestLinkMatch("https://www.exemple.com/test1"))
+        )
+
+        actAndAssert(
+                "(https://www.exemple.com/test(1))",
+                arrayOf(TestLinkMatch("https://www.exemple.com/test(1)"))
+        )
+
+    }
+
+
+    @Test
+    fun linkify_Multiple() {
+        val testString =
+                actAndAssert(
+                        """
+                   In brackets like (help for Riot: https://about.riot.im/help) , the link is usable,
+                    But you can call +44 207 123 1234 and come to 37.786971,-122.399677;u=35 then
+                    see if this mail jhon@riot.im is active but this should not 12345
+                """,
+                        arrayOf(
+                                TestLinkMatch("https://about.riot.im/help"),
+                                TestLinkMatch("+44 207 123 1234", url = "tel:+442071231234"),
+                                TestLinkMatch("37.786971,-122.399677;u=35", "geo:"),
+                                TestLinkMatch("jhon@riot.im", "mailto:")
+                        )
+                )
+    }
+
     fun actAndAssert(format: String, matches: Array<TestLinkMatch>) {
         val textView = TextView(mContext)
         val displays = (matches.map { it.display }).toTypedArray()
@@ -150,7 +200,11 @@ class CustomLinkifyTest {
 
 
     private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit): Unit {
-        this.getSpans(0, length, URLSpan::class.java).forEachIndexed { index, urlSpan ->
+        val spans = this.getSpans(0, length, URLSpan::class.java)
+        spans.sortWith(Comparator { o1, o2 ->
+            getSpanStart(o1) - getSpanStart(o2)
+        })
+        spans.forEachIndexed { index, urlSpan ->
             val start = getSpanStart(urlSpan)
             val end = getSpanEnd(urlSpan)
             action.invoke(index, urlSpan, start, end)

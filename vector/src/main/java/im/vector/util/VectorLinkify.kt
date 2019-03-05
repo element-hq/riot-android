@@ -16,6 +16,7 @@
 package im.vector.util
 
 import android.support.v4.text.util.LinkifyCompat
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -32,8 +33,55 @@ fun TextView.vectorCustomLinkify() {
     val mailProtocols = arrayOf("mailto:")
 
     val currentSpan = SpannableString.valueOf(text)
-    LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.AUTOLINK_WEB_URL, protocols[0], protocols, urlMatchFilter, null)
-    LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.AUTOLINK_EMAIL, mailProtocols.first(), mailProtocols, null, null)
+
+    //Use the framework first, the found span can then be manipulated if needed
+    LinkifyCompat.addLinks(currentSpan, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+
+    //we might want to modify some matches
+    val createdSpans = ArrayList<LinkSpec>()
+    currentSpan.forEachSpanIndexed { index, urlSpan, start, end ->
+        currentSpan.removeSpan(urlSpan)
+        //check trailing space
+        if (end < currentSpan.length - 1 && currentSpan[end] == '/') {
+            //modify the span to include the slash
+            val spec = LinkSpec(URLSpan(urlSpan.url + "/"), start, end + 1)
+            createdSpans.add(spec)
+            return@forEachSpanIndexed
+        }
+        //Try to do something for ending ) issues/3020
+        if (currentSpan[end - 1] == ')') {
+            var lbehind = end - 2
+            var isFullyContained = 1
+            while (lbehind > start) {
+                val char = currentSpan[lbehind]
+                if (char == '(') isFullyContained -= 1
+                if (char == ')') isFullyContained += 1
+                lbehind--
+            }
+            if (isFullyContained != 0) {
+                //In this case we will return false to match, and manually add span if we want?
+                val span = URLSpan(currentSpan.substring(start, end - 1))
+                val spec = LinkSpec(span, start, end - 1)
+                createdSpans.add(spec)
+                return@forEachSpanIndexed
+            }
+        }
+
+//        var lbehind = start - 1
+//        while (lbehind > 0) {
+//            val char = s[lbehind]
+//            if (char.isWhitespace()) break
+//            if (char == '/') return@MatchFilter false
+//            lbehind--
+//        }
+        createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
+
+    }
+
+    for (spec in createdSpans) {
+        currentSpan.setSpan(spec.span, spec.start, spec.end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+
     LinkifyCompat.addLinks(currentSpan, VectorAutoLinkPatterns.GEO_URI, "geo:", arrayOf("geo:"), geoMatchFilter, null)
 
     //this is a bit hacky but for phone numbers we use the framework but it's too lenient
@@ -49,34 +97,12 @@ fun TextView.vectorCustomLinkify() {
     }
 
     //maybe need to prune overlaps? tried to make some but didn't find
-
     text = currentSpan
     addLinkMovementMethod(this)
 
 }
 
-private val urlMatchFilter = Linkify.MatchFilter { s, start, _ ->
-    //    Log.d(TestLinkifyActivity::class.java.name, "FOO ${s.substring(start, end)}")
-    if (start == 0) {
-        return@MatchFilter true
-    }
-    //prevent turning the domain name in an email address into a web link.
-    if (s[start - 1] == '@') {
-        return@MatchFilter false
-    }
-
-    //prevent [whaoo.org] from being turned in link in foo://toto.[whaoo.org]
-    // so we go back and if we found / before a white space don't highlight
-    var lbehind = start - 1
-    while (lbehind > 0) {
-        val char = s[lbehind]
-        if (char.isWhitespace()) return@MatchFilter true
-        if (char == '/') return@MatchFilter false
-        lbehind--
-    }
-
-    return@MatchFilter true
-}
+private data class LinkSpec(val span: URLSpan, val start: Int, val end: Int)
 
 //Exclude short match that don't have geo: prefix, e.g do not highlight things like 1,2
 private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
@@ -84,6 +110,15 @@ private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
         return@MatchFilter end - start > 12
     }
     return@MatchFilter true
+}
+
+private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit): Unit {
+    val spans = this.getSpans(0, length, URLSpan::class.java)
+    spans.forEachIndexed { index, urlSpan ->
+        val start = getSpanStart(urlSpan)
+        val end = getSpanEnd(urlSpan)
+        action.invoke(index, urlSpan, start, end)
+    }
 }
 
 private fun addLinkMovementMethod(t: TextView) {
