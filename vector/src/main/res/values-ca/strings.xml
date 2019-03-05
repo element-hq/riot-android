@@ -1394,5 +1394,5 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_setup_step3_text_line2">En cas que oblideu la vostra contrasenya, la vostra clau de recuperació és un últim recurs per recuperar l\'accés als vostres missatges xifrats.
 \nDeseu aquesta clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">Generant la clau de recuperació…</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">S\'està generant la clau de recuperació…</string>
     </resources>
