@@ -55,14 +55,7 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
     override fun getLayoutRes() = R.layout.activity_authentication_fallback
 
-    override fun getTitleRes(): Int {
-        return if (mMode == MODE_LOGIN) {
-            R.string.login
-        } else {
-            // MODE_REGISTER
-            R.string.create_account
-        }
-    }
+    override fun getTitleRes() = if (mMode == MODE_LOGIN) R.string.login else R.string.create_account
 
     override fun initUiAndData() {
         configureToolbar()
