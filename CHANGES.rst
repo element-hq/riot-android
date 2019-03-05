@@ -9,6 +9,7 @@ Features:
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
+ - Add option to send messages with enter button (#1070)
  - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
  - Hide e2e keys management section in settings if crypto is disabled
  - Display message with formatted_body but with empty body (#2989)

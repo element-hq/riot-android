@@ -108,6 +108,8 @@ public class PreferencesManager {
     private static final String SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
     private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
     private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
+    private static final String SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER";
+
 
     // home
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
@@ -179,6 +181,7 @@ public class PreferencesManager {
             SETTINGS_MEDIA_SAVING_PERIOD_KEY,
             SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
             SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
+            SETTINGS_SEND_MESSAGE_WITH_ENTER,
 
             SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
             SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
@@ -766,6 +769,16 @@ public class PreferencesManager {
      */
     public static boolean previewMediaWhenSending(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, false);
+    }
+
+    /**
+     * Tells if message should be send by pressing enter on the soft keyboard
+     *
+     * @param context the context
+     * @return true to send message with enter
+     */
+    public static boolean sendMessageWithEnter(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SEND_MESSAGE_WITH_ENTER, false);
     }
 
     /**

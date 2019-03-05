@@ -765,6 +765,8 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
+    <string name="settings_send_message_with_enter">Send message with enter</string>
+    <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
