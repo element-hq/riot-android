@@ -1284,7 +1284,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
 
     <string name="keys_backup_setup_step3_generating_key_status">S\'està generant la clau de recuperació emprant una frase de pas. Aquest procés pot trigar uns segons.</string>
-    <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor personal. La còpia inicial pot trigar alguns minuts.</string>
+    <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor base. La còpia inicial pot trigar alguns minuts.</string>
 
 
     <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase de pas: verifiqueu que la frase de pas que heu introduït és la correcta.</string>
@@ -1393,4 +1393,6 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
 
     <string name="keys_backup_setup_step3_text_line2">En cas que oblideu la vostra contrasenya, la vostra clau de recuperació és un últim recurs per recuperar l\'accés als vostres missatges xifrats.
 \nDeseu aquesta clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Generant la clau de recuperació…</string>
     </resources>
