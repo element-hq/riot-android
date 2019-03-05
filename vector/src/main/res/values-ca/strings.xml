@@ -513,7 +513,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
 
-    <string name="settings_data_save_mode">Mode de desament de dades</string>
+    <string name="settings_data_save_mode">Mode d\'estalvi de dades</string>
 
     <string name="devices_details_dialog_title">Detalls del dispositiu</string>
     <string name="devices_details_id_title">ID</string>
@@ -718,8 +718,8 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <!-- directory activity  -->
     <string name="select_room_directory">Escolliu un directori de sale</string>
     <string name="directory_server_fail_to_retrieve_server">És possible que el servidor no estigui disponible o que estigui sobrecarregat</string>
-    <string name="directory_server_type_homeserver">Introdueix un servidor per veure les seves sales públiques</string>
-    <string name="directory_server_placeholder">URL del servidor</string>
+    <string name="directory_server_type_homeserver">Introdueix un servidor base per veure les seves sales públiques</string>
+    <string name="directory_server_placeholder">URL del servidor base</string>
     <string name="directory_server_all_rooms_on_server">Totes les sales del servidor %s</string>
     <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
 
@@ -1024,18 +1024,18 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
 
     <string name="resource_limit_contact_admin">Contacteu amb l\'administrador del servei</string>
 
-    <string name="resource_limit_soft_default">Aquest servidor ha sobrepassat on dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
-    <string name="resource_limit_hard_default">Aquest servidor ha sobrepassat on dels seus límits de recursos.</string>
+    <string name="resource_limit_soft_default">Aquest servidor base ha sobrepassat un dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_default">Aquest servidor base ha sobrepassat un dels seus límits de recursos.</string>
 
-    <string name="resource_limit_soft_mau"> Aquest servidor ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
-    <string name="resource_limit_hard_mau">Aquest servidor ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
+    <string name="resource_limit_soft_mau"> Aquest servidor base ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_mau">Aquest servidor base ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
 
     <string name="resource_limit_soft_contact">Si us plau %s per tal d\'incrementar aquest límit.</string>
     <string name="resource_limit_hard_contact">"Si us plau %s  per continuar usant aquest servei."</string>
 
     <string name="settings_lazy_loading_title">Torna a carregar els membres de la sala</string>
     <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor base encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
 
     <string name="unknown_error">Ho sentim, s\'ha produït un error</string>
 
@@ -1056,7 +1056,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     </plurals>
     <string name="reason_hint">Motiu</string>
 
-    <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre homeserver suporti aquesta funcionalitat.</string>
+    <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre servidor base suporti aquesta funcionalitat.</string>
     <string name="settings_send_typing_notifs">Envia notificacions d\'escriptura</string>
     <string name="settings_send_typing_notifs_summary">Feu saber a altres usuaris que esteu escrivint.</string>
     <string name="settings_send_markdown">Format en Markdown</string>
@@ -1168,9 +1168,9 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Registre del testimoni</string>
-    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor personal.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor personal.
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor base.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor base.
+\n%1$s</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Reinici automàtic del servei de notificacions</string>
     <string name="settings_troubleshoot_test_service_restart_success">El servei s\'ha parat i tornat a iniciar automàticament.</string>
@@ -1389,4 +1389,6 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
 \n
 \nPer màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del vostre compte.</string>
+    <string name="settings_data_save_mode_summary">El mode d\'estalvi de dades aplica un filtre específic que evita l\'enviament de notificacions de presència i d\'escriptura.</string>
+
     </resources>
