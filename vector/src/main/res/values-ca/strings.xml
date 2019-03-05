@@ -1035,7 +1035,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
 
     <string name="settings_lazy_loading_title">Torna a carregar els membres de la sala</string>
     <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor base encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor base encara no suporta la càrrega en diferit de membres d\'una sala. Proveu-ho més tard.</string>
 
     <string name="unknown_error">Ho sentim, s\'ha produït un error</string>
 
