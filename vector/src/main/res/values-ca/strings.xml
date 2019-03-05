@@ -22,7 +22,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuració</string>
     <string name="title_activity_member_details">Detalls dels participants</string>
-    <string name="title_activity_historical">Històric</string>
+    <string name="title_activity_historical">Historial</string>
     <string name="title_activity_bug_report">Informe d\'errors</string>
     <string name="title_activity_group_details">Detalls de la comunitat</string>
 
@@ -30,7 +30,7 @@
     <string name="ok">D\'acord</string>
     <string name="cancel">Cancel·la</string>
     <string name="save">Desa</string>
-    <string name="leave">Surt de la sala</string>
+    <string name="leave">Abandona la sala</string>
     <string name="send">Envia</string>
     <string name="copy">Còpia</string>
     <string name="resend">Reenvia</string>
@@ -61,12 +61,12 @@
     <string name="offline">Fora de línia</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Surt</string>
+    <string name="action_sign_out">Desconnecta</string>
     <string name="action_voice_call">Trucada de veu</string>
     <string name="action_video_call">Vídeotrucada</string>
     <string name="action_global_search">Cerca global</string>
     <string name="action_mark_all_as_read">Marca-ho tot com a llegit</string>
-    <string name="action_historical">Històric</string>
+    <string name="action_historical">Historial</string>
     <string name="action_quick_reply">Resposta ràpida</string>
     <string name="action_open">Obre</string>
     <string name="action_close">Tanca</string>
@@ -139,7 +139,7 @@
     <string name="username">Nom d\'usuari</string>
     <string name="create_account">Registra\'m</string>
     <string name="login">Entra</string>
-    <string name="logout">Surt de la sessió</string>
+    <string name="logout">Desconnecta</string>
     <string name="hs_url">URL del servidor</string>
     <string name="identity_url">URL del servidor d\'identitat</string>
     <string name="search">Cerca</string>
@@ -317,7 +317,7 @@
     <string name="room_title_one_member">1 participant</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Surt de la sala</string>
+    <string name="room_participants_leave_prompt_title">Abandona la sala</string>
     <string name="room_participants_leave_prompt_msg">Esteu segurs que voleu sortir de la sala\?</string>
     <string name="room_participants_remove_prompt_msg">Esteu segur que voleu eliminar %s d\'aques xat?</string>
     <string name="room_participants_create">Crea</string>
@@ -379,7 +379,7 @@
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
     <string name="ssl_do_not_trust">No hi confiïs</string>
-    <string name="ssl_logout_account">Surt</string>
+    <string name="ssl_logout_account">Desconnecta</string>
     <string name="ssl_remain_offline">Ignora</string>
     <string name="ssl_fingerprint_hash">Empremta digital (%s):</string>
     <string name="ssl_could_not_verify">No s\'ha pogut verificar la identitat del servidor remot.</string>
@@ -594,8 +594,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
     <string name="room_settings_directory_visibility">Mostra aquesta sala al directori de sales</string>
     <string name="room_settings_room_access_rules_pref_title">Accés a la sala</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l\'històric de la sala</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l\'històric?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l\'historial de la sala</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l\'historial\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Qui pot accedir a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
@@ -724,7 +724,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Busca a l\'històric</string>
+    <string name="historical_placeholder">Busca a l\'historial</string>
 
     <!-- text size selection -->
     <string name="font_size">Mida de la font</string>
@@ -919,7 +919,7 @@ En voleu afegir algun?</string>
     </plurals>
 
     <string name="room_participants_now">Ara %1$s</string>
-    <string name="room_participants_ago">Fa %1$s %2$s</string>
+    <string name="room_participants_ago">%1$s fa %2$s</string>
 
     <string name="room_participants_action_unignore_prompt">Mostrar tots els missatges d\'aquest usuari?
 
@@ -1251,36 +1251,21 @@ Aquest error és fora del control del Riot. No hi ha cap compte de Google al tel
 Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
 %1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">"Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode Doze. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard. "</string>
-    <string name="store_full_description">El Riot.im és un entorn de col·laboració simple i elegant que reuneix totes les vostres conversacions i integracions d\'aplicacions en una sola aplicació.
-
-Construït al voltant de sales de conversa, el Riot.im us permet compartir missatges, imatges, vídeos i fitxers; interactuar amb les vostres eines i accedir a les vostres comunitats tot sota el mateix sostre. Una sola identitat i lloc per als vostres equips: no cal canviar de comptes, treballeu i xategeu amb gent de diferents organitzacions en sales públiques o privades: des de projectes professionals a excursions escolars, el Riot.im esdevindrà el centre de totes les vostres discussions!
-
-Ara amb xifratge punt a punt!
-
-Les funcionalitats que implementa inclouen:
-
-• Compartiu missatges, imatges, vídeos i fitxers de qualsevol classe instantàniament, en grups de qualsevol mida.
-• Trucades de veu i vídeo individuals i de conferència via WebRTC
-• Xifratge punt a punt emprant Olm (https://matrix.org/git/olm)
-• Veieu qui llegeix els vostres missatges amb els informes de lectura
-• Comuniqueu-vos amb usuaris arreu de l\'ecosistema Matrix.org — no només usuaris del Riot.im!
-• Descobriu i convideu usuaris per adreça de correu
-• Participeu en sales públiques obertes a convidats
-• Molt escalable — suporta centenars de sales i milers d\'usuaris
-• Historial de missatges totalment sincronitzat entre diferents dispositius i navegadors
-• Paràmetres de notificació molt personalitzable, sincronitzat entre dispositius
-• Historial de missatges amb cerca sense límit
-• Enllaços permanents als missatges
-• Cerca de missatges sencers
-• Suport per a llengües escrites de dreta a esquerra, com l\'àrab
-
-Per als desenvolupadors:
-• El Riot.im és un client de Matrix — està construït al voltant de l\'estàndard obert i ecosistema de Matrix.org, proveint interoperabilitat amb la resta d\'aplicacions, servidors i integracions compatibles amb Matrix
-• Totalment lliure, sota la llicència permissiva Apache — aconseguiu el codi des de https://github.com/vector-im/vector-android. Els «pull requests» són benvinguts!
-• Molt fàcil d\'estendre via l\'API Client-Server de Matrix (https://matrix.org/docs/spec)
-• Executeu el vostre servidor propi! Podeu emprar el servidor per defecte matrix.org o emprar el vostre servidor de Matrix propi. (per exemple https://matrix.org/docs/projects/server/synapse.html)
-
-Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
+    <string name="store_full_description">Una aplicació de xat, sota el vostre control i totalment flexible. El Riot us permet comunicar-vos de la manera que preferiu. Fet per al [matrix] - l\'estàndard per a la comunicació oberta i descentralitzada.
+\n
+\nObteniu un compte gratuït de matrix.org, executeu el vostre servidor propi a https://modular.im, o empreu un altre servidor de Matrix.
+\n
+\nPer què triar Riot.im\?
+\n
+\n• COMUNICACIÓ COMPLETA: Creeu sales al voltant dels vostres equips, els vostre amics o la vostra comunitat - de la manera que preferiu! Converseu, compartiu fitxers, afegiu ginys i feu trucades de veu i vídeo - tot de manera gratuïta.
+\n
+\n• INTEGRACIONS POTENTS: Empreu el Riot.im amb les eines que ja coneixeu i us agraden. Amb el Riot.im fins i tot podeu conversar amb usuaris i grups d\'altres aplicacions de xat.
+\n
+\n• PRIVAT I SEGUR: Mantingueu les vostres converses en secret. Xifratge punt a punt us assegura que les comunicacions privades continuaran sent privades.
+\n
+\n• OBERT, NO TANCAT: Programari lliure, i construït damunt de Matrix. Sigueu els propietaris de les vostres dades hostatjant el vostre servidor propi, o emprant un en què confieu.
+\n
+\n• ALLÀ ON SIGUEU: Esteu en contacte allà on esteu amb una sincronització total de l\'historial dels missatges en tots els vostres dispositius, i en línia a https://riot.im.</string>
 
 
     <string name="keys_backup_setup_step3_generating_key_status">S\'està generant la clau de recuperació emprant una frase de pas. Aquest procés pot trigar uns segons.</string>
@@ -1392,13 +1377,13 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="settings_data_save_mode_summary">El mode d\'estalvi de dades aplica un filtre específic que evita l\'enviament de notificacions de presència i d\'escriptura.</string>
 
     <string name="keys_backup_setup_step3_text_line2">En cas que oblideu la vostra contrasenya, la vostra clau de recuperació és un últim recurs per recuperar l\'accés als vostres missatges xifrats.
-\nDeseu aquesta clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+\nDeseu aquesta clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">S\'està generant la clau de recuperació…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">S\'estan baixant les claus…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">S\'estan important les claus…</string>
     <string name="keys_backup_settings_untrusted_backup">Per fer servir la còpia de seguretat de clau en aquest dispositiu, utilitzeu la vostra contrasenya o clau de recuperació ara.</string>
-    <string name="new_recovery_method_popup_description">Una nova còpia de seguretat de clau ha estat trobada.
+    <string name="new_recovery_method_popup_description">S\'ha trobat una còpia de seguretat nova de la clau.
 \n
-\nSi no heu configurat el nou mètode de recuperació, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un nou mètode de recuperació immediatament a la Configuració.</string>
+\nSi no heu configurat el mètode de recuperació nou, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un mètode de recuperació nou immediatament a la configuració.</string>
     </resources>
