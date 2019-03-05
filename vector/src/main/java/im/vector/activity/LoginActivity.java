@@ -160,15 +160,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.button_login)
     Button mLoginButton;
 
-    @BindView(R.id.button_switch_to_login)
-    Button mSwitchToLoginButton;
+    @BindView(R.id.button_switch_to_register)
+    Button mSwitchToRegisterButton;
 
     // create account button
     @BindView(R.id.button_register)
     Button mRegisterButton;
 
-    @BindView(R.id.button_switch_to_register)
-    Button mSwitchToRegisterButton;
+    @BindView(R.id.button_switch_to_login)
+    Button mSwitchToLoginButton;
 
     // forgot password button
     @BindView(R.id.button_reset_password)
@@ -208,7 +208,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // if the taps on login button
     // after updating the IS / HS urls
     // without selecting another item
-    // the IS/HS textviews don't loose the focus
+    // the IS/HS textviews don't lose the focus
     // and the flow is not checked.
     private boolean mIsPendingLogin;
 
@@ -356,7 +356,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-                if ((networkInfo != null) && networkInfo.isConnected()) {
+                if (networkInfo != null && networkInfo.isConnected()) {
                     // refresh only once
                     if (mIsWaitingNetworkConnection) {
                         refreshDisplay();
@@ -467,7 +467,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // already registered
         if (hasCredentials()) {
-            if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
+            if (null != intent && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
                 Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
                 goToSplash();
             } else {
@@ -646,7 +646,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHandler = new Handler(getMainLooper());
 
         // Check whether the application has been resumed from an universal link
-        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
+        Bundle receivedBundle = null != intent ? getIntent().getExtras() : null;
         if (null != receivedBundle) {
             if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
                 mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
@@ -683,7 +683,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mTextInputLayouts = ViewUtilKt.findAllTextInputLayout(mFormContainer);
         ViewUtilKt.autoResetTextInputLayoutErrors(mTextInputLayouts);
 
-
         mLoginEmailTextView.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 String candidate = mLoginEmailTextView.getText().toString();
@@ -696,7 +695,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 }
             }
         });
-
     }
 
     private void tryAutoDiscover(String possibleDomain) {
@@ -992,15 +990,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.d(LOG_TAG, "KEYCODE_BACK pressed");
-            if ((MODE_ACCOUNT_CREATION == mMode) && (!mRegistrationManager.hasRegistrationResponse())) {
+            if (MODE_ACCOUNT_CREATION == mMode && !mRegistrationManager.hasRegistrationResponse()) {
                 Log.d(LOG_TAG, "## cancel the registration mode");
                 fallbackToLoginMode();
                 return true;
-            } else if ((MODE_FORGOT_PASSWORD == mMode) || (MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode)) {
+            } else if (MODE_FORGOT_PASSWORD == mMode || MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode) {
                 Log.d(LOG_TAG, "## cancel the forgot password mode");
                 fallbackToLoginMode();
                 return true;
-            } else if ((MODE_ACCOUNT_CREATION_THREE_PID == mMode)) {
+            } else if (MODE_ACCOUNT_CREATION_THREE_PID == mMode) {
                 Log.d(LOG_TAG, "## cancel the three pid mode");
                 cancelEmailPolling();
                 mRegistrationManager.clearThreePid();
@@ -1019,7 +1017,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean hasCredentials() {
         try {
             MXSession session = Matrix.getInstance(this).getDefaultSession();
-            return ((null != session) && session.isAlive());
+            return null != session && session.isAlive();
 
         } catch (Exception e) {
             Log.e(LOG_TAG, "## Exception: " + e.getMessage(), e);
@@ -1843,7 +1841,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     void onLoginClick() {
         if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
             mIsPendingLogin = true;
-            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
+            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not lose the focus");
             return;
         }
 
@@ -2117,15 +2115,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // home server
         mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
-        // views
-        mLoginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
-        mCreationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
-        mForgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        mThreePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
+        // Hide views
+        mLoginLayout.setVisibility(View.GONE);
+        mCreationLayout.setVisibility(View.GONE);
+        mForgetPasswordLayout.setVisibility(View.GONE);
+        mThreePidLayout.setVisibility(View.GONE);
 
-        boolean isLoginMode = mMode == MODE_LOGIN;
-
-        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
+        // Hide text
+        mPasswordForgottenTxtView.setVisibility(View.GONE);
 
         // Hide all buttons
         mLoginButton.setVisibility(View.GONE);
@@ -2142,20 +2139,25 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // Then show them depending on mode
         switch (mMode) {
             case MODE_LOGIN:
+                mLoginLayout.setVisibility(View.VISIBLE);
+                mPasswordForgottenTxtView.setVisibility(View.VISIBLE);
                 mLoginButton.setVisibility(View.VISIBLE);
                 mSwitchToRegisterButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_ACCOUNT_CREATION:
+                mCreationLayout.setVisibility(View.VISIBLE);
                 mRegisterButton.setVisibility(View.VISIBLE);
                 mSwitchToLoginButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_FORGOT_PASSWORD:
+                mForgetPasswordLayout.setVisibility(View.VISIBLE);
                 mForgotPasswordButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_FORGOT_PASSWORD_WAITING_VALIDATION:
                 mForgotValidateEmailButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_ACCOUNT_CREATION_THREE_PID:
+                mThreePidLayout.setVisibility(View.VISIBLE);
                 mSubmitThreePidButton.setVisibility(View.VISIBLE);
                 if (mRegistrationManager.canSkipThreePid()) {
                     mSkipThreePidButton.setVisibility(View.VISIBLE);
@@ -2239,7 +2241,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
 
             String identityServerUrlString = getIdentityServerUrl();
-            if ((!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http"))
+            if (!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http")
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
                 displayErrorOnUrl(mIdentityServerTextTil, getString(R.string.login_error_must_start_http));
@@ -2333,7 +2335,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED)) {
+            } else if (resultCode == RESULT_CANCELED) {
                 Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
                 // reset the home server to let the user writes a valid one.
                 mHomeserverConnectionConfig = null;
