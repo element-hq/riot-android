@@ -19,6 +19,7 @@ package im.vector.activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
 import android.support.v7.app.AlertDialog
@@ -143,6 +144,12 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
                 // on error case, close this activity
                 runOnUiThread { finish() }
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+
+                toolbar.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {
