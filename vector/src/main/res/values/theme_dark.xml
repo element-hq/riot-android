@@ -8,10 +8,12 @@
         <item name="colorPrimary">@color/primary_color_dark</item>
         <item name="colorAccent">@color/accent_color_dark</item>
 
-        <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
+        <item name="android:textColorPrimary">@color/primary_text_color_selector_dark</item>
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
+
+        <item name="android:textColorLink">@color/link_color_dark</item>
 
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">#FFFFFFFF</item>
@@ -26,6 +28,7 @@
         <!-- application bar text color -->
         <item name="vctr_toolbar_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_toolbar_secondary_text_color">@color/riot_secondary_text_color_dark</item>
+        <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
         <!-- application bar text hint color -->
         <item name="vctr_primary_hint_text_color">@color/primary_hint_text_color_dark</item>
@@ -42,7 +45,7 @@
         <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">@color/vector_fuchsia_color</item>
         <item name="vctr_message_text_color">@android:color/white</item>
-        <item name="vctr_notice_text_color">?android:attr/textColorPrimary</item>
+        <item name="vctr_notice_text_color">@color/riot_primary_text_color_dark</item>
         <item name="vctr_encrypting_message_text_color">@color/accent_color_dark</item>
         <item name="vctr_sending_message_text_color">?android:textColorSecondary</item>
         <item name="vctr_highlighted_message_text_color">@color/vector_fuchsia_color</item>

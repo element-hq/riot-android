@@ -31,9 +31,10 @@
         android:paddingEnd="6dp"
         android:paddingRight="6dp"
         android:paddingBottom="3dp"
-        android:textColor="?vctr_list_header_secondary_text_color"
+        android:textColor="@android:color/white"
         android:textSize="12sp"
         android:textStyle="bold"
+        tools:background="?vctr_notice_secondary"
         tools:text="12" />
 
     <android.support.v7.widget.RecyclerView

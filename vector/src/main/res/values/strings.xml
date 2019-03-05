@@ -122,11 +122,11 @@
     <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
-    <string name="home_filter_placeholder_groups">Search for communities</string>
+    <string name="home_filter_placeholder_home">Filter room names</string>
+    <string name="home_filter_placeholder_favorites">Filter favourites</string>
+    <string name="home_filter_placeholder_people">Filter people</string>
+    <string name="home_filter_placeholder_rooms">Filter room names</string>
+    <string name="home_filter_placeholder_groups">Filter community names</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>

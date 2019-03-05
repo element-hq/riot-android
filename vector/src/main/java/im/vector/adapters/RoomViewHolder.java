@@ -20,7 +20,6 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +40,7 @@ import im.vector.R;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
+import im.vector.util.ViewUtilKt;
 
 public class RoomViewHolder extends RecyclerView.ViewHolder {
     private static final String LOG_TAG = RoomViewHolder.class.getSimpleName();
@@ -162,11 +162,7 @@ public class RoomViewHolder extends RecyclerView.ViewHolder {
         if (isInvitation || (notificationCount > 0)) {
             vRoomUnreadCount.setText(isInvitation ? "!" : RoomUtils.formatUnreadMessagesCounter(notificationCount));
             vRoomUnreadCount.setTypeface(null, Typeface.BOLD);
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(100);
-            shape.setColor(bingUnreadColor);
-            vRoomUnreadCount.setBackground(shape);
+            ViewUtilKt.setRoundBackground(vRoomUnreadCount, bingUnreadColor);
             vRoomUnreadCount.setVisibility(View.VISIBLE);
         } else {
             vRoomUnreadCount.setVisibility(View.GONE);

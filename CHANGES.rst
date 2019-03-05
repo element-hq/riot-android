@@ -10,12 +10,16 @@ Features:
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
  - Add option to send messages with enter button (#1070)
+ - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
+ - Hide e2e keys management section in settings if crypto is disabled
+ - Display message with formatted_body but with empty body (#2989)
 
 Other changes:
- -
+ - Change color of links (#2987)
+ - Change color of HomeSection badge (#2987)
 
 Bugfix:
- -
+ - Fix crash in settings when cryptography is disabled (#2991)
 
 Translations:
  -
@@ -79,6 +83,7 @@ Other changes:
  - New application icon! (#2905)
 
 Bugfix:
+ - Fix No Visual Difference is setting if disabled (#2929)
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
  - LED notifications are not working (#2512)

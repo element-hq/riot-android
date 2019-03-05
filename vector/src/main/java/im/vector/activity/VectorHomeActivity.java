@@ -1516,7 +1516,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorPrimary));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorTertiary));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
