@@ -1382,7 +1382,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_info_title_signature">Signatura</string>
 
     <string name="new_recovery_method_popup_was_me">He sigut jo</string>
-    <string name="new_recovery_method_popup_title">Nova còpia de seguretat de clau</string>
+    <string name="new_recovery_method_popup_title">Còpia de seguretat nova de la clau</string>
 <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als vostres missatges encriptats, hauríeu d\'activar la còpia de seguretat encriptada a tots els vostres dispositius.</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdreu accés als vostres missatges encriptats si no feu una còpia de seguretat de les vostres claus abans de sortir de la sessió.</string>
 
