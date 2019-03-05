@@ -290,6 +290,18 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
         } else super.onKeyDown(keyCode, event)
     }
 
+    /* ==========================================================================================
+     * UI event
+     * ========================================================================================== */
+
+    override fun onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     companion object {
         private val LOG_TAG = FallbackAuthenticationActivity::class.java.simpleName
 
