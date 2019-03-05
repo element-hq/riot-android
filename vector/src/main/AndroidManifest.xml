@@ -416,6 +416,7 @@
         <activity
             android:name=".activity.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
+        <activity android:name=".activity.DebugMenuActivity" />
 
         <!-- FileProvider -->
         <provider
