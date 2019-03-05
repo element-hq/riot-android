@@ -1396,4 +1396,5 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">S\'està generant la clau de recuperació…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">S\'estan baixant les claus…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Important claus…</string>
     </resources>
