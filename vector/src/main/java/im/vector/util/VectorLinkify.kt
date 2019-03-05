@@ -29,9 +29,6 @@ import android.widget.TextView
  */
 fun TextView.vectorCustomLinkify() {
 
-    val protocols = arrayOf("http://", "https://", "rtsp://")
-    val mailProtocols = arrayOf("mailto:")
-
     val currentSpan = SpannableString.valueOf(text)
 
     //Use the framework first, the found span can then be manipulated if needed
@@ -39,7 +36,7 @@ fun TextView.vectorCustomLinkify() {
 
     //we might want to modify some matches
     val createdSpans = ArrayList<LinkSpec>()
-    currentSpan.forEachSpanIndexed { index, urlSpan, start, end ->
+    currentSpan.forEachSpanIndexed { _, urlSpan, start, end ->
         currentSpan.removeSpan(urlSpan)
         //check trailing space
         if (end < currentSpan.length - 1 && currentSpan[end] == '/') {
@@ -112,7 +109,7 @@ private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
     return@MatchFilter true
 }
 
-private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit): Unit {
+private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit) {
     val spans = this.getSpans(0, length, URLSpan::class.java)
     spans.forEachIndexed { index, urlSpan ->
         val start = getSpanStart(urlSpan)
