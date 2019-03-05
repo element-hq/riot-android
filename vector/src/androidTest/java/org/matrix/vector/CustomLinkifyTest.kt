@@ -26,8 +26,6 @@ import org.junit.Test
 
 class CustomLinkifyTest {
 
-    val mContext = InstrumentationRegistry.getContext()
-
     data class TestLinkMatch(
             val display: String,
             val protocol: String? = null,
@@ -37,7 +35,7 @@ class CustomLinkifyTest {
     fun linkify_testLinkifySimpleURL() {
         actAndAssert(
                 "this is an url with no protocol www.myserver.com",
-                arrayOf(
+                listOf(
                         TestLinkMatch("www.myserver.com", "http://")
                 )
         )
@@ -45,27 +43,25 @@ class CustomLinkifyTest {
 
     @Test
     fun linkify_testLinkifyURLWithTrailingSlashAndTextAfter() {
-
         actAndAssert(
                 "with trailing slash www.myserver.com/ | ",
-                arrayOf(
+                listOf(
                         TestLinkMatch("www.myserver.com/", "http://")
                 )
         )
         actAndAssert(
                 "with trailing slash www.myserver.com/",
-                arrayOf(
+                listOf(
                         TestLinkMatch("www.myserver.com/", "http://")
                 )
         )
-
     }
 
     @Test
     fun linkify_testLinkifyMultipleUrls() {
         actAndAssert(
                 "Look at %s and %s and tell me",
-                arrayOf(
+                listOf(
                         TestLinkMatch("www.myserver.com", "http://"),
                         TestLinkMatch("https://www.otherdomain.foo/ohh?er=32%2B20")
                 )
@@ -74,19 +70,18 @@ class CustomLinkifyTest {
 
     @Test
     fun linkify_strictDomainNameWhenNoProtocol() {
-
         val strangeTopLevel = "strangetoplevel"
         val ianaTopLevel = "ninja"
         val base = "foo.ansible.%s/xoxys.matrix#2c0b65eb"
 
         actAndAssert(
                 "bla bla ${base.format(strangeTopLevel)}",
-                arrayOf()
+                listOf()
         )
 
         actAndAssert(
                 "bla bla %s",
-                arrayOf(
+                listOf(
                         TestLinkMatch(base.format(ianaTopLevel), "http://")
                 )
         )
@@ -94,15 +89,14 @@ class CustomLinkifyTest {
 
     @Test
     fun linkify_strictDoNotMatchSmallNumbersAsPn() {
-
         actAndAssert(
                 "ksks9808",
-                arrayOf()
+                emptyList()
         )
 
         actAndAssert(
                 "call me at %s",
-                arrayOf(
+                listOf(
                         TestLinkMatch("+44 207 123 1234", url = "tel:+442071231234")
                 )
         )
@@ -110,10 +104,9 @@ class CustomLinkifyTest {
 
     @Test
     fun linkify_testGeoString() {
-
         actAndAssert(
                 "I am here %s :)",
-                arrayOf(
+                listOf(
                         TestLinkMatch("37.786971,-122.399677;u=35", "geo:")
                 )
         )
@@ -121,76 +114,76 @@ class CustomLinkifyTest {
         //Do not match too small
         actAndAssert(
                 "I am here 1,12 :)",
-                arrayOf()
+                emptyList()
         )
-
     }
 
     @Test
     fun linkify_2350_someMessagesConvertedToMap() {
-
         //Should not match
         actAndAssert(
                 "synchrone peut tenir la route la",
-                arrayOf()
+                emptyList()
         )
 
     }
 
     @Test
     fun linkify_3020_roundBrackets() {
-
         actAndAssert(
                 "in brackets like (help for Riot: https://about.riot.im/help) , the link is usable ",
-                arrayOf(TestLinkMatch("https://about.riot.im/help"))
+                listOf(TestLinkMatch("https://about.riot.im/help"))
         )
 
 //        actAndAssert(
 //                "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable ",
-//                arrayOf(TestLinkMatch("https://www.exemple/com/find(1)"))
+//                listOf(TestLinkMatch("https://www.exemple/com/find(1)"))
 //        )
 
         actAndAssert(
                 "https://www.exemple.com/test1)",
-                arrayOf(TestLinkMatch("https://www.exemple.com/test1"))
+                listOf(TestLinkMatch("https://www.exemple.com/test1"))
         )
 
         actAndAssert(
                 "(https://www.exemple.com/test(1))",
-                arrayOf(TestLinkMatch("https://www.exemple.com/test(1)"))
+                listOf(TestLinkMatch("https://www.exemple.com/test(1)"))
         )
-
     }
-
 
     @Test
     fun linkify_Multiple() {
-        val testString =
-                actAndAssert(
-                        """
+        actAndAssert(
+                """
                    In brackets like (help for Riot: https://about.riot.im/help) , the link is usable,
                     But you can call +44 207 123 1234 and come to 37.786971,-122.399677;u=35 then
                     see if this mail jhon@riot.im is active but this should not 12345
                 """,
-                        arrayOf(
-                                TestLinkMatch("https://about.riot.im/help"),
-                                TestLinkMatch("+44 207 123 1234", url = "tel:+442071231234"),
-                                TestLinkMatch("37.786971,-122.399677;u=35", "geo:"),
-                                TestLinkMatch("jhon@riot.im", "mailto:")
-                        )
+                listOf(
+                        TestLinkMatch("https://about.riot.im/help"),
+                        TestLinkMatch("+44 207 123 1234", url = "tel:+442071231234"),
+                        TestLinkMatch("37.786971,-122.399677;u=35", "geo:"),
+                        TestLinkMatch("jhon@riot.im", "mailto:")
                 )
+        )
     }
 
-    fun actAndAssert(format: String, matches: Array<TestLinkMatch>) {
-        val textView = TextView(mContext)
+    private fun actAndAssert(format: String, matches: List<TestLinkMatch>) {
+        // Arrange
+        val textView = TextView(InstrumentationRegistry.getContext())
         val displays = (matches.map { it.display }).toTypedArray()
         val testString = format.format(*displays)
         textView.text = testString
+
+        // Act
         textView.vectorCustomLinkify()
 
-        //We need to assert that a URL span ha been added
+        // Assert
+        //We need to assert that URL span(s) have been added
         val spannable = textView.text.toSpannable()
-        assertEquals(matches.size, spannable.getSpans(0, testString.length, URLSpan::class.java).count())
+        assertEquals("Wrong number of span detected for $format",
+                matches.size,
+                spannable.getSpans(0, testString.length, URLSpan::class.java).count())
 
         spannable.forEachSpanIndexed { index, urlSpan, start, end ->
             assertEquals("Incorrect Url", matches[index].url, urlSpan.url)
@@ -199,7 +192,7 @@ class CustomLinkifyTest {
     }
 
 
-    private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit): Unit {
+    private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit) {
         val spans = this.getSpans(0, length, URLSpan::class.java)
         spans.sortWith(Comparator { o1, o2 ->
             getSpanStart(o1) - getSpanStart(o2)
@@ -211,5 +204,4 @@ class CustomLinkifyTest {
         }
         //for (element in this.span) action(element)
     }
-
 }

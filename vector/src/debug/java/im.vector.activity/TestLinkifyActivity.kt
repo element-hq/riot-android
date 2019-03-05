@@ -24,25 +24,23 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.R
 import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.util.MatrixLinkMovementMethod
-import im.vector.util.vectorCustomLinkify
 import im.vector.util.openUrlInExternalBrowser
+import im.vector.util.vectorCustomLinkify
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.rest.model.Event
 
 
 class TestLinkifyActivity : AppCompatActivity() {
 
-    @BindView(R.id.test_linkify_scrollview)
-    lateinit var scrollView: ScrollView
     @BindView(R.id.test_linkify_content_view)
     lateinit var scrollContent: LinearLayout
+
     @BindView(R.id.test_linkify_coordinator)
     lateinit var coordinatorLayout: CoordinatorLayout
 
@@ -54,7 +52,7 @@ class TestLinkifyActivity : AppCompatActivity() {
 
         scrollContent.removeAllViews()
 
-        listOf<String>(
+        listOf(
                 "https://www.html5rocks.com/en/tutorials/webrtc/basics/ |",
                 "https://www.html5rocks.com/en/tutorials/webrtc/basics/",
                 "mailto mailto:test@toto.com  test@toto.com",
@@ -93,127 +91,128 @@ class TestLinkifyActivity : AppCompatActivity() {
                 "foo.ansible.toplevel/xoxys.matrix#2c0b65eb",
                 "foo.ansible.ninja/xoxys.matrix#2c0b65eb",
                 "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable "
-        ).forEach {
-            val layout = LayoutInflater.from(this).inflate(R.layout.item_test_linkify, scrollContent, false)
-            layout.findViewById<TextView>(R.id.test_linkify_auto_text)?.let { tv ->
-                tv.text = it
-                tv.movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
-                    override fun onURLClick(uri: Uri?) {
-                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
-                                .show()
+        )
+                .forEach { textContent ->
+                    val item = LayoutInflater.from(this)
+                            .inflate(R.layout.item_test_linkify, scrollContent, false)
 
-                    }
-                })
-            }
-            layout.findViewById<TextView>(R.id.test_linkify_custom_text)?.let { tv ->
-                tv.text = it
-                tv.movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
-                    override fun onURLClick(uri: Uri?) {
-                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
-                                .setAction("open") {
-                                    openUrlInExternalBrowser(tv.context, uri)
-                                }
-                                .show()
+                    item.findViewById<TextView>(R.id.test_linkify_auto_text)
+                            ?.apply {
+                                text = textContent
+                                movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
+                                    override fun onURLClick(uri: Uri?) {
+                                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
+                                                .setAction("open") {
+                                                    openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
+                                                }
+                                                .show()
+                                    }
+                                })
+                            }
 
-                    }
-                })
-                tv.vectorCustomLinkify()
-            }
+                    item.findViewById<TextView>(R.id.test_linkify_custom_text)
+                            ?.apply {
+                                text = textContent
+                                movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
+                                    override fun onURLClick(uri: Uri?) {
+                                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
+                                                .setAction("open") {
+                                                    openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
+                                                }
+                                                .show()
+                                    }
+                                })
 
-            scrollContent.addView(layout, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                                vectorCustomLinkify()
+                            }
 
-        }
+                    scrollContent.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                }
     }
-
 }
 
-open class MockMessageAdapterActionListener : IMessagesAdapterActionsListener {
+abstract class MockMessageAdapterActionListener : IMessagesAdapterActionsListener {
     override fun onRowClick(position: Int) {
     }
 
     override fun onRowLongClick(position: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onContentClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onContentLongClick(position: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onAvatarClick(userId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onAvatarLongClick(userId: String?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onSenderNameClick(userId: String?, displayName: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onMediaDownloaded(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onMoreReadReceiptClick(eventId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onGroupFlairClick(userId: String?, groupIds: MutableList<String>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onURLClick(uri: Uri?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun shouldHighlightEvent(event: Event?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onMatrixUserIdClick(userId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onRoomAliasClick(roomAlias: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onRoomIdClick(roomId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onEventIdClick(eventId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onGroupIdClick(groupId: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onInvalidIndexes() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onEventAction(event: Event?, textMsg: String?, action: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onE2eIconClick(event: Event?, deviceInfo: MXDeviceInfo?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onEventDecrypted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun onSelectedEventChange(currentSelectedEvent: Event?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
-
 }
 

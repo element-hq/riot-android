@@ -24,10 +24,10 @@ import java.util.regex.Pattern
 object VectorAutoLinkPatterns {
 
     //geo:
-    private val LAT_OR_LONG_OR_ALT_NUMBER = "-?\\d+(?:\\.\\d+)?"
-    private val COORDINATE_SYSTEM = ";crs=[\\w-]+"
+    private const val LAT_OR_LONG_OR_ALT_NUMBER = "-?\\d+(?:\\.\\d+)?"
+    private const val COORDINATE_SYSTEM = ";crs=[\\w-]+"
 
-    val GEO_URI = Pattern.compile("(?:geo:)?" +
+    val GEO_URI: Pattern = Pattern.compile("(?:geo:)?" +
             "(" + LAT_OR_LONG_OR_ALT_NUMBER + ")" +
             "," +
             "(" + LAT_OR_LONG_OR_ALT_NUMBER + ")" +
@@ -37,6 +37,6 @@ object VectorAutoLinkPatterns {
             "(?:" +
             ";[\\w-]+=(?:[\\w-_.!~*'()]|%[\\da-f][\\da-f])+" + //dafuk
             ")*"
-            , Pattern.CASE_INSENSITIVE);
+            , Pattern.CASE_INSENSITIVE)
 
 }

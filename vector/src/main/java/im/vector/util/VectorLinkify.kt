@@ -25,7 +25,7 @@ import android.text.util.Linkify
 import android.widget.TextView
 
 /**
- * Better support for auto link than the default implem
+ * Better support for auto link than the default implementation
  */
 fun TextView.vectorCustomLinkify() {
 
@@ -64,15 +64,7 @@ fun TextView.vectorCustomLinkify() {
             }
         }
 
-//        var lbehind = start - 1
-//        while (lbehind > 0) {
-//            val char = s[lbehind]
-//            if (char.isWhitespace()) break
-//            if (char == '/') return@MatchFilter false
-//            lbehind--
-//        }
         createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
-
     }
 
     for (spec in createdSpans) {
@@ -95,11 +87,13 @@ fun TextView.vectorCustomLinkify() {
 
     //maybe need to prune overlaps? tried to make some but didn't find
     text = currentSpan
-    addLinkMovementMethod(this)
 
+    addLinkMovementMethod()
 }
 
-private data class LinkSpec(val span: URLSpan, val start: Int, val end: Int)
+private data class LinkSpec(val span: URLSpan,
+                            val start: Int,
+                            val end: Int)
 
 //Exclude short match that don't have geo: prefix, e.g do not highlight things like 1,2
 private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
@@ -110,20 +104,20 @@ private val geoMatchFilter = Linkify.MatchFilter { s, start, end ->
 }
 
 private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit) {
-    val spans = this.getSpans(0, length, URLSpan::class.java)
-    spans.forEachIndexed { index, urlSpan ->
-        val start = getSpanStart(urlSpan)
-        val end = getSpanEnd(urlSpan)
-        action.invoke(index, urlSpan, start, end)
-    }
+    getSpans(0, length, URLSpan::class.java)
+            .forEachIndexed { index, urlSpan ->
+                val start = getSpanStart(urlSpan)
+                val end = getSpanEnd(urlSpan)
+                action.invoke(index, urlSpan, start, end)
+            }
 }
 
-private fun addLinkMovementMethod(t: TextView) {
-    val m = t.movementMethod
+private fun TextView.addLinkMovementMethod() {
+    val m = movementMethod
 
     if (m == null || m !is LinkMovementMethod) {
-        if (t.linksClickable) {
-            t.movementMethod = LinkMovementMethod.getInstance()
+        if (linksClickable) {
+            movementMethod = LinkMovementMethod.getInstance()
         }
     }
 }
