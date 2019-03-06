@@ -44,6 +44,8 @@ before_script:
 
 # Just build the project for now
 script:
+  # TODO Remove this line
+  - ./gradlew testAppReleaseUnitTest --stacktrace
   # Build app
   - ./gradlew clean assembleAppRelease --stacktrace
   - ./gradlew clean assembleAppfdroidRelease --stacktrace
