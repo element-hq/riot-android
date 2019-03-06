@@ -29,7 +29,9 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.support.annotation.StringRes
 import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -44,6 +46,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import com.bumptech.glide.Glide
 import com.google.i18n.phonenumbers.NumberParseException
@@ -55,6 +58,7 @@ import im.vector.activity.*
 import im.vector.contacts.ContactsManager
 import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
+import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
 import im.vector.preference.ProgressBarPreference
 import im.vector.preference.UserAvatarPreference
@@ -63,6 +67,7 @@ import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
+import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
@@ -753,7 +758,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { it ->
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
 
                 val task = ClearMediaCacheAsyncTask(
@@ -1036,78 +1041,146 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Update the password.
      */
     private fun onPasswordUpdateClick() {
+        activity?.let { activity ->
+            val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_change_password, null) as ViewGroup
 
-        val thisActivity = activity
-        thisActivity?.let { activity ->
-            val view = activity.layoutInflater.inflate(R.layout.dialog_change_password, null)
-            val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
-            val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
-            val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
+            val showPassword: ImageView = view.findViewById(R.id.change_password_show_passwords)
+            val oldPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_old_pwd_til)
+            val oldPasswordText: TextInputEditText = view.findViewById(R.id.change_password_old_pwd_text)
+            val newPasswordText: TextInputEditText = view.findViewById(R.id.change_password_new_pwd_text)
+            val confirmNewPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_confirm_new_pwd_til)
+            val confirmNewPasswordText: TextInputEditText = view.findViewById(R.id.change_password_confirm_new_pwd_text)
+            val changePasswordLoader: View = view.findViewById(R.id.change_password_loader)
+
+            var passwordShown = false
+
+            showPassword.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    passwordShown = !passwordShown
+
+                    oldPasswordText.showPassword(passwordShown)
+                    newPasswordText.showPassword(passwordShown)
+                    confirmNewPasswordText.showPassword(passwordShown)
+
+                    showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                }
+            })
 
             val dialog = AlertDialog.Builder(activity)
-                    .setTitle(R.string.settings_change_password)
                     .setView(view)
-                    .setPositiveButton(R.string.save) { _, _ ->
-
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-
-                        val oldPwd = oldPasswordText.text.toString().trim()
-                        val newPwd = newPasswordText.text.toString().trim()
-
-                        displayLoadingView()
-
-                        mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
-                            private fun onDone(textId: Int) {
-                                activity.runOnUiThread {
-                                    hideLoadingView()
-                                    activity.toast(textId, Toast.LENGTH_LONG)
-                                }
-                            }
-
-                            override fun onSuccess(info: Void?) {
-                                onDone(R.string.settings_password_updated)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { _, _ ->
+                    .setPositiveButton(R.string.settings_change_password_submit, null)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setOnDismissListener {
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
-                    .setOnCancelListener {
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                    }
-                    .show()
+                    .create()
 
-            val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            saveButton.isEnabled = false
+            dialog.setOnShowListener {
+                val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                updateButton.isEnabled = false
 
-            confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                fun updateUi() {
                     val oldPwd = oldPasswordText.text.toString().trim()
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+
+                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && !TextUtils.equals(newPwd, newConfirmPwd)) {
+                        confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
+                    }
                 }
 
-                override fun afterTextChanged(s: Editable) {}
-            })
+                oldPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        oldPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                newPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        confirmNewPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                confirmNewPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        confirmNewPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                fun showPasswordLoadingView(toShow: Boolean) {
+                    if (toShow) {
+                        showPassword.isEnabled = false
+                        oldPasswordText.isEnabled = false
+                        newPasswordText.isEnabled = false
+                        confirmNewPasswordText.isEnabled = false
+                        changePasswordLoader.isVisible = true
+                        updateButton.isEnabled = false
+                    } else {
+                        showPassword.isEnabled = true
+                        oldPasswordText.isEnabled = true
+                        newPasswordText.isEnabled = true
+                        confirmNewPasswordText.isEnabled = true
+                        changePasswordLoader.isVisible = false
+                        updateButton.isEnabled = true
+                    }
+                }
+
+                updateButton.setOnClickListener {
+                    if (passwordShown) {
+                        // Hide passwords during processing
+                        showPassword.performClick()
+                    }
+
+                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+
+                    showPasswordLoadingView(true)
+
+                    mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
+                        private fun onDone(@StringRes textResId: Int) {
+                            showPasswordLoadingView(false)
+
+                            if (textResId == R.string.settings_fail_to_update_password_invalid_current_password) {
+                                oldPasswordTil.error = getString(textResId)
+                            } else {
+                                dialog.dismiss()
+                                activity.toast(textResId, Toast.LENGTH_LONG)
+                            }
+                        }
+
+                        override fun onSuccess(info: Void?) {
+                            onDone(R.string.settings_password_updated)
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            if (e.error == "Invalid password") {
+                                onDone(R.string.settings_fail_to_update_password_invalid_current_password)
+                            } else {
+                                dialog.dismiss()
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+                    })
+                }
+            }
+            dialog.show()
         }
     }
 
@@ -2846,4 +2919,5 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     putString(ARG_MATRIX_ID, matrixId)
                 }
     }
+
 }
