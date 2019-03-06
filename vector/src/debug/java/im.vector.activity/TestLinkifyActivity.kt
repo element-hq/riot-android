@@ -90,7 +90,12 @@ class TestLinkifyActivity : AppCompatActivity() {
                 "www.example.com/, et ca",
                 "foo.ansible.toplevel/xoxys.matrix#2c0b65eb",
                 "foo.ansible.ninja/xoxys.matrix#2c0b65eb",
-                "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable "
+                "in brackets like (help for Riot: https://www.exemple/com/find(1)) , the link is usable ",
+                """
+                    In brackets like (help for Riot: https://about.riot.im/help) , the link is usable,
+                    But you can call +44 207 123 1234 and come to 37.786971,-122.399677;u=35 then
+                    see if this mail jhon@riot.im is active but this should not 12345
+                """.trimIndent()
         )
                 .forEach { textContent ->
                     val item = LayoutInflater.from(this)

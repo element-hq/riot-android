@@ -152,13 +152,24 @@ class CustomLinkifyTest {
     }
 
     @Test
+    fun linkify_Overlap() {
+        // geo containing a phone number. Only the geo should be detected
+        actAndAssert(
+                "test overlap 0673728392,48.107864 geo + pn?",
+                listOf(
+                        TestLinkMatch("0673728392,48.107864", "geo:")
+                )
+        )
+    }
+
+    @Test
     fun linkify_Multiple() {
         actAndAssert(
                 """
                    In brackets like (help for Riot: https://about.riot.im/help) , the link is usable,
                     But you can call +44 207 123 1234 and come to 37.786971,-122.399677;u=35 then
                     see if this mail jhon@riot.im is active but this should not 12345
-                """,
+                """.trimIndent(),
                 listOf(
                         TestLinkMatch("https://about.riot.im/help"),
                         TestLinkMatch("+44 207 123 1234", url = "tel:+442071231234"),
