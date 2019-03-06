@@ -20,6 +20,13 @@ Other changes:
 
 Bugfix:
  - Fix crash in settings when cryptography is disabled (#2991)
+ - Fix Claims of display names being linkified #2975
+ - Fix Riot breaks links if message contains numbers #2891
+ - Fix geo: URIs are treated as phone numbers #2464
+ - Fix Some text in messages are converted to maps link and should not #2350
+ - Fix Numbers are too much linkified #1140
+ - Fix Highlight geo: URIs #1329
+ - Fix Odd linkification bug with trailing slash #865
 
 Translations:
  -

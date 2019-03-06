@@ -53,9 +53,6 @@ protected Integer
 ### Use the interface declaration. Example: use type "Map" instead of type "HashMap" to declare variable or parameter
 (private|public|protected|    ) (static )?(final )?(HashMap|HashSet|ArrayList)<
 
-### Prefer comparison the ascending way, when checking for value in range. Use <=
->= .* &&===13
-
 ### Use int instead of short
 Short\.parseShort
 \(short\)

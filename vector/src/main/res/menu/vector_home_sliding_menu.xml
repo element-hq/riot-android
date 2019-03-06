@@ -49,4 +49,10 @@
             android:id="@+id/sliding_menu_third_party_notices"
             android:title="@string/room_sliding_menu_third_party_notices" />
     </group>
+
+    <group android:visible="@bool/debug_mode">
+        <item
+            android:id="@+id/sliding_menu_debug"
+            android:title="@string/debug_screen" />
+    </group>
 </menu>

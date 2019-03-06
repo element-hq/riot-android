@@ -1836,6 +1836,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         VectorUtils.displayThirdPartyLicenses();
                         break;
                     }
+
+                    case R.id.sliding_menu_debug: {
+                        // This menu item is only displayed in debug build
+                        startActivity(new Intent(VectorHomeActivity.this, DebugMenuActivity.class));
+                        break;
+                    }
                 }
 
                 mSlidingMenuIndex = -1;

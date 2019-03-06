@@ -147,6 +147,6 @@ echo
 if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
    echo "MAIN OK"
 else
-   echo "MAIN ERROR"
+   echo "❌ MAIN ERROR"
    exit 1
 fi

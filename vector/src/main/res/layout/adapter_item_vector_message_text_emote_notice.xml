@@ -102,7 +102,6 @@
                         android:layout_marginLeft="4dp"
                         android:layout_toEndOf="@id/message_adapter_e2e_icon"
                         android:layout_toRightOf="@id/message_adapter_e2e_icon"
-                        android:autoLink="all"
                         android:textIsSelectable="false"
                         android:textSize="14sp"
                         tools:text="A body www.example.org" />
