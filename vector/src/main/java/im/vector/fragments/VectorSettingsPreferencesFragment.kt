@@ -157,7 +157,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     private val mContactPhonebookCountryPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
     }
 
     // Group Flairs
@@ -233,28 +233,32 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY)
     }
     private val selectedLanguagePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
     }
     private val textSizePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
     }
     private val cryptoInfoDeviceNamePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY) as VectorPreference
     }
     private val cryptoInfoDeviceIdPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
+    }
+
+    private val manageBackupPref by lazy {
+        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
     }
 
     private val exportPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
     }
 
     private val importPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
     }
 
     private val cryptoInfoTextPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
     }
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
@@ -675,7 +679,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // application version
-        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY) as Preference).let {
+        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
             it.summary = VectorUtils.getApplicationVersion(appContext)
 
             it.setOnPreferenceClickListener {
@@ -820,15 +824,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             false
         }
-
-        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            context?.let {
-                startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
-            }
-            false
-        }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -2080,7 +2075,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             // Also remove keys management section
             it.removePreference(mCryptographyManageCategory)
-            it.removePreference(mCryptographyManageCategory)
+            it.removePreference(mCryptographyManageCategoryDivider)
         }
     }
 
@@ -2117,6 +2112,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
                 activity?.let { copyToClipboard(it, deviceId) }
                 true
+            }
+
+
+            manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                context?.let {
+                    startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+                }
+                false
             }
 
             exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -2388,7 +2391,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                 val count = mDevicesListSettingsCategory.preferenceCount
 
                                 for (i in 0 until count) {
-                                    val pref = mDevicesListSettingsCategory.getPreference(i) as Preference
+                                    val pref = mDevicesListSettingsCategory.getPreference(i)
 
                                     if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.title)) {
                                         pref.summary = newName

@@ -39,17 +39,17 @@ import im.vector.settings.VectorLocale;
 
 public class LoginHandler {
     /**
-     * The account login / creation succeeds so create the dedicated session and store it.
+     * The account login succeeds so create the dedicated session and store it.
      *
      * @param appCtx      the application context.
      * @param hsConfig    the homeserver config
      * @param credentials the credentials
      * @param callback    the callback
      */
-    private void onRegistrationDone(Context appCtx,
-                                    HomeServerConnectionConfig hsConfig,
-                                    Credentials credentials,
-                                    ApiCallback<Void> callback) {
+    private void onLoginDone(Context appCtx,
+                             HomeServerConnectionConfig hsConfig,
+                             Credentials credentials,
+                             ApiCallback<Void> callback) {
         // sanity check - GA issue
         if (TextUtils.isEmpty(credentials.userId)) {
             callback.onMatrixError(new MatrixError(MatrixError.FORBIDDEN, "No user id"));
@@ -97,7 +97,7 @@ public class LoginHandler {
         callLogin(ctx, hsConfig, username, phoneNumber, phoneNumberCountry, password, new UnrecognizedCertApiCallback<Credentials>(hsConfig, callback) {
             @Override
             public void onSuccess(Credentials credentials) {
-                onRegistrationDone(appCtx, hsConfig, credentials, callback);
+                onLoginDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override
@@ -188,7 +188,7 @@ public class LoginHandler {
             @Override
             public void onSuccess(Credentials credentials) {
                 // Should never happen, onMatrixError() will be called
-                onRegistrationDone(appCtx, hsConfig, credentials, callback);
+                onLoginDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override

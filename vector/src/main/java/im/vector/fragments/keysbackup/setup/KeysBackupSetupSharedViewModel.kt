@@ -95,6 +95,9 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         currentRequestId.value = System.currentTimeMillis()
         isCreatingBackupVersion.value = true
 
+        // Ensure passphrase is hidden during the process
+        showPasswordMode.value = false
+
         recoveryKey.value = null
         prepareRecoverFailError.value = null
         session?.let { mxSession ->
