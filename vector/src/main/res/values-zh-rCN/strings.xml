@@ -65,7 +65,6 @@
     <string name="copy">复制</string>
     <string name="view_source">查看源代码</string>
     <string name="view_decrypted_source">查看解密后的源代码</string>
-    <string name="ongoing_conference_call_video">视频</string>
     <string name="or">或</string>
 
     <string name="action_sign_out">登出</string>
@@ -403,8 +402,9 @@
     <string name="rename">重命名</string>
     <string name="report_content">举报消息</string>
     <string name="active_call">当前通话</string>
-    <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
+    <string name="ongoing_conference_call">正在进行电话会议。\n请以%1$s或%2$s的形式加入。</string>
     <string name="ongoing_conference_call_voice">语音</string>
+    <string name="ongoing_conference_call_video">视频</string>
     <string name="missing_permissions_to_start_conf_call">您需要在此聊天室中发起会议的权限</string>
     <string name="send_anyway">仍然发送</string>
     <string name="send_bug_report">问题反馈</string>

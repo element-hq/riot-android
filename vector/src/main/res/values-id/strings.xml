@@ -17,7 +17,6 @@
     <string name="delete">Hapus</string>
     <string name="rename">Ubah Nama</string>
     <string name="report_content">Laporkan konten</string>
-    <string name="ongoing_conference_call_voice">suara</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="or">atau</string>
     <string name="invite">Undang</string>
@@ -77,7 +76,6 @@
     <string name="permalink">Buat Tautan</string>
     <string name="view_decrypted_source">Tampilkan Sumber Terdekripsi</string>
     <string name="active_call">Panggilan aktif</string>
-    <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Tidak dapat memulai panggilan, coba lagi nanti</string>
     <string name="missing_permissions_title_to_start_conf_call">Tidak dapat memulai panggilan</string>
     <string name="action_sign_out">Keluar</string>
@@ -172,7 +170,9 @@
     <string name="title_activity_historical">Jejak Percakapan</string>
 
     <string name="redact">Hapus</string>
-    <string name="ongoing_conference_call">Panggilan massal sedang berlangsung. Bergabunglah lewat suara atau video.</string>
+    <string name="ongoing_conference_call">Panggilan massal sedang berlangsung.\nBergabunglah lewat %1$s atau %2$s.</string>
+    <string name="ongoing_conference_call_voice">suara</string>
+    <string name="ongoing_conference_call_video">video</string>
     <string name="missing_permissions_warning">Beberapa fitur tidak dapat digunakan karena aplikasi belum mendapat ijin…</string>
     <string name="missing_permissions_to_start_conf_call">Anda membutuhkan ijin mengundang untuk memulai panggilan massal di ruang ini</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Panggilan massal tidak dapat diselenggarakan di ruang terenkripsi</string>

@@ -72,7 +72,8 @@
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call">Ongoing conference call. Join as:\nVoice or Video</string>
+    <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
+    <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
