@@ -116,20 +116,20 @@ private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
         var remove = -1
 
         //test if there is an overlap
-        if (b.start in a.start..(a.end - 1)) {
-            if (b.end <= a.end) {
-                //b is inside a -> b should be removed
-                remove = i + 1
-            } else if (a.end - a.start > b.end - b.start) {
-                //overlap and a is bigger -> b should be removed
-                remove = i + 1
-            } else if (a.end - a.start < b.end - b.start) {
-                //overlap and a is smaller -> a should be removed
-                remove = i
+        if (b.start in a.start until a.end) {
+            when {
+                b.end <= a.end ->
+                    //b is inside a -> b should be removed
+                    remove = i + 1
+                a.end - a.start > b.end - b.start ->
+                    //overlap and a is bigger -> b should be removed
+                    remove = i + 1
+                a.end - a.start < b.end - b.start ->
+                    //overlap and a is smaller -> a should be removed
+                    remove = i
             }
 
             if (remove != -1) {
-                val spec = links[remove]
                 links.removeAt(remove)
                 len--
                 continue
