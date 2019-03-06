@@ -1187,7 +1187,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="passphrase_create_passphrase">Criar passphrase</string>
     <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
-    <string name="store_full_description">Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Riot permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
+    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Riot permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
 
 Obtenha uma conta matrix.org grátis, obtenha seu próprio servidor em https://modular.im ou use outro servidor Matrix.
 
@@ -1201,19 +1201,19 @@ Por que escolher o Riot.im?
 
 • ABERTO, NÃO FECHADO: Código aberto e construído sobre o Matrix. Possua seus próprios dados hospedando seu próprio servidor ou selecionando um que você confia.
 
-• EM TODOS OS LUGARES: Mantenha-se em contato onde quer que esteja com o histórico de mensagens totalmente sincronizado em todos os seus dispositivos e online em https://riot.im.</string>
+• EM TODOS OS LUGARES: Mantenha-se em contato onde quer que esteja com o histórico de mensagens totalmente sincronizado em todos os seus dispositivos e online em https://riot.im."</string>
 
     <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
 
-    <string name="store_whats_new">Estamos sempre fazendo alterações e melhorias no Riot.im.
+    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Riot.im.
 O changelog completo pode ser encontrado aqui: %1$s.
-Para garantir que você não perca nada, mantenha suas atualizações ativadas.</string>
+Para garantir que você não perca nada, mantenha suas atualizações ativadas."</string>
     <string name="title_activity_keys_backup_setup">Backup da chave</string>
     <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
 
     <string name="keys_backup_is_not_finished_please_wait">Backup de chaves não está terminado, por favor aguarde …</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Você perderá suas mensagens criptografadas se sair agora</string>
-<string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em andamento. Se você sair agora, perderá o acesso às suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em andamento. Se você sair agora, perderá o acesso às suas mensagens criptografadas.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">O Backup de chave seguro deve estar ativo em todos os seus dispositivos para evitar perder o acesso às suas mensagens criptografadas.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens criptografadas</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves …</string>
@@ -1224,7 +1224,7 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas.<
 
     <string name="keys_backup_info_title_signature">Assinatura</string>
 
-<string name="stay">Permaneça</string>
+    <string name="stay">Permaneça</string>
     <string name="skip">Pular</string>
     <string name="done">Feito</string>
     <string name="abort">Abortar</string>
@@ -1242,4 +1242,4 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas.<
 
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nEste erro está fora do controle do Riot e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
-    </resources>
+</resources>

@@ -66,10 +66,10 @@
     <string name="action_voice_call">Telefono</string>
     <string name="action_video_call">videotelefono</string>
     <string name="action_global_search">Universala serĉo</string>
-<string name="call_anyway">Tamen alvoki</string>
+    <string name="call_anyway">Tamen alvoki</string>
     <string name="action_quick_reply">Rapida respondo</string>
     <string name="action_open">Malfermi</string>
     <string name="action_close">Fermi</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sendi ĉifritan respondon…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sendi respondon (neĉifritan)…</string>
-    </resources>
+</resources>

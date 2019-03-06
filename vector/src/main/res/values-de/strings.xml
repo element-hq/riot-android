@@ -289,8 +289,8 @@ Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
-    <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet. %s ist nicht mit diesem Konto verknüpft.
-\nDu kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen.</string>
+    <string name="room_preview_unlinked_email_warning">"Diese Einladung wurde an %s gesendet. Es ist nicht mit diesem Konto verknüpft.
+Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen."</string>
     <string name="room_preview_try_join_an_unknown_room">Du möchtest auf %s zugreifen. Möchtest du den Raum betreten, um an der Diskussion teilzunehmen?</string>
     <string name="room_preview_try_join_an_unknown_room_default">einen Raum</string>
     <string name="room_preview_room_interactions_disabled">Dies ist eine Vorschau dieses Raums. Raum-Interaktionen wurden deaktiviert.</string>
@@ -1220,9 +1220,9 @@ Warum solltest du Riot.im wählen?
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
-    <string name="store_whats_new">An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
-\nDas vollständige Änderungsprotokoll ist hier zu finden: %1$s
-\nUm sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert.</string>
+    <string name="store_whats_new">"An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
+Das vollständige Änderungsprotokoll ist hier zu finden: %1$s
+Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
@@ -1409,7 +1409,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="keys_backup_info_title_algorithm">Algorithmus</string>
     <string name="keys_backup_info_title_signature">Signatur</string>
 
-<string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
-    </resources>
+</resources>

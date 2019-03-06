@@ -883,7 +883,7 @@ Haluatko lisätä paketteja?</string>
 
     <string name="auth_accept_policies">Tarkista ja hyväksy tämän kotipalvelimen käytännöt:</string>
 
-<string name="title_activity_keys_backup_setup">Avainten varmuuskopiointi</string>
+    <string name="title_activity_keys_backup_setup">Avainten varmuuskopiointi</string>
     <string name="title_activity_keys_backup_restore">Käytä avainten varmuuskopiointia</string>
 
     <string name="keys_backup_is_not_finished_please_wait">Avainten varmuuskopio ei ole valmis, odotathan hetken…</string>
@@ -920,9 +920,9 @@ Haluatko lisätä paketteja?</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä Riot toisella laitteela, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän laitteeseen.</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">yksi jäsenyysmuutos</item>
-	<item quantity="other">%d jäsenyysmuutosta</item>
-</plurals>
+        <item quantity="one">yksi jäsenyysmuutos</item>
+        <item quantity="other">%d jäsenyysmuutosta</item>
+    </plurals>
 
     <string name="settings_call_ringtone_use_riot_ringtone">Käytä Riotin oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
@@ -932,29 +932,29 @@ Haluatko lisätä paketteja?</string>
     <string name="open_chat_header">Avaa otsikko</string>
     <string name="room_sync_in_progress">Päivitetään…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">yksi aktiivinen käyttäjä</item>
-	<item quantity="other">%d aktiivista käyttäjää</item>
-</plurals>
+        <item quantity="one">yksi aktiivinen käyttäjä</item>
+        <item quantity="other">%d aktiivista käyttäjää</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">yksi käyttäjä</item>
-	<item quantity="other">%d käyttäjää</item>
-</plurals>
+        <item quantity="one">yksi käyttäjä</item>
+        <item quantity="other">%d käyttäjää</item>
+    </plurals>
     <plurals name="format_time_s">
-	<item quantity="one">1 s</item>
-	<item quantity="other">%d s</item>
-</plurals>
+        <item quantity="one">1 s</item>
+        <item quantity="other">%d s</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 m</item>
-	<item quantity="other">%d m</item>
-</plurals>
+        <item quantity="one">1 m</item>
+        <item quantity="other">%d m</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 h</item>
-	<item quantity="other">%d h</item>
-</plurals>
+        <item quantity="one">1 h</item>
+        <item quantity="other">%d h</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 d</item>
-	<item quantity="other">%d d</item>
-</plurals>
+        <item quantity="one">1 d</item>
+        <item quantity="other">%d d</item>
+    </plurals>
 
     <string name="room_participants_now">Nyt %1$s</string>
     <string name="room_participants_ago">Oli %1$s %2$s sitten</string>
@@ -964,9 +964,9 @@ Haluatko lisätä paketteja?</string>
 \n
 \nHuomioi, että tämä toiminto käynnistää Riotin uudelleen ja siinä voi kestää jonkin aikaa.</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Oletko varma, että haluat potkia tämän käyttäjän tästä keskustelusta\?</item>
-	<item quantity="other">Oletko varma, että haluat potkia nämä käyttäjät tästä keskustelusta\?</item>
-</plurals>
+        <item quantity="one">Oletko varma, että haluat potkia tämän käyttäjän tästä keskustelusta\?</item>
+        <item quantity="other">Oletko varma, että haluat potkia nämä käyttäjät tästä keskustelusta\?</item>
+    </plurals>
     <string name="reason_hint">Syy</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -976,22 +976,22 @@ Haluatko lisätä paketteja?</string>
     <string name="room_message_placeholder_reply_to_encrypted">Lähetä salattu vastaus…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Lähetä vastaus (salaamaton)…</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">yksi uusi viesti</item>
-	<item quantity="other">%d uutta viestiä</item>
-</plurals>
+        <item quantity="one">yksi uusi viesti</item>
+        <item quantity="other">%d uutta viestiä</item>
+    </plurals>
 
     <plurals name="room_details_selected">
-	<item quantity="one">yksi valittu</item>
-	<item quantity="other">%d valittu</item>
-</plurals>
+        <item quantity="one">yksi valittu</item>
+        <item quantity="other">%d valittu</item>
+    </plurals>
     <plurals name="directory_search_rooms">
-	<item quantity="one">yksi huone</item>
-	<item quantity="other">%d huonetta</item>
-</plurals>
+        <item quantity="one">yksi huone</item>
+        <item quantity="other">%d huonetta</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s huone löydetty kohteelle %2$s</item>
-	<item quantity="other">%1$s huonetta löydetty kohteelle %2$s</item>
-</plurals>
+        <item quantity="one">%1$s huone löydetty kohteelle %2$s</item>
+        <item quantity="other">%1$s huonetta löydetty kohteelle %2$s</item>
+    </plurals>
     <string name="settings_notification_advanced">Yksityiskohtaiset ilmoitusasetukset</string>
     <string name="settings_notification_advanced_summary">Aseta ilmoituksien tärkeys kohteittain ja määritä hälytysäänet, ledin värit ja värinähälytykset</string>
     <string name="settings_notification_by_event">Ilmoituksen tärkeys kohteittain</string>
@@ -1139,21 +1139,21 @@ Haluatko lisätä paketteja?</string>
     <string name="lock_screen_hint">Kirjoita tähän…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">yksi lukematon viesti</item>
-	<item quantity="other">%d lukematonta viestiä</item>
-</plurals>
+        <item quantity="one">yksi lukematon viesti</item>
+        <item quantity="other">%d lukematonta viestiä</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 lukematon viesti</item>
-	<item quantity="other">%d lukematonta viestiä</item>
-</plurals>
+        <item quantity="one">1 lukematon viesti</item>
+        <item quantity="other">%d lukematonta viestiä</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">yksi huone</item>
-	<item quantity="other">%d huonetta</item>
-</plurals>
+        <item quantity="one">yksi huone</item>
+        <item quantity="other">%d huonetta</item>
+    </plurals>
     <plurals name="active_widgets">
-	<item quantity="one">yksi aktiivinen sovelma</item>
-	<item quantity="other">%d aktiivista sovelmaa</item>
-</plurals>
+        <item quantity="one">yksi aktiivinen sovelma</item>
+        <item quantity="other">%d aktiivista sovelmaa</item>
+    </plurals>
 
     <string name="widget_integration_missing_parameter">Vaadittu parametri puuttuu.</string>
     <string name="widget_integration_invalid_parameter">Parametri ei ole kelvollinen.</string>
@@ -1178,14 +1178,14 @@ Haluatko lisätä paketteja?</string>
 
     <string name="notification_silent">Hiljainen</string>
     <plurals name="group_members">
-	<item quantity="one">yksi jäsen</item>
-	<item quantity="other">%d jäsentä</item>
-</plurals>
+        <item quantity="one">yksi jäsen</item>
+        <item quantity="other">%d jäsentä</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">yksi huone</item>
-	<item quantity="other">%d huonetta</item>
-</plurals>
+        <item quantity="one">yksi huone</item>
+        <item quantity="other">%d huonetta</item>
+    </plurals>
     <string name="receipt_avatar">Kuittauksen hahmokuva</string>
     <string name="notice_avatar">Ilmoituksen hahmokuva</string>
     <string name="avatar">Hahmokuva</string>
@@ -1240,9 +1240,9 @@ Haluatko lisätä paketteja?</string>
     <string name="no_valid_google_play_services_apk">Kelvollista Google Play Services APK:ta ei löytynyt. Ilmoitukset eivät ehkä toimi oikein.</string>
 
     <string name="store_title">Riot.im - Kommunikoi, sinun tavallasi.</string>
-    <string name="store_whats_new">Olemme aina tekemässä muutoksia ja parannuksia Riot.im:ään.
-\nTäydellisen muutoslokin löydät täältä: %1$s.
-\nJotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä.</string>
+    <string name="store_whats_new">"Olemme aina tekemässä muutoksia ja parannuksia Riot.im:ään.
+Täydellisen muutoslokin löydät täältä: %1$s.
+Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä."</string>
     <string name="store_short_description">Universaali ja turvallinen keskusteluohjelma kokonaan sinun hallinnassa.</string>
     <string name="passphrase_create_passphrase">Luo salalause</string>
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
@@ -1319,13 +1319,13 @@ Haluatko lisätä paketteja?</string>
     <string name="keys_backup_restore_success_title">Varmuuskopio palautettu %s !</string>
     <string name="keys_backup_restore_success_description">%1$d istuntoavainta palautettu, ja lisättiin %2$d uutta avainta, joita tämä laite ei tuntenut</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Varmuuskopio palautettiin yhdellä avaimella.</item>
-	<item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
-</plurals>
+        <item quantity="one">Varmuuskopio palautettiin yhdellä avaimella.</item>
+        <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">yksi uusi avain lisätty tähän laitteeseen.</item>
-	<item quantity="other">%d uutta avainta lisätty tähän laitteeseen.</item>
-</plurals>
+        <item quantity="one">yksi uusi avain lisätty tähän laitteeseen.</item>
+        <item quantity="other">%d uutta avainta lisätty tähän laitteeseen.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Uusimman palautusavaimen version hakeminen epäonnistui (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Istunnon kryptografia ei ole aktivoitu</string>
@@ -1368,9 +1368,9 @@ Haluatko lisätä paketteja?</string>
 
     <string name="keys_backup_info_keys_all_backup_up">Kaikki avaimet varmuuskopioitu</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Varmuuskopioidaan yhtä avainta…</item>
-	<item quantity="other">Varmuuskopioidaan %d avainta…</item>
-</plurals>
+        <item quantity="one">Varmuuskopioidaan yhtä avainta…</item>
+        <item quantity="other">Varmuuskopioidaan %d avainta…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versio</string>
     <string name="keys_backup_info_title_algorithm">Algoritmi</string>

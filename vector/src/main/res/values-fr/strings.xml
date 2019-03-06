@@ -1172,9 +1172,9 @@ Pourquoi choisir Riot.im ?
 
     <string name="video_call_in_progress">Appel vidéo en cours…</string>
 
-    <string name="store_whats_new">Nous sommes constamment en train de modifier et d’améliorer Riot.im.
+    <string name="store_whats_new">"Nous sommes constamment en train de modifier et d’améliorer Riot.im.
 Le journal des modifications peut être consulté ici : %1$s.
-Afin d’être sûr de ne rien manquer, continuez à installer les mises à jour.</string>
+Afin d’être sûr de ne rien manquer, continuez à installer les mises à jour."</string>
     <string name="title_activity_keys_backup_setup">Sauvegarde de clés</string>
     <string name="title_activity_keys_backup_restore">Utiliser la sauvegarde de clés</string>
     <string name="keys_backup_is_not_finished_please_wait">La sauvegarde des clés n’est pas terminée, veuillez patienter…</string>
@@ -1359,7 +1359,7 @@ Conservez votre clé de récupération en lieu sûr, comme un gestionnaire de mo
 
 Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération immédiatement dans les paramètres.</string>
     <string name="new_recovery_method_popup_was_me">C’est bien moi</string>
-<string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string>
-    </resources>
+</resources>

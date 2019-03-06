@@ -1128,9 +1128,9 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
 
     <string name="store_title">Riot.im - Comunica\'t, a la teva manera.</string>
-    <string name="store_whats_new">Sempre hi som fent canvis i millores al Riot.im.
+    <string name="store_whats_new">"Sempre hi som fent canvis i millores al Riot.im.
 Podeu trobar el registre de canvis complet aquí: %1$s.
-Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
+Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades."</string>
     <string name="store_short_description">Una aplicació de xat universal i segura sota el vostre control.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de la clau</string>
     <string name="title_activity_keys_backup_restore">Empra una còpia de seguretat de la clau</string>
@@ -1368,7 +1368,7 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
 
     <string name="new_recovery_method_popup_was_me">He sigut jo</string>
     <string name="new_recovery_method_popup_title">Còpia de seguretat nova de la clau</string>
-<string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als vostres missatges encriptats, hauríeu d\'activar la còpia de seguretat encriptada a tots els vostres dispositius.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als vostres missatges encriptats, hauríeu d\'activar la còpia de seguretat encriptada a tots els vostres dispositius.</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdreu accés als vostres missatges encriptats si no feu una còpia de seguretat de les vostres claus abans de sortir de la sessió.</string>
 
     <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
@@ -1386,4 +1386,4 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="new_recovery_method_popup_description">S\'ha trobat una còpia de seguretat nova de la clau.
 \n
 \nSi no heu configurat el mètode de recuperació nou, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un mètode de recuperació nou immediatament a la configuració.</string>
-    </resources>
+</resources>

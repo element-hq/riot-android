@@ -1140,26 +1140,26 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="command_problem_with_parameters">指令 %s 需要更多参数，或者有些参数不正确。</string>
     <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
 
-    <string name="store_whats_new">我们在持续改进 Riot.im 的体验。
+    <string name="store_whats_new">"我们在持续改进 Riot.im 的体验。
 完整的 changelog 在这里：%1$s
-为了不错过新改进，请保持更新开启。</string>
-    <string name="store_full_description">一个聊天应用，由你掌控且完全灵活。Riot 让你以你的方式沟通。为 [matrix] - 开放、去中心化的沟通而打造。
-\n
-\n获取一个免费的 matrix.org 账号，在 https://modular.im 获取一个你自己的服务器，或者使用其他 Matrix 服务器。
-\n
-\n为什么选择 Riot.im\?
-\n
-\n• 完整的沟通：围绕你的团队、你的朋友、你的社区创建聊天室 - 随你喜欢！聊天、分享文件、添加插件和语音视频通话 - 全部免费。
-\n
-\n• 强大的集成度：通过你了解和喜欢的工具来使用 Riot.im 。你甚至可以在 Riot.im 上与其他聊天应用的用户和群组聊天。
-\n
-\n• 隐私和安全：保守你对话的秘密。最先进的端到端加密技术可确保私密通信保持私密性。
-\n
-\n• 开放，而非封闭：开源，基于 Matrix。通过自己开设的服务器来拥有你自己的数据，或者选择你信赖的服务器。
-\n
-\n• 随处可及：在你所有的设备和线上页面 https://riot.im 上通过完整的历史信息同步让你随处可及。</string>
+为了不错过新改进，请保持更新开启。"</string>
+    <string name="store_full_description">"一个聊天应用，由你掌控且完全灵活。Riot 让你以你的方式沟通。为 [matrix] - 开放、去中心化的沟通而打造。
 
-<string name="title_activity_keys_backup_setup">密钥备份</string>
+获取一个免费的 matrix.org 账号，在 https://modular.im 获取一个你自己的服务器，或者使用其他 Matrix 服务器。
+
+为什么选择 Riot.im\?
+
+• 完整的沟通：围绕你的团队、你的朋友、你的社区创建聊天室 - 随你喜欢！聊天、分享文件、添加插件和语音视频通话 - 全部免费。
+
+• 强大的集成度：通过你了解和喜欢的工具来使用 Riot.im 。你甚至可以在 Riot.im 上与其他聊天应用的用户和群组聊天。
+
+• 隐私和安全：保守你对话的秘密。最先进的端到端加密技术可确保私密通信保持私密性。
+
+• 开放，而非封闭：开源，基于 Matrix。通过自己开设的服务器来拥有你自己的数据，或者选择你信赖的服务器。
+
+• 随处可及：在你所有的设备和线上页面 https://riot.im 上通过完整的历史信息同步让你随处可及。"</string>
+
+    <string name="title_activity_keys_backup_setup">密钥备份</string>
     <string name="title_activity_keys_backup_restore">使用备份密钥</string>
 
     <string name="keys_backup_is_not_finished_please_wait">密钥备份尚未完成，请等待…</string>
@@ -1284,11 +1284,11 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="keys_backup_restore_success_title">备份已恢复 %s ！</string>
     <string name="keys_backup_restore_success_description">恢复了 %1$d 个会话密钥，并添加了 %2$d 个此设备未知的新密钥</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="other">恢复了一个包含 %d 个密钥的备份。</item>
-</plurals>
+        <item quantity="other">恢复了一个包含 %d 个密钥的备份。</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="other">%d 个新密钥已被添加到此设备中。</item>
-</plurals>
+        <item quantity="other">%d 个新密钥已被添加到此设备中。</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">无法获取最新的恢复密钥版本 (%s) 。</string>
     <string name="keys_backup_no_keysbackup_sdk_error">会话加密没有被启用</string>
@@ -1334,8 +1334,8 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 
     <string name="keys_backup_info_keys_all_backup_up">所有密钥都已备份</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="other">%d 个密钥备份中 …</item>
-</plurals>
+        <item quantity="other">%d 个密钥备份中 …</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">版本</string>
     <string name="keys_backup_info_title_algorithm">算法</string>
