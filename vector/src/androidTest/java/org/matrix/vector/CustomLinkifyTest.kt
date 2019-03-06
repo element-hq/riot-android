@@ -179,6 +179,25 @@ class CustomLinkifyTest {
         )
     }
 
+    @Test
+    fun linkify_Mailto_trailingslash() {
+        actAndAssert("mail me at test@foo.bar/or bar@foo.me/",
+                listOf(
+                        TestLinkMatch("test@foo.bar", "mailto:"),
+                        TestLinkMatch("bar@foo.me", "mailto:")
+                )
+        )
+    }
+
+    @Test
+    fun linkify_Mailto_include_protocol() {
+        actAndAssert("mailto:test@foo.bar",
+                listOf(
+                        TestLinkMatch("mailto:test@foo.bar", url = "mailto:test@foo.bar")
+                )
+        )
+    }
+
     private fun actAndAssert(format: String, matches: List<TestLinkMatch>) {
         // Arrange
         val textView = TextView(InstrumentationRegistry.getContext())

@@ -47,6 +47,20 @@ fun TextView.vectorCustomLinkify() {
             return@forEachSpanIndexed
         }
 
+        //include mailto: if found before match
+        if (urlSpan.url?.startsWith("mailto:") == true) {
+            val protocolLength = "mailto:".length
+            if (start - protocolLength >= 0 && "mailto:" == spannableText.substring(start - protocolLength, start)) {
+                //modify to include the protocol
+                createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start - protocolLength, end))
+            } else {
+                createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
+            }
+
+            return@forEachSpanIndexed
+        }
+
+        //Handle url matches
 
         //check trailing space
         if (end < spannableText.length - 1 && spannableText[end] == '/') {
