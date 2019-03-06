@@ -18,12 +18,13 @@
 package im.vector.view;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -176,7 +177,7 @@ public class VectorOngoingConferenceCallView extends FrameLayout {
 
         if (pos >= 0) {
             ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+            ss.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + voiceString.length(), 0);
         } else {
             Log.e(LOG_TAG, "## initView() : cannot find " + voiceString + " in " + ss.toString());
         }
@@ -186,7 +187,7 @@ public class VectorOngoingConferenceCallView extends FrameLayout {
 
         if (pos >= 0) {
             ss.setSpan(videoClickableSpan, pos, pos + videoString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
+            ss.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + videoString.length(), 0);
         } else {
             Log.e(LOG_TAG, "## initView() : cannot find " + videoString + " in " + ss.toString());
         }

@@ -72,9 +72,9 @@
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call">Ongoing conference call. Join as voice or video.</string>
-    <string name="ongoing_conference_call_voice">voice</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call">Ongoing conference call. Join as:\nVoice or Video</string>
+    <string name="ongoing_conference_call_voice">Voice</string>
+    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
