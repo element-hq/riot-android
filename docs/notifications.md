@@ -20,11 +20,11 @@ GCM only wakes up the app. The app syncs with the user's homeserver to get the m
 ```
 Homeserver ----> Sygnal ----> GCM ----> Riot
                                         (Sync) ----> Homeserver
-                                               <---- 
+                                               <----
                                         Display notification
 ```
 
- 
+
   - Background sync disabled
 
 The app displays a notification with the data provided with the GCM payload.
@@ -46,7 +46,7 @@ This mode requires that the user enables the [background sync](#background-synch
 ```
                                        Riot
                                        (Periodic syncs) ----> Homeserver
-                                                        <---- 
+                                                        <----
                                        Display notification
 ```
 
@@ -56,8 +56,8 @@ The inverval between periodic syncs with the homeserver is 66 seconds by default
 # Application Settings
 
 ## Notifications > Enable notifications for this account
- 
-Configure Sygnal to send or not notifications to all user devices. 
+
+Configure Sygnal to send or not notifications to all user devices.
 
 ## Notifications > Enable notifications for this device
 
@@ -141,5 +141,5 @@ In order to display true messages notifications, the application can:
 
  - display a new normal (ie, removable) notification with those messages. But that creates a second notification and a second Riot icon in the Android notifications status bar.
  - replace the persistent `Listen for events` notification by a new persistent notification showing new messages. There is only one Riot notification but this one is unswipable. The notifications for new messages will be reset only when the user opens the app.
- 
+
  Riot, as of time of writing, uses the 2nd approach.

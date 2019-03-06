@@ -823,12 +823,15 @@
 
     <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">Old password</string>
+    <string name="settings_old_password">Current password</string>
     <string name="settings_new_password">New password</string>
-    <string name="settings_confirm_password">Confirm password</string>
+    <string name="settings_confirm_password">Confirm new password</string>
+    <string name="settings_change_password_submit">Update Password</string>
     <string name="settings_fail_to_update_password">Failed to update password</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
