@@ -2,7 +2,8 @@ Changes in Riot 0.8.4 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.18.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.18
 
 Features:
  - Implement server config discovery - .well-known support (#2982)
