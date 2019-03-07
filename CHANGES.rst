@@ -1,11 +1,13 @@
-Changes in Riot 0.8.4 (2019-XX-XX)
+Changes in Riot 0.8.24 (2019-03-07)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.18.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.18
 
 Features:
  - Implement server config discovery - .well-known support (#2982)
+ - Implement login with SSO (#3025)
 
 Improvements:
  - Improve UX when restoring e2e keys (#2999)
@@ -21,20 +23,14 @@ Other changes:
 
 Bugfix:
  - Fix crash in settings when cryptography is disabled (#2991)
- - Fix Claims of display names being linkified #2975
- - Fix Riot breaks links if message contains numbers #2891
- - Fix geo: URIs are treated as phone numbers #2464
- - Fix Some text in messages are converted to maps link and should not #2350
- - Fix Numbers are too much linkified #1140
- - Fix Highlight geo: URIs #1329
- - Fix Odd linkification bug with trailing slash #865
+ - Fix Claims of display names being linkified (#2975)
+ - Fix Riot breaks links if message contains numbers (#2891)
+ - Fix geo: URIs are treated as phone numbers (#2464)
+ - Fix Some text in messages are converted to maps link and should not (#2350)
+ - Fix Numbers are too much linkified (#1140)
+ - Fix Highlight geo: URIs (#1329)
+ - Fix Odd linkification bug with trailing slash (#865)
  - Fix issue on joining conference call wording in some languages (#2112)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.23 (2019-02-21)
 ===================================================
