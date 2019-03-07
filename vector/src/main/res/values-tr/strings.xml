@@ -50,9 +50,9 @@
     <string name="rename">Yeniden Adlandır</string>
     <string name="report_content">İçeriği bildir</string>
     <string name="active_call">Şu anki görüşme</string>
-    <string name="ongoing_conference_call">Devam eden konferans görüşmesi. Sesli veya görüntülü katıl.</string>
-    <string name="ongoing_conference_call_voice">ses</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call">Devam eden konferans görüşmesi.\n%1$s veya %2$s katıl.</string>
+    <string name="ongoing_conference_call_voice">Sesli</string>
+    <string name="ongoing_conference_call_video">görüntülü</string>
     <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
     <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir…</string>
     <string name="missing_permissions_to_start_conf_call">Bu odada bir konferans başlatma davetiyesi göndermek için izniniz olması gerekmektedir</string>

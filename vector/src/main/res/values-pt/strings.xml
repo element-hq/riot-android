@@ -32,7 +32,7 @@
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
     <string name="active_call">Chamada ativa</string>
-    <string name="ongoing_conference_call">Chamada de grupo em curso. Junte-se por voz ou vídeo.</string>
+    <string name="ongoing_conference_call">Chamada de grupo em curso.\nJunte-se por %1$s ou %2$s.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não foi possível iniciar a chamada, por favor tente mais tarde</string>

@@ -31,7 +31,7 @@
     <string name="rename">غيّر الاسم</string>
     <string name="report_content">أبلِغ عن المحتوى</string>
     <string name="active_call">مكالمة نشطة</string>
-    <string name="ongoing_conference_call">مكالمة اجتماع جارية. انضم إليها بالصوت أو بالصورة.</string>
+    <string name="ongoing_conference_call">مكالمة اجتماع جارية.\nانضم إليها %1$s أو %2$s.</string>
     <string name="ongoing_conference_call_voice">بالصوت</string>
     <string name="ongoing_conference_call_video">بالصورة</string>
     <string name="cannot_start_call">تعذّر بدء المكالمة، رجاءً أعِد المحاولة لاحقا</string>

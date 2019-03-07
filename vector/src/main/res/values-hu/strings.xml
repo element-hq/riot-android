@@ -28,9 +28,9 @@
     <string name="rename">Átnevezés</string>
     <string name="report_content">Tartalom bejelentése</string>
     <string name="active_call">Aktív hívás</string>
-    <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás. Csatlakozás hanggal vagy videóval.</string>
-    <string name="ongoing_conference_call_voice">hang</string>
-    <string name="ongoing_conference_call_video">videó</string>
+    <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás.\nCsatlakozás %1$s vagy %2$s.</string>
+    <string name="ongoing_conference_call_voice">hanggal</string>
+    <string name="ongoing_conference_call_video">videóval</string>
     <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, próbáld meg később</string>
     <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek…</string>
     <string name="missing_permissions_to_start_conf_call">Ezen szobában való értekezlet indításához meghívási jogosultság szükséges</string>

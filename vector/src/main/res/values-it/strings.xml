@@ -33,7 +33,7 @@
     <string name="rename">Rinomina</string>
     <string name="report_content">Segnala contenuto</string>
     <string name="active_call">Chiamata attiva</string>
-    <string name="ongoing_conference_call">Chiamata conferenza in corso. Unisciti con voce o video.</string>
+    <string name="ongoing_conference_call">Chiamata conferenza in corso.\nUnisciti con %1$s o %2$s.</string>
     <string name="ongoing_conference_call_voice">voce</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Impossibile avviare la chiamata, riprova più tardi</string>

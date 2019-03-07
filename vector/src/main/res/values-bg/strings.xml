@@ -95,15 +95,15 @@
     <string name="rename">Преименувай</string>
     <string name="report_content">Докладвай съдържанието</string>
     <string name="active_call">Активен разговор</string>
-    <string name="ongoing_conference_call_voice">гласов</string>
-    <string name="ongoing_conference_call_video">видео</string>
     <string name="notification_listening_for_events">Следете за събития</string>
     <string name="notification_noisy_notifications">Шумни известия</string>
     <string name="notification_silent_notifications">Уведомления без звук</string>
 
     <string name="title_activity_member_details">Членове</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
-    <string name="ongoing_conference_call">Тече групов разговор. Присъедини се с глас или видео.</string>
+    <string name="ongoing_conference_call">Тече групов разговор.\nПрисъедини се с %1$s или %2$s.</string>
+    <string name="ongoing_conference_call_voice">глас</string>
+    <string name="ongoing_conference_call_video">видео</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
     <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват…</string>
     <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>

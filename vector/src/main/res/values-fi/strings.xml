@@ -35,9 +35,9 @@
     <string name="rename">Nimeä uudelleen</string>
     <string name="report_content">Ilmoita epäilyttävästä sisällöstä</string>
     <string name="active_call">Puhelu meneillään</string>
-    <string name="ongoing_conference_call">Ryhmäpuhelu meneillään. Liity pelkällä äänellä tai videon kanssa.</string>
+    <string name="ongoing_conference_call">Ryhmäpuhelu meneillään.\nLiity pelkällä %1$s tai %2$s kanssa.</string>
     <string name="ongoing_conference_call_voice">äänellä</string>
-    <string name="ongoing_conference_call_video">videolla</string>
+    <string name="ongoing_conference_call_video">videon</string>
     <string name="cannot_start_call">Ei voitu aloittaa puhelua, yritä uudelleen</string>
     <string name="missing_permissions_warning">Puuttuvien oikeuksien takia osa ominaisuuksista ei ole käytettävissä…</string>
     <string name="missing_permissions_to_start_conf_call">Sinulta puuttuu oikeus käynnistää ryhmäpuhelu tässä huoneessa</string>

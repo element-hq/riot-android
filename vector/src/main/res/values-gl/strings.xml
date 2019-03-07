@@ -38,12 +38,12 @@
     <string name="delete">Borrar</string>
     <string name="rename">Renomear</string>
     <string name="active_call">Chamada en curso</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
     <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
-    <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
+    <string name="ongoing_conference_call">Conferencia en curso.\nÚnase con %1$s ou %2$s.</string>
+    <string name="ongoing_conference_call_voice">voz</string>
+    <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
     <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características…</string>
     <string name="missing_permissions_to_start_conf_call">Precisa permiso para convidar a iniciar unha conferencia en esta sala</string>

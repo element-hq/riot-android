@@ -28,7 +28,7 @@
     <string name="rename">Aldatu izena</string>
     <string name="report_content">Salatu edukia</string>
     <string name="active_call">Dei aktiboa</string>
-    <string name="ongoing_conference_call">Konferentzia deia abian. Elkartu ahotsa edo bideoa erabiliz.</string>
+    <string name="ongoing_conference_call">Konferentzia deia abian.\nElkartu %1$s edo %2$s erabiliz.</string>
     <string name="ongoing_conference_call_voice">ahotsa</string>
     <string name="ongoing_conference_call_video">bideoa</string>
     <string name="cannot_start_call">Ezin da deia hasi, saiatu geroago</string>

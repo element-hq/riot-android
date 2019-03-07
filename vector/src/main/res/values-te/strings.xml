@@ -24,8 +24,6 @@
     <string name="later">తరువాత</string>
     <string name="view_source">మూలాన్ని వీక్షించండి</string>
     <string name="rename">పేరు మార్చండి</string>
-    <string name="ongoing_conference_call_voice">స్వరము</string>
-    <string name="ongoing_conference_call_video">వీడియో</string>
     <string name="cannot_start_call">కాల్ను ప్రారంభించలేరు, దయచేసి తరువాత ప్రయత్నించండి</string>
     <string name="device_information">పరికర సమాచారం</string>
     <string name="or">లేదా</string>
@@ -223,7 +221,9 @@
     <string name="room_participants_action_leave">గదిని వదలండి</string>
     <string name="room_participants_action_remove">ఈ గది నుండి తీసివేయండి</string>
     <string name="room_participants_action_ban">నిషేధించు</string>
-    <string name="ongoing_conference_call">జరుగుతున్న కాన్ఫరెన్స్ కాల్. వాయిస్ లేదా వీడియోగా చేరండి.</string>
+    <string name="ongoing_conference_call">జరుగుతున్న కాన్ఫరెన్స్ కాల్.\n%1$s లేదా %2$s చేరండి.</string>
+    <string name="ongoing_conference_call_voice">వాయిస్</string>
+    <string name="ongoing_conference_call_video">వీడియోగా</string>
     <string name="missing_permissions_to_start_conf_call">ఈ గదిలో ఒక సమావేశాన్ని ప్రారంభించడానికి ఆహ్వానించడానికి మీకు అనుమతి అవసరం</string>
     <string name="missing_permissions_title_to_start_conf_call">కాల్ను ప్రారంభిచలేరు</string>
     <string name="room_no_conference_call_in_encrypted_rooms">ఎన్క్రిప్టెడ్ గదులలో కాన్ఫరెన్స్ కాల్లకు మద్దతు లేదు</string>
