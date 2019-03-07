@@ -58,10 +58,10 @@
     <string name="bottom_action_people">Participants</string>
     <string name="bottom_action_rooms">Salons</string>
 
-    <string name="home_filter_placeholder_home">Rechercher dans ces salons</string>
-    <string name="home_filter_placeholder_favorites">Rechercher dans les favoris</string>
-    <string name="home_filter_placeholder_people">Rechercher dans les participants</string>
-    <string name="home_filter_placeholder_rooms">Rechercher des salons</string>
+    <string name="home_filter_placeholder_home">Filtrer les noms des salons</string>
+    <string name="home_filter_placeholder_favorites">Filtrer les favoris</string>
+    <string name="home_filter_placeholder_people">Filtrer les participants</string>
+    <string name="home_filter_placeholder_rooms">Filtrer les noms des salons</string>
 
     <string name="invitations_header">Invitations</string>
     <string name="low_priority_header">Priorité basse</string>
@@ -92,7 +92,7 @@
 
     <string name="join_room">Rejoindre le salon</string>
     <string name="username">Nom d’utilisateur</string>
-    <string name="create_account">S’inscrire</string>
+    <string name="create_account">Créer un compte</string>
     <string name="login">Se connecter</string>
     <string name="logout">Se déconnecter</string>
     <string name="hs_url">URL du serveur d’accueil</string>
@@ -137,14 +137,14 @@
     <string name="auth_identity_server">Serveur d’identité :</string>
     <string name="login_error_unable_register">Impossible de s’inscrire</string>
     <string name="login_error_unable_register_mail_ownership">Impossible de s’inscrire : erreur sur le propriétaire de l’adresse e-mail</string>
-    <string name="login_error_invalid_home_server">Entrez une URL valide</string>
+    <string name="login_error_invalid_home_server">Veuillez saisir une URL valide</string>
 
     <string name="login_error_forbidden">Nom d’utilisateur/mot de passe invalide</string>
     <string name="login_error_bad_json">JSON malformé</string>
     <string name="login_error_not_json">Ne contient pas de JSON valide</string>
     <string name="read_receipts_list">Liste des accusés de lecture</string>
 
-    <string name="compression_options">"Envoyer au format "</string>
+    <string name="compression_options">"Envoyer en "</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Grand</string>
     <string name="compression_opt_list_medium">Moyen</string>
@@ -331,9 +331,9 @@
 
     <string name="account_email_validation_title">Vérification en attente</string>
     <string name="settings_change_password">Changer le mot de passe</string>
-    <string name="settings_old_password">Ancien mot de passe</string>
+    <string name="settings_old_password">Mot de passe actuel</string>
     <string name="settings_new_password">Nouveau mot de passe</string>
-    <string name="settings_confirm_password">Confirmer le mot de passe</string>
+    <string name="settings_confirm_password">Confirmer le nouveau mot de passe</string>
     <string name="settings_fail_to_update_password">Échec de mise à jour du mot de passe</string>
     <string name="settings_password_updated">Votre mot de passe a été mis à jour</string>
     <string name="settings_select_country">Choisissez un pays</string>
@@ -733,7 +733,7 @@ Appareils inconnus :</string>
 
     <string name="bottom_action_groups">Communautés</string>
 
-    <string name="home_filter_placeholder_groups">Rechercher dans ces communautés</string>
+    <string name="home_filter_placeholder_groups">Filtrer les noms des communautés</string>
 
     <string name="groups_invite_header">Inviter</string>
     <string name="groups_header">Communautés</string>
@@ -1137,7 +1137,7 @@ Le travail qu’essayera de faire l’application sera restreint agressivement t
 
     <string name="settings_troubleshoot_test_battery_title">Optimisation de la batterie</string>
     <string name="settings_troubleshoot_test_battery_success">Riot n’est pas affecté par l’optimisation de la batterie.</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Si un utilisateur laisse un appareil débranché et immobile pour une longue durée, avec l’écran éteint, l’appareil entre dans le mode Doze. Cela empêche les applications d’accéder au réseau et reporte leurs travaux, synchronisations et alarmes standard. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Si un utilisateur laisse un appareil débranché et immobile pour une longue durée, avec l’écran éteint, l’appareil entre dans le mode Doze. Cela empêche les applications d’accéder au réseau et reporte leurs travaux, synchronisations et alarmes standard.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorer l’optimisation</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Connexion en arrière-plan</string>
@@ -1362,4 +1362,22 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string>
+<string name="ignore">Ignorer</string>
+
+    <string name="auth_login_sso">Se connecter avec l’authentification unique</string>
+    <string name="login_error_unknown_host">Cette URL est injoignable, veuillez la vérifier</string>
+    <string name="login_error_ssl_handshake">Votre appareil utilise une version obsolète du protocole de sécurité TLS, vulnérable aux attaques. Pour votre sécurité vous ne pourrez pas vous connecter</string>
+    <string name="settings_send_message_with_enter">Envoyer le message avec Entrée</string>
+    <string name="settings_send_message_with_enter_summary">Le bouton Entrée sur le clavier logiciel enverra le message au lieu d’aller à la ligne</string>
+
+    <string name="settings_change_password_submit">Mettre à jour le mot de passe</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Le mot de passe n’est pas valide</string>
+    <string name="passwords_do_not_match">Les mots de passe ne correspondent pas</string>
+
+    <string name="autodiscover_invalid_response">Réponse de découverte du serveur d’accueil non valide</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Auto-compléter les options du serveur</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot a détecté une configuration de serveur personnalisée pour le domaine de votre identifiant « %s » :
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Utiliser la configuration</string>
+
 </resources>

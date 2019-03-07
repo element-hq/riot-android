@@ -79,11 +79,11 @@
     <string name="bottom_action_rooms">聊天室</string>
     <string name="bottom_action_groups">社群</string>
 
-    <string name="home_filter_placeholder_home">搜尋聊天室</string>
-    <string name="home_filter_placeholder_favorites">搜尋收藏夾</string>
-    <string name="home_filter_placeholder_people">搜尋人</string>
-    <string name="home_filter_placeholder_rooms">搜尋聊天室</string>
-    <string name="home_filter_placeholder_groups">搜尋社群</string>
+    <string name="home_filter_placeholder_home">過濾聊天室名稱</string>
+    <string name="home_filter_placeholder_favorites">過濾最愛</string>
+    <string name="home_filter_placeholder_people">過濾人</string>
+    <string name="home_filter_placeholder_rooms">過濾聊天室名稱</string>
+    <string name="home_filter_placeholder_groups">過濾社群名稱</string>
 
     <string name="invitations_header">邀請</string>
     <string name="low_priority_header">低優先度</string>
@@ -128,7 +128,7 @@
 
     <string name="join_room">加入聊天室</string>
     <string name="username">使用者名稱</string>
-    <string name="create_account">註冊</string>
+    <string name="create_account">建立帳號</string>
     <string name="login">登入</string>
     <string name="logout">登出</string>
     <string name="hs_url">家伺服器網址</string>
@@ -210,7 +210,7 @@
     <string name="login_error_registration_network_error">無法註冊：網路錯誤</string>
     <string name="login_error_unable_register">無法註冊</string>
     <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
-    <string name="login_error_invalid_home_server">輸入有效的網址</string>
+    <string name="login_error_invalid_home_server">請輸入有效的網址</string>
     <string name="login_mobile_device">行動</string>
 
     <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
@@ -305,8 +305,7 @@
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
 
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
-    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。
-你也許希望以不同帳號登入，或將電子郵件加入到此帳號。</string>
+    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
     <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入討論嗎？</string>
     <string name="room_preview_try_join_an_unknown_room_default">聊天室</string>
     <string name="room_preview_room_interactions_disabled">這是聊天室的預覽，聊天室互動已停用。</string>
@@ -603,9 +602,9 @@
     <string name="account_phone_number_already_used_error">這個電話號碼已被使用。</string>
 
     <string name="settings_change_password">變更密碼</string>
-    <string name="settings_old_password">舊密碼</string>
+    <string name="settings_old_password">目前的密碼</string>
     <string name="settings_new_password">新密碼</string>
-    <string name="settings_confirm_password">確認密碼</string>
+    <string name="settings_confirm_password">確認新密碼</string>
     <string name="settings_fail_to_update_password">更新密碼失敗</string>
     <string name="settings_password_updated">您的密碼已經更新</string>
     <string name="settings_unignore_user">顯示所有來自 %s 的訊息？
@@ -933,7 +932,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_participants_now">目前 %1$s</string>
     <string name="room_participants_ago">%1$s %2$s 前</string>
 
-    <string name="room_participants_invite_join_names">"%1$s， "</string>
+    <string name="room_participants_invite_join_names">%1$s，</string>
     <string name="room_participants_invite_join_names_and">%1$s 與 %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
@@ -1095,7 +1094,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
     <string name="settings_troubleshoot_test_battery_success">Riot 不會被電池最佳化影響。</string>
-    <string name="settings_troubleshoot_test_battery_failed">"如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。 "</string>
+    <string name="settings_troubleshoot_test_battery_failed">如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
@@ -1317,4 +1316,22 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_restoring_computing_key_waiting_message">正在計算復原金鑰……</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">正在下載金鑰……</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">正在匯出金鑰……</string>
+<string name="ignore">忽略</string>
+
+    <string name="auth_login_sso">使用單一登入系統登入</string>
+    <string name="login_error_unknown_host">這個 URL 不可用，請檢查</string>
+    <string name="login_error_ssl_handshake">您的裝置正在使用過期的 TLS 安全協定，容易遭受攻擊，為了您的安全將不會連線</string>
+    <string name="settings_send_message_with_enter">使用 Enter 傳送訊息</string>
+    <string name="settings_send_message_with_enter_summary">軟體鍵盤的 Enter 按鈕將會傳送訊息而非換行</string>
+
+    <string name="settings_change_password_submit">更新密碼</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">密碼無效</string>
+    <string name="passwords_do_not_match">密碼不符合</string>
+
+    <string name="autodiscover_invalid_response">無效的家伺服器探索回應</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">自動完成伺服器選項</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot 偵測到您的 userId 網域「%s」有自訂的伺服器設定：
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">使用設定</string>
+
 </resources>
