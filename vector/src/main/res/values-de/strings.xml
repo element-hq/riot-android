@@ -32,7 +32,7 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">Konferenzgespräch läuft. Per Sprache oder Video beitreten.</string>
+    <string name="ongoing_conference_call">Konferenzgespräch läuft. Per Sprache oder Video beitreten</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
@@ -69,10 +69,10 @@
     <string name="bottom_action_rooms">Räume</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Nach Räumen suchen</string>
-    <string name="home_filter_placeholder_favorites">Nach Favoriten suchen</string>
-    <string name="home_filter_placeholder_people">Nach Personen suchen</string>
-    <string name="home_filter_placeholder_rooms">Nach Räumen suchen</string>
+    <string name="home_filter_placeholder_home">Raumnamen filtern</string>
+    <string name="home_filter_placeholder_favorites">Favoriten filtern</string>
+    <string name="home_filter_placeholder_people">Personen filtern</string>
+    <string name="home_filter_placeholder_rooms">Raumnamen filtern</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Einladungen</string>
@@ -114,7 +114,7 @@
 
     <string name="join_room">Raum betreten</string>
     <string name="username">Benutzername</string>
-    <string name="create_account">Registrieren</string>
+    <string name="create_account">Konto erstellen</string>
     <string name="login">Anmelden</string>
     <string name="logout">Abmelden</string>
     <string name="hs_url">Home-Server-URL</string>
@@ -190,7 +190,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="login_error_registration_network_error">Registrierung unmöglich: Netzwerkfehler</string>
     <string name="login_error_unable_register">Registrierung unmöglich</string>
     <string name="login_error_unable_register_mail_ownership">Registrierung unmöglich: E-Mail-Adresse nicht verifizierbar</string>
-    <string name="login_error_invalid_home_server">Gib eine gültige Home-Server-URL ein</string>
+    <string name="login_error_invalid_home_server">Bitte eine gültige URL eingeben</string>
 
     <string name="login_error_forbidden">Ungültige Zugangsdaten</string>
     <string name="login_error_unknown_token">Der verwendete Zugangstoken ist unbekannt</string>
@@ -782,7 +782,7 @@ Unbekannte Geräte:</string>
     <string name="action_exit">Schließen</string>
     <string name="bottom_action_groups">Communities</string>
 
-    <string name="home_filter_placeholder_groups">Nach Communities suchen</string>
+    <string name="home_filter_placeholder_groups">Community-Namen filtern</string>
 
     <string name="groups_invite_header">Einladen</string>
     <string name="groups_header">Communities</string>
@@ -1412,4 +1412,23 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
+<string name="ignore">Ignorieren</string>
+
+    <string name="auth_login_sso">Mit single-sign-on anmelden</string>
+    <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>
+    <string name="login_error_ssl_handshake">Dein Gerät nutzt eine veraltetes TLS-Sicherheitsprotokoll, das anfällig für Angriffe ist. Zu deiner Sicherheit wirst du nicht in der Lage sein, dich zu verbinden</string>
+    <string name="settings_send_message_with_enter">Setze Nachricht mit Eingabetaste</string>
+    <string name="settings_send_message_with_enter_summary">Eingabetaste der Bildschirmtastatur schickt die Nachricht ab, statt einen Zeilenumbruch zu erzeugen</string>
+
+    <string name="settings_change_password_submit">Passwort aktualisieren</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
+    <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
+
+    <string name="autodiscover_invalid_response">Ungültige Rückmeldung bei Heimserver-Entdeckung</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden
+\n\"%s\":
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
+
 </resources>
