@@ -1185,7 +1185,7 @@ Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
     <string name="no_valid_google_play_services_apk">Geçerli Google Play Hizmetleri APK\'sı bulunamadı. Bildirimler olması gerektiği gibi çalışmayacak.</string>
 
     <string name="store_title">Riot.im - İletişim, senin yolunda.</string>
-    <string name="store_whats_new">"Biz her zaman Riot.im\'e geliştirmeler ve değişimler yapıyoruz.
+    <string name="store_whats_new">"Biz her zaman Riot.im’e geliştirmeler ve değişimler yapıyoruz.
 Tam değişiklikler listesi burada bulunabilir: %1$s.
 Bir şeyleri kaçırmamak için güncellemeleri açık tutun."</string>
     <string name="store_short_description">Evrensel senin kontrolün altında güvenli sohbet uygulaması.</string>
@@ -1193,17 +1193,17 @@ Bir şeyleri kaçırmamak için güncellemeleri açık tutun."</string>
 
 Ücretsiz matrix.org hesabı al, https://modular.im adresinde kendi özel sunucunu al ya da farklı bir Matrix sunucusu kullan.
 
-Neden Riot.im\'i seçmeliyim\?
+Neden Riot.im’i seçmeliyim?
 
 • TAMAMEN İLETİŞİM: Takımın, arkadaşların ve topluluğun etrafında odalar oluştur - nasıl istersen! Sohbet et, dosya paylaş, widget ekle ve sesli arama yap ya da görüntülü arama yap - tamamen ücretsiz.
 
-• GÜÇLÜ ENTEGRASYON: Riot.im\'i bildiğin ve sevdiğin araçlarla kullan. Riot.im ile farklı sohbet uygulamalarındaki kullanıcılar, gruplarla bile konuşabilirsin.
+• GÜÇLÜ ENTEGRASYON: Riot.im’i bildiğin ve sevdiğin araçlarla kullan. Riot.im ile farklı sohbet uygulamalarındaki kullanıcılar, gruplarla bile konuşabilirsin.
 
 • GİZLİ VE GÜVENLİ: Tartışmalarını gizli tutar. Uçtan-uca şifreleme gizli iletişimin gizli kalmasını sağlar.
 
 • AÇIK, KAPALI DEĞİL: Açık kaynaklı, ve Matrix üzerinde kuruldu. Kendi verilerine kendi sunucunu kullanarak ya da güvendiğin bir tanesini seçerek sahip ol.
 
-• OLDUĞUN HERYERDE: Tüm cihazlarında ya da çevrimiçi https://riot.im\'de tamamen senkronize mesaj geçmişi ile nerede olursan ol iletişimde kal."</string>
+• OLDUĞUN HERYERDE: Tüm cihazlarında ya da çevrimiçi https://riot.im’de tamamen senkronize mesaj geçmişi ile nerede olursan ol iletişimde kal."</string>
 
     <string name="passphrase_create_passphrase">Parola oluştur</string>
     <string name="passphrase_confirm_passphrase">Parolayı doğrula</string>

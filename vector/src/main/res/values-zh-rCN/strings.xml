@@ -1140,13 +1140,13 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
 
     <string name="store_whats_new">"我们在持续改进 Riot.im 的体验。
-完整的 changelog 在这里：%1$s
+完整的 changelog 在这里：%1$s。
 为了不错过新改进，请保持更新开启。"</string>
     <string name="store_full_description">"一个聊天应用，由你掌控且完全灵活。Riot 让你以你的方式沟通。为 [matrix] - 开放、去中心化的沟通而打造。
 
 获取一个免费的 matrix.org 账号，在 https://modular.im 获取一个你自己的服务器，或者使用其他 Matrix 服务器。
 
-为什么选择 Riot.im\?
+为什么选择 Riot.im?
 
 • 完整的沟通：围绕你的团队、你的朋友、你的社区创建聊天室 - 随你喜欢！聊天、分享文件、添加插件和语音视频通话 - 全部免费。
 

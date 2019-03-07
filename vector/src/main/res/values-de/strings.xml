@@ -1221,7 +1221,7 @@ Warum solltest du Riot.im wählen?
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
     <string name="store_whats_new">"An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
-Das vollständige Änderungsprotokoll ist hier zu finden: %1$s
+Das vollständige Änderungsprotokoll ist hier zu finden: %1$s.
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
