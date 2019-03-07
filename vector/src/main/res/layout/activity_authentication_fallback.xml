@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,12 +9,13 @@
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:subtitle="https://www.example.org"
+        tools:title="@string/auth_login" />
 
     <WebView
-        android:id="@+id/account_creation_webview"
+        android:id="@+id/fallback_authentication_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

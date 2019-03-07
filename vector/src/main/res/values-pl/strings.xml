@@ -25,9 +25,9 @@
     <string name="rename">Zmień nazwę</string>
     <string name="report_content">Zgłoś zawartość</string>
     <string name="active_call">Aktywne połączenie</string>
-    <string name="ongoing_conference_call">Przychodzące połączenie grupowe. Dołącz z mikrofonem lub z kamerą.</string>
-    <string name="ongoing_conference_call_voice">głos</string>
-    <string name="ongoing_conference_call_video">obraz</string>
+    <string name="ongoing_conference_call">Przychodzące połączenie grupowe.\nDołącz z %1$s lub z %2$s.</string>
+    <string name="ongoing_conference_call_voice">mikrofonem</string>
+    <string name="ongoing_conference_call_video">kamerą</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
     <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
     <string name="missing_permissions_to_start_conf_call">Musisz być uprawniony, aby rozpocząć połączenie grupowe</string>
@@ -1115,9 +1115,9 @@ Sprawdź ustawienia systemowe.</string>
 Sprawdź ustawienia konta.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Powiadomienia nie są dozwolone dla tego urządzenia.
 Proszę sprawdź ustawienia Riot.</string>
-    <string name="store_whats_new">Zawsze wprowadzamy zmiany i ulepszenia do Riot.im.
+    <string name="store_whats_new">"Zawsze wprowadzamy zmiany i ulepszenia do Riot.im.
 Pełną listę zmian można znaleźć tutaj: %1$s.
-Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktualizacje.</string>
+Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktualizacje."</string>
     <string name="account_additional_info">Dodatkowe informacje: %s</string>
 
     <string name="account_phone_number_error">Wystąpił błąd podczas weryfikowania numeru telefonu.</string>

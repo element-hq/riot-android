@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.adapters.model.NotificationCounter;
 import im.vector.util.RoomUtils;
 
 public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
@@ -184,23 +185,27 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
     }
 
     /**
-     * Return the sum of notifications for all the displayed rooms
+     * Return the sum of highlight and notifications for all the displayed rooms
      *
      * @return badge value
      */
-    public int getBadgeCount() {
-        int badgeCount = 0;
+    public NotificationCounter getBadgeCount() {
+        NotificationCounter notificationCounter = new NotificationCounter();
+
         for (Room room : mFilteredRooms) {
+            notificationCounter.addHighlights(room.getHighlightCount());
+
             // sanity checks : reported by GA
-            if (null != room.getDataHandler() && (null != room.getDataHandler().getBingRulesManager())) {
-                if (room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
-                    badgeCount += room.getHighlightCount();
-                } else {
-                    badgeCount += room.getNotificationCount();
-                }
+            if (null != room.getDataHandler()
+                    && (null != room.getDataHandler().getBingRulesManager())
+                    && room.getDataHandler().getBingRulesManager().isRoomMentionOnly(room.getRoomId())) {
+                notificationCounter.addNotifications(room.getHighlightCount());
+            } else {
+                notificationCounter.addNotifications(room.getNotificationCount());
             }
         }
-        return badgeCount;
+
+        return notificationCounter;
     }
 
     /*

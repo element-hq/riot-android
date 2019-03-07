@@ -144,10 +144,6 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activity.FallbackAccountCreationActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/create_account" />
-        <activity
             android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
@@ -156,7 +152,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
         <activity
-            android:name=".activity.FallbackLoginActivity"
+            android:name=".activity.FallbackAuthenticationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login" />
         <activity
@@ -416,6 +412,7 @@
         <activity
             android:name=".activity.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
+        <activity android:name=".activity.DebugMenuActivity" />
 
         <!-- FileProvider -->
         <provider

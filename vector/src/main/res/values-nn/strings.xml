@@ -47,7 +47,7 @@
     <string name="rename">Gje nytt namn</string>
     <string name="report_content">Meld frå om innhald</string>
     <string name="active_call">Pågåande samtale</string>
-    <string name="ongoing_conference_call">Pågåande gruppesamtale. Vert med med røyst eller video.</string>
+    <string name="ongoing_conference_call">Pågåande gruppesamtale.\nVert med med %1$s eller %2$s.</string>
     <string name="ongoing_conference_call_voice">røyst</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikkje få i gang samtala, prøv att seinare</string>

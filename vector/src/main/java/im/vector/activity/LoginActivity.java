@@ -33,6 +33,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -50,11 +51,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.login.AutoDiscovery;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
+import org.matrix.androidsdk.rest.model.HttpException;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms;
@@ -68,14 +72,19 @@ import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.util.Log;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import im.vector.BuildConfig;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.PhoneNumberHandler;
@@ -91,7 +100,6 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
 import im.vector.util.PhoneNumberUtils;
-import im.vector.util.UrlUtilKt;
 import im.vector.util.ViewUtilKt;
 
 /**
@@ -110,10 +118,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // or creates a new account
     private static final int MODE_UNKNOWN = 0;
     private static final int MODE_LOGIN = 1;
-    private static final int MODE_ACCOUNT_CREATION = 2;
-    private static final int MODE_FORGOT_PASSWORD = 3;
-    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
-    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 5;
+    private static final int MODE_LOGIN_SSO = 2;
+    private static final int MODE_ACCOUNT_CREATION = 3;
+    private static final int MODE_FORGOT_PASSWORD = 4;
+    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 5;
+    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 6;
 
     // saved parameters index
     // creation
@@ -127,7 +136,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // activity mode
     private int mMode = MODE_LOGIN;
 
+    // Cache for Discovery results (domain -> Discovery)
+    private Map<String, AutoDiscovery.DiscoveredClientConfig> autoDiscoveredDomainCache = new HashMap<>();
+
     // graphical items
+    @BindView(R.id.login_main_container)
+    ViewGroup mMainContainer;
+
     @BindView(R.id.login_form_container)
     ViewGroup mFormContainer;
 
@@ -151,15 +166,19 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.button_login)
     Button mLoginButton;
 
-    @BindView(R.id.button_switch_to_login)
-    Button mSwitchToLoginButton;
+    @BindView(R.id.button_switch_to_register)
+    Button mSwitchToRegisterButton;
+
+    // login SSO button
+    @BindView(R.id.button_login_sso)
+    Button mLoginSsoButton;
 
     // create account button
     @BindView(R.id.button_register)
     Button mRegisterButton;
 
-    @BindView(R.id.button_switch_to_register)
-    Button mSwitchToRegisterButton;
+    @BindView(R.id.button_switch_to_login)
+    Button mSwitchToLoginButton;
 
     // forgot password button
     @BindView(R.id.button_reset_password)
@@ -199,7 +218,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     // if the taps on login button
     // after updating the IS / HS urls
     // without selecting another item
-    // the IS/HS textviews don't loose the focus
+    // the IS/HS textviews don't lose the focus
     // and the flow is not checked.
     private boolean mIsPendingLogin;
 
@@ -347,7 +366,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-                if ((networkInfo != null) && networkInfo.isConnected()) {
+                if (networkInfo != null && networkInfo.isConnected()) {
                     // refresh only once
                     if (mIsWaitingNetworkConnection) {
                         refreshDisplay();
@@ -405,6 +424,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     protected void onPause() {
         super.onPause();
         removeNetworkStateNotificationListener();
+        autoDiscoveredDomainCache.clear();
     }
 
     /**
@@ -457,7 +477,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // already registered
         if (hasCredentials()) {
-            if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
+            if (null != intent && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
                 Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
                 goToSplash();
             } else {
@@ -561,6 +581,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mUseCustomHomeServersCheckbox.post(new Runnable() {
                     @Override
                     public void run() {
+                        // Reset SSO mode
+                        if (mMode == MODE_LOGIN_SSO) {
+                            mMode = MODE_LOGIN;
+                        }
+
                         // reset the HS urls.
                         mHomeServerUrl = null;
                         mIdentityServerUrl = null;
@@ -591,7 +616,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHomeServerText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // Disable buttons
+                setActionButtonsEnabled(false);
             }
 
             @Override
@@ -613,7 +639,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mIdentityServerText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // Disable buttons
+                setActionButtonsEnabled(false);
             }
 
             @Override
@@ -636,7 +663,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mHandler = new Handler(getMainLooper());
 
         // Check whether the application has been resumed from an universal link
-        Bundle receivedBundle = (null != intent) ? getIntent().getExtras() : null;
+        Bundle receivedBundle = null != intent ? getIntent().getExtras() : null;
         if (null != receivedBundle) {
             if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
                 mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
@@ -672,6 +699,119 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         mTextInputLayouts = ViewUtilKt.findAllTextInputLayout(mFormContainer);
         ViewUtilKt.autoResetTextInputLayoutErrors(mTextInputLayouts);
+
+        mLoginEmailTextView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                String candidate = mLoginEmailTextView.getText().toString();
+                //Try to see if we can find a domain
+                if (MXPatterns.isUserId(candidate)) {
+                    //looks like a user name with domain
+                    String possibleDomain = candidate.substring(candidate.indexOf(":") + 1);
+                    if (possibleDomain.isEmpty()) return;
+                    tryAutoDiscover(possibleDomain);
+                }
+            }
+        });
+    }
+
+    private void tryAutoDiscover(String possibleDomain) {
+        if (autoDiscoveredDomainCache.containsKey(possibleDomain)) {
+            onAutoDiscoveryRetrieved(possibleDomain, autoDiscoveredDomainCache.get(possibleDomain));
+        } else {
+            enableLoadingScreen(true);
+
+            new AutoDiscovery().findClientConfig(possibleDomain, new ApiCallback<AutoDiscovery.DiscoveredClientConfig>() {
+
+                String mDomain = possibleDomain;
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                    enableLoadingScreen(false);
+                    Log.e(LOG_TAG, "AutoDiscovery error for domain" + mDomain, e);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+                    enableLoadingScreen(false);
+                    Log.e(LOG_TAG, "AutoDiscovery Network error for domain " + mDomain, e);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    enableLoadingScreen(false);
+                    //nop
+                }
+
+                @Override
+                public void onSuccess(AutoDiscovery.DiscoveredClientConfig info) {
+                    if (info.getAction() == AutoDiscovery.Action.PROMPT
+                            || info.getAction() == AutoDiscovery.Action.IGNORE) {
+                        // Prompt or Ignore, keep in cache
+                        autoDiscoveredDomainCache.put(mDomain, info);
+                    }
+
+                    Log.d(LOG_TAG, "AutoDiscovery info " + info);
+                    if (!TextUtils.equals(mDomain, possibleDomain)) return;
+
+                    enableLoadingScreen(false);
+                    onAutoDiscoveryRetrieved(mDomain, info);
+                }
+            });
+        }
+    }
+
+    private void onAutoDiscoveryRetrieved(String domain, AutoDiscovery.DiscoveredClientConfig info) {
+        // Do not change anything if not in login mode
+        if (mMode != MODE_LOGIN) return;
+
+        if (AutoDiscovery.Action.PROMPT == info.getAction()) {
+            if (info.getWellKnown() == null) return;
+            if (info.getWellKnown().homeServer == null) return;
+            final String hs = info.getWellKnown().homeServer.baseURL;
+            String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
+            if (info.getWellKnown().identityServer != null
+                    && !TextUtils.isEmpty(info.getWellKnown().identityServer.baseURL)) {
+                ids = info.getWellKnown().identityServer.baseURL;
+            }
+
+            if (hs != null) {
+                if (ServerUrlsRepository.INSTANCE.isDefaultHomeServerUrl(LoginActivity.this, hs)) {
+                    if (mUseCustomHomeServersCheckbox.isChecked()) {
+                        mHomeServerText.setText(null);
+                        mIdentityServerText.setText(null);
+                        mUseCustomHomeServersCheckbox.performClick();
+                    }
+                } else {
+                    if (!mUseCustomHomeServersCheckbox.isChecked()
+                            || !hs.equals(mHomeServerUrl)
+                            || !ids.equals(mIdentityServerUrl)) {
+                        String finalIds = ids;
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle(getString(R.string.autodiscover_well_known_autofill_dialog_title))
+                                .setMessage(getString(R.string.autodiscover_well_known_autofill_dialog_message,
+                                        domain,
+                                        String.format("• %s\n• %s", hs, ids)))
+                                .setPositiveButton(getString(R.string.autodiscover_well_known_autofill_confirm), (dialog, which) -> {
+                                    mHomeServerText.setText(hs);
+                                    mIdentityServerText.setText(finalIds);
+                                    if (!mUseCustomHomeServersCheckbox.isChecked()) {
+                                        mUseCustomHomeServersCheckbox.performClick();
+                                    } else {
+                                        onHomeServerUrlUpdate(true);
+                                        onIdentityServerUrlUpdate(true);
+                                    }
+                                })
+                                .setNegativeButton(R.string.ignore, null)
+                                .show();
+                    }
+                }
+            }
+        } else if (AutoDiscovery.Action.FAIL_ERROR == info.getAction()
+                || AutoDiscovery.Action.FAIL_PROMPT == info.getAction()) {
+            mLoginEmailTextViewTil.setError(getString(R.string.autodiscover_invalid_response));
+        }
     }
 
     /**
@@ -758,6 +898,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean onHomeServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
+            // Reset SSO mode
+            if (mMode == MODE_LOGIN_SSO) {
+                mMode = MODE_LOGIN;
+            }
+
             mHomeServerUrl = getHomeServerUrl();
             mRegistrationManager.reset();
 
@@ -788,6 +933,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private boolean onIdentityServerUrlUpdate(boolean checkFlowOnUpdate) {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
+            // Reset SSO mode
+            if (mMode == MODE_LOGIN_SSO) {
+                mMode = MODE_LOGIN;
+            }
+
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationManager.reset();
 
@@ -867,15 +1017,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.d(LOG_TAG, "KEYCODE_BACK pressed");
-            if ((MODE_ACCOUNT_CREATION == mMode) && (!mRegistrationManager.hasRegistrationResponse())) {
+            if (MODE_ACCOUNT_CREATION == mMode && !mRegistrationManager.hasRegistrationResponse()) {
                 Log.d(LOG_TAG, "## cancel the registration mode");
                 fallbackToLoginMode();
                 return true;
-            } else if ((MODE_FORGOT_PASSWORD == mMode) || (MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode)) {
+            } else if (MODE_FORGOT_PASSWORD == mMode || MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode) {
                 Log.d(LOG_TAG, "## cancel the forgot password mode");
                 fallbackToLoginMode();
                 return true;
-            } else if ((MODE_ACCOUNT_CREATION_THREE_PID == mMode)) {
+            } else if (MODE_ACCOUNT_CREATION_THREE_PID == mMode) {
                 Log.d(LOG_TAG, "## cancel the three pid mode");
                 cancelEmailPolling();
                 mRegistrationManager.clearThreePid();
@@ -894,7 +1044,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private boolean hasCredentials() {
         try {
             MXSession session = Matrix.getInstance(this).getDefaultSession();
-            return ((null != session) && session.isAlive());
+            return null != session && session.isAlive();
 
         } catch (Exception e) {
             Log.e(LOG_TAG, "## Exception: " + e.getMessage(), e);
@@ -944,7 +1094,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * check if the current page is supported by the current implementation
      */
     private void checkFlows() {
-        if ((mMode == MODE_LOGIN) || (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION)) {
+        if (mMode == MODE_LOGIN
+                || mMode == MODE_LOGIN_SSO
+                || mMode == MODE_FORGOT_PASSWORD
+                || mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
@@ -1416,7 +1569,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // Check whether all listed flows in this authentication session are supported
         // We suggest using the fallback page (if any), when at least one flow is not supported.
-        if (mRegistrationManager.hasNonSupportedStage()) {
+        if (mRegistrationManager.hasNonSupportedStage() || alwaysUseFallback()) {
             String hs = getHomeServerUrl();
             boolean validHomeServer = false;
 
@@ -1432,9 +1585,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return;
             }
 
-            Intent intent = new Intent(LoginActivity.this, FallbackAccountCreationActivity.class);
-            intent.putExtra(FallbackAccountCreationActivity.EXTRA_HOME_SERVER_URL, hs);
-            startActivityForResult(intent, RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+            Intent intent = FallbackAuthenticationActivity.Companion.getIntentToRegister(this, hs);
+            startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -1515,7 +1667,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         @Override
                         public void onUnexpectedError(Exception e) {
                             if (mMode == MODE_ACCOUNT_CREATION) {
-                                onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                                if (e instanceof HttpException
+                                        && ((HttpException) e).getHttpError().getHttpCode() == HttpsURLConnection.HTTP_BAD_METHOD /* 405 */) {
+                                    // Registration is not allowed
+                                    onRegistrationNotAllowed();
+                                } else {
+                                    onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                                }
                             }
                         }
 
@@ -1536,11 +1694,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                             Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage(), castExcept);
                                         }
                                     } else if (e.mStatus == 403) {
-                                        // Registration not supported by the server
-                                        mMode = MODE_LOGIN;
-                                        refreshDisplay();
-
-                                        mSwitchToRegisterButton.setVisibility(View.GONE);
+                                        onRegistrationNotAllowed();
                                     }
                                 }
 
@@ -1564,6 +1718,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         } else {
             setActionButtonsEnabled(true);
         }
+    }
+
+    private void onRegistrationNotAllowed() {
+        // Registration not supported by the server
+        mMode = MODE_LOGIN;
+        refreshDisplay();
+
+        mSwitchToRegisterButton.setVisibility(View.GONE);
     }
 
     /**
@@ -1600,6 +1762,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mMode = MODE_ACCOUNT_CREATION;
             refreshDisplay();
         }
+    }
+
+    @OnClick(R.id.button_login_sso)
+    void openLoginFallback() {
+        final HomeServerConnectionConfig hsConfig = getHsConfig();
+
+        Intent intent = FallbackAuthenticationActivity.Companion
+                .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
+        startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
     }
 
     /**
@@ -1709,7 +1880,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     void onLoginClick() {
         if (onHomeServerUrlUpdate(true) || onIdentityServerUrlUpdate(true)) {
             mIsPendingLogin = true;
-            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
+            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not lose the focus");
             return;
         }
 
@@ -1862,7 +2033,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             } else {
                 enableLoadingScreen(true);
 
-                mLoginHandler.getSupportedLoginFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
+                mLoginHandler.getSupportedLoginFlows(this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
                     @Override
                     public void onSuccess(List<LoginFlow> flows) {
                         // stop listening to network state
@@ -1871,20 +2042,37 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (mMode == MODE_LOGIN) {
                             enableLoadingScreen(false);
                             setActionButtonsEnabled(true);
-                            boolean isSupported = true;
 
-                            // supported only m.login.password by now
+                            boolean isTypePasswordDetected = false;
+                            boolean isSsoDetected = false;
+
                             for (LoginFlow flow : flows) {
-                                isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, flow.type);
+                                switch (flow.type) {
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD:
+                                        isTypePasswordDetected = true;
+                                        break;
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_SSO:
+                                    case LoginRestClient.LOGIN_FLOW_TYPE_CAS:
+                                        isSsoDetected = true;
+                                        break;
+                                    default:
+                                        // Unsupported flow detected
+                                        Log.w(LOG_TAG, "Unsupported login flow: " + flow.type);
+                                        break;
+                                }
                             }
 
-                            // if not supported, switch to the fallback login
-                            if (!isSupported) {
-                                Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
-                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_URL, hsConfig.getHomeserverUri().toString());
-                                startActivityForResult(intent, RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
-                            } else if (mIsPendingLogin) {
-                                onLoginClick();
+                            if (isSsoDetected) {
+                                // SSO has priority over password
+                                mMode = MODE_LOGIN_SSO;
+                                refreshDisplay();
+                            } else if (isTypePasswordDetected) {
+                                if (mIsPendingLogin) {
+                                    onLoginClick();
+                                }
+                            } else {
+                                // if not supported, switch to the fallback login
+                                openLoginFallback();
                             }
                         }
                     }
@@ -1893,16 +2081,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (mMode == MODE_LOGIN) {
                             enableLoadingScreen(false);
                             setActionButtonsEnabled(false);
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            displayErrorOnUrl(mHomeServerTextTil, errorMessage);
                         }
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
                         Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                        // listen to network state, to resume processing as soon as the network is back
-                        addNetworkStateNotificationListener();
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+
+                        if (e instanceof UnknownHostException) {
+                            onError(getString(R.string.login_error_unknown_host));
+                        } else if (e instanceof SSLHandshakeException) {
+                            onError(getString(R.string.login_error_ssl_handshake));
+                        } else {
+                            // listen to network state, to resume processing as soon as the network is back
+                            addNetworkStateNotificationListener();
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
@@ -1980,22 +2175,24 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // check if the device supported the dedicated mode
         checkFlows();
 
+        TransitionManager.beginDelayedTransition(mMainContainer);
+
         // home server
         mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
-        // views
-        mLoginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
-        mCreationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
-        mForgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
-        mThreePidLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION_THREE_PID) ? View.VISIBLE : View.GONE);
+        // Hide views
+        mLoginLayout.setVisibility(View.GONE);
+        mCreationLayout.setVisibility(View.GONE);
+        mForgetPasswordLayout.setVisibility(View.GONE);
+        mThreePidLayout.setVisibility(View.GONE);
 
-        boolean isLoginMode = mMode == MODE_LOGIN;
-
-        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
+        // Hide text
+        mPasswordForgottenTxtView.setVisibility(View.GONE);
 
         // Hide all buttons
         mLoginButton.setVisibility(View.GONE);
         mSwitchToRegisterButton.setVisibility(View.GONE);
+        mLoginSsoButton.setVisibility(View.GONE);
         mRegisterButton.setVisibility(View.GONE);
         mSwitchToLoginButton.setVisibility(View.GONE);
         mForgotPasswordButton.setVisibility(View.GONE);
@@ -2008,20 +2205,28 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // Then show them depending on mode
         switch (mMode) {
             case MODE_LOGIN:
+                mLoginLayout.setVisibility(View.VISIBLE);
+                mPasswordForgottenTxtView.setVisibility(View.VISIBLE);
                 mLoginButton.setVisibility(View.VISIBLE);
                 mSwitchToRegisterButton.setVisibility(View.VISIBLE);
                 break;
+            case MODE_LOGIN_SSO:
+                mLoginSsoButton.setVisibility(View.VISIBLE);
+                break;
             case MODE_ACCOUNT_CREATION:
+                mCreationLayout.setVisibility(View.VISIBLE);
                 mRegisterButton.setVisibility(View.VISIBLE);
                 mSwitchToLoginButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_FORGOT_PASSWORD:
+                mForgetPasswordLayout.setVisibility(View.VISIBLE);
                 mForgotPasswordButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_FORGOT_PASSWORD_WAITING_VALIDATION:
                 mForgotValidateEmailButton.setVisibility(View.VISIBLE);
                 break;
             case MODE_ACCOUNT_CREATION_THREE_PID:
+                mThreePidLayout.setVisibility(View.VISIBLE);
                 mSubmitThreePidButton.setVisibility(View.VISIBLE);
                 if (mRegistrationManager.canSkipThreePid()) {
                     mSkipThreePidButton.setVisibility(View.VISIBLE);
@@ -2059,6 +2264,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void setActionButtonsEnabled(boolean enabled) {
         mLoginButton.setEnabled(enabled);
         mSwitchToRegisterButton.setEnabled(enabled);
+        mLoginSsoButton.setEnabled(enabled);
         mRegisterButton.setEnabled(enabled);
         mSwitchToLoginButton.setEnabled(enabled);
         mForgotPasswordButton.setEnabled(enabled);
@@ -2105,7 +2311,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
 
             String identityServerUrlString = getIdentityServerUrl();
-            if ((!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http"))
+            if (!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http")
                     || TextUtils.equals(identityServerUrlString, "http://")
                     || TextUtils.equals(identityServerUrlString, "https://")) {
                 displayErrorOnUrl(mIdentityServerTextTil, getString(R.string.login_error_must_start_http));
@@ -2178,21 +2384,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mRegistrationManager.reset();
                 fallbackToRegistrationMode();
             }
-        } else if (RequestCodesKt.FALLBACK_ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode
-                || RequestCodesKt.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+        } else if (RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 Log.d(LOG_TAG, "## onActivityResult(): FALLBACK_ACTIVITY => RESULT_OK");
-                String homeServer = data.getStringExtra("homeServer");
-                String userId = data.getStringExtra("userId");
-                String accessToken = data.getStringExtra("accessToken");
-
-                // build a credential with the provided items
-                Credentials credentials = new Credentials();
-                credentials.userId = userId;
-                credentials.homeServer = homeServer;
-                credentials.accessToken = accessToken;
-
                 final HomeServerConnectionConfig hsConfig = getHsConfig();
+
+                Credentials credentials = FallbackAuthenticationActivity.Companion.getResultCredentials(data);
 
                 try {
                     hsConfig.setCredentials(credentials);
@@ -2208,13 +2405,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 goToSplash();
                 finish();
-            } else if ((resultCode == RESULT_CANCELED)) {
+            } else if (resultCode == RESULT_CANCELED) {
                 Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
                 // reset the home server to let the user writes a valid one.
                 mHomeserverConnectionConfig = null;
                 mRegistrationManager.reset();
-                mHomeServerText.setText(UrlUtilKt.HTTPS_SCHEME);
-                setActionButtonsEnabled(false);
+
+                if (mMode != MODE_LOGIN_SSO) {
+                    mHomeServerText.setText(null);
+                    setActionButtonsEnabled(false);
+                    checkFlows();
+                }
             }
         }
     }
@@ -2548,5 +2749,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public void onResourceLimitExceeded(MatrixError e) {
         enableLoadingScreen(false);
         mResourceLimitDialogHelper.displayDialog(e);
+    }
+
+    /**
+     * For test only, will always return false in production build
+     */
+    private boolean alwaysUseFallback() {
+        if (BuildConfig.DEBUG) {
+            // You can return true here, for test only, but never commit the change
+            return false;
+        }
+
+        // Never edit this line.
+        return false;
     }
 }

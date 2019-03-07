@@ -137,6 +137,11 @@
             android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
             android:title="@string/settings_preview_media_before_sending" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
+            android:summary="@string/settings_send_message_with_enter_summary"
+            android:title="@string/settings_send_message_with_enter" />
+
         <ListPreference
             android:defaultValue="always"
             android:entries="@array/show_info_area_entries"
@@ -211,7 +216,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <PreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
@@ -240,13 +245,13 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" />
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory android:title="@string/settings_call_category">
 
@@ -263,13 +268,13 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <PreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
         android:title="@string/settings_ignored_users" />
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
 
     <PreferenceCategory
         android:key="SETTINGS_LABS_PREFERENCE_KEY"
@@ -342,9 +347,11 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
 
-    <PreferenceCategory android:title="@string/settings_cryptography_manage_keys">
+    <PreferenceCategory
+        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
+        android:title="@string/settings_cryptography_manage_keys">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
@@ -363,7 +370,7 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY" />
 
     <!-- devices list: device ids + device names -->
     <PreferenceCategory
@@ -462,7 +469,7 @@
     <im.vector.preference.VectorPreferenceDivider />
 
     <PreferenceCategory
-        android:key="SETTINGS_OTHERS_PREFERENCE_KEY"
+        android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
         android:title="@string/settings_deactivate_account_section">
 
         <im.vector.preference.VectorPreference

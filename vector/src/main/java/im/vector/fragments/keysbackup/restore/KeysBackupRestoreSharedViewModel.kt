@@ -20,6 +20,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import im.vector.R
+import im.vector.activity.util.WaitingViewData
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
@@ -47,7 +48,7 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
     val navigateEvent: LiveData<LiveEvent<String>>
         get() = _navigateEvent
 
-    var loadingEvent: MutableLiveData<LiveEvent<Int>> = MutableLiveData()
+    var loadingEvent: MutableLiveData<WaitingViewData> = MutableLiveData()
 
 
     var importKeyResult: ImportRoomKeysResult? = null
@@ -71,7 +72,8 @@ class KeysBackupRestoreSharedViewModel : ViewModel() {
             //can this happen?
             _keyVersionResultError.value = LiveEvent(context.getString(R.string.keys_backup_no_keysbackup_sdk_error))
         } else {
-            loadingEvent.value = LiveEvent(R.string.keys_backup_restore_is_getting_backup_version)
+            loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restore_is_getting_backup_version))
+
             keysBackup.getCurrentVersion(object : ApiCallback<KeysVersionResult?> {
                 override fun onSuccess(info: KeysVersionResult?) {
                     loadingEvent.value = null

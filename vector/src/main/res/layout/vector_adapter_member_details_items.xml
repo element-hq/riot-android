@@ -19,7 +19,7 @@
             android:id="@+id/adapter_member_details_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/vector_create_direct_room" />
+            tools:src="@drawable/vector_create_direct_room" />
 
         <RelativeLayout
             android:id="@+id/room_avatar_layout"

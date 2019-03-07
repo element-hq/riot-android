@@ -1,3 +1,37 @@
+Changes in Riot 0.8.24 (2019-03-07)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.18.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.18
+
+Features:
+ - Implement server config discovery - .well-known support (#2982)
+ - Implement login with SSO (#3025)
+
+Improvements:
+ - Improve UX when restoring e2e keys (#2999)
+ - Add option to send messages with enter button (#1070)
+ - MediaViewer: display image in high quality and improve max zoom for big file (#2967)
+ - Hide e2e keys management section in settings if crypto is disabled
+ - Display message with formatted_body but with empty body (#2989)
+ - Get full Credentials data from Fallback login (#3006)
+
+Other changes:
+ - Change color of links (#2987)
+ - Change color of HomeSection badge (#2987)
+
+Bugfix:
+ - Fix crash in settings when cryptography is disabled (#2991)
+ - Fix Claims of display names being linkified (#2975)
+ - Fix Riot breaks links if message contains numbers (#2891)
+ - Fix geo: URIs are treated as phone numbers (#2464)
+ - Fix Some text in messages are converted to maps link and should not (#2350)
+ - Fix Numbers are too much linkified (#1140)
+ - Fix Highlight geo: URIs (#1329)
+ - Fix Odd linkification bug with trailing slash (#865)
+ - Fix issue on joining conference call wording in some languages (#2112)
+
 Changes in Riot 0.8.23 (2019-02-21)
 ===================================================
 
@@ -23,7 +57,7 @@ Bugfix:
  - Fix key backup banner doesn't go away after you have restored from backup. (#2943)
  - Fix issue with registration on some HomeServer (#2985)
 
-Changes in Riot 0.8.22 (2019-02-01)
+Changes in Riot 0.8.22-beta (2019-02-01)
 ===================================================
 
 MatrixSdk:
@@ -37,6 +71,7 @@ Features:
  - keys backup: Add a banner on Home to setup or recover backup (#2884)
 
 Improvements:
+ - Make Change Password Settings More User friendly (#2898)
  - Support Split-screen mode (#1832)
  - Enable auto focus when taking picture with the camera (#2831)
  - Better wording in notification for video call (#1421)
@@ -54,6 +89,7 @@ Other changes:
  - New application icon! (#2905)
 
 Bugfix:
+ - Fix No Visual Difference is setting if disabled (#2929)
  - Fix crash when taking picture for user avatar on old device (#2818)
  - Fix crash when adding background to image (#2828)
  - LED notifications are not working (#2512)

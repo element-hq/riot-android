@@ -14,7 +14,7 @@
         android:layout_marginStart="19dp"
         android:layout_marginLeft="19dp"
         android:src="@drawable/key_small"
-        android:tint="?android:textColorPrimary"
+        android:tint="?android:textColorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

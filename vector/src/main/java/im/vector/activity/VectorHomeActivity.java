@@ -1300,7 +1300,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.e2e_need_log_in_again)
                         .setNegativeButton(R.string.cancel, null)
-                        .setPositiveButton(R.string.ok,
+                        .setPositiveButton(R.string.action_sign_out,
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         CommonActivityUtils.logout(VectorApp.getCurrentActivity());
@@ -1516,7 +1516,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         View dialogView = inflater.inflate(R.layout.dialog_join_room_by_id, null);
 
         final EditText textInput = dialogView.findViewById(R.id.join_room_edit_text);
-        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorPrimary));
+        textInput.setTextColor(ThemeUtils.INSTANCE.getColor(this, android.R.attr.textColorTertiary));
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -1836,6 +1836,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         VectorUtils.displayThirdPartyLicenses();
                         break;
                     }
+
+                    case R.id.sliding_menu_debug: {
+                        // This menu item is only displayed in debug build
+                        startActivity(new Intent(VectorHomeActivity.this, DebugMenuActivity.class));
+                        break;
+                    }
                 }
 
                 mSlidingMenuIndex = -1;
@@ -1891,25 +1897,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         }
-
-//        if (SignOutActivity.Companion.doYouNeedToBeDisplayed(mSession)) {
-//            startActivity(new Intent(this, SignOutActivity.class));
-//        } else {
-//            // Display a simple confirmation dialog
-//            new AlertDialog.Builder(this)
-//                    .setTitle(R.string.action_sign_out)
-//                    .setMessage(R.string.action_sign_out_confirmation_simple)
-//                    .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            showWaitingView();
-//
-//                            CommonActivityUtils.logout(VectorHomeActivity.this);
-//                        }
-//                    })
-//                    .setNegativeButton(R.string.cancel, null)
-//                    .show();
-//        }
     }
 
     private void refreshSlidingMenu() {
@@ -2310,7 +2297,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
                 new AlertDialog.Builder(VectorHomeActivity.this)
                         .setMessage(R.string.e2e_enabling_on_app_update)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 CommonActivityUtils.logout(VectorHomeActivity.this);

@@ -38,8 +38,6 @@
     <string name="view_source">Skoða frumkóða</string>
     <string name="delete">Eyða</string>
     <string name="rename">Endurnefna</string>
-    <string name="ongoing_conference_call_voice">talskilaboð</string>
-    <string name="ongoing_conference_call_video">myndmerki</string>
     <string name="device_information">Upplýsingar um tæki</string>
     <string name="send_anyway">Senda samt</string>
     <string name="or">eða</string>
@@ -789,7 +787,9 @@ Leyfa Riot nota tengiliðina ?</string>
     <string name="deactivate_account_prompt_password">Til að halda áfram, settu inn lykilorðið þitt:</string>
     <string name="deactivate_account_submit">Gera notandaaðgang óvirkann</string>
 
-    <string name="ongoing_conference_call">" Símafundur í gangi. Taka þátt með hljóð- eða myndsímtali."</string>
+    <string name="ongoing_conference_call">"Símafundur í gangi.\nTaka þátt með %1$s eða %2$s."</string>
+    <string name="ongoing_conference_call_voice">hljóð-</string>
+    <string name="ongoing_conference_call_video">myndsímtali</string>
     <string name="missing_permissions_to_start_conf_call">Þú þarft aðgangsheimildir til að bjóða til símafundar á þessari spjallrás</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Símafundir eru ekki studdir í dulrituðum spjallrásum</string>
     <string name="send_bug_report_description">Lýstu villunni. Hvað varstu að gera? Hverju áttirðu von á? Hvað gerðist í raun?</string>

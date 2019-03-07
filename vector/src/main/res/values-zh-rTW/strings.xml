@@ -10,7 +10,7 @@
     <string name="notification_sync_in_progress">同步中</string>
     <string name="notification_listening_for_events">聆聽事件</string>
 
-    <string name="title_activity_home">信息</string>
+    <string name="title_activity_home">訊息</string>
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">設置</string>
     <string name="title_activity_member_details">會員訊息</string>
@@ -42,7 +42,7 @@
     <string name="rename">重新命名</string>
     <string name="report_content">回報內容</string>
     <string name="active_call">進行中的通話</string>
-    <string name="ongoing_conference_call">正在進行電話會議，以語音或視訊加入。</string>
+    <string name="ongoing_conference_call">正在進行電話會議，\n以%1$s或%2$s加入。</string>
     <string name="ongoing_conference_call_voice">語音</string>
     <string name="ongoing_conference_call_video">視訊</string>
     <string name="cannot_start_call">無法啟用通話，請稍後再試</string>
@@ -79,11 +79,11 @@
     <string name="bottom_action_rooms">聊天室</string>
     <string name="bottom_action_groups">社群</string>
 
-    <string name="home_filter_placeholder_home">搜尋聊天室</string>
-    <string name="home_filter_placeholder_favorites">搜尋收藏夾</string>
-    <string name="home_filter_placeholder_people">搜尋人</string>
-    <string name="home_filter_placeholder_rooms">搜尋聊天室</string>
-    <string name="home_filter_placeholder_groups">搜尋社群</string>
+    <string name="home_filter_placeholder_home">過濾聊天室名稱</string>
+    <string name="home_filter_placeholder_favorites">過濾最愛</string>
+    <string name="home_filter_placeholder_people">過濾人</string>
+    <string name="home_filter_placeholder_rooms">過濾聊天室名稱</string>
+    <string name="home_filter_placeholder_groups">過濾社群名稱</string>
 
     <string name="invitations_header">邀請</string>
     <string name="low_priority_header">低優先度</string>
@@ -128,7 +128,7 @@
 
     <string name="join_room">加入聊天室</string>
     <string name="username">使用者名稱</string>
-    <string name="create_account">註冊</string>
+    <string name="create_account">建立帳號</string>
     <string name="login">登入</string>
     <string name="logout">登出</string>
     <string name="hs_url">家伺服器網址</string>
@@ -210,7 +210,7 @@
     <string name="login_error_registration_network_error">無法註冊：網路錯誤</string>
     <string name="login_error_unable_register">無法註冊</string>
     <string name="login_error_unable_register_mail_ownership">無法註冊：電子郵件的擁有權失敗</string>
-    <string name="login_error_invalid_home_server">輸入有效的網址</string>
+    <string name="login_error_invalid_home_server">請輸入有效的網址</string>
     <string name="login_mobile_device">行動</string>
 
     <string name="login_error_forbidden">無效的使用者名稱/密碼</string>
@@ -305,8 +305,7 @@
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
 
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
-    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。
-你也許希望以不同帳號登入，或將電子郵件加入到此帳號。</string>
+    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
     <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入討論嗎？</string>
     <string name="room_preview_try_join_an_unknown_room_default">聊天室</string>
     <string name="room_preview_room_interactions_disabled">這是聊天室的預覽，聊天室互動已停用。</string>
@@ -603,9 +602,9 @@
     <string name="account_phone_number_already_used_error">這個電話號碼已被使用。</string>
 
     <string name="settings_change_password">變更密碼</string>
-    <string name="settings_old_password">舊密碼</string>
+    <string name="settings_old_password">目前的密碼</string>
     <string name="settings_new_password">新密碼</string>
-    <string name="settings_confirm_password">確認密碼</string>
+    <string name="settings_confirm_password">確認新密碼</string>
     <string name="settings_fail_to_update_password">更新密碼失敗</string>
     <string name="settings_password_updated">您的密碼已經更新</string>
     <string name="settings_unignore_user">顯示所有來自 %s 的訊息？
@@ -820,7 +819,7 @@
     <string name="widget_integration_room_not_visible">聊天室 %s 不可見。</string>
     <string name="widget_integration_missing_parameter">缺少必需的參數。</string>
     <string name="widget_integration_invalid_parameter">無效參數。</string>
-    <string name="room_add_matrix_apps">添加 Matrix 應用程式</string>
+    <string name="room_add_matrix_apps">新增 Matrix 應用程式</string>
     <string name="settings_labs_native_camera">使用原生相機</string>
     <string name="settings_labs_enable_send_voice">傳送語音訊息</string>
 
@@ -933,7 +932,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_participants_now">目前 %1$s</string>
     <string name="room_participants_ago">%1$s %2$s 前</string>
 
-    <string name="room_participants_invite_join_names">"%1$s， "</string>
+    <string name="room_participants_invite_join_names">%1$s，</string>
     <string name="room_participants_invite_join_names_and">%1$s 與 %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
@@ -1095,7 +1094,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
     <string name="settings_troubleshoot_test_battery_success">Riot 不會被電池最佳化影響。</string>
-    <string name="settings_troubleshoot_test_battery_failed">"如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。 "</string>
+    <string name="settings_troubleshoot_test_battery_failed">如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
@@ -1110,44 +1109,29 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
 
-    <string name="store_title">Riot.im - 開放式團隊協作</string>
-    <string name="store_short_description">歡迎來到 Riot.im：開放溝通的新世界！</string>
-    <string name="store_full_description">Riot.im 是簡潔優雅的協作環境，其收集了您所有不同的對話，並將應用程式整合至單一的應用程式。
+    <string name="store_title">Riot.im - 以您的方式溝通。</string>
+    <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
+    <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Riot 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
 
-圍繞群組聊天室建構，Riot.im 讓您分享訊息、圖片、影片與檔案，與您的工具互動並在同一個地方存取您所有不同的社群。為您所有的團隊使用同一個身份與地方：不需要切換帳號，與從不同組織而來的夥伴們在公開或私密聊天室中工作並聊天：從專業的專案到學校旅行，Riot.im 將會變成您所有討論的中心！
+取得免費的 matrix.org 帳號，在 https://modular.im 取得您自己的伺服器，或是使用其他的 Matrix 伺服器。
 
-現在有端到端加密了！
+為什麼選擇 Riot.im？
 
-包含以下功能：
+• 完整的溝通：與您的團隊、朋友、社群一同建構聊天室，不管您喜歡什麼都可以！聊天、分享檔案、新增小工具與進行語音和視訊通話，全都是免費的。
 
-• 立刻與任何規模的群組分享訊息、圖片、影片與檔案
-• 透過 WebRTC 進行音訊與視訊的一對一或會議通話
-• 使用 Olm (https://matrix.org/git/olm) 的端到端加密
-• 看讀取回條來看誰讀了您的訊息
-• 與整個 Matrix.org 生態系統的使用者溝通 - 不只 Riot.im 使用者！
-• 透過電子郵件探索並邀請使用者
-• 參與訪客可以進入的公開聊天室
-• 高度可擴展性 - 支援數百個聊天室與數千個使用者
-• 橫跨多裝置與瀏覽器完全同步訊息歷史
-• 可精確設定的通知設定，在所有裝置䅮同步
-• 可無限搜尋的聊天歷史
-• 訊息的永久連結
-• 完整訊息搜尋
-• 支援如阿拉伯文的右向左語言
+• 強大的整合：與您知道且所愛的工具一同使用 Riot.im。使用 Riot.im，您甚至可以與其他聊天應用程式的使用者與群組聊天。
 
-對開發者來說：
-• Riot.im 是 Matrix 客戶端 - 建構於 Matrix.org 開放標準與生態系統，提供與其他所有相容 Matrix 的應用程式、伺服器與整合的互操作性
-• 以寬鬆的 Apache 授權條款完全開放原始碼 - 從 https://github.com/vector-im/vector-android 取得。歡迎拉取請求！
-• 可透過開放的 Matrix 客戶端對伺服器 API 擴充 (https://matrix.org/docs/spec)
-• 執行您自己的伺服器！您可以使用預設的 matrix.org 伺服器，或是執行您自己的 Matrix 家伺服器（例如 https://matrix.org/docs/projects/server/synapse.html）
+• 隱密且安全：讓您的對話保持隱密。最先進的端到端加密確保隱密的溝通會繼續保持隱密。
 
-與 Riot.im 探索真正有效與開放的協作！</string>
+• 開放，並不封閉：開放原始碼，建基於 Matrix。透過建構您自己的伺服器來擁有自己的資料，或選取您信任的。
+
+• 無論您身在何處：透過 https://riot.im 來保持聯繫並在您所有的裝置上完全同步訊息歷史。"</string>
 
     <string name="video_call_in_progress">視訊通話進行中……</string>
 
-    <string name="store_whats_new">我們會不斷為 Riot.im 做出變更與改善。
+    <string name="store_whats_new">"我們會不斷為 Riot.im 做出變更與改善。
 完整的變更紀錄可以在此找到：%1$s。
-為了確保您不會錯過任何事情，只要把更新打開就行了。</string>
+為了確保您不會錯過任何事情，只要把更新打開就行了。"</string>
     <string name="title_activity_keys_backup_setup">金鑰備份</string>
     <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
@@ -1227,7 +1211,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_passphrase_error_decrypt">備份可能無法使用此通關密語解密：請驗證您是否輸入正確的復原通關密語。</string>
     <string name="network_error_please_check_and_retry">網路錯誤：請檢查您的連線並重試。</string>
 
-    <string name="keys_backup_restoring_waiting_message">正在復原備份……</string>
+    <string name="keys_backup_restoring_waiting_message">正在復原備份：</string>
     <string name="keys_backup_unlock_button">解鎖歷史紀錄</string>
     <string name="keys_backup_recovery_code_empty_error_message">請輸入復原金鑰</string>
     <string name="keys_backup_recovery_code_error_decrypt">備份可能無法使用此復原金鑰解密：請驗證您是否輸入正確的復原金鑰。</string>
@@ -1245,8 +1229,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_no_keysbackup_sdk_error">工作階段加密未啟用</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">復原</string>
-    <string name="keys_backup_settings_delete_backup_button">刪除</string>
+    <string name="keys_backup_settings_restore_backup_button">自備份復原</string>
+    <string name="keys_backup_settings_delete_backup_button">刪除備份</string>
 
     <string name="keys_backup_settings_status_ok">金鑰備份已為此裝置正確設定。</string>
     <string name="keys_backup_settings_status_ko">金鑰備份未在此裝置上啟用。</string>
@@ -1290,9 +1274,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_setup_step1_manual_export">手動匯出金鑰</string>
 
     <string name="keys_backup_setup_step2_text_title">以通關密語保護您的備份。</string>
-    <string name="keys_backup_setup_step2_text_description">我們將會在我們的伺服器上儲存一份加密過的您的金鑰副本。使用通關密語保護您的備份以確保其安全。
-
-要有最大的安全性，這個應該要與您的帳號密碼不一樣。</string>
+    <string name="keys_backup_setup_step2_text_description">我們將會在您的家伺服器上儲存一份加密過的您的金鑰副本。使用通關密語保護您的備份以確保其安全。
+\n
+\n要有最大的安全性，這個應該要與您的帳號密碼不一樣。</string>
     <string name="keys_backup_setup_creating_backup">正在建立備份</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">或是使用復原金鑰來保障您的備份安全，將其儲存在安全的地方。</string>
     <string name="keys_backup_setup_step2_skip_button_title">（進階）使用復原金鑰設定</string>
@@ -1322,5 +1306,32 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_info_title_version">版本</string>
     <string name="keys_backup_info_title_algorithm">演算法</string>
     <string name="keys_backup_info_title_signature">簽章</string>
+
+    <string name="keys_backup_settings_untrusted_backup">要在此裝置上使用金鑰備份，現在就使用您的通關密語或復原金鑰復原。</string>
+    <string name="new_recovery_method_popup_title">新的金鑰備份</string>
+    <string name="new_recovery_method_popup_description">已偵測到新的安全訊息金鑰備份。
+
+如果您並沒有設定新的復原方法，那麼可能是有攻擊者在嘗試存取您的帳號。在設定中變更您的帳號密碼並立刻設定新的復原方法。</string>
+    <string name="new_recovery_method_popup_was_me">這是我</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">正在計算復原金鑰……</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">正在下載金鑰……</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">正在匯出金鑰……</string>
+    <string name="ignore">忽略</string>
+
+    <string name="auth_login_sso">使用單一登入系統登入</string>
+    <string name="login_error_unknown_host">這個 URL 不可用，請檢查</string>
+    <string name="login_error_ssl_handshake">您的裝置正在使用過期的 TLS 安全協定，容易遭受攻擊，為了您的安全將不會連線</string>
+    <string name="settings_send_message_with_enter">使用 Enter 傳送訊息</string>
+    <string name="settings_send_message_with_enter_summary">軟體鍵盤的 Enter 按鈕將會傳送訊息而非換行</string>
+
+    <string name="settings_change_password_submit">更新密碼</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">密碼無效</string>
+    <string name="passwords_do_not_match">密碼不符合</string>
+
+    <string name="autodiscover_invalid_response">無效的家伺服器探索回應</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">自動完成伺服器選項</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot 偵測到您的 userId 網域「%s」有自訂的伺服器設定：
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">使用設定</string>
 
 </resources>

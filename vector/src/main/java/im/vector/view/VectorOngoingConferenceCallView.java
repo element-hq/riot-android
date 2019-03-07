@@ -18,15 +18,16 @@
 package im.vector.view;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -39,6 +40,9 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
@@ -46,7 +50,7 @@ import im.vector.widgets.WidgetsManager;
 /**
  * This class displays if there is an ongoing conference call.
  */
-public class VectorOngoingConferenceCallView extends FrameLayout {
+public class VectorOngoingConferenceCallView extends RelativeLayout {
     private static final String LOG_TAG = VectorOngoingConferenceCallView.class.getSimpleName();
 
     // video / voice text click listener.
@@ -85,8 +89,12 @@ public class VectorOngoingConferenceCallView extends FrameLayout {
     // the linked widget
     private Widget mActiveWidget;
 
+    @BindView(R.id.ongoing_conference_call_text_view)
+    TextView mConferenceCallTextView;
+
     // close widget icon
-    private View mCloseWidgetIcon;
+    @BindView(R.id.close_widget_icon)
+    View mCloseWidgetIcon;
 
     private ICallClickListener mCallClickListener;
 
@@ -138,75 +146,73 @@ public class VectorOngoingConferenceCallView extends FrameLayout {
      * Common initialisation method.
      */
     private void initView() {
-        View.inflate(getContext(), R.layout.vector_ongoing_conference_call, this);
+        inflate(getContext(), R.layout.vector_ongoing_conference_call, this);
+        ButterKnife.bind(this);
 
-        TextView textView = findViewById(R.id.ongoing_conference_call_text_view);
-        ClickableSpan voiceClickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (null != mCallClickListener) {
-                    try {
-                        mCallClickListener.onVoiceCallClick(mActiveWidget);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage(), e);
-                    }
-                }
-            }
-        };
-
-        ClickableSpan videoClickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (null != mCallClickListener) {
-                    try {
-                        mCallClickListener.onVideoCallClick(mActiveWidget);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage(), e);
-                    }
-                }
-            }
-        };
-
-        SpannableString ss = new SpannableString(textView.getText());
-
-        // "voice" and "video" texts are underlined
-        // and clickable
+        // "voice" and "video" texts are underlined and clickable
         String voiceString = getContext().getString(R.string.ongoing_conference_call_voice);
+        String videoString = getContext().getString(R.string.ongoing_conference_call_video);
+
+        String fullMessage = getContext().getString(R.string.ongoing_conference_call, voiceString, videoString);
+
+        SpannableString ss = new SpannableString(fullMessage);
+
         int pos = ss.toString().indexOf(voiceString);
 
-        if (pos >= 0) {
-            ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
-        } else {
-            Log.e(LOG_TAG, "## initView() : cannot find " + voiceString + " in " + ss.toString());
-        }
+        ss.setSpan(new ClickableSpan() {
+                       @Override
+                       public void onClick(View textView1) {
+                           if (null != mCallClickListener) {
+                               try {
+                                   mCallClickListener.onVoiceCallClick(mActiveWidget);
+                               } catch (Exception e) {
+                                   Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage(), e);
+                               }
+                           }
+                       }
+                   },
+                pos,
+                pos + voiceString.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new StyleSpan(Typeface.BOLD),
+                pos,
+                pos + voiceString.length(),
+                0);
 
-        String videoString = getContext().getString(R.string.ongoing_conference_call_video);
         pos = ss.toString().indexOf(videoString);
 
-        if (pos >= 0) {
-            ss.setSpan(videoClickableSpan, pos, pos + videoString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
-        } else {
-            Log.e(LOG_TAG, "## initView() : cannot find " + videoString + " in " + ss.toString());
-        }
+        ss.setSpan(new ClickableSpan() {
+                       @Override
+                       public void onClick(View textView1) {
+                           if (null != mCallClickListener) {
+                               try {
+                                   mCallClickListener.onVideoCallClick(mActiveWidget);
+                               } catch (Exception e) {
+                                   Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage(), e);
+                               }
+                           }
+                       }
+                   }, pos,
+                pos + videoString.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new StyleSpan(Typeface.BOLD),
+                pos,
+                pos + videoString.length(),
+                0);
 
-        textView.setText(ss);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        mConferenceCallTextView.setText(ss);
+        mConferenceCallTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
 
-        mCloseWidgetIcon = findViewById(R.id.close_widget_icon);
-        mCloseWidgetIcon.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mCallClickListener) {
-                    try {
-                        mCallClickListener.onCloseWidgetClick(mActiveWidget);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## initView() : onRemoveWidgetClick failed " + e.getMessage(), e);
-                    }
-                }
+    @OnClick(R.id.close_widget_icon)
+    void onClose() {
+        if (null != mCallClickListener) {
+            try {
+                mCallClickListener.onCloseWidgetClick(mActiveWidget);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initView() : onRemoveWidgetClick failed " + e.getMessage(), e);
             }
-        });
+        }
     }
 
     /**

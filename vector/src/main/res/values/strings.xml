@@ -72,9 +72,10 @@
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call">Ongoing conference call. Join as voice or video.</string>
-    <string name="ongoing_conference_call_voice">voice</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
+    <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
+    <string name="ongoing_conference_call_voice">Voice</string>
+    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
@@ -91,6 +92,7 @@
     <string name="skip">Skip</string>
     <string name="done">Done</string>
     <string name="abort">Abort</string>
+    <string name="ignore">Ignore</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -121,11 +123,11 @@
     <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
-    <string name="home_filter_placeholder_groups">Search for communities</string>
+    <string name="home_filter_placeholder_home">Filter room names</string>
+    <string name="home_filter_placeholder_favorites">Filter favourites</string>
+    <string name="home_filter_placeholder_people">Filter people</string>
+    <string name="home_filter_placeholder_rooms">Filter room names</string>
+    <string name="home_filter_placeholder_groups">Filter community names</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -177,7 +179,7 @@
 
     <string name="join_room">Join Room</string>
     <string name="username">Username</string>
-    <string name="create_account">Register</string>
+    <string name="create_account">Create Account</string>
     <string name="login">Log in</string>
     <string name="logout">Sign out</string>
     <string name="hs_url">Home Server URL</string>
@@ -209,6 +211,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
+    <string name="auth_login_sso">Sign in with single sign-on</string>
     <string name="auth_register">Create Account</string>
     <string name="auth_submit">Submit</string>
     <string name="auth_skip">Skip</string>
@@ -264,7 +267,9 @@
     <string name="login_error_registration_network_error">Unable to register: Network error</string>
     <string name="login_error_unable_register">Unable to register</string>
     <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
-    <string name="login_error_invalid_home_server">Enter valid URL</string>
+    <string name="login_error_invalid_home_server">Please enter a valid URL</string>
+    <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
+    <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
     <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
@@ -382,7 +387,7 @@
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
-    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
+    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your account.</string>
     <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">a room</string>
     <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
@@ -470,7 +475,7 @@
     -->
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
     <!-- The building block of the first part of the string of names ("Alice, "/"Bob, ") -->
-    <string name="room_participants_invite_join_names">%1$s, </string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
     <!-- The second part of the string of names ("Charlie and David") -->
     <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
     <!-- First variable is the first part, and second is the second part -->
@@ -764,6 +769,8 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
+    <string name="settings_send_message_with_enter">Send message with enter</string>
+    <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
@@ -817,12 +824,15 @@
 
     <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">Old password</string>
+    <string name="settings_old_password">Current password</string>
     <string name="settings_new_password">New password</string>
-    <string name="settings_confirm_password">Confirm password</string>
+    <string name="settings_confirm_password">Confirm new password</string>
+    <string name="settings_change_password_submit">Update Password</string>
     <string name="settings_fail_to_update_password">Failed to update password</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
@@ -1206,7 +1216,7 @@
     <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
 The complete changelog can be found here: %1$s.
 To make sure you don’t miss a thing, just keep your updates turned on."</string>
-    <string name="store_short_description">Communicate the way you want with Riot - a universal secure chat app entirely under your control.</string>
+    <string name="store_short_description">A universal secure chat app entirely under your control.</string>
     <string name="store_full_description">"A chat app, under your control and entirely flexible. Riot lets you communicate the way you want. Made for [matrix] - the standard for open, decentralised communication.
 
 Get a free matrix.org account, get your own server at https://modular.im, or use another Matrix server.
@@ -1243,7 +1253,7 @@ Why choose Riot.im?
     <string name="keys_backup_setup_step1_manual_export">Manually export keys</string>
 
     <string name="keys_backup_setup_step2_text_title">Secure your backup with a Passphrase.</string>
-    <string name="keys_backup_setup_step2_text_description">We’ll store an encrypted copy of your keys on our server. Protect your backup with a passphrase to keep it secure.\n\nFor maximum security, this should be different from your account password.</string>
+    <string name="keys_backup_setup_step2_text_description">We’ll store an encrypted copy of your keys on your homeserver. Protect your backup with a passphrase to keep it secure.\n\nFor maximum security, this should be different from your account password.</string>
     <string name="keys_backup_setup_step2_button_title">Set Passphrase</string>
     <string name="keys_backup_setup_creating_backup">Creating Backup</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Or, secure your backup with a Recovery Key, saving it somewhere safe.</string>
@@ -1265,7 +1275,7 @@ Why choose Riot.im?
     <string name="recovery_key">Recovery Key</string>
     <string name="unexpected_error">Unexpected error</string>
     <string name="keys_backup_setup_backup_started_title">Backup Started</string>
-    <string name="keys_backup_setup_backup_started_message">Your encryption keys are now being backed up in the background to your Homeserver. The initial backup could take several minutes.</string>
+    <string name="keys_backup_setup_backup_started_message">Your encryption keys are now being backed up in the background to your homeserver. The initial backup could take several minutes.</string>
 
 
     <string name="keys_backup_setup_skip_title">Are you sure?</string>
@@ -1287,8 +1297,10 @@ Why choose Riot.im?
     <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
     <string name="network_error_please_check_and_retry">Network error: please check your connection and retry.</string>
 
-    <string name="keys_backup_restoring_from_passphrase_waiting_message">Restoring backup, this process can take several seconds.</string>
-    <string name="keys_backup_restoring_waiting_message">Restoring backup…</string>
+    <string name="keys_backup_restoring_waiting_message">Restoring backup:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Downloading keys…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importing keys…</string>
     <string name="keys_backup_unlock_button">Unlock History</string>
     <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
     <string name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key.</string>
@@ -1357,5 +1369,10 @@ Why choose Riot.im?
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithm</string>
     <string name="keys_backup_info_title_signature">Signature</string>
+
+    <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
 </resources>

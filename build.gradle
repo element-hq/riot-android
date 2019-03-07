@@ -5,10 +5,10 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -23,8 +23,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 82300
-    versionNameProp = "0.8.23"
+    versionCodeProp = 82400
+    versionNameProp = "0.8.24"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
@@ -32,13 +32,13 @@ ext {
 allprojects {
     repositories {
         google()
-        jcenter()
         maven {
             url "https://maven.google.com"
         }
         maven {
             url "https://jitpack.io"
         }
+        jcenter()
     }
 }
 

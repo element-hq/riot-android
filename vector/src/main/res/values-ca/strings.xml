@@ -22,7 +22,7 @@
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuració</string>
     <string name="title_activity_member_details">Detalls dels participants</string>
-    <string name="title_activity_historical">Històric</string>
+    <string name="title_activity_historical">Historial</string>
     <string name="title_activity_bug_report">Informe d\'errors</string>
     <string name="title_activity_group_details">Detalls de la comunitat</string>
 
@@ -30,7 +30,7 @@
     <string name="ok">D\'acord</string>
     <string name="cancel">Cancel·la</string>
     <string name="save">Desa</string>
-    <string name="leave">Surt de la sala</string>
+    <string name="leave">Abandona la sala</string>
     <string name="send">Envia</string>
     <string name="copy">Còpia</string>
     <string name="resend">Reenvia</string>
@@ -46,7 +46,7 @@
     <string name="rename">Reanomena</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call">" Conferència en curs. Uniu-vos hi per veu o vídeo."</string>
+    <string name="ongoing_conference_call">" Conferència en curs.\nUniu-vos hi per %1$s o %2$s."</string>
     <string name="ongoing_conference_call_voice">veu</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
@@ -61,12 +61,12 @@
     <string name="offline">Fora de línia</string>
 
     <!-- actions -->
-    <string name="action_sign_out">Surt</string>
+    <string name="action_sign_out">Desconnecta</string>
     <string name="action_voice_call">Trucada de veu</string>
     <string name="action_video_call">Vídeotrucada</string>
     <string name="action_global_search">Cerca global</string>
     <string name="action_mark_all_as_read">Marca-ho tot com a llegit</string>
-    <string name="action_historical">Històric</string>
+    <string name="action_historical">Historial</string>
     <string name="action_quick_reply">Resposta ràpida</string>
     <string name="action_open">Obre</string>
     <string name="action_close">Tanca</string>
@@ -139,9 +139,9 @@
     <string name="username">Nom d\'usuari</string>
     <string name="create_account">Registra\'m</string>
     <string name="login">Entra</string>
-    <string name="logout">Surt de la sessió</string>
+    <string name="logout">Desconnecta</string>
     <string name="hs_url">URL del servidor</string>
-    <string name="identity_url">URL de la identitat del servidor</string>
+    <string name="identity_url">URL del servidor d\'identitat</string>
     <string name="search">Cerca</string>
 
     <string name="start_new_chat">Inicia un xat nou</string>
@@ -197,7 +197,7 @@
     <string name="auth_recaptcha_message">Aquest servidor es vol assegurar que no sou un robot</string>
     <string name="auth_username_in_use">Aquest nom d\'usuari ja existeix</string>
     <string name="auth_home_server">Servidor:</string>
-    <string name="auth_identity_server">Identitat del servidor:</string>
+    <string name="auth_identity_server">Servidor d\'identitat:</string>
     <string name="auth_reset_password_next_step_button">He verificat el correu electrònic</string>
     <string name="auth_reset_password_message">Introduïu el correu electrònic associat al compte per reiniciar la contrasenya:</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
@@ -225,7 +225,9 @@
     <string name="login_error_login_email_not_yet">L\'enllaç del correu electrònic que encara no heu fet clic</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al servidor.\nAixò només s\'ha de fer un cop.</string>
+    <string name="e2e_need_log_in_again">Heu de tornar a iniciar sessió per tal de generar claus de xifrat d\'extrema a extrem per a aquest dispositiu i enviar la clau pública al vostre servidor base.
+\nAixò només s\'ha de fer un cop.
+\nDisculpeu les molèsties.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Llegit per</string>
@@ -315,8 +317,8 @@
     <string name="room_title_one_member">1 participant</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Surt de la sala</string>
-    <string name="room_participants_leave_prompt_msg">Esteu segur que voleu sortir de la sala?</string>
+    <string name="room_participants_leave_prompt_title">Abandona la sala</string>
+    <string name="room_participants_leave_prompt_msg">Esteu segurs que voleu sortir de la sala\?</string>
     <string name="room_participants_remove_prompt_msg">Esteu segur que voleu eliminar %s d\'aques xat?</string>
     <string name="room_participants_create">Crea</string>
 
@@ -377,7 +379,7 @@
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
     <string name="ssl_do_not_trust">No hi confiïs</string>
-    <string name="ssl_logout_account">Surt</string>
+    <string name="ssl_logout_account">Desconnecta</string>
     <string name="ssl_remain_offline">Ignora</string>
     <string name="ssl_fingerprint_hash">Empremta digital (%s):</string>
     <string name="ssl_could_not_verify">No s\'ha pogut verificar la identitat del servidor remot.</string>
@@ -427,7 +429,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_recents_join_room_prompt">Escriviu un id de sala o un àlies de sala</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Navega pel directpri</string>
+    <string name="directory_search_results_title">Navega pel directori</string>
     <string name="directory_searching_title">S\'està cercant al directori…</string>
 
     <!-- home room settings -->
@@ -458,7 +460,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_app_info_link_summary">Mostra la informació de l\'aplicació als paràmetres del sistema.</string>
     <string name="settings_app_info_link_title">Informació de l\'aplicació</string>
 
-    <string name="settings_notification_ringtone">So de les notificación</string>
+    <string name="settings_notification_ringtone">So de les notificacions</string>
     <string name="settings_enable_all_notif">Habilita les notificacions d\'aquest compte</string>
     <string name="settings_enable_this_device">Habilita les notificacions d\'aquest dispositiu</string>
     <string name="settings_turn_screen_on">Encén la pantalla durant 3 segons</string>
@@ -504,14 +506,14 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="settings_pin_unread_messages">Destaca les sales amb missatges sense llegir</string>
     <string name="settings_devices_list">Dispositius</string>
     <string name="settings_inline_url_preview">Previsualitzacions dels URL en línia</string>
-    <string name="settings_always_show_timestamps">Mostra les marques horàries per a tots els missatges</string>
+    <string name="settings_always_show_timestamps">Mostra sempre l\'hora a tots els missatges</string>
     <string name="settings_12_24_timestamps">Mostra l\'hora en el format de 12 hores</string>
     <string name="settings_vibrate_on_mention">Vibra quan mencionin un usuari</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analítiques</string>
 
-    <string name="settings_data_save_mode">Mode de desament de dades</string>
+    <string name="settings_data_save_mode">Mode d\'estalvi de dades</string>
 
     <string name="devices_details_dialog_title">Detalls del dispositiu</string>
     <string name="devices_details_id_title">ID</string>
@@ -526,7 +528,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
 
     <string name="settings_logged_in">Registrat com a</string>
     <string name="settings_home_server">Servidor</string>
-    <string name="settings_identity_server">Identitat del servidor</string>
+    <string name="settings_identity_server">Servidor d\'identitat</string>
 
     <string name="settings_user_interface">Interfície d\'usuari</string>
     <string name="settings_interface_language">Llengua</string>
@@ -592,8 +594,8 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="room_settings_category_access_visibility_title">Accés i visibilitat</string>
     <string name="room_settings_directory_visibility">Mostra aquesta sala al directori de sales</string>
     <string name="room_settings_room_access_rules_pref_title">Accés a la sala</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l\'històric de la sala</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l\'històric?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Permisos de lectura de l\'historial de la sala</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Qui pot llegir l\'historial\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Qui pot accedir a la sala?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
@@ -716,13 +718,13 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <!-- directory activity  -->
     <string name="select_room_directory">Escolliu un directori de sale</string>
     <string name="directory_server_fail_to_retrieve_server">És possible que el servidor no estigui disponible o que estigui sobrecarregat</string>
-    <string name="directory_server_type_homeserver">Introdueix un servidor per veure les seves sales públiques</string>
-    <string name="directory_server_placeholder">URL del servidor</string>
+    <string name="directory_server_type_homeserver">Introdueix un servidor base per veure les seves sales públiques</string>
+    <string name="directory_server_placeholder">URL del servidor base</string>
     <string name="directory_server_all_rooms_on_server">Totes les sales del servidor %s</string>
     <string name="directory_server_native_rooms">Totes les sales natives de %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Busca a l\'històric</string>
+    <string name="historical_placeholder">Busca a l\'historial</string>
 
     <!-- text size selection -->
     <string name="font_size">Mida de la font</string>
@@ -917,7 +919,7 @@ En voleu afegir algun?</string>
     </plurals>
 
     <string name="room_participants_now">Ara %1$s</string>
-    <string name="room_participants_ago">Fa %1$s %2$s</string>
+    <string name="room_participants_ago">%1$s fa %2$s</string>
 
     <string name="room_participants_action_unignore_prompt">Mostrar tots els missatges d\'aquest usuari?
 
@@ -1002,11 +1004,11 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="dialog_user_consent_submit">Revisa ara</string>
 
     <string name="deactivate_account_title">Desactiva el compte</string>
-    <string name="deactivate_account_content">Això farà que no pugueu usar més el vostre compte. No podreu iniciar la sessió i ningú podrà donar-se d\'alta amb el mateix identificador d\'usuari. Això provocarà que el vostre compte abandoni totes les sales a les que estigui participant i eliminarà les vostres dades del compte al qual teniu el servidor d\'identitats. <b>Aquesta acció és irreversible</b>.
-
-Desactivar el compte <b>no implica que s\'eliminin els missatges que heu eliminat</b>. Si voleu eliminar-los, marqueu la casella a continuació.
-
-La visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que eliminem els vostres missatges significa que els missatges que hagueu enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.</string>
+    <string name="deactivate_account_content">Això farà que no pugueu usar més el vostre compte. No podreu iniciar la sessió i ningú podrà donar-se d\'alta amb el mateix identificador d\'usuari. Això provocarà que el vostre compte abandoni totes les sales a les que estigui participant i eliminarà les vostres dades del compte que hi hagi al vostre servidor d\'identitats. <b>Aquesta acció és irreversible</b>.
+\n
+\nDesactivar el compte <b>no implica que s\'eliminin els missatges que heu enviat</b>. Si voleu eliminar-los, marqueu la casella a continuació.
+\n
+\nLa visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que eliminem els vostres missatges significa que els missatges que hagueu enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.</string>
     <string name="deactivate_account_delete_checkbox">Si us plau elimina tots els missatges que he enviat mentre es desactiva el meu compte (Avís: això provocarà que els usuaris futurs tinguin una vista incompleta de les converses)</string>
     <string name="deactivate_account_prompt_password">Per a continuar, si us plau escriviu la vostra contrasenya:</string>
     <string name="deactivate_account_submit">Desactivar el compte</string>
@@ -1022,18 +1024,18 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
 
     <string name="resource_limit_contact_admin">Contacteu amb l\'administrador del servei</string>
 
-    <string name="resource_limit_soft_default">Aquest servidor ha sobrepassat on dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
-    <string name="resource_limit_hard_default">Aquest servidor ha sobrepassat on dels seus límits de recursos.</string>
+    <string name="resource_limit_soft_default">Aquest servidor base ha sobrepassat un dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_default">Aquest servidor base ha sobrepassat un dels seus límits de recursos.</string>
 
-    <string name="resource_limit_soft_mau"> Aquest servidor ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
-    <string name="resource_limit_hard_mau">Aquest servidor ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
+    <string name="resource_limit_soft_mau"> Aquest servidor base ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
+    <string name="resource_limit_hard_mau">Aquest servidor base ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
 
     <string name="resource_limit_soft_contact">Si us plau %s per tal d\'incrementar aquest límit.</string>
     <string name="resource_limit_hard_contact">"Si us plau %s  per continuar usant aquest servei."</string>
 
     <string name="settings_lazy_loading_title">Torna a carregar els membres de la sala</string>
     <string name="settings_lazy_loading_description">Milloreu el rendiment carregant només els membres de la sala a primera vista.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor encara no suporta la recàrrega de membres d\'una sala. Proveu-ho més tard.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">El vostre servidor base encara no suporta la càrrega en diferit de membres d\'una sala. Proveu-ho més tard.</string>
 
     <string name="unknown_error">Ho sentim, s\'ha produït un error</string>
 
@@ -1054,7 +1056,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     </plurals>
     <string name="reason_hint">Motiu</string>
 
-    <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre homeserver suporti aquesta funcionalitat.</string>
+    <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre servidor base suporti aquesta funcionalitat.</string>
     <string name="settings_send_typing_notifs">Envia notificacions d\'escriptura</string>
     <string name="settings_send_typing_notifs_summary">Feu saber a altres usuaris que esteu escrivint.</string>
     <string name="settings_send_markdown">Format en Markdown</string>
@@ -1062,7 +1064,7 @@ La visibilitat dels missatges a Matrix és similar a la del correu electrònic. 
     <string name="settings_show_join_leave_messages_summary">No afecta invitacions, expulsions i bloquejos.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
     <string name="call_anyway">Truca de totes maneres</string>
-    <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor personal:</string>
+    <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor base:</string>
 
     <string name="video_call_in_progress">Trucada de vídeo en procés…</string>
 
@@ -1125,11 +1127,11 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
 
-    <string name="store_title">Riot.im - col·laboració en equips oberts</string>
-    <string name="store_whats_new">Sempre hi som fent canvis i millores al Riot.im.
+    <string name="store_title">Riot.im - Comunica\'t, a la teva manera.</string>
+    <string name="store_whats_new">"Sempre hi som fent canvis i millores al Riot.im.
 Podeu trobar el registre de canvis complet aquí: %1$s.
-Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades.</string>
-    <string name="store_short_description">Us donem la benvinguda al Riot.im: un món nou de comunicacions obertes!</string>
+Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades."</string>
+    <string name="store_short_description">Una aplicació de xat universal i segura sota el vostre control.</string>
     <string name="title_activity_keys_backup_setup">Còpia de seguretat de la clau</string>
     <string name="title_activity_keys_backup_restore">Empra una còpia de seguretat de la clau</string>
 
@@ -1166,9 +1168,9 @@ Aquest error és fora del control del Riot i segons Google aquest error indica q
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Registre del testimoni</string>
-    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor personal.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor personal.
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">S\'ha registrat correctament el testimoni FCM al servidor base.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">No s\'ha pogut registrar el testimoni FCM al servidor base.
+\n%1$s</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Reinici automàtic del servei de notificacions</string>
     <string name="settings_troubleshoot_test_service_restart_success">El servei s\'ha parat i tornat a iniciar automàticament.</string>
@@ -1249,46 +1251,31 @@ Aquest error és fora del control del Riot. No hi ha cap compte de Google al tel
 Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
 %1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">"Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode Doze. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard. "</string>
-    <string name="store_full_description">El Riot.im és un entorn de col·laboració simple i elegant que reuneix totes les vostres conversacions i integracions d\'aplicacions en una sola aplicació.
-
-Construït al voltant de sales de conversa, el Riot.im us permet compartir missatges, imatges, vídeos i fitxers; interactuar amb les vostres eines i accedir a les vostres comunitats tot sota el mateix sostre. Una sola identitat i lloc per als vostres equips: no cal canviar de comptes, treballeu i xategeu amb gent de diferents organitzacions en sales públiques o privades: des de projectes professionals a excursions escolars, el Riot.im esdevindrà el centre de totes les vostres discussions!
-
-Ara amb xifratge punt a punt!
-
-Les funcionalitats que implementa inclouen:
-
-• Compartiu missatges, imatges, vídeos i fitxers de qualsevol classe instantàniament, en grups de qualsevol mida.
-• Trucades de veu i vídeo individuals i de conferència via WebRTC
-• Xifratge punt a punt emprant Olm (https://matrix.org/git/olm)
-• Veieu qui llegeix els vostres missatges amb els informes de lectura
-• Comuniqueu-vos amb usuaris arreu de l\'ecosistema Matrix.org — no només usuaris del Riot.im!
-• Descobriu i convideu usuaris per adreça de correu
-• Participeu en sales públiques obertes a convidats
-• Molt escalable — suporta centenars de sales i milers d\'usuaris
-• Historial de missatges totalment sincronitzat entre diferents dispositius i navegadors
-• Paràmetres de notificació molt personalitzable, sincronitzat entre dispositius
-• Historial de missatges amb cerca sense límit
-• Enllaços permanents als missatges
-• Cerca de missatges sencers
-• Suport per a llengües escrites de dreta a esquerra, com l\'àrab
-
-Per als desenvolupadors:
-• El Riot.im és un client de Matrix — està construït al voltant de l\'estàndard obert i ecosistema de Matrix.org, proveint interoperabilitat amb la resta d\'aplicacions, servidors i integracions compatibles amb Matrix
-• Totalment lliure, sota la llicència permissiva Apache — aconseguiu el codi des de https://github.com/vector-im/vector-android. Els «pull requests» són benvinguts!
-• Molt fàcil d\'estendre via l\'API Client-Server de Matrix (https://matrix.org/docs/spec)
-• Executeu el vostre servidor propi! Podeu emprar el servidor per defecte matrix.org o emprar el vostre servidor de Matrix propi. (per exemple https://matrix.org/docs/projects/server/synapse.html)
-
-Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
+    <string name="store_full_description">Una aplicació de xat, sota el vostre control i totalment flexible. El Riot us permet comunicar-vos de la manera que preferiu. Fet per al [matrix] - l\'estàndard per a la comunicació oberta i descentralitzada.
+\n
+\nObteniu un compte gratuït de matrix.org, executeu el vostre servidor propi a https://modular.im, o empreu un altre servidor de Matrix.
+\n
+\nPer què triar Riot.im\?
+\n
+\n• COMUNICACIÓ COMPLETA: Creeu sales al voltant dels vostres equips, els vostre amics o la vostra comunitat - de la manera que preferiu! Converseu, compartiu fitxers, afegiu ginys i feu trucades de veu i vídeo - tot de manera gratuïta.
+\n
+\n• INTEGRACIONS POTENTS: Empreu el Riot.im amb les eines que ja coneixeu i us agraden. Amb el Riot.im fins i tot podeu conversar amb usuaris i grups d\'altres aplicacions de xat.
+\n
+\n• PRIVAT I SEGUR: Mantingueu les vostres converses en secret. Xifratge punt a punt us assegura que les comunicacions privades continuaran sent privades.
+\n
+\n• OBERT, NO TANCAT: Programari lliure, i construït damunt de Matrix. Sigueu els propietaris de les vostres dades hostatjant el vostre servidor propi, o emprant un en què confieu.
+\n
+\n• ALLÀ ON SIGUEU: Esteu en contacte allà on esteu amb una sincronització total de l\'historial dels missatges en tots els vostres dispositius, i en línia a https://riot.im.</string>
 
 
     <string name="keys_backup_setup_step3_generating_key_status">S\'està generant la clau de recuperació emprant una frase de pas. Aquest procés pot trigar uns segons.</string>
-    <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor personal. La còpia inicial pot trigar alguns minuts.</string>
+    <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor base. La còpia inicial pot trigar alguns minuts.</string>
 
 
     <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase de pas: verifiqueu que la frase de pas que heu introduït és la correcta.</string>
     <string name="network_error_please_check_and_retry">Error de xarxa: comproveu la vostra connectivitat i torneu-ho a provar.</string>
 
-    <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat…</string>
+    <string name="keys_backup_restoring_waiting_message">S\'està restaurant la còpia de seguretat:</string>
     <string name="keys_backup_unlock_button">Desbloca l\'historial</string>
     <string name="keys_backup_recovery_code_empty_error_message">Introduïu una clau de recuperació</string>
     <string name="keys_backup_recovery_code_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta clau de recuperació: verifiqueu que heu introduït la clau correcta.</string>
@@ -1307,8 +1294,8 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La criptografia de la sessió no és activa</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">Restaura</string>
-    <string name="keys_backup_settings_delete_backup_button">Suprimeix</string>
+    <string name="keys_backup_settings_restore_backup_button">Restaura des de la còpia de seguretat</string>
+    <string name="keys_backup_settings_delete_backup_button">Suprimeix la còpia de seguretat</string>
 
     <string name="keys_backup_settings_status_ok">S\'ha configurat la còpia de seguretat de la clau correctament per a aquest dispositiu.</string>
     <string name="keys_backup_settings_status_ko">La còpia de seguretat de la clau no és activa en aquest dispositiu.</string>
@@ -1342,7 +1329,7 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     <string name="stay">Roman</string>
     <string name="abort">Avorta</string>
 
-    <string name="action_sign_out_confirmation_simple">Esteu segur de voler sortir?</string>
+    <string name="action_sign_out_confirmation_simple">Esteu segurs que voleu sortir de la sessió\?</string>
 
     <string name="encryption_message_recovery">Recuperació de missatges xifrats</string>
     <string name="error_empty_field_enter_user_name">Introduïu un nom d\'usuari.</string>
@@ -1376,4 +1363,27 @@ Descobriu la col·laboració realment eficient i oberta amb el Riot.im!</string>
     </plurals>
 
     <string name="keys_backup_info_title_version">Versió</string>
+    <string name="keys_backup_info_title_algorithm">Algoritme</string>
+    <string name="keys_backup_info_title_signature">Signatura</string>
+
+    <string name="new_recovery_method_popup_was_me">He sigut jo</string>
+    <string name="new_recovery_method_popup_title">Còpia de seguretat nova de la clau</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als vostres missatges encriptats, hauríeu d\'activar la còpia de seguretat encriptada a tots els vostres dispositius.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdreu accés als vostres missatges encriptats si no feu una còpia de seguretat de les vostres claus abans de sortir de la sessió.</string>
+
+    <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
+\n
+\nPer màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del vostre compte.</string>
+    <string name="settings_data_save_mode_summary">El mode d\'estalvi de dades aplica un filtre específic que evita l\'enviament de notificacions de presència i d\'escriptura.</string>
+
+    <string name="keys_backup_setup_step3_text_line2">En cas que oblideu la vostra contrasenya, la vostra clau de recuperació és un últim recurs per recuperar l\'accés als vostres missatges xifrats.
+\nDeseu aquesta clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Deseu la vostra clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">S\'està generant la clau de recuperació…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">S\'estan baixant les claus…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">S\'estan important les claus…</string>
+    <string name="keys_backup_settings_untrusted_backup">Per fer servir la còpia de seguretat de clau en aquest dispositiu, utilitzeu la vostra contrasenya o clau de recuperació ara.</string>
+    <string name="new_recovery_method_popup_description">S\'ha trobat una còpia de seguretat nova de la clau.
+\n
+\nSi no heu configurat el mètode de recuperació nou, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un mètode de recuperació nou immediatament a la configuració.</string>
 </resources>

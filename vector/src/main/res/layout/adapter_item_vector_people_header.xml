@@ -1,4 +1,4 @@
-<!-- menu header is always wrap to content
+<?xml version="1.0" encoding="utf-8"?><!-- menu header is always wrap to content
      so it is required to define a sublayout with the right height -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

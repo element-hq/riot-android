@@ -15,14 +15,14 @@
  */
 package im.vector.activity
 
-import android.support.transition.TransitionManager
-import android.view.ViewGroup
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import butterknife.BindView
 import im.vector.R
+import im.vector.activity.util.WaitingViewData
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a mxSession.
@@ -31,15 +31,14 @@ open class SimpleFragmentActivity : MXCActionBarActivity() {
 
     override fun getLayoutRes() = R.layout.activity
 
+    @BindView(R.id.waiting_view_status_circular_progress)
+    lateinit var waitingCircularProgress: View
 
     @BindView(R.id.waiting_view_status_text)
     lateinit var waitingStatusText: TextView
 
-    @BindView(R.id.waiting_view_content)
-    lateinit var waitingViewParent: ViewGroup
-
     @BindView(R.id.waiting_view_status_horizontal_progress)
-    lateinit var waitingStatusProgress: ProgressBar
+    lateinit var waitingHorizontalProgress: ProgressBar
 
     override fun initUiAndData() {
         mSession = getSession(intent)
@@ -51,18 +50,29 @@ open class SimpleFragmentActivity : MXCActionBarActivity() {
      * Displays a progress indicator with a message to the user.
      * Blocks user interactions.
      */
-    fun showWaitingView(status: String) {
-        waitingStatusText.text = status
-        waitingStatusProgress.isVisible = false
-        showWaitingView()
-    }
+    fun updateWaitingView(data: WaitingViewData?) {
+        data?.let {
+            waitingStatusText.text = data.message
 
-    fun showWaitingViewWithProgress(status: String, progress: Int, progressTotal: Int) {
-        waitingStatusProgress.progress = progress
-        waitingStatusProgress.max = progressTotal
-        waitingStatusProgress.isVisible = true
-        waitingStatusText.text = status
-        showWaitingView()
+            if (data.progress != null && data.progressTotal != null) {
+                waitingHorizontalProgress.isIndeterminate = false
+                waitingHorizontalProgress.progress = data.progress
+                waitingHorizontalProgress.max = data.progressTotal
+                waitingHorizontalProgress.isVisible = true
+                waitingCircularProgress.isVisible = false
+            } else if (data.isIndeterminate) {
+                waitingHorizontalProgress.isIndeterminate = true
+                waitingHorizontalProgress.isVisible = true
+                waitingCircularProgress.isVisible = false
+            } else {
+                waitingHorizontalProgress.isVisible = false
+                waitingCircularProgress.isVisible = true
+            }
+
+            showWaitingView()
+        } ?: run {
+            hideWaitingView()
+        }
     }
 
     override fun showWaitingView() {
@@ -74,32 +84,14 @@ open class SimpleFragmentActivity : MXCActionBarActivity() {
     override fun hideWaitingView() {
         waitingStatusText.text = null
         waitingStatusText.isGone = true
-        waitingStatusProgress.progress = 0
-        waitingStatusProgress.isVisible = false
+        waitingHorizontalProgress.progress = 0
+        waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
-    }
-
-    //updates the status while is loading
-    fun updateWaitingStatus(status: String) {
-        TransitionManager.beginDelayedTransition(waitingViewParent)
-        waitingStatusText.text = status
-        waitingStatusText.isGone = status.isNullOrBlank()
-    }
-
-    fun updateWaitingProgress(visible: Boolean, progress: Int, progressTotal: Int) {
-        if (visible) {
-            waitingStatusProgress.progress = progress
-            waitingStatusProgress.max = progressTotal
-            waitingStatusProgress.isVisible = true
-        } else {
-            waitingStatusProgress.progress = 0
-            waitingStatusProgress.isVisible = false
-        }
     }
 
     override fun onBackPressed() {
         if (waitingView!!.isVisible) {
-            //ignore
+            // ignore
             return
         }
         super.onBackPressed()

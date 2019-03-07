@@ -364,7 +364,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         // room selection
         if (null != currentItem.mRoom) {
             // room name
-            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary));
+            viewHolder.mActionDescTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary));
             viewHolder.mActionDescTextView.setText(currentItem.mRoom.getRoomDisplayName(mContext));
 
             // room avatar
@@ -401,7 +401,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             }
 
             // update the text colour: specific colour is required for the remove action
-            int colourTxt = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary);
+            int colourTxt = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary);
 
             if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);

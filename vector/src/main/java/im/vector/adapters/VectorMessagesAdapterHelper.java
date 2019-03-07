@@ -1021,10 +1021,16 @@ class VectorMessagesAdapterHelper {
         String eventType = event.getType();
 
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
-            // A message is displayable as long as it has a body
-            // Redacted messages should not be displayed
+            // Redacted messages are not displayed (for the moment)
+            if (event.isRedacted()) {
+                return false;
+            }
+
+            // A message is displayable as long as it has a body, emote can have empty body, formatted message can also have empty body
             Message message = JsonUtils.toMessage(event.getContent());
-            return !event.isRedacted() && (!TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE));
+            return !TextUtils.isEmpty(message.body)
+                    || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE)
+                    || (TextUtils.equals(message.format, Message.FORMAT_MATRIX_HTML) && !TextUtils.isEmpty(message.formatted_body));
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             // A sticker is displayable as long as it has a body
             // Redacted stickers should not be displayed

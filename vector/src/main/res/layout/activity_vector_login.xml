@@ -1,5 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/login_actions_bar">
+        android:layout_above="@+id/login_actions_bar">
 
         <LinearLayout
             android:id="@+id/login_form_container"
@@ -15,18 +17,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
-
-                <ImageView
-                    android:id="@+id/login_large_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/riot_splash_0_blue" />
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/login_large_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/riot_splash_0_blue" />
 
             <LinearLayout
                 android:id="@+id/main_input_layout"
@@ -553,6 +550,16 @@
                 android:visibility="gone"
                 tools:layout_marginTop="184dp"
                 tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_login_sso"
+                style="@style/VectorButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:text="@string/auth_login_sso"
+                tools:layout_marginTop="230dp" />
 
         </RelativeLayout>
 

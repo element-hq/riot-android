@@ -35,7 +35,7 @@
     <string name="rename">Premenovať</string>
     <string name="report_content">Ohlásiť obsah</string>
     <string name="active_call">Aktívny hovor</string>
-    <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor. Pripojte sa ako audio alebo video.</string>
+    <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor.\nPripojte sa ako %1$s alebo %2$s.</string>
     <string name="ongoing_conference_call_voice">audio</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nie je možné začať hovor. Prosím, skúste to neskôr</string>
@@ -1190,9 +1190,9 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="no_valid_google_play_services_apk">Nenájdená aktívna aplikácia Služby Google Play. Je možné, že nebude správne fungovať doručovanie oznámení.</string>
 
     <string name="store_title">Riot.im - otvorená spolupráca pre tímy</string>
-    <string name="store_whats_new">Riot.im neustále aktualizujeme s vylepšeniami a zmenami.
+    <string name="store_whats_new">"Riot.im neustále aktualizujeme s vylepšeniami a zmenami.
 Podrobný zoznam zmien (anglicky) nájdete na adrese: %1$s.
-Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie.</string>
+Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</string>
     <string name="store_short_description">Vitajte v aplikácii Riot.im: v novom svete otvorenej komunikácii!</string>
     <string name="store_full_description">Riot.im je jednoduché a elegantné prostredie určené na vzájomnú spoluprácu, ktoré združuje vaše rôzne konverzácie a integrácie do jedinej aplikácii.
 

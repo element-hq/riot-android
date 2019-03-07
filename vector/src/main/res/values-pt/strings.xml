@@ -32,7 +32,7 @@
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
     <string name="active_call">Chamada ativa</string>
-    <string name="ongoing_conference_call">Chamada de grupo em curso. Junte-se por voz ou vídeo.</string>
+    <string name="ongoing_conference_call">Chamada de grupo em curso.\nJunte-se por %1$s ou %2$s.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Não foi possível iniciar a chamada, por favor tente mais tarde</string>
@@ -66,7 +66,7 @@
     <string name="bottom_action_home">Início</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Pessoas</string>
-    <string name="bottom_action_rooms">Salas</string>
+    <string name="bottom_action_rooms">Groupos</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Pesquisar salas</string>
@@ -275,7 +275,7 @@ Por favor, permita o acesso na próxima janela para poder encontrar utilizadores
 
 Permitir ao Riot aceder aos seus contactos?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada por falta de permissões</string>
+    <string name="permissions_action_not_performed_missing_permissions">Desculpe… A ação não foi realizada, por falta de permissões</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -1074,5 +1074,118 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
+
+    <string name="title_activity_keys_backup_setup">backup de chaves</string>
+    <string name="keys_backup_is_not_finished_please_wait">Backup de chaves, imcompleto. Por favor, Aguarde.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chaves, em progresso. Caso pagina seja fechada, irá perder acesso as suas mensagens encriptadas.</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Backup de chaves, em progresso …</string>
+    <string name="keys_backup_activate">Utilize Backup de chaves.</string>
+    <string name="are_you_sure">Tem a certeza?</string>
+    <string name="backup">Fazer Backup</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Irá perder acesso as suas mensagens encriptadas, se não fizer backup de suas chaves, antes de abandonar esta pagina.</string>
+
+    <string name="stay">Ficar</string>
+    <string name="title_activity_keys_backup_restore">Utilize Backup de chaves</string>
+
+    <string name="sign_out_bottom_sheet_warning_no_backup">Se sair desta pagina, irá perder as suas mensagens encriptadas</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Não quero as minhas mensagens encriptadas</string>
+    <string name="keys_backup_banner_in_progress">Backup de chaves, em progresso …</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Backup de chaves, completo.</string>
+    <string name="keys_backup_info_title_version">Versão</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmo</string>
+    <string name="keys_backup_info_title_signature">Assinatura</string>
+
+    <string name="keys_backup_banner_update_line1">Novas chaves de mensagens encriptadas</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Uma</item>
+        <item quantity="other">Outras</item>
+    </plurals>
+
+    <string name="keys_backup_banner_recover_line2">Utilize, Backup de Chaves</string>
+
+    <string name="new_recovery_method_popup_was_me">Fui eu</string>
+    <string name="keys_backup_banner_setup_line1">Nunca perca mensagens encriptadas</string>
+    <string name="keys_backup_banner_setup_line2">Começe a utilizar backup de chaves</string>
+
+    <string name="keys_backup_banner_recover_line1">Nunca perca mensagens encriptadas</string>
+    <string name="new_recovery_method_popup_title">Novo Backup de Chaves</string>
+    <string name="keys_backup_settings_deleting_backup">Apagando Backup …</string>
+    <string name="call_anyway">Ligar na mesma</string>
+    <string name="skip">Passar</string>
+    <string name="done">Terminado</string>
+    <string name="abort">Abortar</string>
+
+    <string name="accept">Aceitar</string>
+    <string name="action_sign_out_confirmation_simple">Tem a certeza que quer Sair?</string>
+    <string name="keys_backup_settings_delete_confirm_title">Apagar Backup</string>
+    <string name="auth_accept_policies">Por favor veja e aceite, apolice para este servidor</string>
+
+    <string name="settings_call_category">Chamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar toque padrão para chamadas recebidas</string>
+    <string name="settings_call_ringtone_title">Toque para chamadas recebidas</string>
+    <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
+
+    <string name="video_call_in_progress">Chamada de Vídeo em Progresso…</string>
+
+    <string name="room_participants_action_kick">Expulsar</string>
+    <string name="reason_hint">Razão</string>
+
+    <string name="settings_notification_advanced">Configurações avançadas para notificações</string>
+    <string name="settings_notification_by_event">Importancia de notificações por evento</string>
+
+    <string name="settings_notification_troubleshoot">Diagnóstico de Notificações</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de falhas</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Iniciar Testes</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Configurações de sistema</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Notificaçoes estão ativadas nas configurações de sistema</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desactivadas em configurações de sistema
+Se faz favor verifique configurações de sistema</string>
+    <string name="open_settings">Abrir configurações</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Configurações de conta</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Notificações estão activadas para a sua conta</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Notificações estão desactivadas para a sua conta
+Se faz favor verifique configurações de conta</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Configurações de aparelho</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notificações estão activadas para este aparelho</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notificações estão desactivadas para este aparelho
+Por favor, verifique configurações de aplicação</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Configurações personalizadas</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Verifique Configurações</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Verificação de serviços Google Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK de serviços Google Play estão disponíveis e actualizadas</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Reparar os serviços Google Play</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar conta</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Registração de token</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">Auto-Reniciar Serviço de Notificações</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Iniciar em boot</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Falha na reniciação de Serviço</string>
+
+    <string name="settings_troubleshoot_test_service_boot_success">Serviço irá iniciar quando aparelho for reniciado</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Activar iniciaçao em boot</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">Verificar restriçoes de histórico</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricções</string>
+
+    <string name="settings_troubleshoot_test_battery_title">Optimização de bateria</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot não é afectado por Optimização de bateria</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Optimização</string>
+
+    <string name="settings_noisy_notifications_preferences">Configurar Notificações de ruido</string>
+    <string name="settings_call_notifications_preferences">Configurar Notificações de chamadas</string>
+    <string name="settings_silent_notifications_preferences">Configurar Notificações de Silêncio</string>
+    <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
+
 
 </resources>

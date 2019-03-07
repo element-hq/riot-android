@@ -95,15 +95,15 @@
     <string name="rename">Преименувай</string>
     <string name="report_content">Докладвай съдържанието</string>
     <string name="active_call">Активен разговор</string>
-    <string name="ongoing_conference_call_voice">гласов</string>
-    <string name="ongoing_conference_call_video">видео</string>
     <string name="notification_listening_for_events">Следете за събития</string>
     <string name="notification_noisy_notifications">Шумни известия</string>
     <string name="notification_silent_notifications">Уведомления без звук</string>
 
     <string name="title_activity_member_details">Членове</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
-    <string name="ongoing_conference_call">Тече групов разговор. Присъедини се с глас или видео.</string>
+    <string name="ongoing_conference_call">Тече групов разговор.\nПрисъедини се с %1$s или %2$s.</string>
+    <string name="ongoing_conference_call_voice">глас</string>
+    <string name="ongoing_conference_call_video">видео</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
     <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват…</string>
     <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>
@@ -1137,44 +1137,29 @@
 
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
 
-    <string name="store_title">Riot.im - отворена колаборация за екипи</string>
-    <string name="store_short_description">Добре дошли в Riot.im: нов свят на отворена комуникация!</string>
-    <string name="store_full_description">Riot.im е проста и елегантна среда за колаборация, която събира всички твой кореспонденции и интеграции в едно единствено приложение.
+    <string name="store_title">Riot.im - комуникирайте по свой начин.</string>
+    <string name="store_short_description">Универсален и сигурен чат изцяло под ваш контрол.</string>
+    <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Riot позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
 
-Изградено върху групови чат стаи, Riot.im позволява изпращането на съобщения, изображения, видеа и файлове - взаимодействайте с инструментите си и достъпвайте всички Ваши общности на едно място. Едно единствено място за всички ваши екипи: без необходимост от смяна на акаунти, работете и чатете с хора от различни организации в публични или лични стаи: от професионални проекти до училищни пътувания, Riot.im ще стане центърът на всички ваши дискусии!
+Използвайте безплатен matrix.org акаунт, собствен сървър от https://modular.im или друг Matrix сървър.
 
-Вече и с шифроване от край до край!
+Защо да изберете Riot.im?
 
-Функции:
+• ПЪЛНА КОМУНИКАЦИЯ: Създавайте каквито пожелаете чат стаи - свързани с работни екипи, приятели или друг вид общности! Чатете, споделяйте файлове, добавяйте приспособления и водете аудио и видео разговори - всичко това, изцяло безплатно.
 
-• Споделяйте мигновено съобщения, изображения, видеа и файлове от всякакъв тип с групи от всякакъв размер
-• Гласови и видео 1-1 разговори, както и конферентни разговори посредством WebRTC
-• Шифроване от край до край посредством Olm (https://matrix.org/git/olm)
-• Вижте кой е прочел съобщенията Ви, посредством индикация за прочитане
-• Комуникирайте с потребители навсякъде в Matrix.org екосистемата - не само с Riot.im!
-• Откривайте и канете потребители по имейл адрес
-• Участвайте в публични стаи достъпни за гости
-• Висока скалируемост - поддържа стотици стаи и хиляди потребители
-• Напълно синхронизирана история на чат съобщенията на множество устройства и уеб браузъри
-• Фино-конфигурируеми настройки за известяване, синхронизирани измежду всички устройства
-• Неограничен период на търсене в чат хронологията
-• Директни връзки към съобщения (Permalinks)
-• Пълно търсене на съобщения
-• Поддръжка за езици от-дясно-наляво, като арабски
+• МОЩНИ ИНТЕГРАЦИИ: Използвайте Riot.im с досега-познатите Ви инструменти. Посредством Riot.im дори можете да чатите с потребители и групи използващи други чат приложения.
 
-За разработчици:
-• Riot.im е Matrix клиент - изграден върху отворения стандарт и екосистема Matrix.org, предлагащ съвместимост с всички други Matrix приложения, сървъри и интеграции
-• Изцяло отворен код под \"позволяващия\" Apache лиценз - вижте кода на https://github.com/vector-im/vector-android. Принос към кода е добре дошъл!
-• Лесно разшируем посредством отвореното Matrix Client-Server API (https://matrix.org/docs/spec)
-• Използвайте ваш собствен сървър! Можете да използвате сървърът по подразбиране (matrix.org) или ваш собствен Matrix сървър (пример: https://matrix.org/docs/projects/server/synapse.html)
+• ЛИЧНО И ЗАЩИТЕНО: Пазете комуникацията си в тайна. Съвременна технология за шифроване от край до край гарантира, че Вашата комуникацията наистина остава Ваша.
 
-Открийте истински ефективна и отворена колаборация с Riot.im!</string>
+• ОТВОРЕНО, А НЕ ЗАТВОРЕНО: Приложение с отворен код, изградено върху Matrix. Дръжте данните си под Ваш контрол, като използвате Ваш собствен сървър или като изберете сървър, на който вярвате.
+
+• КЪДЕТО И ДА СТЕ: Поддържайте връзка където и да сте, с напълно синхронизирана чат история на всички Ваши устройства или онлайн на https://riot.im."</string>
 
     <string name="video_call_in_progress">В момента тече видео разговор…</string>
 
-    <string name="store_whats_new">Постоянно правим промени и подобрения по Riot.im.
+    <string name="store_whats_new">"Постоянно правим промени и подобрения по Riot.im.
 Пълният списък с промени може да бъде намерен тук: %1$s.
-За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени.</string>
+За да сте сигурни, че няма да пропуснете нищо, просто оставете автоматичните обновления включени."</string>
     <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
     <string name="title_activity_keys_backup_restore">Използвай резервно копие на ключовете</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервното копие на ключовете не е завършило. Моля почакайте…</string>
@@ -1234,7 +1219,7 @@
     <string name="recovery_key">Ключ за възстановяване</string>
     <string name="unexpected_error">Неочаквана грешка</string>
     <string name="keys_backup_setup_backup_started_title">Извършва се резервно копие</string>
-    <string name="keys_backup_setup_backup_started_message">Прави се резервно копие на ключовете Ви за шифроване върху сървъра. Първоначалното копиране може да отнеме няколко минути.</string>
+    <string name="keys_backup_setup_backup_started_message">Прави се резервно копие на ключовете Ви за шифроване върху Вашия сървър. Първоначалното копиране може да отнеме няколко минути.</string>
 
 
     <string name="keys_backup_setup_skip_title">Сигурни ли сте?</string>
@@ -1254,7 +1239,7 @@
     <string name="keys_backup_passphrase_error_decrypt">Резервното копие не можа да бъде разшифровано с тази парола: потвърдете че сте въвели правилната парола.</string>
     <string name="network_error_please_check_and_retry">Мрежова грешка: проверете връзката си и опитайте пак.</string>
 
-    <string name="keys_backup_restoring_waiting_message">Възстановяване от резервно копие…</string>
+    <string name="keys_backup_restoring_waiting_message">Възстановяване от резервно копие:</string>
     <string name="keys_backup_unlock_button">Отключи историята</string>
     <string name="keys_backup_recovery_code_empty_error_message">Въведете ключ за възстановяване</string>
     <string name="keys_backup_recovery_code_error_decrypt">Резервното копие не можа да бъде разшифровано с този ключ за възстановяване: потвърдете, че сте въвели правилния ключ за възстановяване.</string>
@@ -1274,8 +1259,8 @@
     <string name="keys_backup_no_keysbackup_sdk_error">Сесията за шифроване не е активирана</string>
 
 
-    <string name="keys_backup_settings_restore_backup_button">Възстанови</string>
-    <string name="keys_backup_settings_delete_backup_button">Изтрий</string>
+    <string name="keys_backup_settings_restore_backup_button">Възстанови от резервно копие</string>
+    <string name="keys_backup_settings_delete_backup_button">Изтрий резервното копие</string>
 
     <string name="keys_backup_settings_status_ok">Резервното копиране на ключовете е успешно настроено на това устройство.</string>
     <string name="keys_backup_settings_status_ko">Резервното копиране на ключовете не е активно на това устройство.</string>
@@ -1319,7 +1304,7 @@
     <string name="keys_backup_setup_step1_manual_export">Ръчно експортиране на ключовете</string>
 
     <string name="keys_backup_setup_step2_text_title">Защитете резервното копие с парола.</string>
-    <string name="keys_backup_setup_step2_text_description">Ще съхраним резервно копие на ключовете Ви на сървъра. Защитете резервното копие с парола.
+    <string name="keys_backup_setup_step2_text_description">Ще съхраним резервно копие на ключовете Ви на Вашия сървър. Защитете резервното копие с парола.
 
 За максимална защита, паролата е добре да е различна от тази за акаунта Ви.</string>
     <string name="keys_backup_setup_creating_backup">Създаване на резервно копие</string>
@@ -1354,4 +1339,13 @@
     <string name="keys_backup_info_title_algorithm">Алгоритъм</string>
     <string name="keys_backup_info_title_signature">Подпис</string>
 
+    <string name="keys_backup_settings_untrusted_backup">За да използвате резервно копие на ключовете, възстановете с паролата или ключа за възстановяване.</string>
+    <string name="new_recovery_method_popup_title">Ново резервно копие на ключовете</string>
+    <string name="new_recovery_method_popup_description">Беше открито ново резервно копие на ключовете.
+
+Ако не сте конфигурирали нов метод за възстановяване, е възможно някой да се опитва да достъпи акаунта Ви. Веднага сменете паролата на акаунта и настройте нов метод за възстановяване в Настройки.</string>
+    <string name="new_recovery_method_popup_was_me">Бях аз</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
 </resources>

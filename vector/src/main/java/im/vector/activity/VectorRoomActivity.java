@@ -723,13 +723,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
 
-        // IME's DONE button is treated as a send action
+        if (PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
+            // imeOptions="actionSend" only works with single line, so we remove multiline inputType
+            mEditText.setInputType(mEditText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+        }
+
+        // IME's DONE and SEND button is treated as a send action
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
 
-                if (EditorInfo.IME_ACTION_DONE == imeActionId) {
+                if (EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId) {
                     sendTextMessage();
                     return true;
                 }
@@ -2412,8 +2418,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        boolean hasText = (mEditText.getText().length() > 0);
-        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        if (!PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
+            boolean hasText = (mEditText.getText().length() > 0);
+            mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        }
     }
 
     /**
@@ -2625,7 +2633,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
 
             if ((null == call) && (null == activeWidget)) {
-                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
+                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0
+                || PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())))? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else if (null != activeWidget) {
                 mStartCallLayout.setVisibility(View.GONE);
@@ -3796,7 +3805,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @OnClick(R.id.room_send_image_view)
     void onSendClick() {
-        if (!TextUtils.isEmpty(mEditText.getText())) {
+        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
             sendTextMessage();
         } else {
             // hide the header room

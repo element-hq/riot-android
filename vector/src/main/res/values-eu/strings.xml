@@ -28,7 +28,7 @@
     <string name="rename">Aldatu izena</string>
     <string name="report_content">Salatu edukia</string>
     <string name="active_call">Dei aktiboa</string>
-    <string name="ongoing_conference_call">Konferentzia deia abian. Elkartu ahotsa edo bideoa erabiliz.</string>
+    <string name="ongoing_conference_call">Konferentzia deia abian.\nElkartu %1$s edo %2$s erabiliz.</string>
     <string name="ongoing_conference_call_voice">ahotsa</string>
     <string name="ongoing_conference_call_video">bideoa</string>
     <string name="cannot_start_call">Ezin da deia hasi, saiatu geroago</string>
@@ -1184,9 +1184,9 @@ Ezagutu benetako kolaborazio ireki eta eraginkorra Riot.im erabiliz!</string>
 
     <string name="video_call_in_progress">Bide-deia abioan…</string>
 
-    <string name="store_whats_new">Etengabe egiten dizkiogu hobekuntzak eta aldaketak Riot.im aplikazioari.
+    <string name="store_whats_new">"Etengabe egiten dizkiogu hobekuntzak eta aldaketak Riot.im aplikazioari.
 Aldaketen zerrenda osoa hemen aurkitu daiteke: %1$s.
-Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta.</string>
+Ezer galtzen ez duzula ziurtatzeko, mantendu eguneraketak piztuta."</string>
     <string name="title_activity_keys_backup_setup">Mezuak berreskuratzea</string>
     <string name="title_activity_keys_backup_restore">Mezu seguruak</string>
     <string name="keys_backup_is_not_finished_please_wait">Gakoen babes-kopia ez da amaitu, itxaron mesedez…</string>
