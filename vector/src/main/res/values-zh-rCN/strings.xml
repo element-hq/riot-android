@@ -18,7 +18,7 @@
     <string name="send_bug_report_include_screenshot">发送屏幕截图</string>
     <string name="join_room">进入聊天室</string>
     <string name="username">用户名</string>
-    <string name="create_account">注册</string>
+    <string name="create_account">创建账号</string>
     <string name="login">登录</string>
     <string name="logout">登出</string>
     <string name="search">搜索</string>
@@ -169,7 +169,7 @@
 
     <string name="settings_change_password">修改密码</string>
     <string name="settings_new_password">新密码</string>
-    <string name="settings_confirm_password">确认密码</string>
+    <string name="settings_confirm_password">确认新密码</string>
     <string name="settings_fail_to_update_password">密码更新失败</string>
     <string name="settings_password_updated">您的密码已更新</string>
     <string name="settings_phone_number_label">手机号码</string>
@@ -320,7 +320,7 @@
     <string name="devices_delete_dialog_text">这个操作需要额外的身份认证。
 请输入您的密码以继续。</string>
     <string name="devices_delete_dialog_title">身份认证</string>
-    <string name="settings_old_password">旧密码</string>
+    <string name="settings_old_password">当前密码</string>
     <string name="settings_unignore_user">是否重新显示所有来自 %s 的消息？
 
 注意，此操作会重启应用并将花费一些时间。</string>
@@ -403,7 +403,8 @@
     <string name="rename">重命名</string>
     <string name="report_content">举报消息</string>
     <string name="active_call">当前通话</string>
-    <string name="ongoing_conference_call">正在进行电话会议。请以语音或视频的形式加入。</string>
+    <string name="ongoing_conference_call">正在进行电话会议。
+\n请以语音或视频的形式加入</string>
     <string name="ongoing_conference_call_voice">语音</string>
     <string name="missing_permissions_to_start_conf_call">您需要在此聊天室中发起会议的权限</string>
     <string name="send_anyway">仍然发送</string>
@@ -450,8 +451,7 @@
 
     <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
-    <string name="room_preview_unlinked_email_warning">此邀请已发送至未这个账户关联的 %s。
-您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
+    <string name="room_preview_unlinked_email_warning">此邀请已发送至未与此账户关联的 %s。 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
 
     <string name="room_participants_header_call">通话</string>
@@ -580,10 +580,10 @@
     <string name="bottom_action_people">联系人</string>
     <string name="bottom_action_rooms">聊天室</string>
 
-    <string name="home_filter_placeholder_home">搜索聊天室</string>
-    <string name="home_filter_placeholder_favorites">搜索收藏夹</string>
-    <string name="home_filter_placeholder_people">搜索联系人</string>
-    <string name="home_filter_placeholder_rooms">搜索聊天室</string>
+    <string name="home_filter_placeholder_home">按聊天室名称过滤</string>
+    <string name="home_filter_placeholder_favorites">按收藏夹过滤</string>
+    <string name="home_filter_placeholder_people">按联系人过滤</string>
+    <string name="home_filter_placeholder_rooms">按聊天室名称过滤</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">邀请</string>
@@ -759,7 +759,7 @@
     <string name="actions">操作</string>
     <string name="bottom_action_groups">社区</string>
 
-    <string name="home_filter_placeholder_groups">搜索社区</string>
+    <string name="home_filter_placeholder_groups">按社区名称过滤</string>
 
     <string name="groups_header">社区</string>
     <string name="no_group_placeholder">没有群组</string>
@@ -1131,7 +1131,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">关闭后台限制</string>
 
     <string name="settings_troubleshoot_test_battery_success">Riot 未被电池优化影响。</string>
-    <string name="settings_troubleshoot_test_battery_failed">"如果设备在未充电的情况下关屏静置一段时间，其将进入 Doze 模式。这将阻止应用访问网络并延后其运行、同步、与响铃。 "</string>
+    <string name="settings_troubleshoot_test_battery_failed">如果设备在未充电的情况下关屏静置一段时间，其将进入打盹模式（Doze）。这将阻止应用访问网络并延后其运行、同步、与响铃。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
 
     <string name="encryption_export_notice">请输入用于加密密钥备份的密码。您在恢复此备份时需要使用此密码。</string>
@@ -1340,5 +1340,23 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="keys_backup_info_title_version">版本</string>
     <string name="keys_backup_info_title_algorithm">算法</string>
     <string name="keys_backup_info_title_signature">签名</string>
+
+<string name="ignore">忽略</string>
+
+    <string name="auth_login_sso">以单点登录方式登入</string>
+    <string name="login_error_unknown_host">无法连接到此 URL，请检查</string>
+    <string name="login_error_ssl_handshake">您的设备因使用了过时的 TLS 安全协议而容易受到攻击，为了安全您将无法连接</string>
+    <string name="settings_send_message_with_enter">按回车发送消息</string>
+    <string name="settings_send_message_with_enter_summary">软键盘的 Enter 按钮将发送消息而不是添加换行符</string>
+
+    <string name="settings_change_password_submit">密码更新</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">密码无效</string>
+    <string name="passwords_do_not_match">密码不匹配</string>
+
+    <string name="autodiscover_invalid_response">无效的主服务器探测响应</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">自动完成服务器选项</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot 侦测到您的 userId 域名 \"%s\" 有自定义的服务器设置：
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">使用设置</string>
 
 </resources>
