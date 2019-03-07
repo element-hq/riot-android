@@ -32,7 +32,8 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">Konferenzgespräch läuft.\nPer %1$s oder %2$s beitreten.</string>
+    <string name="ongoing_conference_call">Konferenzgespräch läuft.
+\nPer %1$s oder %2$s beitreten</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
@@ -1417,7 +1418,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="auth_login_sso">Mit single-sign-on anmelden</string>
     <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>
     <string name="login_error_ssl_handshake">Dein Gerät nutzt eine veraltetes TLS-Sicherheitsprotokoll, das anfällig für Angriffe ist. Zu deiner Sicherheit wirst du nicht in der Lage sein, dich zu verbinden</string>
-    <string name="settings_send_message_with_enter">Setze Nachricht mit Eingabetaste</string>
+    <string name="settings_send_message_with_enter">Schicke Nachricht mit Eingabetaste</string>
     <string name="settings_send_message_with_enter_summary">Eingabetaste der Bildschirmtastatur schickt die Nachricht ab, statt einen Zeilenumbruch zu erzeugen</string>
 
     <string name="settings_change_password_submit">Passwort aktualisieren</string>
