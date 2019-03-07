@@ -35,7 +35,7 @@
     <string name="rename">Omdøb</string>
     <string name="report_content">Rapporter indhold</string>
     <string name="active_call">Aktivt opkald</string>
-    <string name="ongoing_conference_call">Igangværende konferenceopkald. Forbind med stemme eller video.</string>
+    <string name="ongoing_conference_call">Igangværende konferenceopkald.\nForbind med %1$s eller %2$s</string>
     <string name="ongoing_conference_call_voice">stemme</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikke starte opkaldet, forsøg igen senere</string>

@@ -43,8 +43,8 @@
     <string name="rename">Перейменувати</string>
     <string name="report_content">Поскаржитись на вміст</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call">Відбувається конференц-дзвінок. Приєднатись голосом чи відео.</string>
-    <string name="ongoing_conference_call_voice">голос</string>
+    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.\nПриєднатись %1$s чи %2$s.</string>
+    <string name="ongoing_conference_call_voice">голосом</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
     <string name="missing_permissions_warning">Деякі функції можуть бути недоступними через відсутність дозволів…</string>

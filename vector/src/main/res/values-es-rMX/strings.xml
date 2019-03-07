@@ -32,7 +32,7 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en proceso. Unirse con voz o video.</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en proceso.\nUnirse con %1$s o %2$s.</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">No se puede iniciar la llamada, inténtalo más tarde</string>

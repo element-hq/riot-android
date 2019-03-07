@@ -17,7 +17,6 @@
     <string name="delete">Hapus</string>
     <string name="rename">Ubah Nama</string>
     <string name="report_content">Laporkan konten</string>
-    <string name="ongoing_conference_call_voice">suara</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="or">atau</string>
     <string name="invite">Undang</string>
@@ -49,7 +48,7 @@
 
     <string name="create_account">Daftar</string>
     <string name="login">Masuk</string>
-    <string name="logout">Keluar</string>
+    <string name="logout">Copot akun</string>
     <string name="hs_url">URL Server Mula</string>
     <string name="search">Cari</string>
 
@@ -77,7 +76,6 @@
     <string name="permalink">Buat Tautan</string>
     <string name="view_decrypted_source">Tampilkan Sumber Terdekripsi</string>
     <string name="active_call">Panggilan aktif</string>
-    <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Tidak dapat memulai panggilan, coba lagi nanti</string>
     <string name="missing_permissions_title_to_start_conf_call">Tidak dapat memulai panggilan</string>
     <string name="action_sign_out">Keluar</string>
@@ -102,7 +100,7 @@
     <string name="identity_url">URL Server Identity</string>
     <string name="start_voice_call">Mulai Panggilan Suara</string>
     <string name="auth_login">Masuk</string>
-    <string name="auth_register">Daftar</string>
+    <string name="auth_register">Buat Akun</string>
     <string name="start_video_call">Mulai Panggilan Video</string>
 
     <string name="option_send_files">Kirim file</string>
@@ -111,8 +109,8 @@
     <string name="auth_forgot_password">Lupa password?</string>
     <string name="auth_invalid_token">Token tidak berlaku</string>
     <string name="auth_invalid_email">Sepertinya alamat email tidak benar</string>
-    <string name="auth_invalid_phone">Sepertinya nomor telpon tidak benar</string>
-    <string name="auth_password_dont_match">Password tidak cocok</string>
+    <string name="auth_invalid_phone">Sepertinya nomor telepon tidak benar</string>
+    <string name="auth_password_dont_match">Kata sandi tidak cocok</string>
     <string name="auth_recaptcha_message">Serve Home ingin memastikan bahwa Anda bukan robot</string>
     <string name="auth_home_server">Server Home:</string>
     <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email saya</string>
@@ -152,7 +150,7 @@
 
     <string name="later">Nanti</string>
     <string name="send_anyway">Kirim Saja</string>
-    <string name="no_contact_access_placeholder">Anda tidak mengizinkan Riot untuk mengakses kontak lokal</string>
+    <string name="no_contact_access_placeholder">Riot belum diijinkan untuk mengakses kontak lokal</string>
     <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
     <string name="huge">Raksasa</string>
     <string name="small">Kecil</string>
@@ -171,8 +169,10 @@
     <string name="encryption_information_verified">Terverifikasi</string>
     <string name="title_activity_historical">Jejak Percakapan</string>
 
-    <string name="redact">Sunting</string>
-    <string name="ongoing_conference_call">Panggilan massal sedang berlangsung. Bergabunglah lewat suara atau video.</string>
+    <string name="redact">Hapus</string>
+    <string name="ongoing_conference_call">Panggilan massal sedang berlangsung.\nBergabunglah lewat %1$s atau %2$s.</string>
+    <string name="ongoing_conference_call_voice">suara</string>
+    <string name="ongoing_conference_call_video">video</string>
     <string name="missing_permissions_warning">Beberapa fitur tidak dapat digunakan karena aplikasi belum mendapat ijin…</string>
     <string name="missing_permissions_to_start_conf_call">Anda membutuhkan ijin mengundang untuk memulai panggilan massal di ruang ini</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Panggilan massal tidak dapat diselenggarakan di ruang terenkripsi</string>
@@ -216,7 +216,7 @@ Anda dapat menambah email di profile Anda dalam pengaturan nantinya.</string>
     <string name="auth_username_in_use">Nama pengguna yang terpakai</string>
     <string name="auth_reset_password_message">Untuk menyetel ulang kata sandi Anda, silahkan masukkan alamat email yang tertaut ke akun Anda:</string>
     <string name="auth_reset_password_missing_email">Anda perlu memasukkan alamat email yang tertaut pada akun.</string>
-    <string name="auth_reset_password_email_validation_message">Sebuah email telah dikirim ke %s. Setelah Anda mengikuti tautan yang termuat di dalamnya, silahkan klik di bawah.</string>
+    <string name="auth_reset_password_email_validation_message">"Selembar email telah dikirim ke %s. Setelah Anda mengikuti tautan yang termuat di dalamnya, klik  yang di bawah."</string>
     <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
     <string name="auth_reset_password_success_message">Kata sandi Anda telah disetel ulang.
 
@@ -316,9 +316,9 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     <string name="option_take_photo">Ambil foto</string>
     <string name="option_take_video">Ambil video</string>
 
-    <string name="no_sticker_application_dialog_content">Saat ini Anda belum memiliki pak sticker.
-
-Mau ditambah sekarang?</string>
+    <string name="no_sticker_application_dialog_content">Saat ini Anda belum memiliki pak stiker.
+\n
+\nMau tambah sekarang\?</string>
 
     <string name="go_on_with">lanjutkan dengan…</string>
     <string name="error_no_external_application_found">Maaf, tidak ada aplikasi eksternal yang mendukung apa yang ingin dilakukan.</string>
@@ -1013,8 +1013,8 @@ Mohon periksa pengaturan Riot.</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Pemeriksaan Layanan Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Layanan Google Play ditemukan dan telah diperbaharui.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot menggunakan Layanan Google Play untuk mengirim pesan push tapi tampaknya tidak diatur sepantasnya.
-%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Perbaiki Layanan Google Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -1053,4 +1053,61 @@ Aktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik 
 
     <string name="settings_troubleshoot_test_battery_title">Optimisasi Baterai</string>
     <string name="settings_troubleshoot_test_battery_success">Riot tidak terpengaruh oleh Optimisasi Baterai.</string>
+    <string name="title_activity_keys_backup_setup">Cadangkan Kunci</string>
+    <string name="title_activity_keys_backup_restore">Gunakan Cadangan Kunci</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Pencadangan kunci belum selesai, mohon tunggu…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Pesan terenkripsi Anda akan hilang apabila Anda mencopot akun sekarang</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Pencadangan kunci sedang berlangsung. Pesan terenkripsi Anda akan hilang apabila Anda mencopot akun sekarang.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Cadangan Kunci Aman harus aktif pada semua perangkat agar terhindar dari hilangnya akses ke pesan yang terenkripsi.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Saya tidak perlu pesan terenkripsi saya</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Mencadangkan kunci…</string>
+    <string name="keys_backup_activate">Gunakan Cadangan Kunci</string>
+    <string name="are_you_sure">Yakin\?</string>
+    <string name="backup">Cadangkan</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Akses ke pesan terenkripsi akan hilang apabila Anda tidak mencadangkan kunci sebelum mencopot akun.</string>
+
+    <string name="skip">Lewatkan</string>
+    <string name="done">Selesai</string>
+    <string name="abort">Hentikan</string>
+
+    <string name="action_sign_out_confirmation_simple">Anda yakin ingin mencopot akun\?</string>
+    <string name="settings_notification_advanced">Pengaturan Pemberitahuan Lanjutan</string>
+    <string name="settings_notification_advanced_summary">Setel urgensi pemberitahuan lewat kejadian, Kelola suara, LED, getaran</string>
+    <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Perhatikan bahwa sebagian jenis pesan tersetel diam (mengeluarkan pemberitahuan tanpa suara).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam aturan Anda.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Gagal memuat aturan, mohon coba lagi.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Periksa Aturan</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nError ini di luar kendali Riot dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nError ini di luar kendali Riot, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nError ini di luar kendali Riot. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Tambah Akun</string>
+
+    <string name="settings_troubleshoot_test_battery_failed">Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode Doze. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Abaikan Optimisasi</string>
+
+    <string name="settings_noisy_notifications_preferences">Kelola Pemberitahuan Berisik</string>
+    <string name="settings_call_notifications_preferences">Kelola Pemberitahuan Panggilan</string>
+    <string name="settings_silent_notifications_preferences">Kelola Pemberitahuan Diam</string>
+    <string name="settings_system_preferences_summary">Pilih warna LED, getaran, suara…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Pengelolaan Kunci Kriptografi</string>
+    <string name="settings_inline_url_preview_summary">Pratinjau tautan dalam obrolan apabila homeserver mendukung fitur ini.</string>
+    <string name="settings_send_typing_notifs">Kirim pemberitahuan mengetik</string>
+    <string name="settings_send_typing_notifs_summary">Beritahu pengguna lain bahwa Anda sedang mengetik.</string>
+    <string name="settings_send_markdown">Format markdown</string>
+    <string name="settings_send_markdown_summary">Format pesan menggunakan sintaks markdown sebelum dikirim. Ini mengijinkan format lanjutan seperti menggunakan tanda bintang untuk menunjukkan teks miring.</string>
+    <string name="settings_show_read_receipts">Tunjukkan tanda telah dibaca</string>
+    <string name="settings_show_read_receipts_summary">Klik tanda telah dibaca untuk daftar yang lebih rinci.</string>
+    <string name="settings_show_join_leave_messages">Tunjukkan kejadian bergabung dan meninggalkan</string>
+    <string name="settings_show_join_leave_messages_summary">Undangan, pengeluaran, dan larangan tidak terpengaruh.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Tunjukkan kejadian akun</string>
 </resources>

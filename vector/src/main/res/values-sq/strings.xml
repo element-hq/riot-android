@@ -42,8 +42,6 @@
     <string name="rename">Riemërtojeni</string>
     <string name="report_content">Raportoni lëndë</string>
     <string name="active_call">Thirrje aktive</string>
-    <string name="ongoing_conference_call_voice">Zë</string>
-    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">S’fillohet dot thirrja, ju lutemi, riprovoni më vonë</string>
     <string name="missing_permissions_title_to_start_conf_call">S’fillohet dot thirrja</string>
     <string name="device_information">Të dhëna pajisjeje</string>
@@ -733,8 +731,9 @@
     <string name="x_plus">%d+</string>
 
     <string name="notification_listening_for_events">Po përgjohet për akte</string>
-    <string name="ongoing_conference_call">Thirrje nga konferencë. Merrni pjesë me:
-\n Zë ose Video</string>
+    <string name="ongoing_conference_call">Thirrje konference që po zhvillohet.\nMerrni pjesë me %1$s ose %2$s.</string>
+    <string name="ongoing_conference_call_voice">zë</string>
+    <string name="ongoing_conference_call_video">video</string>
     <string name="missing_permissions_to_start_conf_call">Ju duhen leje për ftesa, që të nisni një konferencë në këtë dhomë</string>
     <string name="bottom_action_favourites">Të parapëlqyer</string>
     <string name="no_contact_access_placeholder">S’e lejuat Riot-i të hyjë në kontaktet tuaja vendore</string>

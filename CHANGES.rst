@@ -28,6 +28,7 @@ Bugfix:
  - Fix Numbers are too much linkified #1140
  - Fix Highlight geo: URIs #1329
  - Fix Odd linkification bug with trailing slash #865
+ - Fix issue on joining conference call wording in some languages (#2112)
 
 Translations:
  -

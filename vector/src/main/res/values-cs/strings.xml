@@ -20,8 +20,6 @@
     <string name="view_source">Zobrazit zdroj</string>
     <string name="delete">Odstranit</string>
     <string name="rename">Přejmenovat</string>
-    <string name="ongoing_conference_call_voice">hlas</string>
-    <string name="ongoing_conference_call_video">video</string>
     <string name="or">nebo</string>
     <string name="invite">Pozvat</string>
     <string name="offline">Offline</string>
@@ -48,7 +46,9 @@
     <string name="view_decrypted_source">Zobraz dešifrovaný zdroj</string>
     <string name="report_content">Nahlásit obsah</string>
     <string name="active_call">Aktivní hovor</string>
-    <string name="ongoing_conference_call">Probíhající konferenční hovor. Připojit se hlasem nebo videem.</string>
+    <string name="ongoing_conference_call">Probíhající konferenční hovor.\nPřipojit se %1$s nebo %2$s.</string>
+    <string name="ongoing_conference_call_voice">hlasem</string>
+    <string name="ongoing_conference_call_video">videem</string>
     <string name="cannot_start_call">Nemohu spustit hovor, prosím zkusit později</string>
     <string name="missing_permissions_warning">Z důvodu chybějících práv mohou některé funkce chybět…</string>
     <string name="missing_permissions_to_start_conf_call">Potřebujete práva pro spuštění konference</string>

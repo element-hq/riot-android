@@ -30,7 +30,7 @@
     <string name="rename">Pārdēvēt</string>
     <string name="report_content">Ziņot par saturu</string>
     <string name="active_call">Aktīvs zvans</string>
-    <string name="ongoing_conference_call">" Ienākošs konferences zvans. Pievienojies ar balss vai video iespēju."</string>
+    <string name="ongoing_conference_call">"Ienākošs konferences zvans.\nPievienojies ar %1$s vai %2$s iespēju."</string>
     <string name="ongoing_conference_call_voice">balss</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nevarēja sākt zvanu. Lūdzu, pamēģini vēlāk</string>

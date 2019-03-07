@@ -32,7 +32,7 @@
     <string name="rename">Herbenoemen</string>
     <string name="report_content">Inhoud melden</string>
     <string name="active_call">Actief gesprek</string>
-    <string name="ongoing_conference_call">Lopend vergadergesprek. Neem deel met microfoon of video.</string>
+    <string name="ongoing_conference_call">Lopend vergadergesprek.\nNeem deel met %1$s of %2$s.</string>
     <string name="ongoing_conference_call_voice">microfoon</string>
     <string name="ongoing_conference_call_video">camera</string>
     <string name="cannot_start_call">Kan het gesprek niet starten, probeer later nog eens</string>

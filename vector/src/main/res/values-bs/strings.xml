@@ -38,9 +38,9 @@
     <string name="rename">Preimenuj</string>
     <string name="report_content">Prijavi sadržaj</string>
     <string name="active_call">Aktivni poziv</string>
-    <string name="ongoing_conference_call">" Konferencijski poziv u toku. Pridruži se putem videa ili glasa."</string>
-    <string name="ongoing_conference_call_voice">Glas</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call">"Konferencijski poziv u toku.\nPridruži se putem %1$s ili %2$s."</string>
+    <string name="ongoing_conference_call_voice">glasa</string>
+    <string name="ongoing_conference_call_video">videa</string>
     <string name="cannot_start_call">Nije moguće započeti poziv, molimo pokušajte poslije</string>
     <string name="missing_permissions_warning">Zbog nedostatka ovlasti, neke komponente mogu nedostajati..</string>
     <string name="missing_permissions_to_start_conf_call">Potrebne su vam ovlasti da bi započeli konferenciju u ovoj sobi</string>

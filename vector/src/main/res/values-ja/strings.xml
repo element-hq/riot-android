@@ -325,9 +325,6 @@
 
     <string name="auth_send_reset_email">初期化メール送信</string>
     <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には, Riotアプリに端末のカメラの使用を許可する必要があります.</string>
-    <string name="ongoing_conference_call">会議通話実施中。音声かビデオ通話で参加してください。</string>
-    <string name="ongoing_conference_call_voice">音声</string>
-    <string name="ongoing_conference_call_video">映像</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
     <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>

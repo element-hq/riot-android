@@ -42,7 +42,7 @@
     <string name="rename">重新命名</string>
     <string name="report_content">回報內容</string>
     <string name="active_call">進行中的通話</string>
-    <string name="ongoing_conference_call">正在進行電話會議，以語音或視訊加入</string>
+    <string name="ongoing_conference_call">正在進行電話會議，\n以%1$s或%2$s加入。</string>
     <string name="ongoing_conference_call_voice">語音</string>
     <string name="ongoing_conference_call_video">視訊</string>
     <string name="cannot_start_call">無法啟用通話，請稍後再試</string>

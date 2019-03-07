@@ -32,8 +32,8 @@
     <string name="rename">Переименовать</string>
     <string name="report_content">Пожаловаться на содержимое</string>
     <string name="active_call">Активный вызов</string>
-    <string name="ongoing_conference_call">Установлен конференц-вызов. Присоединяйтесь с голосом или видео.</string>
-    <string name="ongoing_conference_call_voice">голос</string>
+    <string name="ongoing_conference_call">Установлен конференц-вызов.\nПрисоединяйтесь с %1$s или %2$s.</string>
+    <string name="ongoing_conference_call_voice">голосом</string>
     <string name="ongoing_conference_call_video">видео</string>
     <string name="cannot_start_call">Не удалось осуществить вызов, попробуйте позже</string>
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
