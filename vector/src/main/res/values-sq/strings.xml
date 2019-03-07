@@ -1328,7 +1328,7 @@ Mbajeni kyçin tuaj të rikthimeve diku shumë të sigurt, bie fjala, nën një 
     <string name="keys_backup_info_title_algorithm">Algoritëm</string>
     <string name="keys_backup_info_title_signature">Nënshkrim</string>
 
-<string name="ignore">Shpërfille</string>
+    <string name="ignore">Shpërfille</string>
 
     <string name="auth_login_sso">Hyni me një hyrje njëshe</string>
     <string name="login_error_unknown_host">Kjo URL s’kapet dot, ju lutemi, kontrollojeni</string>

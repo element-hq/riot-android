@@ -1412,7 +1412,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
-<string name="ignore">Ignorieren</string>
+    <string name="ignore">Ignorieren</string>
 
     <string name="auth_login_sso">Mit single-sign-on anmelden</string>
     <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>

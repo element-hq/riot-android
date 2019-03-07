@@ -1340,7 +1340,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="keys_backup_info_title_algorithm">算法</string>
     <string name="keys_backup_info_title_signature">签名</string>
 
-<string name="ignore">忽略</string>
+    <string name="ignore">忽略</string>
 
     <string name="auth_login_sso">以单点登录方式登入</string>
     <string name="login_error_unknown_host">无法连接到此 URL，请检查</string>
