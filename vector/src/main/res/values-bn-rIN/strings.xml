@@ -256,14 +256,14 @@
     <string name="login_error_unable_register_mail_ownership">নিবন্ধন করতে অক্ষম: ইমেইল মালিকানা ব্যর্থতা</string>
     <string name="login_error_invalid_home_server">একটি বৈধ URL প্রবেশ করুন</string>
     <string name="login_error_unknown_host">এই URL টি পৌঁছানোর যোগ্য নয়, দয়া করে এটি পরীক্ষা করুন</string>
-    <string name="login_error_ssl_handshake">আপনার যন্ত্র একটি সেকেলে T L C নিরাপত্তা খসড়া চুক্তি,অরক্ষিত সংঘর্ষ করতে ,আপনার নিত্যাপাত্তার জন্য আপনি সম্পর্ক করতে পারবেন না</string>
+    <string name="login_error_ssl_handshake">আপনার যন্ত্র একটি সেকেলে TLS নিরাপত্তা খসড়া চুক্তি,অরক্ষিত সংঘর্ষ করতে ,আপনার নিত্যাপাত্তার জন্য আপনি সম্পর্ক করতে পারবেন না</string>
     <string name="login_mobile_device">মোবাইল</string>
 
     <string name="login_error_forbidden">অবৈধ ব্যাবহারকারির নাম/সংকেত শব্দ</string>
-    <string name="login_error_unknown_token">"প্রবেশকারী টোকেনটা চিনতে নির্দিষ্ট ছিলো না "</string>
-    <string name="login_error_bad_json">"বিকৃত JSON   "</string>
-    <string name="login_error_not_json">"ধারণ করছে না সঠিক JSON "</string>
-    <string name="login_error_limit_exceeded">অনেকগুলো অনুরোধ পাঠিয়ে দিয়েছে</string>
+    <string name="login_error_unknown_token">প্রবেশকারী টোকেনটা চিনতে নির্দিষ্ট ছিলো না</string>
+    <string name="login_error_bad_json">বিকৃত JSON</string>
+    <string name="login_error_not_json">ধারণ করছে না সঠিক JSON</string>
+    <string name="login_error_limit_exceeded">অনেকগুলো অনুরোধ পাঠানো হয়েছে</string>
     <string name="login_error_user_in_use">এই ব্যাবহারকারী আগেও নাম ব্যবহার করে ছিল</string>
     <string name="login_error_login_email_not_yet">এই ইমেইল লিংক যেটা এখনো ক্লিক করা হয়নি</string>
 
