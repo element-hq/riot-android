@@ -267,4 +267,76 @@
     <string name="login_error_user_in_use">এই ব্যাবহারকারী আগেও নাম ব্যবহার করে ছিল</string>
     <string name="login_error_login_email_not_yet">এই ইমেইল লিংক যেটা এখনো ক্লিক করা হয়নি</string>
 
+    <string name="e2e_need_log_in_again">"আপনার প্রয়জনীয় পিছনে লগ করা যন্ত্রের জন্য এনক্রিপশন চাবি উৎপন্ন করতে শেষ থেকে শেষে এবং জমা করা জনগণ এর চাবি আপনার ঘরের লোক এর কাছে।
+\nএটাই হলো একবার।
+\nক্ষমা করবেন এটাই হলো অসুবিধা।  "</string>
+
+    <string name="e2e_re_request_encryption_key"><ও>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</ও>আপনার অন্য যন্ত্রগুলি থেকে।</string>
+
+    <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">অনুরোধ পাঠানো</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন Riot অন্য যন্ত্রে যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
+
+    <string name="read_receipts_list">পড়ো প্রাপ্তিগুলি সারি</string>
+
+    <string name="groups_list">গোষ্ঠীগুলি সারি</string>
+
+    <plurals name="membership_changes">
+	<item quantity="one">১ সদস্যাতা পরিবর্তন</item>
+	<item quantity="other">%d সদস্যাতা পরিবর্তন</item>
+</plurals>
+
+    <string name="compression_options">পাঠান যেমন</string>
+    <string name="compression_opt_list_original">খাঁটি</string>
+    <string name="compression_opt_list_large">বড়</string>
+    <string name="compression_opt_list_medium">মাধ্যম</string>
+    <string name="compression_opt_list_small">ছোট</string>
+
+    <string name="attachment_cancel_download">বাতিল করুন নামানো নথি\?</string>
+    <string name="attachment_cancel_upload">বাতিল করুন আপলোড\?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%১$dm %২$ds</string>
+
+    <string name="yesterday">গতকাল</string>
+    <string name="today">আজ</string>
+
+    <string name="room_info_room_name">ঘরএর নাম</string>
+    <string name="room_info_room_topic">ঘরএর বিষয়</string>
+
+    <string name="settings_call_category">ডাকা</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">ব্যবহার করছেন অনুপস্থিত Riot রিংটোন আগামী ডাক এর জন্য</string>
+    <string name="settings_call_ringtone_title">আসা কল এর রিংটোন</string>
+    <string name="settings_call_ringtone_dialog_title">নির্বাচন করুন রিংটোন কল আর জন্য:</string>
+
+    <string name="call">ডাকা</string>
+    <string name="call_connected">কল সংযুক্ত হয়েছিলো</string>
+    <string name="call_connecting">কল সংযোগ হচ্ছে।…</string>
+    <string name="call_ended">কল শেষ হলো</string>
+    <string name="call_ring">ডাকাহচ্ছে…</string>
+    <string name="incoming_call">আসা ডাক</string>
+    <string name="incoming_video_call">প্রবেশ দৃশ্য-রেকর্ড ডাক</string>
+    <string name="incoming_voice_call">প্রবেশ কথাবলার ডাক</string>
+    <string name="call_in_progress">ডাক এর অগ্রগতি…</string>
+    <string name="video_call_in_progress">দৃশ্য-রেকর্ড ডাক এর অগ্রগতি…</string>
+
+    <string name="call_error_user_not_responding">দূরবর্তী এর একটি ধার নিতে ব্যর্থ হচ্ছে।</string>
+    <string name="call_error_ice_failed">মাধ্যম সংযোগ ব্যর্থ হয়েছে</string>
+    <string name="call_error_camera_init_failed">ক্যামেরাটি আরাম্ভ করতে পারছেন না</string>
+    <string name="call_error_answered_elsewhere">ডাক আর উত্তর দেওয়া হয়েছে অনত্র</string>
+
+    <string name="media_picker_both_capture_title">"নাও একটা ছবি অথবা একটা দৃশ্য রেকর্ড "</string>
+    <string name="media_picker_cannot_record_video">পারছেন না দৃশ্য নথি করতে</string>
+
+    <string name="permissions_rationale_popup_title">তথা</string>
+    <string name="permissions_rationale_msg_storage">Riot এর প্রয়াজন অনুমতি নিতে আপনার ছবি এবং দৃশ্য রেকর্ড কে গ্রন্থাগার থেকে পাঠিয়ে জমার জায়গায় সংযুক্ত করতে।
+\nদেয়া করে অনুমতি দিন প্রবেশ করতে পরের pop-up কে যেটা সক্ষম আপনার নথি কে আপনার ফোন থেকে পাঠাতে।</string>
+    <string name="permissions_rationale_msg_camera">"Riot এর প্রয়োজন অনুমতি নিয়ে প্রবেশে করতে আপনার ছবি তোলার যন্ত্র থেকে ছবি নিতে এবং দৃষ্টি রেকর্ড ডাকতে। "</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nদয়াকরে অনুমতি দিন প্রবেশ করাতে পরের pop-pu কে যেটা ডাকতে সক্ষম"</string>
+    <string name="permissions_rationale_msg_record_audio">"Riot এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে "</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nদেয়া করে অনুমতিদিন প্রবেশ করতে পরের pop-up এ যেটা কল করতে সক্ষম"</string>
     </resources>
