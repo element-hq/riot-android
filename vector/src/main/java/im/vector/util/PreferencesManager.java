@@ -134,6 +134,7 @@ public class PreferencesManager {
     public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2";
 
     // media
+    private static final String SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY";
     private static final String SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY";
     private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
 
@@ -174,6 +175,7 @@ public class PreferencesManager {
 
     // some preferences keys must be kept after a logout
     private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
+            SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
             SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
 
             SETTINGS_SEND_TYPING_NOTIF_KEY,
@@ -311,6 +313,16 @@ public class PreferencesManager {
      */
     public static boolean isSendVoiceFeatureEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells which compression level to use by default
+     *
+     * @param context the context
+     * @return the selected compression level
+     */
+    public static int getSelectedDefaultMediaCompressionLevel(Context context) {
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY, "0"));
     }
 
     /**

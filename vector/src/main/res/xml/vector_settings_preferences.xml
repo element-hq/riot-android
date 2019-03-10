@@ -253,6 +253,13 @@
 
         <ListPreference
             android:defaultValue="0"
+            android:entries="@array/compression_levels"
+            android:entryValues="@array/compression_level_values"
+            android:summary="%s"
+            android:title="@string/settings_default_compression"
+            android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY" />
+        <ListPreference
+            android:defaultValue="0"
             android:entries="@array/media_sources"
             android:entryValues="@array/media_source_values"
             android:summary="%s"
