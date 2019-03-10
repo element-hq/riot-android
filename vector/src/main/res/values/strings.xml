@@ -858,6 +858,7 @@
     <string name="compression_opt_list_choose">Choose</string>
     <string name="settings_default_media_source">Default media source</string>
     <string name="media_source_choose">Choose</string>
+    <string name="settings_play_shutter_sound">Play shutter sound</string>
 
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>

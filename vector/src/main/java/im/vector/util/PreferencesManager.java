@@ -137,6 +137,7 @@ public class PreferencesManager {
     private static final String SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY";
     private static final String SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY";
     private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
+    private static final String SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY";
 
     // background sync
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -177,6 +178,7 @@ public class PreferencesManager {
     private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
             SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
             SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
+            SETTINGS_PLAY_SHUTTER_SOUND_KEY,
 
             SETTINGS_SEND_TYPING_NOTIF_KEY,
             SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
@@ -333,6 +335,16 @@ public class PreferencesManager {
      */
     public static int getSelectedDefaultMediaSource(Context context) {
         return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, "0"));
+    }
+
+    /**
+     * Tells whether to use shutter sound.
+     *
+     * @param context the context
+     * @return true if shutter sound should play
+     */
+    public static boolean useShutterSound(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true);
     }
 
     /**

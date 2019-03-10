@@ -93,6 +93,7 @@ import im.vector.listeners.ImageViewOnTouchListener;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.PreferencesManager;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
@@ -1341,8 +1342,10 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
      * Play the camera shutter sound
      */
     private void playShutterSound() {
-        MediaActionSound sound = new MediaActionSound();
-        sound.play(MediaActionSound.SHUTTER_CLICK);
+        if (PreferencesManager.useShutterSound(this)) {
+            MediaActionSound sound = new MediaActionSound();
+            sound.play(MediaActionSound.SHUTTER_CLICK);
+        }
     }
 
     /**
