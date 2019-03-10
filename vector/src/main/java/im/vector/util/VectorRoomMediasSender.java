@@ -728,8 +728,6 @@ public class VectorRoomMediasSender {
                 imageStream.close();
 
                 int prefResize = PreferencesManager.getSelectedDefaultMediaCompressionLevel(mVectorRoomActivity);
-                Log.e("IMAGE COMPRESSIONS", imageSizes.getImageSizesDescription(mVectorRoomActivity).toString());
-
                 if (prefResize > MEDIA_COMPRESSION_CHOOSE) {
                     // subtract "choose" option
                     int opt = prefResize - 1;
