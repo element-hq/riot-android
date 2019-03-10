@@ -607,7 +607,7 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Questa stanza non ha indirizzi locali</string>
-    <string name="room_settings_addresses_add_new_address">Nuovo indirizzo (e.g #foo:matrix.org")</string>
+    <string name="room_settings_addresses_add_new_address">Nuovo indirizzo (es. #foo:matrix.org)</string>
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome non valido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome</string>
