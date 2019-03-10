@@ -9,7 +9,7 @@ Features:
  -
 
 Improvements:
- -
+ - Add option to choose default media source (#2763)
 
 Other changes:
  -

@@ -852,6 +852,11 @@
     <string name="account_phone_number_error">An error occurred while verifying your phone number.</string>
     <string name="account_additional_info">Additional info: %s</string>
 
+    <!-- Media settings -->
+    <string name="settings_media">Media</string>
+    <string name="settings_default_media_source">Default media source</string>
+    <string name="media_source_choose">Choose</string>
+
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>
 
