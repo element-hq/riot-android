@@ -107,9 +107,7 @@ public class PreferencesManager {
     private static final String SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY";
     private static final String SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY";
     private static final String SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY";
-    private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
     private static final String SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER";
-
 
     // home
     private static final String SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY";
@@ -134,6 +132,12 @@ public class PreferencesManager {
     public static final String SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2";
     public static final String SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2";
     public static final String SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2";
+
+    // media
+    private static final String SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY";
+    private static final String SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY";
+    private static final String SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY";
+    private static final String SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY";
 
     // background sync
     public static final String SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY";
@@ -172,6 +176,10 @@ public class PreferencesManager {
 
     // some preferences keys must be kept after a logout
     private static final List<String> mKeysToKeepAfterLogout = Arrays.asList(
+            SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
+            SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
+            SETTINGS_PLAY_SHUTTER_SOUND_KEY,
+
             SETTINGS_SEND_TYPING_NOTIF_KEY,
             SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
             SETTINGS_12_24_TIMESTAMPS_KEY,
@@ -307,6 +315,36 @@ public class PreferencesManager {
      */
     public static boolean isSendVoiceFeatureEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false);
+    }
+
+    /**
+     * Tells which compression level to use by default
+     *
+     * @param context the context
+     * @return the selected compression level
+     */
+    public static int getSelectedDefaultMediaCompressionLevel(Context context) {
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY, "0"));
+    }
+
+    /**
+     * Tells which media source to use by default
+     *
+     * @param context the context
+     * @return the selected media source
+     */
+    public static int getSelectedDefaultMediaSource(Context context) {
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, "0"));
+    }
+
+    /**
+     * Tells whether to use shutter sound.
+     *
+     * @param context the context
+     * @return true if shutter sound should play
+     */
+    public static boolean useShutterSound(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true);
     }
 
     /**

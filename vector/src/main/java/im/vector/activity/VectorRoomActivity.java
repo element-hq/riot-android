@@ -99,6 +99,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.OnTouch;
 import im.vector.Matrix;
 import im.vector.R;
@@ -188,6 +189,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
+
+    // media selection
+    private static final int MEDIA_SOURCE_FILE = 1;
+    private static final int MEDIA_SOURCE_VOICE = 2;
+    private static final int MEDIA_SOURCE_STICKER = 3;
+    private static final int MEDIA_SOURCE_PHOTO = 4;
+    private static final int MEDIA_SOURCE_VIDEO = 5;
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -723,7 +731,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
 
-        if (PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
+        if (PreferencesManager.sendMessageWithEnter(this)) {
             // imeOptions="actionSend" only works with single line, so we remove multiline inputType
             mEditText.setInputType(mEditText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
             mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
@@ -2418,10 +2426,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        if (!PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
-            boolean hasText = (mEditText.getText().length() > 0);
-            mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        int img = R.drawable.ic_material_file;
+        if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
+             img = R.drawable.ic_material_send_green;
         }
+        else {
+            switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
+                case MEDIA_SOURCE_VOICE:
+                    if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
+                        img = R.drawable.vector_micro_green;
+                    }
+                    break;
+                case MEDIA_SOURCE_STICKER:
+                    img = R.drawable.ic_send_sticker;
+                    break;
+                case MEDIA_SOURCE_PHOTO:
+                    img = R.drawable.ic_material_camera;
+                    break;
+                case MEDIA_SOURCE_VIDEO:
+                    img = R.drawable.ic_material_videocam;
+                    break;
+            }
+        }
+        mSendImageView.setImageResource(img);
     }
 
     /**
@@ -2634,7 +2661,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             if ((null == call) && (null == activeWidget)) {
                 mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0
-                || PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())))? View.VISIBLE : View.GONE);
+                || PreferencesManager.sendMessageWithEnter(this)))? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else if (null != activeWidget) {
                 mStartCallLayout.setVisibility(View.GONE);
@@ -3803,45 +3830,98 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
+    private void chooseMediaSource(boolean useNativeCamera, boolean isVoiceFeatureEnabled) {
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        final List<DialogListItem> items = new ArrayList<>();
+
+        // Send file
+        items.add(DialogListItem.SendFile.INSTANCE);
+
+        // Send voice
+        if (isVoiceFeatureEnabled) {
+            items.add(DialogListItem.SendVoice.INSTANCE);
+        }
+
+        // Send sticker
+        items.add(DialogListItem.SendSticker.INSTANCE);
+
+        // Camera
+        if (useNativeCamera) {
+            items.add(DialogListItem.TakePhoto.INSTANCE);
+            items.add(DialogListItem.TakeVideo.INSTANCE);
+        } else {
+            items.add(DialogListItem.TakePhotoVideo.INSTANCE);
+        }
+
+        new AlertDialog.Builder(this)
+                .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onSendChoiceClicked(items.get(which));
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @OnClick(R.id.room_send_image_view)
     void onSendClick() {
-        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(VectorApp.getInstance())) {
+        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(this)) {
             sendTextMessage();
         } else {
-            // hide the header room
-            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+            boolean useNativeCamera = PreferencesManager.useNativeCamera(this);
+            boolean isVoiceFeatureEnabled = PreferencesManager.isSendVoiceFeatureEnabled(this);
 
-            final List<DialogListItem> items = new ArrayList<>();
-
-            // Send file
-            items.add(DialogListItem.SendFile.INSTANCE);
-
-            // Send voice
-            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
-                items.add(DialogListItem.SendVoice.INSTANCE);
+            switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
+                case MEDIA_SOURCE_FILE:
+                    onSendChoiceClicked(DialogListItem.SendFile.INSTANCE);
+                    return;
+                case MEDIA_SOURCE_VOICE:
+                    if (isVoiceFeatureEnabled) {
+                        onSendChoiceClicked(DialogListItem.SendVoice.INSTANCE);
+                        return;
+                    }
+                    // show all options if voice feature is disabled
+                    break;
+                case MEDIA_SOURCE_STICKER:
+                    onSendChoiceClicked(DialogListItem.SendSticker.INSTANCE);
+                    return;
+                case MEDIA_SOURCE_PHOTO:
+                    if (useNativeCamera) {
+                        onSendChoiceClicked(DialogListItem.TakePhoto.INSTANCE);
+                        return;
+                    }
+                    else {
+                        onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
+                        return;
+                    }
+                case MEDIA_SOURCE_VIDEO:
+                    if (useNativeCamera) {
+                        onSendChoiceClicked(DialogListItem.TakeVideo.INSTANCE);
+                        return;
+                    }
+                    else {
+                        onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
+                        return;
+                    }
             }
 
-            // Send sticker
-            items.add(DialogListItem.SendSticker.INSTANCE);
-
-            // Camera
-            if (PreferencesManager.useNativeCamera(this)) {
-                items.add(DialogListItem.TakePhoto.INSTANCE);
-                items.add(DialogListItem.TakeVideo.INSTANCE);
-            } else {
-                items.add(DialogListItem.TakePhotoVideo.INSTANCE);
-            }
-
-            new AlertDialog.Builder(this)
-                    .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            onSendChoiceClicked(items.get(which));
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+            chooseMediaSource(useNativeCamera, isVoiceFeatureEnabled);
         }
+    }
+
+    @OnLongClick(R.id.room_send_image_view)
+    boolean onLongClick() {
+        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(this)) {
+            return false;
+        }
+        boolean useNativeCamera = PreferencesManager.useNativeCamera(this);
+        boolean isVoiceFeatureEnabled = PreferencesManager.isSendVoiceFeatureEnabled(this);
+        chooseMediaSource(useNativeCamera, isVoiceFeatureEnabled);
+
+        return true;
     }
 
     private void onSendChoiceClicked(DialogListItem dialogListItem) {

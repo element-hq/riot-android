@@ -9,7 +9,9 @@ Features:
  -
 
 Improvements:
- -
+ - Add option to choose default media source (#2763)
+ - Add option to choose default photo compression (#2763)
+ - Add option to disable camera shutter sound
 
 Other changes:
  -

@@ -134,10 +134,6 @@
             android:title="@string/settings_vibrate_on_mention" />
 
         <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
-            android:title="@string/settings_preview_media_before_sending" />
-
-        <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
@@ -252,6 +248,34 @@
         android:title="@string/settings_notifications_targets" />
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
+
+    <PreferenceCategory android:title="@string/settings_media">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/compression_levels"
+            android:entryValues="@array/compression_level_values"
+            android:summary="%s"
+            android:title="@string/settings_default_compression"
+            android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/media_sources"
+            android:entryValues="@array/media_source_values"
+            android:summary="%s"
+            android:title="@string/settings_default_media_source"
+            android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY" />
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+            android:title="@string/settings_preview_media_before_sending" />
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_play_shutter_sound"
+            android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider />
 
     <PreferenceCategory android:title="@string/settings_call_category">
 
