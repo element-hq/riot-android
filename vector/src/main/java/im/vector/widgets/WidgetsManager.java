@@ -516,6 +516,10 @@ public class WidgetsManager {
     public static boolean isScalarUrl(Context context, String url) {
         String[] array = context.getResources().getStringArray(R.array.integrations_widgets_urls);
 
+        if (array.length == 0) {
+            array = new String[]{context.getString(R.string.integrations_rest_url)};
+        }
+
         for (String allowedUrl : array) {
             if (url.startsWith(allowedUrl)) {
                 return true;
