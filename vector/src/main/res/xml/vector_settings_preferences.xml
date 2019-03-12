@@ -251,27 +251,36 @@
 
     <PreferenceCategory android:title="@string/settings_media">
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
+            android:summary="@string/settings_labs_native_camera_summary"
+            android:title="@string/settings_labs_native_camera" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+
+            android:title="@string/settings_play_shutter_sound" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+            android:title="@string/settings_preview_media_before_sending" />
+
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/compression_levels"
             android:entryValues="@array/compression_level_values"
+            android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
             android:summary="%s"
-            android:title="@string/settings_default_compression"
-            android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY" />
+            android:title="@string/settings_default_compression" />
+
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/media_sources"
             android:entryValues="@array/media_source_values"
+            android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
             android:summary="%s"
-            android:title="@string/settings_default_media_source"
-            android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY" />
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
-            android:title="@string/settings_preview_media_before_sending" />
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_play_shutter_sound"
-            android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
-            android:defaultValue="true" />
+            android:title="@string/settings_default_media_source" />
 
     </PreferenceCategory>
 
@@ -332,11 +341,6 @@
             android:defaultValue="true"
             android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
             android:title="@string/settings_labs_create_conference_with_jitsi" />
-
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
-            android:summary="@string/settings_labs_native_camera_summary"
-            android:title="@string/settings_labs_native_camera" />
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
