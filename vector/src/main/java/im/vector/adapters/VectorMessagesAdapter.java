@@ -1238,7 +1238,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 bodyTextView.setText(result);
 
                 mHelper.applyLinkMovementMethod(bodyTextView);
-                VectorLinkifyKt.vectorCustomLinkify(bodyTextView);
+                VectorLinkifyKt.vectorCustomLinkify(bodyTextView, true);
                 textViews = new ArrayList<>();
                 textViews.add(bodyTextView);
             }
@@ -1412,8 +1412,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Notice message management
+     * Notice and RoomMember message management
      *
+     * @param viewType    the viewType
      * @param position    the message position
      * @param convertView the message view
      * @param parent      the parent view
@@ -1447,6 +1448,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 MatrixURLSpan.refreshMatrixSpans(strBuilder, mVectorMessagesAdapterEventsListener);
                 mHelper.applyLinkMovementMethod(noticeTextView);
                 noticeTextView.setText(strBuilder);
+                //In room member we don't want autolink, but do it for m.notice
+                if (viewType == ROW_TYPE_NOTICE) {
+                    VectorLinkifyKt.vectorCustomLinkify(noticeTextView, true);
+                }
             }
 
             View textLayout = convertView.findViewById(R.id.messagesAdapter_text_layout);
@@ -1501,7 +1506,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             CharSequence body = "* " + row.getSenderDisplayName() + " " + message.body;
 
-            if (TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format)) {
+            boolean isCustomHtml = TextUtils.equals(Message.FORMAT_MATRIX_HTML, message.format);
+            if (isCustomHtml) {
                 String htmlString = mHelper.getSanitisedHtml(message.formatted_body);
 
                 if (null != htmlString) {
@@ -1515,7 +1521,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             emoteTextView.setText(strBuilder);
             mHelper.applyLinkMovementMethod(emoteTextView);
-            VectorLinkifyKt.vectorCustomLinkify(emoteTextView);
+            VectorLinkifyKt.vectorCustomLinkify(emoteTextView, isCustomHtml);
 
             int textColor;
 

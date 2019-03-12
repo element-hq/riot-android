@@ -17,6 +17,7 @@ package org.matrix.vector
 
 import android.support.test.InstrumentationRegistry
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.style.URLSpan
 import android.widget.TextView
 import androidx.core.text.toSpannable
@@ -196,6 +197,31 @@ class CustomLinkifyTest {
                         TestLinkMatch("mailto:test@foo.bar", url = "mailto:test@foo.bar")
                 )
         )
+    }
+
+
+    @Test
+    fun linkify_testKeepExistingSpans() {
+        val text = "my matrix.org test"
+        val spanString = SpannableString(text)
+        val span = URLSpan("https://vector.im")
+        val start = text.indexOf("matrix.org")
+        spanString.setSpan(span, start, start + "matrix.org".length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val textView = TextView(InstrumentationRegistry.getContext())
+        textView.text = spanString
+
+        textView.vectorCustomLinkify(keepExistingUrlSpan = true)
+
+        val spannable = textView.text.toSpannable()
+        assertEquals("Wrong number of span detected",
+                1,
+                spannable.getSpans(0, spannable.length, URLSpan::class.java).count())
+
+        spannable.forEachSpanIndexed { index, urlSpan, start, end ->
+            assertEquals("Incorrect Url", "https://vector.im", urlSpan.url)
+            assertEquals("Match is not correct", "matrix.org", spannable.substring(start, end))
+        }
     }
 
     private fun actAndAssert(format: String, matches: List<TestLinkMatch>) {
