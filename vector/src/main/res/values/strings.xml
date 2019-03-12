@@ -13,6 +13,7 @@
     <string name="status_theme">Status.im Theme</string>
 
     <!-- permanent notification subtitle -->
+    <string name="notification_sync_init">Initializing service</string>
     <string name="notification_sync_in_progress">Synchronising</string>
     <string name="notification_listening_for_events">Listening for events</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
