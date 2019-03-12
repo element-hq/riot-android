@@ -1294,7 +1294,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_settings_delete_confirm_title">Ezabatu babes-kopia</string>
     <string name="keys_backup_settings_delete_confirm_message">Ezabatu zure zifratze-gakoen babeskopia zerbitzaritik? Ezin izango duzu zure berreskuratze gakoa erabili zifratutako mezuen historiala irakurtzeko.</string>
 
-<string name="sign_out_bottom_sheet_warning_no_backup">Zifratutako mezuak galduko dituzu saioa orain amaitzen baduzu</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Zifratutako mezuak galduko dituzu saioa orain amaitzen baduzu</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Gakoen babes-kopia abian. Saioa orain amaitzen baduzu zure zifratutako mezuak atzitzeko aukera galduko duzu.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Gakoen babes-kopia segurua zure gailu guztietan aktibatu beharko litzateke zifratutako mezuetara sarbidea ez galtzeko.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ez ditut nire zifratutako mezuak nahi</string>
@@ -1302,4 +1302,4 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_activate">Erabili gakoen babes-kopia</string>
     <string name="are_you_sure">Ziur al zaude\?</string>
     <string name="backup">Babes-kopia</string>
-    </resources>
+</resources>

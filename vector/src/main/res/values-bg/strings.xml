@@ -1349,7 +1349,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
-<string name="ignore">Игнорирай</string>
+    <string name="ignore">Игнорирай</string>
 
     <string name="login_error_unknown_host">URL адресът не е достъпен, моля проверете</string>
     <string name="login_error_ssl_handshake">Устройството Ви използва остарял TLS протокол за сигурност, който е уязвим към атаки. За ваша безопасност няма да може да се свържете</string>

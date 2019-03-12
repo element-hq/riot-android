@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">bn</string>
+<resources>
+    <string name="resources_language">bn</string>
     <string name="resources_country_code">IN</string>
 
     <string name="light_theme">হালকা থিম</string>
@@ -131,9 +132,9 @@
     <string name="no_room_placeholder">কোন রুম নেই</string>
     <string name="no_public_room_placeholder">কোন পাবলিক রুম উপলব্ধ নেই</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">১ জন ব্যবহারকারী</item>
-	<item quantity="other">%d জন ব্যবহারকারী</item>
-</plurals>
+        <item quantity="one">১ জন ব্যবহারকারী</item>
+        <item quantity="other">%d জন ব্যবহারকারী</item>
+    </plurals>
 
     <string name="groups_invite_header">আমন্ত্রণ</string>
     <string name="groups_header">সম্প্রদায়গুলি</string>
@@ -283,9 +284,9 @@
     <string name="groups_list">গোষ্ঠীগুলি সারি</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">১ সদস্যাতা পরিবর্তন</item>
-	<item quantity="other">%d সদস্যাতা পরিবর্তন</item>
-</plurals>
+        <item quantity="one">১ সদস্যাতা পরিবর্তন</item>
+        <item quantity="other">%d সদস্যাতা পরিবর্তন</item>
+    </plurals>
 
     <string name="compression_options">পাঠান যেমন</string>
     <string name="compression_opt_list_original">খাঁটি</string>
@@ -339,4 +340,4 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nদেয়া করে অনুমতিদিন প্রবেশ করতে পরের pop-up এ যেটা কল করতে সক্ষম"</string>
-    </resources>
+</resources>
