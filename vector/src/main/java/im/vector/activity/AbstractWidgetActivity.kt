@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
@@ -70,8 +71,10 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
      * Data
      * ========================================================================================== */
 
-    private var mTokenAlreadyRefreshed: Boolean = false
-    private var mHistoryAlreadyCleared: Boolean = false
+    private var mIsRefreshingToken = false
+    private var mTokenAlreadyRefreshed = false
+    private var mHistoryAlreadyCleared = false
+
 
     /* ==========================================================================================
      * LIFE CYCLE
@@ -91,25 +94,16 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
 
-        getScalarTokenAndLoadUrl(false)
+        getScalarTokenAndLoadUrl()
     }
 
-    private fun getScalarTokenAndLoadUrl(refreshToken: Boolean) {
+    private fun getScalarTokenAndLoadUrl() {
         if (canScalarTokenBeProvided()) {
-            if (refreshToken) {
-                if (mTokenAlreadyRefreshed) {
-                    // Only once to avoid infinite loop
-                    return
-                }
-
-                mTokenAlreadyRefreshed = true
-                WidgetsManager.clearScalarToken(this, mSession)
-            }
-
             showWaitingView()
 
             WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
                 override fun onSuccess(scalarToken: String) {
+                    mIsRefreshingToken = false
                     hideWaitingView()
                     launchUrl(scalarToken)
                 }
@@ -133,11 +127,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
             })
         } else {
             // Scalar token cannot be provided
-            if (refreshToken) {
-                // Nothing to do in this case, sorry
-            } else {
-                launchUrl(null)
-            }
+            launchUrl(null)
         }
     }
 
@@ -205,8 +195,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
                 override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
                     // In case of 403, try to refresh the scalar token
-                    if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
-                        getScalarTokenAndLoadUrl(true)
+                    if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN
+                            && canScalarTokenBeProvided()
+                            && !mTokenAlreadyRefreshed) {
+                        mTokenAlreadyRefreshed = true
+                        mIsRefreshingToken = true
+                        WidgetsManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
+
+                        // Hide the webview because it's displaying an error message we try to fix by refreshing the token
+                        mWebView.isVisible = false
+
+                        getScalarTokenAndLoadUrl()
                     }
                 }
 
@@ -216,7 +215,15 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                         return
                     }
 
+                    if (mIsRefreshingToken) {
+                        // We are waiting for a scalar token refresh
+                        return
+                    }
+
                     hideWaitingView()
+
+                    // Ensure the webview is visible, it may have been hidden during token refresh
+                    mWebView.isVisible = true
 
                     val js = AssetReader.readAssetFile(this@AbstractWidgetActivity, "postMessageAPI.js")
 

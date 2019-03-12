@@ -31,6 +31,7 @@ import android.view.ViewGroup
 import android.webkit.*
 import android.widget.TextView
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnClick
@@ -68,8 +69,9 @@ class WidgetActivity : VectorAppCompatActivity() {
     @BindView(R.id.widget_title)
     lateinit var mWidgetTypeTextView: TextView
 
-    private var mTokenAlreadyRefreshed: Boolean = false
-    private var mHistoryAlreadyCleared: Boolean = false
+    private var mIsRefreshingToken = false
+    private var mTokenAlreadyRefreshed = false
+    private var mHistoryAlreadyCleared = false
 
     /**
      * Widget events listener
@@ -273,6 +275,11 @@ class WidgetActivity : VectorAppCompatActivity() {
                             && !mTokenAlreadyRefreshed
                             && WidgetsManager.isScalarUrl(this@WidgetActivity, mWidget!!.url)) {
                         mTokenAlreadyRefreshed = true
+                        mIsRefreshingToken = true
+
+                        // Hide the webview because it's displaying an error message we try to fix by refreshing the token
+                        mWidgetWebView.isVisible = false
+
                         WidgetsManager.clearScalarToken(this@WidgetActivity, mSession)
                         loadUrl()
                     }
@@ -284,7 +291,15 @@ class WidgetActivity : VectorAppCompatActivity() {
                         return
                     }
 
+                    if (mIsRefreshingToken) {
+                        // We are waiting for a scalar token refresh
+                        return
+                    }
+
                     hideWaitingView()
+
+                    // Ensure the webview is visible, it may have been hidden during token refresh
+                    mWidgetWebView.isVisible = true
 
                     if (mTokenAlreadyRefreshed && !mHistoryAlreadyCleared) {
                         // Also clear WebView history, for the scenario when the scalar token was invalid, to avoid loading again the url with the invalid token
@@ -307,6 +322,8 @@ class WidgetActivity : VectorAppCompatActivity() {
         showWaitingView()
         WidgetsManager.getFormattedWidgetUrl(this, mWidget!!, object : ApiCallback<String> {
             override fun onSuccess(url: String) {
+                mIsRefreshingToken = false
+
                 hideWaitingView()
                 mWidgetWebView.loadUrl(url)
             }
