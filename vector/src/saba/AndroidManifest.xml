@@ -1,15 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.vector">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-
-        <receiver android:name=".receiver.OnApplicationUpgradeReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-
+        <activity android:name="im.vector.activity.AboutSabaActivity"></activity>
     </application>
-
 </manifest>
