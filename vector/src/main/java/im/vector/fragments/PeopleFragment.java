@@ -18,41 +18,42 @@
 package im.vector.fragments;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.search.SearchUsersResponse;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.PeopleAdapter;
+import im.vector.adapters.RoomAdapter;
+import im.vector.adapters.SabaPeopleAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -65,6 +66,9 @@ import im.vector.view.SimpleDividerItemDecoration;
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
 
+    //from roomadapter fragment
+    private static final String LOG_TAG_1 = RoomsFragment.class.getSimpleName();
+
     private static final String MATRIX_USER_ONLY_PREF_KEY = "MATRIX_USER_ONLY_PREF_KEY";
 
     private static final int MAX_KNOWN_CONTACTS_FILTER_COUNT = 50;
@@ -72,9 +76,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @BindView(R.id.recyclerview)
     RecyclerView mRecycler;
 
-    private CheckBox mMatrixUserOnlyCheckbox;
+//    private CheckBox mMatrixUserOnlyCheckbox;
 
-    private PeopleAdapter mAdapter;
+    private SabaPeopleAdapter mAdapter;
+
+    private RoomAdapter rAdapter;
 
     private List<Room> mDirectChats = new ArrayList<>();
     private final List<ParticipantAdapterItem> mLocalContacts = new ArrayList<>();
@@ -84,6 +90,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     // way to detect that the contacts list has been updated
     private int mContactsSnapshotSession = -1;
     private MXEventListener mEventsListener;
+
+
+
 
     /*
      * *********************************************************************************************
@@ -124,7 +133,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
         mOnRoomChangedListener = this;
 
-        mMatrixUserOnlyCheckbox.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MATRIX_USER_ONLY_PREF_KEY, false));
+//        mMatrixUserOnlyCheckbox.setChecked(PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MATRIX_USER_ONLY_PREF_KEY, false));
 
         mAdapter.onFilterDone(mCurrentFilter);
 
@@ -132,8 +141,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_MEMBERS_SEARCH, this, PermissionsToolsKt.PERMISSION_REQUEST_CODE);
         }
 
-        initKnownContacts();
+//        initKnownContacts();
     }
+
 
     @Override
     public void onResume() {
@@ -142,7 +152,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         ContactsManager.getInstance().addListener(this);
         // Local address book
         initContactsData();
-        initContactsViews();
+//        initContactsViews();
 
         mAdapter.setInvitation(mActivity.getRoomInvitations());
 
@@ -164,20 +174,20 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mSession.cancelUsersSearch();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ContactsManager.getInstance().refreshLocalContactsSnapshot();
-            } else {
-                initContactsData();
-            }
-
-            // refresh the contact views
-            // the placeholders might need to be updated
-            initContactsViews();
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                ContactsManager.getInstance().refreshLocalContactsSnapshot();
+//            } else {
+//                initContactsData();
+//            }
+//
+//            // refresh the contact views
+//            // the placeholders might need to be updated
+//            initContactsViews();
+//        }
+//    }
 
     /*
      * *********************************************************************************************
@@ -217,6 +227,9 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         });
     }
 
+
+
+
     /*
      * *********************************************************************************************
      * UI management
@@ -231,7 +244,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecycler.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
         mRecycler.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
-        mAdapter = new PeopleAdapter(getActivity(), new PeopleAdapter.OnSelectItemListener() {
+        mAdapter = new SabaPeopleAdapter(getActivity(), new SabaPeopleAdapter.OnSelectItemListener() {
             @Override
             public void onSelectItem(Room room, int position) {
                 openRoom(room);
@@ -242,23 +255,43 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 onContactSelected(contact);
             }
         }, this, this);
+
+        rAdapter = new RoomAdapter(getActivity(), new RoomAdapter.OnSelectItemListener() {
+            @Override
+            public void onSelectItem(Room item, int position) {
+                openRoom(item);
+            }
+
+            @Override
+            public void onSelectItem(PublicRoom publicRoom) {
+                onPublicRoomSelected(publicRoom);
+            }
+
+
+            @Override
+            public void onSelectItem(ParticipantAdapterItem contact, int position) {
+                onContactSelected(contact);
+
+            }
+        }, this,  this);
         mRecycler.setAdapter(mAdapter);
 
-        View checkBox = mAdapter.findSectionSubViewById(R.id.matrix_only_filter_checkbox);
-        if (checkBox != null && checkBox instanceof CheckBox) {
-            mMatrixUserOnlyCheckbox = (CheckBox) checkBox;
-            mMatrixUserOnlyCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    PreferenceManager.getDefaultSharedPreferences(getActivity())
-                            .edit()
-                            .putBoolean(MATRIX_USER_ONLY_PREF_KEY, mMatrixUserOnlyCheckbox.isChecked())
-                            .apply();
 
-                    initContactsViews();
-                }
-            });
-        }
+//        View checkBox = mAdapter.findSectionSubViewById(R.id.matrix_only_filter_checkbox);
+//        if (checkBox != null && checkBox instanceof CheckBox) {
+//            mMatrixUserOnlyCheckbox = (CheckBox) checkBox;
+//            mMatrixUserOnlyCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    PreferenceManager.getDefaultSharedPreferences(getActivity())
+//                            .edit()
+//                            .putBoolean(MATRIX_USER_ONLY_PREF_KEY, mMatrixUserOnlyCheckbox.isChecked())
+//                            .apply();
+//
+//                    initContactsViews();
+//                }
+//            });
+//        }
     }
 
     /*
@@ -266,6 +299,77 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      * Data management
      * *********************************************************************************************
      */
+
+    // from roomadapter fragment
+
+    private void onPublicRoomSelected(final PublicRoom publicRoom) {
+        // sanity check
+        if (null != publicRoom.roomId) {
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.canonicalAlias, null);
+
+            // Check whether the room exists to handled the cases where the user is invited or he has joined.
+            // CAUTION: the room may exist whereas the user membership is neither invited nor joined.
+            final Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
+            if (null != room && room.isInvited()) {
+                Log.d(LOG_TAG_1, "onPublicRoomSelected : the user is invited -> display the preview " + getActivity());
+                CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
+            } else if (null != room && room.isJoined()) {
+                Log.d(LOG_TAG_1, "onPublicRoomSelected : the user joined the room -> open the room");
+                final Map<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
+
+                if (!TextUtils.isEmpty(publicRoom.name)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
+                }
+
+                if (!TextUtils.isEmpty(publicRoom.topic)) {
+                    params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
+                }
+
+                CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+            } else {
+                // Display a preview by default.
+                Log.d(LOG_TAG_1, "onPublicRoomSelected : display the preview");
+                mActivity.showWaitingView();
+
+                roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+                    private void onDone() {
+                        if (null != mActivity) {
+                            mActivity.hideWaitingView();
+                            CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone();
+                    }
+
+                    private void onError() {
+                        roomPreviewData.setPublicRoom(publicRoom);
+                        roomPreviewData.setRoomName(publicRoom.name);
+                        onDone();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError();
+                    }
+                });
+            }
+        }
+    }
 
     /**
      * Fill the local address book and known contacts adapters with data
@@ -371,7 +475,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                             }
                         }
 
-                        mAdapter.setKnownContactsExtraTitle(null);
+//                        mAdapter.setKnownContactsExtraTitle(null);
                         mAdapter.setKnownContactsLimited((null != searchUsersResponse.limited) ? searchUsersResponse.limited : false);
                         mAdapter.setFilteredKnownContacts(list, mCurrentFilter);
                     }
@@ -505,11 +609,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     /**
      * Init contacts views with data and update their display
      */
-    private void initContactsViews() {
-        mAdapter.setLocalContacts(mMatrixUserOnlyCheckbox != null && mMatrixUserOnlyCheckbox.isChecked()
-                ? getMatrixUsers()
-                : mLocalContacts);
-    }
+//    private void initContactsViews() {
+//        mAdapter.setLocalContacts(mMatrixUserOnlyCheckbox != null && mMatrixUserOnlyCheckbox.isChecked()
+//                ? getMatrixUsers()
+//                : mLocalContacts);
+//    }
 
     /*
      * *********************************************************************************************
@@ -529,7 +633,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onRefresh() {
         initContactsData();
-        initContactsViews();
+//        initContactsViews();
     }
 
     @Override
@@ -538,7 +642,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         if (!mLocalContacts.containsAll(newContactList)) {
             mLocalContacts.clear();
             mLocalContacts.addAll(newContactList);
-            initContactsViews();
+//            initContactsViews();
         }
     }
 

@@ -56,6 +56,10 @@ public class RoomAdapter extends AbsAdapter {
 
     private final OnSelectItemListener mListener;
 
+
+
+
+
     /*
      * *********************************************************************************************
      * Constructor
@@ -80,7 +84,7 @@ public class RoomAdapter extends AbsAdapter {
         mPublicRoomsSection.setEmptyViewPlaceholder(context.getString(R.string.no_public_room_placeholder), context.getString(R.string.no_result_placeholder));
 
         addSection(mRoomsSection);
-        addSection(mPublicRoomsSection);
+//        addSection(mPublicRoomsSection);
     }
 
     /*
@@ -264,6 +268,8 @@ public class RoomAdapter extends AbsAdapter {
         void onSelectItem(Room item, int position);
 
         void onSelectItem(PublicRoom publicRoom);
+
+        void onSelectItem(ParticipantAdapterItem contact, int position);
     }
 
 }

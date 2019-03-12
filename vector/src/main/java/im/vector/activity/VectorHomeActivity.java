@@ -145,6 +145,8 @@ import im.vector.view.VectorPendingCallView;
  */
 public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
 
+
+
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
     // shared instance
@@ -201,7 +203,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
 
-    @BindView(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
+    //    com.getbase.floatingactionbutton.
+    @BindView(R.id.fab_expand_menu_button)
     AddFloatingActionButton mFabMain;
 
     @BindView(R.id.button_start_chat)
@@ -490,7 +493,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         final View selectedMenu;
         if (isFirstCreation()) {
-            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
+            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_people);
         } else {
             selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
         }
@@ -2338,8 +2341,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         joinARoom();
     }
 
-    //==============================================================================================================
-    // Events listener
+//    ==============================================================================================================
+//     Events listener
     //==============================================================================================================
 
     /**
@@ -2492,4 +2495,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             mSession.getDataHandler().removeListener(mEventsListener);
         }
     }
+
+
 }

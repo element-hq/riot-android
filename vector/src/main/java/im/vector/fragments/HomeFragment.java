@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -43,7 +44,9 @@ import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
+import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.HomeSectionView;
+import im.vector.view.SimpleDividerItemDecoration;
 
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
@@ -177,12 +180,14 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
+        mDirectChatsSection.setHideIfEmpty(true);
         mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
         mDirectChatsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
+        mRoomsSection.setHideIfEmpty(true);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
         mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
