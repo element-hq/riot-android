@@ -126,7 +126,7 @@ private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
 
         //test if there is an overlap
         if (b.start in a.start until a.end) {
-            if ((a.important && !b.important) || (!a.important && b.important)) {
+            if (a.important != b.important) {
                 remove = if (a.important) i + 1 else i
             } else {
                 when {
@@ -155,7 +155,8 @@ private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
 
 private data class LinkSpec(val span: URLSpan,
                             val start: Int,
-                            val end: Int, val important: Boolean = false)
+                            val end: Int,
+                            val important: Boolean = false)
 
 private val COMPARATOR = Comparator<LinkSpec> { (_, startA, endA), (_, startB, endB) ->
     if (startA < startB) {

@@ -1412,8 +1412,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     /**
-     * Notice message management
+     * Notice and RoomMember message management
      *
+     * @param viewType    the viewType
      * @param position    the message position
      * @param convertView the message view
      * @param parent      the parent view
