@@ -18,8 +18,6 @@
 package im.vector.widgets;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -28,6 +26,7 @@ import com.google.gson.JsonObject;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
@@ -489,34 +488,13 @@ public class WidgetsManager {
      * @param callback the callback
      */
     public static void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
-        getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new ApiCallback<String>() {
+        getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
             @Override
             public void onSuccess(String token) {
                 if (null == token) {
                     callback.onSuccess(widget.getUrl());
                 } else {
                     callback.onSuccess(widget.getUrl() + "&scalar_token=" + token);
-                }
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
                 }
             }
         });
@@ -536,21 +514,14 @@ public class WidgetsManager {
         final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
 
         if (null != scalarToken) {
-            (new Handler(Looper.getMainLooper())).post(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != scalarToken) {
-                        callback.onSuccess(scalarToken);
-                    }
-                }
-            });
+            callback.onSuccess(scalarToken);
         } else {
-            session.openIdToken(new ApiCallback<Map<Object, Object>>() {
+            session.openIdToken(new SimpleApiCallback<Map<Object, Object>>(callback) {
                 @Override
                 public void onSuccess(Map<Object, Object> tokensMap) {
                     WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context);
 
-                    widgetsRestClient.register(tokensMap, new ApiCallback<Map<String, String>>() {
+                    widgetsRestClient.register(tokensMap, new SimpleApiCallback<Map<String, String>>(callback) {
                         @Override
                         public void onSuccess(Map<String, String> response) {
                             String token = response.get("scalar_token");
@@ -566,49 +537,7 @@ public class WidgetsManager {
                                 callback.onSuccess(token);
                             }
                         }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            if (null != callback) {
-                                callback.onNetworkError(e);
-                            }
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            if (null != callback) {
-                                callback.onMatrixError(e);
-                            }
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            if (null != callback) {
-                                callback.onUnexpectedError(e);
-                            }
-                        }
                     });
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    if (null != callback) {
-                        callback.onNetworkError(e);
-                    }
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    if (null != callback) {
-                        callback.onMatrixError(e);
-                    }
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    if (null != callback) {
-                        callback.onUnexpectedError(e);
-                    }
                 }
             });
         }
