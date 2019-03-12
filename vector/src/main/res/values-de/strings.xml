@@ -1432,4 +1432,12 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
-</resources>
+<string name="notification_sync_init">Initialisiere Dienst</string>
+    <string name="settings_media">Medien</string>
+    <string name="settings_default_compression">Standard-Komprimierung</string>
+    <string name="compression_opt_list_choose">Wählen</string>
+    <string name="settings_default_media_source">Standard-Medienquelle</string>
+    <string name="media_source_choose">Wählen</string>
+    <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
+
+    </resources>
