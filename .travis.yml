@@ -44,15 +44,13 @@ before_script:
 
 # Just build the project for now
 script:
-  # Build app
-  - ./gradlew clean assembleAppRelease --stacktrace
-  - ./gradlew clean assembleAppfdroidRelease --stacktrace
-  # Build Android test
-  - ./gradlew assembleAndroidTest --stacktrace
+  # Build app (assembleAppRelease assembleAppfdroidRelease)
+  # Build Android test (assembleAndroidTest)
+  # Code quality (lintAppRelease lintAppfdroidRelease)
+  - ./gradlew clean assembleAppRelease assembleAppfdroidRelease assembleAndroidTest lintAppRelease lintAppfdroidRelease --stacktrace
   # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
   # - ./gradlew testAppReleaseUnitTest --stacktrace
-  # Code quality
-  - ./gradlew clean lintAppRelease lintAppfdroidRelease --stacktrace
+  # Other code quality check
   - ./tools/check/check_code_quality.sh
   - ./tools/travis/check_pr.sh
   # Check that indonesians file are identical. Due to Android issue, the resource folder must be value-in/, and Weblate export data into value-id/.
