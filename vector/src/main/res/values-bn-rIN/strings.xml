@@ -296,7 +296,7 @@
     <string name="attachment_cancel_download">বাতিল করুন নামানো নথি\?</string>
     <string name="attachment_cancel_upload">বাতিল করুন আপলোড\?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%১$dm %২$ds</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
     <string name="yesterday">গতকাল</string>
     <string name="today">আজ</string>
