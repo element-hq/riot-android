@@ -120,6 +120,7 @@ public class EventStreamService extends Service {
      * States of the foreground service notification.
      */
     private enum ForegroundNotificationState {
+        PRESTART,
         // the foreground notification is not displayed
         NONE,
         // initial sync in progress or the app is resuming
@@ -139,7 +140,7 @@ public class EventStreamService extends Service {
     /**
      * The current state of the foreground service notification (`NOTIFICATION_ID_FOREGROUND_SERVICE`).
      */
-    private static ForegroundNotificationState mForegroundNotificationState = ForegroundNotificationState.NONE;
+    private static ForegroundNotificationState mForegroundNotificationState = ForegroundNotificationState.PRESTART;
 
     /**
      * Default bing rule
@@ -327,6 +328,14 @@ public class EventStreamService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (mForegroundNotificationState == ForegroundNotificationState.PRESTART) {
+            //The service has been started in foreground, we must display a notif ASAP
+            Notification notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_init);
+            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE,notification);
+            //And switch now to NONE
+            mForegroundNotificationState = ForegroundNotificationState.NONE;
+        }
         // no intent : restarted by Android
         // EXTRA_AUTO_RESTART_ACTION : restarted by the service itself (
         if (null == intent || intent.hasExtra(EXTRA_AUTO_RESTART_ACTION)) {
@@ -356,17 +365,23 @@ public class EventStreamService extends Service {
 
                 if ((null == sessions) || sessions.isEmpty()) {
                     Log.e(LOG_TAG, "onStartCommand : no session");
+                    //Fix: Rageshake Context.startForegroundService() did not then call Service.startForeground()
+                    stopForeground(true);
                     return START_NOT_STICKY;
                 }
 
                 if (VectorUncaughtExceptionHandler.INSTANCE.didAppCrash(this)) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the application crashed");
+                    //Fix: Rageshake Context.startForegroundService() did not then call Service.startForeground()
+                    stopForeground(true);
                     return START_NOT_STICKY;
                 }
 
                 PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();
                 if (!pushManager.canStartAppInBackground()) {
                     Log.e(LOG_TAG, "onStartCommand : no auto restart because the user disabled the background sync");
+                    //Fix: Rageshake Context.startForegroundService() did not then call Service.startForeground()
+                    stopForeground(true);
                     return START_NOT_STICKY;
                 }
 
@@ -418,6 +433,8 @@ public class EventStreamService extends Service {
             case RESUME: {
                 if ((null == mSessions) || mSessions.isEmpty()) {
                     Log.e(LOG_TAG, "onStartCommand : empty sessions list with action " + action);
+                    //Fix rage shake 4081
+                    stopForeground(true);
                     return START_NOT_STICKY;
                 }
 
@@ -453,7 +470,7 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "## autoRestart() : restarts after " + delay + " ms");
 
         // reset the service identifier
-        mForegroundNotificationState = ForegroundNotificationState.NONE;
+        mForegroundNotificationState = ForegroundNotificationState.PRESTART;
 
         // restart the services after 3 seconds
         Intent restartServiceIntent = new Intent(getApplicationContext(), getClass());
