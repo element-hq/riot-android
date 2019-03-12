@@ -95,41 +95,50 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     }
 
     private fun getScalarTokenAndLoadUrl(refreshToken: Boolean) {
-        if (refreshToken) {
-            if (mTokenAlreadyRefreshed) {
-                // Only once to avoid infinite loop
-                return
+        if (canScalarTokenBeProvided()) {
+            if (refreshToken) {
+                if (mTokenAlreadyRefreshed) {
+                    // Only once to avoid infinite loop
+                    return
+                }
+
+                mTokenAlreadyRefreshed = true
+                WidgetsManager.clearScalarToken(this, mSession)
             }
 
-            mTokenAlreadyRefreshed = true
-            WidgetsManager.clearScalarToken(this, mSession)
+            showWaitingView()
+
+            WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
+                override fun onSuccess(scalarToken: String) {
+                    hideWaitingView()
+                    launchUrl(scalarToken)
+                }
+
+                private fun onError(errorMessage: String) {
+                    toast(errorMessage)
+                    finish()
+                }
+
+                override fun onNetworkError(e: Exception) {
+                    onError(e.localizedMessage)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    onError(e.localizedMessage)
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    onError(e.localizedMessage)
+                }
+            })
+        } else {
+            // Scalar token cannot be provided
+            if (refreshToken) {
+                // Nothing to do in this case, sorry
+            } else {
+                launchUrl(null)
+            }
         }
-
-        showWaitingView()
-
-        WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
-            override fun onSuccess(scalarToken: String) {
-                hideWaitingView()
-                launchUrl(scalarToken)
-            }
-
-            private fun onError(errorMessage: String) {
-                toast(errorMessage)
-                finish()
-            }
-
-            override fun onNetworkError(e: Exception) {
-                onError(e.localizedMessage)
-            }
-
-            override fun onMatrixError(e: MatrixError) {
-                onError(e.localizedMessage)
-            }
-
-            override fun onUnexpectedError(e: Exception) {
-                onError(e.localizedMessage)
-            }
-        })
     }
 
     /* ==========================================================================================
@@ -231,7 +240,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
-    private fun launchUrl(scalarToken: String) {
+    private fun launchUrl(scalarToken: String?) {
         val url = buildInterfaceUrl(scalarToken)
 
         if (null == url) {
@@ -242,7 +251,9 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         mWebView.loadUrl(url)
     }
 
-    abstract fun buildInterfaceUrl(scalarToken: String): String?
+    abstract fun canScalarTokenBeProvided(): Boolean
+
+    abstract fun buildInterfaceUrl(scalarToken: String?): String?
 
     /*
      * *********************************************************************************************

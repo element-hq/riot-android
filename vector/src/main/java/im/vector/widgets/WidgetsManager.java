@@ -45,6 +45,7 @@ import java.util.UUID;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.extensions.UrlExtensionsKt;
 import im.vector.settings.VectorLocale;
 
 public class WidgetsManager {
@@ -488,18 +489,41 @@ public class WidgetsManager {
      * @param callback the callback
      */
     public static void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
-        getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
-            @Override
-            public void onSuccess(String token) {
-                if (null == token) {
-                    callback.onSuccess(widget.getUrl());
-                } else {
-                    callback.onSuccess(widget.getUrl() + "&scalar_token=" + token);
+        if (isScalarUrl(context, widget.getUrl())) {
+            getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
+                @Override
+                public void onSuccess(String token) {
+                    if (null == token) {
+                        callback.onSuccess(widget.getUrl());
+                    } else {
+                        callback.onSuccess(UrlExtensionsKt.appendParamToUrl(new StringBuilder(widget.getUrl()), "scalar_token", token).toString());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            // Do not provide the scalar token
+            callback.onSuccess(widget.getUrl());
+        }
     }
 
+    /**
+     * Return true if the url is allowed to receive the scalar token in parameter
+     *
+     * @param context
+     * @param url
+     * @return true if the url is allowed to receive the scalar token in parameter
+     */
+    public static boolean isScalarUrl(Context context, String url) {
+        String[] array = context.getResources().getStringArray(R.array.integrations_widgets_urls);
+
+        for (String allowedUrl : array) {
+            if (url.startsWith(allowedUrl)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Retrieve the scalar token
