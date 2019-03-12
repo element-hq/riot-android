@@ -20,6 +20,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 interface WidgetsApi {
     /**
@@ -28,5 +29,5 @@ interface WidgetsApi {
      * @param body the body content
      */
     @POST("register")
-    Call<Map<String, String>> register(@Body Map<Object, Object> body);
+    Call<Map<String, String>> register(@Body Map<Object, Object> body, @Query("v") String version);
 }
