@@ -41,6 +41,7 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Parent class for all Activities managing Widget Webview
@@ -66,6 +67,13 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     protected var mRoom: Room? = null
 
     /* ==========================================================================================
+     * Data
+     * ========================================================================================== */
+
+    private var mTokenAlreadyRefreshed: Boolean = false
+    private var mHistoryAlreadyCleared: Boolean = false
+
+    /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
 
@@ -82,6 +90,22 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         initWebView()
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
+
+        getScalarTokenAndLoadUrl(false)
+    }
+
+    private fun getScalarTokenAndLoadUrl(refreshToken: Boolean) {
+        if (refreshToken) {
+            if (mTokenAlreadyRefreshed) {
+                // Only once to avoid infinite loop
+                return
+            }
+
+            mTokenAlreadyRefreshed = true
+            WidgetsManager.clearScalarToken(this, mSession)
+        }
+
+        showWaitingView()
 
         WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
             override fun onSuccess(scalarToken: String) {
@@ -164,9 +188,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
             it.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    Log.d(LOG_TAG, "## onPageStarted - Url: $url")
+                    // Do not log url, it can contains token
+                    Log.d(LOG_TAG, "## onPageStarted")
 
                     showWaitingView()
+                }
+
+                override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                    // In case of 403, try to refresh the scalar token
+                    if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+                        getScalarTokenAndLoadUrl(true)
+                    }
                 }
 
                 override fun onPageFinished(view: WebView, url: String) {
@@ -181,6 +213,13 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
                     if (null != js) {
                         runOnUiThread { mWebView.loadUrl("javascript:$js") }
+                    }
+
+                    if (mTokenAlreadyRefreshed && !mHistoryAlreadyCleared) {
+                        // Also clear WebView history, for the scenario when the scalar token was invalid, to avoid loading again the url with the invalid token
+                        // It has to be done when page has finished to be loaded
+                        mHistoryAlreadyCleared = true
+                        mWebView.clearHistory()
                     }
                 }
             }

@@ -55,8 +55,6 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         waitingView = findViewById(R.id.integration_progress_layout)
 
-        showWaitingView()
-
         super.initUiAndData()
 
         // Some widgets need popup to be enabled
