@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.widgets;
 
-import java.util.Map;
+package im.vector.extensions
 
-import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+import java.net.URLEncoder
 
-interface WidgetsApi {
-    /**
-     * register to the server
-     *
-     * @param body the body content
-     */
-    @POST("register")
-    Call<Map<String, String>> register(@Body Map<Object, Object> body, @Query("v") String version);
+/**
+ * Append param and value to a Url, using "?" or "&". Value parameter will be encoded
+ * Return this for chaining purpose
+ */
+fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder {
+    if (contains("?")) {
+        append("&")
+    } else {
+        append("?")
+    }
+
+    append(param)
+    append("=")
+    append(URLEncoder.encode(value, "utf-8"))
+
+    return this
 }

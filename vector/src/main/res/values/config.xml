@@ -11,8 +11,13 @@
     <string name="piwik_server_url" translatable="false">"https://piwik.riot.im"</string>
 
     <!-- Widget urls -->
-    <string name="integrations_rest_url" translatable="false">"https://scalar-staging.riot.im/scalar"</string>
     <string name="integrations_ui_url" translatable="false">"https://scalar-staging.riot.im/scalar-web/"</string>
+    <string name="integrations_rest_url" translatable="false">"https://scalar-staging.riot.im/scalar/api"</string>
+
+    <string-array name="integrations_widgets_urls" translatable="false">
+        <item>https://scalar-staging.riot.im/scalar/api</item>
+        <item>https://scalar.vector.im/api</item>
+    </string-array>
 
     <!-- empty means to use the active HS url -->
     <!-- set a valid URL like "https://matrix.org" to use a custom one -->
