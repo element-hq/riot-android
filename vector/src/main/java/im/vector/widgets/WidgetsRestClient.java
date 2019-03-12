@@ -37,7 +37,7 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
                         .withHomeServerUri(Uri.parse(context.getString(R.string.integrations_rest_url)))
                         .build(),
                 WidgetsApi.class,
-                "api/",
+                "",
                 false);
     }
 
