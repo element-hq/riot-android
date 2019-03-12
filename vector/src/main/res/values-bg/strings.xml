@@ -15,7 +15,7 @@
     <string name="title_activity_room">Стая</string>
     <string name="title_activity_settings">Настройки</string>
 
-    <string name="compression_options">"Изпратете с размер "</string>
+    <string name="compression_options">Изпратете като</string>
     <string name="compression_opt_list_original">Оригинален</string>
     <string name="compression_opt_list_large">Голям</string>
     <string name="compression_opt_list_medium">Среден</string>
@@ -101,9 +101,10 @@
 
     <string name="title_activity_member_details">Членове</string>
     <string name="view_decrypted_source">Прегледай разшифрования източник</string>
-    <string name="ongoing_conference_call">Тече групов разговор.\nПрисъедини се с %1$s или %2$s.</string>
-    <string name="ongoing_conference_call_voice">глас</string>
-    <string name="ongoing_conference_call_video">видео</string>
+    <string name="ongoing_conference_call">Тече групов разговор.
+\nПрисъедини се с %1$s или %2$s</string>
+    <string name="ongoing_conference_call_voice">Глас</string>
+    <string name="ongoing_conference_call_video">Видео</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
     <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват…</string>
     <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>
@@ -137,11 +138,11 @@
     <string name="bottom_action_rooms">Стаи</string>
     <string name="bottom_action_groups">Общности</string>
 
-    <string name="home_filter_placeholder_home">Търси стаи</string>
-    <string name="home_filter_placeholder_favorites">Търси любими</string>
-    <string name="home_filter_placeholder_people">Търси хора</string>
-    <string name="home_filter_placeholder_rooms">Търси стаи</string>
-    <string name="home_filter_placeholder_groups">Търси общности</string>
+    <string name="home_filter_placeholder_home">Филтрирай стаи</string>
+    <string name="home_filter_placeholder_favorites">Филтрирай любими</string>
+    <string name="home_filter_placeholder_people">Филтрирай хора</string>
+    <string name="home_filter_placeholder_rooms">Филтрирай стаи</string>
+    <string name="home_filter_placeholder_groups">Филтрирай общности</string>
 
     <string name="invitations_header">Покани</string>
     <string name="low_priority_header">Нисък приоритет</string>
@@ -184,7 +185,7 @@
 
     <string name="join_room">Присъедини се към стая</string>
     <string name="username">Потребителско име</string>
-    <string name="create_account">Регистрация</string>
+    <string name="create_account">Създай акаунт</string>
     <string name="login">Вход</string>
     <string name="logout">Изход</string>
     <string name="hs_url">URL на Home сървър</string>
@@ -481,9 +482,9 @@
     <string name="account_phone_number_already_used_error">Този телефонен номер е вече зает.</string>
 
     <string name="settings_change_password">Смяна на парола</string>
-    <string name="settings_old_password">Стара парола</string>
+    <string name="settings_old_password">Текуща парола</string>
     <string name="settings_new_password">Нова парола</string>
-    <string name="settings_confirm_password">Потвърди парола</string>
+    <string name="settings_confirm_password">Потвърди новата парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на паролата</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
     <string name="settings_unignore_user">Показване на всички съобщения от %s?
@@ -718,7 +719,7 @@
 
     <string name="room_preview_invitation_format">Вие сте поканен да се присъедините към тази стая от %s</string>
     <string name="room_preview_unlinked_email_warning">Поканата беше изпратена на %s, който не е свързан с този профил.
-Може да искате да влезете с друг профил или да добавите имейл адреса в този.</string>
+\nМоже би искате да влезете с друг профил или да добавите имейл адреса в този.</string>
     <string name="room_preview_try_join_an_unknown_room">Опитвате се да влезете в %s. Желаете ли да се присъедините, за да участвате в дискусията?</string>
     <string name="room_preview_try_join_an_unknown_room_default">стая</string>
     <string name="room_preview_room_interactions_disabled">Това е преглед на стаята. Интеракции в нея са изключени.</string>
@@ -1122,7 +1123,7 @@
 
     <string name="settings_troubleshoot_test_battery_title">Оптимизация на батерията</string>
     <string name="settings_troubleshoot_test_battery_success">Riot не се влияе от Оптимизация на батерията.</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Ако потребител остави устройството неподвижно с изключен екран за даден период от време, то влиза в режим на заспиване. Това предотвратява приложенията да достъпват мрежата и отлага техните задачи, синхронизации и аларми. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Ако потребител остави устройството неподвижно с изключен екран за известно време, то влиза в режим на заспиване. Това предотвратява приложенията да достъпват мрежата и отлага техните задачи, синхронизации и стандартни аларми.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорирай оптимизацията</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Връзка във фонов режим</string>
@@ -1348,4 +1349,21 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
+<string name="ignore">Игнорирай</string>
+
+    <string name="login_error_unknown_host">URL адресът не е достъпен, моля проверете</string>
+    <string name="login_error_ssl_handshake">Устройството Ви използва остарял TLS протокол за сигурност, който е уязвим към атаки. За ваша безопасност няма да може да се свържете</string>
+    <string name="settings_send_message_with_enter">Изпращай съобщения с Enter</string>
+    <string name="settings_send_message_with_enter_summary">Enter бутонът на клавиатурата ще изпраща съобщение вместо да добавя нов ред</string>
+
+    <string name="settings_change_password_submit">Обнови паролата</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Паролата не е валидна</string>
+    <string name="passwords_do_not_match">Паролите не съвпадат</string>
+
+    <string name="autodiscover_invalid_response">Невалиден отговор при опит за откриване на адреса на сървъра</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Опции за откриване на сървър</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%s\":
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
+
 </resources>
