@@ -27,8 +27,11 @@ import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
+import im.vector.util.SecretStoringUtils
 import org.matrix.androidsdk.util.Log
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 /**
  * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
@@ -353,11 +356,10 @@ class NotificationDrawerManager(val context: Context) {
         }
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            val fileOut = FileOutputStream(file)
-            val out = ObjectOutputStream(fileOut)
-            out.writeObject(eventList)
-            out.close()
-            fileOut.close()
+            if (!file.exists()) file.createNewFile()
+            FileOutputStream(file).use {
+                SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+            }
         } catch (e: Throwable) {
             Log.e(LOG_TAG, "## Failed to save cached notification info", e)
         }
@@ -367,11 +369,11 @@ class NotificationDrawerManager(val context: Context) {
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
-                val fileIn = FileInputStream(file)
-                val ois = ObjectInputStream(fileIn)
-                val readObject = ois.readObject()
-                (readObject as? ArrayList<*>)?.let { arrayList ->
-                    return ArrayList(arrayList.mapNotNull { it as NotifiableEvent })
+                FileInputStream(file).use {
+                    val events: ArrayList<NotifiableEvent>? = SecretStoringUtils.loadSecureSecret(it, "notificationMgr", this.context)
+                    if (events != null) {
+                        return ArrayList(events.mapNotNull { it as? NotifiableEvent })
+                    }
                 }
             }
         } catch (e: Throwable) {

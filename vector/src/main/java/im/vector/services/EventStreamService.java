@@ -219,7 +219,7 @@ public class EventStreamService extends Service {
 
         @Override
         public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
-            Log.e(LOG_TAG, "%%%%%%%%  MXEventListener: onLiveEventsChunkProcessed[" + fromToken + "->" + toToken + "]");
+            Log.d(LOG_TAG, "%%%%%%%%  MXEventListener: onLiveEventsChunkProcessed[" + fromToken + "->" + toToken + "]");
 
             VectorApp.getInstance().getNotificationDrawerManager().refreshNotificationDrawer(new OutdatedEventDetector(EventStreamService.this));
 
