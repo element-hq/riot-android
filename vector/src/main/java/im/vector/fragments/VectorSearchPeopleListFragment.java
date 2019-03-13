@@ -230,6 +230,10 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
         mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
+                if (!isAdded()) {
+                    return;
+                }
+
                 mPeopleListView.post(new Runnable() {
                     @Override
                     public void run() {
