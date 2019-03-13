@@ -2428,9 +2428,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void manageSendMoreButtons() {
         int img = R.drawable.ic_material_file;
         if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
-             img = R.drawable.ic_material_send_green;
-        }
-        else {
+            img = R.drawable.ic_material_send_green;
+        } else {
             switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
                 case MEDIA_SOURCE_VOICE:
                     if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
@@ -2661,7 +2660,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             if ((null == call) && (null == activeWidget)) {
                 mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0
-                || PreferencesManager.sendMessageWithEnter(this)))? View.VISIBLE : View.GONE);
+                        || PreferencesManager.sendMessageWithEnter(this))) ? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else if (null != activeWidget) {
                 mStartCallLayout.setVisibility(View.GONE);
@@ -3892,8 +3891,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     if (useNativeCamera) {
                         onSendChoiceClicked(DialogListItem.TakePhoto.INSTANCE);
                         return;
-                    }
-                    else {
+                    } else {
                         onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
                         return;
                     }
@@ -3901,8 +3899,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     if (useNativeCamera) {
                         onSendChoiceClicked(DialogListItem.TakeVideo.INSTANCE);
                         return;
-                    }
-                    else {
+                    } else {
                         onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
                         return;
                     }

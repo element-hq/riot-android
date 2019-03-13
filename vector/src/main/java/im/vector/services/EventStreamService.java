@@ -332,7 +332,7 @@ public class EventStreamService extends Service {
         if (mForegroundNotificationState == ForegroundNotificationState.PRESTART) {
             //The service has been started in foreground, we must display a notif ASAP
             Notification notification = NotificationUtils.INSTANCE.buildForegroundServiceNotification(this, R.string.notification_sync_init);
-            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE,notification);
+            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification);
             //And switch now to NONE
             mForegroundNotificationState = ForegroundNotificationState.NONE;
         }

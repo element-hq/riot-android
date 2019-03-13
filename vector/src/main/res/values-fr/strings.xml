@@ -1381,7 +1381,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Utiliser la configuration</string>
 
-<string name="notification_sync_init">Initialisation du service</string>
+    <string name="notification_sync_init">Initialisation du service</string>
     <string name="settings_media">Média</string>
     <string name="settings_default_compression">Compression par défaut</string>
     <string name="compression_opt_list_choose">Choisir</string>
@@ -1389,4 +1389,4 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="media_source_choose">Choisir</string>
     <string name="settings_play_shutter_sound">Jouer le son de l’obturateur</string>
 
-    </resources>
+</resources>

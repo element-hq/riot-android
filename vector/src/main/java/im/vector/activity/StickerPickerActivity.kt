@@ -27,7 +27,6 @@ import im.vector.types.JsonDict
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
-import java.lang.StringBuilder
 
 class StickerPickerActivity : AbstractWidgetActivity() {
 
