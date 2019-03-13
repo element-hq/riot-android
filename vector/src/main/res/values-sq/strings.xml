@@ -1355,4 +1355,12 @@ Mbajeni kyçin tuaj të rikthimeve diku shumë të sigurt, bie fjala, nën një 
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Përdor Formësim</string>
 
-</resources>
+<string name="notification_sync_init">Po gatitet shërbimi</string>
+    <string name="settings_media">Media</string>
+    <string name="settings_default_compression">Ngjeshje parazgjedhje</string>
+    <string name="compression_opt_list_choose">Zgjidhni</string>
+    <string name="settings_default_media_source">Burim parazgjedhje media</string>
+    <string name="media_source_choose">Zgjidhni</string>
+    <string name="settings_play_shutter_sound">Luaj tingull shkrepjeje</string>
+
+    </resources>
