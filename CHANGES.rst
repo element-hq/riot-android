@@ -13,6 +13,7 @@ Improvements:
  - Add option to choose default photo compression (#2763)
  - Add option to disable camera shutter sound
  - Auto-refresh scalar token when a 403 error is detected (#3051)
+ - Open each links with the browser in a new Tab (#381)
 
 Other changes:
  -
