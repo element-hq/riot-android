@@ -35,7 +35,8 @@
     <string name="rename">Nimeä uudelleen</string>
     <string name="report_content">Ilmoita epäilyttävästä sisällöstä</string>
     <string name="active_call">Puhelu meneillään</string>
-    <string name="ongoing_conference_call">Ryhmäpuhelu meneillään.\nLiity pelkällä %1$s tai %2$s kanssa.</string>
+    <string name="ongoing_conference_call">Ryhmäpuhelu meneillään.
+\nLiity pelkällä %1$s tai %2$s kanssa</string>
     <string name="ongoing_conference_call_voice">äänellä</string>
     <string name="ongoing_conference_call_video">videon</string>
     <string name="cannot_start_call">Ei voitu aloittaa puhelua, yritä uudelleen</string>
@@ -72,10 +73,10 @@
     <string name="bottom_action_rooms">Huoneet</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Haku</string>
-    <string name="home_filter_placeholder_favorites">Haku</string>
-    <string name="home_filter_placeholder_people">Haku</string>
-    <string name="home_filter_placeholder_rooms">Etsi huoneita</string>
+    <string name="home_filter_placeholder_home">Suodata huoneista</string>
+    <string name="home_filter_placeholder_favorites">Suodata suosikeista</string>
+    <string name="home_filter_placeholder_people">Suodata henkilöistä</string>
+    <string name="home_filter_placeholder_rooms">Suodata huoneista</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Kutsut</string>
@@ -117,7 +118,7 @@
 
     <string name="join_room">Liity huoneeseen</string>
     <string name="username">Käyttäjätunnus</string>
-    <string name="create_account">Rekisteröidy</string>
+    <string name="create_account">Luo tunnus</string>
     <string name="login">Kirjaudu sisään</string>
     <string name="logout">Kirjaudu ulos</string>
     <string name="hs_url">Kotipalvelimen URL</string>
@@ -193,7 +194,7 @@
     <string name="login_error_unable_register">Rekisteröityminen epäonnistui</string>
     <string name="login_error_unable_register_mail_ownership">Rekisteröityminen epäonnistui: sähköpostin varmistaminen epäonnistui</string>
     <!-- ??? -->
-    <string name="login_error_invalid_home_server">Anna pätevä URL</string>
+    <string name="login_error_invalid_home_server">Syötäthän toimivan osoitteen</string>
 
     <string name="login_error_forbidden">Väärä käyttäjätunnus tai salasana</string>
     <string name="login_error_unknown_token">Annettua tunnistetta ei hyväksytty</string>
@@ -289,7 +290,8 @@ Salli Riotin käyttää yhteystietojasi?</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s on kutsunut sinut huoneeseen</string>
-    <string name="room_preview_unlinked_email_warning">Kutsu lähetettiin osoitteeseen %s, joka ei kuulu tälle tilille.\nVoit kirjautua sisään toisella tilillä tai lisätä sähköpostiosoitteesi tälle tilille.</string>
+    <string name="room_preview_unlinked_email_warning">Tämä kutsu lähetettiin osoitteeseen %s, jota ei ole liitetty tunnukseesi.
+\nVoit kirjautua sisään toisella tilillä tai lisätä tämän sähköpostiosoitteen tunnukseesi.</string>
     <string name="room_preview_try_join_an_unknown_room">Olet avaamassa huonetta %s. Haluatko liittyä huoneeseen osallistuaksesi keskusteluun?</string>
     <string name="room_preview_try_join_an_unknown_room_default">huone</string> <!-- ??? what is this meant to be, I suspect grammar shenanigans -->
     <string name="room_preview_room_interactions_disabled">Tämä on esikatsely huoneesta. Liity huoneeseen osallistuaksesi keskusteluun.</string>
@@ -306,7 +308,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="room_participants_create">Luo</string>
 
     <string name="room_participants_online">kirjautuneena sisään</string>
-    <string name="room_participants_offline">ei saavutettavissa</string>
+    <string name="room_participants_offline">saavuttamattomissa</string>
     <string name="room_participants_idle">toimettomana</string>
 
     <string name="room_participants_header_admin_tools">YLLÄPITÄJÄN TYÖKALUT</string>
@@ -506,7 +508,7 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="account_phone_number_already_used_error">Kyseinen puhelinnumero on jo käytössä.</string>
 
     <string name="settings_change_password">Vaihda salasana</string>
-    <string name="settings_old_password">Vanha salasana</string>
+    <string name="settings_old_password">Nykyinen salasana</string>
     <string name="settings_new_password">Uusi salasana</string>
     <string name="settings_confirm_password">Vahvista uusi salasana</string>
     <string name="settings_fail_to_update_password">Salasanan päivittäminen epäonnistui</string>
@@ -778,7 +780,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="action_exit">Poistu</string>
     <string name="bottom_action_groups">Yhteisöt</string>
 
-    <string name="home_filter_placeholder_groups">Haku</string>
+    <string name="home_filter_placeholder_groups">Suodata yhteisöistä</string>
 
     <string name="groups_invite_header">Kutsu</string>
     <string name="groups_header">Yhteisöt</string>
@@ -823,10 +825,10 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="no_users_placeholder">Ei käyttäjiä</string>
 
     <string name="rooms">Huoneet</string>
-    <string name="joined">Liittyi</string>
-    <string name="invited">Kutsuttiin</string>
-    <string name="filter_group_members">Suodata ryhmän jäseniä</string>
-    <string name="filter_group_rooms">Suodata ryhmän huoneita</string>
+    <string name="joined">Jäsenet</string>
+    <string name="invited">Kutsuttu</string>
+    <string name="filter_group_members">Rajaa jäsenlistaa</string>
+    <string name="filter_group_rooms">Rajaa huonelistaa</string>
 
     <string name="group_no_long_description">Yhteisön pääkäyttäjä ei ole antanut pitkää kuvausta yhteisölle.</string>
 
@@ -1078,7 +1080,7 @@ Haluatko lisätä paketteja?</string>
 
     <string name="settings_troubleshoot_test_battery_title">Akkukäytön optimointi</string>
     <string name="settings_troubleshoot_test_battery_success">Akkukäytön optimointi ei vaikuta Riotin toimintaan.</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Jos käyttäjä jättää laitteen ilman johtoa paikoilleen joksikin aikaa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä yhteyksiä ja lykkää niiden töitä, synkronointteja ja perushälytyksiä. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Jos käyttäjä jättää laitteen ilman latausjohtoa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä verkkoyhteyksiä ja lykkää niiden töitä, synkronointeja ja perushälytyksiä.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
 
     <string name="settings_notification_privacy_warning">Riot.im käyttää taustapalvelua pitääksesi viestisi sisällön yksityisenä. Voit vaihtaa tämän asetuksen vähentääksesi akun käyttöä.</string>
@@ -1375,5 +1377,44 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="keys_backup_info_title_version">Versio</string>
     <string name="keys_backup_info_title_algorithm">Algoritmi</string>
     <string name="keys_backup_info_title_signature">Allekirjoitus</string>
+
+    <string name="ignore">Jätä huomiotta</string>
+
+    <string name="auth_login_sso">Kirjaudu sisään kertakirjautumisella</string>
+    <string name="login_error_unknown_host">Tämä osoite ei ole saavutettavissa. Tarkistathan osoitteen</string>
+    <string name="login_error_ssl_handshake">Laitteesi käyttää vanhaentunutta, haavoittuvaista TLS-protokollan versiota. Turvallisuutesi vuoksi et pysty yhdistämään</string>
+    <string name="settings_send_message_with_enter">Lähetä viesti enter-näppäimellä</string>
+    <string name="settings_send_message_with_enter_summary">Näppäimistön enter-näppäin lähettää viestin sen sijaan, että se lisäisi rivinvaihdon</string>
+
+    <string name="settings_change_password_submit">Päivitä salasana</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Salasana ei ole kelvollinen</string>
+    <string name="passwords_do_not_match">Salasanat eivät täsmää</string>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
+
+    <string name="store_full_description">Keskusteluohjelma, joka on täysin hallinnoitavissasi ja erittäin joustava. Riot sallii sinun kommunikoivan juuri sillä tavalla kuin haluat. [matrix]-sovellus — avoimen ja hajautetun kommunikaation standardi.
+\n
+\nKäytä ilmaista matrix.org-tunnusta, hanki oma palvelimesi osoitteesta https://modular.im tai käytä muuta Matrix-palvelinta.
+\n
+\nMiksi valita Riot.im\?
+\n
+\n• Täydellinen kommunikaatio: rakenna huoneita tiimeillesi, ystävillesi ja yhteisöllesi — juuri niin kuin haluat! Keskustele, jaa tiedostoja, lisää sovelmia ja tee ääni‐ ja videopuheluita — kaikki tämä ilmaiseksi.
+\n
+\n• Tehokkaat integraatiot: Käytä Riotia juuri niillä työkaluilla, jotka tiedät ja joita rakastat. Riot.im jopa mahdollistaa keskustelun henkilöiden kanssa, jotka käyttävät eri keskusteluohjelmia.
+\n
+\n• Yksityinen ja turvallinen: Pidä keskustelusi salaisina. Nykyaikainen osapuolten välinen salaus pitää huolen, että yksityiset keskustelut pysyvät yksityisenä.
+\n
+\n• Avoin, ei suljettu: Avointa koodia, ja rakennettu käyttämään Matrixia. Voit omistaa oman datasi ylläpitämällä omaa palvelintasi, tai käyttämällä palvelinta, johon luotat.
+\n
+\n• Kaikkialla, missä olet: pysy yhteydessä siellä, missä ikinä oletkin täysin synkronoidulla viestihistorialla kaikkien laitteidesi ja sivun https://riot.im välillä.</string>
+
+    <string name="new_recovery_method_popup_description">Uusi avainvarmuuskopio on löydetty.
+\n
+\nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tunnukseesi. Vaihda tunnuksesi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
+    <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%s”:
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
 
 </resources>

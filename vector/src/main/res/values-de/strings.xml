@@ -32,7 +32,8 @@
     <string name="rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
-    <string name="ongoing_conference_call">Konferenzgespräch läuft.\nPer %1$s oder %2$s beitreten.</string>
+    <string name="ongoing_conference_call">Konferenzgespräch läuft.
+\nPer %1$s oder %2$s beitreten</string>
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
@@ -1221,7 +1222,7 @@ Warum solltest du Riot.im wählen?
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
     <string name="store_whats_new">"An Riot.im werden ständig Änderungen und Verbesserungen durchgeführt.
-Das vollständige Änderungsprotokoll ist hier zu finden: %1$s
+Das vollständige Änderungsprotokoll ist hier zu finden: %1$s.
 Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktiviert."</string>
     <string name="title_activity_keys_backup_setup">Schlüssel-Sicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüssel-Sicherung verwenden</string>
@@ -1417,7 +1418,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="auth_login_sso">Mit single-sign-on anmelden</string>
     <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>
     <string name="login_error_ssl_handshake">Dein Gerät nutzt eine veraltetes TLS-Sicherheitsprotokoll, das anfällig für Angriffe ist. Zu deiner Sicherheit wirst du nicht in der Lage sein, dich zu verbinden</string>
-    <string name="settings_send_message_with_enter">Setze Nachricht mit Eingabetaste</string>
+    <string name="settings_send_message_with_enter">Schicke Nachricht mit Eingabetaste</string>
     <string name="settings_send_message_with_enter_summary">Eingabetaste der Bildschirmtastatur schickt die Nachricht ab, statt einen Zeilenumbruch zu erzeugen</string>
 
     <string name="settings_change_password_submit">Passwort aktualisieren</string>
@@ -1430,5 +1431,13 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 \n\"%s\":
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
+
+    <string name="notification_sync_init">Initialisiere Dienst</string>
+    <string name="settings_media">Medien</string>
+    <string name="settings_default_compression">Standard-Komprimierung</string>
+    <string name="compression_opt_list_choose">Wählen</string>
+    <string name="settings_default_media_source">Standard-Medienquelle</string>
+    <string name="media_source_choose">Wählen</string>
+    <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
 
 </resources>

@@ -659,6 +659,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aVisibilityToSet View.GONE to hide the view, View.VISIBLE to show
      */
     private void setScreenDevicesListVisibility(int aVisibilityToSet) {
+        if (mDevicesListHeaderView == null) {
+            // Activity is destroyed
+            return;
+        }
+
         mDevicesListHeaderView.setVisibility(aVisibilityToSet);
         mDevicesListView.setVisibility(aVisibilityToSet);
 

@@ -1455,4 +1455,6 @@ Email также позволит вам при необходимости во�
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортирование ключей…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Скачивание ключей…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление ключа восстановления…</string>
+    <string name="ignore">Игнорировать</string>
+
 </resources>

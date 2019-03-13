@@ -27,15 +27,24 @@ import java.util.*
 /**
  * Better support for auto link than the default implementation
  */
-fun TextView.vectorCustomLinkify() {
+fun TextView.vectorCustomLinkify(keepExistingUrlSpan: Boolean = false) {
 
     val spannableText = SpannableString.valueOf(text)
+
+    //we might want to modify some matches
+    val createdSpans = ArrayList<LinkSpec>()
+
+    if (keepExistingUrlSpan) {
+        //Keep track of existing URLSpans, and mark them as important
+        spannableText.forEachSpanIndexed { _, urlSpan, start, end ->
+            createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end, important = true))
+        }
+    }
 
     //Use the framework first, the found span can then be manipulated if needed
     LinkifyCompat.addLinks(spannableText, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS)
 
     //we might want to modify some matches
-    val createdSpans = ArrayList<LinkSpec>()
     spannableText.forEachSpanIndexed { _, urlSpan, start, end ->
         spannableText.removeSpan(urlSpan)
 
@@ -117,16 +126,20 @@ private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
 
         //test if there is an overlap
         if (b.start in a.start until a.end) {
-            when {
-                b.end <= a.end ->
-                    //b is inside a -> b should be removed
-                    remove = i + 1
-                a.end - a.start > b.end - b.start ->
-                    //overlap and a is bigger -> b should be removed
-                    remove = i + 1
-                a.end - a.start < b.end - b.start ->
-                    //overlap and a is smaller -> a should be removed
-                    remove = i
+            if (a.important != b.important) {
+                remove = if (a.important) i + 1 else i
+            } else {
+                when {
+                    b.end <= a.end ->
+                        //b is inside a -> b should be removed
+                        remove = i + 1
+                    a.end - a.start > b.end - b.start ->
+                        //overlap and a is bigger -> b should be removed
+                        remove = i + 1
+                    a.end - a.start < b.end - b.start ->
+                        //overlap and a is smaller -> a should be removed
+                        remove = i
+                }
             }
 
             if (remove != -1) {
@@ -142,7 +155,8 @@ private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
 
 private data class LinkSpec(val span: URLSpan,
                             val start: Int,
-                            val end: Int)
+                            val end: Int,
+                            val important: Boolean = false)
 
 private val COMPARATOR = Comparator<LinkSpec> { (_, startA, endA), (_, startB, endB) ->
     if (startA < startB) {

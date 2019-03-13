@@ -1,3 +1,16 @@
+Changes in Riot 0.8.25 (2019-03-13)
+===================================================
+
+Improvements:
+ - Add option to choose default media source (#2763)
+ - Add option to choose default photo compression (#2763)
+ - Add option to disable camera shutter sound
+ - Auto-refresh scalar token when a 403 error is detected (#3051)
+ - Open each links with the browser in a new Tab (#381)
+
+Translations:
+ - New partial translations in Bengali-India
+
 Changes in Riot 0.8.24 (2019-03-07)
 ===================================================
 
@@ -1238,6 +1251,7 @@ Changes in Riot 0.8.XX (2019-XX-XX)
 
 MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
 
 Features:
  -

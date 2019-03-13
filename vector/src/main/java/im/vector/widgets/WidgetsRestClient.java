@@ -29,6 +29,9 @@ import java.util.Map;
 import im.vector.R;
 
 class WidgetsRestClient extends RestClient<WidgetsApi> {
+
+    private static final String API_VERSION = "1.1";
+
     /**
      * {@inheritDoc}
      */
@@ -37,7 +40,7 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
                         .withHomeServerUri(Uri.parse(context.getString(R.string.integrations_rest_url)))
                         .build(),
                 WidgetsApi.class,
-                "api/",
+                "",
                 false);
     }
 
@@ -50,7 +53,7 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
     public void register(final Map<Object, Object> params, final ApiCallback<Map<String, String>> callback) {
         final String description = "Register";
 
-        mApi.register(params).enqueue(new RestAdapterCallback<Map<String, String>>(description,
+        mApi.register(params, API_VERSION).enqueue(new RestAdapterCallback<Map<String, String>>(description,
                 mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
             @Override
             public void onRetry() {

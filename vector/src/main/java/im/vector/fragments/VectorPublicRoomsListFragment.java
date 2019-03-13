@@ -174,6 +174,10 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
 
                         roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                             private void onDone() {
+                                if (!isAdded()) {
+                                    return;
+                                }
+
                                 mInitializationSpinnerView.setVisibility(View.GONE);
                                 CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                             }
@@ -184,6 +188,10 @@ public class VectorPublicRoomsListFragment extends VectorBaseFragment {
                             }
 
                             private void onError() {
+                                if (!isAdded()) {
+                                    return;
+                                }
+
                                 roomPreviewData.setPublicRoom(publicRoom);
                                 roomPreviewData.setRoomName(publicRoom.name);
                                 onDone();
