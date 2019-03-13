@@ -485,4 +485,90 @@
 </plurals>
 
     <string name="ssl_trust">আস্থাস্থাপন</string>
+    <string name="ssl_do_not_trust">বিশ্বাস করবেন না</string>
+    <string name="ssl_logout_account">লগআউট</string>
+    <string name="ssl_remain_offline">উপেক্ষাকরা</string>
+    <string name="ssl_fingerprint_hash">আঙুলেরছাপ(%s):</string>
+    <string name="ssl_could_not_verify">"রিমোট সার্ভারএর পরিচয় যাচাই করা হয়নি  "</string>
+    <string name="ssl_cert_not_trust">"এর অর্থ এই যে কেউ দূষিতভাবে আপনার ট্রাফিক কে আটকাতে পারে অথবা আপনার ফোন রিমোট সার্ভার দ্বারা সর্বরাহিত শংসাপত্রের উপর বিশ্বাস করে  না."</string>
+    <string name="ssl_cert_new_account_expl">যদি সার্ভার এডমিনিস্ট্রেটর বলে থাকেন যে এটি প্রত্যাশিত,নিচের আঙুলের ছাপ প্রদত্ত আঙুলের ছাপ মেলে নিশ্চিত করুন।</string>
+    <string name="ssl_unexpected_existing_expl">"শংসাপত্র আপনার ফোন দ্বারা বিশ্বাস করা হয় যে এক থেকে পরিবর্তীত হয়েছে।এটি অত্যন্ত অস্বাভাবিক।আপনি এই নতুন শংসাপত্র গ্রহণ না করা বাঞ্চনীয়। "</string>
+    <string name="ssl_expected_existing_expl">"সার্টিফিকেটটি পূর্বে বিশ্বাসযোগ্য এক থেকে একে বিশ্বস্ত নয়.সার্ভারটি এটির শংসাপত্র পুনর্বিকরণ করেছে।অনুমোদিত আঙুলের ছাপ এর জন্য  সার্ভার প্রশাসকের সাথে যোগাযোগ করুন।"</string>
+    <string name="ssl_only_accept">কেবলমাত্র সার্ভার প্রশাসকটি উপরের মেলে এমন একটি আঙুলের ছাপ প্রকাশ করলেই শংসাপত্রটি গ্রহণ করবে।</string>
+
+    <string name="room_details_title">ঘরের বিস্তারিত</string>
+    <string name="room_details_people">লোকজন</string>
+    <string name="room_details_files">নথিগুলি</string>
+    <string name="room_details_settings">নির্ধারণ</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">%d নির্বাচিত</item>
+	<item quantity="other"></item>
+</plurals>
+    <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
+    <string name="room_details_people_present_group_name">যোগকরা</string>
+
+    <string name="room_event_action_report_prompt_reason">বিষয়বস্তুর বিবরণী দেয়ার জন কারণ</string>
+    <string name="room_event_action_report_prompt_ignore_user">ব্যাবহারকারির কাছ থেকে আপনি কি সব বার্তা লোকাতে চান\?উল্লেখ্য এই প্রতিক্রিয়াটি চালু করবেন এবং এটি কিছু সময় নিতে পারে।</string>
+    <string name="room_event_action_cancel_upload">আপলোড বাতিল করুন</string>
+    <string name="room_event_action_cancel_download">নামানো বাতিল করুন</string>
+
+    <string name="search_hint">খোঁজা</string>
+    <string name="search_members_hint">"ছাঁকুন ঘরের সংখ্যাগুলো "</string>
+    <string name="search_no_results">কোনো ফলাফল নেই</string>
+    <string name="tab_title_search_rooms">ঘর</string>
+    <string name="tab_title_search_messages">বার্তাগুলি</string>
+    <string name="tab_title_search_people">লোকজন</string>
+    <string name="tab_title_search_files">নথি</string>
+
+    <string name="room_recents_join">যোগদান</string>
+    <string name="room_recents_directory">নির্দেশক</string>
+    <string name="room_recents_favourites">প্রিয়</string>
+    <string name="room_recents_conversations">ঘরগুলি</string>
+    <string name="room_recents_low_priority">"কম গুরুত্ব "</string>
+    <string name="room_recents_invites">আমন্ত্রণ</string>
+    <string name="room_recents_start_chat">চ্যাট শুরু করুন</string>
+    <string name="room_recents_create_room">ঘর তৈরিকরা</string>
+    <string name="room_recents_join_room">যোগদান করুন ঘরে</string>
+    <string name="room_recents_join_room_title">যোগকরুন একটা ঘর</string>
+    <string name="room_recents_join_room_prompt">আদর্শ ঘরের পরিচয় অথবা একটা ঘর আর উপনাম</string>
+
+    <string name="directory_search_results_title">ব্রাউস নির্দেশনা</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">"একটা ঘর "</item>
+	<item quantity="other">%d ঘরগুলি</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%২$s এর জন্য ঘর খোঁজা হয়েছে %১$s</item>
+	<item quantity="other">%২$s এর জন্য ঘরগুলি খোঁজা হয়েছে %১$s</item>
+</plurals>
+    <string name="directory_searching_title">খোঁজা হচ্ছে নির্দেশনা…</string>
+
+    <string name="room_settings_all_messages_noisy">সব বার্তা (হইচই)</string>
+    <string name="room_settings_all_messages">সব বার্তাগুলি</string>
+    <string name="room_settings_mention_only">শুধুমাত্র উল্লেখ করুন</string>
+    <string name="room_settings_mute">নিঃশব্দ</string>
+    <string name="room_settings_favourite">প্রিয়</string>
+    <string name="room_settings_de_prioritize">অনাগ্রাধিকার</string>
+    <string name="room_settings_direct_chat">সরাসরি চ্যাট</string>
+    <string name="room_settings_leave_conversation">ত্যাগ করুন কথোপকথন</string>
+    <string name="room_settings_forget">ভুলেযাওয়া</string>
+    <string name="room_settings_add_homescreen_shortcut">ঘরের পর্দার ছোটোখাটো যোগ করুন</string>
+
+    <string name="room_sliding_menu_messages">বার্তা</string>
+    <string name="room_sliding_menu_settings">নির্ধারণ</string>
+    <string name="room_sliding_menu_version">সংস্করণ</string>
+    <string name="room_sliding_menu_version_x">সংস্করণ %s</string>
+    <string name="room_sliding_menu_term_and_conditions">শর্তাবলী</string>
+    <string name="room_sliding_menu_third_party_notices">তৃতীয় পক্ষের বিগপ্তি</string>
+    <string name="room_sliding_menu_copyright">গ্রন্থস্বত্ব</string>
+    <string name="room_sliding_menu_privacy_policy">গোপনীয় পন্থা</string>
+
+    <string name="settings_profile_picture">"নথির ছবি "</string>
+    <string name="settings_display_name">প্রদশনীয় নাম</string>
+    <string name="settings_email_address">ইমেইল</string>
+    <string name="settings_add_email_address">যোগ করুন ইমেইল এর ঠিকানা</string>
+    <string name="settings_phone_number">ফোন</string>
+    <string name="settings_add_phone_number">যোগ করুন ফোন নম্বর</string>
+    <string name="settings_app_info_link_title">আবেদন তথ্য</string>
     </resources>
