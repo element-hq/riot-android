@@ -1359,4 +1359,12 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用设置</string>
 
-</resources>
+<string name="notification_sync_init">正在初始化服务</string>
+    <string name="settings_media">媒体</string>
+    <string name="settings_default_compression">默认压缩</string>
+    <string name="compression_opt_list_choose">选择</string>
+    <string name="settings_default_media_source">默认媒体来源</string>
+    <string name="media_source_choose">选择</string>
+    <string name="settings_play_shutter_sound">播放快门声</string>
+
+    </resources>
