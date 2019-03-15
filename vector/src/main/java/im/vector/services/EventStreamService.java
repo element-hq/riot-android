@@ -900,7 +900,8 @@ public class EventStreamService extends Service {
      * @param notification                an already built notification. Required for `INCOMING_CALL` and `CALL_IN_PROGRESS`
      */
     private void setForegroundNotificationState(ForegroundNotificationState foregroundNotificationState, Notification notification) {
-        if (foregroundNotificationState == mForegroundNotificationState) {
+        if (foregroundNotificationState == mForegroundNotificationState
+                && foregroundNotificationState != ForegroundNotificationState.NONE) {
             return;
         }
 
