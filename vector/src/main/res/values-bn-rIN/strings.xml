@@ -489,10 +489,10 @@
     <string name="ssl_logout_account">লগআউট</string>
     <string name="ssl_remain_offline">উপেক্ষাকরা</string>
     <string name="ssl_fingerprint_hash">আঙুলেরছাপ(%s):</string>
-    <string name="ssl_could_not_verify">"রিমোট সার্ভারএর পরিচয় যাচাই করা হয়নি  "</string>
+    <string name="ssl_could_not_verify">রিমোট সার্ভারএর পরিচয় যাচাই করা হয়নি।</string>
     <string name="ssl_cert_not_trust">"এর অর্থ এই যে কেউ দূষিতভাবে আপনার ট্রাফিক কে আটকাতে পারে অথবা আপনার ফোন রিমোট সার্ভার দ্বারা সর্বরাহিত শংসাপত্রের উপর বিশ্বাস করে  না."</string>
     <string name="ssl_cert_new_account_expl">যদি সার্ভার এডমিনিস্ট্রেটর বলে থাকেন যে এটি প্রত্যাশিত,নিচের আঙুলের ছাপ প্রদত্ত আঙুলের ছাপ মেলে নিশ্চিত করুন।</string>
-    <string name="ssl_unexpected_existing_expl">"শংসাপত্র আপনার ফোন দ্বারা বিশ্বাস করা হয় যে এক থেকে পরিবর্তীত হয়েছে।এটি অত্যন্ত অস্বাভাবিক।আপনি এই নতুন শংসাপত্র গ্রহণ না করা বাঞ্চনীয়। "</string>
+    <string name="ssl_unexpected_existing_expl">শংসাপত্র আপনার ফোন দ্বারা বিশ্বাস করা হয় যে এক থেকে পরিবর্তীত হয়েছে। এটি অত্যন্ত অস্বাভাবিক। আপনি এই নতুন শংসাপত্র গ্রহণ না করা বাঞ্চনীয়।</string>
     <string name="ssl_expected_existing_expl">"সার্টিফিকেটটি পূর্বে বিশ্বাসযোগ্য এক থেকে একে বিশ্বস্ত নয়.সার্ভারটি এটির শংসাপত্র পুনর্বিকরণ করেছে।অনুমোদিত আঙুলের ছাপ এর জন্য  সার্ভার প্রশাসকের সাথে যোগাযোগ করুন।"</string>
     <string name="ssl_only_accept">কেবলমাত্র সার্ভার প্রশাসকটি উপরের মেলে এমন একটি আঙুলের ছাপ প্রকাশ করলেই শংসাপত্রটি গ্রহণ করবে।</string>
 
@@ -502,7 +502,7 @@
     <string name="room_details_settings">নির্ধারণ</string>
     <plurals name="room_details_selected">
 	<item quantity="one">%d নির্বাচিত</item>
-	<item quantity="other"></item>
+	<item quantity="other"/>
 </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -571,4 +571,89 @@
     <string name="settings_phone_number">ফোন</string>
     <string name="settings_add_phone_number">যোগ করুন ফোন নম্বর</string>
     <string name="settings_app_info_link_title">আবেদন তথ্য</string>
+    <string name="settings_app_info_link_summary">সিস্টেম সেটিংস অ্যাপ্লিকেশন তথ্য প্রদর্শন করুন।</string>
+
+
+    <string name="settings_notification_advanced">উন্নত বিজ্ঞপ্তি সেটিংস</string>
+    <string name="settings_notification_advanced_summary">ইভেন্ট দ্বারা বিজ্ঞপ্তি সেট করুন, শব্দ, নেতৃত্বে, কম্পন কনফিগার করুন</string>
+    <string name="settings_notification_by_event">ঘটনা দ্বারা বিজ্ঞপ্তির গুরুত্ব</string>
+
+    <string name="settings_notification_privacy">বিজ্ঞপ্তির গোপনীয়তা</string>
+    <string name="settings_notification_troubleshoot">বিজ্ঞপ্তিগুলি সমাধান করুন</string>
+    <string name="settings_troubleshoot_diagnostic">ডায়াগনস্টিকস এর সমস্যা সমাধান</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">পরীক্ষাগুলি চালাও</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">"(%1$d of %2$d) চলছে... "</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">বিজ্ঞপ্তি আপনার অ্যাকাউন্টের জন্য নিষ্ক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">সক্ষম</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">যন্ত্র সেটিংস।</string>
+    <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই ডিভাইসের জন্য সক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই ডিভাইসের জন্য অনুমতি দেওয়া হয় নি।
+\nRiot এর সেটিংস চেক করুন।</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">সক্ষম</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">কাস্টম সেটিংস।</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">লক্ষ্য করুন যে কিছু বার্তা টাইপ নীরব করা হয়েছে (কোন শব্দ ছাড়াই একটি বিজ্ঞপ্তি তৈরি করবে)।</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">কিছু বিজ্ঞপ্তি আপনার কাস্টম সেটিংস এ নিষ্ক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">কাস্টম নিয়ম লোড করতে ব্যর্থ হয়েছে, আবার চেষ্টা করুন।</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">সেটিংস চেক করুন</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Play Services পরীক্ষা</string>
+    <string name="settings_troubleshoot_test_play_services_success">গুগল প্লে সার্ভিসেস APK পাওয়া গেছে এবং আপ টু ডেট রয়েছে।</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot পুশ বার্তার প্রদানের জন্য Google Play পরিষেবাদি ব্যবহার করে কিন্তু এটি সঠিকভাবে কনফিগার করা বলে মনে হচ্ছে না:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Play Services ঠিক করুন</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Firebase এর টোকেন</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM টোকেন সফলভাবে উদ্ধার করা হয়েছে:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM টোকেন উদ্ধার করতে ব্যর্থ হয়েছে:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nএই ত্রুটিটি Riot এর নিয়ন্ত্রণের বাইরে এবং Google এর মতে, এই ত্রুটিটি ইঙ্গিত করে যে ডিভাইসটিতে FCM এর সাথে নিবন্ধিত অনেকগুলি অ্যাপ্লিকেশন রয়েছে। ত্রুটিগুলি কেবলমাত্র অ্যাপ্লিকেশনের চরম সংখ্যাগুলিতে ঘটে থাকে, তাই এটি গড় ব্যবহারকারীকে প্রভাবিত করবে না।</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nএই ত্রুটি Riot এর নিয়ন্ত্রণ বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nএই ত্রুটি Riot এর নিয়ন্ত্রণের বাইরে। ফোনে কোন গুগল একাউন্ট নেই। অ্যাকাউন্ট ম্যানেজার খুলুন এবং একটি গুগল একাউন্ট যোগ করুন।</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">একাউন্ট যোগ করুন</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">টোকেন নিবন্ধন</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM টোকেন সফলভাবে হোম সার্ভারে নিবন্ধিত।</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">হোম সার্ভারে FCM টোকেন নিবন্ধন করতে ব্যর্থ হয়েছে:
+\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">বিজ্ঞপ্তিগুলির সেবা</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">বিজ্ঞপ্তিগুলির সেবা চলছে।</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">বিজ্ঞপ্তিগুলির সেবা চলছে না। 
+\nঅপ্প্লিকেশনটি পুনরায় আরম্ভ করার চেষ্টা করুন।</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">পরিসেবা আরম্ভ</string>
+
+    <string name="settings_troubleshoot_test_service_restart_title">বিজ্ঞপ্তি পরিষেবা অটো-পুনরায়-আরম্ভ</string>
+    <string name="settings_troubleshoot_test_service_restart_success">সেবা টি হত্যা করা হয়েছে এবং স্বয়ংক্রিয়ভাবে পুনরায় আরম্ভ করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">পরিষেবা পুনরায় আরম্ভ করতে ব্যর্থ হয়েছে</string>
+
+    <string name="settings_troubleshoot_test_service_boot_title">বুট করার সময় শুরু</string>
+    <string name="settings_troubleshoot_test_service_boot_success">ডিভাইসটি পুনরায় চালু হলে পরিষেবা শুরু হবে।</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">ডিভাইসটি পুনরায় চালু হওয়ার সময় পরিষেবাটি শুরু হবে না, আপনি একবার Riot টি খোলা না হওয়া পর্যন্ত বিজ্ঞপ্তি পাবেন না।</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">বুট থেকে শুরু করা সক্রিয় করুন</string>
+
+    <string name="settings_troubleshoot_test_bg_restricted_title">ব্যাকগ্রাউন্ড এর সীমাবদ্ধতা চেক করুন</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">ব্যাকগ্রউন্ডের সীমাবদ্ধতা Riot এর জন্য নিষ্ক্রিয় করা হয়েছে। এই পরীক্ষা মোবাইল ডেটা ব্যবহার করে চালানো উচিত (ওয়াইফাই না)।
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">ব্যাকগ্রউন্ডের সীমাবদ্ধতা রিমোট এর জন্য সক্রিয় করা হয়েছে।
+\nঅ্যাপ্লিকেশন যেটি করার চেষ্টা করে সেটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আক্রমনাত্মকভাবে সীমিত হবে এবং এটি বিজ্ঞপ্তিগুলিতে প্রভাবিত হতে পারে।
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">সীমাবদ্ধগুলি নিষ্ক্রিয়</string>
+
+    <string name="settings_troubleshoot_test_battery_title">ব্যাটারি অপ্টিমাইজেশান</string>
+    <string name="settings_troubleshoot_test_battery_success">Riot ব্যাটারি অপ্টিমাইজেশান দ্বারা প্রভাবিত হয় না।</string>
+    <string name="settings_troubleshoot_test_battery_failed">যদি কোনও ব্যবহারকারী কোনও ডিভাইসটিকে নির্দিষ্ট সময়ের জন্য আনপ্লাগ এবং স্থিতিশীল রাখে তবে স্ক্রীন বন্ধের সাথে ডিভাইসটি ডোজ মোডে প্রবেশ করে। এটি অ্যাপ্লিকেশানগুলিকে নেটওয়ার্ক অ্যাক্সেস করতে বাধা দেয় এবং তাদের কাজ, সিঙ্ক এবং মান অ্যালার্মগুলি স্থগিত করে।</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">"অপ্টিমাইজেশান অবহেলা "</string>
+
+    <string name="settings_notification_privacy_warning">Riot.im আপনার বিজ্ঞপ্তি বার্তা কন্টেন্ট ব্যক্তিগত রাখতে ব্যাকগ্রাউন্ডে রান করে। আপনি ব্যাটারি ব্যবহার কমাতে এই বিকল্পটি পরিবর্তন করতে পারেন।</string>
+    <string name="settings_notification_privacy_normal">সাধারণ</string>
+    <string name="settings_notification_privacy_power_saving">শক্তি সঞ্চয় বিকল্পগুলি</string>
+    <string name="settings_notification_privacy_low_detail">নিম্ন বিস্তারিত বিজ্ঞপ্তিগুলি</string>
+    <string name="settings_notification_privacy_reduced">হ্রাস গোপনীয়তা</string>
+    <string name="settings_notification_privacy_need_permission">অ্যাপ্লিকেশন ব্যাকগ্রাউন্ডে চালানোর অনুমতি প্রয়োজন</string>
     </resources>
