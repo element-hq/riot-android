@@ -511,7 +511,7 @@ Um fortzufahren, gib dein Passwort ein.</string>
     <string name="settings_change_password">Passwort ändern</string>
     <string name="settings_old_password">Altes Passwort</string>
     <string name="settings_new_password">Neues Passwort</string>
-    <string name="settings_confirm_password">Passwort bestätigen</string>
+    <string name="settings_confirm_password">Neues Passwort bestätigen</string>
     <string name="settings_fail_to_update_password">Ändern des Passworts fehlgeschlagen</string>
     <string name="settings_password_updated">Dein Passwort wurde aktualisiert</string>
     <string name="settings_unignore_user">Alle Nachrichten von %s anzeigen?
