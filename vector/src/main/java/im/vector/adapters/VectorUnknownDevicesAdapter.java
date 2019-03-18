@@ -155,11 +155,8 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
         ImageView imageView = convertView.findViewById(R.id.heading_image);
 
-        if (isExpanded) {
-            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
-        } else {
-            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
-        }
+        int expandLogoRes = isExpanded ? R.drawable.ic_material_expand_more_black : R.drawable.ic_material_expand_less_black;
+        imageView.setImageResource(expandLogoRes);
         return convertView;
     }
 

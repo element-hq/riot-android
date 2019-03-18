@@ -49,13 +49,14 @@
         <ImageView
             android:id="@+id/heading_image"
             android:layout_width="20dp"
+            android:tint="?attr/vctr_list_header_primary_text_color"
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            tools:src="@drawable/ic_material_expand_more_black" />
 
     </RelativeLayout>
 
