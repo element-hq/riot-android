@@ -1366,4 +1366,12 @@
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
 
-</resources>
+<string name="notification_sync_init">Инициализиране на услугата</string>
+    <string name="settings_media">Медия</string>
+    <string name="settings_default_compression">Компресия по подразбиране</string>
+    <string name="compression_opt_list_choose">Избери</string>
+    <string name="settings_default_media_source">Източник на медия по подразбиране</string>
+    <string name="media_source_choose">Избери</string>
+    <string name="settings_play_shutter_sound">Издавай звук при снимане</string>
+
+    </resources>
