@@ -481,7 +481,13 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.DismissNotificationReceiver" />
+
+        <!-- Exported false, should only be accessible from this app!! -->
+        <receiver
+            android:name=".receiver.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <receiver
             android:name=".receiver.VectorReferrerReceiver"
             android:enabled="true"

@@ -86,6 +86,7 @@ android {
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             resValue "string", "build_number", rootProject.ext.buildNumberProp
+            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
         }
 
@@ -95,6 +96,7 @@ android {
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
             resValue "string", "git_branch_name", "\"${gitBranchName()}\""
             resValue "string", "build_number", rootProject.ext.buildNumberProp
+            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -183,6 +185,12 @@ android {
             includeAndroidResources = true
         }
     }
+}
+
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+
+androidExtensions {
+    experimental = true
 }
 
 static def gitRevision() {
