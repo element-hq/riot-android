@@ -1084,7 +1084,6 @@ Haluatko lisätä paketteja?</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
 
     <string name="settings_notification_privacy_normal">Normaali</string>
-    <string name="settings_notification_privacy_power_saving">Virransäästöasetukset</string>
     <string name="settings_notification_privacy_reduced">Heikentynyt yksityisyys</string>
     <string name="settings_notification_privacy_need_permission">Tämä sovellus tarvitsee oikeuden ajaakseen taustapalveluaan</string>
     <string name="settings_notification_privacy_fcm">• ilmoitukset lähetetään Google Cloud Messaging -palvelun kautta</string>

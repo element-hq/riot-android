@@ -591,7 +591,6 @@
 
     <string name="settings_notification_privacy">Friðhelgi tilkynninga</string>
     <string name="settings_notification_privacy_normal">Venjulegt</string>
-    <string name="settings_notification_privacy_power_saving">Valkostir aflstjórnunar</string>
     <string name="settings_notification_privacy_reduced">Minnkuð friðhelgi</string>
     <string name="settings_notification_ringtone">Hljóð með tilkynningu</string>
     <string name="settings_enable_all_notif">Virkja tilkynningar fyrir þennan notandaaðgang</string>

@@ -936,7 +936,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     </plurals>
     <string name="room_sliding_menu_version_x">Versió %s</string>
     <string name="settings_notification_privacy">Notificació de privacitat</string>
-    <string name="settings_notification_privacy_power_saving">Opcions d\'estalvi d\'energia</string>
     <string name="settings_notification_privacy_reduced">Privacitat reduïda</string>
     <string name="settings_notification_privacy_need_permission">L\'aplicació necessita permisos per funcionar en segon pla</string>
     <string name="settings_notification_privacy_fcm">• Les notificacions s\'envien via Google Cloud Messaging</string>

@@ -849,7 +849,6 @@ Ismeretlen eszközök:</string>
     <string name="receipt_avatar">Címzett profilképe</string>
     <string name="notice_avatar">Észlelési profilkép</string>
     <string name="settings_notification_privacy_normal">Normál</string>
-    <string name="settings_notification_privacy_power_saving">Akkumulátor kímélő beállítások</string>
     <string name="settings_notification_privacy_fcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>

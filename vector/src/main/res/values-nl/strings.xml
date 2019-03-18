@@ -890,7 +890,6 @@ Wil je er nu een paar toevoegen?</string>
 
     <string name="settings_notification_privacy">Notificatie privacy</string>
     <string name="settings_notification_privacy_normal">Normaal</string>
-    <string name="settings_notification_privacy_power_saving">Energie-besparende Opties</string>
     <string name="settings_notification_privacy_reduced">Gereduceerde privacy</string>
     <string name="settings_notification_privacy_need_permission">De applicatie heeft toestemming nodig om in de achtergrond te werken</string>
     <string name="settings_notification_privacy_fcm">• Notifications worden verstuurd via Google Cloud Messaging</string>

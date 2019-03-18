@@ -846,7 +846,6 @@
     <string name="group_no_long_description">社区管理员没有提供这个社区的具体描述。</string>
 
     <string name="settings_notification_privacy_normal">标准</string>
-    <string name="settings_notification_privacy_power_saving">省电模式</string>
     <string name="settings_notification_privacy_reduced">低隐私模式</string>
     <string name="settings_deactivate_account_section">停用账户</string>
     <string name="settings_deactivate_my_account">停用我的账户</string>

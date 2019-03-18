@@ -868,7 +868,6 @@ Neznáme zariadenia:</string>
     <string name="avatar">Obrázok</string>
 
     <string name="settings_notification_privacy">Súkromie oznámení</string>
-    <string name="settings_notification_privacy_power_saving">Nastavenia šetrenia energie</string>
     <string name="settings_notification_privacy_reduced">Nižšia úroveň súkromia</string>
     <string name="settings_notification_privacy_normal">Normálne</string>
     <string name="settings_notification_privacy_need_permission">Aplikácia vyžaduje povolenie bežať na pozadí</string>

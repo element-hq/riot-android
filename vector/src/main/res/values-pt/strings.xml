@@ -882,7 +882,6 @@ Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</
     <string name="room_sliding_menu_version_x">Versão %s</string>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">A aplicação precisa de permissão para executar em segundo plano</string>
     <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo Google Cloud Messaging</string>

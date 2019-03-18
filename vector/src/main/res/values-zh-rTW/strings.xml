@@ -497,7 +497,6 @@
 
     <string name="settings_notification_privacy">通知隱私</string>
     <string name="settings_notification_privacy_normal">標準</string>
-    <string name="settings_notification_privacy_power_saving">節電選項</string>
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
     <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
     <string name="settings_notification_privacy_fcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>

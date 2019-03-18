@@ -545,7 +545,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
 
     <string name="settings_notification_privacy">Kerahasiaan pemberitahuan</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opsi Hemat Tenaga</string>
     <string name="settings_notification_privacy_reduced">Kerahasiaan diperlemah</string>
     <string name="settings_notification_privacy_need_permission">Aplikasi ini membutuhkan permisi untuk beroperasi di balik layar</string>
     <string name="settings_notification_privacy_fcm">• Pemberitahuan dikirim melalui Google Cloud Messaging</string>

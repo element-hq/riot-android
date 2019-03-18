@@ -506,7 +506,6 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
     <string name="settings_notification_privacy_normal">Vanleg</string>
-    <string name="settings_notification_privacy_power_saving">Straumsparings-Innstillingar</string>
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
     <string name="settings_notification_privacy_need_permission">Æppen treng tilgang til å køyra i bakgrunnen</string>
     <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>

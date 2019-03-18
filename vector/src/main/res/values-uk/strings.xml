@@ -826,7 +826,6 @@
         <item quantity="other" />
     </plurals>
 
-    <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
     <string name="settings_notification_privacy_need_permission">Програма потребує дозвіл на роботу у фоновому режимі</string>
     <string name="settings_notification_privacy_fcm">• Повідомлення відправляються через Google Cloud Messaging</string>

@@ -886,7 +886,6 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
     <string name="title_activity_choose_sticker">Enviar um sticker</string>

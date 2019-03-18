@@ -850,7 +850,6 @@ Appareils inconnus :</string>
     <string name="receipt_avatar">Avatar de réception</string>
     <string name="settings_notification_privacy">Confidentialité des notifications</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Options d\'économie d\'énergie</string>
     <string name="settings_notification_privacy_reduced">Confidentialité réduite</string>
     <string name="settings_notification_privacy_need_permission">L\'application a besoin de la permission de fonctionner en arrière-plan</string>
     <string name="settings_notification_privacy_fcm">• Les notifications sont envoyées via Google Cloud Messaging</string>

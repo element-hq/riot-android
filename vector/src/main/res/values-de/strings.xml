@@ -899,7 +899,6 @@ Unbekannte Geräte:</string>
     <string name="notice_avatar">Profilbild für Bemerkungen</string>
     <string name="settings_notification_privacy">Datenschutz für Benachrichtigungen</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Energiesparoptionen</string>
     <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
     <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>

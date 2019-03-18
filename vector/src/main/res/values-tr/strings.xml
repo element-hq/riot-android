@@ -691,7 +691,6 @@ Ayrıca e-posta adresi, şifrenizi sıfırlamanıza da olanak tanır.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimizasyonu Göz ardı et</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Güç-tasarrufu Seçenekleri</string>
     <string name="settings_notification_privacy_reduced">Azaltılmış gizlilik</string>
     <string name="settings_notification_privacy_need_permission">Uygulamanın arkaplanda çalışması için izne ihtiyacı var</string>
     <string name="settings_notification_privacy_fcm">• Bildirimler Google Bulut Mesajlaşma ile gönderildi</string>

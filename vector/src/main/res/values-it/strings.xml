@@ -896,7 +896,6 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
 
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
     <string name="settings_notification_privacy_normal">Normale</string>
-    <string name="settings_notification_privacy_power_saving">Opzioni risparmio energetico</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>

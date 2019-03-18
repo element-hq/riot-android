@@ -834,7 +834,6 @@
     <string name="receipt_avatar">Профилна снимка</string>
     <string name="notice_avatar">Профилна снимка</string>
     <string name="open_chat_header">Отвори заглавие</string>
-    <string name="settings_notification_privacy_power_saving">Настройки за енергоспестяване</string>
     <string name="settings_notification_privacy_reduced">Намалена конфиденциалност</string>
     <string name="settings_notification_privacy_need_permission">Приложението се нуждае от достъп за работа във фонов режим</string>
     <string name="settings_notification_privacy_fcm">• Уведомления се изпращат чрез Google Cloud Messaging</string>

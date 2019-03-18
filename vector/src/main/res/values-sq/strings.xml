@@ -390,7 +390,6 @@
     <string name="settings_add_phone_number">Shtoni numër telefoni</string>
     <string name="settings_app_info_link_title">Të dhëna aplikacioni</string>
     <string name="settings_notification_privacy_normal">Normale</string>
-    <string name="settings_notification_privacy_power_saving">Mundësi Kursimi Energjie</string>
     <string name="settings_notification_privacy_reduced">Me privatësi të zvogëluar</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Njoftimet <b>s’do të shfaqin lëndë mesazhi</b></string>
 

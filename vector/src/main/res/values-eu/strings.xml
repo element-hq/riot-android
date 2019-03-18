@@ -847,7 +847,6 @@ Gailu ezezagunak:</string>
 
     <string name="settings_notification_privacy">Jakinarazpenen pribatutasuna</string>
     <string name="settings_notification_privacy_normal">Arrunta</string>
-    <string name="settings_notification_privacy_power_saving">Energia aurrezteko aukerak</string>
     <string name="settings_notification_privacy_reduced">Pribatutasun murriztua</string>
     <string name="settings_notification_privacy_need_permission">Aplikazioak bigarren planoan aritzeko baimenak behar ditu</string>
     <string name="settings_notification_privacy_fcm">• Jakinarazpenak Google Cloud Messaging bidez bidaltzen dira</string>

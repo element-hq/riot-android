@@ -926,7 +926,6 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
 
     <string name="settings_notification_privacy">Privacidad de notificaciones</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opciones de Ahorro de Energía</string>
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
     <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>

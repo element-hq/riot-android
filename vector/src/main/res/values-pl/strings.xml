@@ -755,7 +755,6 @@ Jesteś pewien?</string>
 
     <string name="settings_notification_privacy">Prywatność powiadomień</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
-    <string name="settings_notification_privacy_power_saving">Opcje oszczędzania energii</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
     <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
