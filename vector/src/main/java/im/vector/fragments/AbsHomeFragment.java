@@ -48,6 +48,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
+import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomUtils;
 
@@ -341,7 +342,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
             }
 
             // Update badge unread count in case device is offline
-            CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
+            BadgeProxy.INSTANCE.specificUpdateBadgeUnreadCount(mSession, getContext());
 
             // Launch corresponding room activity
             Map<String, Object> params = new HashMap<>();

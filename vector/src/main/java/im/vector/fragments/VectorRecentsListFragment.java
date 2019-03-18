@@ -63,6 +63,7 @@ import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
+import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.RoomUtils;
 import im.vector.view.RecentsExpandableListView;
 
@@ -241,7 +242,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
                     // update badge unread count in case device is offline
-                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
+                    BadgeProxy.INSTANCE.specificUpdateBadgeUnreadCount(mSession, getContext());
 
                     // launch corresponding room activity
                     if (null != roomId) {

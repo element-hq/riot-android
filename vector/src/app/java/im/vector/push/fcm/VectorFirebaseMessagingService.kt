@@ -35,6 +35,7 @@ import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.SimpleNotifiableEvent
 import im.vector.push.PushManager
 import im.vector.services.EventStreamService
+import im.vector.ui.badge.BadgeProxy
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
@@ -112,7 +113,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             }
             // update the badge counter
             val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
-            CommonActivityUtils.updateBadgeCount(applicationContext, unreadCount)
+            BadgeProxy.updateBadgeCount(applicationContext, unreadCount)
 
             val session = Matrix.getInstance(applicationContext)?.defaultSession
 

@@ -47,7 +47,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
@@ -86,8 +85,8 @@ import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.YesNoListener;
 import im.vector.push.PushManager;
 import im.vector.services.EventStreamService;
+import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PreferencesManager;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Contains useful functions which are called in multiple activities.
@@ -312,11 +311,7 @@ public class CommonActivityUtils {
         EventStreamService.removeNotification();
         stopEventStream(context);
 
-        try {
-            ShortcutBadger.setBadge(context, 0);
-        } catch (Exception e) {
-            Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage(), e);
-        }
+        BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
 
         // warn that the user logs out
         Collection<MXSession> sessions = Matrix.getMXSessions(context);
@@ -400,11 +395,7 @@ public class CommonActivityUtils {
                 EventStreamService.removeNotification();
                 stopEventStream(context);
 
-                try {
-                    ShortcutBadger.setBadge(context, 0);
-                } catch (Exception e) {
-                    Log.d(LOG_TAG, "## logout(): Exception Msg=" + e.getMessage(), e);
-                }
+                BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
 
                 // Publish to the server that we're now offline
                 MyPresenceManager.getInstance(context, mxSession).advertiseOffline();
@@ -1211,89 +1202,6 @@ public class CommonActivityUtils {
                 }
             }
         });
-    }
-
-    //==============================================================================================================
-    // Application badge (displayed in the launcher)
-    //==============================================================================================================
-
-    private static int mBadgeValue = 0;
-
-    /**
-     * Update the application badge value.
-     *
-     * @param context    the context
-     * @param badgeValue the new badge value
-     */
-    public static void updateBadgeCount(Context context, int badgeValue) {
-        try {
-            mBadgeValue = badgeValue;
-            ShortcutBadger.setBadge(context, badgeValue);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## updateBadgeCount(): Exception Msg=" + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Refresh the badge count for specific configurations.<br>
-     * The refresh is only effective if the device is:
-     * <ul><li>offline</li><li>does not support FCM</li>
-     * <li>FCM registration failed</li>
-     * <br>Notifications rooms are parsed to track the notification count value.
-     *
-     * @param aSession session value
-     * @param aContext App context
-     */
-    public static void specificUpdateBadgeUnreadCount(MXSession aSession, Context aContext) {
-        MXDataHandler dataHandler;
-
-        // sanity check
-        if ((null == aContext) || (null == aSession)) {
-            Log.w(LOG_TAG, "## specificUpdateBadgeUnreadCount(): invalid input null values");
-        } else if ((null == (dataHandler = aSession.getDataHandler()))) {
-            Log.w(LOG_TAG, "## specificUpdateBadgeUnreadCount(): invalid DataHandler instance");
-        } else {
-            if (aSession.isAlive()) {
-                boolean isRefreshRequired;
-                PushManager pushManager = Matrix.getInstance(aContext).getPushManager();
-
-                // update the badge count if the device is offline, FCM is not supported or FCM registration failed
-                isRefreshRequired = !Matrix.getInstance(aContext).isConnected();
-                isRefreshRequired |= (null != pushManager) && (!pushManager.useFcm() || !pushManager.hasRegistrationToken());
-
-                if (isRefreshRequired) {
-                    updateBadgeCount(aContext, dataHandler);
-                }
-            }
-        }
-    }
-
-    /**
-     * Update the badge count value according to the rooms content.
-     *
-     * @param aContext     App context
-     * @param aDataHandler data handler instance
-     */
-    private static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
-        //sanity check
-        if ((null == aContext) || (null == aDataHandler)) {
-            Log.w(LOG_TAG, "## updateBadgeCount(): invalid input null values");
-        } else if (null == aDataHandler.getStore()) {
-            Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance");
-        } else {
-            List<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
-            int unreadRoomsCount = 0;
-
-            for (Room room : roomCompleteList) {
-                if (room.getNotificationCount() > 0) {
-                    unreadRoomsCount++;
-                }
-            }
-
-            // update the badge counter
-            Log.d(LOG_TAG, "## updateBadgeCount(): badge update count=" + unreadRoomsCount);
-            CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
-        }
     }
 
     //==============================================================================================================
