@@ -44,9 +44,6 @@ android {
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
 
-        // custom values
-        resValue "string", "bug_report_url", "https://riot.im/bugreports/submit"
-
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

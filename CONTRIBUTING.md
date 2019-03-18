@@ -1,3 +1,7 @@
+# Important Announcement
+
+The core team is now working mainly on [RiotX](https://github.com/vector-im/riotX-android). New contributions (PR, issues) are still welcome, but be aware that this codebase will be replaced in the future by the RiotX implementation.
+
 # Contributing code to Matrix
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
