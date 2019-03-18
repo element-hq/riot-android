@@ -99,6 +99,9 @@ import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
 import im.vector.services.EventStreamService;
+import im.vector.ui.badge.BadgeProxy;
+import im.vector.ui.themes.ActivityOtherThemes;
+import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ViewUtilKt;
 
@@ -611,7 +614,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 REQUEST_REGISTRATION_COUNTRY);
 
         // reset the badge counter
-        CommonActivityUtils.updateBadgeCount(this, 0);
+        BadgeProxy.INSTANCE.updateBadgeCount(this, 0);
 
         mHomeServerText.addTextChangedListener(new TextWatcher() {
             @Override

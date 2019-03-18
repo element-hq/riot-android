@@ -12,7 +12,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Disable usage of library ShortcutBadger on device running API 26+
 
 Bugfix:
  - Fix expand and collapse color (#3035)
