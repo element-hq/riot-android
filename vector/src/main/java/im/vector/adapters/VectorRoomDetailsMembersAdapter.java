@@ -729,10 +729,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         // set the group title
         String titleValue = getGroupTitle(aGroupPosition);
         viewHolder.mTitleTxtView.setText(titleValue);
-
-        // set the expander logo
-        int expanderLogoResId = aIsExpanded ? R.drawable.ic_material_expand_more_black : R.drawable.ic_material_expand_less_black;
-        viewHolder.mExpanderLogoImageView.setImageResource(expanderLogoResId);
+        int expandLogoRes = aIsExpanded ? R.drawable.ic_material_expand_more_black : R.drawable.ic_material_expand_less_black;
+        viewHolder.mExpanderLogoImageView.setImageResource(expandLogoRes);
 
         return aConvertView;
     }

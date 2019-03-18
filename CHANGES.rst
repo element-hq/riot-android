@@ -60,6 +60,7 @@ Other changes:
  - Change color of HomeSection badge (#2987)
 
 Bugfix:
+ - Fix expand and collapse color (#3035)
  - Fix crash in settings when cryptography is disabled (#2991)
  - Fix Claims of display names being linkified (#2975)
  - Fix Riot breaks links if message contains numbers (#2891)
