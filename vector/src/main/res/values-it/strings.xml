@@ -1425,4 +1425,12 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usa configurazione</string>
 
-</resources>
+<string name="notification_sync_init">Inizializzazione del servizio</string>
+    <string name="settings_media">Multimedia</string>
+    <string name="settings_default_compression">Compressione predefinita</string>
+    <string name="compression_opt_list_choose">Scegli</string>
+    <string name="settings_default_media_source">Sorgente multimediale predefinita</string>
+    <string name="media_source_choose">Scegli</string>
+    <string name="settings_play_shutter_sound">Riproduci suono otturatore</string>
+
+    </resources>
