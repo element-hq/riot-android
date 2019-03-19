@@ -1201,20 +1201,20 @@ Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare 
 
     <string name="store_title">Riot.im - Comunica, a modo tuo.</string>
     <string name="store_short_description">Un\'app universale di chat sicure interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n
-\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix.
-\n
-\nPerchè scegliere Riot.im\?
-\n
-\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito.
-\n
-\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat.
-\n
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali.
-\n
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi.
-\n
+    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
+\n 
+\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix. 
+\n 
+\nPerché scegliere Riot.im\? 
+\n 
+\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito. 
+\n 
+\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat. 
+\n 
+\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali. 
+\n 
+\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi. 
+\n 
 \n• OVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
 
     <string name="video_call_in_progress">Videochiamata in corso…</string>
