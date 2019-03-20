@@ -656,4 +656,16 @@
     <string name="settings_notification_privacy_low_detail">নিম্ন বিস্তারিত বিজ্ঞপ্তিগুলি</string>
     <string name="settings_notification_privacy_reduced">হ্রাস গোপনীয়তা</string>
     <string name="settings_notification_privacy_need_permission">অ্যাপ্লিকেশন ব্যাকগ্রাউন্ডে চালানোর অনুমতি প্রয়োজন</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">সাধারণ লক্ষণ ঠিক আছে.যদি আপনি এখনও কোনো প্রজ্ঞাপন পাননি,দয়াকরে জমা করুন একটা গুরুত্বপূর্ণ খসড়া যেটা সাহায্য করবে তদন্ত করতে।</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">এক অথবা অধিক পরীক্ষা বার্থ হয়েছে,প্রস্তাবিত ঠিক করে চেষ্টা করুন(es).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">এক অথবা অধিক পরীক্ষা ব্যর্থ হয়েছে,দয়া করে জমা করুন একটা গুরুত্বপূর্ণ খসড়া যেটা সাহায্য করবে অনুসন্ধান করতে।</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">পদ্ধতি নির্ধারণ।</string>
+    <string name="settings_troubleshoot_test_system_settings_success">বিজ্ঞাপ্তিকে পদ্ধতি নির্ধারণ এর মাধ্যমে সক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">বিজ্ঞাপ্তিকে পদ্ধতি নির্ধারণ এর মাধ্যমে নিষ্ক্রিয় করা হয়েছে।
+\nদেয়া করে দেখে নিন পদ্ধতি নির্ধারণ।</string>
+    <string name="open_settings">খুলুন নির্ধারণটি</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">গণনা নির্ধারণ।</string>
+    <string name="settings_troubleshoot_test_account_settings_success">বিজ্ঞাপ্তি আপনার একাউন্টএর জন্য সক্রিয় করা হোক.</string>
     </resources>
