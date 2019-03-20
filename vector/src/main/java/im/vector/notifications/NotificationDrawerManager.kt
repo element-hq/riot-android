@@ -298,7 +298,8 @@ class NotificationDrawerManager(val context: Context) {
                 summaryInboxStyle.setBigContentTitle(sumTitle)
                 NotificationUtils.buildSummaryListNotification(
                         context,
-                        summaryInboxStyle, sumTitle,
+                        summaryInboxStyle,
+                        sumTitle,
                         noisy = hasNewEvent && summaryIsNoisy
                 )?.let {
                     NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)

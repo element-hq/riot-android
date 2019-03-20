@@ -325,8 +325,11 @@ object NotificationUtils {
         return builder.build()
     }
 
+    /**
+     * Build a notification for a Room
+     */
     fun buildMessagesListNotification(context: Context,
-                                      messageSytle: NotificationCompat.MessagingStyle,
+                                      messageStyle: NotificationCompat.MessagingStyle,
                                       roomInfo: RoomEventGroupInfo,
                                       largeIcon: Bitmap?,
                                       senderDisplayNameForReplyCompat: String?): Notification? {
@@ -339,7 +342,7 @@ object NotificationUtils {
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
-                .setStyle(messageSytle)
+                .setStyle(messageStyle)
 
                 // A category allows groups of notifications to be ranked and filtered – per user or system settings.
                 // For example, alarm notifications should display before promo notifications, or message from known contact
@@ -354,14 +357,15 @@ object NotificationUtils {
                 // Number of new notifications for API <24 (M and below) devices.
                 .setSubText(context
                         .resources
-                        .getQuantityString(R.plurals.room_new_messages_notification, messageSytle.messages.size, messageSytle.messages.size)
+                        .getQuantityString(R.plurals.room_new_messages_notification, messageStyle.messages.size, messageStyle.messages.size)
                 )
 
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
+                // TODO Group should be current user display name
                 .setGroup(context.getString(R.string.riot_app_name))
 
-                //In order to avoid notification making sound twice (due to the summary notificaiton)
+                //In order to avoid notification making sound twice (due to the summary notification)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
 
                 .setSmallIcon(smallIcon)
@@ -414,7 +418,8 @@ object NotificationUtils {
                     val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
                             System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
                     setDeleteIntent(pendingIntent)
-                }.build()
+                }
+                .build()
     }
 
 
@@ -544,12 +549,16 @@ object NotificationUtils {
     }
 
     //// Number of new notifications for API <24 (M and below) devices.
-    fun buildSummaryListNotification(context: Context, sytle: NotificationCompat.Style, compatSummary: String, noisy: Boolean): Notification? {
+    /**
+     * Build the summary notification
+     */
+    fun buildSummaryListNotification(context: Context, style: NotificationCompat.Style, compatSummary: String, noisy: Boolean): Notification? {
 
         val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
-                .setStyle(sytle) // used in compat < N, after summary is built based on child notifications
+                // used in compat < N, after summary is built based on child notifications
+                .setStyle(style)
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setSmallIcon(smallIcon)
                 //set content text to support devices running API level < 24
