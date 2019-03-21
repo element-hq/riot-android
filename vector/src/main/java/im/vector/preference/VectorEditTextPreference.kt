@@ -37,6 +37,7 @@ class VectorEditTextPreference : EditTextPreference {
 
     init {
         dialogLayoutResource = R.layout.dialog_preference_edit_text
+        isIconSpaceReserved = false
     }
 
     // No single line for title

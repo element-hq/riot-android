@@ -36,6 +36,10 @@ class VectorSwitchPreference : SwitchPreference {
 
     constructor(context: Context) : super(context)
 
+    init {
+        isIconSpaceReserved = false
+    }
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         // display the title in multi-line to avoid ellipsis.
         holder.itemView.findViewById<TextView>(android.R.id.title)?.setSingleLine(false)
