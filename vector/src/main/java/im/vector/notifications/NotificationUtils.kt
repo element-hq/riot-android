@@ -72,6 +72,7 @@ object NotificationUtils {
     private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.JOIN_ACTION"
     private const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.REJECT_ACTION"
     private const val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.QUICK_LAUNCH_ACTION"
+    const val MARK_ROOM_READ_ACTION_PREFIX = "${BuildConfig.APPLICATION_ID}.NotificationUtils.MARK_ROOM_READ_ACTION"
     const val SMART_REPLY_ACTION_PREFIX = "${BuildConfig.APPLICATION_ID}.NotificationUtils.SMART_REPLY_ACTION_"
     const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_SUMMARY_ACTION"
     const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_ROOM_NOTIF_ACTION"
@@ -392,7 +393,19 @@ object NotificationUtils {
                     }
 
                     //Add actions and notification intents
+                    // Mark room as read
+                    val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
+                    markRoomReadIntent.action = "${MARK_ROOM_READ_ACTION_PREFIX}_${roomInfo.roomId}"
+                    markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
+                    val markRoomReadPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), markRoomReadIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT)
 
+                    addAction(NotificationCompat.Action(
+                            R.drawable.ic_material_done_all_white,
+                            context.getString(R.string.action_mark_room_read),
+                            markRoomReadPendingIntent))
+
+                    // Quick reply
                     if (!roomInfo.hasSmartReplyError) {
                         buildQuickReplyIntent(context, roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                             val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)

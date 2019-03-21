@@ -31,13 +31,14 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.MXCryptoError
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
 import org.matrix.androidsdk.util.Log
 
 /**
- * Receives actions broadcasted by notification (on click, on dismiss, inline replies)
+ * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
@@ -54,7 +55,24 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 }
             } else if (action == NotificationUtils.DISMISS_SUMMARY_ACTION) {
                 VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
+            } else if (action.startsWith(NotificationUtils.MARK_ROOM_READ_ACTION_PREFIX)) {
+                intent.getStringExtra(KEY_ROOM_ID)?.let {
+                    VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
+                    handleMarkAsRead(context, it)
+                }
             }
+        }
+    }
+
+    private fun handleMarkAsRead(context: Context, roomId: String) {
+        Matrix.getInstance(context)?.defaultSession?.let { session ->
+            session.dataHandler
+                    ?.getRoom(roomId)
+                    ?.markAllAsRead(object : SimpleApiCallback<Void>() {
+                        override fun onSuccess(void: Void?) {
+                            // Ignore
+                        }
+                    })
         }
     }
 
@@ -73,7 +91,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 sendMatrixEvent(message!!, session, roomId!!, room, context)
             }
         }
-        return
     }
 
     private fun sendMatrixEvent(message: String, session: MXSession, roomId: String, room: Room, context: Context?) {
