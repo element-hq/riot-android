@@ -134,7 +134,7 @@
 
         <!-- activities list starts here -->
         <activity
-            android:name=".activity.LauncherActivity"
+            android:name=".activity.VectorLauncherActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

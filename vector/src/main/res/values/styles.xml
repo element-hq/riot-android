@@ -3,7 +3,7 @@
 
     <!-- ************************ Common items ************************ -->
 
-    <!-- Launcher Theme, only used for LauncherActivity (will be use even before the Activity is started) -->
+    <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
     <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
 
