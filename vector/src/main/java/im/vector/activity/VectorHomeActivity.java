@@ -2051,29 +2051,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     /**
-     * Remove the BottomNavigationView menu shift
-     */
-    private void removeMenuShiftMode() {
-        int childCount = mBottomNavigationView.getChildCount();
-
-        for (int i = 0; i < childCount; i++) {
-            if (mBottomNavigationView.getChildAt(i) instanceof BottomNavigationMenuView) {
-                BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) mBottomNavigationView.getChildAt(i);
-
-                try {
-                    Field shiftingMode = bottomNavigationMenuView.getClass().getDeclaredField("mShiftingMode");
-                    shiftingMode.setAccessible(true);
-                    shiftingMode.setBoolean(bottomNavigationMenuView, false);
-                    shiftingMode.setAccessible(false);
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## removeMenuShiftMode failed " + e.getMessage(), e);
-                }
-            }
-        }
-    }
-
-    /**
      * Add the unread messages badges.
      */
     @SuppressLint("RestrictedApi")
@@ -2082,8 +2059,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         int badgeOffsetX = (int) (18 * scale + 0.5f);
         int badgeOffsetY = (int) (7 * scale + 0.5f);
 
-        removeMenuShiftMode();
-
         int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
 
         for (int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
@@ -2091,15 +2066,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 int itemId = mBottomNavigationView.getMenu().getItem(menuIndex).getItemId();
                 BottomNavigationItemView navigationItemView = mBottomNavigationView.findViewById(itemId);
 
-
-                navigationItemView.setShiftingMode(false);
-
-                Field marginField = navigationItemView.getClass().getDeclaredField("mDefaultMargin");
+                Field marginField = navigationItemView.getClass().getDeclaredField("defaultMargin");
                 marginField.setAccessible(true);
                 marginField.setInt(navigationItemView, marginField.getInt(navigationItemView) + (largeTextHeight / 2));
                 marginField.setAccessible(false);
 
-                Field shiftAmountField = navigationItemView.getClass().getDeclaredField("mShiftAmount");
+                Field shiftAmountField = navigationItemView.getClass().getDeclaredField("shiftAmount");
                 shiftAmountField.setAccessible(true);
                 shiftAmountField.setInt(navigationItemView, 0);
                 shiftAmountField.setAccessible(false);
