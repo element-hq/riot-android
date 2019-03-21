@@ -204,8 +204,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     soundName = BingRule.ACTION_VALUE_DEFAULT,
                     isPushGatewayEvent = true
             )
-            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent, session.myUserId
-                    ?: "", session.myUser?.displayname)
+            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)
             notificationDrawerManager.refreshNotificationDrawer(null)
 
             return
@@ -239,14 +238,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
                     notifiableEvent.isPushGatewayEvent = true
                     notifiableEvent.matrixID = session.myUserId
-                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent, session.myUserId
-                            ?: "", session.myUser?.displayname)
+                    notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
                     notificationDrawerManager.refreshNotificationDrawer(null)
                 }
-
-
             }
-
         }
     }
 

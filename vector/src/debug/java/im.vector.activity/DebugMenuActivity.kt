@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.Person
 import butterknife.OnClick
 import im.vector.R
 
@@ -74,25 +75,21 @@ class DebugMenuActivity : VectorAppCompatActivity() {
                 .setGroup("GroupKey")
                 .setGroupSummary(true)
 
-        val messagingStyle1 = NotificationCompat.MessagingStyle("User name")
-                /*
-                    Person.Builder()
+        val messagingStyle1 = NotificationCompat.MessagingStyle(
+                Person.Builder()
                         .setName("User name")
                         .build()
-                )
-                */
-                .addMessage("Message 1 - 1", System.currentTimeMillis(), "user 1-1") //Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 1 - 2", System.currentTimeMillis(), "user 1-2") //Person.Builder().setName("user 1-2").build())
+        )
+                .addMessage("Message 1 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 1 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
 
-        val messagingStyle2 = NotificationCompat.MessagingStyle("User name 2")
-                /*
-                    Person.Builder()
+        val messagingStyle2 = NotificationCompat.MessagingStyle(
+                Person.Builder()
                         .setName("User name 2")
                         .build()
-                )
-                */
-                .addMessage("Message 2 - 1", System.currentTimeMillis(), "user 2-1") //Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 2 - 2", System.currentTimeMillis(), "user 2-2") //Person.Builder().setName("user 1-2").build())
+        )
+                .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
 
 
         notificationManager.notify(10, builder.build())

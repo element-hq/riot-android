@@ -23,7 +23,7 @@ class OutdatedEventDetector(val context: Context) {
 
     /**
      * Returns true if the given event is outdated.
-     * Used to clean un notifications if a displayed message has been read on an
+     * Used to clean up notifications if a displayed message has been read on an
      * other device.
      */
     fun isMessageOutdated(notifiableEvent: NotifiableEvent): Boolean {

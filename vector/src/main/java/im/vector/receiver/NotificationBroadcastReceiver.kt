@@ -96,8 +96,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         roomId,
                         room.getRoomDisplayName(context))
                 notifiableMessageEvent.outGoingMessage = true
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
-                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
 
@@ -136,8 +135,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 notifiableMessageEvent.outGoingMessage = true
                 notifiableMessageEvent.outGoingMessageFailed = true
 
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
-                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })
