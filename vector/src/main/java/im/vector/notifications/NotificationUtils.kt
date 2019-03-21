@@ -184,7 +184,6 @@ object NotificationUtils {
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
-                .setWhen(System.currentTimeMillis())
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setContentText(context.getString(subTitleResId))
                 .setSmallIcon(R.drawable.logo_transparent)
@@ -236,7 +235,6 @@ object NotificationUtils {
     fun buildIncomingCallNotification(context: Context, isVideo: Boolean, roomName: String, matrixId: String, callId: String): Notification {
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
-                .setWhen(System.currentTimeMillis())
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
                 .apply {
                     if (isVideo) {
@@ -291,7 +289,6 @@ object NotificationUtils {
             : Notification {
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
-                .setWhen(System.currentTimeMillis())
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
                 .apply {
                     if (isVideo) {
@@ -336,6 +333,7 @@ object NotificationUtils {
                                       messageStyle: NotificationCompat.MessagingStyle,
                                       roomInfo: RoomEventGroupInfo,
                                       largeIcon: Bitmap?,
+                                      lastMessageTimestamp: Long,
                                       senderDisplayNameForReplyCompat: String?): Notification? {
 
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -345,6 +343,7 @@ object NotificationUtils {
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
+                .setWhen(lastMessageTimestamp)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
                 .setStyle(messageStyle)
 
@@ -553,13 +552,18 @@ object NotificationUtils {
     /**
      * Build the summary notification
      */
-    fun buildSummaryListNotification(context: Context, style: NotificationCompat.Style, compatSummary: String, noisy: Boolean): Notification? {
+    fun buildSummaryListNotification(context: Context,
+                                     style: NotificationCompat.Style,
+                                     compatSummary: String,
+                                     noisy: Boolean,
+                                     lastMessageTimestamp: Long): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
         val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 // used in compat < N, after summary is built based on child notifications
+                .setWhen(lastMessageTimestamp)
                 .setStyle(style)
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setSmallIcon(smallIcon)

@@ -96,7 +96,7 @@ class NotificationDrawerManager(val context: Context) {
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Log.d(LOG_TAG, "%%%%%%%% onNotifiableEventReceived $notifiableEvent")
         }
-        synchronized(this) {
+        synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
@@ -125,7 +125,7 @@ class NotificationDrawerManager(val context: Context) {
     Clear all known events and refresh the notification drawer
      */
     fun clearAllEvents() {
-        synchronized(this) {
+        synchronized(eventList) {
             eventList.clear()
         }
         refreshNotificationDrawer(null)
@@ -151,7 +151,7 @@ class NotificationDrawerManager(val context: Context) {
      */
     fun setCurrentRoom(roomId: String?) {
         var hasChanged: Boolean
-        synchronized(this) {
+        synchronized(eventList) {
             hasChanged = roomId != currentRoomId
             currentRoomId = roomId
         }
@@ -161,7 +161,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
     fun homeActivityDidResume(matrixID: String?) {
-        synchronized(this) {
+        synchronized(eventList) {
             eventList.removeAll { e ->
                 return@removeAll e !is NotifiableMessageEvent //messages are cleared when entering room
             }
@@ -169,7 +169,7 @@ class NotificationDrawerManager(val context: Context) {
     }
 
     fun clearMemberShipNotificationForRoom(roomId: String) {
-        synchronized(this) {
+        synchronized(eventList) {
             eventList.removeAll { e ->
                 if (e is InviteNotifiableEvent) {
                     return@removeAll e.roomId == roomId
@@ -193,7 +193,7 @@ class NotificationDrawerManager(val context: Context) {
                 return@launch
             }
 
-            synchronized(this) {
+            synchronized(eventList) {
 
                 Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
                 //TMP code
@@ -230,6 +230,8 @@ class NotificationDrawerManager(val context: Context) {
 
 
                 Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
+
+                var globalLastMessageTimestamp = 0L
 
                 //events have been grouped
                 for ((roomId, events) in roomIdToEventMap) {
@@ -296,11 +298,18 @@ class NotificationDrawerManager(val context: Context) {
 
                     if (!firstTime || roomGroup.hasNewEvent) { //Should update displayed notification
                         Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
-                        NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, myUserDisplayName)?.let {
-                            //is there an id for this room?
-                            notifications.add(it)
-                            NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
+                        val lastMessageTimestamp = events.last().timestamp
+
+                        if (globalLastMessageTimestamp < lastMessageTimestamp) {
+                            globalLastMessageTimestamp = lastMessageTimestamp
                         }
+
+                        NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, lastMessageTimestamp, myUserDisplayName)
+                                ?.let {
+                                    //is there an id for this room?
+                                    notifications.add(it)
+                                    NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
+                                }
                         hasNewEvent = true
                         summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
                     } else {
@@ -349,7 +358,8 @@ class NotificationDrawerManager(val context: Context) {
                             context,
                             summaryInboxStyle,
                             sumTitle,
-                            noisy = hasNewEvent && summaryIsNoisy
+                            noisy = hasNewEvent && summaryIsNoisy,
+                            lastMessageTimestamp = globalLastMessageTimestamp
                     )?.let {
                         NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
                     }
