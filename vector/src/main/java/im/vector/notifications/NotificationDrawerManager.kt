@@ -417,8 +417,8 @@ class NotificationDrawerManager(val context: Context) {
                                 .format(DecodeFormat.PREFER_ARGB_8888))
                         .submit()
                         .get()
-            } catch (oom: OutOfMemoryError) {
-                Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "decodeFile failed", e)
                 null
             }?.let { bitmap ->
                 IconCompat.createWithBitmap(bitmap)
