@@ -44,23 +44,23 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
+
         Log.d(LOG_TAG, "ReplyNotificationBroadcastReceiver received : $intent")
-        val action = intent.action
-        if (action != null) {
-            if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION_PREFIX)) {
+
+        when (intent.action) {
+            NotificationUtils.SMART_REPLY_ACTION ->
                 handleSmartReply(intent, context)
-            } else if (action == NotificationUtils.DISMISS_ROOM_NOTIF_ACTION) {
+            NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
                 }
-            } else if (action == NotificationUtils.DISMISS_SUMMARY_ACTION) {
+            NotificationUtils.DISMISS_SUMMARY_ACTION ->
                 VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
-            } else if (action.startsWith(NotificationUtils.MARK_ROOM_READ_ACTION_PREFIX)) {
+            NotificationUtils.MARK_ROOM_READ_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
                     handleMarkAsRead(context, it)
                 }
-            }
         }
     }
 

@@ -69,14 +69,14 @@ object NotificationUtils {
      * IDs for actions
      * ========================================================================================== */
 
-    private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.JOIN_ACTION"
-    private const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.REJECT_ACTION"
-    private const val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.QUICK_LAUNCH_ACTION"
-    const val MARK_ROOM_READ_ACTION_PREFIX = "${BuildConfig.APPLICATION_ID}.NotificationUtils.MARK_ROOM_READ_ACTION"
-    const val SMART_REPLY_ACTION_PREFIX = "${BuildConfig.APPLICATION_ID}.NotificationUtils.SMART_REPLY_ACTION_"
-    const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_SUMMARY_ACTION"
-    const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.DISMISS_ROOM_NOTIF_ACTION"
-    private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationUtils.TAP_TO_VIEW_ACTION"
+    private const val JOIN_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.JOIN_ACTION"
+    private const val REJECT_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.REJECT_ACTION"
+    private const val QUICK_LAUNCH_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.QUICK_LAUNCH_ACTION"
+    const val MARK_ROOM_READ_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.MARK_ROOM_READ_ACTION"
+    const val SMART_REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.SMART_REPLY_ACTION"
+    const val DISMISS_SUMMARY_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_SUMMARY_ACTION"
+    const val DISMISS_ROOM_NOTIF_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
+    private const val TAP_TO_VIEW_ACTION = "${BuildConfig.APPLICATION_ID}.NotificationActions.TAP_TO_VIEW_ACTION"
 
     /* ==========================================================================================
      * IDs for channels
@@ -395,7 +395,8 @@ object NotificationUtils {
                     //Add actions and notification intents
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                    markRoomReadIntent.action = "${MARK_ROOM_READ_ACTION_PREFIX}_${roomInfo.roomId}"
+                    markRoomReadIntent.action = MARK_ROOM_READ_ACTION
+                    markRoomReadIntent.data = Uri.parse("foobar://${roomInfo.roomId}")
                     markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                     val markRoomReadPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), markRoomReadIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
@@ -471,7 +472,7 @@ object NotificationUtils {
                         val joinIntent = JoinRoomActivity.getJoinRoomIntent(context, roomId, matrixId)
 
                         // the action must be unique else the parameters are ignored
-                        joinIntent.action = JOIN_ACTION + System.currentTimeMillis().toInt()
+                        joinIntent.action = JOIN_ACTION
                         joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
                         addAction(
                                 R.drawable.vector_notification_accept_invitation,
@@ -540,7 +541,8 @@ object NotificationUtils {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
-            intent.action = "${SMART_REPLY_ACTION_PREFIX}_$roomId"
+            intent.action = SMART_REPLY_ACTION
+            intent.data = Uri.parse("foobar://$roomId")
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
             return PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), intent,
                     PendingIntent.FLAG_UPDATE_CURRENT)
@@ -552,7 +554,8 @@ object NotificationUtils {
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, senderName ?: "")
 
                 // the action must be unique else the parameters are ignored
-                quickReplyIntent.action = QUICK_LAUNCH_ACTION + System.currentTimeMillis().toInt()
+                quickReplyIntent.action = QUICK_LAUNCH_ACTION
+                quickReplyIntent.data = Uri.parse("foobar://$roomId")
                 return PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
             }
         }
