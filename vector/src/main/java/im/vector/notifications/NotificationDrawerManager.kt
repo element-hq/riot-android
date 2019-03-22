@@ -20,23 +20,17 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.PowerManager
-import android.support.annotation.WorkerThread
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.Person
 import android.support.v4.graphics.drawable.IconCompat
 import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.RequestOptions
 import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.util.SecretStoringUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.util.Log
 import java.io.File
@@ -56,11 +50,6 @@ class NotificationDrawerManager(val context: Context) {
     private var eventList = loadEventInfo()
     private var myUserDisplayName: String = ""
     private var myUserIcon: IconCompat? = null
-
-    //Keeps a mapping between a notification ID
-    //and the list of eventIDs represented by the notification
-    //private val notificationToEventsMap: MutableMap<String, List<String>> = HashMap()
-    //private val notificationToRoomIdMap: MutableMap<Int, String> = HashMap()
 
     private var currentRoomId: String? = null
 
@@ -181,209 +170,205 @@ class NotificationDrawerManager(val context: Context) {
 
 
     fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
-        // Go to a BG thread
-        GlobalScope.launch {
+        if (myUserDisplayName.isBlank() || myUserIcon == null) {
+            initWithSession(Matrix.getInstance(context).defaultSession)
+        }
 
-            if (myUserDisplayName.isBlank() || myUserIcon == null) {
-                initWithSession(Matrix.getInstance(context).defaultSession)
-            }
+        if (myUserDisplayName.isBlank()) {
+            // Should not happen, but myUserDisplayName cannot be blank if used to create a Person
+            return
+        }
 
-            if (myUserDisplayName.isBlank()) {
-                // Should not happen, but myUserDisplayName cannot be blank if used to create a Person
-                return@launch
-            }
+        synchronized(eventList) {
 
-            synchronized(eventList) {
+            Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
+            //TMP code
+            var hasNewEvent = false
+            var summaryIsNoisy = false
+            val summaryInboxStyle = NotificationCompat.InboxStyle()
 
-                Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ")
-                //TMP code
-                var hasNewEvent = false
-                var summaryIsNoisy = false
-                val summaryInboxStyle = NotificationCompat.InboxStyle()
+            //group events by room to create a single MessagingStyle notif
+            val roomIdToEventMap: MutableMap<String, ArrayList<NotifiableMessageEvent>> = HashMap()
+            val simpleEvents: ArrayList<NotifiableEvent> = ArrayList()
+            val notifications: ArrayList<Notification> = ArrayList()
 
-                //group events by room to create a single MessagingStyle notif
-                val roomIdToEventMap: MutableMap<String, ArrayList<NotifiableMessageEvent>> = HashMap()
-                val simpleEvents: ArrayList<NotifiableEvent> = ArrayList()
-                val notifications: ArrayList<Notification> = ArrayList()
+            val eventIterator = eventList.listIterator()
+            while (eventIterator.hasNext()) {
+                val event = eventIterator.next()
+                if (event is NotifiableMessageEvent) {
+                    val roomId = event.roomId
+                    var roomEvents = roomIdToEventMap[roomId]
+                    if (roomEvents == null) {
+                        roomEvents = ArrayList()
+                        roomIdToEventMap[roomId] = roomEvents
+                    }
 
-                val eventIterator = eventList.listIterator()
-                while (eventIterator.hasNext()) {
-                    val event = eventIterator.next()
-                    if (event is NotifiableMessageEvent) {
-                        val roomId = event.roomId
-                        var roomEvents = roomIdToEventMap[roomId]
-                        if (roomEvents == null) {
-                            roomEvents = ArrayList()
-                            roomIdToEventMap[roomId] = roomEvents
-                        }
-
-                        if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
-                            //forget this event
-                            eventIterator.remove()
-                        } else {
-                            roomEvents.add(event)
-                        }
+                    if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
+                        //forget this event
+                        eventIterator.remove()
                     } else {
-                        simpleEvents.add(event)
+                        roomEvents.add(event)
                     }
-                }
-
-
-                Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
-
-                var globalLastMessageTimestamp = 0L
-
-                //events have been grouped
-                for ((roomId, events) in roomIdToEventMap) {
-
-                    if (events.isEmpty()) {
-                        //Just clear this notification
-                        Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
-                        NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
-                        continue
-                    }
-
-                    val roomGroup = RoomEventGroupInfo(roomId)
-                    roomGroup.hasNewEvent = false
-                    roomGroup.shouldBing = false
-                    val senderDisplayName = events[0].senderName ?: ""
-                    val roomName = events[0].roomName ?: events[0].senderName ?: ""
-                    val style = NotificationCompat.MessagingStyle(Person.Builder()
-                            .setName(myUserDisplayName)
-                            .setIcon(myUserIcon)
-                            .build())
-                    roomGroup.roomDisplayName = roomName
-                    if (roomName != senderDisplayName) {
-                        style.conversationTitle = roomName
-                    }
-
-                    val largeBitmap = getRoomBitmap(events)
-
-
-                    for (event in events) {
-                        //if all events in this room have already been displayed there is no need to update it
-                        if (!event.hasBeenDisplayed) {
-                            roomGroup.shouldBing = roomGroup.shouldBing || event.noisy
-                            roomGroup.customSound = event.soundName
-                        }
-                        roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
-
-                        val senderPerson = Person.Builder()
-                                .setName(event.senderName)
-                                .setIcon(getUserIcon(event.senderAvatarPath))
-                                .build()
-
-                        if (event.outGoingMessage && event.outGoingMessageFailed) {
-                            style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                            roomGroup.hasSmartReplyError = true
-                        } else {
-                            style.addMessage(event.body, event.timestamp, senderPerson)
-                        }
-                        event.hasBeenDisplayed = true //we can consider it as displayed
-
-                        //It is possible that this event was previously shown as an 'anonymous' simple notif.
-                        //And now it will be merged in a single MessageStyle notif, so we can clean to be sure
-                        NotificationUtils.cancelNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID)
-                    }
-
-                    try {
-                        val summaryLine = context.resources.getQuantityString(
-                                R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
-                        summaryInboxStyle.addLine(summaryLine)
-                    } catch (e: Throwable) {
-                        //String not found or bad format
-                        Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
-                        summaryInboxStyle.addLine(roomName)
-                    }
-
-                    if (firstTime || roomGroup.hasNewEvent) {
-                        //Should update displayed notification
-                        Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
-                        val lastMessageTimestamp = events.last().timestamp
-
-                        if (globalLastMessageTimestamp < lastMessageTimestamp) {
-                            globalLastMessageTimestamp = lastMessageTimestamp
-                        }
-
-                        NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, lastMessageTimestamp, myUserDisplayName)
-                                ?.let {
-                                    //is there an id for this room?
-                                    notifications.add(it)
-                                    NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
-                                }
-                        hasNewEvent = true
-                        summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
-                    } else {
-                        Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
-                    }
-                }
-
-
-                //Handle simple events
-                for (event in simpleEvents) {
-                    //We build a simple event
-                    if (firstTime || !event.hasBeenDisplayed) {
-                        NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
-                            notifications.add(it)
-                            NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
-                            event.hasBeenDisplayed = true //we can consider it as displayed
-                            hasNewEvent = true
-                            summaryIsNoisy = summaryIsNoisy || event.noisy
-                            summaryInboxStyle.addLine(event.description)
-                        }
-                    }
-                }
-
-
-                //======== Build summary notification =========
-                //On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
-                // your group using snippets of text from each notification. The user can expand this
-                // notification to see each separate notification.
-                // To support older versions, which cannot show a nested group of notifications,
-                // you must create an extra notification that acts as the summary.
-                // This appears as the only notification and the system hides all the others.
-                // So this summary should include a snippet from all the other notifications,
-                // which the user can tap to open your app.
-                // The behavior of the group summary may vary on some device types such as wearables.
-                // To ensure the best experience on all devices and versions, always include a group summary when you create a group
-                // https://developer.android.com/training/notify-user/group
-
-                if (eventList.isEmpty()) {
-                    NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
                 } else {
-                    val nbEvents = roomIdToEventMap.size + simpleEvents.size
-                    val sumTitle = context.resources.getQuantityString(
-                            R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
-                    summaryInboxStyle.setBigContentTitle(sumTitle)
-                    NotificationUtils.buildSummaryListNotification(
-                            context,
-                            summaryInboxStyle,
-                            sumTitle,
-                            noisy = hasNewEvent && summaryIsNoisy,
-                            lastMessageTimestamp = globalLastMessageTimestamp
-                    )?.let {
-                        NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
+                    simpleEvents.add(event)
+                }
+            }
+
+
+            Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
+
+            var globalLastMessageTimestamp = 0L
+
+            //events have been grouped
+            for ((roomId, events) in roomIdToEventMap) {
+
+                if (events.isEmpty()) {
+                    //Just clear this notification
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
+                    NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                    continue
+                }
+
+                val roomGroup = RoomEventGroupInfo(roomId)
+                roomGroup.hasNewEvent = false
+                roomGroup.shouldBing = false
+                val senderDisplayName = events[0].senderName ?: ""
+                val roomName = events[0].roomName ?: events[0].senderName ?: ""
+                val style = NotificationCompat.MessagingStyle(Person.Builder()
+                        .setName(myUserDisplayName)
+                        .setIcon(myUserIcon)
+                        .build())
+                roomGroup.roomDisplayName = roomName
+                if (roomName != senderDisplayName) {
+                    style.conversationTitle = roomName
+                }
+
+                val largeBitmap = getRoomBitmap(events)
+
+
+                for (event in events) {
+                    //if all events in this room have already been displayed there is no need to update it
+                    if (!event.hasBeenDisplayed) {
+                        roomGroup.shouldBing = roomGroup.shouldBing || event.noisy
+                        roomGroup.customSound = event.soundName
+                    }
+                    roomGroup.hasNewEvent = roomGroup.hasNewEvent || !event.hasBeenDisplayed
+
+                    val senderPerson = Person.Builder()
+                            .setName(event.senderName)
+                            .setIcon(getUserIcon(event.senderAvatarPath))
+                            .build()
+
+                    if (event.outGoingMessage && event.outGoingMessageFailed) {
+                        style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
+                        roomGroup.hasSmartReplyError = true
+                    } else {
+                        style.addMessage(event.body, event.timestamp, senderPerson)
+                    }
+                    event.hasBeenDisplayed = true //we can consider it as displayed
+
+                    //It is possible that this event was previously shown as an 'anonymous' simple notif.
+                    //And now it will be merged in a single MessageStyle notif, so we can clean to be sure
+                    NotificationUtils.cancelNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID)
+                }
+
+                try {
+                    val summaryLine = context.resources.getQuantityString(
+                            R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
+                    summaryInboxStyle.addLine(summaryLine)
+                } catch (e: Throwable) {
+                    //String not found or bad format
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
+                    summaryInboxStyle.addLine(roomName)
+                }
+
+                if (firstTime || roomGroup.hasNewEvent) {
+                    //Should update displayed notification
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
+                    val lastMessageTimestamp = events.last().timestamp
+
+                    if (globalLastMessageTimestamp < lastMessageTimestamp) {
+                        globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
-                    if (hasNewEvent && summaryIsNoisy) {
-                        try {
-                            // turn the screen on for 3 seconds
-                            if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
-                                val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
-                                val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                                        NotificationDrawerManager::class.java.name)
-                                wl.acquire(3000)
-                                wl.release()
+                    NotificationUtils.buildMessagesListNotification(context, style, roomGroup, largeBitmap, lastMessageTimestamp, myUserDisplayName)
+                            ?.let {
+                                //is there an id for this room?
+                                notifications.add(it)
+                                NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
                             }
-                        } catch (e: Throwable) {
-                            Log.e(LOG_TAG, "## Failed to turn screen on", e)
-                        }
+                    hasNewEvent = true
+                    summaryIsNoisy = summaryIsNoisy || roomGroup.shouldBing
+                } else {
+                    Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
+                }
+            }
 
+
+            //Handle simple events
+            for (event in simpleEvents) {
+                //We build a simple event
+                if (firstTime || !event.hasBeenDisplayed) {
+                    NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
+                        notifications.add(it)
+                        NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
+                        event.hasBeenDisplayed = true //we can consider it as displayed
+                        hasNewEvent = true
+                        summaryIsNoisy = summaryIsNoisy || event.noisy
+                        summaryInboxStyle.addLine(event.description)
                     }
                 }
-                //notice that we can get bit out of sync with actual display but not a big issue
-                firstTime = false
             }
+
+
+            //======== Build summary notification =========
+            //On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
+            // your group using snippets of text from each notification. The user can expand this
+            // notification to see each separate notification.
+            // To support older versions, which cannot show a nested group of notifications,
+            // you must create an extra notification that acts as the summary.
+            // This appears as the only notification and the system hides all the others.
+            // So this summary should include a snippet from all the other notifications,
+            // which the user can tap to open your app.
+            // The behavior of the group summary may vary on some device types such as wearables.
+            // To ensure the best experience on all devices and versions, always include a group summary when you create a group
+            // https://developer.android.com/training/notify-user/group
+
+            if (eventList.isEmpty()) {
+                NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
+            } else {
+                val nbEvents = roomIdToEventMap.size + simpleEvents.size
+                val sumTitle = context.resources.getQuantityString(
+                        R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
+                summaryInboxStyle.setBigContentTitle(sumTitle)
+                NotificationUtils.buildSummaryListNotification(
+                        context,
+                        summaryInboxStyle,
+                        sumTitle,
+                        noisy = hasNewEvent && summaryIsNoisy,
+                        lastMessageTimestamp = globalLastMessageTimestamp
+                )?.let {
+                    NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
+                }
+
+                if (hasNewEvent && summaryIsNoisy) {
+                    try {
+                        // turn the screen on for 3 seconds
+                        if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
+                            val pm = VectorApp.getInstance().getSystemService(Context.POWER_SERVICE) as PowerManager
+                            val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                                    NotificationDrawerManager::class.java.name)
+                            wl.acquire(3000)
+                            wl.release()
+                        }
+                    } catch (e: Throwable) {
+                        Log.e(LOG_TAG, "## Failed to turn screen on", e)
+                    }
+
+                }
+            }
+            //notice that we can get bit out of sync with actual display but not a big issue
+            firstTime = false
         }
     }
 
@@ -406,8 +391,11 @@ class NotificationDrawerManager(val context: Context) {
         return null
     }
 
-    @WorkerThread
+    // TODO This has to be done a worker thread.
+    // @WorkerThread
     private fun getUserIcon(path: String?): IconCompat? {
+        return null
+        /*
         return path?.let {
             try {
                 Glide.with(context)
@@ -424,6 +412,7 @@ class NotificationDrawerManager(val context: Context) {
                 IconCompat.createWithBitmap(bitmap)
             }
         }
+        */
     }
 
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
