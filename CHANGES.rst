@@ -16,6 +16,7 @@ Other changes:
 
 Bugfix:
  - Fix expand and collapse color (#3035)
+ - Fix LED not flashing on noisy messages
 
 Translations:
  -
