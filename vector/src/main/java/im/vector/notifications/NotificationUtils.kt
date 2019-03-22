@@ -361,7 +361,7 @@ object NotificationUtils {
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 .setGroup(context.getString(R.string.riot_app_name))
 
-                //In order to avoid notification making sound twice (due to the summary notificaiton)
+                //In order to avoid notification making sound twice (due to the summary notification)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
 
                 .setSmallIcon(smallIcon)
@@ -546,6 +546,7 @@ object NotificationUtils {
     //// Number of new notifications for API <24 (M and below) devices.
     fun buildSummaryListNotification(context: Context, sytle: NotificationCompat.Style, compatSummary: String, noisy: Boolean): Notification? {
 
+        val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
@@ -565,6 +566,7 @@ object NotificationUtils {
                         PreferencesManager.getNotificationRingTone(context)?.let {
                             setSound(it)
                         }
+                        setLights(accentColor, 500, 500)
                     } else {
                         //compat
                         priority = NotificationCompat.PRIORITY_LOW
