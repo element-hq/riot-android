@@ -296,7 +296,8 @@ class NotificationDrawerManager(val context: Context) {
                         summaryInboxStyle.addLine(roomName)
                     }
 
-                    if (!firstTime || roomGroup.hasNewEvent) { //Should update displayed notification
+                    if (firstTime || roomGroup.hasNewEvent) {
+                        //Should update displayed notification
                         Log.d(LOG_TAG, "%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                         val lastMessageTimestamp = events.last().timestamp
 
@@ -321,7 +322,7 @@ class NotificationDrawerManager(val context: Context) {
                 //Handle simple events
                 for (event in simpleEvents) {
                     //We build a simple event
-                    if (!firstTime || !event.hasBeenDisplayed) {
+                    if (firstTime || !event.hasBeenDisplayed) {
                         NotificationUtils.buildSimpleEventNotification(context, event, null, myUserDisplayName)?.let {
                             notifications.add(it)
                             NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)

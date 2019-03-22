@@ -449,8 +449,6 @@ object NotificationUtils {
         return NotificationCompat.Builder(context, channelID)
                 .setContentTitle(context.getString(R.string.riot_app_name))
                 .setContentText(simpleNotifiableEvent.description)
-                //.setSubText(roomInfo.roomDisplayName)
-                //.setNumber(messageSytle.messages.size)
                 .setGroup(context.getString(R.string.riot_app_name))
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
                 .setSmallIcon(smallIcon)
