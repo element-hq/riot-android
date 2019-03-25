@@ -72,7 +72,7 @@
     <string name="action_close">Fermi</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sendi ĉifritan respondon…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sendi respondon (neĉifritan)…</string>
-<string name="bottom_action_people">Homoj</string>
+    <string name="bottom_action_people">Homoj</string>
     <string name="bottom_action_rooms">Babilejoj</string>
     <string name="bottom_action_groups">Komunumoj</string>
 
@@ -91,4 +91,4 @@
     <string name="no_users_placeholder">Neniu uzantoj</string>
 
     <string name="rooms">Babilejoj</string>
-    </resources>
+</resources>

@@ -1298,7 +1298,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_activate">Erabili gakoen babes-kopia</string>
     <string name="are_you_sure">Ziur al zaude\?</string>
     <string name="backup">Babes-kopia</string>
-<string name="notification_sync_init">Zerbitzua hasieratzen</string>
+    <string name="notification_sync_init">Zerbitzua hasieratzen</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Zure mezu zifratuetara sarbidea galduko duzu ez baduzu gakoen babes-kopia egiten saioa amaitu aurretik.</string>
 
     <string name="stay">Geratu</string>
@@ -1366,9 +1366,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_info_keys_all_backup_up">Gako guztien babes-kopia egin da</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Gako %den babes-kopia egiten…</item>
-	<item quantity="other">%d gakoen babes kopia egiten…</item>
-</plurals>
+        <item quantity="one">Gako %den babes-kopia egiten…</item>
+        <item quantity="other">%d gakoen babes kopia egiten…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Bertsioa</string>
     <string name="keys_backup_info_title_algorithm">Algoritmoa</string>

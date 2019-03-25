@@ -1382,7 +1382,7 @@ Per què triar Riot.im?
     <string name="new_recovery_method_popup_description">S\'ha trobat una còpia de seguretat nova de la clau.
 \n
 \nSi no heu configurat el mètode de recuperació nou, un atacant podria estar intentant accedir al vostre compte. Canvieu la contrasenya del vostre compte i configureu-hi un mètode de recuperació nou immediatament a la configuració.</string>
-<string name="notification_sync_init">Inicialitzar servei</string>
+    <string name="notification_sync_init">Inicialitzar servei</string>
     <string name="ignore">Ignorar</string>
 
     <string name="auth_login_sso">Registrar-se amb Single Sign-on</string>

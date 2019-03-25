@@ -340,7 +340,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nদেয়া করে অনুমতিদিন প্রবেশ করতে পরের pop-up এ যেটা কল করতে সক্ষম।"</string>
-<string name="notification_sync_init">সেবা আরম্ভ করা হচ্ছে</string>
+    <string name="notification_sync_init">সেবা আরম্ভ করা হচ্ছে</string>
     <string name="permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য Riot আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
 \n
 \nকল করতে সক্ষম হতে পরবর্তী পপ আপ অ্যাক্সেস অনুমতি দিন।</string>
@@ -379,31 +379,31 @@
     <string name="room_creation_title">নতুন বার্তা</string>
     <string name="room_creation_add_member">সদস্য যোগ করুন</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">১ সক্রিয় সদস্য</item>
-	<item quantity="other">%d সক্রিয় সদস্য</item>
-</plurals>
+        <item quantity="one">১ সক্রিয় সদস্য</item>
+        <item quantity="other">%d সক্রিয় সদস্য</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">১ জন সদস্য</item>
-	<item quantity="other">"%d  জন সদস্য"</item>
-</plurals>
+        <item quantity="one">১ জন সদস্য</item>
+        <item quantity="other">"%d  জন সদস্য"</item>
+    </plurals>
     <string name="room_title_one_member">১ জন সদস্য</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">১ সেকেন্ড</item>
-	<item quantity="other">%d সেকেন্ড</item>
-</plurals>
+        <item quantity="one">১ সেকেন্ড</item>
+        <item quantity="other">%d সেকেন্ড</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">১ মিনিট</item>
-	<item quantity="other">%d মিনিট</item>
-</plurals>
+        <item quantity="one">১ মিনিট</item>
+        <item quantity="other">%d মিনিট</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">১ ঘন্টা</item>
-	<item quantity="other">%d ঘন্টা</item>
-</plurals>
+        <item quantity="one">১ ঘন্টা</item>
+        <item quantity="other">%d ঘন্টা</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">১ দিন</item>
-	<item quantity="other">%d দিন</item>
-</plurals>
+        <item quantity="one">১ দিন</item>
+        <item quantity="other">%d দিন</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">রুম ছেড়ে দিন</string>
     <string name="room_participants_leave_prompt_msg">আপনি কি রুম ছেড়ে যেতে চান\?</string>
@@ -442,9 +442,9 @@
 \nআপনি কি নিশ্চিত\?</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারী কে পদাঘাত করতে চান\?</item>
-	<item quantity="other">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারীদের কে পদাঘাত করতে চান\?</item>
-</plurals>
+        <item quantity="one">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারী কে পদাঘাত করতে চান\?</item>
+        <item quantity="other">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারীদের কে পদাঘাত করতে চান\?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">আপনি কি এই চ্যাট থেকে এই ব্যবহারকারীকে নিষিদ্ধ করতে চান\?</string>
     <string name="reason_hint">কারণ</string>
 
@@ -480,9 +480,9 @@
     <string name="room_message_file_not_found">ফাইল খুঁজে পাওয়া যায় নি</string>
     <string name="room_do_not_have_permission_to_post">আপনার এই রুমে পোস্ট করার অনুমতি নেই</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">১টি নতুন বার্তা</item>
-	<item quantity="other">%d টি নতুন বার্তা</item>
-</plurals>
+        <item quantity="one">১টি নতুন বার্তা</item>
+        <item quantity="other">%d টি নতুন বার্তা</item>
+    </plurals>
 
     <string name="ssl_trust">আস্থাস্থাপন</string>
     <string name="ssl_do_not_trust">বিশ্বাস করবেন না</string>
@@ -501,9 +501,9 @@
     <string name="room_details_files">নথিগুলি</string>
     <string name="room_details_settings">নির্ধারণ</string>
     <plurals name="room_details_selected">
-	<item quantity="one">%d নির্বাচিত</item>
-	<item quantity="other"/>
-</plurals>
+        <item quantity="one">%d নির্বাচিত</item>
+        <item quantity="other" />
+    </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
     <string name="room_details_people_present_group_name">যোগকরা</string>
@@ -535,13 +535,13 @@
 
     <string name="directory_search_results_title">ব্রাউস নির্দেশনা</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">"একটা ঘর "</item>
-	<item quantity="other">%d ঘরগুলি</item>
-</plurals>
+        <item quantity="one">"একটা ঘর "</item>
+        <item quantity="other">%d ঘরগুলি</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%২$s এর জন্য ঘর খোঁজা হয়েছে %১$s</item>
-	<item quantity="other">%২$s এর জন্য ঘরগুলি খোঁজা হয়েছে %১$s</item>
-</plurals>
+        <item quantity="one">%২$s এর জন্য ঘর খোঁজা হয়েছে %১$s</item>
+        <item quantity="other">%২$s এর জন্য ঘরগুলি খোঁজা হয়েছে %১$s</item>
+    </plurals>
     <string name="directory_searching_title">খোঁজা হচ্ছে নির্দেশনা…</string>
 
     <string name="room_settings_all_messages_noisy">সব বার্তা (হইচই)</string>
@@ -668,4 +668,4 @@
 
     <string name="settings_troubleshoot_test_account_settings_title">গণনা নির্ধারণ।</string>
     <string name="settings_troubleshoot_test_account_settings_success">বিজ্ঞাপ্তি আপনার একাউন্টএর জন্য সক্রিয় করা হোক.</string>
-    </resources>
+</resources>

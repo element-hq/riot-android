@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">ie</string>
+<resources>
+    <string name="resources_language">ie</string>
     <string name="resources_country_code">SA</string>
 
     <string name="light_theme">Leagan Geal</string>
@@ -102,4 +103,4 @@
     <string name="dialog_title_warning">Rabhadh</string>
     <string name="dialog_title_error">Earráid</string>
 
-    </resources>
+</resources>

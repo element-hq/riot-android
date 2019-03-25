@@ -1413,7 +1413,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
 
-<string name="notification_sync_init">Alustetaan palvelua</string>
+    <string name="notification_sync_init">Alustetaan palvelua</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_compression">Oletuksena oleva pakkauksen määrä</string>
     <string name="compression_opt_list_choose">Valitse</string>
@@ -1421,4 +1421,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="media_source_choose">Valitse</string>
     <string name="settings_play_shutter_sound">Toista sulkimen ääni</string>
 
-    </resources>
+</resources>
