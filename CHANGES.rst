@@ -1,9 +1,34 @@
+Changes in Riot 0.8.27 (2019-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.X.Y.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in Riot 0.8.26 (2019-03-25)
 ===================================================
 
 MatrixSdk:
  - Upgrade MatrixSdk to version 0.9.19.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.19
 
 Features:
  - Notification rework: inline reply/mark as read actions, one notification per room (#3068 and others)
@@ -1269,7 +1294,7 @@ Changes in Riot 0.8.XX (2019-XX-XX)
 
 MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
  -
