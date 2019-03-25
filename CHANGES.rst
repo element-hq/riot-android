@@ -1,15 +1,12 @@
-Changes in Riot 0.8.26 (2019-XX-XX)
+Changes in Riot 0.8.26 (2019-03-25)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
+ - Upgrade MatrixSdk to version 0.9.19.
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
 
 Features:
  - Notification rework: inline reply/mark as read actions, one notification per room (#3068 and others)
-
-Improvements:
- -
 
 Other changes:
  - Disable usage of library ShortcutBadger on device running API 26+
@@ -17,12 +14,6 @@ Other changes:
 Bugfix:
  - Fix expand and collapse color (#3035)
  - Fix LED not flashing on noisy messages
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.25 (2019-03-13)
 ===================================================
