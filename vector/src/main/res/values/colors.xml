@@ -143,4 +143,8 @@
     <color name="link_color_dark">#368BD6</color>
     <color name="link_color_status">#368BD6</color>
 
+    <!-- Notification (do not depends on theme -->
+    <color name="notification_accent_color">#368BD6</color>
+
+
 </resources>

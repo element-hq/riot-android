@@ -11,6 +11,7 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
         tools:title="Title of the web page" />
 
     <WebView

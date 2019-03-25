@@ -17,9 +17,11 @@
 
 package im.vector.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -368,6 +370,11 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                                                 imageView.post(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                                                                && ((Activity) mContext).isDestroyed()) {
+                                                            return;
+                                                        }
+
                                                         Uri mediaUri = Uri.parse(newHighResUri);
                                                         Glide.with(imageView)
                                                                 .load(mediaUri)

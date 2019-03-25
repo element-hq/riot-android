@@ -894,14 +894,10 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
         <item quantity="other">%d cambi d\'appartenenza</item>
     </plurals>
 
-    <string name="settings_notification_privacy_warning">Riot.im funziona in sottofondo per mantenere privato il contenuto delle notifiche. Puoi cambiare questa opzione per ridurre il consumo della batteria.</string>
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
     <string name="settings_notification_privacy_normal">Normale</string>
-    <string name="settings_notification_privacy_power_saving">Opzioni risparmio energetico</string>
-    <string name="settings_notification_privacy_low_detail">Notifiche poco dettagliate</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_no_permission">Le app <b>non</b> richiedono il permesso per funzionare in sottofondo</string>
     <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
@@ -1201,20 +1197,20 @@ Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare 
 
     <string name="store_title">Riot.im - Comunica, a modo tuo.</string>
     <string name="store_short_description">Un\'app universale di chat sicure interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate.
-\n
-\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix.
-\n
-\nPerchè scegliere Riot.im\?
-\n
-\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito.
-\n
-\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat.
-\n
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali.
-\n
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi.
-\n
+    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
+\n 
+\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix. 
+\n 
+\nPerché scegliere Riot.im\? 
+\n 
+\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito. 
+\n 
+\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat. 
+\n 
+\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali. 
+\n 
+\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi. 
+\n 
 \n• OVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
 
     <string name="video_call_in_progress">Videochiamata in corso…</string>
@@ -1424,5 +1420,13 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="autodiscover_well_known_autofill_dialog_message">Riot ha rilevato una configurazione server personalizzata per il tuo dominio userId \"%s\":
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usa configurazione</string>
+
+    <string name="notification_sync_init">Inizializzazione del servizio</string>
+    <string name="settings_media">Multimedia</string>
+    <string name="settings_default_compression">Compressione predefinita</string>
+    <string name="compression_opt_list_choose">Scegli</string>
+    <string name="settings_default_media_source">Sorgente multimediale predefinita</string>
+    <string name="media_source_choose">Scegli</string>
+    <string name="settings_play_shutter_sound">Riproduci suono otturatore</string>
 
 </resources>

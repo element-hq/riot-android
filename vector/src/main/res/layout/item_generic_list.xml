@@ -48,7 +48,8 @@
         android:id="@+id/item_generic_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="item_generic_accessory_image,item_generic_progress_bar" />
+        app:constraint_referenced_ids="item_generic_accessory_image,item_generic_progress_bar"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/item_generic_accessory_image"

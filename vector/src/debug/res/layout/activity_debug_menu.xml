@@ -24,6 +24,14 @@
                 android:layout_height="wrap_content"
                 android:text="Test linkification" />
 
+            <Button
+                android:id="@+id/debug_test_notification"
+                style="@style/VectorButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:text="Test Notification" />
+
         </LinearLayout>
 
     </ScrollView>

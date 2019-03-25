@@ -53,7 +53,8 @@
         android:id="@+id/view_keys_backup_banner_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_loading" />
+        app:constraint_referenced_ids="view_keys_backup_banner_close,view_keys_backup_banner_loading"
+        tools:ignore="MissingConstraints" />
 
     <ProgressBar
         android:id="@+id/view_keys_backup_banner_loading"

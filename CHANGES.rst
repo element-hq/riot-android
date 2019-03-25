@@ -1,3 +1,20 @@
+Changes in Riot 0.8.26 (2019-03-25)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.19.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
+
+Features:
+ - Notification rework: inline reply/mark as read actions, one notification per room (#3068 and others)
+
+Other changes:
+ - Disable usage of library ShortcutBadger on device running API 26+
+
+Bugfix:
+ - Fix expand and collapse color (#3035)
+ - Fix LED not flashing on noisy messages
+
 Changes in Riot 0.8.25 (2019-03-13)
 ===================================================
 
@@ -90,6 +107,7 @@ Improvements:
  - Better wording in notification for video call (#1421)
  - Improve widget banner (#2129)
  - Icon for Oreo (#2169)
+ - Notification reliability and Messaging Style, with inlined reply (#2823, #1016).
  - Notification settings re-organization, added bing rule troubleshoot
  - Kotlin Code Improvement in VectorSettingsPreferencesFragment.kt
  - Remove redundant !! , Replace it with null safe operators in VectorSettingsPreferencesFragment.kt

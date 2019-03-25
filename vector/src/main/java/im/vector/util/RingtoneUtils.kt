@@ -46,8 +46,13 @@ fun getCallRingtoneUri(context: Context): Uri? {
         return Uri.parse(it)
     }
 
-    // Use current system notification sound for incoming calls per default (note that it can return null)
-    return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+    return try {
+        // Use current system notification sound for incoming calls per default (note that it can return null)
+        RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+    } catch (e: SecurityException) {
+        // Ignore for now
+        null
+    }
 }
 
 /**
