@@ -102,6 +102,7 @@ class NotifiableEventResolver(val context: Context) {
                     timestamp = event.originServerTs,
                     noisy = noisy,
                     senderName = senderDisplayName,
+                    senderId = event.sender,
                     body = body,
                     roomId = event.roomId,
                     roomName = roomName)
@@ -122,9 +123,11 @@ class NotifiableEventResolver(val context: Context) {
                     timestamp = event.originServerTs,
                     noisy = noisy,
                     senderName = senderDisplayName,
+                    senderId = event.sender,
                     body = body,
                     roomId = event.roomId,
-                    roomName = roomName)
+                    roomName = roomName,
+                    roomIsDirect = room.isDirect)
 
             notifiableEvent.matrixID = session.myUserId
             notifiableEvent.soundName = soundName

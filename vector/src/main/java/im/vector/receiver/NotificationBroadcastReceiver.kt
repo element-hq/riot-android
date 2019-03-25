@@ -109,9 +109,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         System.currentTimeMillis(),
                         session.myUser?.displayname
                                 ?: context?.getString(R.string.notification_sender_me),
+                        session.myUserId,
                         message,
                         roomId,
-                        room.getRoomDisplayName(context))
+                        room.getRoomDisplayName(context),
+                        room.isDirect)
                 notifiableMessageEvent.outGoingMessage = true
                 VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
@@ -146,9 +148,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         System.currentTimeMillis(),
                         session.myUser?.displayname
                                 ?: context?.getString(R.string.notification_sender_me),
+                        session.myUserId,
                         message,
                         roomId,
-                        room.getRoomDisplayName(context))
+                        room.getRoomDisplayName(context),
+                        room.isDirect)
                 notifiableMessageEvent.outGoingMessage = true
                 notifiableMessageEvent.outGoingMessageFailed = true
 

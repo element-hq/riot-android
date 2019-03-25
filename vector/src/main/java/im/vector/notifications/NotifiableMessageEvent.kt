@@ -23,9 +23,11 @@ data class NotifiableMessageEvent(
         override var noisy: Boolean,
         override val timestamp: Long,
         var senderName: String?,
+        var senderId: String?,
         var body: String?,
         var roomId: String,
-        var roomName: String?
+        var roomName: String?,
+        var roomIsDirect: Boolean = false
 ) : NotifiableEvent {
 
 

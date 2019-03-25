@@ -22,7 +22,6 @@ import android.graphics.BitmapFactory
 import android.os.PowerManager
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.Person
-import android.support.v4.graphics.drawable.IconCompat
 import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.ImageView
@@ -49,9 +48,19 @@ class NotificationDrawerManager(val context: Context) {
 
     private var eventList = loadEventInfo()
     private var myUserDisplayName: String = ""
-    private var myUserIcon: IconCompat? = null
+    private var myUserAvatarUrl: String = ""
+
+    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
 
     private var currentRoomId: String? = null
+
+    private var iconLoader = IconLoader(context,
+            object : IconLoader.IconLoaderListener {
+                override fun onIconsLoaded() {
+                    // Force refresh
+                    refreshNotificationDrawer(null)
+                }
+            })
 
     /**
      * No multi session support for now
@@ -62,12 +71,12 @@ class NotificationDrawerManager(val context: Context) {
 
             // User Avatar
             it.myUser?.avatarUrl?.let { avatarUrl ->
-                val userAvatarUrlPath = it.mediaCache?.thumbnailCacheFile(avatarUrl, 50)
+                val userAvatarUrlPath = it.mediaCache?.thumbnailCacheFile(avatarUrl, avatarSize)
                 if (userAvatarUrlPath != null) {
-                    myUserIcon = getUserIcon(userAvatarUrlPath.path)
+                    myUserAvatarUrl = userAvatarUrlPath.path
                 } else {
                     // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), avatarUrl, 50)
+                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), avatarUrl, avatarSize)
                 }
             }
         }
@@ -170,7 +179,7 @@ class NotificationDrawerManager(val context: Context) {
 
 
     fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
-        if (myUserDisplayName.isBlank() || myUserIcon == null) {
+        if (myUserDisplayName.isBlank()) {
             initWithSession(Matrix.getInstance(context).defaultSession)
         }
 
@@ -232,14 +241,18 @@ class NotificationDrawerManager(val context: Context) {
                 val roomGroup = RoomEventGroupInfo(roomId)
                 roomGroup.hasNewEvent = false
                 roomGroup.shouldBing = false
-                val senderDisplayName = events[0].senderName ?: ""
+                roomGroup.isDirect = events[0].roomIsDirect
                 val roomName = events[0].roomName ?: events[0].senderName ?: ""
                 val style = NotificationCompat.MessagingStyle(Person.Builder()
                         .setName(myUserDisplayName)
-                        .setIcon(myUserIcon)
+                        .setIcon(iconLoader.getUserIcon(myUserAvatarUrl))
+                        .setKey(events[0].matrixID)
                         .build())
                 roomGroup.roomDisplayName = roomName
-                if (roomName != senderDisplayName) {
+
+                style.isGroupConversation = !roomGroup.isDirect
+
+                if (!roomGroup.isDirect) {
                     style.conversationTitle = roomName
                 }
 
@@ -256,7 +269,8 @@ class NotificationDrawerManager(val context: Context) {
 
                     val senderPerson = Person.Builder()
                             .setName(event.senderName)
-                            .setIcon(getUserIcon(event.senderAvatarPath))
+                            .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                            .setKey(event.senderId)
                             .build()
 
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
@@ -389,30 +403,6 @@ class NotificationDrawerManager(val context: Context) {
 
         }
         return null
-    }
-
-    // TODO This has to be done a worker thread.
-    // @WorkerThread
-    private fun getUserIcon(path: String?): IconCompat? {
-        return null
-        /*
-        return path?.let {
-            try {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(path)
-                        .apply(RequestOptions.circleCropTransform()
-                                .format(DecodeFormat.PREFER_ARGB_8888))
-                        .submit()
-                        .get()
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "decodeFile failed", e)
-                null
-            }?.let { bitmap ->
-                IconCompat.createWithBitmap(bitmap)
-            }
-        }
-        */
     }
 
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
