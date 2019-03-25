@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">ie</string>
-    <string name="resources_country_code">SA</string>
+    <string name="resources_language">ga</string>
+    <string name="resources_country_code">IE</string>
 
     <string name="light_theme">Leagan Geal</string>
     <string name="dark_theme">Leagan Dorcha</string>

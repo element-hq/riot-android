@@ -582,7 +582,7 @@
     <string name="settings_notification_troubleshoot">বিজ্ঞপ্তিগুলি সমাধান করুন</string>
     <string name="settings_troubleshoot_diagnostic">ডায়াগনস্টিকস এর সমস্যা সমাধান</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">পরীক্ষাগুলি চালাও</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">"(%1$d of %2$d) চলছে... "</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">"(%1$d of %2$d) চলছে… "</string>
     <string name="settings_troubleshoot_test_account_settings_failed">বিজ্ঞপ্তি আপনার অ্যাকাউন্টের জন্য নিষ্ক্রিয় করা হয়েছে।</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">সক্ষম</string>
 
@@ -650,10 +650,7 @@
     <string name="settings_troubleshoot_test_battery_failed">যদি কোনও ব্যবহারকারী কোনও ডিভাইসটিকে নির্দিষ্ট সময়ের জন্য আনপ্লাগ এবং স্থিতিশীল রাখে তবে স্ক্রীন বন্ধের সাথে ডিভাইসটি ডোজ মোডে প্রবেশ করে। এটি অ্যাপ্লিকেশানগুলিকে নেটওয়ার্ক অ্যাক্সেস করতে বাধা দেয় এবং তাদের কাজ, সিঙ্ক এবং মান অ্যালার্মগুলি স্থগিত করে।</string>
     <string name="settings_troubleshoot_test_battery_quickfix">"অপ্টিমাইজেশান অবহেলা "</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im আপনার বিজ্ঞপ্তি বার্তা কন্টেন্ট ব্যক্তিগত রাখতে ব্যাকগ্রাউন্ডে রান করে। আপনি ব্যাটারি ব্যবহার কমাতে এই বিকল্পটি পরিবর্তন করতে পারেন।</string>
     <string name="settings_notification_privacy_normal">সাধারণ</string>
-    <string name="settings_notification_privacy_power_saving">শক্তি সঞ্চয় বিকল্পগুলি</string>
-    <string name="settings_notification_privacy_low_detail">নিম্ন বিস্তারিত বিজ্ঞপ্তিগুলি</string>
     <string name="settings_notification_privacy_reduced">হ্রাস গোপনীয়তা</string>
     <string name="settings_notification_privacy_need_permission">অ্যাপ্লিকেশন ব্যাকগ্রাউন্ডে চালানোর অনুমতি প্রয়োজন</string>
     <string name="settings_troubleshoot_diagnostic_success_status">সাধারণ লক্ষণ ঠিক আছে.যদি আপনি এখনও কোনো প্রজ্ঞাপন পাননি,দয়াকরে জমা করুন একটা গুরুত্বপূর্ণ খসড়া যেটা সাহায্য করবে তদন্ত করতে।</string>
