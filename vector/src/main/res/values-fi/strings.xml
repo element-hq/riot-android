@@ -481,8 +481,8 @@ Salli Riotin käyttää yhteystietojasi?</string>
     <string name="settings_contacts_app_permission">Oikeus yhteystietoihin</string>
     <string name="settings_contacts_phonebook_country">Yhteystiedot (maa)</string>
     <string name="settings_home_display">Koti</string>
-    <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_pin_missed_notifications">Kiinnitä huoneet, joissa on huomaamatta jääneitä ilmoituksia</string>
+    <string name="settings_pin_unread_messages">Kiinnitä huoneet, joissa on lukemattomia viestejä</string>
     <string name="settings_devices_list">Laitteet</string>
     <string name="devices_details_dialog_title">Laitteen tiedot</string>
     <string name="devices_details_id_title">ID</string>
@@ -1218,7 +1218,7 @@ Haluatko lisätä paketteja?</string>
     <string name="resource_limit_hard_contact">Tee %s jatkaaksesi palvelun käyttöä.</string>
 
     <string name="settings_lazy_loading_title">Lataa huoneen käyttäjät laiskasti</string>
-    <string name="settings_lazy_loading_description">Paranna suorituskykyä lataamalla huoneen jäsenet ensimmäisellä kerralla.</string>
+    <string name="settings_lazy_loading_description">Paranna suorituskykyä lataamalla huoneen jäsenet vasta, kun huone näytetään ensimmäisen kerran.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Kotipalvelimesi ei tue huoneen jäsenten laiskaa latausta. Yritä myöhemmin.</string>
 
     <string name="unknown_error">Törmäsimme virheeseen</string>
@@ -1413,4 +1413,12 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
 
-</resources>
+<string name="notification_sync_init">Alustetaan palvelua</string>
+    <string name="settings_media">Media</string>
+    <string name="settings_default_compression">Oletuksena oleva pakkauksen määrä</string>
+    <string name="compression_opt_list_choose">Valitse</string>
+    <string name="settings_default_media_source">Oletuksena oleva medialähde</string>
+    <string name="media_source_choose">Valitse</string>
+    <string name="settings_play_shutter_sound">Toista sulkimen ääni</string>
+
+    </resources>
