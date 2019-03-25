@@ -572,8 +572,6 @@ object NotificationUtils {
                                      noisy: Boolean,
                                      lastMessageTimestamp: Long): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-
-        val accentColor = ThemeUtils.getColor(context, R.attr.colorAccent)
         val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
