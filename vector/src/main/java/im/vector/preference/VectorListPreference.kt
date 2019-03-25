@@ -54,6 +54,7 @@ class VectorListPreference : ListPreference {
 
     init {
         widgetLayoutResource = R.layout.vector_settings_list_preference_with_warning
+        isIconSpaceReserved = false
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {

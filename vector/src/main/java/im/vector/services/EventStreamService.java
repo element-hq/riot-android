@@ -212,8 +212,7 @@ public class EventStreamService extends Service {
 
             NotifiableEvent notifiableEvent = mNotifiableEventResolver.resolveEvent(event, roomState, bingRule, session);
             if (notifiableEvent != null) {
-                String userDisplayName = (session.getMyUser() != null) ? session.getMyUser().displayname : "";
-                VectorApp.getInstance().getNotificationDrawerManager().onNotifiableEventReceived(notifiableEvent, session.getMyUserId(), userDisplayName);
+                VectorApp.getInstance().getNotificationDrawerManager().onNotifiableEventReceived(notifiableEvent);
             }
         }
 

@@ -85,6 +85,7 @@
             app:itemBackground="?vctr_bottom_nav_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

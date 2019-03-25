@@ -114,7 +114,6 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.notifications.NotificationUtils;
 import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;

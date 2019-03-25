@@ -111,6 +111,9 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
+    <!-- New when targeting API 28 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".VectorApp"
         android:allowBackup="false"
@@ -131,7 +134,7 @@
 
         <!-- activities list starts here -->
         <activity
-            android:name=".activity.LauncherActivity"
+            android:name=".activity.VectorLauncherActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,7 +6,7 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X/Y
 
 Features:
- -
+ - Notification rework: inline reply/mark as read actions, one notification per room (#3068 and others)
 
 Improvements:
  -
@@ -16,6 +16,7 @@ Other changes:
 
 Bugfix:
  - Fix expand and collapse color (#3035)
+ - Fix LED not flashing on noisy messages
 
 Translations:
  -

@@ -31,30 +31,48 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.MXCryptoError
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
 import org.matrix.androidsdk.util.Log
 
 /**
- * Receives actions broadcasted by notification (on click, on dismiss, inline replies)
+ * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
+
         Log.d(LOG_TAG, "ReplyNotificationBroadcastReceiver received : $intent")
-        val action = intent.action
-        if (action != null) {
-            if (action.startsWith(NotificationUtils.SMART_REPLY_ACTION_PREFIX)) {
+
+        when (intent.action) {
+            NotificationUtils.SMART_REPLY_ACTION ->
                 handleSmartReply(intent, context)
-            } else if (action == NotificationUtils.DISMISS_ROOM_NOTIF_ACTION) {
+            NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let {
                     VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
                 }
-            } else if (action == NotificationUtils.DISMISS_SUMMARY_ACTION) {
+            NotificationUtils.DISMISS_SUMMARY_ACTION ->
                 VectorApp.getInstance().notificationDrawerManager.clearAllEvents()
-            }
+            NotificationUtils.MARK_ROOM_READ_ACTION ->
+                intent.getStringExtra(KEY_ROOM_ID)?.let {
+                    VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(it)
+                    handleMarkAsRead(context, it)
+                }
+        }
+    }
+
+    private fun handleMarkAsRead(context: Context, roomId: String) {
+        Matrix.getInstance(context)?.defaultSession?.let { session ->
+            session.dataHandler
+                    ?.getRoom(roomId)
+                    ?.markAllAsRead(object : SimpleApiCallback<Void>() {
+                        override fun onSuccess(void: Void?) {
+                            // Ignore
+                        }
+                    })
         }
     }
 
@@ -73,7 +91,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 sendMatrixEvent(message!!, session, roomId!!, room, context)
             }
         }
-        return
     }
 
     private fun sendMatrixEvent(message: String, session: MXSession, roomId: String, room: Room, context: Context?) {
@@ -92,12 +109,13 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         System.currentTimeMillis(),
                         session.myUser?.displayname
                                 ?: context?.getString(R.string.notification_sender_me),
+                        session.myUserId,
                         message,
                         roomId,
-                        room.getRoomDisplayName(context))
+                        room.getRoomDisplayName(context),
+                        room.isDirect)
                 notifiableMessageEvent.outGoingMessage = true
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
-                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
 
@@ -130,14 +148,15 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         System.currentTimeMillis(),
                         session.myUser?.displayname
                                 ?: context?.getString(R.string.notification_sender_me),
+                        session.myUserId,
                         message,
                         roomId,
-                        room.getRoomDisplayName(context))
+                        room.getRoomDisplayName(context),
+                        room.isDirect)
                 notifiableMessageEvent.outGoingMessage = true
                 notifiableMessageEvent.outGoingMessageFailed = true
 
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(
-                        notifiableMessageEvent, session.myUserId, session.myUser.displayname)
+                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })

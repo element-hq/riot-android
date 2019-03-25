@@ -23,7 +23,7 @@ import android.support.v7.app.AppCompatActivity
 /**
  * This Activity is here only to display a logo when waiting for Riot Application to start
  */
-class LauncherActivity : AppCompatActivity() {
+class VectorLauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

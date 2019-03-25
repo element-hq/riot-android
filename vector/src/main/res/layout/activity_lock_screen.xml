@@ -69,6 +69,7 @@
             android:layout_gravity="start"
             android:layout_weight="1"
             android:hint="@string/lock_screen_hint"
+            android:imeOptions="actionSend"
             android:inputType="textCapSentences"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

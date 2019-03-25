@@ -190,6 +190,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
         // retrieve 2 private members
         if (null == mPopupCanBeUpdatedField) {
             try {
+                // FIXME This does not work anymore with Android API 28 -> Popup are displayed full width
                 mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
                 mPopupCanBeUpdatedField.setAccessible(true);
             } catch (Exception e) {

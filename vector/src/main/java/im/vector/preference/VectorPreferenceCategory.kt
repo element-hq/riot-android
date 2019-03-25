@@ -21,6 +21,7 @@ import android.graphics.Typeface
 import android.support.v7.preference.PreferenceCategory
 import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.TextView
 
 /**
@@ -34,11 +35,18 @@ class VectorPreferenceCategory : PreferenceCategory {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    init {
+        isIconSpaceReserved = false
+    }
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
         val titleTextView = holder.itemView.findViewById<TextView>(android.R.id.title)
 
         titleTextView?.setTypeface(null, Typeface.BOLD)
+
+        // "isIconSpaceReserved = false" does not work for preference category, so remove the padding
+        (titleTextView?.parent as? ViewGroup)?.setPadding(0, 0, 0, 0)
     }
 }

@@ -24,8 +24,8 @@ import android.text.TextUtils
 import android.util.Pair
 import androidx.core.content.edit
 import im.vector.R
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.matrix.androidsdk.util.Log
 import java.util.*
 

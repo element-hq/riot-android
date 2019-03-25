@@ -102,6 +102,7 @@ class NotifiableEventResolver(val context: Context) {
                     timestamp = event.originServerTs,
                     noisy = noisy,
                     senderName = senderDisplayName,
+                    senderId = event.sender,
                     body = body,
                     roomId = event.roomId,
                     roomName = roomName)
@@ -122,9 +123,11 @@ class NotifiableEventResolver(val context: Context) {
                     timestamp = event.originServerTs,
                     noisy = noisy,
                     senderName = senderDisplayName,
+                    senderId = event.sender,
                     body = body,
                     roomId = event.roomId,
-                    roomName = roomName)
+                    roomName = roomName,
+                    roomIsDirect = room.isDirect)
 
             notifiableEvent.matrixID = session.myUserId
             notifiableEvent.soundName = soundName
@@ -138,13 +141,14 @@ class NotifiableEventResolver(val context: Context) {
                 session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
             }
 
-            room.state.getMemberByEventId(event.eventId)?.avatarUrl?.let {
-                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, 50)
+            room.state.getMember(event.sender)?.avatarUrl?.let {
+                val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
                 if (userAvatarUrlPath != null) {
                     notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
                 } else {
                     // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, 50)
+                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
                 }
             }
 
