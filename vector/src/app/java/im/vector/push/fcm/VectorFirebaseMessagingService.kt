@@ -34,7 +34,7 @@ import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.SimpleNotifiableEvent
 import im.vector.push.PushManager
-import im.vector.services.EventStreamService
+import im.vector.services.EventStreamServiceX
 import im.vector.ui.badge.BadgeProxy
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.Event
@@ -121,11 +121,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 //Notification contains metadata and maybe data information
                 handleNotificationWithoutSyncingMode(data, session)
             } else {
-                ensureEventStreamServiceStarted(session)
+                // ensureEventStreamServiceStarted(session)
                 // Safe guard... (race?)
                 if (isEventAlreadyKnown(data["event_id"], data["room_id"])) return
                 //Catch up!!
-                CommonActivityUtils.catchupEventStream(this)
+                //CommonActivityUtils.catchupEventStream(this)
+                EventStreamServiceX.onPushReceived(this)
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.message, e)
@@ -133,6 +134,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     //legacy code
+    /*
     private fun ensureEventStreamServiceStarted(session: MXSession?) {
         // Ensure event stream service is started
         if (EventStreamService.getInstance() == null) {
@@ -147,6 +149,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             mCheckLaunched = true
         }
     }
+    */
 
 
     // check if the event was not yet received

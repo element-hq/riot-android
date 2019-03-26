@@ -233,7 +233,12 @@ object NotificationUtils {
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildIncomingCallNotification(context: Context, isVideo: Boolean, roomName: String, matrixId: String, callId: String): Notification {
+    fun buildIncomingCallNotification(context: Context,
+                                      isVideo: Boolean,
+                                      roomName: String,
+                                      matrixId: String,
+                                      callId: String): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
@@ -246,7 +251,7 @@ object NotificationUtils {
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
-                .setLights(Color.GREEN, 500, 500)
+                .setLights(accentColor, 500, 500)
 
         //Compat: Display the incoming call notification on the lock screen
         builder.priority = NotificationCompat.PRIORITY_MAX
@@ -286,8 +291,12 @@ object NotificationUtils {
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildPendingCallNotification(context: Context, isVideo: Boolean, roomName: String, roomId: String, matrixId: String, callId: String)
-            : Notification {
+    fun buildPendingCallNotification(context: Context,
+                                     isVideo: Boolean,
+                                     roomName: String,
+                                     roomId: String,
+                                     matrixId: String,
+                                     callId: String): Notification {
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(context, roomName))
