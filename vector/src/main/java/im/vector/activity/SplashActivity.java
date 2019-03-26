@@ -308,17 +308,6 @@ public class SplashActivity extends MXCActionBarActivity {
             Matrix.getInstance(this).mHasBeenDisconnected = false;
         }
 
-        /*
-        if (EventStreamService.getInstance() == null) {
-            // Start the event stream service
-            Intent intent = new Intent(this, EventStreamService.class);
-            intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-            intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-            startService(intent);
-        } else {
-            EventStreamService.getInstance().startAccounts(matrixIds);
-        }
-        */
         EventStreamServiceX.Companion.onApplicationStarted(this);
 
         // trigger the push registration if required

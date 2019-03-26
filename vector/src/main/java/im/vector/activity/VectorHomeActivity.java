@@ -1773,11 +1773,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                     case R.id.sliding_menu_exit: {
                         EventStreamServiceX.Companion.onApplicationStopped(VectorHomeActivity.this);
-                        /*
-                        if (EventStreamService.getInstance() != null) {
-                            EventStreamService.getInstance().stopNow();
-                        }
-                         */
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

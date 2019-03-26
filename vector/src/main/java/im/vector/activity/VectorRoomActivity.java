@@ -784,8 +784,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mMyUserId = mSession.getCredentials().userId;
 
-        //CommonActivityUtils.resumeEventStream(this);
-
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
         if (mVectorMessageListFragment == null) {

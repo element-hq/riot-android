@@ -520,7 +520,6 @@
             </intent-filter>
         </activity>
 
-        <!--service android:name=".services.EventStreamService" /-->
         <service
             android:name=".services.EventStreamServiceX"
             android:exported="false" />

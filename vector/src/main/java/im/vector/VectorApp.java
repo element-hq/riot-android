@@ -135,6 +135,7 @@ public class VectorApp extends MultiDexApplication {
     private VectorMarkdownParser mMarkdownParser;
 
     private NotificationDrawerManager mNotificationDrawerManager;
+
     public NotificationDrawerManager getNotificationDrawerManager() {
         return mNotificationDrawerManager;
     }
@@ -499,21 +500,14 @@ public class VectorApp extends MultiDexApplication {
         if (isAppInBackground() && !mIsCallingInBackground) {
             // the event stream service has been killed
             EventStreamServiceX.Companion.onAppGoingToForeground(VectorApp.this);
-            /*
-            if (EventStreamService.isStopped()) {
-                CommonActivityUtils.startEventStreamService(VectorApp.this);
-            } else {
-                CommonActivityUtils.resumeEventStream(VectorApp.this);
 
-                // try to perform a FCM registration if it failed
-                // or if the FCM server generated a new push key
-                PushManager pushManager = Matrix.getInstance(this).getPushManager();
+            // try to perform a FCM registration if it failed
+            // or if the FCM server generated a new push key
+            PushManager pushManager = Matrix.getInstance(this).getPushManager();
 
-                if (null != pushManager) {
-                    pushManager.checkRegistrations();
-                }
+            if (null != pushManager) {
+                pushManager.checkRegistrations();
             }
-            */
 
             // get the contact update at application launch
             ContactsManager.getInstance().clearSnapshot();
