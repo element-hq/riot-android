@@ -714,6 +714,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                                     // Request the battery optimization cancellation to the user
                                     SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                                            null,
                                             RequestCodesKt.BATTERY_OPTIMIZATION_FDROID_REQUEST_CODE);
                                 }
                             })

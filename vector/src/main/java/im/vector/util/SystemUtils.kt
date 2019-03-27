@@ -57,11 +57,15 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @TargetApi(Build.VERSION_CODES.M)
-fun requestDisablingBatteryOptimization(activity: Activity, requestCode: Int) {
+fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?, requestCode: Int) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     intent.data = Uri.parse("package:" + activity.packageName)
-    activity.startActivityForResult(intent, requestCode)
+    if (fragment != null) {
+        fragment.startActivityForResult(intent, requestCode)
+    } else {
+        activity.startActivityForResult(intent, requestCode)
+    }
 }
 
 //==============================================================================================================

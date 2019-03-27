@@ -35,7 +35,7 @@ class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.strin
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_battery_quickfix) {
                 override fun doFix() {
                     fragment.activity?.let {
-                        requestDisablingBatteryOptimization(it, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                        requestDisablingBatteryOptimization(it, fragment, NotificationTroubleshootTestManager.REQ_CODE_FIX)
                     }
                 }
             }
