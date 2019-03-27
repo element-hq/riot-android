@@ -56,7 +56,7 @@ class CallService : VectorService() {
             ACTION_NO_ACTIVE_CALL -> hideCallNotifications()
             else ->
                 // Should not happen
-                stopSelf()
+                myStopSelf()
         }
 
         // We want the system to restore the service if killed
@@ -138,7 +138,7 @@ class CallService : VectorService() {
      * Hide the permanent call notifications
      */
     private fun hideCallNotifications() {
-        stopSelf()
+        myStopSelf()
     }
 
     companion object {

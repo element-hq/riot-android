@@ -26,6 +26,11 @@ import org.matrix.androidsdk.util.Log
  */
 abstract class VectorService : Service() {
 
+    /**
+     * Tells if the service self destroyed.
+     */
+    private var mIsSelfDestroyed = false
+
     override fun onCreate() {
         super.onCreate()
 
@@ -35,7 +40,16 @@ abstract class VectorService : Service() {
     override fun onDestroy() {
         Log.i(LOG_TAG, "## onDestroy() : $this")
 
+        if (!mIsSelfDestroyed) {
+            Log.w(LOG_TAG, "## Destroy by the system : $this")
+        }
+
         super.onDestroy()
+    }
+
+    protected fun myStopSelf() {
+        mIsSelfDestroyed = true
+        stopSelf()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

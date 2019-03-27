@@ -102,7 +102,7 @@ class EventStreamServiceX : VectorService() {
 
             // do not suspend the application if there is some active calls
             if (ServiceState.CATCHUP == mServiceState) {
-                val hasActiveCalls = mSession!!.mCallsManager.hasActiveCalls()
+                val hasActiveCalls = mSession?.mCallsManager?.hasActiveCalls() == true
 
                 // if there are some active calls, the catchup should not be stopped.
                 // because an user could answer to a call from another device.
@@ -149,7 +149,7 @@ class EventStreamServiceX : VectorService() {
         if (null == intent) {
             // Cannot happen anymore
             Log.e(LOG_TAG, "onStartCommand : null intent")
-            stopSelf()
+            myStopSelf()
             return START_NOT_STICKY
         }
 
@@ -157,7 +157,7 @@ class EventStreamServiceX : VectorService() {
 
         if (null == mSession) {
             Log.e(LOG_TAG, "onStartCommand : no sessions")
-            stopSelf()
+            myStopSelf()
             return START_NOT_STICKY
         }
 
@@ -298,7 +298,7 @@ class EventStreamServiceX : VectorService() {
         mSession = null
 
         // Stop the service
-        stopSelf()
+        myStopSelf()
     }
 
     /**
