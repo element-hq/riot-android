@@ -21,7 +21,7 @@ Translations:
  -
 
 Build:
- -
+ - Exclude Firebase analytics code (#2481)
 
 Changes in Riot 0.8.29 (2019-04-04)
 ===================================================
