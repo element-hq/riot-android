@@ -1160,8 +1160,8 @@ public final class PushManager {
     /**
      * Tell if the application can run in background.
      * It depends on the app settings and the `IgnoringBatteryOptimizations` permission in FCM mode.
-     * In FCM mode return true if token is registred and IgnoringBatteryOptimizations is on
-     * In fdroid mode returns true if user pref for backgroudn sync is on (will use foreground notificaiton to keep alive, no need for battery optimisation).
+     * In FCM mode return true if token is registered and IgnoringBatteryOptimizations is on
+     * In fdroid mode returns true if user pref for background sync is on (will use foreground notification to keep alive, no need for battery optimisation).
      *
      * @return true if the background sync is allowed
      */

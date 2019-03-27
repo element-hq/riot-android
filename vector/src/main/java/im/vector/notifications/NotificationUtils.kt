@@ -25,7 +25,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.StringRes
@@ -107,6 +106,8 @@ object NotificationUtils {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+
         //Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
         // + currentTimeMillis).
         //Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
@@ -136,6 +137,7 @@ object NotificationUtils {
                     description = context.getString(R.string.notification_noisy_notifications)
                     enableVibration(true)
                     enableLights(true)
+                    lightColor = accentColor
                 })
 
         /**
@@ -148,6 +150,7 @@ object NotificationUtils {
                     description = context.getString(R.string.notification_silent_notifications)
                     setSound(null, null)
                     enableLights(true)
+                    lightColor = accentColor
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
@@ -166,7 +169,7 @@ object NotificationUtils {
                     description = context.getString(R.string.call)
                     setSound(null, null)
                     enableLights(true)
-                    lightColor = Color.GREEN
+                    lightColor = accentColor
                 })
     }
 
@@ -184,10 +187,14 @@ object NotificationUtils {
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.riot_app_name))
-                .setContentText(context.getString(subTitleResId))
+                .setContentTitle(context.getString(subTitleResId))
+                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
                 .setSmallIcon(R.drawable.logo_transparent)
+                .setProgress(0, 0, true)
+                .setColor(accentColor)
                 .setContentIntent(pi)
 
         // hide the notification from the status bar

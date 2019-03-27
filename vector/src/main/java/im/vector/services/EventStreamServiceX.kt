@@ -19,12 +19,19 @@ package im.vector.services
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import im.vector.BuildConfig
 import im.vector.Matrix
+import im.vector.R
 import im.vector.VectorApp
 import im.vector.notifications.NotifiableEventResolver
+import im.vector.notifications.NotificationUtils
 import im.vector.notifications.OutdatedEventDetector
 import im.vector.push.PushManager
 import im.vector.util.CallsManager
@@ -37,6 +44,7 @@ import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.util.Log
+import java.util.concurrent.TimeUnit
 
 /**
  * A service in charge of controlling whether the event stream is running or not.
@@ -53,7 +61,11 @@ class EventStreamServiceX : VectorService() {
     /**
      * The current state.
      */
-    private var mServiceState = ServiceState.INIT
+    private var serviceState = ServiceState.INIT
+        set(newServiceState) {
+            Log.i(LOG_TAG, "setServiceState from $field to $newServiceState")
+            field = newServiceState
+        }
 
     /**
      * Push manager
@@ -101,7 +113,7 @@ class EventStreamServiceX : VectorService() {
             VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(OutdatedEventDetector(this@EventStreamServiceX))
 
             // do not suspend the application if there is some active calls
-            if (ServiceState.CATCHUP == mServiceState) {
+            if (ServiceState.CATCHUP == serviceState) {
                 val hasActiveCalls = mSession?.mCallsManager?.hasActiveCalls() == true
 
                 // if there are some active calls, the catchup should not be stopped.
@@ -111,7 +123,7 @@ class EventStreamServiceX : VectorService() {
                 if (hasActiveCalls) {
                     Log.i(LOG_TAG, "onLiveEventsChunkProcessed : Catchup again because there are active calls")
                     catchup(false)
-                } else if (ServiceState.CATCHUP == mServiceState) {
+                } else if (ServiceState.CATCHUP == serviceState) {
                     Log.i(LOG_TAG, "onLiveEventsChunkProcessed : no Active call")
                     CallsManager.getSharedInstance().checkDeadCalls()
                     stop()
@@ -119,18 +131,6 @@ class EventStreamServiceX : VectorService() {
             }
         }
     }
-
-    // Current service state
-    private var serviceState: ServiceState
-        get() {
-            Log.i(LOG_TAG, "getServiceState $mServiceState")
-
-            return mServiceState
-        }
-        set(newServiceState) {
-            Log.i(LOG_TAG, "setServiceState from $mServiceState to $newServiceState")
-            mServiceState = newServiceState
-        }
 
     /**
      * Service internal state
@@ -145,6 +145,9 @@ class EventStreamServiceX : VectorService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Cancel any previous worker
+        WorkManager.getInstance().cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
+
         // no intent : restarted by Android
         if (null == intent) {
             // Cannot happen anymore
@@ -163,12 +166,29 @@ class EventStreamServiceX : VectorService() {
 
         val action = intent.action
 
-        Log.i(LOG_TAG, "onStartCommand with action : " + action!!)
+        Log.i(LOG_TAG, "onStartCommand with action : $action (current state $serviceState)")
+
+        // Manage foreground notification
+        when (action) {
+            ACTION_BOOT_COMPLETE,
+            ACTION_APPLICATION_UPGRADE,
+            ACTION_SIMULATED_PUSH_RECEIVED -> {
+                // Display foreground notification
+                Log.i(LOG_TAG, "startForeground")
+                val notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress)
+                startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+            }
+            ACTION_GO_TO_FOREGROUND -> {
+                // Stop foreground notification display
+                Log.i(LOG_TAG, "stopForeground")
+                stopForeground(true)
+            }
+        }
 
         when (action) {
             ACTION_START,
             ACTION_GO_TO_FOREGROUND ->
-                when (mServiceState) {
+                when (serviceState) {
                     EventStreamServiceX.ServiceState.INIT ->
                         start(false)
                     EventStreamServiceX.ServiceState.CATCHUP ->
@@ -182,17 +202,25 @@ class EventStreamServiceX : VectorService() {
             ACTION_GO_TO_BACKGROUND,
             ACTION_LOGOUT ->
                 stop()
-            ACTION_PUSH_RECEIVED ->
-                when (mServiceState) {
-                    EventStreamServiceX.ServiceState.INIT -> start(true)
-                    EventStreamServiceX.ServiceState.CATCHUP -> catchup(true)
-                    EventStreamServiceX.ServiceState.STARTED -> {
+            ACTION_PUSH_RECEIVED,
+            ACTION_SIMULATED_PUSH_RECEIVED ->
+                when (serviceState) {
+                    EventStreamServiceX.ServiceState.INIT ->
+                        start(true)
+                    EventStreamServiceX.ServiceState.CATCHUP ->
+                        catchup(true)
+                    EventStreamServiceX.ServiceState.STARTED ->
                         // Nothing to do
-                    }
+                        Unit
                 }
             ACTION_PUSH_UPDATE -> pushStatusUpdate()
             ACTION_BOOT_COMPLETE -> {
-                // TODO FDroid
+                // No FCM only
+                catchup(true)
+            }
+            ACTION_APPLICATION_UPGRADE -> {
+                // FDroid only
+                catchup(true)
             }
             else -> {
                 // Should not happen
@@ -201,6 +229,30 @@ class EventStreamServiceX : VectorService() {
 
         // We don't want the service to be restarted automatically by the System
         return START_NOT_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Schedule worker?
+        if (shouldISimulatePush()) {
+            val delay = mPushManager?.backgroundSyncDelay ?: let { 60_000 }
+            Log.i(LOG_TAG, "## service is schedule to restart in $delay millis, if network is connected")
+
+            val pushSimulatorRequest = OneTimeWorkRequestBuilder<PushSimulatorWorker>()
+                    .setInitialDelay(delay.toLong(), TimeUnit.MILLISECONDS)
+                    .setConstraints(Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build())
+                    .addTag(PUSH_SIMULATOR_REQUEST_TAG)
+                    .build()
+
+            WorkManager.getInstance().let {
+                // Cancel any previous worker
+                it.cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
+                it.enqueue(pushSimulatorRequest)
+            }
+        }
     }
 
     /**
@@ -233,7 +285,7 @@ class EventStreamServiceX : VectorService() {
         if (store!!.isReady) {
             startEventStream(session, store)
         } else {
-            // wait that the store is ready  before starting the events listener
+            // wait that the store is ready  before starting the events stream
             store.addMXStoreListener(object : MXStoreListener() {
                 override fun onStoreReady(accountId: String) {
                     startEventStream(session, store)
@@ -338,10 +390,48 @@ class EventStreamServiceX : VectorService() {
 
     /**
      * The push status has been updated (i.e disabled or enabled).
+     * TODO Useless now?
      */
     private fun pushStatusUpdate() {
         Log.i(LOG_TAG, "## pushStatusUpdate")
     }
+
+    /* ==========================================================================================
+     * Push simulator
+     * ========================================================================================== */
+
+    /**
+     * @return true if the FCM is disable or not setup, user allowed background sync, user wants notification
+     */
+    private fun shouldISimulatePush(): Boolean {
+        mPushManager?.let { pushManager ->
+            if (pushManager.useFcm()
+                    && !TextUtils.isEmpty(pushManager.currentRegistrationToken)
+                    && pushManager.isServerRegistered) {
+                // FCM is ok
+                Log.i(LOG_TAG, "## shouldISimulatePush: NO: FCM is up")
+                return false
+            }
+
+            if (!pushManager.isBackgroundSyncAllowed) {
+                // Background sync not allowed
+                // TODO Seems not necessary now
+                Log.i(LOG_TAG, "## shouldISimulatePush: NO: background sync not allowed")
+                return false
+            }
+
+            if (!pushManager.areDeviceNotificationsAllowed()) {
+                // User does not want notifications
+                Log.i(LOG_TAG, "## shouldISimulatePush: NO: user does not want notification")
+                return false
+            }
+        }
+
+        // Lets simulate push
+        Log.i(LOG_TAG, "## shouldISimulatePush: YES")
+        return true
+    }
+
 
     //================================================================================
     // Call management
@@ -396,14 +486,18 @@ class EventStreamServiceX : VectorService() {
     companion object {
         private val LOG_TAG = EventStreamServiceX::class.java.simpleName
 
+        private const val PUSH_SIMULATOR_REQUEST_TAG = "PUSH_SIMULATOR_REQUEST_TAG"
+
         private const val ACTION_START = "im.vector.services.EventStreamServiceX.START"
         private const val ACTION_LOGOUT = "im.vector.services.EventStreamServiceX.LOGOUT"
         private const val ACTION_GO_TO_FOREGROUND = "im.vector.services.EventStreamServiceX.GO_TO_FOREGROUND"
         private const val ACTION_GO_TO_BACKGROUND = "im.vector.services.EventStreamServiceX.GO_TO_BACKGROUND"
         private const val ACTION_PUSH_UPDATE = "im.vector.services.EventStreamServiceX.PUSH_UPDATE"
         private const val ACTION_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.PUSH_RECEIVED"
+        private const val ACTION_SIMULATED_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.SIMULATED_PUSH_RECEIVED"
         private const val ACTION_STOP = "im.vector.services.EventStreamServiceX.STOP"
         private const val ACTION_BOOT_COMPLETE = "im.vector.services.EventStreamServiceX.BOOT_COMPLETE"
+        private const val ACTION_APPLICATION_UPGRADE = "im.vector.services.EventStreamServiceX.APPLICATION_UPGRADE"
 
         /* ==========================================================================================
          * Events sent to the service
@@ -433,20 +527,33 @@ class EventStreamServiceX : VectorService() {
             sendAction(context, ACTION_PUSH_RECEIVED)
         }
 
+        fun onSimulatedPushReceived(context: Context) {
+            sendAction(context, ACTION_SIMULATED_PUSH_RECEIVED, true)
+        }
+
         fun onApplicationStopped(context: Context) {
             sendAction(context, ACTION_STOP)
         }
 
         fun onBootComplete(context: Context) {
-            sendAction(context, ACTION_BOOT_COMPLETE)
+            sendAction(context, ACTION_BOOT_COMPLETE, true)
         }
 
-        private fun sendAction(context: Context, action: String) {
+        fun onApplicationUpgrade(context: Context) {
+            sendAction(context, ACTION_APPLICATION_UPGRADE, true)
+        }
+
+        private fun sendAction(context: Context, action: String, foreground: Boolean = false) {
             Log.i(LOG_TAG, "sendAction $action")
 
             val intent = Intent(context, EventStreamServiceX::class.java)
             intent.action = action
-            context.startService(intent)
+
+            if (foreground) {
+                ContextCompat.startForegroundService(context, intent)
+            } else {
+                context.startService(intent)
+            }
         }
     }
 }

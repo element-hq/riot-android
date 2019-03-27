@@ -33,8 +33,8 @@ class NotificationTroubleshootTestManagerFactory {
             if (session != null) {
                 mgr.addTest(TestBingRulesSettings(fragment, session))
             }
-            mgr.addTest(TestNotificationServiceRunning(fragment))
-            mgr.addTest(TestServiceRestart(fragment))
+            // mgr.addTest(TestNotificationServiceRunning(fragment))
+            // mgr.addTest(TestServiceRestart(fragment))
             mgr.addTest(TestAutoStartBoot(fragment))
             mgr.addTest(TestBackgroundRestrictions(fragment))
             mgr.addTest(TestBatteryOptimization(fragment))
