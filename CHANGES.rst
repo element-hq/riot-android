@@ -12,7 +12,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Scalar URL: Use prod urls in Riot mobile apps (#3077)
 
 Bugfix:
  -
