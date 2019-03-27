@@ -247,7 +247,6 @@ public final class PushManager {
                 register(null);
 
                 Log.d(LOG_TAG, "checkRegistrations : reregistered");
-                //CommonActivityUtils.onPushUpdate(mContext);
                 EventStreamServiceX.Companion.onPushUpdate(mContext);
             } else {
                 Log.d(LOG_TAG, "checkRegistrations : onPusherRegistrationFailed");
@@ -731,7 +730,6 @@ public final class PushManager {
                 // remove them
                 unregister(null);
             } else {
-                // CommonActivityUtils.onPushUpdate(mContext);
                 EventStreamServiceX.Companion.onPushUpdate(mContext);
             }
 
@@ -824,7 +822,6 @@ public final class PushManager {
             if (useFcm() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions()) {
                 register(null);
             } else {
-                //CommonActivityUtils.onPushUpdate(mContext);
                 EventStreamServiceX.Companion.onPushUpdate(mContext);
             }
 
@@ -1133,7 +1130,6 @@ public final class PushManager {
 
         if (!useFcm()) {
             // when FCM is disabled, enable / disable the "Listen for events" notifications
-            //CommonActivityUtils.onPushUpdate(mContext);
             EventStreamServiceX.Companion.onPushUpdate(mContext);
         }
     }
@@ -1184,7 +1180,6 @@ public final class PushManager {
                 .apply();
 
         // when FCM is disabled, enable / disable the "Listen for events" notifications
-        //CommonActivityUtils.onPushUpdate(mContext);
         EventStreamServiceX.Companion.onPushUpdate(mContext);
     }
 
