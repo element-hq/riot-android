@@ -30,6 +30,7 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Key Backup</string>
     <string name="title_activity_keys_backup_restore">Use Key Backup</string>
+    <string name="title_activity_verify_device">Verify device</string>
 
     <!-- Signing out screen -->
 
@@ -1399,5 +1400,20 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
+
+
+    <string name="sas_verify_title">Verify by comparing a short text string.</string>
+    <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
+    <string name="sas_verify_start_button_title">Begin Verifying</string>
+    <string name="sas_incoming_request_title">Incoming Verification Request</string>
+    <string name="sas_incoming_request_description">Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages."</string>
+    <string name="sas_incoming_request_description_2">Verifying this user will mark their device has trusted, and also mark your device as trusted to them."</string>
+
+
+    <string name="sas_emoji_description">Verify this user by confirming the following emoji appear on their screen"</string>
+
+    <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
+    <string name="sas_view_request_action">View request</string>
+    <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
 
 </resources>

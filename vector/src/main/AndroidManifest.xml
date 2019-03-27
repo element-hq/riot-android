@@ -421,6 +421,11 @@
             android:label="@string/encryption_message_recovery" />
         <activity android:name=".activity.DebugMenuActivity" />
 
+        <activity
+            android:name=".activity.ShortCodeDeviceVerificationActivity"
+            android:label="@string/title_activity_verify_device"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <!-- FileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"

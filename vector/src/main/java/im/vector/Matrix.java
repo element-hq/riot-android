@@ -740,11 +740,12 @@ public class Matrix {
                             KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
                         }
                     });
-
+                    IncomingVerificationRequestHandler.INSTANCE.initialize(session.getCrypto().getShortCodeVerificationManager());
                     registerKeyBackupStateListener(session);
                 }
             }
         });
+
 
 
         return session;
