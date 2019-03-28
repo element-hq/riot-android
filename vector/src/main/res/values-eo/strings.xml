@@ -91,4 +91,6 @@
     <string name="no_users_placeholder">Neniu uzantoj</string>
 
     <string name="rooms">Babilejoj</string>
-</resources>
+<string name="room_jump_to_first_unread">Salti al unua nelegita mesaĝo.</string>
+
+    </resources>
