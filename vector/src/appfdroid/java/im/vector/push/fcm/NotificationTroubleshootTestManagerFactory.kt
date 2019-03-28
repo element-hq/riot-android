@@ -37,7 +37,7 @@ class NotificationTroubleshootTestManagerFactory {
             // mgr.addTest(TestServiceRestart(fragment))
             mgr.addTest(TestAutoStartBoot(fragment))
             mgr.addTest(TestBackgroundRestrictions(fragment))
-            mgr.addTest(TestBatteryOptimization(fragment))
+            // mgr.addTest(TestBatteryOptimization(fragment))
             return mgr
         }
     }

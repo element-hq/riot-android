@@ -699,6 +699,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 return;
             }
 
+            /*
             if (pushManager.isBackgroundSyncAllowed() && !PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
                 PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
@@ -721,6 +722,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                             .show();
                 }
             }
+            */
         }
     }
 

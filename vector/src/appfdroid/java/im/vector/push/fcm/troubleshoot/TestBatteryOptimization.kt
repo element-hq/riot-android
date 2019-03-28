@@ -22,6 +22,7 @@ import im.vector.fragments.troubleshoot.TroubleshootTest
 import im.vector.util.isIgnoringBatteryOptimizations
 import im.vector.util.requestDisablingBatteryOptimization
 
+// Not used anymore
 class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform() {
