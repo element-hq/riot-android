@@ -29,6 +29,7 @@ import kotlin.concurrent.timerTask
 /**
  * Stop the event stream service and check that it is restarted
  */
+// Not used anymore
 class TestServiceRestart(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_service_restart_title) {
 
     var timer: Timer? = null

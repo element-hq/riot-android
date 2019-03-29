@@ -131,6 +131,8 @@ class NotificationDrawerManager(val context: Context) {
 
     /** Clear all known message events for this room and refresh the notification drawer */
     fun clearMessageEventOfRoom(roomId: String?) {
+        Log.d(LOG_TAG, "clearMessageEventOfRoom $roomId")
+
         if (roomId != null) {
             eventList.removeAll { e ->
                 if (e is NotifiableMessageEvent) {

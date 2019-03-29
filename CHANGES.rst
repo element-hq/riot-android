@@ -9,7 +9,7 @@ Features:
  -
 
 Improvements:
- -
+ - Deprecate EventStreamService, replaced by EventStreamServiceX and CallService (#2782, #3065)
 
 Other changes:
  - Scalar URL: Use prod urls in Riot mobile apps (#3077)

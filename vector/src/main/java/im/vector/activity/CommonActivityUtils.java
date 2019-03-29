@@ -83,8 +83,7 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.YesNoListener;
-import im.vector.push.PushManager;
-import im.vector.services.EventStreamService;
+import im.vector.services.EventStreamServiceX;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PreferencesManager;
 
@@ -146,6 +145,8 @@ public class CommonActivityUtils {
 
         if (session.isAlive()) {
             // stop the service
+            EventStreamServiceX.Companion.onLogout(context);
+            /*
             EventStreamService eventStreamService = EventStreamService.getInstance();
 
             // reported by a rageshake
@@ -154,13 +155,14 @@ public class CommonActivityUtils {
                 matrixIds.add(session.getMyUserId());
                 eventStreamService.stopAccounts(matrixIds);
             }
+            */
 
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(context, session).advertiseOffline();
             MyPresenceManager.remove(session);
 
             // clear notification
-            EventStreamService.removeNotification();
+            VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
 
             // unregister from the push server.
             Matrix.getInstance(context).getPushManager().unregister(session, null);
@@ -176,16 +178,18 @@ public class CommonActivityUtils {
     }
 
     public static boolean shouldRestartApp(Context context) {
-        EventStreamService eventStreamService = EventStreamService.getInstance();
+        // EventStreamService eventStreamService = EventStreamService.getInstance();
 
         if (!Matrix.hasValidSessions()) {
             Log.e(LOG_TAG, "shouldRestartApp : the client has no valid session");
         }
 
+        /*
         if (null == eventStreamService) {
             Log.e(LOG_TAG, "eventStreamService is null : restart the event stream");
             CommonActivityUtils.startEventStreamService(context);
         }
+        */
 
         return !Matrix.hasValidSessions();
     }
@@ -308,8 +312,9 @@ public class CommonActivityUtils {
         // if no activity is provided, use the application context instead.
         final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
-        EventStreamService.removeNotification();
-        stopEventStream(context);
+        VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+        EventStreamServiceX.Companion.onLogout(activity);
+        // stopEventStream(context);
 
         BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
 
@@ -392,8 +397,9 @@ public class CommonActivityUtils {
 
             @Override
             public void onSuccess(Void info) {
-                EventStreamService.removeNotification();
-                stopEventStream(context);
+                VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+                EventStreamServiceX.Companion.onLogout(context);
+                // stopEventStream(context);
 
                 BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
 
@@ -437,164 +443,6 @@ public class CommonActivityUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
-
-    //==============================================================================================================
-    // Events stream service
-    //==============================================================================================================
-
-    /**
-     * Indicate if a user is logged out or not. If no default session is enabled,
-     * no user is logged.
-     *
-     * @param aContext App context
-     * @return true if no user is logged in, false otherwise
-     */
-    private static boolean isUserLogout(Context aContext) {
-        boolean retCode = false;
-
-        if (null == aContext) {
-            retCode = true;
-        } else {
-            if (null == Matrix.getInstance(aContext.getApplicationContext()).getDefaultSession()) {
-                retCode = true;
-            }
-        }
-
-        return retCode;
-    }
-
-    /**
-     * Send an action to the events service.
-     *
-     * @param context the context.
-     * @param action  the action to send.
-     */
-    private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
-        Context appContext = context.getApplicationContext();
-
-        if (!isUserLogout(appContext)) {
-            Intent eventStreamService = new Intent(appContext, EventStreamService.class);
-
-            if ((action == EventStreamService.StreamAction.CATCHUP) && (EventStreamService.isStopped())) {
-                Log.d(LOG_TAG, "sendEventStreamAction : auto restart");
-                eventStreamService.putExtra(EventStreamService.EXTRA_AUTO_RESTART_ACTION, EventStreamService.EXTRA_AUTO_RESTART_ACTION);
-            } else {
-                Log.d(LOG_TAG, "sendEventStreamAction " + action);
-                eventStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
-            }
-
-            appContext.startService(eventStreamService);
-        } else {
-            Log.d(LOG_TAG, "## sendEventStreamAction(): \"" + action + "\" action not sent - user logged out");
-        }
-    }
-
-    /**
-     * Stop the event stream.
-     *
-     * @param context the context.
-     */
-    private static void stopEventStream(Context context) {
-        Log.d(LOG_TAG, "stopEventStream");
-        sendEventStreamAction(context, EventStreamService.StreamAction.STOP);
-    }
-
-    /**
-     * Pause the event stream.
-     *
-     * @param context the context.
-     */
-    public static void pauseEventStream(Context context) {
-        Log.d(LOG_TAG, "pauseEventStream");
-        sendEventStreamAction(context, EventStreamService.StreamAction.PAUSE);
-    }
-
-    /**
-     * Resume the events stream
-     *
-     * @param context the context.
-     */
-    public static void resumeEventStream(Context context) {
-        Log.d(LOG_TAG, "resumeEventStream");
-        sendEventStreamAction(context, EventStreamService.StreamAction.RESUME);
-    }
-
-    /**
-     * Trigger a event stream catchup i.e. there is only sync/ call.
-     *
-     * @param context the context.
-     */
-    public static void catchupEventStream(Context context) {
-        if (VectorApp.isAppInBackground()) {
-            Log.d(LOG_TAG, "catchupEventStream");
-            sendEventStreamAction(context, EventStreamService.StreamAction.CATCHUP);
-        }
-    }
-
-    /**
-     * Warn the events stream that there was a push status update.
-     *
-     * @param context the context.
-     */
-    public static void onPushUpdate(Context context) {
-        Log.d(LOG_TAG, "onPushUpdate");
-        sendEventStreamAction(context, EventStreamService.StreamAction.PUSH_STATUS_UPDATE);
-    }
-
-    /**
-     * Start the events stream service.
-     *
-     * @param context the context.
-     */
-    public static void startEventStreamService(Context context) {
-        // the events stream service is launched
-        // either the application has never be launched
-        // or the service has been killed on low memory
-        if (EventStreamService.isStopped()) {
-            List<String> matrixIds = new ArrayList<>();
-            Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
-
-            if ((null != sessions) && (sessions.size() > 0)) {
-                PushManager pushManager = Matrix.getInstance(context).getPushManager();
-                Log.e(LOG_TAG, "## startEventStreamService() : restart EventStreamService");
-
-                for (MXSession session : sessions) {
-                    // reported by GA
-                    if ((null != session.getDataHandler()) && (null != session.getDataHandler().getStore())) {
-                        boolean isSessionReady = session.getDataHandler().getStore().isReady();
-
-                        if (!isSessionReady) {
-                            Log.e(LOG_TAG, "## startEventStreamService() : the session " + session.getMyUserId() + " is not opened");
-                            session.getDataHandler().getStore().open();
-                        } else {
-                            // it seems that the crypto is not always restarted properly after a crash
-                            Log.e(LOG_TAG, "## startEventStreamService() : check if the crypto of the session " + session.getMyUserId());
-                            session.checkCrypto();
-                        }
-
-                        session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
-                        session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
-
-                        // session to activate
-                        matrixIds.add(session.getCredentials().userId);
-                    }
-                }
-
-                // check size
-                if (matrixIds.size() > 0) {
-                    Intent intent = new Intent(context, EventStreamService.class);
-                    intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-                    intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                    ContextCompat.startForegroundService(context, intent);
-                }
-            }
-
-            if (EventStreamService.getInstance() != null) {
-                EventStreamService.getInstance().refreshForegroundNotification();
-            }
-        }
-    }
-
 
     //==============================================================================================================
     // Room preview methods.

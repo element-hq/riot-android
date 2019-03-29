@@ -58,11 +58,11 @@ import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.services.EventStreamService;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.RoomUtils;
 import im.vector.view.RecentsExpandableListView;
@@ -626,7 +626,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
             @Override
             public void onLeaveRoom(final String roomId) {
                 // clear any pending notification for this room
-                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                VectorApp.getInstance().getNotificationDrawerManager().clearMessageEventOfRoom(roomId);
                 onForceRefresh();
             }
 
@@ -715,7 +715,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
                             @Override
                             public void run() {
                                 // clear any pending notification for this room
-                                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                                VectorApp.getInstance().getNotificationDrawerManager().clearMessageEventOfRoom(roomId);
                                 hideWaitingView();
                             }
                         });
@@ -777,7 +777,7 @@ public class VectorRecentsListFragment extends VectorBaseFragment implements
                             @Override
                             public void run() {
                                 // clear any pending notification for this room
-                                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                                VectorApp.getInstance().getNotificationDrawerManager().clearMessageEventOfRoom(roomId);
                                 hideWaitingView();
                             }
                         });

@@ -66,7 +66,7 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.notifications.NotificationDrawerManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
-import im.vector.services.EventStreamService;
+import im.vector.services.EventStreamServiceX;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
 import im.vector.tools.VectorUncaughtExceptionHandler;
@@ -135,6 +135,7 @@ public class VectorApp extends MultiDexApplication {
     private VectorMarkdownParser mMarkdownParser;
 
     private NotificationDrawerManager mNotificationDrawerManager;
+
     public NotificationDrawerManager getNotificationDrawerManager() {
         return mNotificationDrawerManager;
     }
@@ -383,7 +384,7 @@ public class VectorApp extends MultiDexApplication {
         // suspend the events thread if the client uses FCM
         if (!pushManager.isBackgroundSyncAllowed() || (pushManager.useFcm() && pushManager.hasRegistrationToken())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
-            CommonActivityUtils.pauseEventStream(this);
+            //CommonActivityUtils.pauseEventStream(this);
         } else {
             Log.d(LOG_TAG, "suspendApp ; the event stream is not paused because FCM is disabled.");
         }
@@ -453,6 +454,8 @@ public class VectorApp extends MultiDexApplication {
                         mIsInBackground = true;
                         mIsCallingInBackground = (null != mCallsManager.getActiveCall());
 
+                        EventStreamServiceX.Companion.onAppGoingToBackground(VectorApp.this);
+
                         // if there is a pending call
                         // the application is not suspended
                         if (!mIsCallingInBackground) {
@@ -496,18 +499,14 @@ public class VectorApp extends MultiDexApplication {
 
         if (isAppInBackground() && !mIsCallingInBackground) {
             // the event stream service has been killed
-            if (EventStreamService.isStopped()) {
-                CommonActivityUtils.startEventStreamService(VectorApp.this);
-            } else {
-                CommonActivityUtils.resumeEventStream(VectorApp.this);
+            EventStreamServiceX.Companion.onAppGoingToForeground(VectorApp.this);
 
-                // try to perform a FCM registration if it failed
-                // or if the FCM server generated a new push key
-                PushManager pushManager = Matrix.getInstance(this).getPushManager();
+            // try to perform a FCM registration if it failed
+            // or if the FCM server generated a new push key
+            PushManager pushManager = Matrix.getInstance(this).getPushManager();
 
-                if (null != pushManager) {
-                    pushManager.checkRegistrations();
-                }
+            if (null != pushManager) {
+                pushManager.checkRegistrations();
             }
 
             // get the contact update at application launch

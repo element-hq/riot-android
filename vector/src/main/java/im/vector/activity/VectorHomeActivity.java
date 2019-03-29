@@ -127,7 +127,7 @@ import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.services.EventStreamService;
+import im.vector.services.EventStreamServiceX;
 import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
@@ -699,6 +699,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 return;
             }
 
+            /*
             if (pushManager.isBackgroundSyncAllowed() && !PreferencesManager.didAskUserToIgnoreBatteryOptimizations(this)) {
                 PreferencesManager.setDidAskUserToIgnoreBatteryOptimizations(this);
 
@@ -714,12 +715,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                                     // Request the battery optimization cancellation to the user
                                     SystemUtilsKt.requestDisablingBatteryOptimization(VectorHomeActivity.this,
+                                            null,
                                             RequestCodesKt.BATTERY_OPTIMIZATION_FDROID_REQUEST_CODE);
                                 }
                             })
                             .show();
                 }
             }
+            */
         }
     }
 
@@ -1669,7 +1672,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             @Override
             public void onSuccess(Void info) {
                 // clear any pending notification for this room
-                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                VectorApp.getInstance().getNotificationDrawerManager().clearMessageEventOfRoom(roomId);
                 hideWaitingView();
 
                 if (null != onSuccessCallback) {
@@ -1772,9 +1775,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_exit: {
-                        if (EventStreamService.getInstance() != null) {
-                            EventStreamService.getInstance().stopNow();
-                        }
+                        EventStreamServiceX.Companion.onApplicationStopped(VectorHomeActivity.this);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2380,7 +2381,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             @Override
             public void onLeaveRoom(final String roomId) {
                 // clear any pending notification for this room
-                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
+                VectorApp.getInstance().getNotificationDrawerManager().clearMessageEventOfRoom(roomId);
                 onForceRefresh();
             }
 
