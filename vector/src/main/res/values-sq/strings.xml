@@ -968,7 +968,7 @@
     <string name="settings_app_info_link_summary">Shfaq te rregullimet e sistemit të dhëna të aplikacionit.</string>
 
     <string name="settings_notification_privacy_need_permission">Aplikacioni lyp leje për xhirim në prapaskenë</string>
-    <string name="settings_notification_privacy_fcm">• Njoftimet dërgohen përmes Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Njoftimet dërgohen përmes Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Njoftimet përmbajnë vetëm tejtëdhëna</string>
     <string name="settings_notification_privacy_secure_message_content">• Lënda e mesazhit të njoftimit <b>gjendet e siguruar drejt e nga shërbyesi home Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Njoftimet përmbajnën <b>tejtëdhëna dhe të dhëna mesazhi</b></string>
@@ -1343,4 +1343,22 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="media_source_choose">Zgjidhni</string>
     <string name="settings_play_shutter_sound">Luaj tingull shkrepjeje</string>
 
-</resources>
+<string name="action_mark_room_read">Vëri shenjë si të lexuar</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikacioni <b>nuk</b> ka nevojë të lidhet në prapaskenë me shërbyesin Home, kjo do të ulte harxhimin e baterisë</string>
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 mesazh</item>
+	<item quantity="other">%1$s: %2$d mesazhe</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d njoftim</item>
+	<item quantity="other">%d njoftime</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">Veprimtari e Re</string>
+    <string name="notification_unknown_room_name">Dhomë</string>
+    <string name="notification_new_messages">Mesazhe të Rinj</string>
+    <string name="notification_new_invitation">Ftesë e Re</string>
+    <string name="notification_sender_me">Unë</string>
+    <string name="notification_inline_reply_failed">** S’u arrit të dërgohej - ju lutemi, hapni dhomë</string>
+
+    </resources>
