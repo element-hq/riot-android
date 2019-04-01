@@ -18,6 +18,7 @@
 
 package im.vector.services;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -70,7 +71,10 @@ import im.vector.util.SystemUtilsKt;
  * <p>
  * It manages messages notifications displayed to the end user. It can also display foreground
  * notifications in some situations to let the app run in background.
+ *
+ * @Deprecated Use {@link EventStreamServiceX}
  */
+@SuppressLint("Registered")
 public class EventStreamService extends Service {
     private static final String LOG_TAG = EventStreamService.class.getSimpleName();
 

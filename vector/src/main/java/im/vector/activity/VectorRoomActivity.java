@@ -114,7 +114,6 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
@@ -785,8 +784,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         mMyUserId = mSession.getCredentials().userId;
 
-        CommonActivityUtils.resumeEventStream(this);
-
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
         if (mVectorMessageListFragment == null) {
@@ -1159,10 +1156,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mSession.getDataHandler().addListener(mResourceLimitEventListener);
 
         Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
-
-        if (null != mRoom) {
-            EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
-        }
 
         // sanity checks
         if ((null != mRoom) && (null != Matrix.getInstance(this).getDefaultLatestChatMessageCache())) {

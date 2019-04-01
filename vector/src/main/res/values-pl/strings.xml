@@ -757,7 +757,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
@@ -1133,7 +1133,7 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
 Spróbuj uruchomić ponownie aplikację.</string>
     <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
 
-    <string name="title_activity_keys_backup_setup">Przywracanie wiadomości</string>
+    <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
     <string name="skip">Pomiń</string>
     <string name="settings_notification_advanced">Zaawansowane ustawienia powiadomień</string>
@@ -1153,4 +1153,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="ignore">Ignoruj</string>
 
     <string name="settings_default_compression">Domyślna kompresja</string>
+    <string name="settings_noisy_notifications_preferences">Konfiguruj głośne powiadomienia</string>
+    <string name="settings_silent_notifications_preferences">Konfiguruj ciche powiadomienia</string>
+    <string name="notification_silent">Ciche</string>
+    <string name="keys_backup_settings_restore_backup_button">Przywróć z kopii zapasowej</string>
+    <string name="keys_backup_settings_delete_backup_button">Usuń kopię zapasową</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Usuń kopię zapasową</string>
+    <string name="keys_backup_info_title_version">Wersja</string>
 </resources>

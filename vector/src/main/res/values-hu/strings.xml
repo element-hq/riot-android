@@ -849,7 +849,7 @@ Ismeretlen eszközök:</string>
     <string name="receipt_avatar">Címzett profilképe</string>
     <string name="notice_avatar">Észlelési profilkép</string>
     <string name="settings_notification_privacy_normal">Normál</string>
-    <string name="settings_notification_privacy_fcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
+    <string name="settings_notification_privacy_fcm">• Az értesítések a Firebase Cloud Messaging rendszeren keresztül lesznek elküldve</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
@@ -1383,5 +1383,23 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_default_media_source">Alapértelmezett média forrása</string>
     <string name="media_source_choose">Válassz</string>
     <string name="settings_play_shutter_sound">Exponálás hang lejátszása</string>
+
+    <string name="action_mark_room_read">Olvasottnak jelöl</string>
+    <string name="settings_notification_privacy_no_background_sync">Az alkalmazásnak <b>nem</b> kell a háttérben folyamatosan a Matrix szerverrel tartani a kapcsolatot, ez csökkentheti az akkumulátor használatot</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 üzenet</item>
+        <item quantity="other">%1$s: %2$d üzenet</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d értesítés</item>
+        <item quantity="other">%d értesítés</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Új esemény</string>
+    <string name="notification_unknown_room_name">Szoba</string>
+    <string name="notification_new_messages">Új üzenetek</string>
+    <string name="notification_new_invitation">Új meghívók</string>
+    <string name="notification_sender_me">Én</string>
+    <string name="notification_inline_reply_failed">** A küldés nem sikerült - kérlek nyisd meg a szobát</string>
 
 </resources>

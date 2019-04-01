@@ -665,4 +665,5 @@
 
     <string name="settings_troubleshoot_test_account_settings_title">গণনা নির্ধারণ।</string>
     <string name="settings_troubleshoot_test_account_settings_success">বিজ্ঞাপ্তি আপনার একাউন্টএর জন্য সক্রিয় করা হোক.</string>
+    <string name="action_mark_room_read">পঠিত হিসেবে চিহ্নিত</string>
 </resources>

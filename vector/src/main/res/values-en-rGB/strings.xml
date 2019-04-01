@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">en</string>
+    <string name="resources_country_code">GB</string>
+
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="black_them">Black Theme</string>
+    <string name="status_theme">Status.im Theme</string>
+
+    <string name="notification_sync_init">Initializing service</string>
+    <string name="notification_sync_in_progress">Synchronising</string>
+    <string name="notification_listening_for_events">Listening for events</string>
+    <string name="notification_noisy_notifications">Noisy notifications</string>
+    <string name="notification_silent_notifications">Silent notifications</string>
+
+    <string name="title_activity_home">Messages</string>
+    <string name="title_activity_room">Room</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_member_details">Member Details</string>
+    <string name="title_activity_historical">Historical</string>
+    <string name="title_activity_bug_report">Bug report</string>
+    <string name="title_activity_group_details">Community details</string>
+    <string name="title_activity_choose_sticker">Send a sticker</string>
+    <string name="title_activity_keys_backup_setup">Key Backup</string>
+    <string name="title_activity_keys_backup_restore">Use Key Backup</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now, you’ll lose access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your devices to avoid losing access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
+    <string name="keys_backup_activate">Use Key Backup</string>
+    <string name="are_you_sure">Are you sure\?</string>
+    <string name="backup">Back up</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages, unless you back up your keys before signing out.</string>
+
+    <string name="dialog_title_third_party_licences">Third party licences</string>
+
+    <string name="loading">Loading…</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
+    <string name="send">Send</string>
+    <string name="copy">Copy</string>
+    <string name="resend">Resend</string>
+    <string name="redact">Remove</string>
+    <string name="quote">Quote</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="speak">Speak</string>
+    <string name="clear">Clear</string>
+    <string name="later">Later</string>
+    <string name="forward">Forward</string>
+    <string name="permalink">Permalink</string>
+    <string name="view_source">View Source</string>
+    <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="report_content">Report content</string>
+    <string name="active_call">Active call</string>
+    <string name="ongoing_conference_call">Ongoing conference call.
+\nJoin as %1$s or %2$s</string>
+    <string name="ongoing_conference_call_voice">Voice</string>
+    <string name="ongoing_conference_call_video">Video</string>
+    <string name="cannot_start_call">Cannot start the call, please try later</string>
+    <string name="missing_permissions_warning">Due to missing permissions, some features may be missing…</string>
+    <string name="missing_permissions_error">Due to missing permissions, this action is not possible.</string>
+</resources>

@@ -34,7 +34,7 @@ import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.SimpleNotifiableEvent
 import im.vector.push.PushManager
-import im.vector.services.EventStreamService
+import im.vector.services.EventStreamServiceX
 import im.vector.ui.badge.BadgeProxy
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.rest.model.Event
@@ -45,9 +45,6 @@ import org.matrix.androidsdk.util.Log
  * Class extending FirebaseMessagingService.
  */
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
-
-    // Tells if the events service running state has been tested
-    private var mCheckLaunched = false
 
     private val notifiableEventResolver by lazy {
         NotifiableEventResolver(this)
@@ -121,33 +118,15 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 //Notification contains metadata and maybe data information
                 handleNotificationWithoutSyncingMode(data, session)
             } else {
-                ensureEventStreamServiceStarted(session)
                 // Safe guard... (race?)
                 if (isEventAlreadyKnown(data["event_id"], data["room_id"])) return
                 //Catch up!!
-                CommonActivityUtils.catchupEventStream(this)
+                EventStreamServiceX.onPushReceived(this)
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## onMessageReceivedInternal() failed : " + e.message, e)
         }
     }
-
-    //legacy code
-    private fun ensureEventStreamServiceStarted(session: MXSession?) {
-        // Ensure event stream service is started
-        if (EventStreamService.getInstance() == null) {
-            CommonActivityUtils.startEventStreamService(this)
-        }
-
-        // check if the application has been launched once
-        // the first FCM event could have been triggered whereas the application is not yet launched.
-        // so it is required to create the sessions and to start/resume event stream
-        if (!mCheckLaunched && null != session) {
-            CommonActivityUtils.startEventStreamService(this)
-            mCheckLaunched = true
-        }
-    }
-
 
     // check if the event was not yet received
     // a previous catchup might have already retrieved the notified event

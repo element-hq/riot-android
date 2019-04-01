@@ -96,6 +96,6 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
     }
 
     companion object {
-        val REQ_CODE_FIX = 9099
+        const val REQ_CODE_FIX = 9099
     }
 }

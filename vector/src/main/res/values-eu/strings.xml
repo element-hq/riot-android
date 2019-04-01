@@ -849,7 +849,7 @@ Gailu ezezagunak:</string>
     <string name="settings_notification_privacy_normal">Arrunta</string>
     <string name="settings_notification_privacy_reduced">Pribatutasun murriztua</string>
     <string name="settings_notification_privacy_need_permission">Aplikazioak bigarren planoan aritzeko baimenak behar ditu</string>
-    <string name="settings_notification_privacy_fcm">• Jakinarazpenak Google Cloud Messaging bidez bidaltzen dira</string>
+    <string name="settings_notification_privacy_fcm">• Jakinarazpenak Firebase Cloud Messaging bidez bidaltzen dira</string>
     <string name="settings_notification_privacy_metadata">• Jakinarazpenek meta-datuak besterik ez dituzte</string>
     <string name="settings_notification_privacy_secure_message_content">• Jakinarazpen mezuaren edukia <b>Matrix hasiera-zerbitzarian gorde da seguru</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Jakinarazpenek <b>mezuen datuak eta metadatuak dituzte</b></string>
@@ -1379,5 +1379,23 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="autodiscover_well_known_autofill_dialog_message">"Riot-ek pertsonalizatutako zerbitzari konfigurazio bat antzeman du zure erabiltzaile id-arentzat  \"%s\" domeinuan:
 \n%s"</string>
     <string name="autodiscover_well_known_autofill_confirm">Erabili konfigurazioa</string>
+
+    <string name="action_mark_room_read">Markatu irakurritako gisa</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikazioak <b>ez</b> du hasiera-zerbitzarira bigarren planoan konektatzeko beharrik, bateria aurreztu beharko litzateke</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: mezu 1</item>
+        <item quantity="other">%1$s: %2$d mezu</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">jakinarazpen %d</item>
+        <item quantity="other">%d jakinarazpen</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Gertaera berria</string>
+    <string name="notification_unknown_room_name">Gela</string>
+    <string name="notification_new_messages">Mezu berriak</string>
+    <string name="notification_new_invitation">Gonbidapen berria</string>
+    <string name="notification_sender_me">Ni</string>
+    <string name="notification_inline_reply_failed">** Bidalketak huts egin du, ireki gela</string>
 
 </resources>

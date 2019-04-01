@@ -12,7 +12,6 @@
             android:title="@string/settings_profile_picture" />
 
         <im.vector.preference.VectorEditTextPreference
-            android:focusable="true"
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
             android:summary="@string/settings_display_name"
             android:title="@string/settings_display_name" />
@@ -229,13 +228,13 @@
             android:title="@string/settings_enable_background_sync" />
 
         <im.vector.preference.VectorEditTextPreference
-            android:focusable="true"
+            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
             android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
             android:numeric="integer"
             android:title="@string/settings_set_sync_timeout" />
 
         <im.vector.preference.VectorEditTextPreference
-            android:focusable="true"
+            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
             android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
             android:numeric="integer"
             android:title="@string/settings_set_sync_delay" />

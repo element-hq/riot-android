@@ -20,6 +20,7 @@ import im.vector.R
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import im.vector.services.EventStreamService
 
+// Not used anymore
 class TestNotificationServiceRunning(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_foreground_service_started_title) {
 
     override fun perform() {
