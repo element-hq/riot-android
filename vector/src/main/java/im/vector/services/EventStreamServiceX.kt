@@ -59,6 +59,11 @@ class EventStreamServiceX : VectorService() {
     private var mSession: MXSession? = null
 
     /**
+     * Set to true to simulate a push immediately when service is destroyed
+     */
+    private var mSimulatePushImmediate = false
+
+    /**
      * The current state.
      */
     private var serviceState = ServiceState.INIT
@@ -146,7 +151,7 @@ class EventStreamServiceX : VectorService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Cancel any previous worker
-        WorkManager.getInstance().cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
+        cancelAnySimulatedPushSchedule()
 
         // no intent : restarted by Android
         if (null == intent) {
@@ -216,7 +221,8 @@ class EventStreamServiceX : VectorService() {
             ACTION_PUSH_UPDATE -> pushStatusUpdate()
             ACTION_BOOT_COMPLETE -> {
                 // No FCM only
-                catchup(true)
+                mSimulatePushImmediate = true
+                stop()
             }
             ACTION_APPLICATION_UPGRADE -> {
                 // FDroid only
@@ -235,8 +241,22 @@ class EventStreamServiceX : VectorService() {
         super.onDestroy()
 
         // Schedule worker?
+        scheduleSimulatedPushIfNeeded()
+    }
+
+    /**
+     * Tell the WorkManager to cancel any schedule of push simulation
+     */
+    private fun cancelAnySimulatedPushSchedule() {
+        WorkManager.getInstance().cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
+    }
+
+    /**
+     * Configure the WorkManager to schedule a simulated push, if necessary
+     */
+    private fun scheduleSimulatedPushIfNeeded() {
         if (shouldISimulatePush()) {
-            val delay = mPushManager?.backgroundSyncDelay ?: let { 60_000 }
+            val delay = if (mSimulatePushImmediate) 0 else mPushManager?.backgroundSyncDelay ?: let { 60_000 }
             Log.i(LOG_TAG, "## service is schedule to restart in $delay millis, if network is connected")
 
             val pushSimulatorRequest = OneTimeWorkRequestBuilder<PushSimulatorWorker>()
@@ -414,8 +434,7 @@ class EventStreamServiceX : VectorService() {
             }
 
             if (!pushManager.isBackgroundSyncAllowed) {
-                // Background sync not allowed
-                // TODO Seems not necessary now
+                // User has disabled background sync
                 Log.i(LOG_TAG, "## shouldISimulatePush: NO: background sync not allowed")
                 return false
             }
