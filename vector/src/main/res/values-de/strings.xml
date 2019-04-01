@@ -901,7 +901,7 @@ Unbekannte Geräte:</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Verringerter Datenschutz</string>
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
-    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Google Cloud Messaging versendet</string>
+    <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Firebase Cloud Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
     <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Heimserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
@@ -1341,7 +1341,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_get_trust_error">Konnte Vertrauensinformationen für die Sicherung nicht abrufen (%s).</string>
 
     <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
-    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen um deinen verschlüsselten Chatverlauf zu lesen.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn sie sich jetzt ausloggen, dann gehen ihre verschlüsselten Nachrichten verloren.</string>
@@ -1421,10 +1421,9 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
 
-    <string name="autodiscover_invalid_response">Ungültige Rückmeldung bei Heimserver-Entdeckung</string>
+    <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden
-\n\"%s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%s\": 
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
@@ -1436,4 +1435,22 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
 
-</resources>
+<string name="action_mark_room_read">Als gelesen markieren</string>
+    <string name="settings_notification_privacy_no_background_sync">Die App muss <b>nicht</b> im Hintergrund zum Heimserver verbinden, dies sollte die Akkunutzung reduzieren</string>
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 Nachricht</item>
+	<item quantity="other">%1$s: %2$d Nachrichten</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d Nachricht</item>
+	<item quantity="other">%d Nachrichten</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">Neues Ereignis</string>
+    <string name="notification_unknown_room_name">Raum</string>
+    <string name="notification_new_messages">Neue Nachrichten</string>
+    <string name="notification_new_invitation">Neue Einladung</string>
+    <string name="notification_sender_me">Ich</string>
+    <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
+
+    </resources>

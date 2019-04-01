@@ -499,7 +499,7 @@
     <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_reduced">低隱私模式</string>
     <string name="settings_notification_privacy_need_permission">應用程式需要權限以在後臺運行</string>
-    <string name="settings_notification_privacy_fcm">•通知將通過 GCM(Google Cloud Messaging) 發送</string>
+    <string name="settings_notification_privacy_fcm">•通知將通過 Firebase Cloud Messaging 發送</string>
     <string name="settings_notification_privacy_metadata">·通知僅包含中繼資料</string>
     <string name="settings_notification_privacy_secure_message_content">• 通知的消息內容<b>將從 Matrix 主服務器安全獲取</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• 通知含有<b>訊息與中繼資料</b></string>
@@ -1339,4 +1339,20 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="media_source_choose">選擇</string>
     <string name="settings_play_shutter_sound">播放快門聲</string>
 
-</resources>
+<string name="action_mark_room_read">標示為已讀</string>
+    <string name="settings_notification_privacy_no_background_sync">應用程式<b>不</b>需要在背景連線到家伺服器，它應該可以降低耗電量</string>
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="other">%1$s：%2$d 則訊息</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="other">%d 個通知</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">新活動</string>
+    <string name="notification_unknown_room_name">聊天室</string>
+    <string name="notification_new_messages">新訊息</string>
+    <string name="notification_new_invitation">新邀請</string>
+    <string name="notification_sender_me">我</string>
+    <string name="notification_inline_reply_failed">** 傳送失敗 - 請開啟聊天室</string>
+
+    </resources>
