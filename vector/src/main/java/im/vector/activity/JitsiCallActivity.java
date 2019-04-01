@@ -22,17 +22,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.facebook.react.modules.core.PermissionListener;
+
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
+import org.jitsi.meet.sdk.ReactActivityLifecycleCallbacks;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.Map;
@@ -43,7 +44,10 @@ import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
-public class JitsiCallActivity extends VectorAppCompatActivity {
+/**
+ * Inspired from JitsiMeetActivity
+ */
+public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiMeetActivityInterface {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**
@@ -62,7 +66,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     private static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
 
     // the jitsi view
-    private JitsiMeetView mJitsiView = null;
+    private JitsiMeetView mJitsiView;
 
     // the linked widget
     private Widget mWidget = null;
@@ -79,14 +83,8 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     // the room
     private Room mRoom;
 
-    @BindView(R.id.jsti_back_to_app_icon)
-    View mBackToAppIcon;
-
-    @BindView(R.id.jsti_close_widget_icon)
-    View mCloseWidgetIcon;
-
-    @BindView(R.id.jsti_connecting_text_view)
-    View mConnectingTextView;
+    @BindView(R.id.jitsi_layout)
+    FrameLayout mJitsiContainer;
 
     /**
      * Widget events listener
@@ -143,58 +141,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
 
         mJitsiView = new JitsiMeetView(this);
 
-        refreshStatusBar();
-
         loadURL();
-    }
-
-    /**
-     * Refresh the status bar
-     */
-    private void refreshStatusBar() {
-        boolean canCloseWidget = (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom));
-
-        // close widget button
-        mCloseWidgetIcon.setVisibility(canCloseWidget ? View.VISIBLE : View.GONE);
-        mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWaitingView();
-                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        finish();
-                    }
-
-                    private void onError(String errorMessage) {
-                        hideWaitingView();
-                        Toast.makeText(JitsiCallActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
-            }
-        });
-
-        mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     /**
@@ -214,12 +161,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
             finish();
         }
 
-        RelativeLayout layout = findViewById(R.id.call_layout);
-        RelativeLayout.LayoutParams params
-                = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        layout.setVisibility(View.VISIBLE);
-        layout.addView(mJitsiView, 0, params);
+        FrameLayout.LayoutParams params
+                = new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        mJitsiContainer.addView(mJitsiView, 0, params);
 
         mJitsiView.setListener(new JitsiMeetViewListener() {
             @Override
@@ -235,7 +180,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mConnectingTextView.setVisibility(View.GONE);
+                        hideWaitingView();
                     }
                 });
             }
@@ -285,18 +230,18 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
             mJitsiView = null;
         }
 
-        JitsiMeetView.onHostDestroy(this);
+        ReactActivityLifecycleCallbacks.onHostDestroy(this);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-        JitsiMeetView.onNewIntent(intent);
+        ReactActivityLifecycleCallbacks.onNewIntent(intent);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        JitsiMeetView.onHostPause(this);
+    protected void onStop() {
+        super.onStop();
+        ReactActivityLifecycleCallbacks.onHostPause(this);
         WidgetsManager.removeListener(mWidgetListener);
     }
 
@@ -309,15 +254,21 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        JitsiMeetView.onHostResume(this);
+        ReactActivityLifecycleCallbacks.onHostResume(this);
         WidgetsManager.addListener(mWidgetListener);
-        refreshStatusBar();
     }
 
     @Override
     public void onBackPressed() {
-        if (!JitsiMeetView.onBackPressed()) {
-            super.onBackPressed();
-        }
+        ReactActivityLifecycleCallbacks.onBackPressed();
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        ReactActivityLifecycleCallbacks.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
+        ReactActivityLifecycleCallbacks.requestPermissions(this, permissions, requestCode, listener);
     }
 }
