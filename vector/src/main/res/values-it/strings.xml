@@ -1195,7 +1195,7 @@ Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare 
 
     <string name="no_valid_google_play_services_apk">Nessun valido APK Google Play Services è stato trovato. Le notifiche non funzioneranno correttamente.</string>
 
-    <string name="store_title">Riot.im - Comunica, a modo tuo.</string>
+    <string name="store_title">Riot.im - Comunica, a modo tuo</string>
     <string name="store_short_description">Un\'app universale di chat sicure interamente sotto il tuo controllo.</string>
     <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
 \n 

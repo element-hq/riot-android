@@ -1179,7 +1179,7 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Riot.im - Comunique-se do seu jeito.</string>
+    <string name="store_title">Riot.im - Comunique-se do seu jeito</string>
     <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
     <string name="passphrase_create_passphrase">Criar passphrase</string>

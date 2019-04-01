@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Ensure EventStreamServiceX call startForeground(), even if there is no session, and do not simulate push in this case
 
 Translations:
  -

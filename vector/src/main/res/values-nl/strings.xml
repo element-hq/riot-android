@@ -1294,7 +1294,7 @@
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Er is geen geldige APK van Google Play Services gevonden. Meldingen zullen mogelijk niet correct functioneren.</string>
 
-    <string name="store_title">Riot.im - Communiceer op uw manier.</string>
+    <string name="store_title">Riot.im - Communiceer op uw manier</string>
     <string name="store_whats_new">We blijven Riot.im voortdurend aanpassen en verbeteren. Het volledige wijzigingslogboek vindt u hier: %1$s. Om niets te missen, houdt u best uw updates ingeschakeld.</string>
     <string name="store_short_description">Een universele en veilige chat-app, volledig onder uw controle.</string>
     <string name="store_full_description">Een chat-app, onder uw controle en heel flexibel. Riot laat u communiceren zoals u dat wilt. Gemaakt voor [matrix] - de standaard voor open, gedecentraliseerde communicatie.
