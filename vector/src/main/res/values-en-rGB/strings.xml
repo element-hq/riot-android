@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">en</string>
+<resources>
+    <string name="resources_language">en</string>
     <string name="resources_country_code">GB</string>
 
     <string name="light_theme">Light Theme</string>
@@ -69,4 +70,4 @@
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">Due to missing permissions, this action is not possible.</string>
-    </resources>
+</resources>

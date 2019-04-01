@@ -816,13 +816,13 @@
     <string name="open_chat_header">Opschrift openen</string>
     <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 actieve deelnemer</item>
-	<item quantity="other">%d actieve deelnemers</item>
-</plurals>
+        <item quantity="one">1 actieve deelnemer</item>
+        <item quantity="other">%d actieve deelnemers</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 deelnemer</item>
-	<item quantity="other">%d deelnemers</item>
-</plurals>
+        <item quantity="one">1 deelnemer</item>
+        <item quantity="other">%d deelnemers</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Weet u zeker dat u deze gebruiker uit dit gesprek wilt verbannen\?</string>
 
     <plurals name="room_new_messages_notification">
@@ -831,13 +831,13 @@
     </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 kamer</item>
-	<item quantity="other">%d kamers</item>
-</plurals>
+        <item quantity="one">1 kamer</item>
+        <item quantity="other">%d kamers</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s kamer gevonden voor %2$s</item>
-	<item quantity="other">%1$s kamers gevonden voor %2$s</item>
-</plurals>
+        <item quantity="one">%1$s kamer gevonden voor %2$s</item>
+        <item quantity="other">%1$s kamers gevonden voor %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
     <string name="room_settings_mention_only">Alleen vermeldingen</string>
@@ -857,13 +857,13 @@
 
 
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
-</plurals>
+        <item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 kamer</item>
-	<item quantity="other">%d kamers</item>
-</plurals>
+        <item quantity="one">1 kamer</item>
+        <item quantity="other">%d kamers</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
     <plurals name="active_widgets">
@@ -903,9 +903,9 @@
     <string name="avatar">Avatar</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
-	<item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
-</plurals>
+        <item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
+        <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
+    </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
 
@@ -1015,9 +1015,9 @@
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1u</item>
-	<item quantity="other">%du</item>
-</plurals>
+        <item quantity="one">1u</item>
+        <item quantity="other">%du</item>
+    </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1d</item>
         <item quantity="other">%dd</item>
@@ -1042,9 +1042,9 @@
     </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 kamer</item>
-	<item quantity="other">%d kamers</item>
-</plurals>
+        <item quantity="one">1 kamer</item>
+        <item quantity="other">%d kamers</item>
+    </plurals>
     <string name="resource_limit_exceeded_title">Bronlimiet overschreden</string>
     <string name="resource_limit_contact_action">Beheerder contacteren</string>
 
@@ -1075,9 +1075,9 @@
 
     <string name="room_participants_action_kick">Eruit sturen</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Weet u zeker dat u deze gebruiker uit dit gesprek wilt sturen\?</item>
-	<item quantity="other">Weet u zeker dat u deze gebruikers uit dit gesprek wilt sturen\?</item>
-</plurals>
+        <item quantity="one">Weet u zeker dat u deze gebruiker uit dit gesprek wilt sturen\?</item>
+        <item quantity="other">Weet u zeker dat u deze gebruikers uit dit gesprek wilt sturen\?</item>
+    </plurals>
     <string name="reason_hint">Reden</string>
 
     <string name="room_sliding_menu_version_x">Versie %s</string>
@@ -1092,7 +1092,7 @@
     <string name="settings_show_join_leave_messages_summary">Meldingen over uitnodigingen, verwijderingen en verbanningen worden altijd weergegeven.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Accountgebeurtenissen weergeven</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Omvat veranderingen in avatar en weergavenaam.</string>
-<string name="notification_sync_init">Dienst wordt geïnitialiseerd</string>
+    <string name="notification_sync_init">Dienst wordt geïnitialiseerd</string>
     <string name="title_activity_keys_backup_setup">Sleutelback-up</string>
     <string name="title_activity_keys_backup_restore">Sleutelback-up gebruiken</string>
 
@@ -1250,13 +1250,13 @@
     <string name="encryption_import_room_keys_success">%1$d/%2$d sleutel(s) geïmporteerd.</string>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 bericht</item>
-	<item quantity="other">%1$s: %2$d berichten</item>
-</plurals>
+        <item quantity="one">%1$s: 1 bericht</item>
+        <item quantity="other">%1$s: %2$d berichten</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d melding</item>
-	<item quantity="other">%d meldingen</item>
-</plurals>
+        <item quantity="one">%d melding</item>
+        <item quantity="other">%d meldingen</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Nieuwe gebeurtenis</string>
     <string name="notification_unknown_room_name">Kamer</string>
@@ -1388,13 +1388,13 @@
     <string name="keys_backup_restore_success_title">Back-up hersteld %s!</string>
     <string name="keys_backup_restore_success_description">%1$d sessiesleutels hersteld, en %2$d nieuwe sleutel(s) die dit apparaat nog niet kende toegevoegd</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Back-up met %d sleutel hersteld.</item>
-	<item quantity="other">Back-up met %d sleutels hersteld.</item>
-</plurals>
+        <item quantity="one">Back-up met %d sleutel hersteld.</item>
+        <item quantity="other">Back-up met %d sleutels hersteld.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Er is %d nieuwe sleutel toegevoegd aan dit apparaat.</item>
-	<item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan dit apparaat.</item>
-</plurals>
+        <item quantity="one">Er is %d nieuwe sleutel toegevoegd aan dit apparaat.</item>
+        <item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan dit apparaat.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Verkrijgen van laatste herstelsleutelversie (%s) mislukt.</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Sessieversleuteling is niet actief</string>
@@ -1440,9 +1440,9 @@
 
     <string name="keys_backup_info_keys_all_backup_up">Alle sleutels zijn geback-upt</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Back-up van %d sleutel wordt gemaakt…</item>
-	<item quantity="other">Back-up van %d sleutels wordt gemaakt…</item>
-</plurals>
+        <item quantity="one">Back-up van %d sleutel wordt gemaakt…</item>
+        <item quantity="other">Back-up van %d sleutels wordt gemaakt…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Versie</string>
     <string name="keys_backup_info_title_algorithm">Algoritme</string>

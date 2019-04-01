@@ -1098,7 +1098,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_troubleshoot_diagnostic">Diagnóstico de errores</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Iniciar pruebas</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Haciendo… (%1$d of %2$d)</string>
-<string name="notification_sync_init">Iniciando servicio</string>
+    <string name="notification_sync_init">Iniciando servicio</string>
     <string name="title_activity_keys_backup_setup">Copia de seguridad de la clave</string>
     <string name="title_activity_keys_backup_restore">Usar copia de seguridad de la clave</string>
 
@@ -1149,4 +1149,4 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="settings_troubleshoot_test_play_services_title">Prueba de servicios Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK de servicios de Google Play esta disponible y actualizado.</string>
-    </resources>
+</resources>

@@ -502,7 +502,7 @@
     <string name="room_details_settings">নির্ধারণ</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -665,5 +665,5 @@
 
     <string name="settings_troubleshoot_test_account_settings_title">গণনা নির্ধারণ।</string>
     <string name="settings_troubleshoot_test_account_settings_success">বিজ্ঞাপ্তি আপনার একাউন্টএর জন্য সক্রিয় করা হোক.</string>
-<string name="action_mark_room_read">পঠিত হিসেবে চিহ্নিত</string>
-    </resources>
+    <string name="action_mark_room_read">পঠিত হিসেবে চিহ্নিত</string>
+</resources>
