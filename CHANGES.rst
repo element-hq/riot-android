@@ -1,27 +1,11 @@
-Changes in Riot 0.8.27 (2019-XX-XX)
+Changes in Riot 0.8.27 (2019-04-01)
 ===================================================
-
-MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
 
 Improvements:
  - Deprecate EventStreamService, replaced by EventStreamServiceX and CallService (#2782, #3065)
 
 Other changes:
  - Scalar URL: Use prod urls in Riot mobile apps (#3077)
-
-Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.26 (2019-03-25)
 ===================================================
