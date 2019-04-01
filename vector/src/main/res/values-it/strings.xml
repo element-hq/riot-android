@@ -898,7 +898,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="settings_notification_privacy_normal">Normale</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
     <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
-    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
     <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>
@@ -1429,4 +1429,22 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="media_source_choose">Scegli</string>
     <string name="settings_play_shutter_sound">Riproduci suono otturatore</string>
 
-</resources>
+<string name="action_mark_room_read">Segna come letto</string>
+    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in background all\'homeserver, dovrebbe ridurre il consumo della batteria</string>
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 messaggio</item>
+	<item quantity="other">%1$s: %2$d messaggi</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d notifica</item>
+	<item quantity="other">%d notifiche</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">Nuovo evento</string>
+    <string name="notification_unknown_room_name">Stanza</string>
+    <string name="notification_new_messages">Nuovi messaggi</string>
+    <string name="notification_new_invitation">Nuovo invito</string>
+    <string name="notification_sender_me">Io</string>
+    <string name="notification_inline_reply_failed">** Invio fallito - per favore apri la stanza</string>
+
+    </resources>

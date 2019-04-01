@@ -83,7 +83,7 @@
         <item quantity="one">1 użytkownik</item>
         <item quantity="few">%d użytkowników</item>
         <item quantity="many">%d użytkowników</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
@@ -600,7 +600,7 @@ Przepraszamy za trudności.</string>
         <item quantity="one">%d zmiana członkostwa</item>
         <item quantity="few">%d zmiany członkostwa</item>
         <item quantity="many">%d zmian członkostwa</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="call_error_user_not_responding">Rozmówca nie połączył się.</string>
@@ -629,13 +629,13 @@ Zezwolić Riot na dostęp do kontaktów?</string>
         <item quantity="one">Jeden aktywny członek</item>
         <item quantity="few">Kilku aktywnych członków</item>
         <item quantity="many">%d aktywnych członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">kilku członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
@@ -652,7 +652,7 @@ Jesteś pewien?</string>
         <item quantity="one">Nowa wiadomość</item>
         <item quantity="few">Kilka nowych wiadomości</item>
         <item quantity="many">%d nowych wiadomości</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
@@ -666,13 +666,13 @@ Jesteś pewien?</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s pokój znaleziony dla %2$s</item>
         <item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
         <item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
@@ -757,7 +757,7 @@ Jesteś pewien?</string>
     <string name="settings_notification_privacy_normal">Standardowa</string>
     <string name="settings_notification_privacy_reduced">Zmniejszona prywatność</string>
     <string name="settings_notification_privacy_need_permission">Aplikacja wymaga uprawnień do działania w tle</string>
-    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Powiadomienia wysyłane za pomocą Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Powiadomienia zawierają tylko meta-dane</string>
     <string name="settings_notification_privacy_secure_message_content">• Treść powiadomienia jest <b>bezpiecznie pobierana z domowego serwera Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Powiadomienia zawierają <b>meta-dane oraz treść wiadomości</b></string>
@@ -822,13 +822,13 @@ Nieznane urządzenia:</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="active_widgets">
         <item quantity="one">1 aktywny widżet</item>
         <item quantity="few">%d aktywne widżety</item>
         <item quantity="many">%d aktywnych widżetów</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
@@ -850,13 +850,13 @@ Czy chcesz dodać teraz kilka?</string>
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
 
@@ -942,14 +942,14 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
 
@@ -965,25 +965,25 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 sekunda</item>
         <item quantity="few">%d sek.</item>
         <item quantity="many">%d sek.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1 minuta</item>
         <item quantity="few">%d min.</item>
         <item quantity="many">%d min.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1 godzina</item>
         <item quantity="few">%s godz.</item>
         <item quantity="many">%s godz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1 dzień</item>
         <item quantity="few">%d dni</item>
         <item quantity="many">%d dni</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
@@ -992,7 +992,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
         <item quantity="many">%d zaznaczonych</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_sliding_menu_version_x">Wersja %s</string>
     <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
@@ -1064,7 +1064,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
         <item quantity="one">Czy chcesz wyrzucić tego użytkownika z rozmowy?</item>
         <item quantity="few">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
         <item quantity="many">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
@@ -1133,7 +1133,7 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
 Spróbuj uruchomić ponownie aplikację.</string>
     <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
 
-    <string name="title_activity_keys_backup_setup">Przywracanie wiadomości</string>
+    <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
     <string name="skip">Pomiń</string>
     <string name="settings_notification_advanced">Zaawansowane ustawienia powiadomień</string>
@@ -1153,4 +1153,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="ignore">Ignoruj</string>
 
     <string name="settings_default_compression">Domyślna kompresja</string>
-</resources>
+<string name="settings_noisy_notifications_preferences">Konfiguruj głośne powiadomienia</string>
+    <string name="settings_silent_notifications_preferences">Konfiguruj ciche powiadomienia</string>
+    <string name="notification_silent">Ciche</string>
+    <string name="keys_backup_settings_restore_backup_button">Przywróć z kopii zapasowej</string>
+    <string name="keys_backup_settings_delete_backup_button">Usuń kopię zapasową</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Usuń kopię zapasową</string>
+    <string name="keys_backup_info_title_version">Wersja</string>
+    </resources>
