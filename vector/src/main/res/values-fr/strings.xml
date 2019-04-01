@@ -1149,7 +1149,7 @@ Sur l’écran suivant on vous demandera d’autoriser Riot à toujours fonction
 
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
 
-    <string name="store_title">Riot.im - Communiquez, à votre façon.</string>
+    <string name="store_title">Riot.im - Communiquez, à votre façon</string>
     <string name="store_short_description">Une application de discussion sécurisée universelle que vous contrôlez.</string>
     <string name="store_full_description">"Une application de discussion, que vous contrôlez et entièrement flexible. Riot vous laisse communiquer comme vous le souhaitez. Conçu pour [matrix], le standard pour les communications libres et décentralisées.
 

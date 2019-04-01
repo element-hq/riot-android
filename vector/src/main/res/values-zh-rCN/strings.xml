@@ -1092,7 +1092,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="plus_x">+%d</string>
     <string name="generic_label_and_value">%1$s：%2$s</string>
     <string name="generic_label">%1$s：</string>
-    <string name="store_title">Riot.im - 沟通，由你掌控。</string>
+    <string name="store_title">Riot.im - 沟通，由你掌控</string>
     <string name="store_short_description">一款完全由你掌控的通用安全聊天应用。</string>
     <string name="show_info_area_always">总是</string>
     <string name="show_info_area_messages_and_errors">消息与错误</string>
