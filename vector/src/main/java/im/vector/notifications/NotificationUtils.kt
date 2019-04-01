@@ -345,6 +345,17 @@ object NotificationUtils {
     }
 
     /**
+     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended
+     */
+    fun buildCallEndedNotification(context: Context): Notification {
+        return NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(context.getString(R.string.call_ended))
+                .setSmallIcon(R.drawable.ic_material_call_end_grey)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .build()
+    }
+
+    /**
      * Build a notification for a Room
      */
     fun buildMessagesListNotification(context: Context,
