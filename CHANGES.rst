@@ -1,3 +1,9 @@
+Changes in Riot 0.8.28 (2019-04-01)
+===================================================
+
+Bugfix:
+ - Ensure EventStreamServiceX call startForeground(), even if there is no session, and do not simulate push in this case
+
 Changes in Riot 0.8.27 (2019-04-01)
 ===================================================
 

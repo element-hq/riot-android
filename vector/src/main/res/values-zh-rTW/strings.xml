@@ -1106,7 +1106,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_valid_google_play_services_apk">找不到有效的 Google Play 服務 APK。通知可能無法正常運作。</string>
 
-    <string name="store_title">Riot.im - 以您的方式溝通。</string>
+    <string name="store_title">Riot.im - 以您的方式溝通</string>
     <string name="store_short_description">一個完全由您控制的安全聊天應用程式。</string>
     <string name="store_full_description">"完全由您控制且極具彈性的聊天應用程式。Riot 讓您以您想要的方式溝通。為 [matrix] 而生，其為開放、去中心化的通訊標準。
 

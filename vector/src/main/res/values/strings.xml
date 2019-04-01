@@ -1235,7 +1235,7 @@
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- String for Play Store -->
-    <string name="store_title">Riot.im - Communicate, your way.</string>
+    <string name="store_title">Riot.im - Communicate, your way</string>
     <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
 The complete changelog can be found here: %1$s.
 To make sure you don’t miss a thing, just keep your updates turned on."</string>

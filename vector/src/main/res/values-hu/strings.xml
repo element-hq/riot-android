@@ -1148,7 +1148,7 @@ A következő képernyőn el kell fogadnod, hogy a Riot folyamatosan fusson a h�
 
     <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
 
-    <string name="store_title">Riot.im - Beszélgess, ahogy tetszik.</string>
+    <string name="store_title">Riot.im - Beszélgess, ahogy tetszik</string>
     <string name="store_short_description">Egy biztonságos és univerzális csevegő alkalmazás az irányításod alatt.</string>
     <string name="store_full_description">A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Riot megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
 \n

@@ -1134,7 +1134,7 @@
 
     <string name="no_valid_google_play_services_apk">Не беше открит валиден APK пакет за Google Play услугите. Уведомленията може да не работят правилно.</string>
 
-    <string name="store_title">Riot.im - комуникирайте по свой начин.</string>
+    <string name="store_title">Riot.im - комуникирайте по свой начин</string>
     <string name="store_short_description">Универсален и сигурен чат изцяло под ваш контрол.</string>
     <string name="store_full_description">"Чат приложение, което е изцяло гъвкаво и под Ваш контрол. Riot позволява да комуникирате по начина, по който искате. Направено за [matrix] - стандарт за отворена и децентрализирана комуникация.
 

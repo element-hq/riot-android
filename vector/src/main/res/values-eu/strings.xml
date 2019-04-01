@@ -1142,7 +1142,7 @@ Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan 
 
     <string name="no_valid_google_play_services_apk">Ez da baliozko Google Play Services APK-rik aurkitu. Jakinarazpenak agian ez dira ongi ibiliko.</string>
 
-    <string name="store_title">Riot.im - Komunikatu, zure erara.</string>
+    <string name="store_title">Riot.im - Komunikatu, zure erara</string>
     <string name="store_short_description">Txat seguru eta unibertsala zure kontrolpean erabat.</string>
     <string name="settings_troubleshoot_test_battery_failed">Erabiltzaile batek gailu bat deskonektatuta eta erabili gabe uzten badu denbora batez, pantaila itzalita duela, gailua kuluxka moduan sartzen da. Honek aplikazioak sarera konektatzea eragozten du eta beraien lanak atzeratzen ditu, baita ohiko alarmak.</string>
     <string name="startup_notification_fdroid_battery_optim_message">Riot-ek bigarren planoko konexio arin bat behar du jakinarazpen fidagarriak izateko.

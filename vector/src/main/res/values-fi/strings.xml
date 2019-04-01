@@ -1237,7 +1237,7 @@ Haluatko lisätä paketteja?</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Kelvollista Google Play Services APK:ta ei löytynyt. Ilmoitukset eivät ehkä toimi oikein.</string>
 
-    <string name="store_title">Riot.im - Kommunikoi, sinun tavallasi.</string>
+    <string name="store_title">Riot.im - Kommunikoi, sinun tavallasi</string>
     <string name="store_whats_new">"Olemme aina tekemässä muutoksia ja parannuksia Riot.im:ään.
 Täydellisen muutoslokin löydät täältä: %1$s.
 Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytössä."</string>

@@ -1107,7 +1107,7 @@
 
     <string name="no_valid_google_play_services_apk">S’u gjet APK për Google Play Services. Njoftimet mund të mos punojnë saktë.</string>
 
-    <string name="store_title">Riot.im - Komunikoni, sipas mënyrës tuaj.</string>
+    <string name="store_title">Riot.im - Komunikoni, sipas mënyrës tuaj</string>
     <string name="store_short_description">Një aplikacion universal i sigurt bisedash, tërësisht nën kontrollin tuaj.</string>
     <string name="store_full_description">Një aplikacion fjalosjesh, nën kontrollin tuaj dhe plotësisht i zhdërvjellët. Riot-i ju lejon të komunikoni sipas mënyrës që doni. I krijuar për [matrix] - standardi për komunikime të hapura, të decentralizuara.
 \n
