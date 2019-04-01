@@ -1,27 +1,8 @@
-Changes in Riot 0.8.28 (2019-XX-XX)
+Changes in Riot 0.8.28 (2019-04-01)
 ===================================================
-
-MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
-
-Improvements:
- -
-
-Other changes:
- -
 
 Bugfix:
  - Ensure EventStreamServiceX call startForeground(), even if there is no session, and do not simulate push in this case
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.27 (2019-04-01)
 ===================================================
