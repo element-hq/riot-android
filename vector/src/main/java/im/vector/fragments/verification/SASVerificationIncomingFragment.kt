@@ -25,7 +25,7 @@ import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.VectorUtils
-import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
+import org.matrix.androidsdk.crypto.verification.IncomingSASVerificationTransaction
 
 class SASVerificationIncomingFragment : VectorBaseFragment() {
 
@@ -62,13 +62,17 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
         }
 
         viewModel.transactionState.observe(this, Observer {
-            when (it) {
-                SASVerificationTransaction.SASVerificationTxState.Accepted -> {
-                    //display loading
+            val uxState = (it as? IncomingSASVerificationTransaction)?.uxState
+            when (uxState) {
+                IncomingSASVerificationTransaction.State.WAIT_FOR_KEY_AGREEMENT -> {
                     viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
                 }
-                SASVerificationTransaction.SASVerificationTxState.ShortCodeReady -> {
+                IncomingSASVerificationTransaction.State.SHOW_SAS -> {
                     viewModel.shortCodeReady()
+                }
+                IncomingSASVerificationTransaction.State.CANCELLED_BY_ME,
+                IncomingSASVerificationTransaction.State.CANCELLED_BY_OTHER -> {
+                    viewModel.navigateCancel()
                 }
             }
         })
@@ -82,6 +86,6 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
     @OnClick(R.id.sas_request_cancel_button)
     fun didCancel() {
-        viewModel.cancelTransaction()
+        viewModel.interrupt()
     }
 }

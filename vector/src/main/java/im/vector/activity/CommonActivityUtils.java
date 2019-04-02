@@ -1167,6 +1167,67 @@ public class CommonActivityUtils {
             return;
         }
 
+        //Priority is to use new verification method, and fallback to older if user chooses to
+
+        Intent intent = ShortCodeDeviceVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
+        activity.startActivity(intent);
+
+
+//        LayoutInflater inflater = activity.getLayoutInflater();
+//
+//        View layout = inflater.inflate(R.layout.dialog_device_verify, null);
+//
+//        TextView textView;
+//
+//        textView = layout.findViewById(R.id.encrypted_device_info_device_name);
+//        textView.setText(deviceInfo.displayName());
+//
+//        textView = layout.findViewById(R.id.encrypted_device_info_device_id);
+//        textView.setText(deviceInfo.deviceId);
+//
+//        textView = layout.findViewById(R.id.encrypted_device_info_device_key);
+//        textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
+//
+//        new AlertDialog.Builder(activity)
+//                .setTitle(R.string.encryption_information_verify_device)
+//                .setView(layout)
+//                .setPositiveButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender,
+//                                new SimpleApiCallback<Void>() {
+//                                    // Note: onSuccess() is the only method which will be called
+//                                    @Override
+//                                    public void onSuccess(Void info) {
+//                                        yesNoListener.yes();
+//                                    }
+//                                });
+//                    }
+//                })
+//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        yesNoListener.no();
+//                    }
+//                })
+//                .show();
+    }
+    /**
+     * Display the device verification warning
+     *
+     * @param deviceInfo the device info
+     */
+    static public <T> void displayDeviceVerificationDialogLegacy(final MXDeviceInfo deviceInfo,
+                                                                 final String sender,
+                                                                 final MXSession session,
+                                                                 Activity activity,
+                                                                 @NonNull final YesNoListener yesNoListener) {
+        // sanity check
+        if ((null == deviceInfo) || (null == sender) || (null == session)) {
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
+            return;
+        }
+
         LayoutInflater inflater = activity.getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.dialog_device_verify, null);

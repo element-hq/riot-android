@@ -1411,9 +1411,37 @@ Why choose Riot.im?
 
 
     <string name="sas_emoji_description">Verify this user by confirming the following emoji appear on their screen"</string>
+    <string name="sas_decimal_description">Verify this user by confirming the following numbers appear on their screen"</string>
 
     <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
     <string name="sas_view_request_action">View request</string>
     <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
+
+
+    <string name="sas_verified">Verified!</string>
+    <string name="sas_verified_successful">You\'ve successfully verified this user.</string>
+    <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
+    <string name="sas_got_it">Got it</string>
+
+    <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
+    <string name="sas_legacy_verification_button_title">Use legacy verification.</string>
+
+    <string name="sas_cancelled_dialog_title">Request Cancelled</string>
+    <string name="sas_cancelled_by_other">The other party cancelled the verification.\n%s</string>
+    <string name="sas_cancelled_by_me">The verification is canceled.\nReason: %s</string>
+
+    <!-- SAS Errors -->
+    <string name="sas_error_m.user">The user cancelled the verification</string>
+    <string name="sas_error_m.timeout">The verification process timed out</string>
+    <string name="sas_error_m.unknown_transaction">The device does not know about that transaction</string>,
+    <string name="sas_error_m.unknown_method">The device can’t agree on a key agreement, hash, MAC, or SAS method</string>
+    <string name="sas_error_m.mismatched_commitment">The hash commitment did not match</string>
+    <string name="sas_error_m.mismatched_sas">The SAS did not match</string>
+    <string name="sas_error_m.unexpected_message">The device received an unexpected message</string>
+    <string name="sas_error_m.invalid_message">An invalid message was received</string>
+    <string name="sas_error_m.key_mismatch">Key mismatch</string>
+    <string name="sas_error_m.user_error">User mismatch</string>
+    <string name="sas_error_unknown">Unknown Error</string>
+
 
 </resources>

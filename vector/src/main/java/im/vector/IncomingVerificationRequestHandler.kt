@@ -19,10 +19,10 @@ import android.support.v7.app.AlertDialog
 import im.vector.activity.ShortCodeDeviceVerificationActivity
 import org.matrix.androidsdk.crypto.verification.CancelCode
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
-import org.matrix.androidsdk.crypto.verification.ShortCodeVerificationManager
+import org.matrix.androidsdk.crypto.verification.VerificationManager
 import org.matrix.androidsdk.crypto.verification.VerificationTransaction
 
-object IncomingVerificationRequestHandler : ShortCodeVerificationManager.ManagerListener {
+object IncomingVerificationRequestHandler : VerificationManager.ManagerListener {
 
     private var mAlertDialog: AlertDialog? = null
 
@@ -46,27 +46,29 @@ object IncomingVerificationRequestHandler : ShortCodeVerificationManager.Manager
         }
         val activity = VectorApp.getCurrentActivity()
 
-        val session = Matrix.getInstance(activity).defaultSession
+        if (activity != null) {
+            val session = Matrix.getInstance(activity).defaultSession
 
 
-        mAlertDialog = AlertDialog.Builder(activity)
-                .setMessage(activity.getString(R.string.sas_incoming_verification_request_dialog))
-                .setCancelable(false)
-                .setNegativeButton(R.string.ignore_request) { dialog, which ->
-                    //onDisplayKeyShareDialogClose(false, true)
-                    tx.cancel(session, CancelCode.User)
-                }.setPositiveButton(R.string.sas_view_request_action
-                ) { dialog, id ->
-                    val intent = ShortCodeDeviceVerificationActivity.intent(activity, session.myUserId, tx.otherUserID, tx.transactionId)
-                    activity.startActivity(intent)
-                }
-                .setOnCancelListener {
-                    tx.cancel(session, CancelCode.User)
-                }
-                .show()
+            mAlertDialog = AlertDialog.Builder(activity)
+                    .setMessage(activity.getString(R.string.sas_incoming_verification_request_dialog))
+                    .setCancelable(false)
+                    .setNegativeButton(R.string.ignore_request) { dialog, which ->
+                        //onDisplayKeyShareDialogClose(false, true)
+                        tx.cancel(session, CancelCode.User)
+                    }.setPositiveButton(R.string.sas_view_request_action
+                    ) { dialog, id ->
+                        val intent = ShortCodeDeviceVerificationActivity.intent(activity, session.myUserId, tx.otherUserID, tx.transactionId)
+                        activity.startActivity(intent)
+                    }
+                    .setOnCancelListener {
+                        tx.cancel(session, CancelCode.User)
+                    }
+                    .show()
+        }
     }
 
-    fun initialize(mgr: ShortCodeVerificationManager) {
+    fun initialize(mgr: VerificationManager) {
         mgr.addListener(this)
     }
 }

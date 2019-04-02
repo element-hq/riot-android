@@ -18,22 +18,19 @@ package im.vector.fragments.verification
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import butterknife.OnClick
-import im.vector.R
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.crypto.verification.CancelCode
-import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
-import org.matrix.androidsdk.crypto.verification.ShortCodeVerificationManager
-import org.matrix.androidsdk.crypto.verification.VerificationTransaction
+import org.matrix.androidsdk.crypto.verification.*
 import org.matrix.androidsdk.rest.model.User
 
-class SasVerificationViewModel : ViewModel(), ShortCodeVerificationManager.ManagerListener {
+class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListener {
 
     companion object {
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
+        const val NAVIGATE_FINISH_SUCCESS = "NAVIGATE_FINISH_SUCCESS"
         const val NAVIGATE_EMOJI = "NAVIGATE_EMOJI"
         const val NAVIGATE_SUCCESS = "NAVIGATE_SUCCESS"
+        const val NAVIGATE_CANCELLED = "NAVIGATE_CANCELLED"
         //const val NAVIGATE_TO_SUCCESS = "NAVIGATE_TO_SUCCESS"
     }
 
@@ -43,6 +40,14 @@ class SasVerificationViewModel : ViewModel(), ShortCodeVerificationManager.Manag
     var otherDevice: String? = null
     var otherUser: User? = null
     var transaction: SASVerificationTransaction? = null
+
+
+    var transactionState: MutableLiveData<SASVerificationTransaction.SASVerificationTxState> = MutableLiveData()
+
+    init {
+        //Force a first observe
+        transactionState.value = null
+    }
 
     private var _navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     val navigateEvent: LiveData<LiveEvent<String>>
@@ -62,15 +67,26 @@ class SasVerificationViewModel : ViewModel(), ShortCodeVerificationManager.Manag
             field = value
         }
 
-    var transactionState: MutableLiveData<SASVerificationTransaction.SASVerificationTxState> = MutableLiveData()
 
     fun initSession(session: MXSession, otherUserId: String, transactionID: String?) {
         this.session = session
         this.otherUserId = otherUserId
         this.transactionID = transactionID
         session.crypto?.shortCodeVerificationManager?.addListener(this)
-
         this.otherUser = session.dataHandler.store.getUser(otherUserId)
+    }
+
+    fun initOutgoing(session: MXSession, otherUserId: String, otherDeviceId: String) {
+        this.session = session
+        this.otherUserId = otherUserId
+        this.otherDevice = otherDeviceId
+        session.crypto?.shortCodeVerificationManager?.addListener(this)
+        this.otherUser = session.dataHandler.store.getUser(otherUserId)
+    }
+
+    fun beginSasKeyVerification() {
+        val verificationSAS = session.crypto?.shortCodeVerificationManager?.beginKeyVerificationSAS(otherUserId!!, otherDevice!!)
+        this.transactionID = verificationSAS
     }
 
 
@@ -89,8 +105,18 @@ class SasVerificationViewModel : ViewModel(), ShortCodeVerificationManager.Manag
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
     }
 
+    //TODO reason code
+    fun interrupt() {
+        _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
+    }
+
+    fun finishSuccess() {
+        _navigateEvent.value = LiveEvent(NAVIGATE_FINISH_SUCCESS)
+    }
+
+
     fun acceptTransaction() {
-        transaction?.performAccept(session)
+        (transaction as? IncomingSASVerificationTransaction)?.performAccept(session)
     }
 
     fun confirmEmojiSame() {
@@ -104,7 +130,11 @@ class SasVerificationViewModel : ViewModel(), ShortCodeVerificationManager.Manag
 
     fun deviceIsVerified() {
         loadingLiveEvent.value = null
-        _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
+        _navigateEvent.value = LiveEvent(NAVIGATE_SUCCESS)
+    }
+
+    fun navigateCancel() {
+        _navigateEvent.value = LiveEvent(NAVIGATE_CANCELLED)
     }
 
     override fun onCleared() {
