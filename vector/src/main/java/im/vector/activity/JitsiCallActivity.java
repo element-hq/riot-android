@@ -152,6 +152,8 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
             Bundle config = new Bundle();
             //config.putBoolean("startWithAudioMuted", true);
             config.putBoolean("startWithVideoMuted", !mIsVideoCall);
+            // Configure the title of the screen
+            config.putString("callDisplayName", mRoom.getRoomDisplayName(this));
             Bundle urlObject = new Bundle();
             urlObject.putBundle("config", config);
             urlObject.putString("url", mCallUrl);
@@ -159,6 +161,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         } catch (Exception e) {
             Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage(), e);
             finish();
+            return;
         }
 
         FrameLayout.LayoutParams params
