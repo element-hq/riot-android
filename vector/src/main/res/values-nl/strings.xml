@@ -831,13 +831,13 @@
     </plurals>
 
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 gesprek</item>
-	<item quantity="other">%d gesprekken</item>
-</plurals>
+        <item quantity="one">1 gesprek</item>
+        <item quantity="other">%d gesprekken</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s gesprek gevonden voor %2$s</item>
-	<item quantity="other">%1$s gesprek gevonden voor %2$s</item>
-</plurals>
+        <item quantity="one">%1$s gesprek gevonden voor %2$s</item>
+        <item quantity="other">%1$s gesprek gevonden voor %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
     <string name="room_settings_mention_only">Alleen vermeldingen</string>
@@ -861,8 +861,8 @@
         <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 gesprek</item>
-	<item quantity="other">%d gesprekken</item>
+        <item quantity="one">1 gesprek</item>
+        <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
@@ -1042,8 +1042,8 @@
     </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 gesprek</item>
-	<item quantity="other">%d gesprekken</item>
+        <item quantity="one">1 gesprek</item>
+        <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="resource_limit_exceeded_title">Bronlimiet overschreden</string>
     <string name="resource_limit_contact_action">Beheerder contacteren</string>
