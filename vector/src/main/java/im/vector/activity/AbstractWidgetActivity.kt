@@ -211,7 +211,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
                 override fun onPageFinished(view: WebView, url: String) {
                     // Check that the Activity is still alive
-                    if (isDestroyed) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed) {
                         return
                     }
 

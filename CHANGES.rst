@@ -1,4 +1,4 @@
-Changes in Riot 0.8.27 (2019-XX-XX)
+Changes in Riot 0.8.29 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
@@ -9,10 +9,10 @@ Features:
  -
 
 Improvements:
- - Deprecate EventStreamService, replaced by EventStreamServiceX and CallService (#2782, #3065)
+ - Fix crash on Jitsi conference by upgrading the lib to version 1.21.0 (#2412)
 
 Other changes:
- - Scalar URL: Use prod urls in Riot mobile apps (#3077)
+ -
 
 Bugfix:
  -
@@ -22,6 +22,21 @@ Translations:
 
 Build:
  -
+
+Changes in Riot 0.8.28 (2019-04-01)
+===================================================
+
+Bugfix:
+ - Ensure EventStreamServiceX call startForeground(), even if there is no session, and do not simulate push in this case
+
+Changes in Riot 0.8.27 (2019-04-01)
+===================================================
+
+Improvements:
+ - Deprecate EventStreamService, replaced by EventStreamServiceX and CallService (#2782, #3065)
+
+Other changes:
+ - Scalar URL: Use prod urls in Riot mobile apps (#3077)
 
 Changes in Riot 0.8.26 (2019-03-25)
 ===================================================

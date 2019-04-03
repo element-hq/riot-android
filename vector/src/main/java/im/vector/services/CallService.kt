@@ -138,6 +138,11 @@ class CallService : VectorService() {
      * Hide the permanent call notifications
      */
     private fun hideCallNotifications() {
+        val notification = NotificationUtils.buildCallEndedNotification(applicationContext)
+
+        // It's mandatory to startForeground to avoid crash
+        startForeground(NOTIFICATION_ID, notification)
+
         myStopSelf()
     }
 

@@ -1123,7 +1123,7 @@ A la pantalla següent se us demanarà que permeteu al Riot executar-se sempre a
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">No s\'ha trobat cap APK de Google Play Services vàlid. Les notificacions poden no funcionar correctament.</string>
 
-    <string name="store_title">Riot.im - Comunica\'t, a la teva manera.</string>
+    <string name="store_title">Riot.im - Comunica\'t, a la teva manera</string>
     <string name="store_whats_new">"Sempre hi som fent canvis i millores al Riot.im.
 Podeu trobar el registre de canvis complet aquí: %1$s.
 Per assegurar-vos que no us perdeu res, només heu de mantenir les actualitzacions automàtiques habilitades."</string>

@@ -96,7 +96,7 @@
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -852,13 +852,13 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -866,7 +866,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -876,45 +876,45 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s комната найдена для %2$s</item>
         <item quantity="few">%1$s комнаты найдено для %2$s</item>
         <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
@@ -1024,25 +1024,25 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%ds</item>
         <item quantity="few">%ds</item>
         <item quantity="many">%ds</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">%dm</item>
         <item quantity="few">%dm</item>
         <item quantity="many">%dm</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">%dh</item>
         <item quantity="few">%dh</item>
         <item quantity="many">%dh</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%dd</item>
         <item quantity="few">%dd</item>
         <item quantity="many">%dd</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="room_participants_now">Сейчас %1$s</string>
@@ -1056,20 +1056,20 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="group_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1118,9 +1118,9 @@ Email также позволит вам при необходимости во�
     <string name="room_participants_action_kick">Выгнать</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Вы уверены, что хотите выгнать этого пользователя из чата?</item>
-        <item quantity="few"/>
+        <item quantity="few" />
         <item quantity="many">Вы уверены, что хотите выгнать этих пользователей из чата?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Причина</string>
 
@@ -1240,7 +1240,7 @@ Email также позволит вам при необходимости во�
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Не найден APK сервисов Google Play. Уведомления могут работать неправильно.</string>
 
-    <string name="store_title">Riot.im — общайся по-своему.</string>
+    <string name="store_title">Riot.im — общайся по-своему</string>
     <string name="store_short_description">Универсальное приложение для безопасного общения, полностью находящееся под вашим контролем.</string>
     <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, исключения и запреты.</string>
     <string name="store_full_description">"Приложение для чата, под вашим контролем и полностью гибкое. Riot позволяет вам общаться так, как вы хотите. Сделано на [matrix] — стандарт для открытого, децентрализованного общения.
@@ -1358,14 +1358,14 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
         <item quantity="few">%d новых ключа были добавлены к этому устройству.</item>
         <item quantity="many">%d новых ключей были добавлены к этому устройству.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Восстановлена резервная копия с %d ключом.</item>
         <item quantity="few">Восстановлена резервная копия с %d ключами.</item>
         <item quantity="many">Восстановлена резервная копия с %d ключами.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="keys_backup_restore_success_description">Восстановлены %1$d сеансовые ключи и добавлены %2$d новые ключи, которые не были известны этому устройству</string>
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого ключа восстановления: убедитесь, что вы ввели правильный ключ.</string>
@@ -1412,7 +1412,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">Резервное копирование %d ключа…</item>
         <item quantity="few">Резервное копирование %d ключей…</item>
         <item quantity="many">Резервное копирование %d ключей…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_keys_all_backup_up">Все ключи сохранены</string>
@@ -1454,7 +1454,7 @@ Email также позволит вам при необходимости во�
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление ключа восстановления…</string>
     <string name="ignore">Игнорировать</string>
 
-<string name="notification_sync_init">Инициализация сервиса</string>
+    <string name="notification_sync_init">Инициализация сервиса</string>
     <string name="action_mark_room_read">Отметить как прочитанное</string>
     <string name="auth_login_sso">Войти с помощью единого входа</string>
     <string name="login_error_unknown_host">"Этот URL не доступен, пожалуйста проверить   "</string>
@@ -1469,15 +1469,15 @@ Email также позволит вам при необходимости во�
     <string name="settings_default_media_source">Источник медиа по умолчанию</string>
     <string name="media_source_choose">Выберите</string>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 сообщение</item>
-	<item quantity="few">%1$s: %2$d сообщения</item>
-	<item quantity="many">%1$s: %2$d сообщения</item>
-</plurals>
+        <item quantity="one">%1$s: 1 сообщение</item>
+        <item quantity="few">%1$s: %2$d сообщения</item>
+        <item quantity="many">%1$s: %2$d сообщения</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d оповещение</item>
-	<item quantity="few">%d оповещения</item>
-	<item quantity="many">%d оповещения</item>
-</plurals>
+        <item quantity="one">%d оповещение</item>
+        <item quantity="few">%d оповещения</item>
+        <item quantity="many">%d оповещения</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Новое событие</string>
     <string name="notification_unknown_room_name">Комната</string>

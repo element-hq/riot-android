@@ -1076,6 +1076,8 @@
         <item quantity="other">%d active widgets</item>
     </plurals>
 
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
@@ -1235,7 +1237,7 @@
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- String for Play Store -->
-    <string name="store_title">Riot.im - Communicate, your way.</string>
+    <string name="store_title">Riot.im - Communicate, your way</string>
     <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
 The complete changelog can be found here: %1$s.
 To make sure you don’t miss a thing, just keep your updates turned on."</string>

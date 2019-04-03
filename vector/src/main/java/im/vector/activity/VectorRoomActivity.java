@@ -1738,10 +1738,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if it is a video call
      */
     private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
-        final Intent intent = new Intent(this, JitsiCallActivity.class);
-        intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-        intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Display a error dialog for old API
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        } else {
+            final Intent intent = new Intent(this, JitsiCallActivity.class);
+            intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+            intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -1758,9 +1767,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onSuccess(Widget widget) {
                 hideWaitingView();
 
-                final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
-                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-                startActivity(intent);
+                launchJitsiActivity(widget, aIsVideoCall);
             }
 
             private void onError(String errorMessage) {

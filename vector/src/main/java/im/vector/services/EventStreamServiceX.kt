@@ -161,14 +161,6 @@ class EventStreamServiceX : VectorService() {
             return START_NOT_STICKY
         }
 
-        mSession = Matrix.getInstance(applicationContext)!!.defaultSession
-
-        if (null == mSession) {
-            Log.e(LOG_TAG, "onStartCommand : no sessions")
-            myStopSelf()
-            return START_NOT_STICKY
-        }
-
         val action = intent.action
 
         Log.i(LOG_TAG, "onStartCommand with action : $action (current state $serviceState)")
@@ -188,6 +180,14 @@ class EventStreamServiceX : VectorService() {
                 Log.i(LOG_TAG, "stopForeground")
                 stopForeground(true)
             }
+        }
+
+        mSession = Matrix.getInstance(applicationContext)!!.defaultSession
+
+        if (null == mSession) {
+            Log.e(LOG_TAG, "onStartCommand : no sessions")
+            myStopSelf()
+            return START_NOT_STICKY
         }
 
         when (action) {
@@ -424,6 +424,12 @@ class EventStreamServiceX : VectorService() {
      * @return true if the FCM is disable or not setup, user allowed background sync, user wants notification
      */
     private fun shouldISimulatePush(): Boolean {
+        if (Matrix.getInstance(applicationContext)?.defaultSession == null) {
+            Log.i(LOG_TAG, "## shouldISimulatePush: NO: no session")
+
+            return false
+        }
+
         mPushManager?.let { pushManager ->
             if (pushManager.useFcm()
                     && !TextUtils.isEmpty(pushManager.currentRegistrationToken)

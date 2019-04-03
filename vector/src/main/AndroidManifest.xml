@@ -107,6 +107,10 @@
     <!-- jitsi -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- Jitsi libs require min API 21 and min is set to 16 -->
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,co.apptailor.googlesignin,com.BV.LinearGradient,com.calendarevents,com.corbt.keepawake,com.dylanvann.fastimage,com.oblador.vectoricons,com.ocetnik.timer,com.rnimmersive,com.zmxv.RNSound,com.i18n.reactnativei18n,org.webkit.androidjsc" />
+
+
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />

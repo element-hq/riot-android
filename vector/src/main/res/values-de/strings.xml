@@ -1197,7 +1197,7 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="no_valid_google_play_services_apk">Keine validen Google-Play-Dienste gefunden. Benachrichtigungen könnten nicht richtig funktionieren.</string>
 
-    <string name="store_title">Riot.im - Kommunizierte auf deine Weise.</string>
+    <string name="store_title">Riot.im - Kommunizierte auf deine Weise</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
     <string name="store_full_description">"Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
 
@@ -1435,16 +1435,16 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
 
-<string name="action_mark_room_read">Als gelesen markieren</string>
+    <string name="action_mark_room_read">Als gelesen markieren</string>
     <string name="settings_notification_privacy_no_background_sync">Die App muss <b>nicht</b> im Hintergrund zum Heimserver verbinden, dies sollte die Akkunutzung reduzieren</string>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 Nachricht</item>
-	<item quantity="other">%1$s: %2$d Nachrichten</item>
-</plurals>
+        <item quantity="one">%1$s: 1 Nachricht</item>
+        <item quantity="other">%1$s: %2$d Nachrichten</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d Nachricht</item>
-	<item quantity="other">%d Nachrichten</item>
-</plurals>
+        <item quantity="one">%d Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Neues Ereignis</string>
     <string name="notification_unknown_room_name">Raum</string>
@@ -1453,4 +1453,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="notification_sender_me">Ich</string>
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
 
-    </resources>
+</resources>
