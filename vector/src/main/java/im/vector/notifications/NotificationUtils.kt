@@ -315,6 +315,7 @@ object NotificationUtils {
                     }
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
 
         // Display the pending call notification on the lock screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -344,6 +345,17 @@ object NotificationUtils {
     }
 
     /**
+     * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended
+     */
+    fun buildCallEndedNotification(context: Context): Notification {
+        return NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(context.getString(R.string.call_ended))
+                .setSmallIcon(R.drawable.ic_material_call_end_grey)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .build()
+    }
+
+    /**
      * Build a notification for a Room
      */
     fun buildMessagesListNotification(context: Context,
@@ -367,7 +379,7 @@ object NotificationUtils {
                 // A category allows groups of notifications to be ranked and filtered – per user or system settings.
                 // For example, alarm notifications should display before promo notifications, or message from known contact
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
-                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
 
                 // Title for API < 16 devices.
                 .setContentTitle(roomInfo.roomDisplayName)
@@ -595,6 +607,7 @@ object NotificationUtils {
                 .setWhen(lastMessageTimestamp)
                 .setStyle(style)
                 .setContentTitle(context.getString(R.string.riot_app_name))
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setSmallIcon(smallIcon)
                 //set content text to support devices running API level < 24
                 .setContentText(compatSummary)

@@ -1076,6 +1076,8 @@
         <item quantity="other">%d active widgets</item>
     </plurals>
 
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>

@@ -9,7 +9,7 @@ Features:
  -
 
 Improvements:
- -
+ - Fix crash on Jitsi conference by upgrading the lib to version 1.21.0 (#2412)
 
 Other changes:
  -

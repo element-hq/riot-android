@@ -118,6 +118,6 @@ public class Widget implements Serializable {
 
     @Override
     public String toString() {
-        return "<Widget: " + this + "p> id: " + getWidgetId() + " - type: " + getType() + " - name: " + getName() + " - url: " + getUrl();
+        return "Widget id: " + getWidgetId() + " - type: " + getType() + " - name: " + getName() + " - url: " + getUrl();
     }
 }
