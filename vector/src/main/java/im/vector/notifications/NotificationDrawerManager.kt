@@ -179,8 +179,16 @@ class NotificationDrawerManager(val context: Context) {
         }
     }
 
-
     fun refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
+        try {
+            _refreshNotificationDrawer(outdatedDetector)
+        } catch (e: Exception) {
+            //defensive coding
+            Log.e(LOG_TAG, "## Failed to refresh drawer", e)
+        }
+    }
+
+    private fun _refreshNotificationDrawer(outdatedDetector: OutdatedEventDetector?) {
         if (myUserDisplayName.isBlank()) {
             initWithSession(Matrix.getInstance(context).defaultSession)
         }
@@ -400,7 +408,9 @@ class NotificationDrawerManager(val context: Context) {
             try {
                 return BitmapFactory.decodeFile(roomAvatarPath, options)
             } catch (oom: OutOfMemoryError) {
-                Log.e(LOG_TAG, "decodeFile failed with an oom", oom)
+                Log.e(LOG_TAG, "## decodeFile failed with an oom", oom)
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "## decodeFile failed", e)
             }
 
         }

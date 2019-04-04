@@ -58,7 +58,7 @@ class IconLoader(val context: Context,
      * If already in cache, use it, else load it and call IconLoaderListener.onIconsLoaded() when ready
      */
     fun getUserIcon(path: String?): IconCompat? {
-        if (path == null) {
+        if (path == null || path.isEmpty()) {
             return null
         }
 
@@ -86,22 +86,7 @@ class IconLoader(val context: Context,
 
     @WorkerThread
     private fun loadUserIcon(path: String) {
-        val iconCompat = path.let {
-            try {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(path)
-                        .apply(RequestOptions.circleCropTransform()
-                                .format(DecodeFormat.PREFER_ARGB_8888))
-                        .submit()
-                        .get()
-            } catch (e: Exception) {
-                Log.e("IconLoader", "decodeFile failed", e)
-                null
-            }?.let { bitmap ->
-                IconCompat.createWithBitmap(bitmap)
-            }
-        }
+        val iconCompat = loadBitmap(path)
 
         synchronized(cache) {
             if (iconCompat == null) {
@@ -119,6 +104,22 @@ class IconLoader(val context: Context,
                 }
             }
         }
+    }
+
+    private fun loadBitmap(path: String): IconCompat? {
+        try {
+            Glide.with(context)
+                    .asBitmap()
+                    .load(path)
+                    .apply(RequestOptions.circleCropTransform().format(DecodeFormat.PREFER_ARGB_8888))
+                    .submit()
+                    .get()?.let { bitmap ->
+                        return IconCompat.createWithBitmap(bitmap)
+                    }
+        } catch (e: Exception) {
+            Log.e("IconLoader", "decodeFile failed", e)
+        }
+        return null
     }
 
 
