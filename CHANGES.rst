@@ -1,28 +1,13 @@
-Changes in Riot 0.8.29 (2019-XX-XX)
+Changes in Riot 0.8.29 (2019-04-04)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
+ - Upgrade MatrixSdk to version 0.9.20.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.20
 
 Improvements:
  - Fix crash on Jitsi conference by upgrading the lib to version 1.21.0 (#2412)
  - Finally upgrade Jitsi lib to version 2.0.0 (https://github.com/jitsi/jitsi-meet/releases/tag/android-sdk-2.0.0)
-
-Other changes:
- -
-
-Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.8.28 (2019-04-01)
 ===================================================
