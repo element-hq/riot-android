@@ -194,7 +194,7 @@ public class VectorAutoCompleteTextView extends AppCompatMultiAutoCompleteTextVi
                 mPopupCanBeUpdatedField = AutoCompleteTextView.class.getDeclaredField("mPopupCanBeUpdated");
                 mPopupCanBeUpdatedField.setAccessible(true);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage(), e);
+                Log.e(LOG_TAG, "## initAutoCompletion() : failed to retrieve mPopupCanBeUpdated " + e.getMessage());
             }
         }
 
