@@ -20,19 +20,20 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
+import com.facebook.react.modules.core.PermissionListener;
+
+import org.jetbrains.annotations.NotNull;
+import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.Map;
@@ -43,7 +44,10 @@ import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 
-public class JitsiCallActivity extends VectorAppCompatActivity {
+/**
+ * Inspired from JitsiMeetActivity
+ */
+public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiMeetActivityInterface {
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**
@@ -62,7 +66,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     private static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
 
     // the jitsi view
-    private JitsiMeetView mJitsiView = null;
+    private JitsiMeetView mJitsiView;
 
     // the linked widget
     private Widget mWidget = null;
@@ -79,14 +83,8 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     // the room
     private Room mRoom;
 
-    @BindView(R.id.jsti_back_to_app_icon)
-    View mBackToAppIcon;
-
-    @BindView(R.id.jsti_close_widget_icon)
-    View mCloseWidgetIcon;
-
-    @BindView(R.id.jsti_connecting_text_view)
-    View mConnectingTextView;
+    @BindView(R.id.jitsi_layout)
+    FrameLayout mJitsiContainer;
 
     /**
      * Widget events listener
@@ -143,58 +141,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
 
         mJitsiView = new JitsiMeetView(this);
 
-        refreshStatusBar();
-
         loadURL();
-    }
-
-    /**
-     * Refresh the status bar
-     */
-    private void refreshStatusBar() {
-        boolean canCloseWidget = (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom));
-
-        // close widget button
-        mCloseWidgetIcon.setVisibility(canCloseWidget ? View.VISIBLE : View.GONE);
-        mCloseWidgetIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWaitingView();
-                WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget.getWidgetId(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        finish();
-                    }
-
-                    private void onError(String errorMessage) {
-                        hideWaitingView();
-                        Toast.makeText(JitsiCallActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
-            }
-        });
-
-        mBackToAppIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     /**
@@ -202,31 +149,26 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
      */
     private void loadURL() {
         try {
-            Bundle config = new Bundle();
-            //config.putBoolean("startWithAudioMuted", true);
-            config.putBoolean("startWithVideoMuted", !mIsVideoCall);
-            Bundle urlObject = new Bundle();
-            urlObject.putBundle("config", config);
-            urlObject.putString("url", mCallUrl);
-            mJitsiView.loadURLObject(urlObject);
+            JitsiMeetConferenceOptions jitsiMeetConferenceOptions = new JitsiMeetConferenceOptions.Builder()
+                    .setVideoMuted(!mIsVideoCall)
+                    // Configure the title of the screen
+                    // TODO config.putString("callDisplayName", mRoom.getRoomDisplayName(this));
+                    .setRoom(mCallUrl)
+                    .build();
+
+            mJitsiView.join(jitsiMeetConferenceOptions);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage(), e);
+            Log.e(LOG_TAG, "## join() failed : " + e.getMessage(), e);
             finish();
+            return;
         }
 
-        RelativeLayout layout = findViewById(R.id.call_layout);
-        RelativeLayout.LayoutParams params
-                = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        layout.setVisibility(View.VISIBLE);
-        layout.addView(mJitsiView, 0, params);
+        FrameLayout.LayoutParams params
+                = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+
+        mJitsiContainer.addView(mJitsiView, 0, params);
 
         mJitsiView.setListener(new JitsiMeetViewListener() {
-            @Override
-            public void onConferenceFailed(Map<String, Object> map) {
-                Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
-                finish();
-            }
 
             @Override
             public void onConferenceJoined(Map<String, Object> map) {
@@ -235,14 +177,14 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mConnectingTextView.setVisibility(View.GONE);
+                        hideWaitingView();
                     }
                 });
             }
 
             @Override
-            public void onConferenceLeft(Map<String, Object> map) {
-                Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
+            public void onConferenceTerminated(Map<String, Object> map) {
+                Log.d(LOG_TAG, "## onConferenceTerminated() : " + map);
                 finish();
             }
 
@@ -256,16 +198,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
                         hideWaitingView();
                     }
                 });
-            }
-
-            @Override
-            public void onConferenceWillLeave(Map<String, Object> map) {
-                Log.d(LOG_TAG, "## onConferenceWillLeave() : " + map);
-            }
-
-            @Override
-            public void onLoadConfigError(Map<String, Object> data) {
-                Log.d(LOG_TAG, "## onLoadConfigError() : " + data);
             }
         });
     }
@@ -281,22 +213,25 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
                 parent.removeView(mJitsiView);
             }
 
+            mJitsiView.setListener(null);
+
+            // mJitsiView.leave();
             mJitsiView.dispose();
             mJitsiView = null;
         }
 
-        JitsiMeetView.onHostDestroy(this);
+        JitsiMeetActivityDelegate.onHostDestroy(this);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-        JitsiMeetView.onNewIntent(intent);
+        JitsiMeetActivityDelegate.onNewIntent(intent);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        JitsiMeetView.onHostPause(this);
+    protected void onStop() {
+        super.onStop();
+        JitsiMeetActivityDelegate.onHostPause(this);
         WidgetsManager.removeListener(mWidgetListener);
     }
 
@@ -309,15 +244,21 @@ public class JitsiCallActivity extends VectorAppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        JitsiMeetView.onHostResume(this);
+        JitsiMeetActivityDelegate.onHostResume(this);
         WidgetsManager.addListener(mWidgetListener);
-        refreshStatusBar();
     }
 
     @Override
     public void onBackPressed() {
-        if (!JitsiMeetView.onBackPressed()) {
-            super.onBackPressed();
-        }
+        JitsiMeetActivityDelegate.onBackPressed();
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
+        JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener);
     }
 }

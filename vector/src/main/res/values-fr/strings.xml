@@ -669,7 +669,7 @@ Appareils inconnus :</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="black_them">Thème noir</string>
 
-    <string name="notification_sync_in_progress">Synchronisation</string>
+    <string name="notification_sync_in_progress">Synchronisation…</string>
     <string name="notification_listening_for_events">Écoute d’évènements</string>
 
     <string name="login_mobile_device">Portable</string>
@@ -1402,5 +1402,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="notification_new_invitation">Nouvelle invitation</string>
     <string name="notification_sender_me">Moi</string>
     <string name="notification_inline_reply_failed">** Échec de l’envoi − veuillez ouvrir le salon</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les vieux appareils (avec une version d\'Android antérieure à 5.0)</string>
 
 </resources>

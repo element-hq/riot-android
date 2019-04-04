@@ -713,7 +713,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="dark_theme">Tumma teema</string>
     <string name="black_them">Musta teema</string>
 
-    <string name="notification_sync_in_progress">Synkronoidaan</string>
+    <string name="notification_sync_in_progress">Synkronoidaan…</string>
     <string name="notification_listening_for_events">Seuraa tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
@@ -1438,5 +1438,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="notification_new_invitation">Uusi kutsu</string>
     <string name="notification_sender_me">Minä</string>
     <string name="notification_inline_reply_failed">** Lähetys epäonnistui — avaathan huoneen</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 5.0 tai vanhempi)</string>
 
 </resources>
