@@ -62,8 +62,11 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
         }
 
         viewModel.transactionState.observe(this, Observer {
-            val uxState = (it as? IncomingSASVerificationTransaction)?.uxState
+            val uxState = (viewModel.transaction as? IncomingSASVerificationTransaction)?.uxState
             when (uxState) {
+                IncomingSASVerificationTransaction.State.SHOW_ACCEPT -> {
+                    viewModel.loadingLiveEvent.value = null
+                }
                 IncomingSASVerificationTransaction.State.WAIT_FOR_KEY_AGREEMENT -> {
                     viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
                 }
@@ -72,6 +75,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
                 }
                 IncomingSASVerificationTransaction.State.CANCELLED_BY_ME,
                 IncomingSASVerificationTransaction.State.CANCELLED_BY_OTHER -> {
+                    viewModel.loadingLiveEvent.value = null
                     viewModel.navigateCancel()
                 }
             }

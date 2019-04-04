@@ -25,7 +25,8 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
-import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
+import org.matrix.androidsdk.crypto.verification.IncomingSASVerificationTransaction
+import org.matrix.androidsdk.crypto.verification.OutgoingSASVerificationRequest
 import org.matrix.androidsdk.rest.model.crypto.KeyVerificationStart
 
 class SASVerificationShortCodeFragment : VectorBaseFragment() {
@@ -128,21 +129,45 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
 
 
         viewModel.transactionState.observe(this, Observer {
-            when (it) {
-                SASVerificationTransaction.SASVerificationTxState.ShortCodeAccepted,
-                SASVerificationTransaction.SASVerificationTxState.SendingMac,
-                SASVerificationTransaction.SASVerificationTxState.MacSent,
-                SASVerificationTransaction.SASVerificationTxState.Verifying -> {
-                    viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
-                }
-                SASVerificationTransaction.SASVerificationTxState.Verified -> {
-                    viewModel.deviceIsVerified()
-                }
-                SASVerificationTransaction.SASVerificationTxState.OnCancelled,
-                SASVerificationTransaction.SASVerificationTxState.Cancelled -> {
-                    viewModel.navigateCancel()
+            if (viewModel.transaction is IncomingSASVerificationTransaction) {
+                val uxState = (viewModel.transaction as IncomingSASVerificationTransaction).uxState
+                when (uxState) {
+                    IncomingSASVerificationTransaction.State.SHOW_SAS -> {
+                        viewModel.loadingLiveEvent.value = null
+                    }
+                    IncomingSASVerificationTransaction.State.VERIFIED -> {
+                        viewModel.loadingLiveEvent.value = null
+                        viewModel.deviceIsVerified()
+                    }
+                    IncomingSASVerificationTransaction.State.CANCELLED_BY_ME,
+                    IncomingSASVerificationTransaction.State.CANCELLED_BY_OTHER -> {
+                        viewModel.loadingLiveEvent.value = null
+                        viewModel.navigateCancel()
+                    }
+                    else -> {
+                        viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
+                    }
                 }
 
+            } else if (viewModel.transaction is OutgoingSASVerificationRequest) {
+                val uxState = (viewModel.transaction as OutgoingSASVerificationRequest).uxState
+                when (uxState) {
+                    OutgoingSASVerificationRequest.State.SHOW_SAS -> {
+                        viewModel.loadingLiveEvent.value = null
+                    }
+                    OutgoingSASVerificationRequest.State.VERIFIED -> {
+                        viewModel.loadingLiveEvent.value = null
+                        viewModel.deviceIsVerified()
+                    }
+                    OutgoingSASVerificationRequest.State.CANCELLED_BY_ME,
+                    OutgoingSASVerificationRequest.State.CANCELLED_BY_OTHER -> {
+                        viewModel.loadingLiveEvent.value = null
+                        viewModel.navigateCancel()
+                    }
+                    else -> {
+                        viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
+                    }
+                }
             }
         })
     }

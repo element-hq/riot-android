@@ -15,60 +15,73 @@
  */
 package im.vector
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.support.v7.app.AlertDialog
+import android.widget.ImageView
 import im.vector.activity.ShortCodeDeviceVerificationActivity
+import im.vector.notifications.NotificationUtils
+import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.verification.CancelCode
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
 import org.matrix.androidsdk.crypto.verification.VerificationManager
 import org.matrix.androidsdk.crypto.verification.VerificationTransaction
+import org.matrix.androidsdk.util.Log
 
+/**
+ * Listens to the VerificationManager and a new notification when an incoming request is detected.
+ */
 object IncomingVerificationRequestHandler : VerificationManager.ManagerListener {
 
-    private var mAlertDialog: AlertDialog? = null
 
-    override fun transactionCreated(tx: VerificationTransaction) {
-
-    }
+    override fun transactionCreated(tx: VerificationTransaction) {}
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx is SASVerificationTransaction) {
-            if (tx.state == SASVerificationTransaction.SASVerificationTxState.OnStarted) {
-                //We should display a dialog
-                onSasTransactionStarted(tx)
+            when (tx.state) {
+                SASVerificationTransaction.SASVerificationTxState.OnStarted -> {
+                    //Add a notification for every incoming request
+                    val context = VectorApp.getInstance()
+                    val session = Matrix.getInstance(context).defaultSession
+                    val name = session.dataHandler.getUser(tx.otherUserID)?.displayname ?: tx.otherUserID
+                    NotificationUtils.buildIncomingKeyVerificationNotification(context, tx.otherUserID, name, tx.transactionId, getUserAvatarBitmap(session,tx.otherUserID))?.let {
+                        NotificationUtils.showNotificationMessage(context, tx.transactionId, 100, it)
+                    }
+                }
+                SASVerificationTransaction.SASVerificationTxState.Cancelled,
+                SASVerificationTransaction.SASVerificationTxState.OnCancelled,
+                SASVerificationTransaction.SASVerificationTxState.Verified -> {
+                    //cancel related notification
+                    NotificationUtils.cancelNotificationMessage(VectorApp.getInstance(),tx.transactionId,100)
+                }
             }
-        }
-    }
-
-    private fun onSasTransactionStarted(tx: SASVerificationTransaction) {
-        if (null == VectorApp.getCurrentActivity()) {
-            //TODO: wait until an activity is ready
-            return
-        }
-        val activity = VectorApp.getCurrentActivity()
-
-        if (activity != null) {
-            val session = Matrix.getInstance(activity).defaultSession
-
-
-            mAlertDialog = AlertDialog.Builder(activity)
-                    .setMessage(activity.getString(R.string.sas_incoming_verification_request_dialog))
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.ignore_request) { dialog, which ->
-                        //onDisplayKeyShareDialogClose(false, true)
-                        tx.cancel(session, CancelCode.User)
-                    }.setPositiveButton(R.string.sas_view_request_action
-                    ) { dialog, id ->
-                        val intent = ShortCodeDeviceVerificationActivity.intent(activity, session.myUserId, tx.otherUserID, tx.transactionId)
-                        activity.startActivity(intent)
-                    }
-                    .setOnCancelListener {
-                        tx.cancel(session, CancelCode.User)
-                    }
-                    .show()
         }
     }
 
     fun initialize(mgr: VerificationManager) {
         mgr.addListener(this)
+    }
+
+    private fun getUserAvatarBitmap(session: MXSession, userId: String): Bitmap? {
+
+        session.dataHandler.getUser(userId)?.avatarUrl?.let {
+            val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, 40)
+            if (userAvatarUrlPath != null) {
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                try {
+                    return BitmapFactory.decodeFile(userAvatarUrlPath.absolutePath, options)
+                } catch (oom: OutOfMemoryError) {
+                    Log.e(IncomingVerificationRequestHandler::class.simpleName, "decodeFile failed with an oom", oom)
+                }
+
+            } else {
+                // prepare for the next time
+                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(VectorApp.getInstance()), it, 40)
+            }
+        }
+        return null
     }
 }

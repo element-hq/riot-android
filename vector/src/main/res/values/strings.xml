@@ -1426,9 +1426,15 @@ Why choose Riot.im?
     <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
     <string name="sas_legacy_verification_button_title">Use legacy verification.</string>
 
+    <string name="sas_verification_request_notification_channel_title">Key Verification</string>
     <string name="sas_cancelled_dialog_title">Request Cancelled</string>
     <string name="sas_cancelled_by_other">The other party cancelled the verification.\n%s</string>
     <string name="sas_cancelled_by_me">The verification is canceled.\nReason: %s</string>
+
+
+    <string name="sas_verification_request_notification_channel">Interactive Device Verification</string>
+    <string name="sas_incoming_request_notif_title">Verification Request</string>
+    <string name="sas_incoming_request_notif_content">%s wants to verify your device</string>
 
     <!-- SAS Errors -->
     <string name="sas_error_m.user">The user cancelled the verification</string>
