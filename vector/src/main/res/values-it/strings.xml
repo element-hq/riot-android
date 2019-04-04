@@ -1447,6 +1447,6 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="notification_sender_me">Io</string>
     <string name="notification_inline_reply_failed">** Invio fallito - per favore apri la stanza</string>
 
-<string name="error_jitsi_not_supported_on_old_device">Spiacenti, le chiamate di gruppo con Jitsi non sono supportate sui vecchi dispositivi (con Android precedenti al 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Spiacenti, le chiamate di gruppo con Jitsi non sono supportate sui vecchi dispositivi (con Android precedenti al 5.0)</string>
 
-    </resources>
+</resources>
