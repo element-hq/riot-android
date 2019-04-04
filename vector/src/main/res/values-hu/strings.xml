@@ -860,7 +860,7 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy">Értesítés adatvédelme</string>
     <string name="settings_notification_privacy_reduced">Csökkentett adatvédelem</string>
     <string name="settings_notification_privacy_need_permission">"Az alkalmazásnak engedélyre van szüksége háttérben futáshoz "</string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem mutatják az üzenet tartalmát</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem fogják mutatni az üzenet tartalmát</b></string>
 
     <string name="startup_notification_privacy_title">Értesítés adatvédelme</string>
     <string name="title_activity_choose_sticker">Matrica küldése</string>
@@ -1031,7 +1031,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1259,11 +1259,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1342,7 +1342,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1402,4 +1402,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="notification_sender_me">Én</string>
     <string name="notification_inline_reply_failed">** A küldés nem sikerült - kérlek nyisd meg a szobát</string>
 
-</resources>
+<string name="error_jitsi_not_supported_on_old_device">Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 5.0-nál régebbi) nem támogatottak</string>
+
+    </resources>
