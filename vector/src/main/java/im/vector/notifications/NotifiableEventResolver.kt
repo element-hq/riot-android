@@ -39,7 +39,19 @@ class NotifiableEventResolver(val context: Context) {
 
     private val eventDisplay = RiotEventDisplay(context)
 
+
     fun resolveEvent(event: Event, roomState: RoomState?, bingRule: BingRule?, session: MXSession): NotifiableEvent? {
+
+        return try {
+            _resolveEvent(event, roomState, bingRule, session)
+        } catch (e: Exception) {
+            //Defensive coding, should not happen
+            Log.e(LOG_TAG, "## Error while resolving event", e)
+            null
+        }
+    }
+
+    private fun _resolveEvent(event: Event, roomState: RoomState?, bingRule: BingRule?, session: MXSession): NotifiableEvent? {
         val store = session.dataHandler.store
         if (store == null) {
             Log.e(LOG_TAG, "## NotifiableEventResolver, unable to get store")
@@ -133,25 +145,31 @@ class NotifiableEventResolver(val context: Context) {
             notifiableEvent.soundName = soundName
 
 
-            val roomAvatarPath = session.mediaCache?.thumbnailCacheFile(room.avatarUrl, 50)
-            if (roomAvatarPath != null) {
-                notifiableEvent.roomAvatarPath = roomAvatarPath.path
-            } else {
-                // prepare for the next time
-                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
-            }
+            try {
 
-            room.state.getMember(event.sender)?.avatarUrl?.let {
-                val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
-                val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
-                if (userAvatarUrlPath != null) {
-                    notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
+                val roomAvatarPath = session.mediaCache?.thumbnailCacheFile(room.avatarUrl, 50)
+                if (roomAvatarPath != null) {
+                    notifiableEvent.roomAvatarPath = roomAvatarPath.path
                 } else {
                     // prepare for the next time
-                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
+                    session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), room.avatarUrl, 50)
                 }
-            }
 
+                room.state.getMember(event.sender)?.getAvatarUrl()?.let {
+                    val size = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+                    val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, size)
+                    if (userAvatarUrlPath != null) {
+                        notifiableEvent.senderAvatarPath = userAvatarUrlPath.path
+                    } else {
+                        // prepare for the next time
+                        session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(context), it, size)
+                    }
+                }
+
+            } catch (e: Exception) {
+                //?Defensive coding, reported crash and logs contains lot of invalid avatar
+                Log.e(LOG_TAG, "## Error while resolving avatars", e)
+            }
             return notifiableEvent
         }
     }
