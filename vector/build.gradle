@@ -250,7 +250,7 @@ dependencies {
     implementation(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
-    implementation('org.jitsi.react:jitsi-meet-sdk:1.21.0') {
+    implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {
         transitive = true
     }
 

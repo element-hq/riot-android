@@ -20,18 +20,18 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.facebook.react.modules.core.PermissionListener;
 
+import org.jetbrains.annotations.NotNull;
+import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
-import org.jitsi.meet.sdk.ReactActivityLifecycleCallbacks;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.util.Log;
@@ -149,32 +149,26 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
      */
     private void loadURL() {
         try {
-            Bundle config = new Bundle();
-            //config.putBoolean("startWithAudioMuted", true);
-            config.putBoolean("startWithVideoMuted", !mIsVideoCall);
-            // Configure the title of the screen
-            config.putString("callDisplayName", mRoom.getRoomDisplayName(this));
-            Bundle urlObject = new Bundle();
-            urlObject.putBundle("config", config);
-            urlObject.putString("url", mCallUrl);
-            mJitsiView.loadURLObject(urlObject);
+            JitsiMeetConferenceOptions jitsiMeetConferenceOptions = new JitsiMeetConferenceOptions.Builder()
+                    .setVideoMuted(!mIsVideoCall)
+                    // Configure the title of the screen
+                    // TODO config.putString("callDisplayName", mRoom.getRoomDisplayName(this));
+                    .setRoom(mCallUrl)
+                    .build();
+
+            mJitsiView.join(jitsiMeetConferenceOptions);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## loadURL() failed : " + e.getMessage(), e);
+            Log.e(LOG_TAG, "## join() failed : " + e.getMessage(), e);
             finish();
             return;
         }
 
         FrameLayout.LayoutParams params
-                = new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
         mJitsiContainer.addView(mJitsiView, 0, params);
 
         mJitsiView.setListener(new JitsiMeetViewListener() {
-            @Override
-            public void onConferenceFailed(Map<String, Object> map) {
-                Log.e(LOG_TAG, "## onConferenceFailed() : " + map);
-                finish();
-            }
 
             @Override
             public void onConferenceJoined(Map<String, Object> map) {
@@ -189,8 +183,8 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
             }
 
             @Override
-            public void onConferenceLeft(Map<String, Object> map) {
-                Log.d(LOG_TAG, "## onConferenceLeft() : " + map);
+            public void onConferenceTerminated(Map<String, Object> map) {
+                Log.d(LOG_TAG, "## onConferenceTerminated() : " + map);
                 finish();
             }
 
@@ -204,16 +198,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
                         hideWaitingView();
                     }
                 });
-            }
-
-            @Override
-            public void onConferenceWillLeave(Map<String, Object> map) {
-                Log.d(LOG_TAG, "## onConferenceWillLeave() : " + map);
-            }
-
-            @Override
-            public void onLoadConfigError(Map<String, Object> data) {
-                Log.d(LOG_TAG, "## onLoadConfigError() : " + data);
             }
         });
     }
@@ -229,22 +213,25 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
                 parent.removeView(mJitsiView);
             }
 
+            mJitsiView.setListener(null);
+
+            // mJitsiView.leave();
             mJitsiView.dispose();
             mJitsiView = null;
         }
 
-        ReactActivityLifecycleCallbacks.onHostDestroy(this);
+        JitsiMeetActivityDelegate.onHostDestroy(this);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-        ReactActivityLifecycleCallbacks.onNewIntent(intent);
+        JitsiMeetActivityDelegate.onNewIntent(intent);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        ReactActivityLifecycleCallbacks.onHostPause(this);
+        JitsiMeetActivityDelegate.onHostPause(this);
         WidgetsManager.removeListener(mWidgetListener);
     }
 
@@ -257,21 +244,21 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     protected void onResume() {
         super.onResume();
 
-        ReactActivityLifecycleCallbacks.onHostResume(this);
+        JitsiMeetActivityDelegate.onHostResume(this);
         WidgetsManager.addListener(mWidgetListener);
     }
 
     @Override
     public void onBackPressed() {
-        ReactActivityLifecycleCallbacks.onBackPressed();
+        JitsiMeetActivityDelegate.onBackPressed();
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        ReactActivityLifecycleCallbacks.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
-        ReactActivityLifecycleCallbacks.requestPermissions(this, permissions, requestCode, listener);
+        JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener);
     }
 }

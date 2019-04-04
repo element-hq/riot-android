@@ -10,6 +10,7 @@ Features:
 
 Improvements:
  - Fix crash on Jitsi conference by upgrading the lib to version 1.21.0 (#2412)
+ - Finally upgrade Jitsi lib to version 2.0.0 (https://github.com/jitsi/jitsi-meet/releases/tag/android-sdk-2.0.0)
 
 Other changes:
  -
