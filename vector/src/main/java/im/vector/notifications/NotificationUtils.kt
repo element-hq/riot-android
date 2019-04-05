@@ -25,6 +25,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.StringRes
@@ -181,7 +182,7 @@ object NotificationUtils {
                     description = context.getString(R.string.sas_verification_request_notification_channel)
                     enableVibration(true)
                     enableLights(true)
-                    lightColor = Color.GREEN
+                    lightColor = accentColor
                 })
     }
 

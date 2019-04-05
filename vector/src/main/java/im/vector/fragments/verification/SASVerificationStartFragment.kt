@@ -74,8 +74,8 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                     //display loading
                     TransitionManager.beginDelayedTransition(this.rootLayout)
                     this.loadingText.isGone = false
+                    //this.startButton.isEnabled = false
                     this.startButton.isInvisible = true
-                    this.startButton.isEnabled = false
                     this.startButtonLoading.isVisible = true
                     this.startButtonLoading.animate()
 
@@ -91,7 +91,7 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                     TransitionManager.beginDelayedTransition(this.rootLayout)
                     this.loadingText.isGone = true
                     this.startButton.isVisible = true
-                    this.startButton.isEnabled = true
+                   // this.startButton.isEnabled = true
                     this.startButtonLoading.isGone = true
                 }
             }
