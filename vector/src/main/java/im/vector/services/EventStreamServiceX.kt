@@ -574,10 +574,15 @@ class EventStreamServiceX : VectorService() {
             val intent = Intent(context, EventStreamServiceX::class.java)
             intent.action = action
 
-            if (foreground) {
-                ContextCompat.startForegroundService(context, intent)
-            } else {
-                context.startService(intent)
+            try {
+                if (foreground) {
+                    ContextCompat.startForegroundService(context, intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (e: java.lang.Exception) {
+                //Can we recover here? in case of illegal state
+                Log.i(LOG_TAG, "## Failed to start event stream", e)
             }
         }
     }
