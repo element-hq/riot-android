@@ -229,7 +229,6 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
         fun didSelectSetupMessageRecovery()
         fun didSelectRestoreMessageRecovery()
         fun didSelectDeleteSetupMessageRecovery()
-        fun displayDeviceVerificationDialog(signature: KeysBackupVersionTrustSignature)
     }
 
 }

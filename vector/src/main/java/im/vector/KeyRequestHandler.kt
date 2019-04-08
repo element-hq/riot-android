@@ -203,9 +203,9 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
 
         val alertMgrUniqueKey = alertManagerId(deviceId, userId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
-            it.mDeviceId == cancellation.mDeviceId &&
-                    it.mUserId == cancellation.mUserId &&
-                    it.mRequestId == cancellation.mRequestId
+            it.mDeviceId == cancellation.mDeviceId
+                    && it.mUserId == cancellation.mUserId
+                    && it.mRequestId == cancellation.mRequestId
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)

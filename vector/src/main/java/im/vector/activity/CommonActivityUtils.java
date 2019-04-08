@@ -35,9 +35,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -1158,8 +1158,7 @@ public class CommonActivityUtils {
     static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
                                                            final String sender,
                                                            final MXSession session,
-                                                           Activity activity,
-                                                           @NonNull final YesNoListener yesNoListener) {
+                                                           Activity activity, Fragment fragment, int reqCode) {
 
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
@@ -1170,8 +1169,11 @@ public class CommonActivityUtils {
         //Priority is to use new verification method, and fallback to older if user chooses to
 
         Intent intent = ShortCodeDeviceVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
-        activity.startActivity(intent);
-
+        if (fragment != null) {
+            fragment.startActivityForResult(intent, reqCode);
+        } else {
+            activity.startActivityForResult(intent, reqCode);
+        }
 
 //        LayoutInflater inflater = activity.getLayoutInflater();
 //
@@ -1212,6 +1214,7 @@ public class CommonActivityUtils {
 //                })
 //                .show();
     }
+
     /**
      * Display the device verification warning
      *

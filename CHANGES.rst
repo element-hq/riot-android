@@ -6,10 +6,10 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - E2E: SAS Verification
 
 Improvements:
- -
+ - Use heads-up alert UX for key-share and key-verification requests
 
 Other changes:
  -

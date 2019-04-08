@@ -112,6 +112,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
+
+    private static final int DEVICE_VERIFICATION_REQ_CODE = 12;
+
     // internal info
     private Room mRoom;
     @Nullable
@@ -239,6 +242,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == DEVICE_VERIFICATION_REQ_CODE) {
+            refreshUserDevicesList();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     // Room action listeners. Every time an action is detected the UI must be updated.
     private final ApiCallback<Void> mRoomActionsListener = new SimpleApiCallback<Void>(this) {
@@ -1524,7 +1536,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 mRoom.addEventListener(mLiveEventsListener);
             }
             mSession.getDataHandler().addListener(mPresenceEventsListener);
-
+            refreshUserDevicesList();
             updateAdapterListViewItems();
         }
     }
@@ -1594,17 +1606,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
             default: // Blocked
-                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, new YesNoListener() {
-                    @Override
-                    public void yes() {
-                        refreshUserDevicesList();
-                    }
-
-                    @Override
-                    public void no() {
-                        // Nothing to do
-                    }
-                });
+                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, null, DEVICE_VERIFICATION_REQ_CODE);
                 break;
         }
     }
