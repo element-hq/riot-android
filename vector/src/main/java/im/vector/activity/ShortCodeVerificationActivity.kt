@@ -128,8 +128,8 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                                 .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                                 .commitNow()
                     }
-                    IncomingSASVerificationTransaction.State.CANCELLED_BY_ME,
-                    IncomingSASVerificationTransaction.State.CANCELLED_BY_OTHER -> {
+                    OutgoingSASVerificationRequest.State.CANCELLED_BY_ME,
+                    OutgoingSASVerificationRequest.State.CANCELLED_BY_OTHER -> {
                         viewModel.navigateCancel()
                     }
                 }
@@ -197,5 +197,10 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                 updateWaitingView(WaitingViewData(status, isIndeterminate = true))
             }
         })
+    }
+
+    override fun onBackPressed() {
+        //we want to cancel the transaction
+        viewModel.cancelTransaction()
     }
 }

@@ -240,6 +240,9 @@ dependencies {
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
 
+    //Alerter
+    implementation 'com.tapadoo.android:alerter:3.0.2'
+
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external lib

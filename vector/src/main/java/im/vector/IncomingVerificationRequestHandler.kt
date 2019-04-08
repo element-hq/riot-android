@@ -15,20 +15,11 @@
  */
 package im.vector
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
-import android.support.v7.app.AlertDialog
-import android.widget.ImageView
 import im.vector.activity.ShortCodeDeviceVerificationActivity
-import im.vector.notifications.NotificationUtils
-import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.verification.CancelCode
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
 import org.matrix.androidsdk.crypto.verification.VerificationManager
 import org.matrix.androidsdk.crypto.verification.VerificationTransaction
-import org.matrix.androidsdk.util.Log
 
 /**
  * Listens to the VerificationManager and a new notification when an incoming request is detected.
@@ -45,16 +36,46 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                     //Add a notification for every incoming request
                     val context = VectorApp.getInstance()
                     val session = Matrix.getInstance(context).defaultSession
-                    val name = session.dataHandler.getUser(tx.otherUserID)?.displayname ?: tx.otherUserID
-                    NotificationUtils.buildIncomingKeyVerificationNotification(context, tx.otherUserID, name, tx.transactionId, getUserAvatarBitmap(session,tx.otherUserID))?.let {
-                        NotificationUtils.showNotificationMessage(context, tx.transactionId, 100, it)
+                    val name = session.dataHandler.getUser(tx.otherUserID)?.displayname
+                            ?: tx.otherUserID
+
+                    val alert = PopupAlertManager.VectorAlert(
+                            "kvr_${tx.transactionId}",
+                            context.getString(R.string.sas_incoming_request_notif_title),
+                            context.getString(R.string.sas_incoming_request_notif_content, name),
+                            R.drawable.shield
+                    ).apply {
+                        contentAction = Runnable {
+                            val intent = ShortCodeDeviceVerificationActivity.intent(context, session.myUserId, tx.otherUserID, tx.transactionId)
+                            weakCurrentActivity?.get()?.startActivity(intent)
+                        }
+                        dissmissedAction = Runnable {
+                            tx.cancel(session, CancelCode.User)
+                        }
+                        addButton(
+                                context.getString(R.string.ignore),
+                                Runnable {
+                                    tx.cancel(session, CancelCode.User)
+                                }
+                        )
+                        addButton(
+                                context.getString(R.string.action_open),
+                                Runnable {
+                                    val intent = ShortCodeDeviceVerificationActivity.intent(context, session.myUserId, tx.otherUserID, tx.transactionId)
+                                    weakCurrentActivity?.get()?.startActivity(intent)
+                                }
+                        )
+
                     }
+                    PopupAlertManager.postVectorAlert(alert)
                 }
                 SASVerificationTransaction.SASVerificationTxState.Cancelled,
                 SASVerificationTransaction.SASVerificationTxState.OnCancelled,
                 SASVerificationTransaction.SASVerificationTxState.Verified -> {
                     //cancel related notification
-                    NotificationUtils.cancelNotificationMessage(VectorApp.getInstance(),tx.transactionId,100)
+                    PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
+                }
+                else -> {
                 }
             }
         }
@@ -64,24 +85,7 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
         mgr.addListener(this)
     }
 
-    private fun getUserAvatarBitmap(session: MXSession, userId: String): Bitmap? {
+    override fun markedAsManuallyVerified(userId: String, deviceID: String) {
 
-        session.dataHandler.getUser(userId)?.avatarUrl?.let {
-            val userAvatarUrlPath = session.mediaCache?.thumbnailCacheFile(it, 40)
-            if (userAvatarUrlPath != null) {
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                try {
-                    return BitmapFactory.decodeFile(userAvatarUrlPath.absolutePath, options)
-                } catch (oom: OutOfMemoryError) {
-                    Log.e(IncomingVerificationRequestHandler::class.simpleName, "decodeFile failed with an oom", oom)
-                }
-
-            } else {
-                // prepare for the next time
-                session.mediaCache?.loadAvatarThumbnail(session.homeServerConfig, ImageView(VectorApp.getInstance()), it, 40)
-            }
-        }
-        return null
     }
 }

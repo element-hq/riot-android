@@ -113,7 +113,7 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
                     CommonActivityUtils.displayDeviceVerificationDialogLegacy<Any>(it, it.userId, viewModel.session, activity, object : YesNoListener {
                         override fun yes() {
-                            viewModel.finishSuccess()
+                            viewModel.manuallyVerified()
                         }
 
                         override fun no() {

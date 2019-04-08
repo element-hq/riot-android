@@ -25,7 +25,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.StringRes
@@ -33,9 +32,11 @@ import android.support.v4.app.*
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import im.vector.BuildConfig
-import im.vector.Matrix
 import im.vector.R
-import im.vector.activity.*
+import im.vector.activity.JoinRoomActivity
+import im.vector.activity.LockScreenActivity
+import im.vector.activity.VectorHomeActivity
+import im.vector.activity.VectorRoomActivity
 import im.vector.receiver.NotificationBroadcastReceiver
 import im.vector.util.PreferencesManager
 import im.vector.util.startNotificationChannelSettingsIntent
@@ -87,10 +88,6 @@ object NotificationUtils {
 
     private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
     private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-
-
-    private const val KEY_VERIFICATION_CHANNEL = "KEY_VERIFICATION_CHANNEL"
-
 
     /* ==========================================================================================
      * Channel names
@@ -175,15 +172,6 @@ object NotificationUtils {
                     lightColor = accentColor
                 })
 
-        notificationManager.createNotificationChannel(NotificationChannel(KEY_VERIFICATION_CHANNEL,
-                context.getString(R.string.sas_incoming_request_title),
-                NotificationManager.IMPORTANCE_HIGH)
-                .apply {
-                    description = context.getString(R.string.sas_verification_request_notification_channel)
-                    enableVibration(true)
-                    enableLights(true)
-                    lightColor = accentColor
-                })
     }
 
     /**
@@ -645,37 +633,6 @@ object NotificationUtils {
                 .setDeleteIntent(getDismissSummaryPendingIntent(context))
                 .build()
 
-    }
-
-    fun buildIncomingKeyVerificationNotification(context: Context, otherUserId: String, otherUserName: String, transactionId: String, largeIcon: Bitmap?): Notification? {
-        return NotificationCompat.Builder(context, KEY_VERIFICATION_CHANNEL)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(context.getString(R.string.sas_incoming_request_notif_title))
-                .setSmallIcon(R.drawable.key_small)
-                //set content text to support devices running API level < 24
-                .setContentText(context.getString(R.string.sas_incoming_request_notif_content, otherUserName))
-                //.setGroup("KeyVerifications")
-                .apply {
-                    if (largeIcon != null) {
-                        setLargeIcon(largeIcon)
-                    }
-                    val uId = Matrix.getInstance(context).defaultSession.myUserId
-                    val intent = ShortCodeDeviceVerificationActivity.intent(context, uId, otherUserId, transactionId)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    intent.data = Uri.parse("foobar://keyVerification?$transactionId")
-                    setContentIntent(PendingIntent.getActivity(context, Random().nextInt(1000), intent, 0))
-
-                    //compat
-                    PreferencesManager.getNotificationRingTone(context)?.let {
-                        setSound(it)
-                    }
-                    val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-                    setLights(accentColor, 500, 500)
-                }
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-
-                .setAutoCancel(true)
-                .build()
     }
 
     private fun getDismissSummaryPendingIntent(context: Context): PendingIntent {

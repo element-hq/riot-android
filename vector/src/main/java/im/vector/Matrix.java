@@ -732,12 +732,12 @@ public class Matrix {
                     session.getCrypto().addRoomKeysRequestListener(new MXCrypto.IRoomKeysRequestListener() {
                         @Override
                         public void onRoomKeyRequest(IncomingRoomKeyRequest request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequest(request);
+                            KeyRequestHandler.Companion.getSharedInstance().handleKeyRequest(request);
                         }
 
                         @Override
                         public void onRoomKeyRequestCancellation(IncomingRoomKeyRequestCancellation request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
+                            KeyRequestHandler.Companion.getSharedInstance().handleKeyRequestCancellation(request);
                         }
                     });
                     IncomingVerificationRequestHandler.INSTANCE.initialize(session.getCrypto().getShortCodeVerificationManager());

@@ -25,6 +25,7 @@ import org.matrix.androidsdk.rest.model.User
 
 class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListener {
 
+
     companion object {
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
         const val NAVIGATE_FINISH_SUCCESS = "NAVIGATE_FINISH_SUCCESS"
@@ -59,8 +60,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
     var transactionID: String? = null
         set(value) {
             if (value != null) {
-                transaction = session.crypto?.shortCodeVerificationManager?.getExistingTransaction(otherUserId!!, value
-                        ?: "") as? SASVerificationTransaction
+                transaction = session.crypto?.shortCodeVerificationManager?.getExistingTransaction(otherUserId!!, value) as? SASVerificationTransaction
                 transactionState.value = transaction?.state
                 otherDevice = transaction?.otherDevice
             }
@@ -100,6 +100,10 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
         }
     }
 
+    override fun markedAsManuallyVerified(userId: String, deviceID: String) {
+
+    }
+
     fun cancelTransaction() {
         transaction?.cancel(session, CancelCode.User)
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
@@ -111,6 +115,13 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
     }
 
     fun finishSuccess() {
+        _navigateEvent.value = LiveEvent(NAVIGATE_FINISH_SUCCESS)
+    }
+
+    fun manuallyVerified() {
+        if (otherUserId != null && otherDevice != null) {
+            session.crypto?.shortCodeVerificationManager?.markedLocallyAsManuallyVerified(otherUserId!!, otherDevice!!)
+        }
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH_SUCCESS)
     }
 
@@ -141,5 +152,6 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
         super.onCleared()
         session.crypto?.shortCodeVerificationManager?.removeListener(this)
     }
+
 
 }
