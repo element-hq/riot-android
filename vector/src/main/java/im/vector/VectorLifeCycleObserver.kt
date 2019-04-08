@@ -16,9 +16,11 @@
 
 package im.vector
 
+import android.app.ActivityManager
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
+import android.content.Context
 import im.vector.services.EventStreamServiceX
 import org.matrix.androidsdk.util.Log
 
@@ -28,8 +30,24 @@ class VectorLifeCycleObserver : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
         Log.d(this::class.java.name, "Returning to foreground…")
-        // the event stream service has been killed
-        EventStreamServiceX.onAppGoingToForeground(VectorApp.getInstance())
+        // https://issuetracker.google.com/issues/110237673
+        // Work around for android 9 bug (service started in on resume can crash with IllegalState
+        // There is a workaround to avoid application crash.
+        // Applications can get the process state in Activity.onResume() by calling
+        // ActivityManager.getRunningAppProcesses() and avoid starting Service if the importance level
+        // is lower than ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND.
+        // If the device hasn’t fully awake, activities would be paused immediately and eventually be resumed again after its fully awake.
+
+        val activityManager = VectorApp.getInstance().getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+        if (activityManager != null) {
+            val importance = activityManager.runningAppProcesses?.firstOrNull()?.importance
+            // higher importance has lower number (?)
+            if (importance != null && importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                EventStreamServiceX.onAppGoingToForeground(VectorApp.getInstance())
+            }
+        } else {
+            EventStreamServiceX.onAppGoingToForeground(VectorApp.getInstance())
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
