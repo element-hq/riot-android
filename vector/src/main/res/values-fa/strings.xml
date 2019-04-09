@@ -24,14 +24,14 @@
     <string name="resend">ارسال مجدد</string>
     <string name="quote">نقل قول</string>
     <string name="share">اشتراک گذاری</string>
-    <string name="later">بعدا</string>
+    <string name="later">بعداً</string>
     <string name="view_source">مشاهده منبع</string>
     <string name="delete">حذف</string>
     <string name="rename">تغییر نام</string>
     <string name="report_content">گزارش محتوا</string>
     <string name="active_call">تماس فعال</string>
-    <string name="ongoing_conference_call_voice">صدا</string>
-    <string name="ongoing_conference_call_video">ویدیو</string>
+    <string name="ongoing_conference_call_voice">صوتی</string>
+    <string name="ongoing_conference_call_video">تصویری</string>
     <string name="device_information">اطلاعات دستگاه</string>
     <string name="send_anyway">به هر حال ارسال کنید</string>
     <string name="or">یا</string>
@@ -56,7 +56,7 @@
     <string name="bottom_action_rooms">اتاق‌ها</string>
     <string name="low_priority_header">اولویت کم</string>
 
-    <string name="direct_chats_header">گفتگو</string>
+    <string name="direct_chats_header">گفتگوها</string>
     <string name="no_conversation_placeholder">مکالمه‌ای نیست</string>
     <string name="rooms_header">اتاق‌ها</string>
     <plurals name="public_room_nb_users">
@@ -70,7 +70,7 @@
     <string name="send_bug_report">گزارش اشکال</string>
     <string name="read_receipt">خواندن</string>
 
-    <string name="join_room">عضویت در اتاق</string>
+    <string name="join_room">پیوستن به اتاق</string>
     <string name="username">نام کاربری</string>
     <string name="create_account">ساخت حساب</string>
     <string name="login">ورود</string>
@@ -82,17 +82,17 @@
     <string name="start_video_call">شروع تماس تصویری</string>
 
     <string name="option_take_photo_video">عکس یا فیلم بگیرید</string>
-    <string name="option_take_photo">عکس گرفتن</string>
+    <string name="option_take_photo">عکس بگیرید</string>
     <string name="option_take_video">فیلم بگیرید</string>
 
     <string name="auth_login">ورود</string>
     <string name="auth_register">ساخت حساب</string>
     <string name="auth_submit">ارسال</string>
-    <string name="auth_skip">رد کردن</string>
-    <string name="auth_send_reset_email">ارسال ایمیل مجدد</string>
+    <string name="auth_skip">رد شدن</string>
+    <string name="auth_send_reset_email">ارسال ایمیل بازیابی</string>
     <string name="auth_user_id_placeholder">ایمیل یا نام کاربری</string>
-    <string name="auth_password_placeholder">رمز عبور</string>
-    <string name="auth_new_password_placeholder">رمز عبور جدید</string>
+    <string name="auth_password_placeholder">گذرواژه</string>
+    <string name="auth_new_password_placeholder">گذرواژه جدید</string>
     <string name="auth_user_name_placeholder">نام کاربری</string>
     <string name="auth_email_placeholder">آدرس ایمیل</string>
     <string name="auth_opt_email_placeholder">آدرس ایمیل (اختیاری)</string>
@@ -130,7 +130,7 @@
 
     <string name="room_info_room_name">نام اتاق</string>
     <string name="notification_sync_in_progress">همگام‌سازی…</string>
-    <string name="call_anyway">به هر حال تماس بگیر</string>
+    <string name="call_anyway">به هر حال تماس بگیرید</string>
     <string name="missing_permissions_title_to_start_conf_call">نمی‌توان تماس را شروع کرد</string>
     <string name="cannot_start_call">نمی‌توان تماس را شروع کرد، لطفاً بعداً تلاش نمایید</string>
     <string name="accept">پذیرفتن</string>
@@ -238,25 +238,25 @@
     <string name="call_error_answered_elsewhere">پاسخ تماس از کاربری نامعتبر دریافت شد</string>
 
     <plurals name="room_title_members">
-	<item quantity="one">۱ عضو</item>
+	<item quantity="one">%d عضو</item>
 	<item quantity="other">%d عضو</item>
 </plurals>
     <string name="room_title_one_member">۱ عضو</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">۱ ثانیه</item>
+	<item quantity="one">%d ثانیه</item>
 	<item quantity="other">%d ثانیه</item>
 </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">۱ دقیقه</item>
+	<item quantity="one">%d دقیقه</item>
 	<item quantity="other">%d دقیقه</item>
 </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">۱ ساعت</item>
+	<item quantity="one">%d ساعت</item>
 	<item quantity="other">%d ساعت</item>
 </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">۱ روز</item>
+	<item quantity="one">%d روز</item>
 	<item quantity="other">%d روز</item>
 </plurals>
 
@@ -279,4 +279,21 @@
     <string name="room_participants_action_invite">دعوت</string>
     <string name="room_participants_action_leave">ترک این اتاق</string>
     <string name="room_participants_action_remove">حذف از این اتاق</string>
+    <string name="stay">ماندن</string>
+    <string name="redact">حذف</string>
+    <string name="download">دریافت</string>
+    <string name="ongoing_conference_call">کنفرانس در حال برگزاری است.
+\nبه صورت %1$s یا %2$s به آن بپیوندید</string>
+    <string name="missing_permissions_warning">به خاطر نداشتن مجوز دسترسی، برخی امکانات ممکن است در دسترس نباشند…</string>
+    <string name="missing_permissions_error">به خاطر نداشتن مجوز دسترسی، این اقدام ممکن نیست.</string>
+    <string name="missing_permissions_to_start_conf_call">برای آغاز کنفرانس نیاز به دسترسی دعوت اعضا دارید</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">تماس گروهی در گفتگوهای رمز شده ممکن نیست</string>
+    <string name="skip">رد شدن</string>
+    <string name="done">انجام شد</string>
+    <string name="abort">انصراف</string>
+    <string name="ignore">نادیده‌گیری</string>
+
+    <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
+    <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
+    <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
     </resources>
