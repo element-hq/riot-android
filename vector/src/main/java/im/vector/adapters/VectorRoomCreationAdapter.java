@@ -39,14 +39,11 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.settings.VectorLocale;
 import im.vector.util.VectorUtils;
-import im.vector.fragments.*;
 
 /**
  * This class displays a list of members to create a room.
  */
 public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterItem> {
-
-
 
     private static final String LOG_TAG = VectorRoomCreationAdapter.class.getSimpleName();
 
@@ -93,8 +90,6 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         mAddMemberLayoutResourceId = addMemberLayoutResourceId;
         mMemberLayoutResourceId = memberLayoutResourceId;
         mSession = session;
-
-
     }
 
     @Override

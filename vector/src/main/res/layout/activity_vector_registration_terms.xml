@@ -9,8 +9,7 @@
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/login_large_logo"

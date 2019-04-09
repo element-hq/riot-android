@@ -112,6 +112,7 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "IS_SABA", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -122,6 +123,7 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "IS_SABA", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
@@ -131,6 +133,7 @@ android {
             applicationId "com.sabaos.messaging"
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "IS_SABA", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"Saba\""

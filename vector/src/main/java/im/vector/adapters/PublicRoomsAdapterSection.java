@@ -18,7 +18,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 

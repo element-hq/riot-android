@@ -905,8 +905,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             CheckBox checkBox = convertView.findViewById(R.id.contacts_filter_checkbox);
             checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, true));
 
-            // Checks to see if default value is checked (which is true) and if so, refreshes
-            //  the screen, causing the user to see only Matrix users
+            // Checks to see if default value is checked (which is true by default) and if so
+            //  refreshes the screen, causing the user to see only Matrix users
             if (checkBox.isChecked()) {
                 mShowMatrixUserOnly = true;
                 refresh(mFirstEntry, null);

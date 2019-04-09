@@ -19,7 +19,6 @@ package im.vector.fragments;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -44,9 +43,7 @@ import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RoomUtils;
-import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.HomeSectionView;
-import im.vector.view.SimpleDividerItemDecoration;
 
 public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnSelectRoomListener {
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();

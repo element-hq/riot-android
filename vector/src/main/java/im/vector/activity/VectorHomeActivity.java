@@ -145,8 +145,6 @@ import im.vector.view.VectorPendingCallView;
  */
 public class VectorHomeActivity extends VectorAppCompatActivity implements SearchView.OnQueryTextListener {
 
-
-
     private static final String LOG_TAG = VectorHomeActivity.class.getSimpleName();
 
     // shared instance
@@ -203,8 +201,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.floating_action_menu)
     FloatingActionsMenu mFloatingActionsMenu;
 
-    //    com.getbase.floatingactionbutton.
-    @BindView(R.id.fab_expand_menu_button)
+    @BindView(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button)
     AddFloatingActionButton mFabMain;
 
     @BindView(R.id.button_start_chat)
@@ -1875,8 +1872,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         break;
                     }
 
-                    //Saba modification: when user click on "About Saba", he/she will be ridirected to "AboutSabaActivity" activity
-                    // where info about saba app is displayed from the string defined in the strings.xml file
+                    // Saba modification: show AboutSabaActivity instead of default about pages
                     case R.id.about_saba: {
                         Intent about_saba_intent = new Intent(getApplicationContext(), AboutSabaActivity.class);
                         getApplicationContext();
@@ -2350,8 +2346,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         joinARoom();
     }
 
-//    ==============================================================================================================
-//     Events listener
+    //==============================================================================================================
+    // Events listener
     //==============================================================================================================
 
     /**
@@ -2504,6 +2500,4 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             mSession.getDataHandler().removeListener(mEventsListener);
         }
     }
-
-
 }

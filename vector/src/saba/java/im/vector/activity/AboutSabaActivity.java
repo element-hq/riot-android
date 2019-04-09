@@ -5,12 +5,14 @@ import android.os.Bundle;
 
 import im.vector.R;
 
+/**
+ * Display a activity containing info about Saba Messenger
+ */
 public class AboutSabaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Saba creation: displays activity containing info about Saba app
         setContentView(R.layout.activity_about_saba);
     }
 }

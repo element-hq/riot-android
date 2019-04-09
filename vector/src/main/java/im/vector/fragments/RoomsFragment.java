@@ -184,7 +184,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             public void onFilterComplete(int count) {
                 Log.i(LOG_TAG, "onResetFilter " + count);
 
-//                 trigger the public rooms search to avoid unexpected list refresh
+                // trigger the public rooms search to avoid unexpected list refresh
                 initPublicRooms(false);
             }
         });
@@ -230,7 +230,6 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
 
             @Override
             public void onSelectItem(ParticipantAdapterItem contact, int position) {
-
             }
         }, this, this);
         mRecycler.setAdapter(mAdapter);
@@ -430,7 +429,7 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
      *
      * @param displayOnTop true to display the public rooms in full screen
      */
-    public void initPublicRooms(final boolean displayOnTop) {
+    private void initPublicRooms(final boolean displayOnTop) {
         refreshDirectorySourceSpinner();
 
         showPublicRoomsLoadingView();

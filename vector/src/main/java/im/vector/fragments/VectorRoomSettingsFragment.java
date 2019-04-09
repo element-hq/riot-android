@@ -1714,8 +1714,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
         final SwitchPreference sendToUnverifiedDevicesPref =
                 (SwitchPreference) findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
 
-
-
         // reported by GA
         if (null == sendToUnverifiedDevicesPref) {
             Log.e(LOG_TAG, "## refreshEndToEnd() : sendToUnverifiedDevicesPref is null");
@@ -1820,7 +1818,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                 encryptSwitchPreference.setKey(key);
                 encryptSwitchPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color));
-
                 encryptSwitchPreference.setChecked(true);
                 mAdvancedSettingsCategory.addPreference(encryptSwitchPreference);
 

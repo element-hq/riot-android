@@ -60,7 +60,6 @@ import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.Room;
@@ -153,8 +152,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // Current sessionId set waiting for an encryption key, after a reRequest from user
     private Set<String> mSessionIdsWaitingForE2eReRequest = new HashSet<>();
-
-
 
     static final int ROW_TYPE_TEXT = 0;
     static final int ROW_TYPE_IMAGE = 1;
@@ -287,11 +284,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_redact,
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
-
-
     }
-
-
 
     /**
      * Expanded constructor.
@@ -2085,7 +2078,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * *********************************************************************************************
      */
 
-    /**🤤🤤🤤
+    /**
      * Display the e2e icon
      *
      * @param inflatedView the base view
