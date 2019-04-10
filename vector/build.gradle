@@ -84,6 +84,7 @@ android {
             resValue "string", "build_number", rootProject.ext.buildNumberProp
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
