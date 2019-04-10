@@ -234,31 +234,33 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 .setView(v)
                 .setTitle(R.string.unknown_devices_alert_title);
 
-        if (null != mListener) {
-            // Add action buttons
-            int messageResId = mIsForCalling ? R.string.call_anyway : R.string.send_anyway;
-            builder.setPositiveButton(messageResId, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    mIsSendAnywayTapped = true;
-                }
-            });
-            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    // nothing : everything will be done on onDismiss()
-                }
-            });
+        mIsSendAnywayTapped = true;
 
-        } else {
-            // Add action buttons
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
+//        if (null != mListener) {
+//             Add action buttons
+//            int messageResId = mIsForCalling ? R.string.call_anyway : R.string.send_anyway;
+//            builder.setPositiveButton(messageResId, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
+//                    mIsSendAnywayTapped = true;
+//                }
+//            });
+//            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
                     // nothing : everything will be done on onDismiss()
-                }
-            });
-        }
+//                }
+//            });
+//
+//        } else {
+//             Add action buttons
+//            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int id) {
+//                     nothing : everything will be done on onDismiss()
+//                }
+//            });
+//        }
 
         return builder.create();
     }
