@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
+import android.util.Log
 import android.view.View
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
@@ -37,6 +38,8 @@ object PopupAlertManager {
     private var currentAlerter: VectorAlert? = null
 
     private val alertFilo = ArrayList<VectorAlert>()
+
+    private val LOG_TAG = PopupAlertManager::class.java.name
 
 
     fun postVectorAlert(alert: VectorAlert) {
@@ -81,7 +84,21 @@ object PopupAlertManager {
         weakCurrentActivity = WeakReference(activity)
 
         if (currentAlerter != null) {
-            currentAlerter?.let { showAlert(it, activity) }
+            if (currentAlerter!!.expirationTimestamp != null && System.currentTimeMillis() > currentAlerter!!.expirationTimestamp!!) {
+                //this alert has expired, remove it
+                //perform dismiss
+                try {
+                    currentAlerter?.dismissedAction?.run()
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "## failed to perform action")
+                }
+                currentAlerter = null
+                Handler(Looper.getMainLooper()).postDelayed({
+                    displayNextIfPossible()
+                }, 2000)
+            } else {
+                showAlert(currentAlerter!!, activity)
+            }
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
                 displayNextIfPossible()
@@ -109,7 +126,20 @@ object PopupAlertManager {
             if (next != null) alertFilo.remove(next)
         }
         currentAlerter = next
-        next?.let { showAlert(it, currentActivity) }
+        next?.let {
+            val currentTime = System.currentTimeMillis()
+            if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {
+                //skip
+                try {
+                    next.dismissedAction?.run()
+                } catch (e: java.lang.Exception) {
+                    Log.e(LOG_TAG, "## failed to perform action")
+                }
+                displayNextIfPossible()
+            } else {
+                showAlert(it, currentActivity)
+            }
+        }
     }
 
     private fun showAlert(alert: VectorAlert, activity: Activity) {
@@ -129,8 +159,8 @@ object PopupAlertManager {
                             }
                             try {
                                 action.action.run()
-                            } catch (e: Exception) {
-
+                            } catch (e: java.lang.Exception) {
+                                Log.e(LOG_TAG, "## failed to perform action")
                             }
 
                         })
@@ -138,13 +168,21 @@ object PopupAlertManager {
                     setOnClickListener(View.OnClickListener { _ ->
                         currentIsDismmissed()
                         Alerter.hide()
-                        alert.contentAction?.run()
+                        try {
+                            alert.contentAction?.run()
+                        } catch (e: java.lang.Exception) {
+                            Log.e(LOG_TAG, "## failed to perform action")
+                        }
                     })
 
                 }
                 .setOnHideListener(OnHideAlertListener {
                     //called when dissmissed on swipe
-                    alert.dissmissedAction?.run()
+                    try {
+                        alert.dismissedAction?.run()
+                    } catch (e: java.lang.Exception) {
+                        Log.e(LOG_TAG, "## failed to perform action")
+                    }
                     currentIsDismmissed()
                 })
                 .enableSwipeToDismiss()
@@ -161,6 +199,9 @@ object PopupAlertManager {
         }, 500)
     }
 
+    /**
+     * Dataclass to describe an important alert with actions.
+     */
     class VectorAlert(val uid: String, val title: String, val description: String, @DrawableRes val iconId: Int?) {
 
         data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
@@ -171,7 +212,10 @@ object PopupAlertManager {
         val actions = ArrayList<Button>()
 
         var contentAction: Runnable? = null
-        var dissmissedAction: Runnable? = null
+        var dismissedAction: Runnable? = null
+
+        /** If this timestamp is after current time, this alert will be skipped */
+        var expirationTimestamp: Long? = null
 
         fun addButton(title: String, action: Runnable, autoClose: Boolean = true) {
             actions.add(Button(title, action, autoClose))

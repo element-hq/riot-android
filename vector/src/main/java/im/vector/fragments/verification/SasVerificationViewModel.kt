@@ -68,12 +68,16 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
         }
 
 
-    fun initSession(session: MXSession, otherUserId: String, transactionID: String?) {
+    fun initIncoming(session: MXSession, otherUserId: String, transactionID: String?) {
         this.session = session
         this.otherUserId = otherUserId
         this.transactionID = transactionID
         session.crypto?.shortCodeVerificationManager?.addListener(this)
         this.otherUser = session.dataHandler.store.getUser(otherUserId)
+        if (transactionID == null || transaction == null) {
+            //sanity, this transaction is not known anymore
+            interrupt()
+        }
     }
 
     fun initOutgoing(session: MXSession, otherUserId: String, otherDeviceId: String) {

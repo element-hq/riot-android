@@ -143,7 +143,7 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
         alert.colorRes = R.color.key_share_req_accent_color
 
         val mappingKey = keyForMap(deviceId, userId)
-        alert.dissmissedAction = Runnable {
+        alert.dismissedAction = Runnable {
             denyAllRequests(mappingKey)
         }
 

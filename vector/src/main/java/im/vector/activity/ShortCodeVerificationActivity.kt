@@ -34,15 +34,17 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
 
     companion object {
 
-        val EXTRA_TRANSACTION_ID = "EXTRA_TRANSACTION_ID"
-        val EXTRA_OTHER_USER_ID = "EXTRA_OTHER_USER_ID"
-        val EXTRA_OTHER_DEVICE_ID = "EXTRA_OTHER_DEVICE_ID"
+        const val EXTRA_TRANSACTION_ID = "EXTRA_TRANSACTION_ID"
+        const val EXTRA_OTHER_USER_ID = "EXTRA_OTHER_USER_ID"
+        const val EXTRA_OTHER_DEVICE_ID = "EXTRA_OTHER_DEVICE_ID"
+        const val EXTRA_IS_INCOMING = "EXTRA_IS_INCOMING"
 
         fun intent(context: Context, matrixID: String, otherUserId: String, transactionID: String): Intent {
             val intent = Intent(context, ShortCodeDeviceVerificationActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             intent.putExtra(EXTRA_TRANSACTION_ID, transactionID)
             intent.putExtra(EXTRA_OTHER_USER_ID, otherUserId)
+            intent.putExtra(EXTRA_IS_INCOMING, true)
             return intent
         }
 
@@ -51,6 +53,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             intent.putExtra(EXTRA_OTHER_DEVICE_ID, otherDeviceId)
             intent.putExtra(EXTRA_OTHER_USER_ID, otherUserId)
+            intent.putExtra(EXTRA_IS_INCOMING, false)
             return intent
         }
     }
@@ -69,20 +72,17 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
             transactionID = intent.getStringExtra(EXTRA_TRANSACTION_ID)
         }
 
-        if (transactionID != null) {
-            viewModel.initSession(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
+        val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
+        if (isIncoming) {
+            //incoming always have a transaction id
+            viewModel.initIncoming(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
         } else {
             viewModel.initOutgoing(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
         }
 
         if (isFirstCreation()) {
 
-            if (viewModel.transaction == null) {
-                //can only be a non started outgoing
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, SASVerificationStartFragment.newInstance())
-                        .commitNow()
-            } else if (viewModel.transaction is IncomingSASVerificationTransaction) {
+            if (isIncoming) {
                 val incoming = viewModel.transaction as IncomingSASVerificationTransaction
                 when (incoming.uxState) {
                     IncomingSASVerificationTransaction.State.UNKNOWN,
@@ -110,12 +110,16 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                     }
                 }
             } else {
-                val outgoing = viewModel.transaction as OutgoingSASVerificationRequest
-                when (outgoing.uxState) {
+                val outgoing = viewModel.transaction as? OutgoingSASVerificationRequest
+                //transaction can be null, as not yet created
+                when (outgoing?.uxState) {
+                    null,
                     OutgoingSASVerificationRequest.State.UNKNOWN,
                     OutgoingSASVerificationRequest.State.WAIT_FOR_START,
                     OutgoingSASVerificationRequest.State.WAIT_FOR_KEY_AGREEMENT -> {
-
+                        supportFragmentManager.beginTransaction()
+                                .replace(R.id.container, SASVerificationStartFragment.newInstance())
+                                .commitNow()
                     }
                     OutgoingSASVerificationRequest.State.SHOW_SAS,
                     OutgoingSASVerificationRequest.State.WAIT_FOR_VERIFICATION -> {
@@ -175,16 +179,18 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                             if (isCancelledByMe) getString(R.string.sas_cancelled_by_me, humanReadableReason)
                             else getString(R.string.sas_cancelled_by_other, humanReadableReason)
                     //Show a dialog
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.sas_cancelled_dialog_title)
-                            .setMessage(message)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                //nop
-                                setResult(Activity.RESULT_CANCELED)
-                                finish()
-                            }
-                            .show()
+                    if (!this.isFinishing) {
+                        AlertDialog.Builder(this)
+                                .setTitle(R.string.sas_cancelled_dialog_title)
+                                .setMessage(message)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok) { _, _ ->
+                                    //nop
+                                    setResult(Activity.RESULT_CANCELED)
+                                    finish()
+                                }
+                                .show()
+                    }
                 }
             }
         })

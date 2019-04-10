@@ -49,7 +49,7 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                             val intent = ShortCodeDeviceVerificationActivity.intent(context, session.myUserId, tx.otherUserID, tx.transactionId)
                             weakCurrentActivity?.get()?.startActivity(intent)
                         }
-                        dissmissedAction = Runnable {
+                        dismissedAction = Runnable {
                             tx.cancel(session, CancelCode.User)
                         }
                         addButton(
@@ -65,6 +65,8 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                                     weakCurrentActivity?.get()?.startActivity(intent)
                                 }
                         )
+                        //10mn expiration
+                        expirationTimestamp = System.currentTimeMillis() + (1000L * 60 * 10)
 
                     }
                     PopupAlertManager.postVectorAlert(alert)
