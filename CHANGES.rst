@@ -13,6 +13,7 @@ Improvements:
 
 Other changes:
  - Remove Amplitude tracker and Calendars permissions added by Jitsi lib (jitsi/jitsi-meet#4068, jitsi/jitsi-meet#4080)
+ - Exclude code of Firebase analytics (#2481)
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
