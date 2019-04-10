@@ -663,7 +663,7 @@ Gailu ezezagunak:</string>
     <string name="dark_theme">Itxura iluna</string>
     <string name="black_them">Itxura beltza</string>
 
-    <string name="notification_sync_in_progress">Sinkronizatzen</string>
+    <string name="notification_sync_in_progress">Sinkronizatzen…</string>
     <string name="notification_listening_for_events">Entzun gertaerak</string>
 
     <string name="login_mobile_device">Mugikorra</string>
@@ -1398,4 +1398,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_sender_me">Ni</string>
     <string name="notification_inline_reply_failed">** Bidalketak huts egin du, ireki gela</string>
 
-</resources>
+<string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 5.0 baino zaharragoak)</string>
+
+    </resources>
