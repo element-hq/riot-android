@@ -1388,6 +1388,6 @@
     <string name="notification_sender_me">Аз</string>
     <string name="notification_inline_reply_failed">** Неуспешно изпращане - моля, отворете стаята</string>
 
-<string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
 
-    </resources>
+</resources>

@@ -222,7 +222,7 @@
     <string name="reject">رد کردن</string>
 
     <string name="list_members">اعضای لیست</string>
-<string name="call_connected">تماس برقرار شد</string>
+    <string name="call_connected">تماس برقرار شد</string>
     <string name="call_connecting">برقراری تماس…</string>
     <string name="call_ended">تماس پایان یافت</string>
     <string name="call_ring">شماره‌گیری…</string>
@@ -238,27 +238,27 @@
     <string name="call_error_answered_elsewhere">پاسخ تماس از کاربری نامعتبر دریافت شد</string>
 
     <plurals name="room_title_members">
-	<item quantity="one">%d عضو</item>
-	<item quantity="other">%d عضو</item>
-</plurals>
+        <item quantity="one">%d عضو</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
     <string name="room_title_one_member">۱ عضو</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">%d ثانیه</item>
-	<item quantity="other">%d ثانیه</item>
-</plurals>
+        <item quantity="one">%d ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%d دقیقه</item>
-	<item quantity="other">%d دقیقه</item>
-</plurals>
+        <item quantity="one">%d دقیقه</item>
+        <item quantity="other">%d دقیقه</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%d ساعت</item>
-	<item quantity="other">%d ساعت</item>
-</plurals>
+        <item quantity="one">%d ساعت</item>
+        <item quantity="other">%d ساعت</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%d روز</item>
-	<item quantity="other">%d روز</item>
-</plurals>
+        <item quantity="one">%d روز</item>
+        <item quantity="other">%d روز</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">ترک اتاق</string>
     <string name="room_participants_leave_prompt_msg">آیا از ترک این اتاق اطمینان دارید؟</string>
@@ -296,4 +296,4 @@
     <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
-    </resources>
+</resources>
