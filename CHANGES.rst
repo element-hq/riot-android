@@ -12,7 +12,8 @@ Improvements:
  -
 
 Other changes:
- -
+ - Remove Amplitude tracker and Calendars permissions added by Jitsi lib (jitsi/jitsi-meet#4068, jitsi/jitsi-meet#4080)
+ - Exclude code of Firebase analytics (#2481)
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
@@ -21,7 +22,7 @@ Translations:
  -
 
 Build:
- -
+ - Exclude Firebase analytics code (#2481)
 
 Changes in Riot 0.8.29 (2019-04-04)
 ===================================================

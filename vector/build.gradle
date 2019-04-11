@@ -84,6 +84,7 @@ android {
             resValue "string", "build_number", rootProject.ext.buildNumberProp
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
@@ -252,6 +253,7 @@ dependencies {
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {
         transitive = true
+        exclude group: 'com.amplitude', module: 'android-sdk'
     }
 
     /************* analytics **************/
@@ -261,8 +263,11 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation 'com.google.firebase:firebase-core:16.0.8'
-    appImplementation 'com.google.firebase:firebase-messaging:17.4.0'
+    appImplementation('com.google.firebase:firebase-messaging:17.4.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-core'
+        exclude group: 'com.google.firebase', module: 'firebase-analytics'
+        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+    }
 
     // appfdroid flavor only
 
