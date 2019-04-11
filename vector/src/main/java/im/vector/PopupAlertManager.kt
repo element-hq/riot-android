@@ -171,12 +171,14 @@ object PopupAlertManager {
                         })
                     }
                     setOnClickListener(View.OnClickListener { _ ->
-                        currentIsDismmissed()
-                        Alerter.hide()
-                        try {
-                            alert.contentAction?.run()
-                        } catch (e: java.lang.Exception) {
-                            Log.e(LOG_TAG, "## failed to perform action")
+                        alert.contentAction?.let {
+                            currentIsDismmissed()
+                            Alerter.hide()
+                            try {
+                                it.run()
+                            } catch (e: java.lang.Exception) {
+                                Log.e(LOG_TAG, "## failed to perform action")
+                            }
                         }
                     })
 
