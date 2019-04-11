@@ -1423,8 +1423,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%s\": 
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
 
     <string name="notification_sync_init">Initialisiere Dienst</string>
