@@ -33,7 +33,11 @@ import org.matrix.androidsdk.crypto.verification.VerificationTransaction
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.rest.model.sync.DeviceInfo
+import org.matrix.androidsdk.rest.model.sync.DevicesListResponse
 import org.matrix.androidsdk.util.Log
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -96,7 +100,30 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
                     session.crypto?.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceId, userId, object : SimpleApiCallback<Void>() {
                         override fun onSuccess(res: Void?) {
                             deviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
-                            postAlert(context, session, userId, deviceId, true, deviceInfo)
+
+                            //can we get more info on this device?
+                            session.getDevicesList(object : ApiCallback<DevicesListResponse> {
+                                override fun onSuccess(info: DevicesListResponse) =
+                                        info.devices.find { it.device_id == deviceId }?.let {
+                                            postAlert(context, session, userId, deviceId, true, deviceInfo, it)
+                                        } ?: run {
+                                            postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                        }
+
+                                override fun onUnexpectedError(e: java.lang.Exception?) {
+                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                }
+
+                                override fun onNetworkError(e: java.lang.Exception?) {
+                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                }
+
+                                override fun onMatrixError(e: MatrixError?) {
+                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                }
+
+                            })
+
                         }
                     })
                 } else {
@@ -124,14 +151,40 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
 
     }
 
-    internal fun postAlert(context: Context, session: MXSession?, userId: String, deviceId: String, wasNewDevice: Boolean, deviceInfo: MXDeviceInfo?) {
+    internal fun postAlert(
+            context: Context,
+            session: MXSession?,
+            userId: String,
+            deviceId: String,
+            wasNewDevice: Boolean,
+            deviceInfo: MXDeviceInfo?,
+            moreInfo: DeviceInfo? = null
+    ) {
 
 
         val deviceName = if (TextUtils.isEmpty(deviceInfo!!.displayName())) deviceInfo.deviceId else deviceInfo.displayName()
-        val dialogText = if (wasNewDevice)
-            context.getString(R.string.you_added_a_new_device, deviceName)
-        else
-            context.getString(R.string.your_unverified_device_requesting, deviceName)
+        var dialogText: String? = null
+
+
+        if (moreInfo != null) {
+            val lastSeenIp = moreInfo.last_seen_ip
+            val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            val time = dateFormatTime.format(Date(moreInfo.last_seen_ts))
+            val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
+            val lastSeenTime = dateFormat.format(Date(moreInfo.last_seen_ts)) + ", " + time
+            val lastSeenInfo = context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
+            dialogText = if (wasNewDevice)
+                context.getString(R.string.you_added_a_new_device_with_info, deviceName, lastSeenInfo)
+            else
+                context.getString(R.string.your_unverified_device_requesting_with_info, deviceName, lastSeenInfo)
+
+        } else {
+            dialogText = if (wasNewDevice)
+                context.getString(R.string.you_added_a_new_device, deviceName)
+            else
+                context.getString(R.string.your_unverified_device_requesting, deviceName)
+        }
+
 
         val alert = PopupAlertManager.VectorAlert(
                 alertManagerId(deviceId, userId),
@@ -148,7 +201,7 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
         }
 
         alert.addButton(
-                context.getString(R.string.start_verification),
+                context.getString(R.string.start_verification_short_label),
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = ShortCodeDeviceVerificationActivity.outgoingIntent(it,
@@ -160,11 +213,11 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
                 false
         )
 
-        alert.addButton(context.getString(R.string.share_without_verifying), Runnable {
+        alert.addButton(context.getString(R.string.share_without_verifying_short_label), Runnable {
             shareAllSessions(mappingKey)
         })
 
-        alert.addButton(context.getString(R.string.ignore), Runnable {
+        alert.addButton(context.getString(R.string.ignore_request_short_label), Runnable {
             denyAllRequests(mappingKey)
         })
 

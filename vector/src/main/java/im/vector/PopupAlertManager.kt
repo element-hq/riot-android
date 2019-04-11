@@ -97,7 +97,7 @@ object PopupAlertManager {
                     displayNextIfPossible()
                 }, 2000)
             } else {
-                showAlert(currentAlerter!!, activity)
+                showAlert(currentAlerter!!, activity, animate = false)
             }
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
@@ -142,12 +142,17 @@ object PopupAlertManager {
         }
     }
 
-    private fun showAlert(alert: VectorAlert, activity: Activity) {
+    private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {
         alert.weakCurrentActivity = WeakReference(activity)
         Alerter.create(activity)
                 .setTitle(alert.title)
                 .setText(alert.description)
                 .apply {
+
+                    if (!animate) {
+                        setEnterAnimation(R.anim.anim_alerter_no_anim)
+                    }
+
                     alert.iconId?.let {
                         setIcon(it)
                     }
