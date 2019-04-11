@@ -15,21 +15,21 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_horizontal_margin"
             android:layout_marginTop="@dimen/layout_vertical_margin"
-            tools:text="@string/sas_emoji_description"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sas_emoji_description" />
 
         <TextView
             android:id="@+id/sas_emoji_description_2"
-            android:layout_width="371dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:layout_margin="@dimen/layout_vertical_margin"
+            android:gravity="center"
             android:text="@string/sas_security_advise"
-            android:textAlignment="center"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"

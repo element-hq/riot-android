@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/sas_verify_title"
-        android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -85,7 +84,6 @@
         android:layout_margin="16dp"
         android:gravity="start"
         android:text="@string/sas_verifying_keys"
-        android:textAlignment="textStart"
         android:textColor="?android:attr/textColorSecondary"
         android:visibility="gone"
         tools:visibility="visible" />
