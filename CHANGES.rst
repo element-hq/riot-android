@@ -17,6 +17,7 @@ Other changes:
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
+ - Fix / Export keys not possible when no network (airplane)
 
 Translations:
  -

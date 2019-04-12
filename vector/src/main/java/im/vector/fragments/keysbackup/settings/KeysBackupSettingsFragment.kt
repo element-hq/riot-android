@@ -74,7 +74,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                 when (keysBackupState) {
                     KeysBackupStateManager.KeysBackupState.Unknown,
                     KeysBackupStateManager.KeysBackupState.CheckingBackUpOnHomeserver -> {
-                        viewModel.loadingEvent.value = WaitingViewData("")
+                        viewModel.loadingEvent.value = WaitingViewData(context!!.getString(R.string.keys_backup_settings_checking_backup_state))
                     }
                     else -> {
                         viewModel.loadingEvent.value = null
@@ -99,7 +99,6 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                 recyclerViewAdapter?.updateWithTrust(session, it)
             }
         })
-
     }
 
     override fun didSelectSetupMessageRecovery() {
