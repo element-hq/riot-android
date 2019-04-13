@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 import im.vector.listeners.IMessagesAdapterActionsListener;
 
-// Class to track some matrix items click}
+// Class to track some matrix items click
 public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     private static final String LOG_TAG = MatrixURLSpan.class.getSimpleName();
 

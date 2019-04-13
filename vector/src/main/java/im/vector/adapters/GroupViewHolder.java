@@ -19,7 +19,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.util.VectorUtils;
+import im.vector.util.ViewUtilKt;
 
 public class GroupViewHolder extends RecyclerView.ViewHolder {
     private static final String LOG_TAG = GroupViewHolder.class.getSimpleName();
@@ -88,11 +88,7 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
         if (isInvitation) {
             vGroupMembersCount.setText("!");
             vGroupMembersCount.setTypeface(null, Typeface.BOLD);
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(100);
-            shape.setColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color));
-            vGroupMembersCount.setBackground(shape);
+            ViewUtilKt.setRoundBackground(vGroupMembersCount, ContextCompat.getColor(context, R.color.vector_fuchsia_color));
             vGroupMembersCount.setVisibility(View.VISIBLE);
         } else {
             vGroupMembersCount.setVisibility(View.GONE);

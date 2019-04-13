@@ -22,10 +22,11 @@ import android.content.Intent
 import android.view.MenuItem
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
+import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict
+import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
-import java.net.URLEncoder
 
 class StickerPickerActivity : AbstractWidgetActivity() {
 
@@ -53,17 +54,26 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         super.initUiAndData()
     }
 
+    override fun canScalarTokenBeProvided(): Boolean {
+        return WidgetsManager.isScalarUrl(this, mWidgetUrl)
+    }
+
     /**
      * Compute the URL
      *
      * @return the URL
      */
-    override fun buildInterfaceUrl(scalarToken: String): String? {
+    override fun buildInterfaceUrl(scalarToken: String?): String? {
         try {
-            return mWidgetUrl + "?" +
-                    "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") +
-                    "&room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8") +
-                    "&widgetId=" + URLEncoder.encode(mWidgetId, "utf-8")
+            return StringBuilder(mWidgetUrl)
+                    .apply {
+                        scalarToken?.let {
+                            appendParamToUrl("scalar_token", it)
+                        }
+                    }
+                    .appendParamToUrl("room_id", mRoom!!.roomId)
+                    .appendParamToUrl("widgetId", mWidgetId)
+                    .toString()
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message, e)
         }
@@ -93,7 +103,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-        // Reload the page, user may have add/remove sticker pack
+            // Reload the page, user may have add/remove sticker pack
             INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE -> mWebView.reload()
         }
     }

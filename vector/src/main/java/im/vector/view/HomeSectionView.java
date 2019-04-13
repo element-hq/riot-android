@@ -18,10 +18,10 @@ package im.vector.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -40,9 +40,11 @@ import butterknife.ButterKnife;
 import im.vector.R;
 import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
+import im.vector.adapters.model.NotificationCounter;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
+import im.vector.util.ViewUtilKt;
 
 public class HomeSectionView extends RelativeLayout {
     private static final String LOG_TAG = HomeSectionView.class.getSimpleName();
@@ -106,12 +108,6 @@ public class HomeSectionView extends RelativeLayout {
         inflate(getContext(), R.layout.home_section_view, this);
         ButterKnife.bind(this);
 
-        GradientDrawable shape = new GradientDrawable();
-        shape.setShape(GradientDrawable.RECTANGLE);
-        shape.setCornerRadius(100);
-        shape.setColor(ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_activity_bottom_gradient_color));
-        mBadge.setBackground(shape);
-
         mHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,14 +128,42 @@ public class HomeSectionView extends RelativeLayout {
             // the adapter value is tested by it seems crashed when calling getBadgeCount
             try {
                 boolean isEmpty = mAdapter.isEmpty();
-                boolean hasNoResult = mAdapter.hasNoResult();
-                int badgeCount = mAdapter.getBadgeCount();
 
-                setVisibility(mHideIfEmpty && isEmpty ? GONE : VISIBLE);
-                mBadge.setText(RoomUtils.formatUnreadMessagesCounter(badgeCount));
-                mBadge.setVisibility(badgeCount == 0 ? GONE : VISIBLE);
-                mRecyclerView.setVisibility(hasNoResult ? GONE : VISIBLE);
-                mPlaceHolder.setVisibility(hasNoResult ? VISIBLE : GONE);
+                if (mHideIfEmpty && isEmpty) {
+                    setVisibility(GONE);
+                } else {
+                    setVisibility(VISIBLE);
+
+                    NotificationCounter notificationCounter = mAdapter.getBadgeCount();
+
+                    if (notificationCounter.getNotifications() == 0) {
+                        mBadge.setVisibility(GONE);
+                    } else {
+                        mBadge.setVisibility(VISIBLE);
+                        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(notificationCounter.getNotifications()));
+
+                        int bingUnreadColor;
+
+                        // Badge background
+                        if (notificationCounter.getHighlights() > 0) {
+                            // Red
+                            bingUnreadColor = ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color);
+                        } else {
+                            // Normal
+                            bingUnreadColor = ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary);
+                        }
+
+                        ViewUtilKt.setRoundBackground(mBadge, bingUnreadColor);
+                    }
+
+                    if (mAdapter.hasNoResult()) {
+                        mRecyclerView.setVisibility(GONE);
+                        mPlaceHolder.setVisibility(VISIBLE);
+                    } else {
+                        mRecyclerView.setVisibility(VISIBLE);
+                        mPlaceHolder.setVisibility(GONE);
+                    }
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onDataUpdated() failed " + e.getMessage(), e);
             }

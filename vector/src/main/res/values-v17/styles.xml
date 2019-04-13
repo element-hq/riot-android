@@ -3,8 +3,4 @@
 
     <!-- End and Start attribute has to be set here -->
 
-    <style name="LoginButtonStyle" parent="LoginButtonStyleBase">
-        <item name="android:layout_marginEnd">16dp</item>
-    </style>
-
 </resources>

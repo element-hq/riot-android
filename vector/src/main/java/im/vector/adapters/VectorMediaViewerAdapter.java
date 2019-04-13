@@ -17,9 +17,11 @@
 
 package im.vector.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.JsonElement;
 
@@ -367,8 +370,15 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                                                 imageView.post(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                                                                && ((Activity) mContext).isDestroyed()) {
+                                                            return;
+                                                        }
+
                                                         Uri mediaUri = Uri.parse(newHighResUri);
-                                                        Glide.with(imageView).load(mediaUri).into((ImageView) imageView);
+                                                        Glide.with(imageView)
+                                                                .load(mediaUri)
+                                                                .into(imageView);
                                                     }
                                                 });
                                             }
@@ -432,8 +442,16 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                     @Override
                     public void onSuccess(File mediaFile) {
                         if (null != mediaFile) {
-                            final String mediaUri = "file://" + mediaFile.getPath();
-                            Glide.with(container).load(mediaUri).into(imageView);
+                            // Max zoom is PhotoViewAttacher.DEFAULT_MAX_SCALE (= 3)
+                            // I set the max zoom to 1 because it leads to too many crashed due to high memory usage.
+                            float maxZoom = 1; // imageView.getMaximumScale();
+
+                            Glide.with(container)
+                                    .load(mediaFile)
+                                    .apply(new RequestOptions()
+                                            // Override image wanted size, to keep good quality when image is zoomed in
+                                            .override((int) (imageView.getWidth() * maxZoom), (int) (imageView.getHeight() * maxZoom)))
+                                    .into(imageView);
                         }
                     }
                 });

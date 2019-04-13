@@ -29,7 +29,9 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.support.annotation.StringRes
 import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v14.preference.SwitchPreference
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -44,6 +46,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import com.bumptech.glide.Glide
 import com.google.i18n.phonenumbers.NumberParseException
@@ -53,7 +56,9 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.*
 import im.vector.contacts.ContactsManager
+import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
+import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
 import im.vector.preference.ProgressBarPreference
 import im.vector.preference.UserAvatarPreference
@@ -62,6 +67,7 @@ import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
+import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
@@ -156,7 +162,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     private val mContactPhonebookCountryPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
     }
 
     // Group Flairs
@@ -170,6 +176,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
     private val mCryptographyCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)
+    }
+    // cryptography manage
+    private val mCryptographyManageCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY) as PreferenceCategory
+    }
+    private val mCryptographyManageCategoryDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)
     }
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
@@ -225,28 +238,32 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_NOTIFICATION_PRIVACY_PREFERENCE_KEY)
     }
     private val selectedLanguagePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
     }
     private val textSizePreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
     }
     private val cryptoInfoDeviceNamePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY) as VectorPreference
     }
     private val cryptoInfoDeviceIdPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
+    }
+
+    private val manageBackupPref by lazy {
+        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
     }
 
     private val exportPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
     }
 
     private val importPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
     }
 
     private val cryptoInfoTextPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY) as Preference
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
     }
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
@@ -667,7 +684,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // application version
-        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY) as Preference).let {
+        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
             it.summary = VectorUtils.getApplicationVersion(appContext)
 
             it.setOnPreferenceClickListener {
@@ -741,7 +758,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { it ->
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
 
                 val task = ClearMediaCacheAsyncTask(
@@ -1012,8 +1029,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // The others notifications settings have to be disable too
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
-        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed && (pushManager?.areDeviceNotificationsAllowed()
-                ?: true) && pushManager?.useFcm() ?: true
+        mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed
+                && (pushManager?.areDeviceNotificationsAllowed() ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
@@ -1024,78 +1041,146 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Update the password.
      */
     private fun onPasswordUpdateClick() {
+        activity?.let { activity ->
+            val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_change_password, null) as ViewGroup
 
-        val thisActivity = activity
-        thisActivity?.let { activity ->
-            val view = activity.layoutInflater.inflate(R.layout.dialog_change_password, null)
-            val oldPasswordText = view.findViewById<EditText>(R.id.change_password_old_pwd_text)
-            val newPasswordText = view.findViewById<EditText>(R.id.change_password_new_pwd_text)
-            val confirmNewPasswordText = view.findViewById<EditText>(R.id.change_password_confirm_new_pwd_text)
+            val showPassword: ImageView = view.findViewById(R.id.change_password_show_passwords)
+            val oldPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_old_pwd_til)
+            val oldPasswordText: TextInputEditText = view.findViewById(R.id.change_password_old_pwd_text)
+            val newPasswordText: TextInputEditText = view.findViewById(R.id.change_password_new_pwd_text)
+            val confirmNewPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_confirm_new_pwd_til)
+            val confirmNewPasswordText: TextInputEditText = view.findViewById(R.id.change_password_confirm_new_pwd_text)
+            val changePasswordLoader: View = view.findViewById(R.id.change_password_loader)
+
+            var passwordShown = false
+
+            showPassword.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    passwordShown = !passwordShown
+
+                    oldPasswordText.showPassword(passwordShown)
+                    newPasswordText.showPassword(passwordShown)
+                    confirmNewPasswordText.showPassword(passwordShown)
+
+                    showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+                }
+            })
 
             val dialog = AlertDialog.Builder(activity)
-                    .setTitle(R.string.settings_change_password)
                     .setView(view)
-                    .setPositiveButton(R.string.save) { _, _ ->
-
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-
-                        val oldPwd = oldPasswordText.text.toString().trim()
-                        val newPwd = newPasswordText.text.toString().trim()
-
-                        displayLoadingView()
-
-                        mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
-                            private fun onDone(textId: Int) {
-                                activity.runOnUiThread {
-                                    hideLoadingView()
-                                    activity.toast(textId, Toast.LENGTH_LONG)
-                                }
-                            }
-
-                            override fun onSuccess(info: Void?) {
-                                onDone(R.string.settings_password_updated)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onDone(R.string.settings_fail_to_update_password)
-                            }
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel) { _, _ ->
+                    .setPositiveButton(R.string.settings_change_password_submit, null)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setOnDismissListener {
                         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                     }
-                    .setOnCancelListener {
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                    }
-                    .show()
+                    .create()
 
-            val saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            saveButton.isEnabled = false
+            dialog.setOnShowListener {
+                val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                updateButton.isEnabled = false
 
-            confirmNewPasswordText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                fun updateUi() {
                     val oldPwd = oldPasswordText.text.toString().trim()
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    saveButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+
+                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && !TextUtils.equals(newPwd, newConfirmPwd)) {
+                        confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
+                    }
                 }
 
-                override fun afterTextChanged(s: Editable) {}
-            })
+                oldPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        oldPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                newPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        confirmNewPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                confirmNewPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        confirmNewPasswordTil.error = null
+                        updateUi()
+                    }
+                })
+
+                fun showPasswordLoadingView(toShow: Boolean) {
+                    if (toShow) {
+                        showPassword.isEnabled = false
+                        oldPasswordText.isEnabled = false
+                        newPasswordText.isEnabled = false
+                        confirmNewPasswordText.isEnabled = false
+                        changePasswordLoader.isVisible = true
+                        updateButton.isEnabled = false
+                    } else {
+                        showPassword.isEnabled = true
+                        oldPasswordText.isEnabled = true
+                        newPasswordText.isEnabled = true
+                        confirmNewPasswordText.isEnabled = true
+                        changePasswordLoader.isVisible = false
+                        updateButton.isEnabled = true
+                    }
+                }
+
+                updateButton.setOnClickListener {
+                    if (passwordShown) {
+                        // Hide passwords during processing
+                        showPassword.performClick()
+                    }
+
+                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+
+                    val oldPwd = oldPasswordText.text.toString().trim()
+                    val newPwd = newPasswordText.text.toString().trim()
+
+                    showPasswordLoadingView(true)
+
+                    mSession.updatePassword(oldPwd, newPwd, object : ApiCallback<Void> {
+                        private fun onDone(@StringRes textResId: Int) {
+                            showPasswordLoadingView(false)
+
+                            if (textResId == R.string.settings_fail_to_update_password_invalid_current_password) {
+                                oldPasswordTil.error = getString(textResId)
+                            } else {
+                                dialog.dismiss()
+                                activity.toast(textResId, Toast.LENGTH_LONG)
+                            }
+                        }
+
+                        override fun onSuccess(info: Void?) {
+                            onDone(R.string.settings_password_updated)
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            if (e.error == "Invalid password") {
+                                onDone(R.string.settings_fail_to_update_password_invalid_current_password)
+                            } else {
+                                dialog.dismiss()
+                                onDone(R.string.settings_fail_to_update_password)
+                            }
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            onDone(R.string.settings_fail_to_update_password)
+                        }
+                    })
+                }
+            }
+            dialog.show()
         }
     }
 
@@ -2057,9 +2142,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     //==============================================================================================================
 
     private fun removeCryptographyPreference() {
-        if (null != preferenceScreen) {
-            preferenceScreen.removePreference(mCryptographyCategory)
-            preferenceScreen.removePreference(mCryptographyCategoryDivider)
+        preferenceScreen.let {
+            it.removePreference(mCryptographyCategory)
+            it.removePreference(mCryptographyCategoryDivider)
+
+            // Also remove keys management section
+            it.removePreference(mCryptographyManageCategory)
+            it.removePreference(mCryptographyManageCategoryDivider)
         }
     }
 
@@ -2096,6 +2185,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
                 activity?.let { copyToClipboard(it, deviceId) }
                 true
+            }
+
+
+            manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                context?.let {
+                    startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+                }
+                false
             }
 
             exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -2156,9 +2253,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     //==============================================================================================================
 
     private fun removeDevicesPreference() {
-        if (null != preferenceScreen) {
-            preferenceScreen.removePreference(mDevicesListSettingsCategory)
-            preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider)
+        preferenceScreen.let {
+            it.removePreference(mDevicesListSettingsCategory)
+            it.removePreference(mDevicesListSettingsCategoryDivider)
         }
     }
 
@@ -2367,7 +2464,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                 val count = mDevicesListSettingsCategory.preferenceCount
 
                                 for (i in 0 until count) {
-                                    val pref = mDevicesListSettingsCategory.getPreference(i) as Preference
+                                    val pref = mDevicesListSettingsCategory.getPreference(i)
 
                                     if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.title)) {
                                         pref.summary = newName
@@ -2487,77 +2584,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // We need WRITE_EXTERNAL permission
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
             activity?.let { activity ->
+                ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
+                    override fun onPassphrase(passphrase: String) {
+                        displayLoadingView()
 
-                val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
-                val builder = AlertDialog.Builder(activity)
-                        .setTitle(R.string.encryption_export_room_keys)
-                        .setView(dialogLayout)
+                        CommonActivityUtils.exportKeys(mSession, passphrase, object : SimpleApiCallback<String>(activity) {
+                            override fun onSuccess(filename: String) {
+                                hideLoadingView()
 
-                val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-                val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_confirm_passphrase_edit_text)
-                val exportButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_export_button)
-                val textWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-                    }
-
-                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-                    }
-
-                    override fun afterTextChanged(s: Editable) {
-                        when {
-                            TextUtils.isEmpty(passPhrase1EditText.text) -> {
-                                exportButton.isEnabled = false
-                                passPhrase2EditText.error = null
+                                AlertDialog.Builder(activity)
+                                        .setMessage(getString(R.string.encryption_export_saved_as, filename))
+                                        .setCancelable(false)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .show()
                             }
-                            TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
-                                exportButton.isEnabled = true
-                                passPhrase2EditText.error = null
+
+                            override fun onNetworkError(e: Exception) {
+                                super.onNetworkError(e)
+                                hideLoadingView()
                             }
-                            else -> {
-                                exportButton.isEnabled = false
-                                passPhrase2EditText.error = getString(R.string.encryption_export_passphrase_dont_match)
+
+                            override fun onMatrixError(e: MatrixError) {
+                                super.onMatrixError(e)
+                                hideLoadingView()
                             }
-                        }
+
+                            override fun onUnexpectedError(e: Exception) {
+                                super.onUnexpectedError(e)
+                                hideLoadingView()
+                            }
+                        })
                     }
-                }
-
-                passPhrase1EditText.addTextChangedListener(textWatcher)
-                passPhrase2EditText.addTextChangedListener(textWatcher)
-
-                exportButton.isEnabled = false
-
-                val exportDialog = builder.show()
-
-                exportButton.setOnClickListener {
-                    displayLoadingView()
-
-                    CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.text.toString(), object : ApiCallback<String> {
-                        override fun onSuccess(filename: String) {
-                            hideLoadingView()
-
-                            AlertDialog.Builder(activity)
-                                    .setMessage(getString(R.string.encryption_export_saved_as, filename))
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            hideLoadingView()
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            hideLoadingView()
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            hideLoadingView()
-                        }
-                    })
-
-                    exportDialog.dismiss()
-                }
+                })
             }
         }
     }
@@ -2608,8 +2666,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            importButton.isEnabled = false
-
             val importDialog = builder.show()
             val appContext = thisActivity.applicationContext
 
@@ -2637,39 +2693,42 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 displayLoadingView()
 
-                mSession.crypto?.importRoomKeys(data, password, object : ApiCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult?) {
-                        if (!isAdded) {
-                            return
-                        }
+                mSession.crypto?.importRoomKeys(data,
+                        password,
+                        null,
+                        object : ApiCallback<ImportRoomKeysResult> {
+                            override fun onSuccess(info: ImportRoomKeysResult?) {
+                                if (!isAdded) {
+                                    return
+                                }
 
-                        hideLoadingView()
+                                hideLoadingView()
 
-                        info?.let {
-                            AlertDialog.Builder(thisActivity)
-                                    .setMessage(getString(R.string.encryption_import_room_keys_success,
-                                            it.successfullyNumberOfImportedKeys,
-                                            it.totalNumberOfKeys))
-                                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                    .show()
-                        }
-                    }
+                                info?.let {
+                                    AlertDialog.Builder(thisActivity)
+                                            .setMessage(getString(R.string.encryption_import_room_keys_success,
+                                                    it.successfullyNumberOfImportedKeys,
+                                                    it.totalNumberOfKeys))
+                                            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                            .show()
+                                }
+                            }
 
-                    override fun onNetworkError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onNetworkError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onMatrixError(e: MatrixError) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
+                            override fun onMatrixError(e: MatrixError) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
 
-                    override fun onUnexpectedError(e: Exception) {
-                        appContext.toast(e.localizedMessage)
-                        hideLoadingView()
-                    }
-                })
+                            override fun onUnexpectedError(e: Exception) {
+                                appContext.toast(e.localizedMessage)
+                                hideLoadingView()
+                            }
+                        })
 
                 importDialog.dismiss()
             })
@@ -2860,4 +2919,5 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     putString(ARG_MATRIX_ID, matrixId)
                 }
     }
+
 }

@@ -3,8 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="?android:attr/colorBackground"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <RelativeLayout
         android:id="@+id/call_layout"
@@ -24,7 +24,7 @@
         <LinearLayout
             android:id="@+id/call_menu_buttons_layout_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:background="@android:color/white"
             android:gravity="center">
@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="16"
-                android:src="@drawable/ic_material_call_end_grey" />
+                android:src="@drawable/voice_call_end_fushia" />
 
             <!-- for further use: for now we cannot switch from audio to video -->
             <ImageView
@@ -90,11 +90,11 @@
         <LinearLayout
             android:id="@+id/incoming_call_menu_buttons_layout_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/call_menu_buttons_layout_container"
+            android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:background="@android:color/white"
-            android:gravity="center">
+            android:gravity="center"
+            tools:layout_marginBottom="80dp">
 
             <ImageView
                 android:id="@+id/reject_incoming_call"

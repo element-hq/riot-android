@@ -43,8 +43,8 @@
     <string name="rename">Перейменувати</string>
     <string name="report_content">Поскаржитись на вміст</string>
     <string name="active_call">Активний виклик</string>
-    <string name="ongoing_conference_call">Відбувається конференц-дзвінок. Приєднатись голосом чи відео.</string>
-    <string name="ongoing_conference_call_voice">голос</string>
+    <string name="ongoing_conference_call">Відбувається конференц-дзвінок.\nПриєднатись %1$s чи %2$s.</string>
+    <string name="ongoing_conference_call_voice">голосом</string>
     <string name="ongoing_conference_call_video">відео</string>
     <string name="cannot_start_call">Не вдалося здійснити виклик, спробуйте пізніше</string>
     <string name="missing_permissions_warning">Деякі функції можуть бути недоступними через відсутність дозволів…</string>
@@ -59,8 +59,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Вийти з облікового запису</string>
-    <string name="action_sign_out_confirmation">З міркувань безпеки, всі ключі шифрування видаляються при виході з системи, що унеможливить перегляд попередньої історії чату коли Ви зайдете в систему знову.
-Експортуйте її, перш ніж вийти.</string>
     <string name="action_voice_call">Голосовий виклик</string>
     <string name="action_video_call">Відеовиклик</string>
     <string name="action_global_search">Глообальний пошук</string>
@@ -302,8 +300,6 @@
     <string name="room_creation_title">Новий Чат</string>
     <string name="room_creation_add_member">Додати учасника</string>
     <string name="room_title_one_member">1 учасник</string>
-    <string name="room_e2e_alert_title">Увага!</string>
-    <string name="room_e2e_alert_message">Скрізне шифрування досі на стадії beta-тестування та може бути ненадійним.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Залишити кімнату</string>
@@ -624,8 +620,6 @@
     <string name="room_settings_addresses_e2e_enabled">У цій кімнаті увімкнено шифрування.</string>
     <string name="room_settings_addresses_e2e_disabled">У цій кімнаті вимкнено шифрування.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Увімкнути шифрування \n(увага: вимкнути його неможливо!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Увага!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Наскрізне шифрування знаходиться в бета-версії та може бути ненадійним.\n\nПоки не варто довіряти йому безпеку секретних даних.\n\nПристрої поки не здатні розшифровувати написане до їх вступу у кімнату.\n\nШифрування у кімнаті (поки що) можна лише увімкнути, але не вимкнути.\n\nШифровані повідомлення невидимі для клієнтів, що не підтримують цю функцію.</string>
 
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
@@ -656,8 +650,8 @@
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
     <string name="encryption_export_room_keys_summary">Експортувати ключі до локального файлу</string>
     <string name="encryption_export_export">Експорт</string>
-    <string name="encryption_import_enter_passphrase">Введіть парольну фразу</string>
-    <string name="encryption_export_confirm_passphrase">Підтвердіть парольну фразу</string>
+    <string name="passphrase_enter_passphrase">Введіть парольну фразу</string>
+    <string name="passphrase_confirm_passphrase">Підтвердіть парольну фразу</string>
     <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'
 
 Попередження: цей файл може бути видалений, якщо видалити додаток.</string>
@@ -832,11 +826,8 @@
         <item quantity="other" />
     </plurals>
 
-    <string name="settings_notification_privacy_power_saving">"Варіанти  енергозабезпечення"</string>
-    <string name="settings_notification_privacy_low_detail">Повідомлення без подробиць</string>
     <string name="settings_notification_privacy_reduced">Обмежена конфіденційність</string>
     <string name="settings_notification_privacy_need_permission">Програма потребує дозвіл на роботу у фоновому режимі</string>
-    <string name="settings_notification_privacy_no_permission">"Програма  "<b>не</b> потребує дозвіл на роботу у фоновому режимі</string>
     <string name="settings_notification_privacy_fcm">• Повідомлення відправляються через Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Повідомлення містять тільки метаданні</string>
     <string name="settings_notification_privacy_secure_message_content">• Зміст сповіщення був <b> надійно віднайдений просто на домашньому сервері Matrix </b></string>
@@ -936,7 +927,6 @@
         <item quantity="other" />
     </plurals>
     <string name="room_sliding_menu_version_x">Версія %s</string>
-    <string name="settings_notification_privacy_warning">Riot.im запущено у фоновому режимі для забезпечення конфіденційності ваших сповіщень. Ви можете змінити цю опцію, щоб зменшити навантаження на батарею.</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Сповіщення містять <b>метадані та дані повідомлення</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Сповіщення <b>не будуть показувати вміст повідомлень</b></string>
 
@@ -955,8 +945,8 @@
 
 
     <string name="encryption_export_notice">Будь ласка, створіть пароль для шифрування ключів що експортуються. Вам знадобиться ввести такий самий пароль для імпорту цих ключів.</string>
-    <string name="encryption_export_create_passphrase">Створіть пароль</string>
-    <string name="encryption_export_passphrase_dont_match">Паролі мають збігатися</string>
+    <string name="passphrase_create_passphrase">Створіть пароль</string>
+    <string name="passphrase_passphrase_does_not_match">Паролі мають збігатися</string>
     <string name="lock_screen_hint">Набирайте тут…</string>
 
     <plurals name="notification_unread_notified_messages">

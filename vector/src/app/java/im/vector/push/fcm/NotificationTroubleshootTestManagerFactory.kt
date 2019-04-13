@@ -17,7 +17,9 @@ package im.vector.push.fcm
 
 import android.support.v4.app.Fragment
 import im.vector.fragments.troubleshoot.*
-import im.vector.push.fcm.troubleshoot.*
+import im.vector.push.fcm.troubleshoot.TestFirebaseToken
+import im.vector.push.fcm.troubleshoot.TestPlayServices
+import im.vector.push.fcm.troubleshoot.TestTokenRegistration
 import org.matrix.androidsdk.MXSession
 
 class NotificationTroubleshootTestManagerFactory {

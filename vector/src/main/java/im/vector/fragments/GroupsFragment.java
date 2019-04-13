@@ -31,10 +31,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -126,8 +124,11 @@ public class GroupsFragment extends AbsHomeFragment {
         super.onActivityCreated(savedInstanceState);
 
         mGroupsManager = mSession.getGroupsManager();
-        mPrimaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups);
-        mSecondaryColor = ContextCompat.getColor(getActivity(), R.color.tab_groups_secondary);
+        mPrimaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home);
+        mSecondaryColor = ThemeUtils.INSTANCE.getColor(getActivity(), R.attr.vctr_tab_home_secondary);
+
+        mFabColor = ContextCompat.getColor(getActivity(), R.color.tab_groups);
+        mFabPressedColor = ContextCompat.getColor(getActivity(), R.color.tab_groups_secondary);
 
         initViews();
 

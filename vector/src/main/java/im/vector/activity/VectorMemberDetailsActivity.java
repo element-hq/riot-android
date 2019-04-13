@@ -659,6 +659,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param aVisibilityToSet View.GONE to hide the view, View.VISIBLE to show
      */
     private void setScreenDevicesListVisibility(int aVisibilityToSet) {
+        if (mDevicesListHeaderView == null) {
+            // Activity is destroyed
+            return;
+        }
+
         mDevicesListHeaderView.setVisibility(aVisibilityToSet);
         mDevicesListView.setVisibility(aVisibilityToSet);
 
@@ -1125,21 +1130,22 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // direct chats management
-
-            // list other direct rooms
-            List<String> roomIds = mSession.getDataHandler().getDirectChatRoomIdsList(mMemberId);
-            for (String roomId : roomIds) {
-                Room room = mSession.getDataHandler().getRoom(roomId);
-                if (null != room) {
-                    directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(room));
+            if (mMemberId != null && mSession != null && !mMemberId.equals(mSession.getMyUserId())) {
+                // list other direct rooms
+                List<String> roomIds = mSession.getDataHandler().getDirectChatRoomIdsList(mMemberId);
+                for (String roomId : roomIds) {
+                    Room room = mSession.getDataHandler().getRoom(roomId);
+                    if (null != room) {
+                        directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(room));
+                    }
                 }
+
+                imageResource = R.drawable.ic_add_black;
+                actionText = getString(R.string.start_new_chat);
+                directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
+
+                mListViewAdapter.setDirectCallsActionsList(directMessagesActions);
             }
-
-            imageResource = R.drawable.ic_add_black;
-            actionText = getString(R.string.start_new_chat);
-            directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
-
-            mListViewAdapter.setDirectCallsActionsList(directMessagesActions);
             mListViewAdapter.notifyDataSetChanged();
 
             mExpandableListView.post(new Runnable() {

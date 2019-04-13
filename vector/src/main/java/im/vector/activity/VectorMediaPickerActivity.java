@@ -93,6 +93,7 @@ import im.vector.listeners.ImageViewOnTouchListener;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.PreferencesManager;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
@@ -704,34 +705,38 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
     private void startAutoFocus() {
         Log.d(LOG_TAG, "## startAutoFocus");
 
-        String focusMode = null;
+        try {
+            String focusMode = null;
 
-        Camera.Parameters params = mCamera.getParameters();
+            Camera.Parameters params = mCamera.getParameters();
 
-        if (mIsVideoMode) {
-            // set auto focus for video
-            if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-                focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO;
+            if (mIsVideoMode) {
+                // set auto focus for video
+                if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                    focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO;
+                }
+            } else {
+                // set auto focus for picture
+                if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
+                }
             }
-        } else {
-            // set auto focus for picture
-            if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
-            }
-        }
 
-        if (focusMode == null
-                && params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
-            focusMode = Camera.Parameters.FOCUS_MODE_AUTO;
-        }
-
-        if (focusMode != null && !focusMode.equals(params.getFocusMode())) {
-            try {
-                params.setFocusMode(focusMode);
-                mCamera.setParameters(params);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## startAutoFocus(): set auto focus fails EXCEPTION Msg=" + e.getMessage(), e);
+            if (focusMode == null
+                    && params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                focusMode = Camera.Parameters.FOCUS_MODE_AUTO;
             }
+
+            if (focusMode != null && !focusMode.equals(params.getFocusMode())) {
+                try {
+                    params.setFocusMode(focusMode);
+                    mCamera.setParameters(params);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## startAutoFocus(): set auto focus fails EXCEPTION Msg=" + e.getMessage(), e);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## ## startAutoFocus(): failed " + e.getMessage(), e);
         }
     }
 
@@ -740,72 +745,76 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
      * The aspect ratio is kept.
      */
     private void resizeCameraPreviewTexture() {
-        Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
+        try {
+            Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
 
-        //  Valid values are 0, 90, 180, and 270 (0 = landscape)
-        if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
-            int tmp = previewSize.width;
-            previewSize.width = previewSize.height;
-            previewSize.height = tmp;
-        }
-
-        // check that the aspect ratio is kept
-        int sourceRatio = previewSize.height * 100 / previewSize.width;
-        int dstRatio = mPreviewTextureHeight * 100 / mPreviewTextureWidth;
-
-        // the camera preview size must fit the size provided by the surface texture
-        if (sourceRatio != dstRatio) {
-            int newWidth;
-            int newHeight;
-
-            // don't update the mCameraPreviewLayout frame when recording the video
-            // else medias_picker_camera_button will move and the video recording would stop
-            newHeight = mIsVideoMode ? mCameraPreviewLayoutHeight : mPreviewTextureHeight;
-            newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
-
-            if (newWidth > mPreviewTextureWidth) {
-                newWidth = mPreviewTextureWidth;
-                newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
-
-                // max value
-                if (newHeight > (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO)) {
-                    newHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
-                    newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
-                }
+            //  Valid values are 0, 90, 180, and 270 (0 = landscape)
+            if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
+                int tmp = previewSize.width;
+                previewSize.width = previewSize.height;
+                previewSize.height = tmp;
             }
 
-            // apply the size provided by the texture to the texture layout
-            ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
-            layout.width = newWidth;
-            layout.height = newHeight;
-            mCameraTextureView.setLayoutParams(layout);
+            // check that the aspect ratio is kept
+            int sourceRatio = previewSize.height * 100 / previewSize.width;
+            int dstRatio = mPreviewTextureHeight * 100 / mPreviewTextureWidth;
 
-            if (mIsAvatarMode) {
-                mCameraTextureMaskView.setVisibility(View.VISIBLE);
-                final int fWidth = newWidth;
-                final int fHeight = newHeight;
+            // the camera preview size must fit the size provided by the surface texture
+            if (sourceRatio != dstRatio) {
+                int newWidth;
+                int newHeight;
 
-                mCameraTextureMaskView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
+                // don't update the mCameraPreviewLayout frame when recording the video
+                // else medias_picker_camera_button will move and the video recording would stop
+                newHeight = mIsVideoMode ? mCameraPreviewLayoutHeight : mPreviewTextureHeight;
+                newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
+
+                if (newWidth > mPreviewTextureWidth) {
+                    newWidth = mPreviewTextureWidth;
+                    newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
+
+                    // max value
+                    if (newHeight > (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO)) {
+                        newHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+                        newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
                     }
-                });
-            } else {
-                mCameraTextureMaskView.setVisibility(View.GONE);
-            }
+                }
 
-            // don't update the mCameraPreviewLayout frame when recording the video
-            // else medias_picker_camera_button will move and the video recording would stop
-            if ((layout.height != mCameraPreviewLayoutHeight) && !mIsVideoMode) {
-                mCameraPreviewLayoutHeight = layout.height;
-                // set the height of the relative layout containing the texture view
-                if (null != mCameraPreviewLayout) {
-                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams) mCameraPreviewLayout.getLayoutParams();
-                    previewLayoutParams.height = mCameraPreviewLayoutHeight;
-                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+                // apply the size provided by the texture to the texture layout
+                ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
+                layout.width = newWidth;
+                layout.height = newHeight;
+                mCameraTextureView.setLayoutParams(layout);
+
+                if (mIsAvatarMode) {
+                    mCameraTextureMaskView.setVisibility(View.VISIBLE);
+                    final int fWidth = newWidth;
+                    final int fHeight = newHeight;
+
+                    mCameraTextureMaskView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
+                        }
+                    });
+                } else {
+                    mCameraTextureMaskView.setVisibility(View.GONE);
+                }
+
+                // don't update the mCameraPreviewLayout frame when recording the video
+                // else medias_picker_camera_button will move and the video recording would stop
+                if ((layout.height != mCameraPreviewLayoutHeight) && !mIsVideoMode) {
+                    mCameraPreviewLayoutHeight = layout.height;
+                    // set the height of the relative layout containing the texture view
+                    if (null != mCameraPreviewLayout) {
+                        RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams) mCameraPreviewLayout.getLayoutParams();
+                        previewLayoutParams.height = mCameraPreviewLayoutHeight;
+                        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+                    }
                 }
             }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## ## resizeCameraPreviewTexture(): failed " + e.getMessage(), e);
         }
     }
 
@@ -1341,8 +1350,10 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
      * Play the camera shutter sound
      */
     private void playShutterSound() {
-        MediaActionSound sound = new MediaActionSound();
-        sound.play(MediaActionSound.SHUTTER_CLICK);
+        if (PreferencesManager.useShutterSound(this)) {
+            MediaActionSound sound = new MediaActionSound();
+            sound.play(MediaActionSound.SHUTTER_CLICK);
+        }
     }
 
     /**

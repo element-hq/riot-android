@@ -10,6 +10,7 @@ import java.util.Set;
 
 /**
  * Generic callback management class, runs callbacks in the UI loop
+ *
  * @param <T>
  */
 public class EventEmitter<T> {

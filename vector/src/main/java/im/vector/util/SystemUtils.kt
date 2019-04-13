@@ -26,7 +26,6 @@ import android.provider.Settings
 import android.support.v4.app.Fragment
 import androidx.core.widget.toast
 import im.vector.R
-import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
 import org.matrix.androidsdk.util.Log
@@ -58,11 +57,15 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
 @TargetApi(Build.VERSION_CODES.M)
-fun requestDisablingBatteryOptimization(activity: Activity, requestCode: Int) {
+fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?, requestCode: Int) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     intent.data = Uri.parse("package:" + activity.packageName)
-    activity.startActivityForResult(intent, requestCode)
+    if (fragment != null) {
+        fragment.startActivityForResult(intent, requestCode)
+    } else {
+        activity.startActivityForResult(intent, requestCode)
+    }
 }
 
 //==============================================================================================================
@@ -108,7 +111,7 @@ fun getDeviceLocale(context: Context): Locale {
  */
 fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
     val intent = Intent()
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -127,6 +130,7 @@ fun startNotificationSettingsIntent(fragment: Fragment, requestCode: Int) {
 /**
  * Shows notification system settings for the given channel id.
  */
+@TargetApi(Build.VERSION_CODES.O)
 fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String) {
     if (!supportNotificationChannels()) return
     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
@@ -142,6 +146,35 @@ fun startAddGoogleAccountIntent(fragment: Fragment, requestCode: Int) {
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
         fragment.startActivityForResult(intent, requestCode)
     } catch (activityNotFoundException: ActivityNotFoundException) {
+        fragment.activity?.toast(R.string.error_no_external_application_found)
+    }
+}
+
+fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null) {
+    val share = Intent(Intent.ACTION_SEND)
+    share.type = "text/plain"
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+    } else {
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    // Add data to the intent, the receiving app will decide what to do with it.
+    share.putExtra(Intent.EXTRA_SUBJECT, subject)
+    share.putExtra(Intent.EXTRA_TEXT, text)
+    try {
+        fragment.startActivity(Intent.createChooser(share, chooserTitle))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        fragment.activity?.toast(R.string.error_no_external_application_found)
+    }
+}
+
+fun startImportTextFromFileIntent(fragment: Fragment, requestCode: Int) {
+    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+        type = "text/plain"
+    }
+    if (intent.resolveActivity(fragment.activity!!.packageManager) != null) {
+        fragment.startActivityForResult(intent, requestCode)
+    } else {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }
 }

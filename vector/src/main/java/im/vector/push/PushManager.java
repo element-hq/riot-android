@@ -46,6 +46,7 @@ import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.push.fcm.FcmHelper;
+import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
 import im.vector.util.SystemUtilsKt;
 
@@ -246,7 +247,7 @@ public final class PushManager {
                 register(null);
 
                 Log.d(LOG_TAG, "checkRegistrations : reregistered");
-                CommonActivityUtils.onPushUpdate(mContext);
+                EventStreamServiceX.Companion.onPushUpdate(mContext);
             } else {
                 Log.d(LOG_TAG, "checkRegistrations : onPusherRegistrationFailed");
             }
@@ -729,7 +730,7 @@ public final class PushManager {
                 // remove them
                 unregister(null);
             } else {
-                CommonActivityUtils.onPushUpdate(mContext);
+                EventStreamServiceX.Companion.onPushUpdate(mContext);
             }
 
             return;
@@ -821,7 +822,7 @@ public final class PushManager {
             if (useFcm() && areDeviceNotificationsAllowed() && Matrix.hasValidSessions()) {
                 register(null);
             } else {
-                CommonActivityUtils.onPushUpdate(mContext);
+                EventStreamServiceX.Companion.onPushUpdate(mContext);
             }
 
             dispatchUnregisterSuccess();
@@ -1036,7 +1037,7 @@ public final class PushManager {
          * Notifications are displayed with low detail (X messages in RoomY).
          * Only message metadata is sent through the push service.
          */
-        LOW_DETAIL,
+       // LOW_DETAIL,
 
         /**
          * Normal: full detailed notifications by keeping user privacy.
@@ -1075,18 +1076,14 @@ public final class PushManager {
      * @return the current notification privacy setting as displayed to the end user.
      */
     public NotificationPrivacy getNotificationPrivacy() {
-        NotificationPrivacy notificationPrivacy = NotificationPrivacy.LOW_DETAIL;
-
-        boolean isContentSendingAllowed = isContentSendingAllowed();
         boolean isBackgroundSyncAllowed = isBackgroundSyncAllowed();
 
-        if (isContentSendingAllowed && !isBackgroundSyncAllowed) {
-            notificationPrivacy = NotificationPrivacy.REDUCED;
-        } else if (!isContentSendingAllowed && isBackgroundSyncAllowed) {
-            notificationPrivacy = NotificationPrivacy.NORMAL;
+        if (isBackgroundSyncAllowed) {
+            //in this case always use normal privacy
+            return NotificationPrivacy.NORMAL;
         }
 
-        return notificationPrivacy;
+        return NotificationPrivacy.REDUCED;
     }
 
     /**
@@ -1102,10 +1099,6 @@ public final class PushManager {
         switch (notificationPrivacy) {
             case REDUCED:
                 setContentSendingAllowed(true);
-                setBackgroundSyncAllowed(false);
-                break;
-            case LOW_DETAIL:
-                setContentSendingAllowed(false);
                 setBackgroundSyncAllowed(false);
                 break;
             case NORMAL:
@@ -1137,7 +1130,7 @@ public final class PushManager {
 
         if (!useFcm()) {
             // when FCM is disabled, enable / disable the "Listen for events" notifications
-            CommonActivityUtils.onPushUpdate(mContext);
+            EventStreamServiceX.Companion.onPushUpdate(mContext);
         }
     }
 
@@ -1163,19 +1156,12 @@ public final class PushManager {
     /**
      * Tell if the application can run in background.
      * It depends on the app settings and the `IgnoringBatteryOptimizations` permission in FCM mode.
-     * In FCM mode return true if token is registred and IgnoringBatteryOptimizations is on
-     * In fdroid mode returns true if user pref for backgroudn sync is on (will use foreground notificaiton to keep alive, no need for battery optimisation).
+     * In FCM mode return true if token is registered and IgnoringBatteryOptimizations is on
+     * In fdroid mode returns true if user pref for background sync is on (will use foreground notification to keep alive, no need for battery optimisation).
      *
      * @return true if the background sync is allowed
      */
     public boolean isBackgroundSyncAllowed() {
-        // If using FCM, first check if the application has the "run in background" permission.
-        // No permission, no background sync
-        if (hasRegistrationToken()
-                && !SystemUtilsKt.isIgnoringBatteryOptimizations(mContext)) {
-            return false;
-        }
-
         // then, this depends on the user setting
         return getPushSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
     }
@@ -1194,7 +1180,7 @@ public final class PushManager {
                 .apply();
 
         // when FCM is disabled, enable / disable the "Listen for events" notifications
-        CommonActivityUtils.onPushUpdate(mContext);
+        EventStreamServiceX.Companion.onPushUpdate(mContext);
     }
 
     /**

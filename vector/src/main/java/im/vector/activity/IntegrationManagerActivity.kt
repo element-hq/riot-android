@@ -22,6 +22,7 @@ import android.content.Intent
 import android.support.annotation.CallSuper
 import android.text.TextUtils
 import im.vector.R
+import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
@@ -30,7 +31,6 @@ import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomMember
 import org.matrix.androidsdk.util.Log
-import java.net.URLEncoder
 import java.util.*
 
 class IntegrationManagerActivity : AbstractWidgetActivity() {
@@ -55,8 +55,6 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         waitingView = findViewById(R.id.integration_progress_layout)
 
-        showWaitingView()
-
         super.initUiAndData()
 
         // Some widgets need popup to be enabled
@@ -67,26 +65,29 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      * IMPLEMENTS METHOD
      * ========================================================================================== */
 
+    override fun canScalarTokenBeProvided() = true
+
     /**
      * Compute the integration URL
      *
      * @return the integration URL
      */
-    override fun buildInterfaceUrl(scalarToken: String): String? {
+    override fun buildInterfaceUrl(scalarToken: String?): String? {
         try {
-            var url = getString(R.string.integrations_ui_url) + "?" +
-                    "scalar_token=" + URLEncoder.encode(scalarToken, "utf-8") + "&" +
-                    "room_id=" + URLEncoder.encode(mRoom!!.roomId, "utf-8")
-
-            if (null != mWidgetId) {
-                url += "&integ_id=" + URLEncoder.encode(mWidgetId, "utf-8")
-            }
-
-            if (null != mScreenId) {
-                url += "&screen=" + URLEncoder.encode(mScreenId, "utf-8")
-            }
-
-            return url
+            return StringBuilder(getString(R.string.integrations_ui_url))
+                    .apply {
+                        scalarToken?.let {
+                            appendParamToUrl("scalar_token", it)
+                        }
+                        mWidgetId?.let {
+                            appendParamToUrl("integ_id", it)
+                        }
+                        mScreenId?.let {
+                            appendParamToUrl("screen", it)
+                        }
+                    }
+                    .appendParamToUrl("room_id", mRoom!!.roomId)
+                    .toString()
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## buildInterfaceUrl() failed " + e.message, e)
         }

@@ -43,6 +43,38 @@
         <item>"joined"</item>
     </string-array>
 
+    <!-- media settings -->
+    <string-array name="compression_levels">
+        <item>@string/compression_opt_list_choose</item>
+        <item>@string/compression_opt_list_original</item>
+        <item>@string/compression_opt_list_large</item>
+        <item>@string/compression_opt_list_medium</item>
+        <item>@string/compression_opt_list_small</item>
+    </string-array>
+    <string-array name="compression_level_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="media_sources">
+        <item>@string/media_source_choose</item>
+        <item>@string/option_send_files</item>
+        <item>@string/option_send_voice</item>
+        <item>@string/option_send_sticker</item>
+        <item>@string/option_take_photo</item>
+        <item>@string/option_take_video</item>
+    </string-array>
+    <string-array name="media_source_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <!-- Room settings notification -->
     <string-array name="notification_entries">
         <item>@string/room_settings_all_messages_noisy</item>

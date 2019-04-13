@@ -23,14 +23,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
 import org.matrix.androidsdk.crypto.MXCrypto;
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackup;
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.metrics.MetricsListener;
@@ -53,18 +57,21 @@ import org.matrix.androidsdk.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.KeysBackupManageActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.analytics.MetricsListenerProxy;
 import im.vector.push.PushManager;
-import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.tools.VectorUncaughtExceptionHandler;
+import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PreferencesManager;
 import im.vector.widgets.WidgetsManager;
 
@@ -99,6 +106,8 @@ public class Matrix {
 
     // tell if the client should be logged out
     public boolean mHasBeenDisconnected = false;
+
+    public Map<String, KeysBackupStateManager.KeysBackupStateListener> keyBackupStateListeners = new HashMap<>();
 
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
@@ -160,7 +169,7 @@ public class Matrix {
                         }
 
                         // update the badge counter
-                        CommonActivityUtils.updateBadgeCount(instance.mAppContext, roomCount);
+                        BadgeProxy.INSTANCE.updateBadgeCount(instance.mAppContext, roomCount);
                     }
                 }
 
@@ -171,7 +180,7 @@ public class Matrix {
             mRefreshUnreadCounter = false;
 
             Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
-            EventStreamService.checkDisplayedNotifications();
+            //EventStreamService.checkDisplayedNotifications();
         }
     };
 
@@ -495,6 +504,12 @@ public class Matrix {
                 mLoginStorage.removeCredentials(session.getHomeServerConfig());
 
                 session.getDataHandler().removeListener(mLiveEventListener);
+                if (keyBackupStateListeners.get(session.getMyUserId()) != null) {
+                    if (session.getCrypto() != null) {
+                        session.getCrypto().getKeysBackup().removeListener(keyBackupStateListeners.get(session.getMyUserId()));
+                    }
+                    keyBackupStateListeners.remove(session.getMyUserId());
+                }
 
                 VectorApp.removeSyncingSession(session);
 
@@ -530,6 +545,12 @@ public class Matrix {
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
+        if (keyBackupStateListeners.get(session.getMyUserId()) != null) {
+            if (session.getCrypto() != null) {
+                session.getCrypto().getKeysBackup().removeListener(keyBackupStateListeners.get(session.getMyUserId()));
+            }
+            keyBackupStateListeners.remove(session.getMyUserId());
+        }
 
         ApiCallback<Void> callback = new SimpleApiCallback<Void>() {
             @Override
@@ -719,11 +740,47 @@ public class Matrix {
                             KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
                         }
                     });
+
+                    registerKeyBackupStateListener(session);
                 }
             }
         });
 
+
         return session;
+    }
+
+    private void registerKeyBackupStateListener(MXSession session) {
+        if (session.getCrypto() != null) {
+            KeysBackup keysBackup = session.getCrypto().getKeysBackup();
+            final String matrixID = session.getMyUserId();
+            if (keyBackupStateListeners.get(matrixID) == null) {
+                KeysBackupStateManager.KeysBackupStateListener keyBackupStateListener = new KeysBackupStateManager.KeysBackupStateListener() {
+                    @Override
+                    public void onStateChange(@NotNull KeysBackupStateManager.KeysBackupState newState) {
+                        if (KeysBackupStateManager.KeysBackupState.WrongBackUpVersion == newState) {
+                            //We should show the popup
+                            Activity activity = VectorApp.getCurrentActivity();
+                            //This is fake multi session :/ i should be able to have current session...
+                            if (activity != null) {
+                                new AlertDialog.Builder(activity)
+                                        .setTitle(R.string.new_recovery_method_popup_title)
+                                        .setMessage(R.string.new_recovery_method_popup_description)
+                                        .setPositiveButton(R.string.open_settings, (dialog, which) -> {
+                                            activity.startActivity(KeysBackupManageActivity.Companion.intent(activity, matrixID));
+                                        })
+                                        .setNegativeButton(R.string.new_recovery_method_popup_was_me, null)
+                                        .show();
+                            }
+                        }
+                    }
+                };
+                keyBackupStateListeners.put(matrixID, keyBackupStateListener);
+            }
+            keysBackup.addListener(keyBackupStateListeners.get(matrixID));
+        } else {
+            Log.e(LOG_TAG, "## Failed to register keybackup state listener");
+        }
     }
 
     /**
@@ -759,6 +816,12 @@ public class Matrix {
 
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
+
+                            if (context instanceof SplashActivity) {
+                                // Avoid bad visual effect, due to check of lazy loading status
+                                ((SplashActivity) context).overridePendingTransition(0, 0);
+                            }
+
                         }
                     }
                 });

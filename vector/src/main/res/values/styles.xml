@@ -1,6 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- ************************ Common items ************************ -->
+
+    <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+    </style>
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
@@ -9,6 +17,7 @@
 
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
+        <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
 
         <item name="theme">@style/VectorToolbarTheme</item>
     </style>
@@ -25,8 +34,14 @@
 
     <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
+
+    <style name="Vector.Toolbar.SubTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
+        <item name="android:fontFamily">"sans-serif"</item>
     </style>
 
     <!-- tabbar text color -->
@@ -34,11 +49,20 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Vector.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+
+    <style name="Vector.PopupMenuBase" parent="Widget.AppCompat.PopupMenu">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:dropDownHorizontalOffset">0dp</item>
         <item name="android:dropDownVerticalOffset">0dp</item>
+    </style>
+
+    <style name="Vector.PopupMenu" parent="Vector.PopupMenuBase">
+        <!--
+            Before Lollipop the popup background is white on dark theme, so force color here.
+            (v21 will revert back to default drawable)
+        -->
+        <item name="android:popupBackground">?colorBackgroundFloating</item>
     </style>
 
     <!-- actionbar icons color -->
@@ -63,14 +87,14 @@
 
     <!-- main text -->
     <style name="ActionBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <!-- sub text -->
     <style name="ActionBarSubTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?attr/vctr_primary_text_color</item>
+        <item name="android:textColor">?attr/vctr_toolbar_primary_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -85,19 +109,32 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="LoginButtonStyleBase" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+    <!-- Styles for button -->
+    <!--
+        Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
+         using colorControlHighlight as an overlay for focused and pressed states.
+    -->
+    <style name="VectorButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/button_text_color_selector</item>
     </style>
 
-    <style name="LoginButtonStyle" parent="LoginButtonStyleBase" />
+    <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
+        using colorControlHighlight as an overlay for focused and pressed states.-->
+    <style name="VectorButtonStyleFlat" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="colorControlHighlight">?colorAccent</item>
+    </style>
 
     <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
@@ -179,6 +216,34 @@
     <style name="Vector.TabView.Group" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/vector_tabbar_background_group_light</item>
         <item name="background">@drawable/vector_tabbar_background_group_light</item>
+    </style>
+
+    <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
+    <style name="VectorLinearLayout">
+        <item name="android:gravity">end</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- BottomSheet theming -->
+    <style name="Vector.BottomSheet.Dark" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_light</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
+    </style>
+
+    <style name="Vector.BottomSheet.Status" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:textColorPrimary">@color/riot_primary_text_color_status</item>
+        <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
     </style>
 
 </resources>

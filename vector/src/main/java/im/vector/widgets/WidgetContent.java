@@ -68,6 +68,7 @@ public class WidgetContent implements Serializable {
 
     /**
      * Convert a json object into a WidgetContent instance
+     *
      * @param jsonObject
      * @return
      */

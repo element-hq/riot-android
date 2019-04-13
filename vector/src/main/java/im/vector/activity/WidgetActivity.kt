@@ -31,6 +31,7 @@ import android.view.ViewGroup
 import android.webkit.*
 import android.widget.TextView
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnClick
@@ -43,6 +44,7 @@ import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.rest.callback.ApiCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.Log
+import javax.net.ssl.HttpsURLConnection
 
 /*
  * This class displays a widget
@@ -66,6 +68,10 @@ class WidgetActivity : VectorAppCompatActivity() {
 
     @BindView(R.id.widget_title)
     lateinit var mWidgetTypeTextView: TextView
+
+    private var mIsRefreshingToken = false
+    private var mTokenAlreadyRefreshed = false
+    private var mHistoryAlreadyCleared = false
 
     /**
      * Widget events listener
@@ -263,8 +269,45 @@ class WidgetActivity : VectorAppCompatActivity() {
                     showWaitingView()
                 }
 
+                override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                    // In case of 403, try to refresh the scalar token
+                    if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN
+                            && !mTokenAlreadyRefreshed
+                            && WidgetsManager.isScalarUrl(this@WidgetActivity, mWidget!!.url)) {
+                        mTokenAlreadyRefreshed = true
+                        mIsRefreshingToken = true
+
+                        // Hide the webview because it's displaying an error message we try to fix by refreshing the token
+                        mWidgetWebView.isVisible = false
+
+                        WidgetsManager.clearScalarToken(this@WidgetActivity, mSession)
+                        loadUrl()
+                    }
+                }
+
                 override fun onPageFinished(view: WebView?, url: String?) {
+                    // Check that the Activity is still alive
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed) {
+                        return
+                    }
+
+                    if (mIsRefreshingToken) {
+                        // We are waiting for a scalar token refresh
+                        return
+                    }
+
                     hideWaitingView()
+
+                    // Ensure the webview is visible, it may have been hidden during token refresh
+                    mWidgetWebView.isVisible = true
+
+                    if (mTokenAlreadyRefreshed && !mHistoryAlreadyCleared) {
+                        // Also clear WebView history, for the scenario when the scalar token was invalid, to avoid loading again the url with the invalid token
+                        // It has to be done when page has finished to be loaded
+                        mHistoryAlreadyCleared = true
+                        mWidgetWebView.clearHistory()
+                    }
+
                 }
             }
 
@@ -279,6 +322,8 @@ class WidgetActivity : VectorAppCompatActivity() {
         showWaitingView()
         WidgetsManager.getFormattedWidgetUrl(this, mWidget!!, object : ApiCallback<String> {
             override fun onSuccess(url: String) {
+                mIsRefreshingToken = false
+
                 hideWaitingView()
                 mWidgetWebView.loadUrl(url)
             }

@@ -52,3 +52,5 @@ Blue <blue at bluecode.fr>
 Ville Ranki <ville.ranki at iki.fi>
  * Fix avatar icon characters being offset
 
+Viktor Liu <vma+github at randomcrap.eu>
+ * Add option to send messages with enter button

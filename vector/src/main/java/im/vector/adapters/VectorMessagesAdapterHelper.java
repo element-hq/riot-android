@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spannable;
@@ -185,6 +186,10 @@ class VectorMessagesAdapterHelper {
 
                     final String fSenderId = event.getSender();
                     final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();
+
+                    Context context = senderTextView.getContext();
+                    int textColor = colorIndexForSender(fSenderId);
+                    senderTextView.setTextColor(context.getResources().getColor(textColor));
 
                     senderTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1016,10 +1021,16 @@ class VectorMessagesAdapterHelper {
         String eventType = event.getType();
 
         if (Event.EVENT_TYPE_MESSAGE.equals(eventType)) {
-            // A message is displayable as long as it has a body
-            // Redacted messages should not be displayed
+            // Redacted messages are not displayed (for the moment)
+            if (event.isRedacted()) {
+                return false;
+            }
+
+            // A message is displayable as long as it has a body, emote can have empty body, formatted message can also have empty body
             Message message = JsonUtils.toMessage(event.getContent());
-            return !event.isRedacted() && (!TextUtils.isEmpty(message.body) || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE));
+            return !TextUtils.isEmpty(message.body)
+                    || TextUtils.equals(message.msgtype, Message.MSGTYPE_EMOTE)
+                    || (TextUtils.equals(message.format, Message.FORMAT_MATRIX_HTML) && !TextUtils.isEmpty(message.formatted_body));
         } else if (Event.EVENT_TYPE_STICKER.equals(eventType)) {
             // A sticker is displayable as long as it has a body
             // Redacted stickers should not be displayed
@@ -1266,6 +1277,41 @@ class VectorMessagesAdapterHelper {
                 previewView.setUrlPreview(mContext, mSession, mUrlsPreviews.get(downloadKey), displayKey);
                 urlsPreviewLayout.addView(previewView);
             }
+        }
+    }
+
+    //Based on riot-web implementation
+    @ColorRes
+    private static int colorIndexForSender(String sender) {
+        int hash = 0;
+        int i;
+        char chr;
+        if (sender.length() == 0) {
+            return R.color.username_1;
+        }
+        for (i = 0; i < sender.length(); i++) {
+            chr = sender.charAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        int cI = (Math.abs(hash) % 8) + 1;
+        switch (cI) {
+            case 1:
+                return R.color.username_1;
+            case 2:
+                return R.color.username_2;
+            case 3:
+                return R.color.username_3;
+            case 4:
+                return R.color.username_4;
+            case 5:
+                return R.color.username_5;
+            case 6:
+                return R.color.username_6;
+            case 7:
+                return R.color.username_7;
+            default:
+                return R.color.username_8;
         }
     }
 }

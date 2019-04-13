@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">ga</string>
+    <string name="resources_country_code">IE</string>
+
+    <string name="light_theme">Leagan Geal</string>
+    <string name="dark_theme">Leagan Dorcha</string>
+    <string name="black_them">Leagan Dubh</string>
+    <string name="status_theme">Leagan Status.im</string>
+
+    <string name="notification_sync_init">Ag tosú na seirbhíse</string>
+    <string name="notification_sync_in_progress">Ag sioncronú</string>
+    <string name="notification_listening_for_events">Ag éisteacht le haghaidh teagmhas</string>
+    <string name="notification_noisy_notifications">Fógraí torannacha</string>
+    <string name="notification_silent_notifications">Fógraí tosta</string>
+
+    <string name="title_activity_home">Teachtaireachtaí</string>
+    <string name="title_activity_room">Seomra</string>
+    <string name="title_activity_settings">Socruithe</string>
+    <string name="title_activity_member_details">Sonraí ball ar leith</string>
+    <string name="title_activity_historical">Stairiúil</string>
+    <string name="title_activity_bug_report">Tuairisc ar na fabhtanna</string>
+    <string name="title_activity_group_details">Sonraí pobal ar leith</string>
+    <string name="title_activity_choose_sticker">Seol greamán</string>
+    <string name="title_activity_keys_backup_setup">Cúltaca Eochrach</string>
+    <string name="title_activity_keys_backup_restore">Déan Cúltacú ar d\'Eochair</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Níl cúltacú na n-eochracha réidh, fan go fóill…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Caillfear do chuid teachtaireachtaí criptithe má shíníonn tú amach anois</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Tá cúltacú na n-eochracha fós idir lámha. Caillfear do chuid teachtaireachtaí criptithe má shíníonn tú amach anois.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Ba chóir go mbeadh Cúltacú Eochracha go críochnaitheach slán ar do ghléasanna go léir chun nach gcaillfí do theachtaireachtaí criptithe.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Níl mo chuid teachtaireachtaí criptithe ag teastáil uaim</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Ag cúltacú na n-eochracha…</string>
+    <string name="are_you_sure">An bhfuil tú cinnte\?</string>
+    <string name="backup">Déan cúltacú</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Caillfear do theachtaireachtaí criptithe mura ndéantar cúltacú ar d\'eochracha sula síneoidh amach.</string>
+
+    <string name="dialog_title_third_party_licences">Ceadúnais tríú páirtí</string>
+
+    <string name="loading">Ag lódáil…</string>
+
+    <string name="ok">Ceart go leor</string>
+    <string name="cancel">Cealaigh</string>
+    <string name="save">Sábháil</string>
+    <string name="leave">Fág</string>
+    <string name="stay">Fan</string>
+    <string name="send">Seol</string>
+    <string name="copy">Cóipeáil</string>
+    <string name="resend">Athsheol</string>
+    <string name="redact">Bain amach</string>
+    <string name="quote">Luaigh</string>
+    <string name="download">Íoslódáil</string>
+    <string name="share">Roinn le</string>
+    <string name="speak">Labhair</string>
+    <string name="clear">Glan</string>
+    <string name="later">Níos deireanaí</string>
+    <string name="forward">Seol ar aghaidh</string>
+    <string name="permalink">Nasc buan</string>
+    <string name="view_source">Féach ar an bhfoinse</string>
+    <string name="view_decrypted_source">Féach ar an bhfoinse dhíchriptithe</string>
+    <string name="delete">Bain amach</string>
+    <string name="rename">Athainmnigh</string>
+    <string name="report_content">Tabhair tuairisc ar ghné leith</string>
+    <string name="active_call">Glao beo</string>
+    <string name="ongoing_conference_call">Glao comhdhála beo.
+\nCeangail mar %1$s nó %2$s</string>
+    <string name="ongoing_conference_call_voice">Guth</string>
+    <string name="ongoing_conference_call_video">Fís</string>
+    <string name="cannot_start_call">Ní féidir an glao a thosú, bain triail as níos déanaí</string>
+    <string name="missing_permissions_warning">De chionn ceadanna a bheith in easnamh b\'fhéidir go bhfuil gnéithe áirithe ar iarraidh…</string>
+    <string name="missing_permissions_error">De chionn ceadanna a bheith in easnamh ní féidir an beart seo a dhéanamh.</string>
+    <string name="missing_permissions_to_start_conf_call">Ní mór duit cead a bheith agat chun cuireadh chun comhdhála a thosú sa seomra seo a thabhairt</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ní féidir an glao a thosú</string>
+    <string name="device_information">Eolas faoin ngléas</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Ní féidir glaonna comhdhála a déanamh i seomraí criptithe</string>
+    <string name="call_anyway">Glaoigh ar aon chuma</string>
+    <string name="send_anyway">Seol ar aon chuma</string>
+    <string name="or">nó</string>
+    <string name="invite">Tabhair cuireadh</string>
+    <string name="offline">As líne</string>
+    <string name="accept">Glac</string>
+    <string name="skip">Gabh thairis</string>
+    <string name="done">Críochnaithe</string>
+    <string name="abort">Tobscoir</string>
+    <string name="ignore">Déan neamhaird de</string>
+
+    <string name="action_exit">Fág</string>
+    <string name="actions">Gníomhartha</string>
+    <string name="action_sign_out">Sínigh amach</string>
+    <string name="action_sign_out_confirmation_simple">An bhfuil tú cinnte go dteastaíonn uait scoir\?</string>
+    <string name="action_voice_call">Glao gutha</string>
+    <string name="action_video_call">Físghlao</string>
+    <string name="action_global_search">Cuardach uilíoch</string>
+    <string name="action_mark_all_as_read">Marcáil uile a bheith léite</string>
+    <string name="action_historical">Stairiúil</string>
+    <string name="action_quick_reply">Freagra grod</string>
+    <string name="action_open">Oscail</string>
+    <string name="action_close">Dún</string>
+    <string name="copied_to_clipboard">Cóipeáilte don ghearrthaisce</string>
+    <string name="disable">Cuir as feidhm</string>
+
+    <string name="dialog_title_confirmation">Deimhniú</string>
+    <string name="dialog_title_warning">Rabhadh</string>
+    <string name="dialog_title_error">Earráid</string>
+
+</resources>

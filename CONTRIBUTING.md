@@ -1,3 +1,7 @@
+# Important Announcement
+
+The core team is now working mainly on [RiotX](https://github.com/vector-im/riotX-android). New contributions (PR, issues) are still welcome, but be aware that this codebase will be replaced in the future by the RiotX implementation.
+
 # Contributing code to Matrix
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
@@ -5,6 +9,10 @@ Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
 Android support can be found in this [![Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
 
 # Specific rules for Matrix Android projects
+
+## Android Studio settings
+
+Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
 
 ## Compilation
 

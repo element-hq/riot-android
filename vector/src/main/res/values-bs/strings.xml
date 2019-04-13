@@ -38,9 +38,9 @@
     <string name="rename">Preimenuj</string>
     <string name="report_content">Prijavi sadržaj</string>
     <string name="active_call">Aktivni poziv</string>
-    <string name="ongoing_conference_call">" Konferencijski poziv u toku. Pridruži se putem videa ili glasa."</string>
-    <string name="ongoing_conference_call_voice">Glas</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call">"Konferencijski poziv u toku.\nPridruži se putem %1$s ili %2$s."</string>
+    <string name="ongoing_conference_call_voice">glasa</string>
+    <string name="ongoing_conference_call_video">videa</string>
     <string name="cannot_start_call">Nije moguće započeti poziv, molimo pokušajte poslije</string>
     <string name="missing_permissions_warning">Zbog nedostatka ovlasti, neke komponente mogu nedostajati..</string>
     <string name="missing_permissions_to_start_conf_call">Potrebne su vam ovlasti da bi započeli konferenciju u ovoj sobi</string>
@@ -53,8 +53,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Odjavi se</string>
-    <string name="action_sign_out_confirmation">Zbog sigurnosti, odjava će izbrisati sve krajnje ključeve za šifriranje, čime se prethodna šifrirana istorija razgovora ne može čitati ako se ponovo prijavite.
-Odaberite eksport kako biste napravili rezervu prije odjavljivanja.</string>
     <string name="action_voice_call">Glasovni Poziv</string>
     <string name="action_video_call">Video Poziv</string>
     <string name="action_global_search">Globalna pretraga</string>
@@ -288,14 +286,6 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
     <string name="room_creation_title">Novi Razgovor</string>
     <string name="room_creation_add_member">Dodaj člana</string>
     <string name="room_title_one_member">1 član</string>
-    <string name="room_e2e_alert_title">Upozorenje!</string>
-    <string name="room_e2e_alert_message">End-to-end šifriranje je u beta verziji i možda nije pouzdano.
-
-Još uvijek nije pouzdan za čuvanje podataka.
-
-Uređaji još uvijek neće moći dešifrirati istoriju prije nego što se pridruže sobi.
-
-Šifrirane poruke neće biti vidljive na klijentima koji još ne provode šifriranje.</string>
 
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Da li ste sigurni da želite napustiti sobu?</string>

@@ -20,7 +20,7 @@
     <string name="send">Enviar</string>
     <string name="copy">Copiar</string>
     <string name="resend">Reenviar</string>
-    <string name="redact">Apagar</string>
+    <string name="redact">Remover</string>
     <string name="quote">Citar</string>
     <string name="share">Compartilhar</string>
     <string name="later">Depois</string>
@@ -32,9 +32,10 @@
     <string name="rename">Renomear</string>
     <string name="report_content">Denunciar conteúdo</string>
     <string name="active_call">Chamada ativa</string>
-    <string name="ongoing_conference_call">Chamada de voz em andamento. Participar por voz ou vídeo.</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
+    <string name="ongoing_conference_call">Chamada de voz em andamento.
+\nParticipar como %1$s ou %2$s</string>
+    <string name="ongoing_conference_call_voice">Voz</string>
+    <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">Não consigo iniciar a chamada, favor tentar mais tarde</string>
     <string name="missing_permissions_warning">Por falta de permissões, algumas funcionalidades podem estar faltando…</string>
     <string name="missing_permissions_to_start_conf_call">Você necessita permissão para convidar para poder iniciar uma conferência nesta sala</string>
@@ -47,8 +48,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Sair da Conta</string>
-    <string name="action_sign_out_confirmation">Por razões de segurança, ao sair da Conta, todas as chaves de criptografia ponta-a-ponta serão apagadas, fazendo com que o histórico de conversas criptografadas não mais sejam acessíveis quando você entrar novamente.
-Exporte estas conversas para o backup antes de sair da Conta se quiser armazená-las.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
@@ -71,10 +70,10 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Pesquisar salas</string>
-    <string name="home_filter_placeholder_favorites">Pesquisar favoritos</string>
-    <string name="home_filter_placeholder_people">Pesquisar pessoas</string>
-    <string name="home_filter_placeholder_rooms">Pesquisar salas</string>
+    <string name="home_filter_placeholder_home">Filtrar nomes de salas</string>
+    <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
+    <string name="home_filter_placeholder_people">Filtrar pessoas</string>
+    <string name="home_filter_placeholder_rooms">Filtrar nomes de salas</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Convites</string>
@@ -109,7 +108,7 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="send_bug_report_sent">O relatório de erro (bug) foi enviado com sucesso</string>
     <string name="send_bug_report_failed">O envio do relatório de erro (bug) falhou (%s)</string>
     <string name="send_bug_report_progress">Andamento (%s%%)</string>
-    <string name="send_bug_report_app_crashed">The application has crashed last time. Would you like to submit a crash report?</string>
+    <string name="send_bug_report_app_crashed">O aplicativo encerrou inesperadamente na última vez. Gostaria de abrir a tela de relatos de falhas?</string>
 
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Ler</string>
@@ -155,14 +154,14 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="auth_invalid_user_name">Nomes de usuário só podem conter letras, números, pontos, hífens e underscores</string>
     <string name="auth_invalid_password">Senha muita curta (mín 6)</string>
     <string name="auth_missing_password">Falta a senha</string>
-    <string name="auth_invalid_email">"Endereço de email inválido"</string>
-    <string name="auth_invalid_phone">"Isso não me parece ser um número de telefone válido"</string>
+    <string name="auth_invalid_email">Isto não parece um endereço de e-mail válido</string>
+    <string name="auth_invalid_phone">Isso não parece um número de telefone válido</string>
     <string name="auth_email_already_defined">Este e-mail já está cadastrado.</string>
     <string name="auth_missing_email">Falta endereço de email</string>
     <string name="auth_missing_phone">Falta número de telefone</string>
     <string name="auth_missing_email_or_phone">Falta endereço de email ou número de telefone</string>
     <string name="auth_invalid_token">Token inválido</string>
-    <string name="auth_password_dont_match">As senhas não coincidem</string>
+    <string name="auth_password_dont_match">As senhas não conferem</string>
     <string name="auth_forgot_password">Esqueceu sua senha?</string>
     <string name="auth_use_server_options">Use opções customizadas de servidor (avançado)</string>
     <string name="auth_email_validation_message">Por favor, verifique o seu e-mail para continuar o cadastro</string>
@@ -186,7 +185,7 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="login_error_registration_network_error">Não foi possível criar conta: Erro de rede</string>
     <string name="login_error_unable_register">Não foi possível criar conta</string>
     <string name="login_error_unable_register_mail_ownership">Não foi possível criar conta: falha na verificação de posse do email</string>
-    <string name="login_error_invalid_home_server">Entre com uma URL válida</string>
+    <string name="login_error_invalid_home_server">Por favor, digite uma URL válida</string>
 
     <string name="login_error_forbidden">Nome de usuário ou senha inválido</string>
     <string name="login_error_unknown_token">O token de acesso especificado não foi reconhecido</string>
@@ -230,10 +229,10 @@ Exporte estas conversas para o backup antes de sair da Conta se quiser armazená
     <string name="call_connecting">Conectando chamada…</string>
     <string name="call_ended">Chamada terminada</string>
     <string name="call_ring">Chamando…</string>
-    <string name="incoming_call">Chamada recebida</string>
-    <string name="incoming_video_call">Chamada de vídeo recebida</string>
-    <string name="incoming_voice_call">Chamada de voz recebida</string>
-    <string name="call_in_progress">Chamada em andamento</string>
+    <string name="incoming_call">Recebendo chamada</string>
+    <string name="incoming_video_call">Recebendo chamada de vídeo</string>
+    <string name="incoming_voice_call">Recebendo chamada de voz</string>
+    <string name="call_in_progress">Chamada em andamento…</string>
 
     <string name="call_error_user_not_responding">A outra parte não conseguiu atender.</string>
     <string name="call_error_ice_failed">A conexão à mídia falhou</string>
@@ -287,7 +286,8 @@ Você autoriza o Riot a acessar seus contatos?</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Você foi convidada(o) a entrar nesta sala por %s</string>
-    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associada(o) com esta conta.\nVocê pode querer fazer login com uma conta diferente, ou adicionar este email à sua conta.</string>
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado a %s, que não está associada(o) com esta conta.
+\nVocê pode querer fazer login com uma conta diferente, ou adicionar este e-mail à sua conta.</string>
     <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Quer entrar na sala para poder participar da conversa?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
     <string name="room_preview_room_interactions_disabled">Esta é uma pré-visualização desta sala. Interações cmo esta sala estão desabilitadas.</string>
@@ -296,8 +296,6 @@ Você autoriza o Riot a acessar seus contatos?</string>
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Adicionar uma pessoa</string>
     <string name="room_title_one_member">1 integrante</string>
-    <string name="room_e2e_alert_title">Atenção!</string>
-    <string name="room_e2e_alert_message">Criptografia ponta-a-ponta está em estágio beta de desenvolvimento e portanto pode ainda não ser confiável.\n\nVocê não deve depositar toda sua confiança nela para preservar seus dados.\n\nDispositivos ainda não podem decriptografar as mensagens anteriores ao momento em que você passou a fazer parte da sala.\n\nMensagens criptografadas não serão visíveis em clientes que não implementaram criptografia.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
@@ -446,7 +444,7 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
 
     <string name="settings_messages_in_one_to_one">Msgs em conversas diretas</string>
     <string name="settings_messages_in_group_chat">Msgs em salas</string>
-    <string name="settings_invited_to_room">Quando eu sou convidada/o a uma sala</string>
+    <string name="settings_invited_to_room">Quando eu sou convidado a uma sala</string>
     <string name="settings_call_invitations">Convites para chamadas</string>
     <string name="settings_messages_sent_by_bot">Mensagens enviadas por "bot"</string>
 
@@ -505,9 +503,9 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="account_phone_number_already_used_error">Este número de telefone já está em uso.</string>
 
     <string name="settings_change_password">Mudar a senha</string>
-    <string name="settings_old_password">Senha antiga</string>
+    <string name="settings_old_password">Senha atual</string>
     <string name="settings_new_password">Senha nova</string>
-    <string name="settings_confirm_password">Confirme a senha</string>
+    <string name="settings_confirm_password">Confirme a nova senha</string>
     <string name="settings_fail_to_update_password">Não consegui atualizar a senha</string>
     <string name="settings_password_updated">Sua senha foi atualizada</string>
     <string name="settings_unignore_user">Mostrar todas as mensagens de %s?
@@ -596,14 +594,12 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="room_settings_addresses_e2e_enabled">Criptografia está habilitada nesta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">Criptografia está desabilitada nesta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia \n(atenção: não é possível desabilitar depois!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Atenção!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">A criptografia ponta-a-ponta está ainda em estágio beta de desenvolvimento e portanto pode não ser totalmente confiável.\n\nVocê não deve ainda confiar totalmente neste mecanismo para proteger seus dados.\n\nOs dispositivos ainda não conseguem decriptografar o histórico de mensagens anteriores ao momento em que você entrou na sala.\n\nQuando a criptografia está habilitada em uma sala, ela não pode mais ser desabilitada (por enquanto).\n\nMensagens criptografadas não serão visíveis para clientes que não implementaram criptografia.</string>
 
     <!-- Directory -->
     <string name="directory_title">Diretório</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s estava tentando carregar um ponto específico da linha do tempo desta sala mas não conseguiu encontraá-lo.</string>
+    <string name="failed_to_load_timeline_position">%s estava tentando carregar um ponto específico da linha do tempo desta sala, mas não conseguiu encontrá-lo.</string>
 
 
     <!-- encryption dialog -->
@@ -629,8 +625,8 @@ Note que esta ação irá reiniciar o aplicativo e poderá tomar um certo tempo.
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar as chaves para um arquivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Entre com a \'passphrase\'</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a \'passphrase\'</string>
+    <string name="passphrase_enter_passphrase">Entre com a \'passphrase\'</string>
+    <string name="passphrase_confirm_passphrase">Confirme a \'passphrase\'</string>
     <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
 
 Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
@@ -722,7 +718,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="action_exit">Sair do App</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Pesquisar comunidades</string>
+    <string name="home_filter_placeholder_groups">Filtrar nomes de comunidades</string>
 
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
@@ -771,7 +767,7 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
     <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
-    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget?</string>
+    <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossível criar o widget.</string>
@@ -890,11 +886,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="send_bug_report_rage_shake">Agite com raiva para reportar uma falha (bug)</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opções de economia de energia</string>
-    <string name="settings_notification_privacy_low_detail">Notificações de baixo detalhe</string>
     <string name="settings_notification_privacy_reduced">Privacidade reduzida</string>
     <string name="settings_notification_privacy_need_permission">O app necessita de permissão para rodar em segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">Os aplicativos <b>não</b> precisam de permissão para rodar em segundo plano</string>
     <string name="title_activity_choose_sticker">Enviar um sticker</string>
 
     <string name="dialog_title_third_party_licences">Licenças de terceiros</string>
@@ -957,7 +950,6 @@ Note que esta ação vai reiniciar o aplicativo e isso pode tomar um certo tempo
         <item quantity="other">%d selecionados</item>
     </plurals>
     <string name="settings_notification_privacy">Privacidade das notificações</string>
-    <string name="settings_notification_privacy_warning">Riot.im funciona em segundo plano para manter sua mensagem de notificação privada. Você pode alterar esta opção para reduzir o uso da bateria.</string>
     <string name="settings_notification_privacy_fcm">• As notificações são enviadas pelo \"Google Cloud Messaging\"</string>
     <string name="settings_notification_privacy_metadata">• As notificações contém apenas metadados</string>
     <string name="settings_notification_privacy_secure_message_content">• O conteúdo das mensagens da notificação é <b>armazenado de forma segura diretamente no servidor Matrix</b></string>
@@ -1073,7 +1065,7 @@ A visibilidade de mensagens no Matrix é parecida com a dos e-mails. Se esquecer
     <string name="settings_troubleshoot_test_system_settings_success">Notificações estão habilitadas nas configurações do sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desabilitadas nas configurações do sistema.
 Por favor revise as configurações do sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Abra as Configurações</string>
+    <string name="open_settings">Abra as Configurações</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da Conta.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão habilitadas para sua conta.</string>
@@ -1187,41 +1179,84 @@ Trabalhos que o aplicativo tentar fazer serão restringidos agressivamente enqua
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Nenhum APK do Google Play Services válido foi encontrado. Notificações podem não funcionar corretamente.</string>
 
-    <string name="store_title">Riot.im - colaboração aberta em equipe</string>
-    <string name="store_short_description">Bem-vindo ao Riot.im: um novo mundo de comunicação aberta!</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão. "</string>
-    <string name="encryption_export_create_passphrase">Criar passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Passphrases devem corresponder</string>
+    <string name="store_title">Riot.im - Comunique-se do seu jeito</string>
+    <string name="store_short_description">Um aplicativo de bate-papo universal seguro totalmente sob seu controle.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Se um usuário deixar um dispositivo desconectado e parado por um período de tempo, com a tela desligada, o dispositivo entrará no modo Cochilo. Isso impede que os aplicativos acessem a rede e adiem seus trabalhos, sincronizações e alarmes padrão.</string>
+    <string name="passphrase_create_passphrase">Criar passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrases devem corresponder</string>
     <string name="settings_lazy_loading_title">Carregamento Lazy dos membros das salas</string>
-    <string name="store_full_description">O Riot.im é um ambiente de colaboração simples e elegante que reúne todas as suas diferentes conversas e integrações de aplicativos em um único aplicativo.
+    <string name="store_full_description">"Um aplicativo de bate-papo, sob seu controle e totalmente flexível. Riot permite que você se comunique do jeito que você quer. Desenvolvido para o [matrix] - o padrão para comunicação aberta e descentralizada.
 
-Construído em torno de salas de bate-papo em grupo, o Riot.im permite que você compartilhe mensagens, imagens, vídeos e arquivos - interaja com suas ferramentas e acesse todas as suas diferentes comunidades sob o mesmo teto. Uma única identidade e lugar para todas as suas equipes: não é necessário trocar de conta, trabalhe e converse com pessoas de diferentes organizações em salas públicas ou privadas: de projetos profissionais a viagens escolares, o Riot.im se tornará o centro de todas as suas discussões!
+Obtenha uma conta matrix.org grátis, obtenha seu próprio servidor em https://modular.im ou use outro servidor Matrix.
 
-Agora com criptografia de ponta a ponta!
+Por que escolher o Riot.im?
 
-Características incluem:
+• COMUNICAÇÃO COMPLETA: Construa salas em torno de suas equipes, seus amigos, sua comunidade - como quiser! Converse, compartilhe arquivos, adicione widgets e faça chamadas de voz e vídeo - tudo de graça.
 
-• Compartilhar instantaneamente mensagens, imagens, vídeos e arquivos de qualquer tipo dentro de grupos de qualquer tamanho
-• Voz e vídeo 1-1 e chamadas em conferência via WebRTC
-• Criptografia de ponta a ponta usando Olm (https://matrix.org/git/olm)
-• Veja quem está lendo suas mensagens com recibos de leitura
-• Comunique-se com os usuários em qualquer lugar do ecossistema Matrix.org - não apenas usuários do Riot.im!
-• Descobrir e convidar usuários por endereço de e-mail
-• Participar em salas públicas acessíveis aos hóspedes
-• Altamente escalável - suporta centenas de salas e milhares de usuários
-• Histórico de mensagens totalmente sincronizado em vários dispositivos e navegadores
-• Configurações de notificação finamente configuráveis, sincronizadas em todos os dispositivos
-• Histórico infinito de bate-papo pesquisável
-• Permalinks para mensagens
-• Pesquisa completa de mensagens
-• Suporte para idiomas RTL, como o árabe
+• INTEGRAÇÕES PODEROSAS: Use o Riot.im com as ferramentas que você conhece e ama. Com Riot.im você pode conversar com usuários e grupos em outros aplicativos de bate-papo.
 
-Para desenvolvedores:
-• O Riot.im é um cliente Matrix - construído no padrão aberto e ecossistema Matrix.org, fornecendo interoperabilidade com todos os outros aplicativos, servidores e integrações compatíveis com Matrix.
-• Abertura completa sob a licença Apache permissiva - obtenha o código em https://github.com/vector-im/vector-android. Pull requests são bem-vindos!
-• Trivialmente extensível através da API de cliente-servidor Matrix aberta (https://matrix.org/docs/spec)
-• Execute seu próprio servidor! Você pode usar o servidor matrix.org padrão ou executar seu próprio servidor inicial Matrix (por exemplo, https://matrix.org/docs/projects/server/synapse.html)
+• PRIVADO E SEGURO: Mantenha suas conversas em segredo. A criptografia de ponta a ponta do estado da arte garante que a comunicação privada permaneça privada.
 
-Descubra uma colaboração verdadeiramente eficiente e aberta com o Riot.im!</string>
+• ABERTO, NÃO FECHADO: Código aberto e construído sobre o Matrix. Possua seus próprios dados hospedando seu próprio servidor ou selecionando um que você confia.
 
+• EM TODOS OS LUGARES: Mantenha-se em contato onde quer que esteja com o histórico de mensagens totalmente sincronizado em todos os seus dispositivos e online em https://riot.im."</string>
+
+    <string name="video_call_in_progress">Chamada de Vídeo em andamento…</string>
+
+    <string name="store_whats_new">"Estamos sempre fazendo alterações e melhorias no Riot.im.
+O changelog completo pode ser encontrado aqui: %1$s.
+Para garantir que você não perca nada, mantenha suas atualizações ativadas."</string>
+    <string name="title_activity_keys_backup_setup">Backup da chave</string>
+    <string name="title_activity_keys_backup_restore">Usar Backup da chave</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Backup de chaves não está terminado, por favor aguarde …</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Você perderá suas mensagens criptografadas se sair agora</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em andamento. Se você sair agora, perderá o acesso às suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">O Backup de chave seguro deve estar ativo em todos os seus dispositivos para evitar perder o acesso às suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens criptografadas</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves …</string>
+    <string name="keys_backup_activate">Use o backup de chave</string>
+    <string name="are_you_sure">Você tem certeza?</string>
+    <string name="backup">Realizar o Backup</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você perderá o acesso às suas mensagens criptografadas, a menos que faça o backup das suas chaves antes de sair.</string>
+
+    <string name="keys_backup_info_title_signature">Assinatura</string>
+
+    <string name="stay">Permaneça</string>
+    <string name="skip">Pular</string>
+    <string name="done">Feito</string>
+    <string name="abort">Abortar</string>
+
+    <string name="action_sign_out_confirmation_simple">Você tem certeza que deseja sair da conta\?</string>
+    <string name="settings_notification_advanced">Configurações Avançadas de Notificação</string>
+    <string name="settings_notification_advanced_summary">Definir a importância da notificação por evento, Configurar som, led, vibração</string>
+    <string name="settings_notification_by_event">Importância da notificação por evento</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Configurações personalizadas.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observe que alguns tipos de mensagens estão configurados para serem silenciosos (produzirão uma notificação sem som).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algumas notificações estão desativadas nas suas configurações personalizadas.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Falha ao carregar regras personalizadas, tente novamente.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Verifique as configurações</string>
+
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nEste erro está fora do controle do Riot e, de acordo com o Google, esse erro indica que o dispositivo tem muitos aplicativos registrados com FCM. O erro só ocorre nos casos em que há números extremos de aplicativos, portanto, isso não deve afetar o usuário comum.</string>
+    <string name="ignore">Ignorar</string>
+
+    <string name="auth_login_sso">Entre com o logon único</string>
+    <string name="login_error_unknown_host">Este URL não está acessível, por favor verifique</string>
+    <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataques. Para sua segurança, você não poderá se conectar</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nEste erro está fora de controle da Riot. Isso pode ocorrer por vários motivos. Talvez funcione se você tentar novamente mais tarde. Você também pode verificar se o Google Play Service não está restrito ao uso de dados nas configurações do sistema ou se o relógio do dispositivo está correto ou pode acontecer na ROM personalizada.</string>
+    <string name="notification_sync_init">Inicializando o serviço</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nEste erro está fora de controle do Riot. Não há conta do Google no telefone. Por favor, abra o gerenciador de contas e adicione uma conta do Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
+
+    <string name="settings_noisy_notifications_preferences">Configurar notificações ruidosas</string>
+    <string name="settings_call_notifications_preferences">Configurar notificações de chamada</string>
+    <string name="settings_silent_notifications_preferences">Configurar notificações silenciosas</string>
+    <string name="settings_system_preferences_summary">Escolha a cor do LED, vibração, som…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
+    <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
 </resources>

@@ -74,6 +74,9 @@ open class VectorPreference : Preference {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
+    init {
+        isIconSpaceReserved = false
+    }
 
     var isHighlighted = false
         set(value) {

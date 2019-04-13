@@ -47,7 +47,7 @@
     <string name="rename">Gje nytt namn</string>
     <string name="report_content">Meld frå om innhald</string>
     <string name="active_call">Pågåande samtale</string>
-    <string name="ongoing_conference_call">Pågåande gruppesamtale. Vert med med røyst eller video.</string>
+    <string name="ongoing_conference_call">Pågåande gruppesamtale.\nVert med med %1$s eller %2$s.</string>
     <string name="ongoing_conference_call_voice">røyst</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikkje få i gang samtala, prøv att seinare</string>
@@ -56,7 +56,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
     <string name="device_information">Einingsinfo</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Gruppesamtaler er ikkje støtta i krypterte rom</string>
-    <string name="send_anyway">Send Likevel</string>
+    <string name="send_anyway"></string>
     <string name="or">eller</string>
     <string name="invite">Byd inn</string>
     <string name="offline">Fråkopla</string>
@@ -64,8 +64,6 @@
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logg av</string>
-    <string name="action_sign_out_confirmation">Av sikkerheitsmessige grunner, slettar det å logga av alle ende-til-ende-krypteringsnyklar slik at tidligare pratehistorie vert uleseleg viss du loggar inn att.
-Velg \"hent ut\" for å sikkerheitskopiera dei før du loggar av.</string>
     <string name="action_voice_call">Røystsamtale</string>
     <string name="action_video_call">Videosamtale</string>
     <string name="action_global_search">Søk over alt</string>
@@ -349,14 +347,6 @@ Du bør kanskje logga inn med ein annan brukar, eller leggja eposten din til den
         <item quantity="other">%d medlemer</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
-    <string name="room_e2e_alert_title">Åtvaring!</string>
-    <string name="room_e2e_alert_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
-
-Du bør ikkje stola på at ho kan sikra data enno.
-
-Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
-
-Krypterte meldingar vil ikkje verta synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="room_participants_leave_prompt_title">Far frå rom</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil fara frå rommet?</string>
@@ -515,13 +505,9 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="settings_app_info_link_title">Æppinfo</string>
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
-    <string name="settings_notification_privacy_warning">Riot.im køyrer i bakgrunnen for å halde varselinnhaldet ditt privat. Du kan forandra på denne innstillinga for å senka batteribruket.</string>
     <string name="settings_notification_privacy_normal">Vanleg</string>
-    <string name="settings_notification_privacy_power_saving">Straumsparings-Innstillingar</string>
-    <string name="settings_notification_privacy_low_detail">Lågdetaljerte varsel</string>
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
     <string name="settings_notification_privacy_need_permission">Æppen treng tilgang til å køyra i bakgrunnen</string>
-    <string name="settings_notification_privacy_no_permission">Æppen treng <b>ikkje</b> tillating til å køyra i bakgrunnen</string>
     <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
     <string name="settings_notification_privacy_metadata">• Varsel inneheld berre metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhald i varselet <b>hentast trygt direkte frå Matrix-heimtenaren</b></string>
@@ -721,16 +707,6 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="room_settings_addresses_e2e_disabled">Kryptering er skrudd av i dette rommet.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Skru kryptering på
 (åtvaring: kan ikkje skruast av att!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Åtvaring!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Ende-til-ende-kryptering vert betatesta og er kanskje ikkje heilt påliteleg. 
-
-Du bør ikkje stola på at ho kan sikra data enno.
-
-Einingar kan ikkje enno dekryptera historia frå før dei kom inn i rommet.
-
-Når kryptering er skrudd på kan det (førebels) ikkje skruast av att.
-
-Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har implementert kryptering.</string>
 
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>
@@ -759,8 +735,8 @@ Krypterte meldingar vil ikkje vera synlege hjå klientar som førebels ikkje har
     <string name="encryption_export_room_keys">Hent romnyklar ut</string>
     <string name="encryption_export_room_keys_summary">Hent nyklane ut til ei lokal fil</string>
     <string name="encryption_export_export">Hent ut</string>
-    <string name="encryption_import_enter_passphrase">Skriv passetning inn</string>
-    <string name="encryption_export_confirm_passphrase">Stadfest passetninga</string>
+    <string name="passphrase_enter_passphrase">Skriv passetning inn</string>
+    <string name="passphrase_confirm_passphrase">Stadfest passetninga</string>
     <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
 
 Åtvaring: fila kan verta sletta vis æppen avinstallerast.</string>
@@ -995,5 +971,12 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
     <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
+
+    <string name="status_theme">Status.im Tema</string>
+
+    <string name="call_anyway" />
+    <string name="accept">Aksepter</string>
+
+    <string name="dialog_title_error">Feil</string>
 
 </resources>

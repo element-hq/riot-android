@@ -22,12 +22,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.Html;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.Log;
-
-import android.text.Html;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -128,8 +127,7 @@ public class VectorImageGetter implements Html.ImageGetter {
             mSource = (String) params[0];
             // Check whether this source is a valid Matrix media content URI, and convert it in an actual url.
             String downloadableUrl = mSession.getContentManager().getDownloadableUrl(mSource);
-            if (null != downloadableUrl)
-            {
+            if (null != downloadableUrl) {
                 Log.d(LOG_TAG, "## doInBackground() : " + mSource);
                 try {
                     return BitmapFactory.decodeStream(new URL(downloadableUrl).openConnection().getInputStream());

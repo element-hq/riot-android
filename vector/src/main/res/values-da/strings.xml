@@ -35,7 +35,7 @@
     <string name="rename">Omdøb</string>
     <string name="report_content">Rapporter indhold</string>
     <string name="active_call">Aktivt opkald</string>
-    <string name="ongoing_conference_call">Igangværende konferenceopkald. Forbind med stemme eller video.</string>
+    <string name="ongoing_conference_call">Igangværende konferenceopkald.\nForbind med %1$s eller %2$s</string>
     <string name="ongoing_conference_call_voice">stemme</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Kan ikke starte opkaldet, forsøg igen senere</string>
@@ -50,8 +50,6 @@
     <string name="offline">Offline</string>
 
     <string name="action_sign_out">Log ud</string>
-    <string name="action_sign_out_confirmation">Af sikkerhedshensyn vil alle krypteringsnøgler blive slettet når du logger ud, hvilket vil gøre din i forvejen krypterede chathistorik ulæselig hvis du logger ind igen.
-Vælg eksportér for at backe dem op inden du logger ud.</string>
     <string name="action_voice_call">Stemmeopkald</string>
     <string name="action_video_call">Videoopkald</string>
     <string name="action_global_search">Global søgning</string>
@@ -293,14 +291,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_creation_title">Ny chat</string>
     <string name="room_creation_add_member">Tilføj medlem</string>
     <string name="room_title_one_member">1 medlem</string>
-    <string name="room_e2e_alert_title">Advarsel!</string>
-    <string name="room_e2e_alert_message">Ende-til-ende kryptering er i beta og kan være upålideligt.
-
-Du bør endnu ikke stole på det til at holde din data sikker.
-
-Din enhed kan endnu ikke kryptere historien fra før du forbandt til rummet.
-
-Krypterede beskeder vil ikke være synlige for klienter der ikke har implementeret kryptering endnu.</string>
 
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>

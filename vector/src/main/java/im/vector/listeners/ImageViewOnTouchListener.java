@@ -49,7 +49,6 @@ public abstract class ImageViewOnTouchListener implements View.OnTouchListener {
      * Set matrix that will be transformed next time instead of new matrix or stored one
      *
      * @param startMatrix
-     *
      */
     public void setStartMatrix(Matrix startMatrix) {
         matrix.set(startMatrix);

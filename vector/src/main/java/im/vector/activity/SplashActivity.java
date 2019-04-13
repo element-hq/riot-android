@@ -18,12 +18,12 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
@@ -46,7 +46,7 @@ import im.vector.VectorApp;
 import im.vector.analytics.TrackingEvent;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.services.EventStreamService;
+import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
 
 /**
@@ -166,10 +166,10 @@ public class SplashActivity extends MXCActionBarActivity {
             return;
         }
 
-        // Load the Gif logo
-        Glide.with(this)
-                .load(R.drawable.riot_splash)
-                .into(animatedLogo);
+        Drawable background = animatedLogo.getBackground();
+        if (background instanceof AnimationDrawable) {
+            ((AnimationDrawable) background).start();
+        }
 
         // Check the lazy loading status
         checkLazyLoadingStatus(sessions);
@@ -308,15 +308,7 @@ public class SplashActivity extends MXCActionBarActivity {
             Matrix.getInstance(this).mHasBeenDisconnected = false;
         }
 
-        if (EventStreamService.getInstance() == null) {
-            // Start the event stream service
-            Intent intent = new Intent(this, EventStreamService.class);
-            intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-            intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-            startService(intent);
-        } else {
-            EventStreamService.getInstance().startAccounts(matrixIds);
-        }
+        EventStreamServiceX.Companion.onApplicationStarted(this);
 
         // trigger the push registration if required
         PushManager pushManager = Matrix.getInstance(getApplicationContext()).getPushManager();

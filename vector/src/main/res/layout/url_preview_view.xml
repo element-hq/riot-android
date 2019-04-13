@@ -28,6 +28,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         app:layout_constraintStart_toEndOf="@id/vertical_bar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:background="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -41,6 +42,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/url_preview_hide_image_view"
         app:layout_constraintStart_toEndOf="@id/url_preview_image_view"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="a title" />
 
     <TextView
@@ -62,6 +64,7 @@
         android:layout_height="30dp"
         android:src="@drawable/vector_clear_edittext_green"
         android:tint="?attr/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

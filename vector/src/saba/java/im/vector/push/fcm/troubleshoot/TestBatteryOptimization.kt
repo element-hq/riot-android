@@ -22,6 +22,7 @@ import im.vector.fragments.troubleshoot.TroubleshootTest
 import im.vector.util.isIgnoringBatteryOptimizations
 import im.vector.util.requestDisablingBatteryOptimization
 
+// Not used anymore
 class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform() {
@@ -35,7 +36,7 @@ class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.strin
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_battery_quickfix) {
                 override fun doFix() {
                     fragment.activity?.let {
-                        requestDisablingBatteryOptimization(it, NotificationTroubleshootTestManager.REQ_CODE_FIX)
+                        requestDisablingBatteryOptimization(it, fragment, NotificationTroubleshootTestManager.REQ_CODE_FIX)
                     }
                 }
             }

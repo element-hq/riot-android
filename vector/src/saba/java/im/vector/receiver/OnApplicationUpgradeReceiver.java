@@ -22,7 +22,7 @@ import android.content.Intent;
 
 import org.matrix.androidsdk.util.Log;
 
-import im.vector.activity.CommonActivityUtils;
+import im.vector.services.EventStreamServiceX;
 
 public class OnApplicationUpgradeReceiver extends BroadcastReceiver {
 
@@ -33,6 +33,6 @@ public class OnApplicationUpgradeReceiver extends BroadcastReceiver {
         Log.d(LOG_TAG, "## onReceive() : Application has been upgraded, restart event stream service.");
 
         // Start Event stream
-        CommonActivityUtils.startEventStreamService(context);
+        EventStreamServiceX.Companion.onApplicationUpgrade(context);
     }
 }

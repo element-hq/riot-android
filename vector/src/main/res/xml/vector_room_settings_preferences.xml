@@ -6,17 +6,17 @@
         android:key="roomPhotoAvatar"
         android:title="@string/room_settings_room_photo" />
 
-    <EditTextPreference
+    <im.vector.preference.VectorEditTextPreference
         android:focusable="true"
         android:key="roomNameEditText"
         android:title="@string/room_settings_room_name" />
 
-    <EditTextPreference
+    <im.vector.preference.VectorEditTextPreference
         android:focusable="true"
         android:key="roomTopicEditText"
         android:title="@string/room_settings_topic" />
 
-    <ListPreference
+    <im.vector.preference.VectorListPreference
         android:dialogTitle="@string/room_settings_tag_pref_dialog_title"
         android:entries="@array/tag_entries"
         android:entryValues="@array/tag_values"
@@ -25,7 +25,7 @@
         android:title="@string/room_settings_room_tag" />
 
     <!-- the notification rule selection -->
-    <ListPreference
+    <im.vector.preference.VectorListPreference
         android:entries="@array/notification_entries"
         android:entryValues="@array/notification_values"
         android:key="roomNotificationPreference"
@@ -62,7 +62,7 @@
             android:title="@string/room_settings_room_access_rules_pref_title" />
 
         <!-- room read history (Who can read history?) -->
-        <ListPreference
+        <im.vector.preference.VectorListPreference
             android:dialogTitle="@string/room_settings_room_read_history_rules_pref_dialog_title"
             android:entries="@array/room_read_history_rules_entries"
             android:entryValues="@array/room_read_history_rules_values"

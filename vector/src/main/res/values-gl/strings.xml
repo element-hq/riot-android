@@ -38,12 +38,12 @@
     <string name="delete">Borrar</string>
     <string name="rename">Renomear</string>
     <string name="active_call">Chamada en curso</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
     <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
-    <string name="ongoing_conference_call">Conferencia en curso. Únase con vídeo ou voz.</string>
+    <string name="ongoing_conference_call">Conferencia en curso.\nÚnase con %1$s ou %2$s.</string>
+    <string name="ongoing_conference_call_voice">voz</string>
+    <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
     <string name="missing_permissions_warning">Debido a falta de permisos, poderían faltar algunhas características…</string>
     <string name="missing_permissions_to_start_conf_call">Precisa permiso para convidar a iniciar unha conferencia en esta sala</string>
@@ -58,8 +58,6 @@
     <string name="action_exit">Saír</string>
     <string name="actions">Accións</string>
     <string name="action_sign_out">Saír</string>
-    <string name="action_sign_out_confirmation">Por seguridade, a desconexión eliminará calquera chave de cifrado extremo-a-extremo facendo o historial de conversas cifradas ilexible si volta a conectarse.
-Escolla exportar para facer copia de seguridade das chaves antes de desconectar.</string>
     <string name="action_voice_call">Chamada de voz</string>
     <string name="action_video_call">Chamada de vídeo</string>
     <string name="action_global_search">Busca global</string>
@@ -224,7 +222,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
 
     <string name="room_jump_to_first_unread">Ir á primeira mensaxe non lida.</string>
 
-    <string name="room_e2e_alert_title">Aviso!</string>
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
     <string name="room_participants_create">Crear</string>
 
@@ -385,7 +382,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_copy_room_id">Copiar a ID da sala</string>
     <string name="room_settings_copy_room_address">Copiar a dirección da sala</string>
 
-    <string name="room_settings_addresses_e2e_prompt_title">Aviso!</string>
     <string name="directory_title">Directorio</string>
     <string name="settings_theme">Tema</string>
 
@@ -410,8 +406,8 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Introduza a frase de paso</string>
-    <string name="encryption_export_confirm_passphrase">Confirme a frase de paso</string>
+    <string name="passphrase_enter_passphrase">Introduza a frase de paso</string>
+    <string name="passphrase_confirm_passphrase">Confirme a frase de paso</string>
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
     <string name="encryption_import_import">Importar</string>
@@ -647,13 +643,9 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     </plurals>
     <string name="room_sliding_menu_term_and_conditions">Termos e condicións</string>
     <string name="settings_notification_privacy">Segredo das notificacións</string>
-    <string name="settings_notification_privacy_warning">Riot.im traballa agochado, en segundo plano, para garantir que o contido das súas mensaxes sexa segredo. Pode cambiar esta opción para que reducir o consumo das baterías.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opcións de aforro de batería</string>
-    <string name="settings_notification_privacy_low_detail">Notificacións con pouco detalle</string>
     <string name="settings_notification_privacy_reduced">Reducir a privacidade</string>
     <string name="settings_notification_privacy_need_permission">Esta aplicación necesita de permisos para traballar en segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">Esta aplicación <b>non</b> ten permisos para traballar en segundo plano</string>
     <string name="settings_notification_privacy_fcm">• Notificacións enviadas a través de Cloud Messaging de Google</string>
     <string name="settings_notification_privacy_metadata">• Notificacións que só conteñen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>

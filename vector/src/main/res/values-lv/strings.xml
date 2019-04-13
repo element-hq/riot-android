@@ -30,7 +30,7 @@
     <string name="rename">Pārdēvēt</string>
     <string name="report_content">Ziņot par saturu</string>
     <string name="active_call">Aktīvs zvans</string>
-    <string name="ongoing_conference_call">" Ienākošs konferences zvans. Pievienojies ar balss vai video iespēju."</string>
+    <string name="ongoing_conference_call">"Ienākošs konferences zvans.\nPievienojies ar %1$s vai %2$s iespēju."</string>
     <string name="ongoing_conference_call_voice">balss</string>
     <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Nevarēja sākt zvanu. Lūdzu, pamēģini vēlāk</string>
@@ -44,7 +44,6 @@
     <string name="invite">Uzaicināt</string>
 
     <string name="action_sign_out">Izrakstīties</string>
-    <string name="action_sign_out_confirmation">Drošības nolūkos, pierakstīšanās dzēsīs visas ierīce-ierīce šifrēšanas atslēgas, padarot iepriekšējo šifrēto čata ziņu vēsturi nelasāmu, ja Tu pierakstīsies atkārtoti. Izvēlies eksportēšanas iespēju, lai saglabātu atslēgu rezerves kopijas pirms izrakstīšanās.</string>
     <string name="action_voice_call">Balss zvans</string>
     <string name="action_video_call">Video zvans</string>
     <string name="action_global_search">Globālā meklēšana</string>
@@ -317,14 +316,6 @@ Tu vari pierakstīties ar citu kontu vai arī pievienot šo epastu šim kontam.<
     <string name="room_creation_title">Jauns čats</string>
     <string name="room_creation_add_member">Pievienots dalībnieku</string>
     <string name="room_title_one_member">1 dalībnieks</string>
-    <string name="room_e2e_alert_title">Uzmanību!</string>
-    <string name="room_e2e_alert_message">\"End-to-end\" šifrēšana ir beta stadijā un var nestrādāt stabili.
-
-Pagaidām tai nevar uzticēties, ja vēlaties būt pārliecināti par datu drošību.
-
-Ierīces nevarēs atšifrēt čata saraksti, kura notikusi, pirms tās pievienotas istabai.
-
-Šifrētās ziņas nebūs redzamas Riot klientos, kuros nav iedzīvināta šī iespēja.</string>
 
     <string name="room_participants_leave_prompt_title">Atstāt istabu</string>
     <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies atstāt istabu?</string>
@@ -675,16 +666,6 @@ Lai turpinātu, ievadi savu paroli.</string>
     <string name="room_settings_addresses_e2e_disabled">Šajā istabā nav ieslēgta šifrēšana.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Ieslēgt šifrēšanu 
 (brīdinājums: vēlāk to nav iespējams izslēgt!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Brīdinājums!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end šifrēšana atrodas beta stadijā un nevar tikt uzskatīta kā uzticama.
-
-Tu tai nevari uzticēties kā datu drošību nodrošinošai.
-
-Ierīces nebūs spējīgas atšifrēt sarakstes vēsturi, kura bijusi pirms Tavas pievienošanās istabai.
-
-Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pagaidām).
-
-Šifrētās ziņas nebūs redzamas/salasāmas klientos (ierīcēs), kuros tā pagaidām nav ieviesta.</string>
 
     <string name="directory_title">Katalogs</string>
     <string name="settings_theme">Ādiņa</string>
@@ -713,8 +694,8 @@ Ja reiz šifrēšana istabā tiek ieslēgta, tā vairs nevar tikt izslēgta (pag
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
     <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
     <string name="encryption_export_export">Eksports</string>
-    <string name="encryption_import_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
-    <string name="encryption_export_confirm_passphrase">Apstiprināt paroli</string>
+    <string name="passphrase_enter_passphrase">Ievadi paroli (paroles frāzi)</string>
+    <string name="passphrase_confirm_passphrase">Apstiprināt paroli</string>
     <string name="encryption_export_saved_as">E2E istabas atslēgas ir saglabātas failā \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Importēt E2E istabas atslēgas</string>

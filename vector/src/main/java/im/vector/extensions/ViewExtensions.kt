@@ -17,8 +17,10 @@
 package im.vector.extensions
 
 import android.support.v7.widget.SearchView
+import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import im.vector.R
 
 /**
@@ -36,4 +38,13 @@ fun SearchView.withoutLeftMargin() {
         searchIconParams.leftMargin = 0
         it.layoutParams = searchIconParams
     }
+}
+
+fun EditText.showPassword(visible: Boolean, updateCursor: Boolean = true) {
+    if (visible) {
+        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+    } else {
+        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+    }
+    if (updateCursor) setSelection(text?.length ?: 0)
 }

@@ -43,7 +43,7 @@ class VectorSettingsActivity : MXCActionBarActivity(),
 
     override fun getTitleRes() = R.string.title_activity_settings
 
-    var keyToHighlight : String? = null
+    private var keyToHighlight: String? = null
 
     override fun initUiAndData() {
         configureToolbar()

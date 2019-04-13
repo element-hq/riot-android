@@ -17,7 +17,11 @@
 package im.vector.analytics
 
 import android.content.Context
-import org.piwik.sdk.*
+import im.vector.R
+import org.piwik.sdk.Piwik
+import org.piwik.sdk.QueryParams
+import org.piwik.sdk.Tracker
+import org.piwik.sdk.TrackerConfig
 import org.piwik.sdk.extra.CustomVariables
 import org.piwik.sdk.extra.TrackHelper
 
@@ -28,7 +32,7 @@ class PiwikAnalytics(context: Context) : Analytics {
     private val tracker: Tracker
 
     init {
-        val config = TrackerConfig("https://piwik.riot.im/", 1, " AndroidPiwikTracker")
+        val config = TrackerConfig(context.getString(R.string.piwik_server_url), 1, " AndroidPiwikTracker")
         tracker = Piwik.getInstance(context).newTracker(config)
     }
 

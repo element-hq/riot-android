@@ -1,5 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,25 +9,21 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/login_actions_bar">
+        android:layout_above="@+id/login_actions_bar">
 
         <LinearLayout
+            android:id="@+id/login_form_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
-
-                <ImageView
-                    android:id="@+id/login_large_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/logo_login" />
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/login_large_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/riot_splash_0_blue" />
 
             <LinearLayout
                 android:id="@+id/main_input_layout"
@@ -46,15 +44,23 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <EditText
-                        android:id="@+id/login_user_name"
-                        style="@style/LoginEditTextStyle"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/login_user_name_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/auth_user_id_placeholder"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:nextFocusDown="@+id/login_password" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/login_user_name"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_user_id_placeholder"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:nextFocusDown="@+id/login_password" />
+
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -70,43 +76,65 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+                        <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
                             android:id="@+id/login_phone_number_country"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
                             android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
                             android:clickable="false"
                             android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:drawableTint="?vctr_settings_icon_tint_color"
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
+                            tools:ignore="UnusedAttribute"
                             tools:text="FR"
                             tools:visibility="visible" />
 
-                        <EditText
-                            android:id="@+id/login_phone_number_value"
-                            style="@style/LoginEditTextStyle"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/login_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/auth_phone_number_placeholder"
-                            android:inputType="phone"
-                            android:maxLines="1"
-                            tools:text="0600000000" />
+                            android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/login_phone_number_value"
+                                style="@style/LoginEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/auth_phone_number_placeholder"
+                                android:inputType="phone"
+                                android:maxLines="1"
+                                tools:text="0600000000" />
+
+                        </android.support.design.widget.TextInputLayout>
+
                     </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/login_password"
-                        style="@style/LoginEditTextStyle"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/login_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:ems="10"
-                        android:hint="@string/auth_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/login_password"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/auth_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,34 +148,60 @@
                         android:layout_height="wrap_content"
                         android:text="@string/auth_reset_password_message" />
 
-                    <EditText
-                        android:id="@+id/forget_email_address"
-                        style="@style/LoginEditTextStyle"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/forget_email_address_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/auth_email_placeholder"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1" />
+                        android:layout_marginTop="10dp"
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                    <EditText
-                        android:id="@+id/forget_new_password"
-                        style="@style/LoginEditTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/auth_new_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/forget_email_address"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_email_placeholder"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1" />
 
-                    <EditText
-                        android:id="@+id/forget_confirm_new_password"
-                        style="@style/LoginEditTextStyle"
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/forget_new_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/auth_repeat_new_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/forget_new_password"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/auth_new_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/forget_confirm_new_password_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/forget_confirm_new_password"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/auth_repeat_new_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -158,34 +212,58 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <EditText
-                        android:id="@+id/creation_your_name"
-                        style="@style/LoginEditTextStyle"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/creation_your_name_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/auth_user_name_placeholder"
-                        android:inputType="text"
-                        android:maxLines="1" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                    <EditText
-                        android:id="@+id/creation_password1"
-                        style="@style/LoginEditTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/auth_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/creation_your_name"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_user_name_placeholder"
+                            android:inputType="text"
+                            android:maxLines="1" />
 
-                    <EditText
-                        android:id="@+id/creation_password2"
-                        style="@style/LoginEditTextStyle"
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/creation_password1_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/auth_repeat_password_placeholder"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/creation_password1"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/auth_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/creation_password2_til"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/creation_password2"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/auth_repeat_password_placeholder"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
@@ -203,15 +281,23 @@
                         android:text="@string/auth_add_email_phone_message"
                         android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/registration_email"
-                        style="@style/LoginEditTextStyle"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/registration_email_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="@string/auth_email_placeholder"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1" />
+                        android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/registration_email"
+                            style="@style/LoginEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_email_placeholder"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
                         android:id="@+id/registration_phone_number"
@@ -219,32 +305,46 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+                        <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
                             android:id="@+id/registration_phone_number_country"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
                             android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
                             android:clickable="false"
                             android:drawableEnd="@drawable/ic_material_expand_more_black"
                             android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:drawableTint="?vctr_settings_icon_tint_color"
                             android:focusable="false"
                             android:maxLines="1"
                             android:visibility="gone"
+                            tools:ignore="UnusedAttribute"
                             tools:text="FR"
                             tools:visibility="visible" />
 
-                        <EditText
-                            android:id="@+id/registration_phone_number_value"
-                            style="@style/LoginEditTextStyle"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/registration_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/auth_phone_number_placeholder"
-                            android:inputType="phone"
-                            android:maxLines="1"
-                            tools:text="0600000000" />
+                            android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/registration_phone_number_value"
+                                style="@style/LoginEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/auth_phone_number_placeholder"
+                                android:inputType="phone"
+                                android:maxLines="1"
+                                tools:text="0600000000" />
+
+                        </android.support.design.widget.TextInputLayout>
+
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -278,40 +378,44 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/auth_home_server" />
-
-                        <EditText
-                            android:id="@+id/login_matrix_server_url"
-                            style="@style/LoginEditTextStyle"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/login_matrix_server_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hs_url"
-                            android:inputType="text"
-                            android:maxLines="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
-                            android:text="@string/auth_identity_server" />
+                            android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <EditText
-                            android:id="@+id/login_identity_url"
-                            style="@style/LoginEditTextStyle"
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/login_matrix_server_url"
+                                style="@style/LoginEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/hs_url"
+                                android:inputType="textUri"
+                                android:maxLines="1" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/login_identity_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/identity_url"
-                            android:inputType="text"
-                            android:maxLines="1" />
+                            android:layout_marginTop="10dp"
+                            android:textColorHint="?attr/vctr_default_text_hint_color">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/login_identity_url"
+                                style="@style/LoginEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/identity_url"
+                                android:inputType="textUri"
+                                android:maxLines="1" />
+
+                        </android.support.design.widget.TextInputLayout>
+
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
@@ -349,7 +453,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/vector_silver_color" />
+            android:background="?vctr_list_divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -358,71 +462,104 @@
 
             <Button
                 android:id="@+id/button_login"
-                style="@style/LoginButtonStyle"
+                style="@style/VectorButtonStyle"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="?attr/colorAccent"
-                android:text="@string/auth_login"
-                android:textColor="@android:color/white" />
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:text="@string/auth_login" />
+
+            <Button
+                android:id="@+id/button_switch_to_register"
+                style="@style/VectorButtonStyleFlat"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:layout_toStartOf="@+id/button_login"
+                android:layout_toLeftOf="@+id/button_login"
+                android:text="@string/auth_register"
+                android:textAllCaps="true" />
 
             <Button
                 android:id="@+id/button_register"
-                style="@style/LoginButtonStyle"
-                android:layout_toStartOf="@+id/button_login"
-                android:layout_toLeftOf="@+id/button_login"
-                android:background="@android:color/white"
+                style="@style/VectorButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:text="@string/auth_register"
-                android:textColor="?attr/colorAccent" />
+                android:textAllCaps="true"
+                tools:layout_marginTop="48dp" />
+
+            <Button
+                android:id="@+id/button_switch_to_login"
+                style="@style/VectorButtonStyleFlat"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:layout_toStartOf="@+id/button_register"
+                android:layout_toLeftOf="@+id/button_register"
+                android:text="@string/auth_login"
+                android:textAllCaps="true"
+                tools:layout_marginTop="48dp" />
 
             <Button
                 android:id="@+id/button_reset_password"
-                style="@style/LoginButtonStyle"
+                style="@style/VectorButtonStyle"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="?attr/colorAccent"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:text="@string/auth_send_reset_email"
-                android:textColor="@android:color/white"
-                android:visibility="gone"
-                tools:layout_marginTop="46dp"
-                tools:visibility="visible" />
-
-            <Button
-                android:id="@+id/button_forgot_email_validate"
-                style="@style/LoginButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="?attr/colorAccent"
-                android:text="@string/auth_send_reset_email"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 tools:layout_marginTop="92dp"
                 tools:visibility="visible" />
 
             <Button
-                android:id="@+id/button_submit_three_pid"
-                style="@style/LoginButtonStyle"
+                android:id="@+id/button_forgot_email_validate"
+                style="@style/VectorButtonStyle"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="?attr/colorAccent"
-                android:minWidth="94dp"
-                android:text="@string/auth_submit"
-                android:textColor="@android:color/white"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:text="@string/auth_send_reset_email"
                 android:visibility="gone"
                 tools:layout_marginTop="138dp"
                 tools:visibility="visible" />
 
             <Button
+                android:id="@+id/button_submit_three_pid"
+                style="@style/VectorButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:minWidth="94dp"
+                android:text="@string/auth_submit"
+                android:visibility="gone"
+                tools:layout_marginTop="184dp"
+                tools:visibility="visible" />
+
+            <Button
                 android:id="@+id/button_skip_three_pid"
-                style="@style/LoginButtonStyle"
+                style="@style/VectorButtonStyle"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:layout_toStartOf="@id/button_submit_three_pid"
                 android:layout_toLeftOf="@id/button_submit_three_pid"
-                android:background="?attr/colorAccent"
                 android:minWidth="94dp"
                 android:text="@string/auth_skip"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
-                tools:layout_marginTop="138dp"
+                tools:layout_marginTop="184dp"
                 tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_login_sso"
+                style="@style/VectorButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:text="@string/auth_login_sso"
+                tools:layout_marginTop="230dp" />
 
         </RelativeLayout>
 
@@ -430,7 +567,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
-            android:background="@color/vector_silver_color" />
+            android:background="?vctr_list_divider_color" />
 
     </LinearLayout>
 

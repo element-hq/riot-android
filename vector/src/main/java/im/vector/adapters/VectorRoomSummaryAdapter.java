@@ -20,7 +20,6 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -57,6 +56,7 @@ import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RiotEventDisplay;
 import im.vector.util.RoomUtils;
 import im.vector.util.VectorUtils;
+import im.vector.util.ViewUtilKt;
 
 /**
  * An adapter which can display room information.
@@ -625,29 +625,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mIsSearchMode) {
             imageView.setVisibility(View.GONE);
         } else {
-            if (isExpanded) {
-                imageView.setImageResource(R.drawable.ic_material_expand_less_black);
-            } else {
-                imageView.setImageResource(R.drawable.ic_material_expand_more_black);
-            }
+            int expandLogoRes = isExpanded ? R.drawable.ic_material_expand_more_black : R.drawable.ic_material_expand_less_black;
+            imageView.setImageResource(expandLogoRes);
         }
         return convertView;
-    }
-
-    /**
-     * Apply a rounded (sides) rectangle as a background to the view provided in aTargetView.
-     *
-     * @param aTargetView      view to apply the background
-     * @param aBackgroundColor background colour
-     */
-    private static void setUnreadBackground(View aTargetView, int aBackgroundColor) {
-        if (null != aTargetView) {
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(100);
-            shape.setColor(aBackgroundColor);
-            aTargetView.setBackground(shape);
-        }
     }
 
     /**
@@ -668,7 +649,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return convertView;
         }
 
-        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary);
+        int roomNameBlack = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary);
         int fushiaColor = ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
         int vectorDefaultTimeStampColor = ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorSecondary);
         int vectorAccentColor = ThemeUtils.INSTANCE.getColor(mContext, R.attr.colorAccent);
@@ -801,7 +782,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             unreadCountTxtView.setVisibility(View.VISIBLE);
             unreadCountTxtView.setText(String.valueOf(notificationCount));
             unreadCountTxtView.setTypeface(null, Typeface.BOLD);
-            setUnreadBackground(unreadCountTxtView, bingUnreadColor);
+            ViewUtilKt.setRoundBackground(unreadCountTxtView, bingUnreadColor);
         } else {
             unreadCountTxtView.setVisibility(View.GONE);
         }
@@ -851,7 +832,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             unreadCountTxtView.setVisibility(View.VISIBLE);
             unreadCountTxtView.setText("!");
             unreadCountTxtView.setTypeface(null, Typeface.BOLD);
-            setUnreadBackground(unreadCountTxtView, fushiaColor);
+            ViewUtilKt.setRoundBackground(unreadCountTxtView, fushiaColor);
             timestampTxtView.setVisibility(View.GONE);
             actionImageView.setVisibility(View.GONE);
         } else {
@@ -919,7 +900,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (aChildRoomSummary.getLatestReceivedEvent() != null) {
                 eventDisplay = new RiotEventDisplay(mContext);
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorPrimary),
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorTertiary),
                         aChildRoomSummary.getLatestReceivedEvent(),
                         aChildRoomSummary.getLatestRoomState());
             }

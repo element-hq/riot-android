@@ -130,32 +130,38 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentC
             if (null != preference) {
                 if (preference is BingRulePreference) {
                     //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
-                    mSession.dataHandler.pushRules()?.let {
-                        preference.setBingRule(it.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey]))
-                    }
-                    preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                        val rule = preference.createRule(newValue as Int)
-                        if (null != rule) {
-                            displayLoadingView()
-                            mSession.dataHandler.bingRulesManager.updateRule(preference.rule,
-                                    rule,
-                                    object : BingRulesManager.onBingRuleUpdateListener {
-                                        private fun onDone() {
-                                            refreshDisplay()
-                                            hideLoadingView()
-                                        }
+                    val rule = mSession.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
-                                        override fun onBingRuleUpdateSuccess() {
-                                            onDone()
-                                        }
+                    if (rule == null) {
+                        // The rule is not defined, hide the preference
+                        preference.isVisible = false
+                    } else {
+                        preference.isVisible = true
+                        preference.setBingRule(rule)
+                        preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                            val rule = preference.createRule(newValue as Int)
+                            if (null != rule) {
+                                displayLoadingView()
+                                mSession.dataHandler.bingRulesManager.updateRule(preference.rule,
+                                        rule,
+                                        object : BingRulesManager.onBingRuleUpdateListener {
+                                            private fun onDone() {
+                                                refreshDisplay()
+                                                hideLoadingView()
+                                            }
 
-                                        override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                            activity?.toast(errorMessage)
-                                            onDone()
-                                        }
-                                    })
+                                            override fun onBingRuleUpdateSuccess() {
+                                                onDone()
+                                            }
+
+                                            override fun onBingRuleUpdateFailure(errorMessage: String) {
+                                                activity?.toast(errorMessage)
+                                                onDone()
+                                            }
+                                        })
+                            }
+                            false
                         }
-                        false
                     }
                 }
             }

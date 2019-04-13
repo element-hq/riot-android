@@ -32,9 +32,10 @@
     <string name="rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
-    <string name="ongoing_conference_call">Llamada de conferencia en curso. Unirse con voz o vídeo.</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
+    <string name="ongoing_conference_call">Llamada de conferencia en curso.
+\nUnirse con %1$s o %2$s</string>
+    <string name="ongoing_conference_call_voice">Voz</string>
+    <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">No se puede iniciar la llamada, por favor inténtalo de nuevo más tarde</string>
     <string name="missing_permissions_warning">Debido a que faltan permisos, pueden faltar algunas características…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para invitar a iniciar una conferencia en esta sala</string>
@@ -47,8 +48,6 @@
 
     <!-- actions -->
     <string name="action_sign_out">Cerrar sesión</string>
-    <string name="action_sign_out_confirmation">Por seguridad, cerrar la sesión eliminará todas las claves de cifrado de extremo a extremo, haciendo ilegible todo el historial de conversación cifrado si vuelves a iniciar sesión.
-Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Vídeo</string>
     <string name="action_global_search">Búsqueda global</string>
@@ -71,10 +70,10 @@ Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</
     <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Buscar salas</string>
-    <string name="home_filter_placeholder_favorites">Buscar favoritos</string>
-    <string name="home_filter_placeholder_people">Buscar personas</string>
-    <string name="home_filter_placeholder_rooms">Buscar salas</string>
+    <string name="home_filter_placeholder_home">Filtrar salas</string>
+    <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
+    <string name="home_filter_placeholder_people">Filtrar personas</string>
+    <string name="home_filter_placeholder_rooms">Filtrar salas</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invitaciones</string>
@@ -109,14 +108,14 @@ Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</
     <string name="send_bug_report_sent">El informe de error ha sido enviado con éxito</string>
     <string name="send_bug_report_failed">No se pudo enviar el informe de error (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-    <string name="send_bug_report_app_crashed">La aplicación falló en la última sesión. ¿Te gustaría enviar un informe de fallas?</string>
+    <string name="send_bug_report_app_crashed">La aplicación falló en la última sesión. ¿Te gustaría enviar un informe de error\?</string>
 
     <string name="send_files_in">Enviar en</string>
     <string name="read_receipt">Leído</string>
 
     <string name="join_room">Unirse a la Sala</string>
     <string name="username">Nombre de usuario</string>
-    <string name="create_account">Registrar</string>
+    <string name="create_account">Crear cuenta</string>
     <string name="login">Iniciar sesión</string>
     <string name="logout">Cerrar sesión</string>
     <string name="hs_url">URL del Servidor Doméstico</string>
@@ -132,7 +131,7 @@ Selecciona exportar para crear una copia de seguridad antes de cerrar sesión.</
 
     <!-- Authentication -->
     <string name="auth_login">Iniciar sesión</string>
-    <string name="auth_register">Registrar</string>
+    <string name="auth_register">Crear cuenta</string>
     <string name="auth_submit">Enviar</string>
     <string name="auth_skip">Omitir</string>
     <string name="auth_send_reset_email">Enviar Correo Electrónico de Restauración</string>
@@ -194,7 +193,7 @@ Se ha cerrado sesión en todos tus dispositivos y ya no recibirás notificacione
     <string name="login_error_registration_network_error">No es posible registrarse: Error de red</string>
     <string name="login_error_unable_register">No es posible registrarse</string>
     <string name="login_error_unable_register_mail_ownership">No es posible registrarse : falló la propiedad del correo electrónico</string>
-    <string name="login_error_invalid_home_server">Ingresa una URL válida</string>
+    <string name="login_error_invalid_home_server">Por favor introduce una URL válida</string>
 
     <string name="login_error_forbidden">Nombre de usuario/contraseña inválidos</string>
     <string name="login_error_unknown_token">No se reconoció el código de acceso especificado</string>
@@ -244,7 +243,7 @@ Disculpas por la molestia.</string>
     <string name="incoming_call">Llamada Entrante</string>
     <string name="incoming_video_call">Llamada de Vídeo Entrante</string>
     <string name="incoming_voice_call">Llamada de Voz Entrante</string>
-    <string name="call_in_progress">Llamada En Curso</string>
+    <string name="call_in_progress">Llamada En Curso…</string>
 
     <string name="call_error_user_not_responding">El lado remoto no contestó.</string>
     <string name="call_error_ice_failed">Falló la Conexión de Medios</string>
@@ -278,7 +277,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
 
 ¿Permitir que Riot acceda a tus contactos ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Lo sentimos.. Acción no realizada, debido a que faltan permisos</string>
+    <string name="permissions_action_not_performed_missing_permissions">Lo sentimos. Acción no realizada, debido a que faltan permisos</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
@@ -308,14 +307,6 @@ Quizás quieras iniciar sesión con otra cuenta, o añadir este correo electrón
     <string name="room_creation_title">Nueva Conversación</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_title_one_member">1 miembro</string>
-    <string name="room_e2e_alert_title">¡Advertencia!</string>
-    <string name="room_e2e_alert_message">El cifrado de extremo a extremo está en beta y puede no ser confiable.
-
-Aún no deberías confiar en él para proteger tus datos.
-
-Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
-
-Los mensajes cifrados no serán visibles en los clientes que aún no implementen el cifrado.</string>
 
     <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
@@ -430,7 +421,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <!-- Directory -->
     <string name="directory_search_results_title">Explorar directorio</string>
-    <string name="directory_searching_title">Buscando directorio..</string>
+    <string name="directory_searching_title">Buscando directorio…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Agregar a Favoritos</string>
@@ -456,7 +447,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_add_email_address">Añadir dirección de correo electrónico</string>
     <string name="settings_phone_number">Teléfono</string>
     <string name="settings_add_phone_number">Añadir número telefónico</string>
-    <string name="settings_app_info_link_summary">Pantalla de información del sistema de la aplicación</string>
+    <string name="settings_app_info_link_summary">Mostrar la pantalla de información de la aplicación de los ajustes del sistema.</string>
     <string name="settings_app_info_link_title">Información de la aplicación</string>
 
     <string name="settings_enable_all_notif">Habilitar notificaciones para esta cuenta</string>
@@ -617,16 +608,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="room_settings_addresses_e2e_disabled">El cifrado está deshabilitado en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Habilitar cifrado
 (advertencia: ¡no se puede volver a deshabilitar!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">¡Advertencia!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">El cifrado de extremo a extremo está en beta y puede no ser confiable.
-
-Aún no deberías confiar en él para proteger tus datos.
-
-Los dispositivos todavía no podrán descifrar el historial desde antes de unirse a la sala.
-
-Una vez que se habilita el cifrado en una sala no se puede volver a desactivar (por ahora).
-
-Los mensajes cifrados no serán visibles en clientes que aún no implementen el cifrado.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directorio</string>
@@ -657,8 +638,8 @@ Los mensajes cifrados no serán visibles en clientes que aún no implementen el 
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
     <string name="encryption_export_room_keys_summary">Exportar las claves a un archivo local</string>
     <string name="encryption_export_export">Exportar</string>
-    <string name="encryption_import_enter_passphrase">Ingresar frase de contraseña</string>
-    <string name="encryption_export_confirm_passphrase">Confirmar frase de contraseña</string>
+    <string name="passphrase_enter_passphrase">Ingresar frase de contraseña</string>
+    <string name="passphrase_confirm_passphrase">Confirmar frase de contraseña</string>
     <string name="encryption_export_saved_as">Las claves de salas con Cifrado de Extremo a Extremo se guardaron en \'%s\'.
 
 Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</string>
@@ -811,7 +792,7 @@ Dispositivos desconocidos:</string>
     <string name="action_exit">Salir</string>
     <string name="bottom_action_groups">Comunidades</string>
 
-    <string name="home_filter_placeholder_groups">Buscar comunidades</string>
+    <string name="home_filter_placeholder_groups">Filtrar comunidades</string>
 
     <string name="groups_invite_header">Invitar</string>
     <string name="groups_header">Comunidades</string>
@@ -924,8 +905,8 @@ Dispositivos desconocidos:</string>
     <string name="title_activity_choose_sticker">Enviar una pegatina</string>
 
     <string name="no_sticker_application_dialog_content">Actualmente no tienes ningún paquete de pegatinas habilitado.
-
-¿Añadir algunos ahora?</string>
+\n
+\n¿Añadir algunos ahora\?</string>
 
     <string name="deactivate_account_title">Desactivar Cuenta</string>
     <string name="avatar">Avatar</string>
@@ -945,13 +926,9 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="deactivate_account_submit">Desactivar Cuenta</string>
 
     <string name="settings_notification_privacy">Privacidad de notificaciones</string>
-    <string name="settings_notification_privacy_warning">Riot.im se ejecuta en segundo plano para mantener privado el contenido del mensaje de la notificación. Puedes cambiar esta opción para reducir el uso de la batería.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Opciones de Ahorro de Energía</string>
-    <string name="settings_notification_privacy_low_detail">Notificaciones simples</string>
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
-    <string name="settings_notification_privacy_no_permission">La aplicación <b> no </b> necesita permiso para ejecutarse en segundo plano</string>
     <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Las notificaciones solo contienen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• El contenido del mensaje de la notificación está <b>ubicado de forma segura directamente desde el servidor doméstico de Matrix</b></string>
@@ -1087,8 +1064,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="room_sliding_menu_version_x">Versión %s</string>
     <string name="encryption_export_notice">Por favor, crea una frase de contraseña para cifrar las claves exportadas. Necesitarás ingresar la misma frase de contraseña para poder importar las claves.</string>
-    <string name="encryption_export_create_passphrase">Crear frase de contraseña</string>
-    <string name="encryption_export_passphrase_dont_match">Las frases de contraseña deben coincidir</string>
+    <string name="passphrase_create_passphrase">Crear frase de contraseña</string>
+    <string name="passphrase_passphrase_does_not_match">Las frases de contraseña deben coincidir</string>
     <string name="settings_lazy_loading_title">Utiliza carga diferida para los miembros de la sala</string>
     <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Tu servidor doméstico aún no admite la carga diferida de los miembros de la sala. Prueba más tarde.</string>
@@ -1098,4 +1075,78 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="merged_events_expand">expandir</string>
     <string name="merged_events_collapse">colapsar</string>
 
+    <string name="call_anyway">llamar de cada manera</string>
+    <string name="accept">Aceptar</string>
+
+    <string name="auth_accept_policies">Por favor revisa y acepta las reglas de este servidor doméstico:</string>
+
+    <string name="settings_call_category">Llamadas</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
+    <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
+    <string name="settings_call_ringtone_dialog_title">Eligir sonido de llamadas:</string>
+
+    <string name="video_call_in_progress">Llamada de video en proceso…</string>
+
+    <string name="room_participants_action_kick">Expulsar</string>
+    <plurals name="room_participants_kick_prompt_msg">
+        <item quantity="one">¿Seguro que quieres expulsar este usuario de esta conversación?</item>
+        <item quantity="other">¿Seguro que quieres expulsar estos usuarios de esta conversación?</item>
+    </plurals>
+    <string name="reason_hint">Razón</string>
+
+    <string name="settings_notification_troubleshoot">Diagnóstico de fallas</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnóstico de errores</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Iniciar pruebas</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Haciendo… (%1$d of %2$d)</string>
+    <string name="notification_sync_init">Iniciando servicio</string>
+    <string name="title_activity_keys_backup_setup">Copia de seguridad de la clave</string>
+    <string name="title_activity_keys_backup_restore">Usar copia de seguridad de la clave</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">La copia de seguridad de la clave no ha finalizado, por favor espere…</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">No quiero mis mensajes cifrados</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Creando copia de seguridad de las claves…</string>
+    <string name="keys_backup_activate">Usar copia de seguridad de la clave</string>
+    <string name="are_you_sure">¿Esta seguro\?</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderá el acceso a sus mensajes cifrados si cierra sesión sin hacer una copia de seguridad de sus claves.</string>
+
+    <string name="stay">Quedarse</string>
+    <string name="skip">Saltar</string>
+    <string name="done">Hecho</string>
+    <string name="abort">Cancelar</string>
+    <string name="ignore">Ignorar</string>
+
+    <string name="action_mark_room_read">Marcar como leído</string>
+    <string name="auth_login_sso">Iniciar sesión con single-sign-on</string>
+    <string name="login_error_ssl_handshake">Tu dispositivo usa una versión anticuada e insegura del protocolo de seguridad TLS. Por tu seguridad no puedes conectarte</string>
+    <string name="settings_notification_advanced">Ajustes avanzados de notificaciones</string>
+    <string name="settings_notification_advanced_summary">Ajusta la importancia de las notificaciones por evento, configura el sonido, LED y vibración</string>
+    <string name="settings_notification_by_event">Importancia de notificación por evento</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Ajustes de sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Las notificaciones están activadas en los ajustes de sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Las notificaciones están desactivadas en los ajustes del sistema.
+\nPor favor comprueba los ajustes de sistema.</string>
+    <string name="open_settings">Abrir ajustes</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Ajustes de cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Las notificaciones están activadas para tu cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Las notificaciones están desactivadas para tu cuenta.
+\nPor favor comprueba los ajustes de cuenta.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Ajustes de dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Las notificaciones están activadas para este dispositivo.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Las notificaciones no están permitidos para este dispositivo.
+\nPor favor comprueba los ajustes Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Activar</string>
+
+    <string name="settings_troubleshoot_test_bing_settings_title">Ajustes personalizados.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Ten en cuenta que algunos mensajes son silenciosos (producen una notificación sin sonido).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Algunas notificaciones están desactivadas en tus ajustes personalizados.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Error al cargar reglas personalizadas, por favor prueba de nuevo.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Comprueba ajustes</string>
+
+    <string name="settings_troubleshoot_test_play_services_title">Prueba de servicios Google Play</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK de servicios de Google Play esta disponible y actualizado.</string>
 </resources>

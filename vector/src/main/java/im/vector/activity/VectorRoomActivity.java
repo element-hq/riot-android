@@ -25,7 +25,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -37,7 +36,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -101,11 +99,11 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.OnTouch;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.ViewedRoomTracker;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.dialogs.DialogCallAdapter;
 import im.vector.dialogs.DialogListItem;
@@ -116,8 +114,6 @@ import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.notifications.NotificationUtils;
-import im.vector.services.EventStreamService;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
@@ -190,6 +186,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
+
+    // media selection
+    private static final int MEDIA_SOURCE_FILE = 1;
+    private static final int MEDIA_SOURCE_VOICE = 2;
+    private static final int MEDIA_SOURCE_STICKER = 3;
+    private static final int MEDIA_SOURCE_PHOTO = 4;
+    private static final int MEDIA_SOURCE_VIDEO = 5;
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -711,12 +714,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mDefaultTopic = intent.getStringExtra(EXTRA_DEFAULT_TOPIC);
         mIsUnreadPreviewMode = intent.getBooleanExtra(EXTRA_IS_UNREAD_PREVIEW_MODE, false);
 
-        // the user has tapped on the "View" notification button
-        if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
-            // remove any pending notifications
-            NotificationUtils.INSTANCE.cancelAllNotifications(this);
-        }
-
         if (mIsUnreadPreviewMode) {
             Log.d(LOG_TAG, "Displaying " + roomId + " in unread preview mode");
         } else if (!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) {
@@ -725,13 +722,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Log.d(LOG_TAG, "Displaying " + roomId);
         }
 
-        // IME's DONE button is treated as a send action
+        if (PreferencesManager.sendMessageWithEnter(this)) {
+            // imeOptions="actionSend" only works with single line, so we remove multiline inputType
+            mEditText.setInputType(mEditText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
+            mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+        }
+
+        // IME's DONE and SEND button is treated as a send action
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
 
-                if (EditorInfo.IME_ACTION_DONE == imeActionId) {
+                if (EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId) {
                     sendTextMessage();
                     return true;
                 }
@@ -780,8 +783,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         });
 
         mMyUserId = mSession.getCredentials().userId;
-
-        CommonActivityUtils.resumeEventStream(this);
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
@@ -1107,16 +1108,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mActiveWidgetsBanner.onActivityPause();
 
         // to have notifications for this room
-        ViewedRoomTracker.getInstance().setViewedRoomId(null);
-        ViewedRoomTracker.getInstance().setMatrixId(null);
+        VectorApp.getInstance().getNotificationDrawerManager().setCurrentRoom(null);
     }
 
     @Override
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
         super.onResume();
-
-        ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
             // check if the room has been left from another client.
@@ -1142,7 +1140,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             // to do not trigger notifications for this room
             // because it is displayed.
-            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
+            VectorApp.getInstance().getNotificationDrawerManager().setCurrentRoom(mRoom.getRoomId());
 
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
@@ -1158,10 +1156,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mSession.getDataHandler().addListener(mResourceLimitEventListener);
 
         Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
-
-        if (null != mRoom) {
-            EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
-        }
 
         // sanity checks
         if ((null != mRoom) && (null != Matrix.getInstance(this).getDefaultLatestChatMessageCache())) {
@@ -1236,8 +1230,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             mVectorOngoingConferenceCallView.onActivityResume();
             mActiveWidgetsBanner.onActivityResume();
         }
-
-        displayE2eRoomAlert();
 
         // init the auto-completion list from the room members
         mEditText.initAutoCompletions(mSession, mRoom);
@@ -1746,10 +1738,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if it is a video call
      */
     private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
-        final Intent intent = new Intent(this, JitsiCallActivity.class);
-        intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-        intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Display a error dialog for old API
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        } else {
+            final Intent intent = new Intent(this, JitsiCallActivity.class);
+            intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+            intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -1766,9 +1767,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onSuccess(Widget widget) {
                 hideWaitingView();
 
-                final Intent intent = new Intent(VectorRoomActivity.this, JitsiCallActivity.class);
-                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-                startActivity(intent);
+                launchJitsiActivity(widget, aIsVideoCall);
             }
 
             private void onError(String errorMessage) {
@@ -2416,8 +2415,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        boolean hasText = (mEditText.getText().length() > 0);
-        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
+        int img = R.drawable.ic_material_file;
+        if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
+            img = R.drawable.ic_material_send_green;
+        } else {
+            switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
+                case MEDIA_SOURCE_VOICE:
+                    if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
+                        img = R.drawable.vector_micro_green;
+                    }
+                    break;
+                case MEDIA_SOURCE_STICKER:
+                    img = R.drawable.ic_send_sticker;
+                    break;
+                case MEDIA_SOURCE_PHOTO:
+                    img = R.drawable.ic_material_camera;
+                    break;
+                case MEDIA_SOURCE_VIDEO:
+                    img = R.drawable.ic_material_videocam;
+                    break;
+            }
+        }
+        mSendImageView.setImageResource(img);
     }
 
     /**
@@ -2629,7 +2648,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Widget activeWidget = mVectorOngoingConferenceCallView.getActiveWidget();
 
             if ((null == call) && (null == activeWidget)) {
-                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
+                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0
+                        || PreferencesManager.sendMessageWithEnter(this))) ? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else if (null != activeWidget) {
                 mStartCallLayout.setVisibility(View.GONE);
@@ -3773,31 +3793,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         launchInvitePeople();
     }
 
-    private static final String E2E_WARNINGS_PREFERENCES = "E2E_WARNINGS_PREFERENCES";
-
-    /**
-     * Display an e2e alert for the first opened room.
-     */
-    private void displayE2eRoomAlert() {
-        if (!isFinishing()) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-            if (!preferences.contains(E2E_WARNINGS_PREFERENCES) && (null != mRoom) && mRoom.isEncrypted()) {
-                preferences
-                        .edit()
-                        .putBoolean(E2E_WARNINGS_PREFERENCES, false)
-                        .apply();
-
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.room_e2e_alert_title)
-                        .setMessage(R.string.room_e2e_alert_message)
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
-            }
-        }
-    }
-
-
     /* ==========================================================================================
      * Interface VectorReadReceiptsDialogFragmentListener
      * ========================================================================================== */
@@ -3823,45 +3818,96 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
+    private void chooseMediaSource(boolean useNativeCamera, boolean isVoiceFeatureEnabled) {
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        final List<DialogListItem> items = new ArrayList<>();
+
+        // Send file
+        items.add(DialogListItem.SendFile.INSTANCE);
+
+        // Send voice
+        if (isVoiceFeatureEnabled) {
+            items.add(DialogListItem.SendVoice.INSTANCE);
+        }
+
+        // Send sticker
+        items.add(DialogListItem.SendSticker.INSTANCE);
+
+        // Camera
+        if (useNativeCamera) {
+            items.add(DialogListItem.TakePhoto.INSTANCE);
+            items.add(DialogListItem.TakeVideo.INSTANCE);
+        } else {
+            items.add(DialogListItem.TakePhotoVideo.INSTANCE);
+        }
+
+        new AlertDialog.Builder(this)
+                .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onSendChoiceClicked(items.get(which));
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @OnClick(R.id.room_send_image_view)
     void onSendClick() {
-        if (!TextUtils.isEmpty(mEditText.getText())) {
+        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(this)) {
             sendTextMessage();
         } else {
-            // hide the header room
-            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+            boolean useNativeCamera = PreferencesManager.useNativeCamera(this);
+            boolean isVoiceFeatureEnabled = PreferencesManager.isSendVoiceFeatureEnabled(this);
 
-            final List<DialogListItem> items = new ArrayList<>();
-
-            // Send file
-            items.add(DialogListItem.SendFile.INSTANCE);
-
-            // Send voice
-            if (PreferencesManager.isSendVoiceFeatureEnabled(this)) {
-                items.add(DialogListItem.SendVoice.INSTANCE);
+            switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
+                case MEDIA_SOURCE_FILE:
+                    onSendChoiceClicked(DialogListItem.SendFile.INSTANCE);
+                    return;
+                case MEDIA_SOURCE_VOICE:
+                    if (isVoiceFeatureEnabled) {
+                        onSendChoiceClicked(DialogListItem.SendVoice.INSTANCE);
+                        return;
+                    }
+                    // show all options if voice feature is disabled
+                    break;
+                case MEDIA_SOURCE_STICKER:
+                    onSendChoiceClicked(DialogListItem.SendSticker.INSTANCE);
+                    return;
+                case MEDIA_SOURCE_PHOTO:
+                    if (useNativeCamera) {
+                        onSendChoiceClicked(DialogListItem.TakePhoto.INSTANCE);
+                        return;
+                    } else {
+                        onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
+                        return;
+                    }
+                case MEDIA_SOURCE_VIDEO:
+                    if (useNativeCamera) {
+                        onSendChoiceClicked(DialogListItem.TakeVideo.INSTANCE);
+                        return;
+                    } else {
+                        onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
+                        return;
+                    }
             }
 
-            // Send sticker
-            items.add(DialogListItem.SendSticker.INSTANCE);
-
-            // Camera
-            if (PreferencesManager.useNativeCamera(this)) {
-                items.add(DialogListItem.TakePhoto.INSTANCE);
-                items.add(DialogListItem.TakeVideo.INSTANCE);
-            } else {
-                items.add(DialogListItem.TakePhotoVideo.INSTANCE);
-            }
-
-            new AlertDialog.Builder(this)
-                    .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            onSendChoiceClicked(items.get(which));
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+            chooseMediaSource(useNativeCamera, isVoiceFeatureEnabled);
         }
+    }
+
+    @OnLongClick(R.id.room_send_image_view)
+    boolean onLongClick() {
+        if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(this)) {
+            return false;
+        }
+        boolean useNativeCamera = PreferencesManager.useNativeCamera(this);
+        boolean isVoiceFeatureEnabled = PreferencesManager.isSendVoiceFeatureEnabled(this);
+        chooseMediaSource(useNativeCamera, isVoiceFeatureEnabled);
+
+        return true;
     }
 
     private void onSendChoiceClicked(DialogListItem dialogListItem) {

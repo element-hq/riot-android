@@ -1,4 +1,4 @@
-<!-- menu header is always wrap to content
+<?xml version="1.0" encoding="utf-8"?><!-- menu header is always wrap to content
      so it is required to define a sublayout with the right height -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,7 +32,8 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            android:tint="?attr/vctr_list_header_primary_text_color"
+            tools:src="@drawable/ic_material_expand_more_black" />
 
     </RelativeLayout>
 

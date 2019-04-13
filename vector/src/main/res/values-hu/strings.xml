@@ -17,7 +17,7 @@
     <string name="send">Küldés</string>
     <string name="copy">Másolás</string>
     <string name="resend">Újraküldés</string>
-    <string name="redact">Kitakarás</string>
+    <string name="redact">Törlés</string>
     <string name="quote">Idézés</string>
     <string name="share">Megosztás</string>
     <string name="later">Később</string>
@@ -28,9 +28,10 @@
     <string name="rename">Átnevezés</string>
     <string name="report_content">Tartalom bejelentése</string>
     <string name="active_call">Aktív hívás</string>
-    <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás. Csatlakozás hanggal vagy videóval.</string>
-    <string name="ongoing_conference_call_voice">hang</string>
-    <string name="ongoing_conference_call_video">videó</string>
+    <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás.
+\nCsatlakozás %1$s vagy %2$s</string>
+    <string name="ongoing_conference_call_voice">Hang</string>
+    <string name="ongoing_conference_call_video">Videó</string>
     <string name="cannot_start_call">Nem sikerült hívást kezdeményezni, próbáld meg később</string>
     <string name="missing_permissions_warning">Hiányzó engedélyek miatt egyes funkciók talán nem elérhetőek…</string>
     <string name="missing_permissions_to_start_conf_call">Ezen szobában való értekezlet indításához meghívási jogosultság szükséges</string>
@@ -42,8 +43,6 @@
     <string name="invite">Meghívás</string>
 
     <string name="action_sign_out">Kijelentkezés</string>
-    <string name="action_sign_out_confirmation">Biztonsági okból kijelentkezéskor törlődnek a végtől végig való titkosítás kulcsai, emiatt a következő bejelentkezéskor a korábban titkosított üzenetek olvashatatlanok lesznek.
-A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</string>
     <string name="action_voice_call">Hanghívás</string>
     <string name="action_video_call">Videóhívás</string>
     <string name="action_global_search">Globális keresés</string>
@@ -63,10 +62,10 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="bottom_action_people">Emberek</string>
     <string name="bottom_action_rooms">Szobák</string>
 
-    <string name="home_filter_placeholder_home">Szoba keresése</string>
-    <string name="home_filter_placeholder_favorites">Kedvenc keresése</string>
-    <string name="home_filter_placeholder_people">Ember keresése</string>
-    <string name="home_filter_placeholder_rooms">Szoba keresése</string>
+    <string name="home_filter_placeholder_home">Szoba nevek szűrése</string>
+    <string name="home_filter_placeholder_favorites">Kedvenc szűrése</string>
+    <string name="home_filter_placeholder_people">Emberek szűrése</string>
+    <string name="home_filter_placeholder_rooms">Szoba nevek szűrése</string>
 
     <string name="invitations_header">Meghívások</string>
     <string name="low_priority_header">Alacsony prioritás</string>
@@ -95,7 +94,7 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="send_bug_report_placeholder">Írd le itt a problémádat</string>
     <string name="send_bug_report_logs_description">A problémák kielemzése érdekében a naplók erről a kliensről a hibabejelentővel elküldésre kerülnek. Ha inkább csak a fenti szöveget szeretnéd elküldeni, szedd ki a pipát:</string>
     <string name="send_bug_report_alert_message">Úgy tűnik, mintha mérgedben ráznád a telefont. Szeretnél hibajelentést beküldeni?</string>
-    <string name="send_bug_report_app_crashed">Az alkalmazás legutóbb összeomlott. Szeretnél hibajelentést beküldeni?</string>
+    <string name="send_bug_report_app_crashed">Az alkalmazás legutóbb összeomlott. Megnyitod a hibabejelentő képernyőt?</string>
 
     <string name="send_bug_report_sent">A hibajelentés sikeresen elküldve</string>
     <string name="send_bug_report_failed">A hibajelentést nem sikerült elküldeni (%s)</string>
@@ -106,7 +105,7 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
 
     <string name="join_room">Belépés a szobába</string>
     <string name="username">Felhasználónév</string>
-    <string name="create_account">Regisztráció</string>
+    <string name="create_account">Fiók készítés</string>
     <string name="login">Bejelentkezés</string>
     <string name="logout">Kijelentkezés</string>
     <string name="hs_url">Matrix szerver URL</string>
@@ -121,7 +120,7 @@ A kulcsok mentéséhez kijelentkezés előtt válaszd az exportálás opciót.</
     <string name="option_take_photo_video">Kép- vagy videókészítés</string>
 
     <string name="auth_login">Bejelentkezés</string>
-    <string name="auth_register">Regisztráció</string>
+    <string name="auth_register">Fiók létrehozása</string>
     <string name="auth_submit">Beküldés</string>
     <string name="auth_skip">Kihagyás</string>
     <string name="auth_send_reset_email">Visszaállító e-mail küldése</string>
@@ -171,7 +170,7 @@ Az e-mail címed a beállításoknál adhatod a profilodhoz.</string>
     <string name="auth_reset_password_missing_email">Meg kell adnod a fiókodhoz tartozó e-mail címet.</string>
     <string name="auth_reset_password_missing_password">Meg kell adnod egy új jelszót.</string>
     <string name="auth_reset_password_email_validation_message">Küldtünk egy e-mailt erre a címre: %s . A benne lévő link használata után kattints.</string>
-    <string name="auth_reset_password_error_unauthorized">Nem sikerült az e-mail címet ellenőrizni: rákattintottál az e-mailben található linkre?</string>
+    <string name="auth_reset_password_error_unauthorized">Nem sikerült az e-mail címet ellenőrizni: rákattintottál az e-mailben található linkre</string>
     <string name="auth_reset_password_success_message">A jelszavad visszaállítottuk.
 
 Kiléptettünk az összes készülékedről, nem érkezik rájuk új értesítés. Az értesítések visszakapcsolásához minden készüléken lépj be újra.</string>
@@ -182,23 +181,23 @@ Kiléptettünk az összes készülékedről, nem érkezik rájuk új értesíté
     <string name="login_error_registration_network_error">Sikertelen regisztráció: Hálózati hiba</string>
     <string name="login_error_unable_register">Regisztráció sikertelen</string>
     <string name="login_error_unable_register_mail_ownership">Regisztráció sikertelen: e-mail tulajdonjog hiba</string>
-    <string name="login_error_invalid_home_server">Adj meg érvényes URL-t</string>
+    <string name="login_error_invalid_home_server">Kérlek adj meg érvényes URL-t</string>
 
     <string name="login_error_forbidden">Helytelen felhasználónév/jelszó</string>
     <string name="login_error_unknown_token">A megadott hozzáférési kódot nem sikerült felismerni</string>
     <string name="login_error_bad_json">Hibás JSON</string>
     <string name="login_error_not_json">Nem tartalmazott érvényes JSON-t</string>
-    <string name="login_error_limit_exceeded">Túl sok kérés érkezett</string>
+    <string name="login_error_limit_exceeded">Túl sok kérés lett elküldve</string>
     <string name="login_error_user_in_use">Ez a felhasználónév már foglalt</string>
-    <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem lett kattintva</string>
+    <string name="login_error_login_email_not_yet">Az e-mailban található linkre még nem kattintottak</string>
 
     <string name="e2e_need_log_in_again">Újra be kell jelentkeznie, hogy egy új végtől végig titkosító kulcsot generáljon ehhez az eszközhöz és beküldeni a nyilvános kulcsot a Matrix szervernek.
 Ez egy egyszeri dolog.
 Elnézést a kellemetlenségért.</string>
 
-    <string name="read_receipts_list">Fogadási lista elolvasása</string>
+    <string name="read_receipts_list">Lista azokról akik elolvasták</string>
 
-    <string name="compression_options">"Küldési méret "</string>
+    <string name="compression_options">"Küldés mint "</string>
     <string name="compression_opt_list_original">Eredeti</string>
     <string name="compression_opt_list_large">Nagy</string>
     <string name="compression_opt_list_medium">Közepes</string>
@@ -222,28 +221,28 @@ Elnézést a kellemetlenségért.</string>
     <string name="incoming_call">Bejövő hívás</string>
     <string name="incoming_video_call">Bejövő videóhívás</string>
     <string name="incoming_voice_call">Bejövő hanghívás</string>
-    <string name="call_in_progress">Hívás folyamatban</string>
+    <string name="call_in_progress">Hívás folyamatban…</string>
 
     <string name="call_error_user_not_responding">A hívott fél nem vette fel.</string>
     <string name="call_error_ice_failed">A médiacsatlakozás nem sikerült</string>
-    <string name="call_error_camera_init_failed">A kamerát nem lehet inicializálni</string>
-    <string name="call_error_answered_elsewhere">hívás felvéve máshol</string>
+    <string name="call_error_camera_init_failed">A kamera nem használható</string>
+    <string name="call_error_answered_elsewhere">hívást máshol vették fel</string>
 
     <string name="media_picker_both_capture_title">Készíts képet vagy videót</string>
     <string name="media_picker_cannot_record_video">Videórögzítés sikertelen</string>
 
     <string name="permissions_rationale_popup_title">Információ</string>
     <string name="permissions_rationale_msg_storage">A Riot-nak szüksége van a fotó és videó könyvtáradnak elérési engedélyéhez a csatolmányok küldéséhez.
-
-Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj fájlokat küldeni a telefonodról.</string>
+\n
+\nKérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj fájlokat küldeni a telefonodról.</string>
     <string name="permissions_rationale_msg_camera">Riot-nak engedély szükséges a kamerád eléréséhez, hogy tudj képeket készíteni és videó hívásokat.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nKérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
     <string name="permissions_rationale_msg_record_audio">A Riot-nak engedély szükséges a mikrofonod eléréséhez, hogy tudj hanghívást kezdeményezni.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nKérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
     <string name="permissions_rationale_msg_camera_and_audio">"A Riot-nak engedély szükséges a mikrofonod  és kamerád eléréséhez, hogy tudj videóhívást kezdeményezni.
 
 Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj hívást kezdeményezni."</string>
@@ -257,7 +256,7 @@ Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
     <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
 
     <string name="media_slider_saved">Mentve</string>
-    <string name="media_slider_saved_message">Mentés a letöltések közé</string>
+    <string name="media_slider_saved_message">Mentés a letöltések közé\?</string>
     <string name="yes">IGEN</string>
     <string name="no">NEM</string>
     <string name="_continue">Folytatás</string>
@@ -273,7 +272,7 @@ Engedélyezed Riot-nak a hozzáférést kapcsolataidhoz?</string>
     <string name="title_activity_member_details">Tag adatok</string>
     <string name="forward">Továbbítás</string>
     <string name="room_preview_unlinked_email_warning">Ez a meghívó erre a címre lett küldve: %s, ami nincs összekötve a felhasználóddal.
-Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-mail címet a felhasználódhoz.</string>
+\nHa gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-mail címet a felhasználódhoz.</string>
     <string name="room_preview_try_join_an_unknown_room">"%s szobához próbálsz hozzáférni.  Szeretnél csatlakozni, hogy részt tudj venni a beszélgetésben?"</string>
     <string name="room_preview_try_join_an_unknown_room_default">egy szoba</string>
     <string name="room_preview_room_interactions_disabled">Ez egy előnézete a szobának. A szobai interakciók letiltásra kerültek.</string>
@@ -281,14 +280,6 @@ Ha gondolod jelentkezz be egy másik felhasználóval, vagy add hozzá ezt az e-
     <string name="room_creation_title">Új csevegés</string>
     <string name="room_creation_add_member">Új tag hozzáadása</string>
     <string name="room_title_one_member">1 tag</string>
-    <string name="room_e2e_alert_title">Figyelem!</string>
-    <string name="room_e2e_alert_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
-
-Még nem kéne megbíznod az adataid megtartásával.
-
-A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
-
-A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
     <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
     <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>
@@ -310,15 +301,15 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="room_participants_action_ban">Tiltás</string>
     <string name="room_participants_action_unban">Tiltás feloldása</string>
     <string name="room_participants_action_set_default_power_level">Visszaállítás normál felhasználóra</string>
-    <string name="room_participants_action_set_moderator">Moderátorrá tevés</string>
-    <string name="room_participants_action_set_admin">Adminná tevés</string>
+    <string name="room_participants_action_set_moderator">Kinevezés moderátornak</string>
+    <string name="room_participants_action_set_admin">Kinevezés adminisztrátornak</string>
     <string name="room_participants_action_ignore">Az összes üzenet elrejtése ettől a felhasználótól</string>
     <string name="room_participants_action_unignore">Az összes üzenet megjelenítése ettől a felhasználótól</string>
     <string name="room_participants_invite_search_another_user">Felhasználói azonosító, név vagy e-mail</string>
     <string name="room_participants_action_mention">Megemlítés</string>
     <string name="room_participants_action_devices_list">Eszközlista mutatása</string>
     <string name="room_participants_power_level_prompt">Nem fogod tudni vissza vonni a változtatásokat mert az adott felhasználó ugyan azzal a jogosultság szinten fog állni mint te.
-Biztos vagy benne?</string>
+\nBiztos vagy benne\?</string>
 
     <string name="room_participants_invite_prompt_msg">Biztos meg akarod hívni %s -t a csevegésbe?</string>
 
@@ -400,7 +391,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_de_prioritize">Prioritás csökkentése</string>
     <string name="room_settings_direct_chat">Közvetlen csevegés</string>
     <string name="room_settings_leave_conversation">Beszélgetés elhagyása</string>
-    <string name="room_settings_forget">Elfelejtés</string>
+    <string name="room_settings_forget">Elfelejt</string>
 
     <string name="room_sliding_menu_messages">Üzenetek</string>
     <string name="room_sliding_menu_settings">Beállítások</string>
@@ -416,7 +407,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_add_email_address">E-mail cím hozzáadása</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Telefonszám hozzáadása</string>
-    <string name="settings_app_info_link_summary">Alkalmazás infók a rendszerbeállításokban</string>
+    <string name="settings_app_info_link_summary">Alkalmazás infók a rendszerbeállításokban.</string>
     <string name="settings_app_info_link_title">Alkalmazás infó</string>
 
     <string name="settings_enable_all_notif">Értesítések bekapcsolása ehhez a felhasználóhoz</string>
@@ -449,7 +440,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_other">Egyéb</string>
     <string name="settings_advanced">Haladó</string>
     <string name="settings_cryptography">Titkosítás</string>
-    <string name="settings_notifications_targets">Értesítés célok</string>
+    <string name="settings_notifications_targets">Értesítési célok</string>
     <string name="settings_contact">Helyi névjegyek</string>
     <string name="settings_contacts_app_permission">Engedély a névjegyekhez</string>
     <string name="settings_contacts_phonebook_country">Telefonkönyv országa</string>
@@ -471,16 +462,16 @@ A folytatáshoz írd be a jelszavad.</string>
 
     <string name="settings_logged_in">Bejelentkezve mint</string>
     <string name="settings_home_server">Matrix szerver</string>
-    <string name="settings_identity_server">Identitásszerver</string>
+    <string name="settings_identity_server">Azonosító szerver</string>
 
     <string name="account_email_validation_title">Hitelesítés folyamatban</string>
     <string name="account_email_validation_message">Kérlek ellenőrizd az e-mail-ed és kattints a linkre amit tartalmaz. Amikor kész, kattints a folytatásra.</string>
     <string name="account_email_validation_error">E-mail cím hitelesítése sikertelen. Kérlek kattints az e-mail-ben található linkre. Amikor kész, kattints a folytatásra.</string>
 
     <string name="settings_change_password">Jelszó megváltoztatása</string>
-    <string name="settings_old_password">Régi jelszó</string>
+    <string name="settings_old_password">Jelenlegi jelszó</string>
     <string name="settings_new_password">Új jelszó</string>
-    <string name="settings_confirm_password">Ellenőrizd a jelszavad</string>
+    <string name="settings_confirm_password">Erősítsd meg az új jelszavad</string>
     <string name="settings_fail_to_update_password">Jelszó frissítése sikertelen</string>
     <string name="settings_password_updated">A jelszavad sikeresen frissítésre került</string>
     <string name="settings_unignore_user">"Az összes üzenet mutatása %s -tól/-től?
@@ -528,12 +519,12 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_room_access_warning">Hogy linkelhess egy szobához, mindenféleképp névvel kell rendelkeznie.</string>
     <string name="room_settings_room_access_entry_only_invited">Csak meghívott emberek</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bárki aki tudja a szoba linkjét, a vendégeket leszámítva</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bárki aki tudja a szoba linkjét, beleszámítva a vendékek</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bárki aki tudja a szoba linkjét, beleszámítva a vendégek</string>
 
     <string name="room_settings_banned_users_title">Tiltott felhasználók</string>
 
     <string name="room_settings_category_advanced_title">Haladó</string>
-    <string name="room_settings_room_internal_id">Ennek a szobának a belső azonosítója</string>
+    <string name="room_settings_room_internal_id">A szoba belső azonosítója</string>
     <string name="room_settings_addresses_pref_title">Címek</string>
     <string name="room_settings_labs_pref_title">Laborok</string>
     <string name="room_settings_labs_warning_message">Ezek kísérleti funkciók, ezek elromolhatnak nem számított módokon. Használd elővigyázatossággal.</string>
@@ -560,14 +551,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_addresses_e2e_disabled">Titkosítás ki van kapcsolva ebben a szobában.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Titkosítás bekapcsolása
 (figyelmeztetés: nem lehet többé kikapcsolni)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Figyelmeztetés!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">Végtől végig titkosítás még tesztelés alatt áll és lehet hogy nem megbízható.
-
-Még nem kéne megbíznod az adataid megtartásával.
-
-A készülékeid nem lesznek képesek visszafejteni a előzményeid azelőttről, hogy becsatlakoztál a szobába.
-
-A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titkosítás funkció még nem érhető el.</string>
 
     <string name="directory_title">Könyvtár</string>
 
@@ -595,8 +578,8 @@ A titkosított üzenetek nem fognak látszódni azokon a klienseken ahol a titko
     <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>
     <string name="encryption_export_room_keys_summary">Exportáld a kulcsokat helyi fájlba</string>
     <string name="encryption_export_export">Exportálás</string>
-    <string name="encryption_import_enter_passphrase">Írj be jelmondatot</string>
-    <string name="encryption_export_confirm_passphrase">Ellenőrizd a jelmondatot</string>
+    <string name="passphrase_enter_passphrase">Írj be jelmondatot</string>
+    <string name="passphrase_confirm_passphrase">Ellenőrizd a jelmondatot</string>
     <string name="encryption_export_saved_as">A E2E szoba kulcsok el lettek mentve ide \'%s\'
 
 Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</string>
@@ -694,7 +677,7 @@ Ismeretlen eszközök:</string>
     <string name="event_formatter_widget_added">%1$s hozzá lett adva %2$s által</string>
     <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
-    <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást?</string>
+    <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást ebből a szobából?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
@@ -708,7 +691,7 @@ Ismeretlen eszközök:</string>
     <string name="room_add_matrix_apps">Matrix alkalmazás hozzáadása</string>
     <string name="notification_listening_for_events">Események figyelése</string>
 
-    <string name="notification_sync_in_progress">Szinkronizálás</string>
+    <string name="notification_sync_in_progress">Szinkronizálás…</string>
     <string name="call">Hívás</string>
     <string name="settings_containing_my_display_name">Profilnevemet tartalmazó üzenetek</string>
     <string name="settings_containing_my_user_name">Felhasználónevemet tartalmazó üzenetek</string>
@@ -751,7 +734,7 @@ Ismeretlen eszközök:</string>
     <string name="action_exit">Kilépés</string>
     <string name="bottom_action_groups">Közösségek</string>
 
-    <string name="home_filter_placeholder_groups">Közösségek keresése</string>
+    <string name="home_filter_placeholder_groups">Közösség nevek szűrése</string>
 
     <string name="groups_invite_header">Meghív</string>
     <string name="groups_header">Közösségek</string>
@@ -861,16 +844,12 @@ Ismeretlen eszközök:</string>
     </plurals>
 
     <!-- Widget Integration Manager -->
-    <string name="avatar">Avatar</string>
+    <string name="avatar">Profilkép</string>
 
-    <string name="receipt_avatar">Visszaigazolási avatar</string>
-    <string name="notice_avatar">Észlelés avatar</string>
-    <string name="settings_notification_privacy_warning">Riot.im a háttérben fut azért, hogy az értesítések tartalma titokban maradhasson. Ezt a beállítást megváltoztathatod kisebb akkumulátor használathoz.</string>
+    <string name="receipt_avatar">Címzett profilképe</string>
+    <string name="notice_avatar">Észlelési profilkép</string>
     <string name="settings_notification_privacy_normal">Normál</string>
-    <string name="settings_notification_privacy_power_saving">Akkumulátor kímélő beállítások</string>
-    <string name="settings_notification_privacy_low_detail">Értesítések kevés részlettel</string>
-    <string name="settings_notification_privacy_no_permission">Az alkalmazásnak <b>nincs</b> szüksége engedélyre a háttérben való futáshoz</string>
-    <string name="settings_notification_privacy_fcm">• Az értesítések a Google Cloud Messaging rendszeren keresztül lesznek elküldve</string>
+    <string name="settings_notification_privacy_fcm">• Az értesítések a Firebase Cloud Messaging rendszeren keresztül lesznek elküldve</string>
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
@@ -881,15 +860,15 @@ Ismeretlen eszközök:</string>
     <string name="settings_notification_privacy">Értesítés adatvédelme</string>
     <string name="settings_notification_privacy_reduced">Csökkentett adatvédelem</string>
     <string name="settings_notification_privacy_need_permission">"Az alkalmazásnak engedélyre van szüksége háttérben futáshoz "</string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem mutatják az üzenet tartalmát</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Az értesítések <b>nem fogják mutatni az üzenet tartalmát</b></string>
 
     <string name="startup_notification_privacy_title">Értesítés adatvédelme</string>
     <string name="title_activity_choose_sticker">Matrica küldése</string>
 
     <string name="option_send_sticker">Matrica küldése</string>
     <string name="no_sticker_application_dialog_content">Nincs semmilyen matrica csomagod.
-
-Hozzáadsz párat most?</string>
+\n
+\nHozzáadsz párat most\?</string>
 
     <string name="settings_deactivate_account_section">Fiók felfüggesztése</string>
     <string name="settings_deactivate_my_account">Függessze fel a fiókomat</string>
@@ -988,7 +967,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_now">Most: %1$s</string>
     <string name="room_participants_ago">%1$s %2$s óta</string>
 
-    <string name="room_participants_invite_join_names">"%1$s "</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s és %2$s</string>
     <string name="room_participants_invite_join_names_combined">%2$s %1$s</string>
 
@@ -1033,8 +1012,8 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="room_sliding_menu_version_x">Verzió: %s</string>
     <string name="encryption_export_notice">Adj meg egy jelmondatot a kimentett kulcsok titkosításához. Ezt a jelmondatot kell majd megadnod a kulcsok betöltéséhez.</string>
-    <string name="encryption_export_create_passphrase">Jelmondat lekészítése</string>
-    <string name="encryption_export_passphrase_dont_match">A jelmondatoknak meg kell egyezniük</string>
+    <string name="passphrase_create_passphrase">Jelmondat lekészítése</string>
+    <string name="passphrase_passphrase_does_not_match">A jelmondatoknak meg kell egyezniük</string>
     <string name="merged_events_expand">kinyit</string>
     <string name="merged_events_collapse">bezár</string>
 
@@ -1098,7 +1077,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
 Kérlek ellenőrizd a rendszerbeállításokat.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Beállítások megnyitása</string>
+    <string name="open_settings">Beállítások megnyitása</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Fiók beállítások.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Az értesítések engedélyezve vannak a felhasználói fiókhoz.</string>
@@ -1115,7 +1094,7 @@ Kérlek ellenőrizd a Riot beállításokat.</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Szolgáltatások ellenőrzése</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK elérhető és a legújabb verziójú.</string>
     <string name="settings_troubleshoot_test_play_services_failed">"Riot a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
-%1$s"</string>
+\n%1$s"</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play Services javítása</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
@@ -1154,7 +1133,7 @@ Bármi amit a Riot el akar végezni amíg a háttérben fut, agresszívan korlá
 
     <string name="settings_troubleshoot_test_battery_title">Akkumulátor optimalizáció</string>
     <string name="settings_troubleshoot_test_battery_success">Riotot nem érinti az akkumulátor optimalizáció.</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Ha a felhasználó töltés nélkül kikapcsolt képernyővel egy ideig magára hagyja az eszközt, az eszköz „Doze” módba kerül. Ez megakadályozza az alkalmazás számára, hogy hozzáférjen a hálózathoz, nem engedi elvégezni a feladatait, szinkronizációt és az alapértelmezett riasztásait. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Ha a felhasználó töltés nélkül kikapcsolt képernyővel egy ideig magára hagyja az eszközt, az eszköz „Doze” módba kerül. Ez megakadályozza az alkalmazás számára, hogy hozzáférjen a hálózathoz, nem engedi elvégezni a feladatait, szinkronizációt és az alapértelmezett riasztásait.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalizáció figyelmen kívül hagyása</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Háttér kapcsolat</string>
@@ -1169,37 +1148,260 @@ A következő képernyőn el kell fogadnod, hogy a Riot folyamatosan fusson a h�
 
     <string name="no_valid_google_play_services_apk">Érvényes Google Play Services APK nem található. Az értesítések megbízhatatlanul működhetnek.</string>
 
-    <string name="store_title">Riot.im - open team collaboration</string>
-    <string name="store_short_description">Üdvözöllek a Riot.im-nél: a szabad kommunikáció új világa!</string>
-    <string name="store_full_description">"Riot.im egyszerű és elegáns környezetet biztosít együttműködéshez ami egy alkalmazásba gyűjti valamennyi beszélgetését.
+    <string name="store_title">Riot.im - Beszélgess, ahogy tetszik</string>
+    <string name="store_short_description">Egy biztonságos és univerzális csevegő alkalmazás az irányításod alatt.</string>
+    <string name="store_full_description">A csevegő alkalmazás ami személyre szabható és az irányításod alatt marad. Riot megteremti a lehetőséget, hogy úgy beszélgess ahogy szeretnél. A [matrix] hálózathoz tervezve - ami egy nyílt és elosztott hálózat.
+\n
+\nKészíts egy ingyenes matrix.org fiókot vagy igényelj egy saját szervert a https://modular.im -től, de üzemeltethetsz is saját Matrix szervert.
+\n
+\nMiért válaszd a Riot.im-et\?
+\n
+\n• TELJES KOMMUNIKÁCIÓ: Nyiss szobákat a csoportod, barátaid, közösséged vagy bárkiknek akiknek szeretnél! Beszélgess, ossz meg fájlokat, adj hozzá kisalkalmazásokat és indíts hang és videóhívásokat - teljesen ingyen.
+\n
+\n• ERŐS KAPCSOLATOK: Használd a Riot-ot a kedvenc eszközeiddel. A Riottal még másik rendszerekben lévő emberekkel és csoportokkal is képes lehetsz beszélgetni.
+\n
+\n• SZEMÉLYES ÉS BIZTONSÁGOS: Tartsd a beszélgetéseidet titokban. A végponttól-végpontig titkosítás biztosítja, hogy a személyes beszélgetések személyesek maradnak.
+\n
+\n• NYÍLT ÉS NEM ZÁRT: Nyílt forrású és a Matrix-hoz készült. Az adataid maradjanak a birtokodban a saját szerver üzemeltetésével vagy válassz olyan szervert amiben megbízol.
+\n
+\n• MINDENHOL AMERRE JÁRSZ: Maradj kapcsolatban a többiekkel mindenhol az eszközeid közötti teljesen szinkronizált üzenetváltásokkal. Akár a https://riot.im -en.</string>
 
-A szolgáltatás csoportos csevegőszobák köré épül. Riot.im-mel üzeneteket, képeket, videókat és fájlokat oszthatsz meg - összekapcsolódhatsz az eszközeiddel és a csatlakozhatsz különböző közösségekhez egy tető alatt. Egy fiók és hely minden csoportod számára: nem kell felhasználót váltanod, dolgozz és csevegj bárkivel - legyen az akár más szervezetnél - nyilvános vagy privát szobákban: professzionális projektekről vagy iskolai kirándulásokról. Riot.im lesz a közepe  a beszélgetéseidnek!
+    <string name="video_call_in_progress">Videóhívás folyamatban…</string>
 
-Most végponttól végpontig titkosítással!
+    <string name="store_whats_new">"Folyamatosan változtatjuk és javítjuk a Riot.im-et.
+A változások teljes listája itt található: %1$s.
+Nehogy lemaradj bármiről, ezért továbbra is engedélyezd a frissítéseket."</string>
+    <string name="title_activity_keys_backup_setup">Kulcs Mentés</string>
+    <string name="title_activity_keys_backup_restore">Kulcs mentés felhasználása</string>
+    <string name="keys_backup_is_not_finished_please_wait">A kulcsok biztonsági mentése még tart, kérlek várj…</string>
 
-Lehetőségek:
+    <string name="skip">Kihagy</string>
+    <string name="done">Kész</string>
 
-• Azonnal megoszthatsz üzenetet, képet, videót vagy bármilyen fájlt a csoporton belül akármilyen méretben
-• Hang és videóhívás privát szobákban vagy konferenciahívás WebRTC-vel
-• Végponttól végpontig való titkosítás Olm (https://matrix.org/git/olm) felhasználásával
-• Láthatod, hogy ki olvasta az üzenetedet olvasás visszaigazolással
-• A Matrix rendszerében bárkivel tarthatod a kapcsolatot - nem csak a Riot.im-et használó felhasználókkal!
-• Keress és hívj meg bárkit e-mail cím megadásával
-• Részt vehetsz vendég felhasználóval látogatható nyílt szobákban
-• Nagyon jól skálázható - több száz szobát és több ezer felhasználót támogat
-• Teljesen egységes üzenet napló minden eszközön és böngészőben
-• Finoman állítható egységes értesítési beállítások minden eszközön
-• Korlátlanul kereshető csevegés naplók
-• Közvetlen hivatkozások üzenetekhez
-• Teljes szöveges keresés az üzenetekben
-• Jobbról balra irányban írt nyelvek, mint az Arab, támogatása
+    <string name="settings_notification_advanced">Haladó Értesítés beállítások</string>
+    <string name="settings_notification_advanced_summary">Értesítés fontosságának beállítása eseménynél. Hang, led, vibráció beállítása</string>
+    <string name="settings_notification_by_event">Értesítés fontosságának beállítása eseménynél</string>
 
-Fejlesztőknek:
-• Riot.im egy Matrix kliens - a Matrix.org nyílt szabványára és környezet köré épült, együttműködést biztosít minden Matrix kompatibilis alkalmazással, szerverrel és más összekötésekkel
-• Teljesen nyílt forráskódú a megengedő Apache licence alatt - a kódot letöltheted innen: https://github.com/vector-im/vector-android . A „Pull request”-eket szívesen vesszük!
-• Egyszerűen bővíthető a nyílt Matrix Client-Server API (https://matrix.org/docs/spec) alapján.
-• Futtass saját szervert! Használhatod az alapértelmezett matrix.org szervert vagy üzemeltethetsz saját Matrix szervert (pl. https://matrix.org/docs/projects/server/synapse.html)
+    <string name="settings_troubleshoot_test_bing_settings_title">Egyedi beállítások.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Figyelj rá, hogy néhány üzenet típus csendesre van állítva (csak hang nélkül fog értesíteni).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Az egyedi beállításaidban néhány értesítés ki van kapcsolva.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Az egyedi szabályokat nem sikerült betölteni, kérlek próbáld újra.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Beállítások ellenőrzése</string>
 
-Fedezd fel az igazán hatásos és nyílt együttműködés lehetőségét a Riot.im-mel!"</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+Ez a hiba a Rioton kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+Ez a hiba a Rioton kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+Ez a hiba a Rioton kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Fiók hozzáadása</string>
+
+    <string name="settings_noisy_notifications_preferences">Hangos értesítések beállítása</string>
+    <string name="settings_call_notifications_preferences">Hívás értesítések beállítása</string>
+    <string name="settings_silent_notifications_preferences">Csendes értesítések beállítása</string>
+    <string name="settings_system_preferences_summary">Led szín, vibráció és hang kiválasztása…</string>
+
+
+    <string name="settings_cryptography_manage_keys">Titkosítási kulcsok kezelése</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Kulcs mentések kezelése</string>
+
+    <string name="notification_silent">Csendes</string>
+    <string name="passphrase_empty_error_message">Kérlek adj meg egy jelmondatot</string>
+    <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Riot Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
+    <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
+
+    <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
+
+Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
+    <string name="keys_backup_setup_step2_button_title">Jelmondat beállítása</string>
+    <string name="keys_backup_setup_step3_button_title">Kész</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Visszaállítási Kulcs mentése</string>
+    <string name="keys_backup_setup_step3_save_button_title">Mentés fájlba</string>
+    <string name="recovery_key_export_saved_as_warning">A Visszaállítási Kulcs ide lett mentve: \'%s\'.
+
+Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Kérlek készíts egy másolatot</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Visszaállítási Kulcs megosztása…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Visszaállítási Kulcs készítése jelmondatból, ez néhány másodpercet is igénybe vehet.</string>
+    <string name="recovery_key">Visszaállítási Kulcs</string>
+    <string name="unexpected_error">Váratlan hiba</string>
+    <string name="keys_backup_setup_backup_started_title">Mentés elkezdődött</string>
+    <string name="keys_backup_setup_backup_started_message">A titkosítási kulcsait biztonsági mentése a Matrix szerveredre a háttérben folyamatban van. Az első mentés perceket is igénybe vehet.</string>
+
+
+    <string name="keys_backup_setup_skip_title">Biztos?</string>
+    <string name="keys_backup_setup_skip_msg">Elvesztheted a titkosított üzeneteidet, ha kijelentkezel vagy elveszted az eszközödet.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Mentés verzió lekérdezése…</string>
+    <string name="keys_backup_restore_with_passphrase">Használd a visszaállítási jelmondatot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
+    <string name="keys_backup_restore_use_recovery_key">visszaállítási kulcs használata</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Nem tudod a visszaállítási jelmondatot, használhatod a %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Használd a Visszaállítási Kulcsot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
+    <string name="keys_backup_restore_key_enter_hint">Visszaállítási Kulcs megadása</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Üzenet Visszaállítás</string>
+
+    <string name="keys_backup_restore_with_key_helper">Elvesztetted a visszaállítási kulcsod? Készíts újat a beállításokban.</string>
+    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
+    <string name="network_error_please_check_and_retry">Hálózati hiba: kérlek ellenőrizd a kapcsolatot és próbáld újra.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Mentés visszaállítás:</string>
+    <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
+    <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
+
+    <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
+    <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Visszaállított mentés %d kulccsal.</item>
+        <item quantity="other" />
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
+        <item quantity="other" />
+    </plurals>
+
+    <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Visszaállítás mentésből</string>
+    <string name="keys_backup_settings_delete_backup_button">Mentés törlése</string>
+
+    <string name="keys_backup_settings_status_ok">A Kulcs mentés megfelelően be van állítva ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_ko">A Kulcs mentés nincs engedélyezve ezen az eszközön.</string>
+    <string name="keys_backup_settings_status_not_setup">A kulcsaid erről az eszközről nem lesznek elmentve.</string>
+
+
+    <string name="keys_backup_settings_signature_from_unknown_device">A mentésnek ismeretlen eszköztől származó aláírása van: %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">A mentésnek érvényes aláírása van ettől az eszköztől.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Mentésnek érvényes aláírása van ellenőrzött eszköztől: %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Mentésnek érvényes aláírása van ellenőrizetlen eszköztől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Mentésnek érvénytelen aláírása van ellenőrzött eszköztől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen eszköztől: %s</string>
+    <string name="keys_backup_get_trust_error">Megbízhatósági információ nem nyerhető ki a mentésből (%s).</string>
+
+    <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
+    <string name="keys_backup_settings_delete_backup_error">A mentés törlése sikertelen (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Mentés törlése</string>
+    <string name="keys_backup_settings_delete_confirm_message">Törlöd a titkosítási kulcsaidat a szerverről? Utána a titkosított üzenetek visszaállítására már nem fogod tudni a visszaállítási kulcsot használni.</string>
+
+    <string name="sign_out_bottom_sheet_warning_no_backup">Ha most kijelentkezel elveszted minden titkosított üzenetedet</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">A kulcsok mentése folyamatban van. Ha most kijelentkezel elveszted minden titkosított üzenetedet.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">A Biztonsági Kulcs Mentést minden eszközön be kell kapcsolni, hogy ne veszítsd el a hozzáférésedet a titkosított üzeneteidhez.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nincs szükségem a titkosított üzeneteimre</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Kulcsok mentése…</string>
+    <string name="keys_backup_activate">Kulcs Mentés felhasználása</string>
+    <string name="are_you_sure">Biztos vagy benne?</string>
+    <string name="backup">Mentsd el</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem mented el a titkosítási kulcsaidat kilépés előtt.</string>
+
+    <string name="stay">Maradok</string>
+    <string name="abort">Névjegy</string>
+
+    <string name="action_sign_out_confirmation_simple">Biztos, hogy ki akarsz lépni?</string>
+    <string name="settings_data_save_mode_summary">Az adatkímélő mód kiszűri az állapotjelentéseket és a gépelés jelentést az adatfolyamból.</string>
+
+    <string name="encryption_message_recovery">Titkosított Üzenetek Visszaállítása</string>
+    <string name="error_empty_field_enter_user_name">Kérlek add meg a felhasználói nevedet.</string>
+    <string name="keys_backup_setup">Kulcs Mentés használatának megkezdése</string>
+    <string name="keys_backup_setup_step1_advanced">(Haladó)</string>
+    <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
+
+    <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
+    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a Matrix szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
+
+A maximális biztonság eléréséhez, használja más jelmondatot mint amit a felhasználói fiókhoz használtál."</string>
+    <string name="keys_backup_setup_creating_backup">Mentés készítése</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Vagy védd a mentésedet egy Visszaállítási Kulccsal amit tárolj biztonságos helyen.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Haladó) Beállítás Visszaállítási Kulccsal</string>
+    <string name="keys_backup_setup_step3_success_title">Sikerült!</string>
+    <string name="keys_backup_setup_step3_text_line1">A kulcsaid mentésre kerülnek.</string>
+    <string name="keys_backup_setup_step3_text_line2">A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.
+A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Készítettem másolatot</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Megosztás</string>
+    <string name="keys_backup_banner_setup_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_setup_line2">Kulcs Mentés használatának megkezdése</string>
+
+    <string name="keys_backup_banner_recover_line1">Soha ne veszíts el titkosított üzenetet</string>
+    <string name="keys_backup_banner_recover_line2">Kulcs Mentés használata</string>
+
+    <string name="keys_backup_banner_update_line1">Új titkosítási kulcsok</string>
+    <string name="keys_backup_banner_update_line2">Kulcs Mentések kezelése</string>
+
+    <string name="keys_backup_banner_in_progress">Kulcsok mentése…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">%d kulcs mentése…</item>
+        <item quantity="other" />
+    </plurals>
+
+    <string name="keys_backup_info_title_version">Verzió</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmus</string>
+    <string name="keys_backup_info_title_signature">Aláírás</string>
+
+    <string name="keys_backup_settings_untrusted_backup">A Kulcs Mentés eszközön való felhasználáshoz, állítsd vissza jelmondattal vagy Visszaállítási Kulcssal.</string>
+    <string name="new_recovery_method_popup_title">Új Kulcs Mentés</string>
+    <string name="new_recovery_method_popup_description">Új biztonságos üzenet kulcs mentés észlelve.
+
+Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
+    <string name="new_recovery_method_popup_was_me">Én voltam</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Visszaállítási kulcs kiszámítása…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Kulcsok letöltése…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Kulcsok betöltése…</string>
+    <string name="ignore">Figyelmen kívül hagy</string>
+
+    <string name="auth_login_sso">Belépés egyszeri bejelelentkezéssel</string>
+    <string name="login_error_unknown_host">Ez az URL elérhetetlen, kérlek ellenőrizd</string>
+    <string name="login_error_ssl_handshake">Az eszközöd elavult TLS biztonsági protokollt használ ami támadható, a biztonságod érdekében nem csatlakozhatsz</string>
+    <string name="settings_send_message_with_enter">Üzenet küldése Enter billentyűvel</string>
+    <string name="settings_send_message_with_enter_summary">Az Enter billentyű a virtuális billentyűzeten elküldi az üzenetet és nem új sort szúr be</string>
+
+    <string name="settings_change_password_submit">Jelszó megváltoztatása</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">A jelszó nem érvényes</string>
+    <string name="passwords_do_not_match">A jelszavak nem egyeznek meg</string>
+
+    <string name="autodiscover_invalid_response">A Matrix szerver felderítésére érvénytelen válasz érkezett</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Szerver beállítások automatikus kiegészítése</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot egyedi szerver beállítást észlelt a felhasználói azonosítód domain-jéhez: \"%s\":
+\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Beállítás használata</string>
+
+    <string name="notification_sync_init">Szolgáltatás indítása</string>
+    <string name="settings_media">Média</string>
+    <string name="settings_default_compression">Alapértelmezett tömörítés</string>
+    <string name="compression_opt_list_choose">Válassz</string>
+    <string name="settings_default_media_source">Alapértelmezett média forrása</string>
+    <string name="media_source_choose">Válassz</string>
+    <string name="settings_play_shutter_sound">Exponálás hang lejátszása</string>
+
+    <string name="action_mark_room_read">Olvasottnak jelöl</string>
+    <string name="settings_notification_privacy_no_background_sync">Az alkalmazásnak <b>nem</b> kell a háttérben folyamatosan a Matrix szerverrel tartani a kapcsolatot, ez csökkentheti az akkumulátor használatot</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 üzenet</item>
+        <item quantity="other">%1$s: %2$d üzenet</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d értesítés</item>
+        <item quantity="other">%d értesítés</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Új esemény</string>
+    <string name="notification_unknown_room_name">Szoba</string>
+    <string name="notification_new_messages">Új üzenetek</string>
+    <string name="notification_new_invitation">Új meghívók</string>
+    <string name="notification_sender_me">Én</string>
+    <string name="notification_inline_reply_failed">** A küldés nem sikerült - kérlek nyisd meg a szobát</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 5.0-nál régebbi) nem támogatottak</string>
 
 </resources>

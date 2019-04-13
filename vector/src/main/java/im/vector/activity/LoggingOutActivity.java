@@ -18,12 +18,21 @@
 
 package im.vector.activity;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+import butterknife.BindView;
 import im.vector.R;
 
 /**
  * LoggingOutActivity displays an animation while a session log out is in progress.
  */
 public class LoggingOutActivity extends MXCActionBarActivity {
+
+    @BindView(R.id.animated_logo_image_view)
+    ImageView animatedLogo;
+
     @Override
     public int getLayoutRes() {
         return R.layout.vector_activity_splash;
@@ -31,6 +40,9 @@ public class LoggingOutActivity extends MXCActionBarActivity {
 
     @Override
     public void initUiAndData() {
-        // Nothing to do
+        Drawable background = animatedLogo.getBackground();
+        if (background instanceof AnimationDrawable) {
+            ((AnimationDrawable) background).start();
+        }
     }
 }

@@ -13,7 +13,8 @@
     <string name="status_theme">Status.im Theme</string>
 
     <!-- permanent notification subtitle -->
-    <string name="notification_sync_in_progress">Synchronising</string>
+    <string name="notification_sync_init">Initializing service</string>
+    <string name="notification_sync_in_progress">Synchronising…</string>
     <string name="notification_listening_for_events">Listening for events</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
@@ -27,6 +28,21 @@
     <string name="title_activity_bug_report">Bug report</string>
     <string name="title_activity_group_details">Community details</string>
     <string name="title_activity_choose_sticker">Send a sticker</string>
+    <string name="title_activity_keys_backup_setup">Key Backup</string>
+    <string name="title_activity_keys_backup_restore">Use Key Backup</string>
+
+    <!-- Signing out screen -->
+
+    <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your devices to avoid losing access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
+    <string name="keys_backup_activate">Use Key Backup</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="backup">Back up</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
 
     <string name="dialog_title_third_party_licences">Third party licences</string>
 
@@ -38,6 +54,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
     <string name="send">Send</string>
     <string name="copy">Copy</string>
     <string name="resend">Resend</string>
@@ -56,9 +73,10 @@
     <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call">Ongoing conference call. Join as voice or video.</string>
-    <string name="ongoing_conference_call_voice">voice</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
+    <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
+    <string name="ongoing_conference_call_voice">Voice</string>
+    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
@@ -72,18 +90,23 @@
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
     <string name="accept">Accept</string>
+    <string name="skip">Skip</string>
+    <string name="done">Done</string>
+    <string name="abort">Abort</string>
+    <string name="ignore">Ignore</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
     <string name="actions">Actions</string>
     <string name="action_sign_out">Sign out</string>
-    <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
+    <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
     <string name="action_historical">Historical</string>
     <string name="action_quick_reply">Quick reply</string>
+    <string name="action_mark_room_read">Mark as read</string>
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
@@ -102,11 +125,11 @@
     <string name="bottom_action_groups">Communities</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Search for rooms</string>
-    <string name="home_filter_placeholder_favorites">Search for favourites</string>
-    <string name="home_filter_placeholder_people">Search for people</string>
-    <string name="home_filter_placeholder_rooms">Search for rooms</string>
-    <string name="home_filter_placeholder_groups">Search for communities</string>
+    <string name="home_filter_placeholder_home">Filter room names</string>
+    <string name="home_filter_placeholder_favorites">Filter favourites</string>
+    <string name="home_filter_placeholder_people">Filter people</string>
+    <string name="home_filter_placeholder_rooms">Filter room names</string>
+    <string name="home_filter_placeholder_groups">Filter community names</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -119,7 +142,7 @@
     <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn\'t allow Riot to access your local contacts</string>
+    <string name="no_contact_access_placeholder">You didn’t allow Riot to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
 
     <!-- Rooms fragment -->
@@ -158,9 +181,9 @@
 
     <string name="join_room">Join Room</string>
     <string name="username">Username</string>
-    <string name="create_account">Register</string>
+    <string name="create_account">Create Account</string>
     <string name="login">Log in</string>
-    <string name="logout">Log out</string>
+    <string name="logout">Sign out</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="search">Search</string>
@@ -182,7 +205,7 @@
     <string name="option_take_video">Take video</string>
 
     <!-- No sticker application dialog -->
-    <string name="no_sticker_application_dialog_content">You don\'t currently have any stickerpacks enabled.\n\nAdd some now?</string>
+    <string name="no_sticker_application_dialog_content">You don’t currently have any stickerpacks enabled.\n\nAdd some now?</string>
 
     <!-- External application -->
     <string name="go_on_with">go on with…</string>
@@ -190,7 +213,8 @@
 
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
-    <string name="auth_register">Register</string>
+    <string name="auth_login_sso">Sign in with single sign-on</string>
+    <string name="auth_register">Create Account</string>
     <string name="auth_submit">Submit</string>
     <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
@@ -213,14 +237,14 @@
     <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
-    <string name="auth_invalid_email">"This doesn't look like a valid email address"</string>
-    <string name="auth_invalid_phone">"This doesn't look like a valid phone number"</string>
+    <string name="auth_invalid_email">"This doesn’t look like a valid email address"</string>
+    <string name="auth_invalid_phone">"This doesn’t look like a valid phone number"</string>
     <string name="auth_email_already_defined">This email address is already defined.</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_missing_phone">Missing phone number</string>
     <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
     <string name="auth_invalid_token">Invalid token</string>
-    <string name="auth_password_dont_match">Passwords don\'t match</string>
+    <string name="auth_password_dont_match">Passwords don’t match</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
@@ -233,7 +257,7 @@
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_missing_password">A new password must be entered.</string>
-    <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you\'ve followed the link it contains, click below.</string>
+    <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
     <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
@@ -245,7 +269,9 @@
     <string name="login_error_registration_network_error">Unable to register: Network error</string>
     <string name="login_error_unable_register">Unable to register</string>
     <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
-    <string name="login_error_invalid_home_server">Enter valid URL</string>
+    <string name="login_error_invalid_home_server">Please enter a valid URL</string>
+    <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
+    <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
     <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
@@ -363,7 +389,7 @@
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
-    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
+    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your account.</string>
     <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">a room</string>
     <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
@@ -380,8 +406,6 @@
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
-    <string name="room_e2e_alert_title">Warning!</string>
-    <string name="room_e2e_alert_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
@@ -453,7 +477,7 @@
     -->
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
     <!-- The building block of the first part of the string of names ("Alice, "/"Bob, ") -->
-    <string name="room_participants_invite_join_names">%1$s, </string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
     <!-- The second part of the string of names ("Charlie and David") -->
     <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
     <!-- First variable is the first part, and second is the second part -->
@@ -608,7 +632,7 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
-    <string name="settings_troubleshoot_test_system_settings_quickfix">Open Settings</string>
+    <string name="open_settings">Open Settings</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>
@@ -628,7 +652,7 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot uses Google Play Services to deliver push messages but it doesn\'t seem to be configured correctly:\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
@@ -667,14 +691,11 @@
     <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
 
-    <string name="settings_notification_privacy_warning">Riot.im runs in the background to keep your notification message content private. You can change this option to reduce battery usage.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="settings_notification_privacy_power_saving">Power-saving Options</string>
-    <string name="settings_notification_privacy_low_detail">Low detail notifications</string>
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
-    <string name="settings_notification_privacy_no_permission">The apps does <b>not</b> need permission to run in the background</string>
-    <string name="settings_notification_privacy_fcm">• Notifications are sent via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <string name="settings_notification_privacy_fcm">• Notifications are sent via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifications contain <b>meta and message data</b></string>
@@ -694,7 +715,7 @@
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
-    <string name="settings_invited_to_room">When I\'m invited to a room</string>
+    <string name="settings_invited_to_room">When I’m invited to a room</string>
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
@@ -722,6 +743,7 @@
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_cryptography">Cryptography</string>
+    <string name="settings_cryptography_manage_keys">Cryptography Keys Management</string>
     <string name="settings_notifications_targets">Notification Targets</string>
     <string name="settings_contact">Local contacts</string>
     <string name="settings_contacts_app_permission">Contacts permission</string>
@@ -746,6 +768,8 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
+    <string name="settings_send_message_with_enter">Send message with enter</string>
+    <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
@@ -768,6 +792,7 @@
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
+    <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
@@ -798,12 +823,15 @@
 
     <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
-    <string name="settings_old_password">Old password</string>
+    <string name="settings_old_password">Current password</string>
     <string name="settings_new_password">New password</string>
-    <string name="settings_confirm_password">Confirm password</string>
+    <string name="settings_confirm_password">Confirm new password</string>
+    <string name="settings_change_password_submit">Update Password</string>
     <string name="settings_fail_to_update_password">Failed to update password</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
 
     <string name="settings_delete_notification_targets_confirmation">Are you sure you want to remove this notification target?</string>
 
@@ -816,12 +844,20 @@
     <string name="settings_phone_number_label">Phone number</string>
     <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
     <string name="settings_phone_number_verification">Phone verification</string>
-    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
+    <string name="settings_phone_number_verification_instruction">"We’ve sent an SMS with an activation code. Please enter this code below."</string>
     <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
     <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
     <string name="settings_phone_number_code">Code</string>
     <string name="account_phone_number_error">An error occurred while verifying your phone number.</string>
     <string name="account_additional_info">Additional info: %s</string>
+
+    <!-- Media settings -->
+    <string name="settings_media">Media</string>
+    <string name="settings_default_compression">Default compression</string>
+    <string name="compression_opt_list_choose">Choose</string>
+    <string name="settings_default_media_source">Default media source</string>
+    <string name="media_source_choose">Choose</string>
+    <string name="settings_play_shutter_sound">Play shutter sound</string>
 
     <string name="settings_flair">Flair</string>
     <string name="settings_without_flair">You are not currently a member of any communities.</string>
@@ -864,15 +900,15 @@
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room’s link, apart from guests</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room’s link, including guests</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
-    <string name="room_settings_room_internal_id">This room\'s internal ID</string>
+    <string name="room_settings_room_internal_id">This room’s internal ID</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
@@ -905,15 +941,13 @@
     <string name="room_settings_addresses_e2e_enabled">Encryption is enabled in this room.</string>
     <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
-    <string name="room_settings_addresses_e2e_prompt_title">Warning!</string>
-    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is in beta and may not be reliable.\n\nYou should not yet trust it to secure data.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+    <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room’s timeline but was unable to find it.</string>
 
     <!-- encryption dialog -->
     <string name="encryption_information_title">End-to-end encryption information</string>
@@ -939,16 +973,15 @@
     <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_notice">Please create a passphrase to encrypt the exported keys. You will need to enter the same passphrase to be able to import the keys.</string>
-    <string name="encryption_export_create_passphrase">Create passphrase</string>
-    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_passphrase_dont_match">Passphrases must match</string>
     <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+
+    <string name="encryption_message_recovery">Encrypted Messages Recovery</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Manage Key Backup</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_import_enter_passphrase">Enter passphrase</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
@@ -967,7 +1000,7 @@
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn\'t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -1000,7 +1033,23 @@
         <item quantity="one">1 room</item>
         <item quantity="other">%d rooms</item>
     </plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 message</item>
+        <item quantity="other">%1$s: %2$d messages</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
+
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <string name="notification_unknown_new_event">New Event</string>
+    <string name="notification_unknown_room_name">Room</string>
+    <string name="notification_new_messages">New Messages</string>
+    <string name="notification_new_invitation">New Invitation</string>
+    <string name="notification_sender_me">Me</string>
+    <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
@@ -1026,6 +1075,8 @@
         <item quantity="one">1 active widget</item>
         <item quantity="other">%d active widgets</item>
     </plurals>
+
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
@@ -1137,6 +1188,7 @@
     <string name="deactivate_account_prompt_password">To continue, please enter your password:</string>
     <string name="deactivate_account_submit">Deactivate Account</string>
 
+    <string name="error_empty_field_enter_user_name">Please enter a username.</string>
     <string name="error_empty_field_your_password">Please enter your password.</string>
     <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active</string>
     <string name="room_tombstone_continuation_link">The conversation continues here</string>
@@ -1185,40 +1237,167 @@
     <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
 
     <!-- String for Play Store -->
-    <string name="store_title">Riot.im - open team collaboration</string>
+    <string name="store_title">Riot.im - Communicate, your way</string>
     <string name="store_whats_new">"We’re always making changes and improvements to Riot.im.
 The complete changelog can be found here: %1$s.
 To make sure you don’t miss a thing, just keep your updates turned on."</string>
-    <string name="store_short_description">Welcome to Riot.im: a new world of open communication!</string>
-    <string name="store_full_description">"Riot.im is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.
+    <string name="store_short_description">A universal secure chat app entirely under your control.</string>
+    <string name="store_full_description">"A chat app, under your control and entirely flexible. Riot lets you communicate the way you want. Made for [matrix] - the standard for open, decentralised communication.
 
-Built around group chatrooms, Riot.im lets you share messages, images, videos and files - interact with your tools and access all your different communities under one roof. One single identity and place for all your teams: no need to switch accounts, work and chat with people from different organisations in public or private rooms: from professional projects to school trips, Riot.im will become the center of all your discussions!
+Get a free matrix.org account, get your own server at https://modular.im, or use another Matrix server.
 
-Now with end-to-end encryption!
+Why choose Riot.im?
 
-Features include:
+• COMPLETE COMMUNICATION: Build rooms around your teams, your friends, your community - however you like! Chat, share files, add widgets and make voice and video calls - all free of charge.
 
-• Instantly share messages, images, videos and files of any kind within groups of any size
-• Voice and video 1-1 and conference calling via WebRTC
-• End-to-end encryption using Olm (https://matrix.org/git/olm)
-• See who's reading your messages with read receipts
-• Communicate with users anywhere in the Matrix.org ecosystem - not just Riot.im users!
-• Discover and invite users by email address
-• Participate in guest-accessible public rooms
-• Highly scalable - supports hundreds of rooms and thousands of users
-• Fully synchronised message history across multiple devices and browsers
-• Finely configurable notification settings, synchronised over all devices
-• Infinite searchable chat history
-• Permalinks to messages
-• Full message search
-• Support for RTL languages such as Arabic
+• POWERFUL INTEGRATIONS: Use Riot.im with the tools you know and love. With Riot.im you can even chat with users and groups on other chat apps.
 
-For developers:
-• Riot.im is a Matrix client - built on the Matrix.org open standard and ecosystem, providing interoperability with all other Matrix compatible apps, servers and integrations
-• Entirely open sourced under the permissive Apache License - get the code from https://github.com/vector-im/vector-android. Pull requests welcome!
-• Trivially extensible via the open Matrix Client-Server API (https://matrix.org/docs/spec)
-• Run your own server! You can use the default matrix.org server or run your own Matrix home server (e.g. https://matrix.org/docs/projects/server/synapse.html)
+• PRIVATE AND SECURE: Keep your conversations secret. State of the art end-to-end encryption ensures that private communication stays private.
 
-Discover truly efficient and open collaboration with Riot.im!"</string>
+• OPEN, NOT CLOSED: Open source, and built on Matrix. Own your own data by hosting your own server, or selecting one you trust.
+
+• EVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and online at https://riot.im."</string>
+
+    <!-- Passphrase -->
+    <string name="passphrase_create_passphrase">Create passphrase</string>
+    <string name="passphrase_confirm_passphrase">Confirm passphrase</string>
+    <string name="passphrase_enter_passphrase">Enter passphrase</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrase doesn’t match</string>
+    <string name="passphrase_empty_error_message">Please enter a passphrase</string>
+    <string name="passphrase_passphrase_too_weak">Passphrase is too weak</string>
+
+    <!-- Key Backup -->
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want Riot to generate a recovery key.</string>
+    <string name="keys_backup_no_session_error">No Matrix session available</string>
+
+    <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
+    <string name="keys_backup_setup_step1_description">Messages in encrypted rooms are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.\n\nSecurely back up your keys to avoid losing them.</string>
+    <string name="keys_backup_setup">Start using Key Backup</string>
+    <string name="keys_backup_setup_step1_advanced">(Advanced)</string>
+    <string name="keys_backup_setup_step1_manual_export">Manually export keys</string>
+
+    <string name="keys_backup_setup_step2_text_title">Secure your backup with a Passphrase.</string>
+    <string name="keys_backup_setup_step2_text_description">We’ll store an encrypted copy of your keys on your homeserver. Protect your backup with a passphrase to keep it secure.\n\nFor maximum security, this should be different from your account password.</string>
+    <string name="keys_backup_setup_step2_button_title">Set Passphrase</string>
+    <string name="keys_backup_setup_creating_backup">Creating Backup</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Or, secure your backup with a Recovery Key, saving it somewhere safe.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Advanced) Set up with Recovery Key</string>
+    <string name="keys_backup_setup_step3_success_title">Success !</string>
+    <string name="keys_backup_setup_step3_text_line1">Your keys are being backed up.</string>
+    <string name="keys_backup_setup_step3_text_line2">Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.\nKeep your recovery key somewhere very secure, like a password manager (or a safe)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Keep your recovery key somewhere very secure, like a password manager (or a safe)</string>
+    <string name="keys_backup_setup_step3_button_title">Done</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">I’ve made a copy</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Save Recovery Key</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Share</string>
+    <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
+    <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
+    <string name="recovery_key">Recovery Key</string>
+    <string name="unexpected_error">Unexpected error</string>
+    <string name="keys_backup_setup_backup_started_title">Backup Started</string>
+    <string name="keys_backup_setup_backup_started_message">Your encryption keys are now being backed up in the background to your homeserver. The initial backup could take several minutes.</string>
+
+
+    <string name="keys_backup_setup_skip_title">Are you sure?</string>
+    <string name="keys_backup_setup_skip_msg">You may lose access to your messages if you log out or lose this device.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Fetching backup version…</string>
+    <string name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your encrypted messages history</string>
+    <string name="keys_backup_restore_use_recovery_key">use your recovery key</string>
+    <!-- %s will be replaced by the keys_backup_restore_use_recovery_key key  -->
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Don’t know your recovery passphrase, you can %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Use your Recovery Key to unlock your encrypted messages history</string>
+    <string name="keys_backup_restore_key_enter_hint">Enter Recovery Key</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Message Recovery</string>
+
+    <!-- %s will be replaced by the keys_backup_restore_setup_recovery_key key  -->
+    <string name="keys_backup_restore_with_key_helper">Lost your recovery key? You can set up a new one in settings.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
+    <string name="network_error_please_check_and_retry">Network error: please check your connection and retry.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Restoring backup:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Downloading keys…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importing keys…</string>
+    <string name="keys_backup_unlock_button">Unlock History</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key.</string>
+
+    <!-- %s will be replaced by an emoji -->
+    <string name="keys_backup_restore_success_title">Backup Restored %s !</string>
+    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this device</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Restored a backup with %d key.</item>
+        <item quantity="other">Restored a backup with %d keys.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d new key has been added to this device.</item>
+        <item quantity="other">%d new keys have been added to this device.</item>
+    </plurals>
+
+    <string name="keys_backup_get_version_error">Failed to get latest restore keys version (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Session crypto is not activated</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Restore from Backup</string>
+    <string name="keys_backup_settings_delete_backup_button">Delete Backup</string>
+
+    <string name="keys_backup_settings_status_ok">Key Backup has been correctly set up for this device.</string>
+    <string name="keys_backup_settings_status_ko">Key Backup is not active on this device.</string>
+    <string name="keys_backup_settings_status_not_setup">Your keys are not being backed up from this device.</string>
+
+    <string name="keys_backup_settings_signature_from_unknown_device">Backup has a signature from unknown device with ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Backup has a valid signature from this device.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Backup has a valid signature from verified device %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Backup has a valid signature from unverified device %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Backup has a invalid signature from verified device %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Backup has a invalid signature from unverified device %s</string>
+    <string name="keys_backup_get_trust_error">Failed to get trust info for backup (%s).</string>
+
+    <!-- renamed key keys_backup_settings_verify_device_now -->
+    <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this device, restore with your passphrase or recovery key now.</string>
+    <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
+    <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
+    <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
+
+    <string name="new_recovery_method_popup_title">New Key Backup</string>
+    <string name="new_recovery_method_popup_description">A new secure message key backup has been detected.\n\nIf you didn’t set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.</string>
+    <string name="new_recovery_method_popup_was_me">It was me</string>
+    <!-- Keys backup banner -->
+    <string name="keys_backup_banner_setup_line1">Never lose encrypted messages</string>
+    <string name="keys_backup_banner_setup_line2">Start using Key Backup</string>
+
+    <string name="keys_backup_banner_recover_line1">Never lose encrypted messages</string>
+    <string name="keys_backup_banner_recover_line2">Use Key Backup</string>
+
+    <string name="keys_backup_banner_update_line1">New encrypted messages keys</string>
+    <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
+
+    <string name="keys_backup_banner_in_progress">Backing up keys…</string>
+
+    <!-- Keys backup info -->
+    <string name="keys_backup_info_keys_all_backup_up">All keys backed up</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Backing up %d key…</item>
+        <item quantity="other">Backing up %d keys…</item>
+    </plurals>
+
+    <string name="keys_backup_info_title_version">Version</string>
+    <string name="keys_backup_info_title_algorithm">Algorithm</string>
+    <string name="keys_backup_info_title_signature">Signature</string>
+
+    <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
+    <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
 </resources>

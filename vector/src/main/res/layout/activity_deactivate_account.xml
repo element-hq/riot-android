@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -61,31 +62,23 @@
 
                 <Button
                     android:id="@+id/deactivate_account_button_submit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    style="@style/VectorButtonStyle"
                     android:layout_below="@+id/deactivate_account_password"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="?attr/colorAccent"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/deactivate_account_submit"
-                    android:textColor="@android:color/white" />
+                    android:text="@string/deactivate_account_submit" />
 
                 <Button
                     android:id="@+id/deactivate_account_button_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    style="@style/VectorButtonStyle"
                     android:layout_alignTop="@+id/deactivate_account_button_submit"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_toStartOf="@+id/deactivate_account_button_submit"
                     android:layout_toLeftOf="@+id/deactivate_account_button_submit"
-                    android:background="?attr/colorAccent"
-                    android:text="@string/cancel"
-                    android:textColor="@android:color/white" />
+                    android:text="@string/cancel" />
 
             </RelativeLayout>
 

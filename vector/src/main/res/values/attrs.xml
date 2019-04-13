@@ -2,11 +2,16 @@
 <resources>
 
     <declare-styleable name="VectorStyles">
+
+        <attr name="vctr_bottom_nav_background_color" format="color" />
+
         <!-- waiting view background -->
         <attr name="vctr_waiting_background_color" format="color" />
 
         <!-- application bar text color -->
-        <attr name="vctr_primary_text_color" format="color" />
+        <attr name="vctr_toolbar_primary_text_color" format="color" />
+        <attr name="vctr_toolbar_secondary_text_color" format="color" />
+        <attr name="vctr_toolbar_link_text_color" format="color" />
 
         <!-- application bar text hint color -->
         <attr name="vctr_primary_hint_text_color" format="color" />
@@ -19,6 +24,7 @@
         <attr name="vctr_unsent_message_text_color" format="color" />
         <attr name="vctr_message_text_color" format="color" />
         <attr name="vctr_notice_text_color" format="color" />
+        <attr name="vctr_notice_secondary" format="color" />
         <attr name="vctr_encrypting_message_text_color" format="color" />
         <attr name="vctr_sending_message_text_color" format="color" />
         <attr name="vctr_highlighted_message_text_color" format="color" />
@@ -26,7 +32,6 @@
         <attr name="vctr_search_mode_room_name_text_color" format="color" />
         <attr name="vctr_unread_marker_line_color" format="color" />
         <attr name="vctr_markdown_block_background_color" format="color" />
-        <attr name="vctr_fenced_code_block_background_color" format="color" />
         <attr name="vctr_room_activity_divider_color" format="color" />
 
         <!-- tab bar colors -->

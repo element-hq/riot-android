@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.core.view.isVisible
 import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
@@ -41,6 +42,7 @@ import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.util.JsonUtils
 import org.matrix.androidsdk.util.Log
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Parent class for all Activities managing Widget Webview
@@ -66,6 +68,15 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     protected var mRoom: Room? = null
 
     /* ==========================================================================================
+     * Data
+     * ========================================================================================== */
+
+    private var mIsRefreshingToken = false
+    private var mTokenAlreadyRefreshed = false
+    private var mHistoryAlreadyCleared = false
+
+
+    /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
 
@@ -83,29 +94,41 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
 
-        WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
-            override fun onSuccess(scalarToken: String) {
-                hideWaitingView()
-                launchUrl(scalarToken)
-            }
+        getScalarTokenAndLoadUrl()
+    }
 
-            private fun onError(errorMessage: String) {
-                toast(errorMessage)
-                finish()
-            }
+    private fun getScalarTokenAndLoadUrl() {
+        if (canScalarTokenBeProvided()) {
+            showWaitingView()
 
-            override fun onNetworkError(e: Exception) {
-                onError(e.localizedMessage)
-            }
+            WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
+                override fun onSuccess(scalarToken: String) {
+                    mIsRefreshingToken = false
+                    hideWaitingView()
+                    launchUrl(scalarToken)
+                }
 
-            override fun onMatrixError(e: MatrixError) {
-                onError(e.localizedMessage)
-            }
+                private fun onError(errorMessage: String) {
+                    toast(errorMessage)
+                    finish()
+                }
 
-            override fun onUnexpectedError(e: Exception) {
-                onError(e.localizedMessage)
-            }
-        })
+                override fun onNetworkError(e: Exception) {
+                    onError(e.localizedMessage)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    onError(e.localizedMessage)
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    onError(e.localizedMessage)
+                }
+            })
+        } else {
+            // Scalar token cannot be provided
+            launchUrl(null)
+        }
     }
 
     /* ==========================================================================================
@@ -136,8 +159,13 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
-                            + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
+                        Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                                + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    } else {
+                        Log.d(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                                + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    }
                     return super.onConsoleMessage(consoleMessage)
                 }
             }
@@ -164,23 +192,55 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
             it.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    Log.d(LOG_TAG, "## onPageStarted - Url: $url")
+                    // Do not log url, it can contains token
+                    Log.d(LOG_TAG, "## onPageStarted")
 
                     showWaitingView()
                 }
 
+                override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                    // In case of 403, try to refresh the scalar token
+                    if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN
+                            && canScalarTokenBeProvided()
+                            && !mTokenAlreadyRefreshed) {
+                        mTokenAlreadyRefreshed = true
+                        mIsRefreshingToken = true
+                        WidgetsManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
+
+                        // Hide the webview because it's displaying an error message we try to fix by refreshing the token
+                        mWebView.isVisible = false
+
+                        getScalarTokenAndLoadUrl()
+                    }
+                }
+
                 override fun onPageFinished(view: WebView, url: String) {
                     // Check that the Activity is still alive
-                    if (isDestroyed) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed) {
+                        return
+                    }
+
+                    if (mIsRefreshingToken) {
+                        // We are waiting for a scalar token refresh
                         return
                     }
 
                     hideWaitingView()
 
+                    // Ensure the webview is visible, it may have been hidden during token refresh
+                    mWebView.isVisible = true
+
                     val js = AssetReader.readAssetFile(this@AbstractWidgetActivity, "postMessageAPI.js")
 
                     if (null != js) {
                         runOnUiThread { mWebView.loadUrl("javascript:$js") }
+                    }
+
+                    if (mTokenAlreadyRefreshed && !mHistoryAlreadyCleared) {
+                        // Also clear WebView history, for the scenario when the scalar token was invalid, to avoid loading again the url with the invalid token
+                        // It has to be done when page has finished to be loaded
+                        mHistoryAlreadyCleared = true
+                        mWebView.clearHistory()
                     }
                 }
             }
@@ -192,7 +252,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
-    private fun launchUrl(scalarToken: String) {
+    private fun launchUrl(scalarToken: String?) {
         val url = buildInterfaceUrl(scalarToken)
 
         if (null == url) {
@@ -203,7 +263,9 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         mWebView.loadUrl(url)
     }
 
-    abstract fun buildInterfaceUrl(scalarToken: String): String?
+    abstract fun canScalarTokenBeProvided(): Boolean
+
+    abstract fun buildInterfaceUrl(scalarToken: String?): String?
 
     /*
      * *********************************************************************************************
