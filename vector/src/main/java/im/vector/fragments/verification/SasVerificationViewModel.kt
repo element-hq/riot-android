@@ -23,7 +23,7 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.verification.*
 import org.matrix.androidsdk.rest.model.User
 
-class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListener {
+class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationManagerListener {
 
 
     companion object {

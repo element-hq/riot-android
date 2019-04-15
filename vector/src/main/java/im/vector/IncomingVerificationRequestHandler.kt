@@ -24,7 +24,7 @@ import org.matrix.androidsdk.crypto.verification.VerificationTransaction
 /**
  * Listens to the VerificationManager and a new notification when an incoming request is detected.
  */
-object IncomingVerificationRequestHandler : VerificationManager.ManagerListener {
+object IncomingVerificationRequestHandler : VerificationManager.VerificationManagerListener {
 
 
     override fun transactionCreated(tx: VerificationTransaction) {}

@@ -49,7 +49,7 @@ import kotlin.collections.HashMap
  * If several requests come from same user/device, a single alert is displayed (this alert will accept/reject all request
  * depending on user action)
  */
-class KeyRequestHandler(val session: MXSession) : VerificationManager.ManagerListener {
+class KeyRequestHandler(val session: MXSession) : VerificationManager.VerificationManagerListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
