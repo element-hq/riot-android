@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.BindView
@@ -73,7 +72,7 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                 OutgoingSASVerificationRequest.State.WAIT_FOR_KEY_AGREEMENT -> {
                     //display loading
                     TransitionManager.beginDelayedTransition(this.rootLayout)
-                    this.loadingText.isGone = false
+                    this.loadingText.isVisible = true
                     this.startButton.isInvisible = true
                     this.startButtonLoading.isVisible = true
                     this.startButtonLoading.animate()
@@ -88,9 +87,9 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                 }
                 else -> {
                     TransitionManager.beginDelayedTransition(this.rootLayout)
-                    this.loadingText.isGone = true
+                    this.loadingText.isVisible = false
                     this.startButton.isVisible = true
-                    this.startButtonLoading.isGone = true
+                    this.startButtonLoading.isVisible = false
                 }
             }
         })
@@ -125,7 +124,8 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
     @OnClick(R.id.sas_cancel_button)
     fun doCancel() {
-        viewModel.interrupt()
+        // Transaction may be started, or not
+        viewModel.cancelTransaction()
     }
 
 

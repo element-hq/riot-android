@@ -20,6 +20,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.OnClick
@@ -121,7 +122,7 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
             } else {
                 descriptionTextView.text = getString(R.string.sas_decimal_description)
                 decimalTextView.isVisible = true
-                emojiGrid.isVisible = false
+                emojiGrid.isInvisible = true
             }
         }
 

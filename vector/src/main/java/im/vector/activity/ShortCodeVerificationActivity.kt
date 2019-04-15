@@ -21,6 +21,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.view.MenuItem
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.fragments.verification.*
@@ -139,7 +140,6 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
             when (uxStateEvent?.getContentIfNotHandled()) {
                 SasVerificationViewModel.NAVIGATE_FINISH -> {
-                    Activity.RESULT_CANCELED
                     finish()
                 }
                 SasVerificationViewModel.NAVIGATE_FINISH_SUCCESS -> {
@@ -183,7 +183,6 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                                 .setCancelable(false)
                                 .setPositiveButton(R.string.ok) { _, _ ->
                                     //nop
-                                    setResult(Activity.RESULT_CANCELED)
                                     finish()
                                 }
                                 .show()
@@ -201,6 +200,16 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
             }
         })
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            //we want to cancel the transaction
+            viewModel.cancelTransaction()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onBackPressed() {
         //we want to cancel the transaction

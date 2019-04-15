@@ -33,6 +33,9 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
         fun newInstance() = SASVerificationIncomingFragment()
     }
 
+    @BindView(R.id.sas_incoming_request_user_display_name)
+    lateinit var otherUserDisplayNameTextView: TextView
+
     @BindView(R.id.sas_incoming_request_user_id)
     lateinit var otherUserIdTextView: TextView
 
@@ -53,6 +56,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
             ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
+        otherUserDisplayNameTextView.text = viewModel.otherUser?.displayname ?: viewModel.otherUserId
         otherUserIdTextView.text = viewModel.otherUserId
         otherDeviceTextView.text = viewModel.otherDevice
 
@@ -90,6 +94,6 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
     @OnClick(R.id.sas_request_cancel_button)
     fun didCancel() {
-        viewModel.interrupt()
+        viewModel.cancelTransaction()
     }
 }

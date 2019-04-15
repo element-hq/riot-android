@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_vertical_margin"
-            android:columnCount="4"
+            android:columnCount="@integer/number_of_emoji_per_line"
             android:padding="@dimen/layout_vertical_margin"
             android:useDefaultMargins="true"
             android:visibility="invisible"
@@ -101,6 +101,7 @@
             android:layout_margin="@dimen/layout_vertical_margin"
             android:minWidth="160dp"
             android:text="@string/_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
 

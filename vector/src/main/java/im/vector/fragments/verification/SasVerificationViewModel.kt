@@ -75,7 +75,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
         this.otherUser = session.dataHandler.store.getUser(otherUserId)
         if (transactionID == null || transaction == null) {
             //sanity, this transaction is not known anymore
-            interrupt()
+            _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
         }
     }
 
@@ -109,11 +109,6 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
 
     fun cancelTransaction() {
         transaction?.cancel(session, CancelCode.User)
-        _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
-    }
-
-    //TODO reason code
-    fun interrupt() {
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
     }
 

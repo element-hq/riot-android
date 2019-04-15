@@ -1416,18 +1416,18 @@ Why choose Riot.im?
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
     <string name="sas_verify_start_button_title">Begin Verifying</string>
     <string name="sas_incoming_request_title">Incoming Verification Request</string>
-    <string name="sas_incoming_request_description">Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages."</string>
-    <string name="sas_incoming_request_description_2">Verifying this user will mark their device has trusted, and also mark your device as trusted to them."</string>
+    <string name="sas_incoming_request_description">Verify this device to mark it as trusted. Trusting devices of partners gives you extra peace of mind when using end-to-end encrypted messages."</string>
+    <string name="sas_incoming_request_description_2">Verifying this device will mark it as trusted, and also mark your device as trusted to the partner."</string>
 
-    <string name="sas_emoji_description">Verify this user by confirming the following emoji appear on their screen"</string>
-    <string name="sas_decimal_description">Verify this user by confirming the following numbers appear on their screen"</string>
+    <string name="sas_emoji_description">Verify this device by confirming the following emoji appear on the screen of the partner"</string>
+    <string name="sas_decimal_description">Verify this device by confirming the following numbers appear on the screen of the partner"</string>
 
     <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
     <string name="sas_view_request_action">View request</string>
     <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
 
     <string name="sas_verified">Verified!</string>
-    <string name="sas_verified_successful">You\'ve successfully verified this user.</string>
+    <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
     <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
     <string name="sas_got_it">Got it</string>
 
