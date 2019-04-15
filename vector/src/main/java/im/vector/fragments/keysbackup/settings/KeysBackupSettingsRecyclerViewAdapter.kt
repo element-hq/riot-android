@@ -30,7 +30,6 @@ import im.vector.ui.list.GenericRecyclerViewItem
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrust
-import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
 class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

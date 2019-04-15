@@ -34,12 +34,12 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
 
     companion object {
 
-        const val EXTRA_TRANSACTION_ID = "EXTRA_TRANSACTION_ID"
-        const val EXTRA_OTHER_USER_ID = "EXTRA_OTHER_USER_ID"
-        const val EXTRA_OTHER_DEVICE_ID = "EXTRA_OTHER_DEVICE_ID"
-        const val EXTRA_IS_INCOMING = "EXTRA_IS_INCOMING"
+        private const val EXTRA_TRANSACTION_ID = "EXTRA_TRANSACTION_ID"
+        private const val EXTRA_OTHER_USER_ID = "EXTRA_OTHER_USER_ID"
+        private const val EXTRA_OTHER_DEVICE_ID = "EXTRA_OTHER_DEVICE_ID"
+        private const val EXTRA_IS_INCOMING = "EXTRA_IS_INCOMING"
 
-        fun intent(context: Context, matrixID: String, otherUserId: String, transactionID: String): Intent {
+        fun incomingIntent(context: Context, matrixID: String, otherUserId: String, transactionID: String): Intent {
             val intent = Intent(context, ShortCodeDeviceVerificationActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             intent.putExtra(EXTRA_TRANSACTION_ID, transactionID)
@@ -66,11 +66,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         viewModel = ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
-        var transactionID: String? = null
-
-        if (intent.hasExtra(EXTRA_TRANSACTION_ID)) {
-            transactionID = intent.getStringExtra(EXTRA_TRANSACTION_ID)
-        }
+        val transactionID: String? = intent.getStringExtra(EXTRA_TRANSACTION_ID)
 
         val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
         if (isIncoming) {
@@ -164,7 +160,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                     val isCancelledByMe = viewModel.transaction?.state == SASVerificationTransaction.SASVerificationTxState.Cancelled
                     val humanReadableReason = when (viewModel.transaction?.cancelledReason) {
                         CancelCode.User -> getString(R.string.sas_error_m_user)
-                        CancelCode.Timeout -> getString(R.string.sas_error_m_user)
+                        CancelCode.Timeout -> getString(R.string.sas_error_m_timeout)
                         CancelCode.UnknownTransaction -> getString(R.string.sas_error_m_unknown_transaction)
                         CancelCode.UnknownMethod -> getString(R.string.sas_error_m_unknown_method)
                         CancelCode.MismatchedCommitment -> getString(R.string.sas_error_m_mismatched_commitment)
@@ -172,6 +168,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                         CancelCode.UnexpectedMessage -> getString(R.string.sas_error_m_unexpected_message)
                         CancelCode.InvalidMessage -> getString(R.string.sas_error_m_invalid_message)
                         CancelCode.MismatchedKeys -> getString(R.string.sas_error_m_key_mismatch)
+                        // Use user error
                         CancelCode.UserMismatchError -> getString(R.string.sas_error_m_user_error)
                         null -> getString(R.string.sas_error_unknown)
                     }

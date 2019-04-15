@@ -171,7 +171,6 @@ object NotificationUtils {
                     enableLights(true)
                     lightColor = accentColor
                 })
-
     }
 
     /**

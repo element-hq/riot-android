@@ -35,6 +35,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -1155,11 +1156,12 @@ public class CommonActivityUtils {
      *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
-                                                           final String sender,
-                                                           final MXSession session,
-                                                           Activity activity, Fragment fragment, int reqCode) {
-
+    public static void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
+                                                       final String sender,
+                                                       final MXSession session,
+                                                       Activity activity,
+                                                       @Nullable Fragment fragment,
+                                                       int reqCode) {
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
@@ -1174,45 +1176,6 @@ public class CommonActivityUtils {
         } else {
             activity.startActivityForResult(intent, reqCode);
         }
-
-//        LayoutInflater inflater = activity.getLayoutInflater();
-//
-//        View layout = inflater.inflate(R.layout.dialog_device_verify, null);
-//
-//        TextView textView;
-//
-//        textView = layout.findViewById(R.id.encrypted_device_info_device_name);
-//        textView.setText(deviceInfo.displayName());
-//
-//        textView = layout.findViewById(R.id.encrypted_device_info_device_id);
-//        textView.setText(deviceInfo.deviceId);
-//
-//        textView = layout.findViewById(R.id.encrypted_device_info_device_key);
-//        textView.setText(MatrixSdkExtensionsKt.getFingerprintHumanReadable(deviceInfo));
-//
-//        new AlertDialog.Builder(activity)
-//                .setTitle(R.string.encryption_information_verify_device)
-//                .setView(layout)
-//                .setPositiveButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender,
-//                                new SimpleApiCallback<Void>() {
-//                                    // Note: onSuccess() is the only method which will be called
-//                                    @Override
-//                                    public void onSuccess(Void info) {
-//                                        yesNoListener.yes();
-//                                    }
-//                                });
-//                    }
-//                })
-//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        yesNoListener.no();
-//                    }
-//                })
-//                .show();
     }
 
     /**
@@ -1220,11 +1183,11 @@ public class CommonActivityUtils {
      *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialogLegacy(final MXDeviceInfo deviceInfo,
-                                                                 final String sender,
-                                                                 final MXSession session,
-                                                                 Activity activity,
-                                                                 @NonNull final YesNoListener yesNoListener) {
+    public static void displayDeviceVerificationDialogLegacy(final MXDeviceInfo deviceInfo,
+                                                             final String sender,
+                                                             final MXSession session,
+                                                             Activity activity,
+                                                             @NonNull final YesNoListener yesNoListener) {
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");

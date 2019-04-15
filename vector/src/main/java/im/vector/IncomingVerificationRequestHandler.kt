@@ -46,7 +46,10 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                             R.drawable.shield
                     ).apply {
                         contentAction = Runnable {
-                            val intent = ShortCodeDeviceVerificationActivity.intent(context, session.myUserId, tx.otherUserID, tx.transactionId)
+                            val intent = ShortCodeDeviceVerificationActivity.incomingIntent(context,
+                                    session.myUserId,
+                                    tx.otherUserID,
+                                    tx.transactionId)
                             weakCurrentActivity?.get()?.startActivity(intent)
                         }
                         dismissedAction = Runnable {
@@ -61,12 +64,15 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                         addButton(
                                 context.getString(R.string.action_open),
                                 Runnable {
-                                    val intent = ShortCodeDeviceVerificationActivity.intent(context, session.myUserId, tx.otherUserID, tx.transactionId)
+                                    val intent = ShortCodeDeviceVerificationActivity.incomingIntent(context,
+                                            session.myUserId,
+                                            tx.otherUserID,
+                                            tx.transactionId)
                                     weakCurrentActivity?.get()?.startActivity(intent)
                                 }
                         )
                         //10mn expiration
-                        expirationTimestamp = System.currentTimeMillis() + (1000L * 60 * 10)
+                        expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
 
                     }
                     PopupAlertManager.postVectorAlert(alert)
@@ -77,14 +83,13 @@ object IncomingVerificationRequestHandler : VerificationManager.ManagerListener 
                     //cancel related notification
                     PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
                 }
-                else -> {
-                }
+                else -> Unit
             }
         }
     }
 
-    fun initialize(mgr: VerificationManager) {
-        mgr.addListener(this)
+    fun initialize(verificationManager: VerificationManager) {
+        verificationManager.addListener(this)
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceID: String) {

@@ -74,39 +74,37 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
 
 
         viewModel.transaction?.let {
-
-
             if (it.supportsEmoji()) {
-                val emojicodes = it.getEmojiCodeRepresentation(it.shortCodeBytes!!, context)
-                emojicodes?.forEachIndexed { index, emojiRepresentation ->
+                val emojicodes = it.getEmojiCodeRepresentation(it.shortCodeBytes!!)
+                emojicodes.forEachIndexed { index, emojiRepresentation ->
                     when (index) {
                         0 -> {
-                            emoji0View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji0View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji0View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji0View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                         1 -> {
-                            emoji1View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji1View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji1View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji1View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                         2 -> {
-                            emoji2View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji2View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji2View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji2View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                         3 -> {
-                            emoji3View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji3View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji3View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji3View.findViewById<TextView>(R.id.item_emoji_name_tv)?.setText(emojiRepresentation.nameResId)
                         }
                         4 -> {
-                            emoji4View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji4View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji4View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji4View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                         5 -> {
-                            emoji5View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji5View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji5View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji5View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                         6 -> {
-                            emoji6View.findViewById<TextView>(R.id.item_emoji_tv)?.text = emojiRepresentation.emoji
-                            emoji6View.findViewById<TextView>(R.id.item_emoji_name_tv)?.text = emojiRepresentation.name
+                            emoji6View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation.emoji
+                            emoji6View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation.nameResId)
                         }
                     }
                 }

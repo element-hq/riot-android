@@ -32,7 +32,6 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.ManagerListene
         const val NAVIGATE_EMOJI = "NAVIGATE_EMOJI"
         const val NAVIGATE_SUCCESS = "NAVIGATE_SUCCESS"
         const val NAVIGATE_CANCELLED = "NAVIGATE_CANCELLED"
-        //const val NAVIGATE_TO_SUCCESS = "NAVIGATE_TO_SUCCESS"
     }
 
     lateinit var session: MXSession

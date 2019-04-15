@@ -992,6 +992,7 @@
     <string name="encryption_information_blocked">Blacklisted</string>
 
     <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_unknown_ip">unknown ip</string>
     <string name="encryption_information_none">none</string>
 
     <string name="encryption_information_verify">Verify</string>
@@ -1099,9 +1100,9 @@
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
-    <string name="you_added_a_new_device_with_info">A new device is requesting encryption keys.\nDevice name: %s\nLast seen: %s\nIf you didn’t log in on another device, ignore this request.</string>
+    <string name="you_added_a_new_device_with_info">A new device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
     <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
-    <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %s\nLast seen: %s\nIf you didn’t log in on another device, ignore this request.</string>
+    <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
 
     <string name="start_verification">Start verification</string>
     <!-- Keep the label as small as possible-->
@@ -1411,7 +1412,6 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
-
     <string name="sas_verify_title">Verify by comparing a short text string.</string>
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
     <string name="sas_verify_start_button_title">Begin Verifying</string>
@@ -1419,14 +1419,12 @@ Why choose Riot.im?
     <string name="sas_incoming_request_description">Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages."</string>
     <string name="sas_incoming_request_description_2">Verifying this user will mark their device has trusted, and also mark your device as trusted to them."</string>
 
-
     <string name="sas_emoji_description">Verify this user by confirming the following emoji appear on their screen"</string>
     <string name="sas_decimal_description">Verify this user by confirming the following numbers appear on their screen"</string>
 
     <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
     <string name="sas_view_request_action">View request</string>
     <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
-
 
     <string name="sas_verified">Verified!</string>
     <string name="sas_verified_successful">You\'ve successfully verified this user.</string>
@@ -1441,23 +1439,21 @@ Why choose Riot.im?
     <string name="sas_cancelled_by_other">The other party cancelled the verification.\n%s</string>
     <string name="sas_cancelled_by_me">The verification is canceled.\nReason: %s</string>
 
-
     <string name="sas_verification_request_notification_channel">Interactive Device Verification</string>
     <string name="sas_incoming_request_notif_title">Verification Request</string>
     <string name="sas_incoming_request_notif_content">%s wants to verify your device</string>
 
     <!-- SAS Errors -->
-    <string name="sas_error_m.user">The user cancelled the verification</string>
-    <string name="sas_error_m.timeout">The verification process timed out</string>
-    <string name="sas_error_m.unknown_transaction">The device does not know about that transaction</string>,
-    <string name="sas_error_m.unknown_method">The device can’t agree on a key agreement, hash, MAC, or SAS method</string>
-    <string name="sas_error_m.mismatched_commitment">The hash commitment did not match</string>
-    <string name="sas_error_m.mismatched_sas">The SAS did not match</string>
-    <string name="sas_error_m.unexpected_message">The device received an unexpected message</string>
-    <string name="sas_error_m.invalid_message">An invalid message was received</string>
-    <string name="sas_error_m.key_mismatch">Key mismatch</string>
-    <string name="sas_error_m.user_error">User mismatch</string>
+    <string name="sas_error_m_user">The user cancelled the verification</string>
+    <string name="sas_error_m_timeout">The verification process timed out</string>
+    <string name="sas_error_m_unknown_transaction">The device does not know about that transaction</string>
+    <string name="sas_error_m_unknown_method">The device can’t agree on a key agreement, hash, MAC, or SAS method</string>
+    <string name="sas_error_m_mismatched_commitment">The hash commitment did not match</string>
+    <string name="sas_error_m_mismatched_sas">The SAS did not match</string>
+    <string name="sas_error_m_unexpected_message">The device received an unexpected message</string>
+    <string name="sas_error_m_invalid_message">An invalid message was received</string>
+    <string name="sas_error_m_key_mismatch">Key mismatch</string>
+    <string name="sas_error_m_user_error">User mismatch</string>
     <string name="sas_error_unknown">Unknown Error</string>
-
 
 </resources>

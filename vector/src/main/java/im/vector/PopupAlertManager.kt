@@ -37,21 +37,21 @@ object PopupAlertManager {
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
 
-    private val alertFilo = ArrayList<VectorAlert>()
+    private val alertFiFo = ArrayList<VectorAlert>()
 
     private val LOG_TAG = PopupAlertManager::class.java.name
 
 
     fun postVectorAlert(alert: VectorAlert) {
-        synchronized(alertFilo) {
-            alertFilo.add(alert)
+        synchronized(alertFiFo) {
+            alertFiFo.add(alert)
         }
         displayNextIfPossible()
     }
 
     fun cancelAlert(uid: String) {
-        synchronized(alertFilo) {
-            alertFilo.listIterator().apply {
+        synchronized(alertFiFo) {
+            alertFiFo.listIterator().apply {
                 while (this.hasNext()) {
                     val next = this.next()
                     if (next.uid == uid) {
@@ -64,7 +64,7 @@ object PopupAlertManager {
         //it could also be the current one
         if (currentAlerter?.uid == uid) {
             Alerter.hide()
-            currentIsDismmissed()
+            currentIsDismissed()
         }
     }
 
@@ -106,12 +106,7 @@ object PopupAlertManager {
         }
     }
 
-    fun shouldIgnoreActivity(activity: Activity): Boolean {
-        if (activity is ShortCodeDeviceVerificationActivity) {
-            return true
-        }
-        return false
-    }
+    private fun shouldIgnoreActivity(activity: Activity) = activity is ShortCodeDeviceVerificationActivity
 
 
     private fun displayNextIfPossible() {
@@ -121,9 +116,9 @@ object PopupAlertManager {
             return
         }
         val next: VectorAlert?
-        synchronized(alertFilo) {
-            next = alertFilo.firstOrNull()
-            if (next != null) alertFilo.remove(next)
+        synchronized(alertFiFo) {
+            next = alertFiFo.firstOrNull()
+            if (next != null) alertFiFo.remove(next)
         }
         currentAlerter = next
         next?.let {
@@ -159,7 +154,7 @@ object PopupAlertManager {
                     alert.actions.forEach { action ->
                         addButton(action.title, R.style.AlerterButton, View.OnClickListener {
                             if (action.autoClose) {
-                                currentIsDismmissed()
+                                currentIsDismissed()
                                 Alerter.hide()
                             }
                             try {
@@ -172,7 +167,7 @@ object PopupAlertManager {
                     }
                     setOnClickListener(View.OnClickListener { _ ->
                         alert.contentAction?.let {
-                            currentIsDismmissed()
+                            currentIsDismissed()
                             Alerter.hide()
                             try {
                                 it.run()
@@ -184,13 +179,13 @@ object PopupAlertManager {
 
                 }
                 .setOnHideListener(OnHideAlertListener {
-                    //called when dissmissed on swipe
+                    //called when dismissed on swipe
                     try {
                         alert.dismissedAction?.run()
                     } catch (e: java.lang.Exception) {
                         Log.e(LOG_TAG, "## failed to perform action")
                     }
-                    currentIsDismmissed()
+                    currentIsDismissed()
                 })
                 .enableSwipeToDismiss()
                 .enableInfiniteDuration(true)
@@ -198,7 +193,7 @@ object PopupAlertManager {
                 .show()
     }
 
-    fun currentIsDismmissed() {
+    private fun currentIsDismissed() {
         //current alert has been hidden
         currentAlerter = null
         Handler(Looper.getMainLooper()).postDelayed({
@@ -209,7 +204,10 @@ object PopupAlertManager {
     /**
      * Dataclass to describe an important alert with actions.
      */
-    class VectorAlert(val uid: String, val title: String, val description: String, @DrawableRes val iconId: Int?) {
+    data class VectorAlert(val uid: String,
+                           val title: String,
+                           val description: String,
+                           @DrawableRes val iconId: Int?) {
 
         data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
 

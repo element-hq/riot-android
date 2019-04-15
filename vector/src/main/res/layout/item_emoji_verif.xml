@@ -7,12 +7,14 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <!-- size in dp, because we do not want the display to be impacted by font size setting -->
     <TextView
         android:id="@+id/item_emoji_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="40sp"
+        android:textSize="40dp"
+        tools:ignore="SpUsage"
         tools:text="🌵" />
 
     <TextView
@@ -20,5 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="4dp"
         tools:text="@string/verification_emoji_cactus" />
+
 </LinearLayout>

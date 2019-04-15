@@ -49,9 +49,13 @@ import kotlin.collections.HashMap
  * If several requests come from same user/device, a single alert is displayed (this alert will accept/reject all request
  * depending on user action)
  */
-class KeyRequestHandler private constructor() : VerificationManager.ManagerListener {
+class KeyRequestHandler(val session: MXSession) : VerificationManager.ManagerListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
+
+    init {
+        session.crypto?.shortCodeVerificationManager?.addListener(this)
+    }
 
     /**
      * Handle incoming key request.
@@ -80,11 +84,6 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
 
         //Add a notification for every incoming request
         val context = VectorApp.getInstance()
-        val session = Matrix.getInstance(context)?.defaultSession
-
-        if (context == null || session == null) {
-            return
-        }
 
         session.crypto?.deviceList?.downloadKeys(Arrays.asList(userId), false, object : ApiCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(devicesMap: MXUsersDevicesMap<MXDeviceInfo>) {
@@ -105,21 +104,21 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
                             session.getDevicesList(object : ApiCallback<DevicesListResponse> {
                                 override fun onSuccess(info: DevicesListResponse) =
                                         info.devices.find { it.device_id == deviceId }?.let {
-                                            postAlert(context, session, userId, deviceId, true, deviceInfo, it)
+                                            postAlert(context, userId, deviceId, true, deviceInfo, it)
                                         } ?: run {
-                                            postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                            postAlert(context, userId, deviceId, true, deviceInfo)
                                         }
 
                                 override fun onUnexpectedError(e: java.lang.Exception?) {
-                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                    postAlert(context, userId, deviceId, true, deviceInfo)
                                 }
 
                                 override fun onNetworkError(e: java.lang.Exception?) {
-                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                    postAlert(context, userId, deviceId, true, deviceInfo)
                                 }
 
                                 override fun onMatrixError(e: MatrixError?) {
-                                    postAlert(context, session, userId, deviceId, true, deviceInfo)
+                                    postAlert(context, userId, deviceId, true, deviceInfo)
                                 }
 
                             })
@@ -127,7 +126,7 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
                         }
                     })
                 } else {
-                    postAlert(context, session, userId, deviceId, false, deviceInfo)
+                    postAlert(context, userId, deviceId, false, deviceInfo)
                 }
             }
 
@@ -151,23 +150,22 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
 
     }
 
-    internal fun postAlert(
-            context: Context,
-            session: MXSession?,
-            userId: String,
-            deviceId: String,
-            wasNewDevice: Boolean,
-            deviceInfo: MXDeviceInfo?,
-            moreInfo: DeviceInfo? = null
-    ) {
-
-
+    private fun postAlert(context: Context,
+                          userId: String,
+                          deviceId: String,
+                          wasNewDevice: Boolean,
+                          deviceInfo: MXDeviceInfo?,
+                          moreInfo: DeviceInfo? = null) {
         val deviceName = if (TextUtils.isEmpty(deviceInfo!!.displayName())) deviceInfo.deviceId else deviceInfo.displayName()
         var dialogText: String? = null
 
 
         if (moreInfo != null) {
-            val lastSeenIp = moreInfo.last_seen_ip
+            val lastSeenIp = if (moreInfo.last_seen_ip.isNullOrBlank()) {
+                context.getString(R.string.encryption_information_unknown_ip)
+            } else {
+                moreInfo.last_seen_ip
+            }
             val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
             val time = dateFormatTime.format(Date(moreInfo.last_seen_ts))
             val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
@@ -293,17 +291,6 @@ class KeyRequestHandler private constructor() : VerificationManager.ManagerListe
 
     companion object {
         private val LOG_TAG = KeyRequestHandler::class.java.simpleName
-
-
-        /**
-         * Provide the shared instance
-         *
-         * @return the shared instance
-         */
-        val sharedInstance: KeyRequestHandler = KeyRequestHandler().apply {
-            Matrix.getInstance(VectorApp.getInstance()).defaultSession.crypto?.shortCodeVerificationManager?.addListener(this)
-        }
-
     }
 
 }

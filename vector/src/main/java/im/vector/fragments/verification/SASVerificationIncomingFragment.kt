@@ -36,7 +36,6 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
     @BindView(R.id.sas_incoming_request_user_id)
     lateinit var otherUserIdTextView: TextView
 
-
     @BindView(R.id.sas_incoming_request_user_device)
     lateinit var otherDeviceTextView: TextView
 
@@ -78,6 +77,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
                     viewModel.loadingLiveEvent.value = null
                     viewModel.navigateCancel()
                 }
+                else -> Unit
             }
         })
 
