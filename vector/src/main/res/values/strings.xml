@@ -1400,4 +1400,6 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
+
+    <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
 </resources>

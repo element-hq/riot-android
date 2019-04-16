@@ -17,6 +17,7 @@ Other changes:
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
+ - Fix / Infinite logout screen when token invalidated
 
 Translations:
  -
