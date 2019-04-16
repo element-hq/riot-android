@@ -103,7 +103,7 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
     @OnClick(R.id.sas_legacy_verification)
     fun doLegacy() {
-        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserId ?: "", viewModel.otherDevice
+        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserId ?: "", viewModel.otherDeviceId
                 ?: "", object : SimpleApiCallback<MXDeviceInfo>() {
             override fun onSuccess(info: MXDeviceInfo?) {
                 info?.let {

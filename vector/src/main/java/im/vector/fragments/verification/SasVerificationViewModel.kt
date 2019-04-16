@@ -37,7 +37,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
     lateinit var session: MXSession
 
     var otherUserId: String? = null
-    var otherDevice: String? = null
+    var otherDeviceId: String? = null
     var otherUser: User? = null
     var transaction: SASVerificationTransaction? = null
 
@@ -61,7 +61,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
             if (value != null) {
                 transaction = session.crypto?.shortCodeVerificationManager?.getExistingTransaction(otherUserId!!, value) as? SASVerificationTransaction
                 transactionState.value = transaction?.state
-                otherDevice = transaction?.otherDevice
+                otherDeviceId = transaction?.otherDeviceId
             }
             field = value
         }
@@ -82,13 +82,13 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
     fun initOutgoing(session: MXSession, otherUserId: String, otherDeviceId: String) {
         this.session = session
         this.otherUserId = otherUserId
-        this.otherDevice = otherDeviceId
+        this.otherDeviceId = otherDeviceId
         session.crypto?.shortCodeVerificationManager?.addListener(this)
         this.otherUser = session.dataHandler.store.getUser(otherUserId)
     }
 
     fun beginSasKeyVerification() {
-        val verificationSAS = session.crypto?.shortCodeVerificationManager?.beginKeyVerificationSAS(otherUserId!!, otherDevice!!)
+        val verificationSAS = session.crypto?.shortCodeVerificationManager?.beginKeyVerificationSAS(otherUserId!!, otherDeviceId!!)
         this.transactionID = verificationSAS
     }
 
@@ -117,8 +117,8 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
     }
 
     fun manuallyVerified() {
-        if (otherUserId != null && otherDevice != null) {
-            session.crypto?.shortCodeVerificationManager?.markedLocallyAsManuallyVerified(otherUserId!!, otherDevice!!)
+        if (otherUserId != null && otherDeviceId != null) {
+            session.crypto?.shortCodeVerificationManager?.markedLocallyAsManuallyVerified(otherUserId!!, otherDeviceId!!)
         }
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH_SUCCESS)
     }

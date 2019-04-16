@@ -36,8 +36,8 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
                     //Add a notification for every incoming request
                     val context = VectorApp.getInstance()
                     val session = Matrix.getInstance(context).defaultSession
-                    val name = session.dataHandler.getUser(tx.otherUserID)?.displayname
-                            ?: tx.otherUserID
+                    val name = session.dataHandler.getUser(tx.otherUserId)?.displayname
+                            ?: tx.otherUserId
 
                     val alert = PopupAlertManager.VectorAlert(
                             "kvr_${tx.transactionId}",
@@ -48,7 +48,7 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
                         contentAction = Runnable {
                             val intent = SASVerificationActivity.incomingIntent(context,
                                     session.myUserId,
-                                    tx.otherUserID,
+                                    tx.otherUserId,
                                     tx.transactionId)
                             weakCurrentActivity?.get()?.startActivity(intent)
                         }
@@ -66,7 +66,7 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
                                 Runnable {
                                     val intent = SASVerificationActivity.incomingIntent(context,
                                             session.myUserId,
-                                            tx.otherUserID,
+                                            tx.otherUserId,
                                             tx.transactionId)
                                     weakCurrentActivity?.get()?.startActivity(intent)
                                 }

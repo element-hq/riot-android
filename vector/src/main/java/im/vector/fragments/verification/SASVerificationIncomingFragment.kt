@@ -58,7 +58,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
         otherUserDisplayNameTextView.text = viewModel.otherUser?.displayname ?: viewModel.otherUserId
         otherUserIdTextView.text = viewModel.otherUserId
-        otherDeviceTextView.text = viewModel.otherDevice
+        otherDeviceTextView.text = viewModel.otherDeviceId
 
         viewModel.otherUser?.let {
             VectorUtils.loadUserAvatar(this.context, viewModel.session, avatarImageView, it.avatarUrl, it.user_id, it.displayname)

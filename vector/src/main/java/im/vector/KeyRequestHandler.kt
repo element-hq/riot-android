@@ -272,8 +272,8 @@ class KeyRequestHandler(val session: MXSession) : VerificationManager.Verificati
             val state = tx.state
             if (state == SASVerificationTransaction.SASVerificationTxState.Verified) {
                 //ok it's verified, see if we have key request for that
-                shareAllSessions("${tx.otherDevice}${tx.otherUserID}")
-                PopupAlertManager.cancelAlert("ikr_${tx.otherDevice}${tx.otherUserID}")
+                shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
+                PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
             }
         }
     }
