@@ -30,7 +30,7 @@ import org.matrix.androidsdk.crypto.verification.IncomingSASVerificationTransact
 import org.matrix.androidsdk.crypto.verification.OutgoingSASVerificationRequest
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
 
-class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
+class SASVerificationActivity : SimpleFragmentActivity() {
 
 
     companion object {
@@ -41,7 +41,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
         private const val EXTRA_IS_INCOMING = "EXTRA_IS_INCOMING"
 
         fun incomingIntent(context: Context, matrixID: String, otherUserId: String, transactionID: String): Intent {
-            val intent = Intent(context, ShortCodeDeviceVerificationActivity::class.java)
+            val intent = Intent(context, SASVerificationActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             intent.putExtra(EXTRA_TRANSACTION_ID, transactionID)
             intent.putExtra(EXTRA_OTHER_USER_ID, otherUserId)
@@ -50,7 +50,7 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
         }
 
         fun outgoingIntent(context: Context, matrixID: String, otherUserId: String, otherDeviceId: String): Intent {
-            val intent = Intent(context, ShortCodeDeviceVerificationActivity::class.java)
+            val intent = Intent(context, SASVerificationActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
             intent.putExtra(EXTRA_OTHER_DEVICE_ID, otherDeviceId)
             intent.putExtra(EXTRA_OTHER_USER_ID, otherUserId)
@@ -69,15 +69,14 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
         viewModel = ViewModelProviders.of(this).get(SasVerificationViewModel::class.java)
         val transactionID: String? = intent.getStringExtra(EXTRA_TRANSACTION_ID)
 
-        val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
-        if (isIncoming) {
-            //incoming always have a transaction id
-            viewModel.initIncoming(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
-        } else {
-            viewModel.initOutgoing(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
-        }
-
         if (isFirstCreation()) {
+            val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
+            if (isIncoming) {
+                //incoming always have a transaction id
+                viewModel.initIncoming(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
+            } else {
+                viewModel.initOutgoing(mSession, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
+            }
 
             if (isIncoming) {
                 val incoming = viewModel.transaction as IncomingSASVerificationTransaction
@@ -87,17 +86,20 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                     IncomingSASVerificationTransaction.State.WAIT_FOR_KEY_AGREEMENT -> {
                         supportActionBar?.setTitle(R.string.sas_incoming_request_title)
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationIncomingFragment.newInstance())
                                 .commitNow()
                     }
                     IncomingSASVerificationTransaction.State.WAIT_FOR_VERIFICATION,
                     IncomingSASVerificationTransaction.State.SHOW_SAS -> {
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                                 .commitNow()
                     }
                     IncomingSASVerificationTransaction.State.VERIFIED -> {
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                                 .commitNow()
                     }
@@ -115,17 +117,20 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                     OutgoingSASVerificationRequest.State.WAIT_FOR_START,
                     OutgoingSASVerificationRequest.State.WAIT_FOR_KEY_AGREEMENT -> {
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationStartFragment.newInstance())
                                 .commitNow()
                     }
                     OutgoingSASVerificationRequest.State.SHOW_SAS,
                     OutgoingSASVerificationRequest.State.WAIT_FOR_VERIFICATION -> {
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                                 .commitNow()
                     }
                     OutgoingSASVerificationRequest.State.VERIFIED -> {
                         supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
                                 .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                                 .commitNow()
                     }
@@ -146,13 +151,15 @@ class ShortCodeDeviceVerificationActivity : SimpleFragmentActivity() {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
-                SasVerificationViewModel.NAVIGATE_EMOJI -> {
+                SasVerificationViewModel.NAVIGATE_SAS_DISPLAY -> {
                     supportFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
                             .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
                             .commitNow()
                 }
                 SasVerificationViewModel.NAVIGATE_SUCCESS -> {
                     supportFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
                             .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
                             .commitNow()
                 }

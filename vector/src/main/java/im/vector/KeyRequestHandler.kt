@@ -21,7 +21,7 @@ package im.vector
 
 import android.content.Context
 import android.text.TextUtils
-import im.vector.activity.ShortCodeDeviceVerificationActivity
+import im.vector.activity.SASVerificationActivity
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation
@@ -202,7 +202,7 @@ class KeyRequestHandler(val session: MXSession) : VerificationManager.Verificati
                 context.getString(R.string.start_verification_short_label),
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
-                        val intent = ShortCodeDeviceVerificationActivity.outgoingIntent(it,
+                        val intent = SASVerificationActivity.outgoingIntent(it,
                                 session?.myUserId ?: "",
                                 userId, deviceId)
                         it.startActivity(intent)

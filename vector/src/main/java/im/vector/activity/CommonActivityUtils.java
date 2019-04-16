@@ -1170,7 +1170,7 @@ public class CommonActivityUtils {
 
         //Priority is to use new verification method, and fallback to older if user chooses to
 
-        Intent intent = ShortCodeDeviceVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
+        Intent intent = SASVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
         if (fragment != null) {
             fragment.startActivityForResult(intent, reqCode);
         } else {

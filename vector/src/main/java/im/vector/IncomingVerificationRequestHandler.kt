@@ -15,7 +15,7 @@
  */
 package im.vector
 
-import im.vector.activity.ShortCodeDeviceVerificationActivity
+import im.vector.activity.SASVerificationActivity
 import org.matrix.androidsdk.crypto.verification.CancelCode
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
 import org.matrix.androidsdk.crypto.verification.VerificationManager
@@ -46,7 +46,7 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
                             R.drawable.shield
                     ).apply {
                         contentAction = Runnable {
-                            val intent = ShortCodeDeviceVerificationActivity.incomingIntent(context,
+                            val intent = SASVerificationActivity.incomingIntent(context,
                                     session.myUserId,
                                     tx.otherUserID,
                                     tx.transactionId)
@@ -64,7 +64,7 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
                         addButton(
                                 context.getString(R.string.action_open),
                                 Runnable {
-                                    val intent = ShortCodeDeviceVerificationActivity.incomingIntent(context,
+                                    val intent = SASVerificationActivity.incomingIntent(context,
                                             session.myUserId,
                                             tx.otherUserID,
                                             tx.transactionId)

@@ -24,7 +24,7 @@ import android.util.Log
 import android.view.View
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
-import im.vector.activity.ShortCodeDeviceVerificationActivity
+import im.vector.activity.SASVerificationActivity
 import java.lang.ref.WeakReference
 
 /**
@@ -106,7 +106,7 @@ object PopupAlertManager {
         }
     }
 
-    private fun shouldIgnoreActivity(activity: Activity) = activity is ShortCodeDeviceVerificationActivity
+    private fun shouldIgnoreActivity(activity: Activity) = activity is SASVerificationActivity
 
 
     private fun displayNextIfPossible() {

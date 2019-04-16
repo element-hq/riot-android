@@ -422,7 +422,7 @@
         <activity android:name=".activity.DebugMenuActivity" />
 
         <activity
-            android:name=".activity.ShortCodeDeviceVerificationActivity"
+            android:name=".activity.SASVerificationActivity"
             android:label="@string/title_activity_verify_device"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 

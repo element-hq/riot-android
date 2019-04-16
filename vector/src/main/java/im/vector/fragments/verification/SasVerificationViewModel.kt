@@ -29,7 +29,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
     companion object {
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
         const val NAVIGATE_FINISH_SUCCESS = "NAVIGATE_FINISH_SUCCESS"
-        const val NAVIGATE_EMOJI = "NAVIGATE_EMOJI"
+        const val NAVIGATE_SAS_DISPLAY = "NAVIGATE_SAS_DISPLAY"
         const val NAVIGATE_SUCCESS = "NAVIGATE_SUCCESS"
         const val NAVIGATE_CANCELLED = "NAVIGATE_CANCELLED"
     }
@@ -134,7 +134,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
 
     fun shortCodeReady() {
         loadingLiveEvent.value = null
-        _navigateEvent.value = LiveEvent(NAVIGATE_EMOJI)
+        _navigateEvent.value = LiveEvent(NAVIGATE_SAS_DISPLAY)
     }
 
     fun deviceIsVerified() {
