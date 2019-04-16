@@ -17,6 +17,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,8 +27,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListAdapter;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -42,6 +43,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.SASVerificationActivity;
 import im.vector.adapters.VectorUnknownDevicesAdapter;
 
 public class VectorUnknownDevicesFragment extends DialogFragment {
@@ -97,9 +99,24 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DEVICE_VERIF_REQ_CODE) {
-            //adapter.notifyDataSetChanged();
-            ListAdapter adapter = mExpandableListView.getAdapter();
+        if (resultCode == Activity.RESULT_OK && requestCode == DEVICE_VERIF_REQ_CODE) {
+            // Update the status
+            String otherUserId = SASVerificationActivity.Companion.getOtherUserId(data);
+            String otherDeviceId = SASVerificationActivity.Companion.getOtherDeviceId(data);
+
+            if (mDevicesList != null && otherUserId != null && otherDeviceId != null) {
+                for (Pair<String, List<MXDeviceInfo>> pair : mDevicesList) {
+                    if (pair.first.equals(otherUserId)) {
+                        for (MXDeviceInfo mxDeviceInfo : pair.second) {
+                            if (mxDeviceInfo.deviceId.equals(otherDeviceId)) {
+                                mxDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED;
+                            }
+                        }
+                    }
+                }
+            }
+
+            ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
             if (adapter instanceof VectorUnknownDevicesAdapter) {
                 ((VectorUnknownDevicesAdapter) adapter).notifyDataSetChanged();
             }

@@ -40,6 +40,10 @@ class SASVerificationActivity : SimpleFragmentActivity() {
         private const val EXTRA_OTHER_DEVICE_ID = "EXTRA_OTHER_DEVICE_ID"
         private const val EXTRA_IS_INCOMING = "EXTRA_IS_INCOMING"
 
+        /* ==========================================================================================
+         * INPUT
+         * ========================================================================================== */
+
         fun incomingIntent(context: Context, matrixID: String, otherUserId: String, transactionID: String): Intent {
             val intent = Intent(context, SASVerificationActivity::class.java)
             intent.putExtra(EXTRA_MATRIX_ID, matrixID)
@@ -56,6 +60,18 @@ class SASVerificationActivity : SimpleFragmentActivity() {
             intent.putExtra(EXTRA_OTHER_USER_ID, otherUserId)
             intent.putExtra(EXTRA_IS_INCOMING, false)
             return intent
+        }
+
+        /* ==========================================================================================
+         * OUTPUT
+         * ========================================================================================== */
+
+        fun getOtherUserId(intent: Intent?): String? {
+            return intent?.getStringExtra(EXTRA_OTHER_USER_ID)
+        }
+
+        fun getOtherDeviceId(intent: Intent?): String? {
+            return intent?.getStringExtra(EXTRA_OTHER_DEVICE_ID)
         }
     }
 
@@ -148,7 +164,10 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 SasVerificationViewModel.NAVIGATE_FINISH_SUCCESS -> {
-                    setResult(Activity.RESULT_OK)
+                    val dataResult = Intent()
+                    dataResult.putExtra(EXTRA_OTHER_DEVICE_ID, viewModel.otherDeviceId)
+                    dataResult.putExtra(EXTRA_OTHER_USER_ID, viewModel.otherUserId)
+                    setResult(Activity.RESULT_OK, dataResult)
                     finish()
                 }
                 SasVerificationViewModel.NAVIGATE_SAS_DISPLAY -> {
