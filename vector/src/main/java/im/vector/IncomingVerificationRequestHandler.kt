@@ -92,7 +92,7 @@ object IncomingVerificationRequestHandler : VerificationManager.VerificationMana
         verificationManager.addListener(this)
     }
 
-    override fun markedAsManuallyVerified(userId: String, deviceID: String) {
+    override fun markedAsManuallyVerified(userId: String, deviceId: String) {
 
     }
 }

@@ -103,7 +103,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
         }
     }
 
-    override fun markedAsManuallyVerified(userId: String, deviceID: String) {
+    override fun markedAsManuallyVerified(userId: String, deviceId: String) {
 
     }
 

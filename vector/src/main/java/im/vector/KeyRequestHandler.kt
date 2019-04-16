@@ -203,7 +203,7 @@ class KeyRequestHandler(val session: MXSession) : VerificationManager.Verificati
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = SASVerificationActivity.outgoingIntent(it,
-                                session?.myUserId ?: "",
+                                session.myUserId ?: "",
                                 userId, deviceId)
                         it.startActivity(intent)
                     }
