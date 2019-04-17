@@ -19,6 +19,7 @@ package im.vector.fragments.keysbackup.setup
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
+import android.support.v7.app.AlertDialog
 import com.nulabinc.zxcvbn.Strength
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
@@ -27,10 +28,12 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.androidsdk.listeners.ProgressListener
-import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.rest.callback.ApiFailureCallback
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.callback.SuccessErrorCallback
 import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.keys.KeysVersion
+import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
 import org.matrix.androidsdk.util.Log
 
 /**
@@ -126,7 +129,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                             megolmBackupCreationInfo = info
                             copyHasBeenMade = false
 
-                            val keyBackup = session?.crypto?.keysBackup
+                            val keyBackup = session.crypto?.keysBackup
                             if (keyBackup != null) {
                                 createKeysBackup(context, keyBackup)
                             } else {
@@ -156,16 +159,8 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_creating_backup), isIndeterminate = true)
 
         creatingBackupError.value = null
-        keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : ApiCallback<KeysVersion> {
 
-            override fun onSuccess(info: KeysVersion) {
-                loadingStatus.value = null
-
-                isCreatingBackupVersion.value = false
-                keysVersion.value = info
-                navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
-            }
-
+        val failureCallBack = object : ApiFailureCallback {
             override fun onUnexpectedError(e: java.lang.Exception) {
                 Log.e(LOG_TAG, "## createKeyBackupVersion ${e.localizedMessage}")
                 loadingStatus.value = null
@@ -189,7 +184,45 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                 isCreatingBackupVersion.value = false
                 creatingBackupError.value = Exception(e.message)
             }
+
+        }
+
+        keysBackup.getCurrentVersion(object : SimpleApiCallback<KeysVersionResult?>(failureCallBack) {
+            override fun onSuccess(info: KeysVersionResult?) {
+                loadingStatus.value = null
+                if (info?.version.isNullOrBlank()) {
+                    //should not happen
+                    processOnCreate()
+                } else {
+                    //we should prompt
+                    AlertDialog.Builder(context)
+                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
+                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
+                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
+                                processOnCreate()
+                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
+                                loadingStatus.value = null
+                                navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
+                                session.crypto?.keysBackup?.checkAndStartKeysBackup()
+                            }
+                            .show()
+                }
+            }
+
+            fun processOnCreate() {
+                keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : SimpleApiCallback<KeysVersion>(failureCallBack) {
+                    override fun onSuccess(info: KeysVersion) {
+                        loadingStatus.value = null
+
+                        isCreatingBackupVersion.value = false
+                        keysVersion.value = info
+                        navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
+                    }
+                })
+            }
         })
+
+
     }
 
 }
