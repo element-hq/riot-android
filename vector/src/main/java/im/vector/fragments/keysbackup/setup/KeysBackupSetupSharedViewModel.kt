@@ -19,7 +19,6 @@ package im.vector.fragments.keysbackup.setup
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
-import android.support.v7.app.AlertDialog
 import com.nulabinc.zxcvbn.Strength
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
@@ -44,6 +43,7 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
     companion object {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
         const val NAVIGATE_TO_STEP_3 = "NAVIGATE_TO_STEP_3"
+        const val NAVIGATE_PROMPT_REPLACE = "NAVIGATE_PROMPT_REPLACE"
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
         const val NAVIGATE_MANUAL_EXPORT = "NAVIGATE_MANUAL_EXPORT"
         private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
@@ -155,7 +155,20 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         }
     }
 
-    private fun createKeysBackup(context: Context, keysBackup: KeysBackup) {
+    fun forceCreateKeyBackup(context: Context) {
+        val keyBackup = session.crypto?.keysBackup
+        if (keyBackup != null) {
+            createKeysBackup(context, keyBackup, true)
+        }
+    }
+    
+    fun stopAndKeepAfterDetectingExistingOnServer() {
+        loadingStatus.value = null
+        navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_FINISH)
+        session.crypto?.keysBackup?.checkAndStartKeysBackup()
+    }
+
+    private fun createKeysBackup(context: Context, keysBackup: KeysBackup, forceOverride: Boolean = false) {
         loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_creating_backup), isIndeterminate = true)
 
         creatingBackupError.value = null
@@ -190,22 +203,15 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
         keysBackup.getCurrentVersion(object : SimpleApiCallback<KeysVersionResult?>(failureCallBack) {
             override fun onSuccess(info: KeysVersionResult?) {
                 loadingStatus.value = null
-                if (info?.version.isNullOrBlank()) {
+                if (info?.version.isNullOrBlank() || forceOverride) {
                     //should not happen
                     processOnCreate()
                 } else {
                     //we should prompt
-                    AlertDialog.Builder(context)
-                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
-                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
-                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
-                                processOnCreate()
-                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
-                                loadingStatus.value = null
-                                navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
-                                session.crypto?.keysBackup?.checkAndStartKeysBackup()
-                            }
-                            .show()
+                    loadingStatus.value = null
+                    isCreatingBackupVersion.value = false
+                    navigateEvent.value = LiveEvent(NAVIGATE_PROMPT_REPLACE)
+
                 }
             }
 
@@ -213,7 +219,6 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
                 keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : SimpleApiCallback<KeysVersion>(failureCallBack) {
                     override fun onSuccess(info: KeysVersion) {
                         loadingStatus.value = null
-
                         isCreatingBackupVersion.value = false
                         keysVersion.value = info
                         navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)

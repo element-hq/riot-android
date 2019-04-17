@@ -668,9 +668,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         checkNotificationPrivacySetting();
 
         //Force remote backup state update to update the banner if needed
-        if (mSession.getCrypto() != null) {
-            mSession.getCrypto().getKeysBackup().checkAndStartKeysBackup();
-        }
+        ViewModelProviders.of(this).get(SignOutViewModel.class).refreshRemoteStateIfNeeded();
     }
 
     /**
