@@ -29,10 +29,7 @@ android:
     - android-28
 
 before_cache:
-    - ls -al $HOME/.gradle/caches/
-    - ls -al $HOME/.gradle/caches/modules-2/files-2.1
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-    - rm -fr $HOME/.gradle/caches/modules-2/files-2.1/com.ibm.icu/*
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
