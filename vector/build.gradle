@@ -136,8 +136,8 @@ android {
 
         saba {
             applicationId "com.sabaos.messaging"
-            versionCode rootProject.ext.versionCodeProp
-            versionName rootProject.ext.versionNameProp
+            versionCode 9801251
+            versionName "Saba 9801a"
             buildConfigField "boolean", "IS_SABA", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
@@ -147,6 +147,7 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
+        abortOnError false
     }
 
     repositories {
