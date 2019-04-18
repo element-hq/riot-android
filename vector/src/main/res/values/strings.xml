@@ -1400,4 +1400,12 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%s\":\n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
+    <!-- Warning screen -->
+    <string name="warning_screen_title">Important announcement</string>
+    <string name="warning_screen_text_title">Please use new Riot.im application</string>
+    <string name="warning_screen_text_main">Following the attack on our infrastructure (https://matrix.org/blog/2019/04/11/security-incident/) we have decided to publish a new Riot application.\n\nMore detail at https://matrix.org/blog/2019/04/11/security-incident/</string>
+    <string name="warning_screen_text_logged">You can still use this application to eventually setup keys backup, or to export your e2e keys to a safe place. Once done, you should sign out from this application and uninstall it.</string>
+    <string name="warning_screen_open_application">Enter this application</string>
+    <string name="warning_screen_install_new_riot">Install new Riot</string>
+
 </resources>

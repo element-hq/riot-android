@@ -277,7 +277,7 @@ public class CommonActivityUtils {
                     .apply();
 
             PendingIntent mPendingIntent =
-                    PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getActivity(activity, 314159, new Intent(activity, WarningActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
             // so restart the application after 100ms
             AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -366,7 +366,7 @@ public class CommonActivityUtils {
                     Activity activeActivity = VectorApp.getCurrentActivity();
 
                     // go to login page
-                    Intent intent = new Intent(activeActivity, LoginActivity.class);
+                    Intent intent = new Intent(activeActivity, WarningActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                     if (null != activeActivity) {
@@ -439,7 +439,7 @@ public class CommonActivityUtils {
      * @param activity the current Activity
      */
     public static void startLoginActivityNewTask(Activity activity) {
-        Intent intent = new Intent(activity, LoginActivity.class);
+        Intent intent = new Intent(activity, WarningActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }

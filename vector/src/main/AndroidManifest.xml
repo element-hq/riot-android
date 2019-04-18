@@ -154,6 +154,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.WarningActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"

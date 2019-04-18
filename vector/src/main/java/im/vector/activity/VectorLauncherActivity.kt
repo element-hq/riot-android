@@ -28,7 +28,7 @@ class VectorLauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, WarningActivity::class.java))
         finish()
     }
 }
