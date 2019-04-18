@@ -34,7 +34,9 @@ import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotificationUtils
 import im.vector.notifications.OutdatedEventDetector
 import im.vector.push.PushManager
+import im.vector.receiver.OnApplicationUpgradeReceiver
 import im.vector.util.CallsManager
+import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.data.Room
@@ -160,7 +162,6 @@ class EventStreamServiceX : VectorService() {
             myStopSelf()
             return START_NOT_STICKY
         }
-
         val action = intent.action
 
         Log.i(LOG_TAG, "onStartCommand with action : $action (current state $serviceState)")
@@ -175,6 +176,12 @@ class EventStreamServiceX : VectorService() {
                 val notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_sync_in_progress)
                 startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
             }
+            ACTION_SIMULATED_PERMANENT_LISTENING -> {
+                // Display foreground notification
+                Log.i(LOG_TAG, "startForeground")
+                val notification = NotificationUtils.buildForegroundServiceNotification(this, R.string.notification_listening_for_events, false)
+                startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+            }
             ACTION_GO_TO_FOREGROUND -> {
                 // Stop foreground notification display
                 Log.i(LOG_TAG, "stopForeground")
@@ -183,6 +190,7 @@ class EventStreamServiceX : VectorService() {
         }
 
         mSession = Matrix.getInstance(applicationContext)!!.defaultSession
+        mPushManager = Matrix.getInstance(applicationContext)!!.pushManager
 
         if (null == mSession || !mSession!!.isAlive) {
             Log.e(LOG_TAG, "onStartCommand : no sessions")
@@ -200,7 +208,12 @@ class EventStreamServiceX : VectorService() {
 
         when (action) {
             ACTION_START,
-            ACTION_GO_TO_FOREGROUND ->
+            ACTION_GO_TO_FOREGROUND -> {
+
+                //We are back in foreground, we can sync
+                mSession?.syncDelay = 0
+                mSession?.syncTimeout = 0
+
                 when (serviceState) {
                     EventStreamServiceX.ServiceState.INIT ->
                         start(false)
@@ -211,12 +224,17 @@ class EventStreamServiceX : VectorService() {
                         // Nothing to do
                     }
                 }
+            }
             ACTION_STOP,
             ACTION_GO_TO_BACKGROUND,
             ACTION_LOGOUT ->
                 stop()
             ACTION_PUSH_RECEIVED,
-            ACTION_SIMULATED_PUSH_RECEIVED ->
+            ACTION_SIMULATED_PUSH_RECEIVED -> {
+
+                // Catchup it asap
+                mSession?.syncTimeout = 0
+
                 when (serviceState) {
                     EventStreamServiceX.ServiceState.INIT ->
                         start(true)
@@ -226,6 +244,26 @@ class EventStreamServiceX : VectorService() {
                         // Nothing to do
                         Unit
                 }
+            }
+
+            ACTION_SIMULATED_PERMANENT_LISTENING -> {
+
+                //Configure the delay and time out for background
+                mSession?.syncDelay = mPushManager?.backgroundSyncDelay ?: 60 * 1000
+                mSession?.syncTimeout = mPushManager?.backgroundSyncTimeOut ?: 6000
+
+                when (serviceState) {
+                    EventStreamServiceX.ServiceState.INIT ->
+                        start(false)
+                    EventStreamServiceX.ServiceState.CATCHUP ->
+                        // A push has been received before, just change state, to avoid stopping the service when catchup is over
+                        serviceState = ServiceState.STARTED
+                    EventStreamServiceX.ServiceState.STARTED ->
+                        // Nothing to do
+                        Unit
+                }
+            }
+
             ACTION_PUSH_UPDATE -> pushStatusUpdate()
             ACTION_BOOT_COMPLETE -> {
                 // No FCM only
@@ -249,7 +287,7 @@ class EventStreamServiceX : VectorService() {
         super.onDestroy()
 
         // Schedule worker?
-        scheduleSimulatedPushIfNeeded()
+        configureBackgroundBehavior()
     }
 
     /**
@@ -262,23 +300,39 @@ class EventStreamServiceX : VectorService() {
     /**
      * Configure the WorkManager to schedule a simulated push, if necessary
      */
-    private fun scheduleSimulatedPushIfNeeded() {
-        if (shouldISimulatePush()) {
-            val delay = if (mSimulatePushImmediate) 0 else mPushManager?.backgroundSyncDelay ?: let { 60_000 }
-            Log.i(LOG_TAG, "## service is schedule to restart in $delay millis, if network is connected")
+    private fun configureBackgroundBehavior() {
 
-            val pushSimulatorRequest = OneTimeWorkRequestBuilder<PushSimulatorWorker>()
-                    .setInitialDelay(delay.toLong(), TimeUnit.MILLISECONDS)
-                    .setConstraints(Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build())
-                    .addTag(PUSH_SIMULATOR_REQUEST_TAG)
-                    .build()
+        when (getBackgroundBehavior()) {
 
-            WorkManager.getInstance().let {
-                // Cancel any previous worker
-                it.cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
-                it.enqueue(pushSimulatorRequest)
+            NotifMode.FCM_FALLBACK,
+            NotifMode.FDROID_OPTIMIZED_FOR_BATTERY -> {
+                val delay = if (mSimulatePushImmediate) 0 else PreferencesManager.getWorkManagerSyncIntervalMillis(this)
+                Log.i(LOG_TAG, "## service is schedule to restart in $delay millis, if network is connected")
+
+                val pushSimulatorRequest = OneTimeWorkRequestBuilder<PushSimulatorWorker>()
+                        .setInitialDelay(delay.toLong(), TimeUnit.MILLISECONDS)
+                        .setConstraints(Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .build())
+                        .addTag(PUSH_SIMULATOR_REQUEST_TAG)
+                        .build()
+
+                WorkManager.getInstance().let {
+                    // Cancel any previous worker
+                    it.cancelAllWorkByTag(PUSH_SIMULATOR_REQUEST_TAG)
+                    it.enqueue(pushSimulatorRequest)
+                }
+            }
+            NotifMode.FDROID_OPTIMIZED_FOR_REALTIME -> {
+                //we restart the service asap with permanent notification
+                val intent = Intent(this, OnApplicationUpgradeReceiver::class.java)
+                intent.action = OnApplicationUpgradeReceiver.PERMANENT_LISTENT
+                sendBroadcast(intent)
+
+            }
+            NotifMode.VIA_FCM,
+            NotifMode.NOTHING -> {
+                //do nothing
             }
         }
     }
@@ -309,8 +363,15 @@ class EventStreamServiceX : VectorService() {
 
         val store = session.dataHandler.store
 
+        if (store == null) {
+            //reported by rage shake
+            //TODO what should we do?
+            Log.e(LOG_TAG, "## monitorSession: Store is null")
+            return
+        }
+
         // the store is ready (no data loading in progress...)
-        if (store!!.isReady) {
+        if (store.isReady) {
             startEventStream(session, store)
         } else {
             // wait that the store is ready  before starting the events stream
@@ -327,7 +388,7 @@ class EventStreamServiceX : VectorService() {
                         startEventStream(session, store)
                     } else {
                         // the data are out of sync
-                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext, true)
+                        Matrix.getInstance(applicationContext)?.reloadSessions(applicationContext)
                     }
 
                     store.removeMXStoreListener(this)
@@ -352,7 +413,6 @@ class EventStreamServiceX : VectorService() {
      */
     private fun start(forPush: Boolean) {
         val applicationContext = applicationContext
-        mPushManager = Matrix.getInstance(applicationContext)!!.pushManager
         mNotifiableEventResolver = NotifiableEventResolver(applicationContext)
 
         monitorSession(mSession!!)
@@ -428,14 +488,22 @@ class EventStreamServiceX : VectorService() {
      * Push simulator
      * ========================================================================================== */
 
+
+    enum class NotifMode {
+        NOTHING,
+        VIA_FCM,
+        FCM_FALLBACK,
+        FDROID_OPTIMIZED_FOR_BATTERY,
+        FDROID_OPTIMIZED_FOR_REALTIME
+    }
+
     /**
      * @return true if the FCM is disable or not setup, user allowed background sync, user wants notification
      */
-    private fun shouldISimulatePush(): Boolean {
+    private fun getBackgroundBehavior(): NotifMode {
         if (Matrix.getInstance(applicationContext)?.defaultSession == null) {
-            Log.i(LOG_TAG, "## shouldISimulatePush: NO: no session")
-
-            return false
+            Log.i(LOG_TAG, "## getBackgroundBehavior: NO: no session")
+            return NotifMode.NOTHING
         }
 
         mPushManager?.let { pushManager ->
@@ -443,26 +511,35 @@ class EventStreamServiceX : VectorService() {
                     && !TextUtils.isEmpty(pushManager.currentRegistrationToken)
                     && pushManager.isServerRegistered) {
                 // FCM is ok
-                Log.i(LOG_TAG, "## shouldISimulatePush: NO: FCM is up")
-                return false
+                Log.i(LOG_TAG, "## getBackgroundBehavior: NO: FCM is up")
+                return NotifMode.VIA_FCM
             }
 
             if (!pushManager.isBackgroundSyncAllowed) {
                 // User has disabled background sync
-                Log.i(LOG_TAG, "## shouldISimulatePush: NO: background sync not allowed")
-                return false
+                Log.i(LOG_TAG, "## getBackgroundBehavior: NO: background sync not allowed")
+                return NotifMode.NOTHING
             }
 
             if (!pushManager.areDeviceNotificationsAllowed()) {
                 // User does not want notifications
-                Log.i(LOG_TAG, "## shouldISimulatePush: NO: user does not want notification")
-                return false
+                Log.i(LOG_TAG, "## getBackgroundBehavior: NO: user does not want notification")
+                return NotifMode.NOTHING
+            }
+
+            if (pushManager.idFdroidSyncModeOptimizedForRealTime()) {
+                Log.i(LOG_TAG, "## getBackgroundBehavior: Using permanent listening")
+                return NotifMode.FDROID_OPTIMIZED_FOR_REALTIME
+            } else if (pushManager.idFdroidSyncModeOptimizedForBattery()) {
+                Log.i(LOG_TAG, "## getBackgroundBehavior: Using Work Manager")
+                return NotifMode.FDROID_OPTIMIZED_FOR_BATTERY
+            } else {
+                Log.i(LOG_TAG, "## getBackgroundBehavior: NO: user does not want notification")
+                return NotifMode.NOTHING
             }
         }
-
-        // Lets simulate push
-        Log.i(LOG_TAG, "## shouldISimulatePush: YES")
-        return true
+        Log.i(LOG_TAG, "## getBackgroundBehavior: NO: Unknown Bacgkround mode")
+        return NotifMode.NOTHING
     }
 
 
@@ -528,6 +605,7 @@ class EventStreamServiceX : VectorService() {
         private const val ACTION_PUSH_UPDATE = "im.vector.services.EventStreamServiceX.PUSH_UPDATE"
         private const val ACTION_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.PUSH_RECEIVED"
         private const val ACTION_SIMULATED_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.SIMULATED_PUSH_RECEIVED"
+        private const val ACTION_SIMULATED_PERMANENT_LISTENING = "im.vector.services.EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING"
         private const val ACTION_STOP = "im.vector.services.EventStreamServiceX.STOP"
         private const val ACTION_BOOT_COMPLETE = "im.vector.services.EventStreamServiceX.BOOT_COMPLETE"
         private const val ACTION_APPLICATION_UPGRADE = "im.vector.services.EventStreamServiceX.APPLICATION_UPGRADE"
@@ -574,6 +652,10 @@ class EventStreamServiceX : VectorService() {
 
         fun onApplicationUpgrade(context: Context) {
             sendAction(context, ACTION_APPLICATION_UPGRADE, true)
+        }
+
+        fun onForcePermanentEventListening(context: Context) {
+            sendAction(context, ACTION_SIMULATED_PERMANENT_LISTENING, true)
         }
 
         private fun sendAction(context: Context, action: String, foreground: Boolean = false) {
