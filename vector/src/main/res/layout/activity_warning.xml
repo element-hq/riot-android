@@ -29,11 +29,19 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/login_large_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/riot_splash_0_blue" />
+
             <TextView
                 android:id="@+id/warning_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:gravity="center"
                 android:text="@string/warning_screen_text_title"
                 android:textSize="18sp"
