@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_saba">About Saba</string>
-    <string name="about_saba_text">This page provides user with information about Saba app.</string>
+    <!-- Saba Strings -->
+    <string name="saba_messenger">Saba Messenger</string>
+    <string name="saba_messenger_long">Saba Secure Business Messenger</string>
+    <string name="saba_about_title">About</string>
 
+    <!-- About Saba -->
+    <string name="saba_about_version_info">Version %1$s</string>
+    <string name="saba_about_security_level_info">System Security Level %1$s</string>
+    <string name="saba_about_privacy">Privacy Policy</string>
+    <string name="saba_about_open_source_software">Open Source</string>
+    <string name="saba_about_about_saba">About Saba</string>
 </resources>
