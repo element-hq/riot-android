@@ -91,10 +91,48 @@
     <string name="room_sliding_menu_privacy_policy">سیاست حریم خصوصی</string>
 
     <!-- Vector Settings -->
+    <string name="settings_profile_picture">عکس پروفایل</string>
+    <string name="settings_display_name">نام</string>
+    <string name="settings_email_address">ایمیل</string>
+    <string name="settings_add_email_address">افزودن آدرس ایمیل</string>
+    <string name="settings_phone_number">شماره تلفن</string>
+    <string name="settings_add_phone_number">افزودن شماره تلفن</string>
+    <string name="settings_app_info_link_title">اطلاعات برنامه</string>
+    <string name="settings_app_info_link_summary">اطلاعات برنامه را در تنظیمات سیستم نمایش بده.</string>
+
+    <string name="settings_password">گذرواژه</string>
+    <string name="settings_change_password">تغییر گذرواژه</string>
+    <string name="settings_old_password">گذرواژه کنونی</string>
+    <string name="settings_new_password">گذرواژه جدید</string>
+    <string name="settings_confirm_password">تایید گذرواژه جدید</string>
+    <string name="settings_change_password_submit">تغییر گذرواژه</string>
+    <string name="settings_fail_to_update_password">تغییر گذرواژه با مشکل مواجه شد</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">گذرواژه معتبر نیست</string>
+    <string name="settings_password_updated">گذرواژه شما تغییر یافت</string>
+    <string name="settings_unignore_user">آیا مطمئن هستید که تمام پیام‌های ارسالی از طرف این کاربر نمایش داده شود؟\n\nاین کار برنامه را مجدداً باز می‌کند و ممکن است کمی به طول انجامد.</string>
+    <string name="passwords_do_not_match">گذرواژه و تایید گذرواژه یکسان نیستند</string>
+
+    <string name="settings_user_interface">رابط کاربری</string>
+    <string name="settings_interface_language">زبان</string>
+    <string name="settings_select_language">انتخاب زبان</string>
+
+    <string name="settings_user_settings">حساب کاربری</string>
+    <string name="settings_cryptography">رمزنگاری</string>
+    <string name="settings_cryptography_manage_keys">مدیریت کلیدهای رمزنگاری</string>
 
     <!-- startup -->
 
     <!-- analytics -->
+    <string name="devices_details_dialog_title">اطلاعات دستگاه</string>
+    <string name="devices_details_id_title">شناسه</string>
+    <string name="devices_details_name_title">نام</string>
+    <string name="devices_details_device_name">نام دستگاه</string>
+    <string name="devices_details_last_seen_title">آخرین اتصال</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_delete_dialog_text">برای این اقدام باید دوباره گذرواژه خود را وارد نمایید.</string>
+    <string name="devices_delete_dialog_title">احراز هویت</string>
+    <string name="devices_delete_pswd">گذرواژه:</string>
+    <string name="devices_delete_submit_button_label">ثبت</string>
 
     <!-- Media settings -->
 
@@ -113,4 +151,84 @@
     <string name="room_settings_tag_pref_entry_favourite">مورد علاقه</string>
     <string name="room_settings_tag_pref_entry_low_priority">اولویت پایین</string>
     <string name="room_settings_tag_pref_entry_none">بدون برچسب</string>
+
+    <!-- Directory -->
+    <string name="directory_title">فهرست</string>
+    <string name="settings_theme">قالب</string>
+
+    <!-- matrix error -->
+    <string name="failed_to_load_timeline_position">%s سعی داشت پیام‌های زمانی خاص را دریافت کند که این پیام‌ها پیدا نشدند. و </string>
+
+    <!-- encryption dialog -->
+    <string name="encryption_information_title">اطلاعات رمزنگاری سر تا سر</string>
+
+    <string name="encryption_information_device_info">اطلاعات رویداد</string>
+    <string name="encryption_information_user_id">شناسه کاربر</string>
+    <string name="encryption_information_curve25519_identity_key">شناسه کلید Curve25519</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">اثرانگشت ادعایی Ed25519</string>
+    <string name="encryption_information_algorithm">الگوریتم</string>
+    <string name="encryption_information_session_id">شناسه جلسه</string>
+    <string name="encryption_information_decryption_error">خطا در رمزگشایی</string>
+
+    <string name="encryption_information_sender_device_information">اطلاعات دستگاه فرستنده</string>
+    <string name="encryption_information_device_name">نام دستگاه</string>
+    <string name="encryption_information_name">نام</string>
+    <string name="encryption_information_device_id">شناسه دستگاه</string>
+    <string name="encryption_information_device_key">کلید دستگاه</string>
+    <string name="encryption_information_verification">تایید</string>
+    <string name="encryption_information_ed25519_fingerprint">اثرانگشت Ed25519</string>
+
+    <string name="encryption_export_e2e_room_keys">صدور کلیدهای رمزنگاری</string>
+    <string name="encryption_export_room_keys">صدور کلیدهای رمزنگاری</string>
+    <string name="encryption_export_room_keys_summary">این گزینه امکان دریافت و ذخیره‌سازی کلیدها را به شما می‌دهد</string>
+    <string name="encryption_export_export">صدور</string>
+    <string name="encryption_export_notice">لطفاً یک رمز برای رمزنگاری کلیدها وارد کنید. ورود این رمز برای بارگذاری کلیدها ضروری خواهد بود.</string>
+    <string name="encryption_export_saved_as">کلیدهای رمزنگاری در \'%s\' ذخیره شد.\n\nهشدار: با حذف نصب برنامه ممکن است این فایل نیز پاک شود.</string>
+
+    <string name="encryption_message_recovery">بازیابی پیام‌های رمز</string>
+    <string name="encryption_settings_manage_message_recovery_summary">مدیریت پشتیبان کلید</string>
+
+    <string name="encryption_import_e2e_room_keys">بارگذاری کلیدهای رمزنگاری</string>
+    <string name="encryption_import_room_keys">بارگذاری کلیدهای رمزنگاری</string>
+    <string name="encryption_import_room_keys_summary">این گزینه امکان بارگذاری کلیدهای ذخیره شده در فایل را به شما می‌دهد</string>
+    <string name="encryption_import_import">بارگذاری</string>
+    <string name="encryption_never_send_to_unverified_devices_title">تایید ضروری برای پیام‌های رمز</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">در صورت فعال بودن، پیام‌های رمز تنها به دستگاه‌هایی که خودتان تایید کرده باشید، ارسال خواهد شد.</string>
+    <string name="encryption_import_room_keys_success">%1$d از %2$d کلید با موفقیت بارگذاری شد.</string>
+
+    <string name="encryption_information_not_verified">تایید نشده!</string>
+    <string name="encryption_information_verified">تایید شده</string>
+    <string name="encryption_information_blocked">در لیست سیاه</string>
+
+    <string name="encryption_information_unknown_device">دستگاه ناشناس</string>
+    <string name="encryption_information_none">هیچ</string>
+
+    <string name="encryption_information_verify">تایید</string>
+    <string name="encryption_information_unverify">رد</string>
+    <string name="encryption_information_block">لیست سیاه</string>
+    <string name="encryption_information_unblock">لیست سفید</string>
+
+    <string name="encryption_information_verify_device">تایید دستگاه</string>
+    <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_key_match">تایید می‌کنم که کلیدها یکسان است</string>
+
+    <string name="e2e_enabling_on_app_update">برای فعال‌سازی رمزنگاری سر تا سر لطفاً از حساب خود خارج شده و دوباره لاگین کنید.</string>
+
+    <!-- unknown devices management -->
+    <string name="unknown_devices_alert_title">دستگاه‌های ناشناس در گفتگو حاضر هستند</string>
+    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
+
+    <!-- text size selection -->
+    <string name="font_size">اندازه قلم</string>
+    <string name="tiny">خیلی ریز</string>
+    <string name="small">ریز</string>
+    <string name="normal">معمولی</string>
+    <string name="large">درشت</string>
+    <string name="larger">درشت‌تر</string>
+    <string name="largest">درشت‌ترین</string>
+    <string name="huge">بسیار درشت</string>
+
+    <!-- Other -->
+    <string name="status_theme">قالب Status.im</string>
 </resources>
