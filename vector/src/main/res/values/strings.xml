@@ -1403,7 +1403,7 @@ Why choose Riot.im?
     <!-- Warning screen -->
     <string name="warning_screen_title">Security update</string>
     <string name="warning_screen_text_title">Please reinstall Riot</string>
-    <string name="warning_screen_text_main">This version of Riot has been replaced by a new release on the Google Play Store as a safety measure.\n\nPlease export your encryption keys, uninstall this app, and install the new version. See https://medium.com/@RiotChat/… for more details.</string>
+    <string name="warning_screen_text_main">This version of Riot has been replaced by a new release on the Google Play Store as a safety measure.\n\nPlease export your encryption keys, uninstall this app, and install the new version. See https://riot.im/reinstall for more details.</string>
     <string name="warning_screen_install_new_riot">Reinstall Riot</string>
     <string name="warning_screen_text_logged">You can still use this application to backup or export your encryption keys. Once done, you should sign out from this application and uninstall it.</string>
     <string name="warning_screen_open_application">Enter this application</string>
