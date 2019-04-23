@@ -1,12 +1,18 @@
-Changes in Riot 0.9.00 (2019-XX-XX)
+Changes in Riot 0.9.00 (2019-04-23)
 ===================================================
 
 /!\ This version is the first version published with app id "im.vector.app".
 
 
+Changes in Riot 0.8.99 (2019-04-23)
+===================================================
+
+/!\ This version is the last version published with app id "im.vector.alpha". It contains a screen which introduce the new application "im.vector.app"
+/!\ This release contains security related bugfixes, users should upgrade asap
+
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.9.21.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.21
+ - Upgrade MatrixSdk to version 0.9.22.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.22
 
 Other changes:
  - Remove Amplitude tracker and Calendars permissions added by Jitsi lib (jitsi/jitsi-meet#4068, jitsi/jitsi-meet#4080)
@@ -14,9 +20,11 @@ Other changes:
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
+ - Security Fix / Remove obsolete and buggy ContentProvider which could allow a malicious local app to compromise account data. Many thanks to Julien Thomas (twitter.com/@julien_thomas) from Protektoid Project (https://protektoid.com) for identifying this and responsibly disclosing it!
 
 Build:
  - Exclude Firebase analytics code (#2481)
+
 
 Changes in Riot 0.8.29 (2019-04-04)
 ===================================================

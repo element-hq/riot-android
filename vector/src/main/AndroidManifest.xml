@@ -539,12 +539,7 @@
         <service
             android:name=".services.CallService"
             android:exported="false" />
-
-        <provider
-            android:name=".db.VectorContentProvider"
-            android:authorities="${applicationId}.VectorApp.provider"
-            android:exported="true" />
-
+    
     </application>
 
 </manifest>
