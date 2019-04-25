@@ -117,8 +117,41 @@
     <string name="settings_select_language">انتخاب زبان</string>
 
     <string name="settings_user_settings">حساب کاربری</string>
+    <string name="settings_notifications">اعلان‌ها</string>
+    <string name="settings_ignored_users">کاربران نادیده گرفته شده</string>
+    <string name="settings_other">سایر</string>
+    <string name="settings_advanced">پیشرفته</string>
     <string name="settings_cryptography">رمزنگاری</string>
     <string name="settings_cryptography_manage_keys">مدیریت کلیدهای رمزنگاری</string>
+    <string name="settings_notifications_targets">مقصد اعلان‌ها</string>
+    <string name="settings_contact">مخاطبین تلفن</string>
+    <string name="settings_contacts_app_permission">دسترسی به مخاطبین</string>
+    <string name="settings_contacts_phonebook_country">کشور پیش‌فرض دفترچه تلفن</string>
+    <string name="settings_home_display">صفحه اصلی</string>
+    <string name="settings_pin_missed_notifications">گفتگوهای دارای اعلان سنجاق شود</string>
+    <string name="settings_pin_unread_messages">گفتگوهای دارای پیام جدید سنجاق شود</string>
+    <string name="settings_devices_list">دستگاه‌ها و نشست‌های فعال</string>
+    <string name="settings_inline_url_preview">پیش‌نمایش پیوندها</string>
+    <string name="settings_inline_url_preview_summary">پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.</string>
+    <string name="settings_send_typing_notifs">ارسال وضعیت در حال نوشتن</string>
+    <string name="settings_send_typing_notifs_summary">در صورت فعال بودن سایر کاربران در زمانی که شما مشغول نوشتن پیام هستید، مطلع می‌شوند.</string>
+    <string name="settings_send_markdown">قالب‌بندی حرفه‌ای پیام‌ها</string>
+    <string name="settings_send_markdown_summary">با استفاده از قالب Markdown و استفاده از کارکترهایی مانند * برای متن پررنگ، به صورت پیشرفته‌تری پیام‌های خود را بنویسید.</string>
+    <string name="settings_always_show_timestamps">نمایش زمان برای تمام پیام‌ها</string>
+    <string name="settings_12_24_timestamps">نمایش زمان در قالب ۱۲ ساعته</string>
+    <string name="settings_show_read_receipts">نمایش وضعیت خوانده شدن</string>
+    <string name="settings_show_read_receipts_summary">با کلیک روی آیکن خوانده شدن، اطلاعات کاملی را مشاهده کنید.</string>
+    <string name="settings_show_join_leave_messages">نمایش پیام‌های پیوستن و ترک گفتگو</string>
+    <string name="settings_show_join_leave_messages_summary">دعوت‌ها و حذف توسط مدیر به هر صورت نمایش داده می‌شوند.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">نمایش پیام‌های تغییرات حساب</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">شامل مواردی مانند تغییر نام و تصویر پروفایل می‌شود.</string>
+    <string name="settings_vibrate_on_mention">لرزیدن گوشی در هنگام اشاره به یک کاربر</string>
+    <string name="settings_preview_media_before_sending">پیش‌نمایش محتوای چندرسانه‌ای قبل از ارسال</string>
+    <string name="settings_send_message_with_enter">ارسال با فشردن اینتر</string>
+    <string name="settings_send_message_with_enter_summary">فشردن اینتر به جای رفتن به خط بعد، پیام را خواهد فرستاد</string>
+
+    <string name="settings_deactivate_account_section">غیرفعال‌سازی حساب</string>
+    <string name="settings_deactivate_my_account">حساب کاربری من غیرفعال بشود</string>
 
     <!-- startup -->
 
@@ -209,15 +242,15 @@
     <string name="encryption_information_unblock">لیست سفید</string>
 
     <string name="encryption_information_verify_device">تایید دستگاه</string>
-    <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning">به منظور احراز هویت این دستگاه، با روشی قابل اطمینان بررسی کنید که کلید نمایش داده شده در برنامه‌ی صاحب این دستگاه با کلید زیر یکسان باشد:</string>
+    <string name="encryption_information_verify_device_warning2">اگر کلیدها یکسان باشد، ارتباط شما کاملاً امن است. در غیر این صورت حتماً دستگاه را به لیست سیاه اضافه کنید.</string>
     <string name="encryption_information_verify_key_match">تایید می‌کنم که کلیدها یکسان است</string>
 
     <string name="e2e_enabling_on_app_update">برای فعال‌سازی رمزنگاری سر تا سر لطفاً از حساب خود خارج شده و دوباره لاگین کنید.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">دستگاه‌های ناشناس در گفتگو حاضر هستند</string>
-    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
+    <string name="unknown_devices_alert_message">این گفتگو شامل دستگاه‌هایی است که توسط شما تایید نشده‌اند و در نتیجه گفتگوی شما نسبت به حملات مردمیانی آسیب‌پذیر است.\nبه منظور تامین امنیت کامل خود، فرآیند تایید را برای تمام دستگاه‌های زیر انجام دهید. دستگاه‌های حاضر تایید نشده عبارتند از:</string>
 
     <!-- text size selection -->
     <string name="font_size">اندازه قلم</string>

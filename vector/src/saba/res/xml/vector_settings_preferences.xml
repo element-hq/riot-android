@@ -138,7 +138,7 @@
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
 
-        <im.vector.preference.VectorListPreference
+        <im.vector.preference.SabaListPreference
             android:defaultValue="always"
             android:entries="@array/show_info_area_entries"
             android:entryValues="@array/show_info_area_values"
