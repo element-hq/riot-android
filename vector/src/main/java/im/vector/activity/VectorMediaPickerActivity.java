@@ -1137,7 +1137,7 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage(), e);
 
-                // take a photo event if the autofocus fails
+                // take a photo even if the autofocus fails
                 playShutterSound();
                 takePhoto();
             }
