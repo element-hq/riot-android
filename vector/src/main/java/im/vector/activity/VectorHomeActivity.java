@@ -213,9 +213,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.fab_expand_menu_button)
     AddFloatingActionButton mFabMain;
 
-    @BindView(R.id.button_start_chat)
-    FloatingActionButton mFabStartChat;
-
     @BindView(R.id.button_create_room)
     FloatingActionButton mFabCreateRoom;
 
@@ -253,9 +250,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @BindView(R.id.home_search_view)
     SearchView mSearchView;
-
-    @BindView(R.id.floating_action_menu_touch_guard)
-    View touchGuard;
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -540,15 +534,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             }
         }
 
-        final View selectedMenu;
-        if (isFirstCreation()) {
-            selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_people);
-        } else {
-            selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
-        }
-        if (selectedMenu != null) {
-            selectedMenu.performClick();
-        }
+        // Open default tab
+        tabsGotoConversations();
 
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
@@ -754,7 +741,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public int getMenuRes() {
-        return R.menu.vector_home;
+        return -1;
     }
 
     @Override
@@ -770,15 +757,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // search in rooms content
             case R.id.ic_action_global_search:
-                final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
-
-                if (R.id.bottom_action_people == mCurrentMenuId) {
-                    searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
-                }
-
-                startActivity(searchIntent);
+                gotoGlobalSearch();
                 return true;
             case R.id.ic_action_historical:
                 startActivity(new Intent(this, HistoricalRoomsActivity.class));
@@ -1064,8 +1044,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             mFabJoinRoom.setColorPressed(fabPressedColor);
             mFabCreateRoom.setColorNormal(fabColor);
             mFabCreateRoom.setColorPressed(fabPressedColor);
-            mFabStartChat.setColorNormal(fabColor);
-            mFabStartChat.setColorPressed(fabPressedColor);
         }
 
         // Set color of toolbar search view
@@ -1126,11 +1104,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         }
 
-        mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
-                ContextCompat.getColor(this, android.R.color.white)
-        ));
-
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
                 ContextCompat.getDrawable(this, R.drawable.ic_add_white),
                 ContextCompat.getColor(this, android.R.color.white)
@@ -1140,24 +1113,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 ContextCompat.getDrawable(this, R.drawable.riot_tab_rooms),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
-
-        mFloatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                touchGuard.animate().alpha(0.6f);
-
-                touchGuard.setClickable(true);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                touchGuard.animate().alpha(0);
-
-                touchGuard.setClickable(false);
-            }
-        });
-
-        touchGuard.setClickable(false);
     }
 
     /**
@@ -1337,20 +1292,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      */
 
     private void revealFloatingActionMenu() {
-        if (null != mFloatingActionsMenu) {
-            mFloatingActionsMenu.collapse();
-            mFloatingActionsMenu.setVisibility(View.VISIBLE);
-            ViewPropertyAnimator animator = mFabMain.animate().scaleX(1).scaleY(1).alpha(1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    if (mFloatingActionsMenu != null) {
-                        mFloatingActionsMenu.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-            animator.start();
-        }
     }
 
     private void concealFloatingActionMenu() {
@@ -1425,15 +1366,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      */
     public View getFloatingActionButton() {
         return mFabMain;
-    }
-
-    /**
-     * Open the room creation with inviting people.
-     */
-    private void invitePeopleToNewRoom() {
-        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        startActivity(settingsIntent);
     }
 
     /**
@@ -1759,7 +1691,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             public void onDrawerClosed(View view) {
                 switch (mSlidingMenuIndex) {
                     case R.id.sliding_menu_messages: {
-                        // no action
+                        tabsGotoConversations();
+                        break;
+                    }
+
+                    case R.id.sliding_menu_groups: {
+                        tabsGotoGroups();
                         break;
                     }
 
@@ -1826,9 +1763,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                     // Saba modification: show AboutSabaActivity instead of default about pages
                     case R.id.about_saba: {
-                        Intent about_saba_intent = new Intent(getApplicationContext(), AboutSabaActivity.class);
-                        getApplicationContext();
-                        startActivity(about_saba_intent);
+                        startActivity(new Intent(VectorHomeActivity.this, AboutSabaActivity.class));
                         break;
                     }
                 }
@@ -2274,17 +2209,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * UI Event
      * ========================================================================================== */
 
-    @OnClick(R.id.floating_action_menu_touch_guard)
-    void touchGuardClicked() {
-        mFloatingActionsMenu.collapse();
-    }
-
-    @OnClick(R.id.button_start_chat)
-    void fabMenuStartChat() {
-        mFloatingActionsMenu.collapse();
-        invitePeopleToNewRoom();
-    }
-
     @OnClick(R.id.button_create_room)
     void fabMenuCreateRoom() {
         mFloatingActionsMenu.collapse();
@@ -2464,5 +2388,47 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     public void recoverKeysBackup() {
         startActivity(KeysBackupManageActivity.Companion.intent(this, mSession.getMyUserId()));
+    }
+
+    /* ==========================================================================================
+     * Main Callbacks
+     * ========================================================================================== */
+    @OnClick(R.id.button_start_chat)
+    void toolbarButtonStartChat() {
+        invitePeopleToNewRoom();
+    }
+
+    @OnClick(R.id.button_global_search)
+    void toolbarButtonGlobalChat() {
+        gotoGlobalSearch();
+    }
+
+    /* ==========================================================================================
+     * Main Helper Methods
+     * ========================================================================================== */
+    /**
+     * Open the room creation with inviting people.
+     *  This method is used for starting a new 1-1 chat.
+     */
+    private void invitePeopleToNewRoom() {
+        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        startActivity(settingsIntent);
+    }
+
+    private void gotoGlobalSearch() {
+        final Intent searchIntent = new Intent(this, VectorUnifiedSearchActivity.class);
+        if (mCurrentMenuId == R.id.bottom_action_people) {
+            searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_TAB_INDEX, VectorUnifiedSearchActivity.SEARCH_PEOPLE_TAB_POSITION);
+        }
+        startActivity(searchIntent);
+    }
+
+    private void tabsGotoConversations() {
+        mBottomNavigationView.findViewById(R.id.bottom_action_people).performClick();
+    }
+
+    private void tabsGotoGroups() {
+        mBottomNavigationView.findViewById(R.id.bottom_action_rooms).performClick();
     }
 }

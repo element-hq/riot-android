@@ -12,6 +12,10 @@
     <string name="saba_about_open_source_software">نرم‌افزارهای آزاد</string>
     <string name="saba_about_about_saba">درباره سبا</string>
 
+    <!-- Menus -->
+    <string name="saba_menu_conversations">گفتگوها</string>
+    <string name="saba_menu_groups">گروه‌ها</string>
+
     <!-- Riot Translations -->
     <!--  Chat -->
     <string name="room_menu_search">جستجو</string>

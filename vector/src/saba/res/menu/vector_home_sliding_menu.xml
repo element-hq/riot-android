@@ -4,19 +4,20 @@
     <group android:id="@+id/account_group">
         <item
             android:id="@+id/sliding_menu_messages"
-            android:icon="@drawable/logo_transparent"
-            android:title="@string/room_sliding_menu_messages" />
+            android:icon="@drawable/ic_person_black"
+            android:title="@string/saba_menu_conversations" />
 
+        <item
+            android:id="@+id/sliding_menu_groups"
+            android:icon="@drawable/riot_tab_groups"
+            android:title="@string/saba_menu_groups" />
+    </group>
+
+    <group android:id="@+id/exit_group">
         <item
             android:id="@+id/sliding_menu_settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/room_sliding_menu_settings" />
-
-        <item
-            android:visible="false"
-            android:id="@+id/sliding_menu_send_bug_report"
-            android:icon="@drawable/ic_material_bug_report"
-            android:title="@string/send_bug_report" />
 
         <item
             android:id="@+id/sliding_menu_exit"
@@ -30,6 +31,17 @@
     </group>
 
     <group android:id="@+id/app_group">
+        <item
+            android:visible="false"
+            android:id="@+id/sliding_menu_send_bug_report"
+            android:icon="@drawable/ic_material_bug_report"
+            android:title="@string/send_bug_report" />
+
+        <item
+            android:id="@+id/about_saba"
+            android:icon="@drawable/ic_devices_info"
+            android:title="@string/saba_about_about_saba" />
+
         <item
             android:visible="false"
             android:id="@+id/sliding_menu_version"
@@ -54,10 +66,6 @@
             android:visible="false"
             android:id="@+id/sliding_menu_third_party_notices"
             android:title="@string/room_sliding_menu_third_party_notices" />
-
-        <item
-            android:id="@+id/about_saba"
-            android:title="@string/saba_about_title" />
     </group>
 
     <group android:visible="@bool/debug_mode">
