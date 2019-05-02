@@ -1,0 +1,38 @@
+# Use Docker file from https://hub.docker.com/r/runmymind/docker-android-sdk
+# Last docker plugin version can be found here:
+# https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
+
+# Build debug version of the Riot application, from the develop branch and the features branches, with the develop branch of the matrix SDK
+
+steps:
+  - label: "Assemble Debug version"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "medium"
+    commands:
+      - "./set_debug_env.sh"
+      - "./gradlew clean lintAppRelease assembleAppDebug --stacktrace"
+      - "./gradlew lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/app/debug/*.apk"
+      - "vector/build/outputs/apk/appfdroid/debug/*.apk"
+    branches: "develop feature/*"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+  - label: "Build Google Play unsigned APK"
+    commands:
+      - "./gradlew clean assembleAppRelease --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/app/release/*.apk"
+    branches: "master"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+# Code quality
+
+  - label: "Code quality"
+    command: "./tools/check/check_code_quality.sh"
