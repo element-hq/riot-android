@@ -22,6 +22,16 @@ steps:
     - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
 
+  - label: "Build Google Play unsigned APK"
+    commands:
+      - "./gradlew clean assembleAppRelease --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/app/release/*.apk"
+    branches: "master"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
 # Code quality
 
   - label: "Code quality"
