@@ -250,7 +250,6 @@ dependencies {
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
-    implementation(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {

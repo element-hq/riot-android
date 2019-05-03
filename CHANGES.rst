@@ -12,7 +12,7 @@ Improvements:
  - Use heads-up alert UX for key-share and key-verification requests
 
 Other changes:
- -
+ - Olm lib is now only a dependency of Matrix Sdk
 
 Bugfix:
  -
