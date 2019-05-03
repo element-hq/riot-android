@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -544,7 +545,7 @@ public class VectorApp extends MultiDexApplication {
      *
      * @param activity the current activity, null if there is no more one.
      */
-    private void setCurrentActivity(Activity activity) {
+    private void setCurrentActivity(@Nullable Activity activity) {
         Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
 
         if (VectorApp.isAppInBackground() && (null != activity)) {
@@ -574,7 +575,7 @@ public class VectorApp extends MultiDexApplication {
         mCurrentActivity = activity;
 
         if (null != mCurrentActivity) {
-            KeyRequestHandler.getSharedInstance().processNextRequest();
+            PopupAlertManager.INSTANCE.onNewActivityDisplayed(mCurrentActivity);
         }
     }
 

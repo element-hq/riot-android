@@ -61,15 +61,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        release {
-            storeFile file(project.hasProperty("RELEASE_STORE_FILE") ? RELEASE_STORE_FILE : "/dummy/path")
-            storePassword project.hasProperty("RELEASE_STORE_PASSWORD") ? RELEASE_STORE_PASSWORD : "dummy password"
-            keyAlias project.hasProperty("RELEASE_KEY_ALIAS") ? RELEASE_KEY_ALIAS : "dummy alias"
-            keyPassword project.hasProperty("RELEASE_KEY_PASSWORD") ? RELEASE_KEY_PASSWORD : "dummy password"
-        }
-    }
-
     dexOptions {
         jumboMode true
         javaMaxHeapSize "2g"
@@ -96,14 +87,6 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        matrixorg.initWith(buildTypes.release)
-        matrixorg {
-            signingConfig signingConfigs.release
-
-            // When building with source of the SDK, there is no buildType 'matrixorg' in the SDK so fallback to 'release'
-            matchingFallbacks = ['release']
         }
     }
 
@@ -241,6 +224,9 @@ dependencies {
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
 
+    //Alerter
+    implementation 'com.tapadoo.android:alerter:3.0.2'
+
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external lib
@@ -248,7 +234,6 @@ dependencies {
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
-    implementation(name: 'olm-sdk', ext: 'aar')
 
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {

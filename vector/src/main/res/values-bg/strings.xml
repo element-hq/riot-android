@@ -1358,8 +1358,8 @@
 
     <string name="autodiscover_invalid_response">Невалиден отговор при опит за откриване на адреса на сървъра</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Опции за откриване на сървър</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot откри конфигурация за собствен сървър за домейна от потребителското Ви име \"%1$s\":
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Използвай конфигурацията</string>
 
     <string name="notification_sync_init">Инициализиране на услугата</string>

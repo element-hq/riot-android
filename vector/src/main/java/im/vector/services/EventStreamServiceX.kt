@@ -313,7 +313,7 @@ class EventStreamServiceX : VectorService() {
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreCorrupted(accountId: String, description: String) {
+                override fun onStoreCorrupted(accountId: String?, description: String?) {
                     // start a new initial sync
                     if (null == store.eventStreamToken) {
                         startEventStream(session, store)
@@ -325,7 +325,7 @@ class EventStreamServiceX : VectorService() {
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreOOM(accountId: String, description: String) {
+                override fun onStoreOOM(accountId: String?, description: String?) {
                     val uiHandler = Handler(mainLooper)
 
                     uiHandler.post {

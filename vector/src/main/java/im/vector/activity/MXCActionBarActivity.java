@@ -156,7 +156,9 @@ public abstract class MXCActionBarActivity extends VectorAppCompatActivity {
     protected void onPause() {
         super.onPause();
         Matrix.removeSessionErrorListener(this);
-        dismissDialogs(this);
+        // Keep the unused method for now, and track unwanted side effects.
+        // Also the history of the body is strange, ylecollen has added code with comment, and remove it the next day, leaving the comment.
+        // dismissDialogs(this);
     }
 
     @Override

@@ -35,9 +35,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -1155,12 +1156,38 @@ public class CommonActivityUtils {
      *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
-                                                           final String sender,
-                                                           final MXSession session,
-                                                           Activity activity,
-                                                           @NonNull final YesNoListener yesNoListener) {
+    public static void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
+                                                       final String sender,
+                                                       final MXSession session,
+                                                       Activity activity,
+                                                       @Nullable Fragment fragment,
+                                                       int reqCode) {
+        // sanity check
+        if ((null == deviceInfo) || (null == sender) || (null == session)) {
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
+            return;
+        }
 
+        //Priority is to use new verification method, and fallback to older if user chooses to
+
+        Intent intent = SASVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
+        if (fragment != null) {
+            fragment.startActivityForResult(intent, reqCode);
+        } else {
+            activity.startActivityForResult(intent, reqCode);
+        }
+    }
+
+    /**
+     * Display the device verification warning
+     *
+     * @param deviceInfo the device info
+     */
+    public static void displayDeviceVerificationDialogLegacy(final MXDeviceInfo deviceInfo,
+                                                             final String sender,
+                                                             final MXSession session,
+                                                             Activity activity,
+                                                             @NonNull final YesNoListener yesNoListener) {
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");

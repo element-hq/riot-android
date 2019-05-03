@@ -1376,8 +1376,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="autodiscover_invalid_response">Baliogabeko hasiera-zerbitzari deskubritze erantzuna</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automatikoki osatu zerbitzariaren aukerak</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">"Riot-ek pertsonalizatutako zerbitzari konfigurazio bat antzeman du zure erabiltzaile id-arentzat  \"%s\" domeinuan:
-\n%s"</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">"Riot-ek pertsonalizatutako zerbitzari konfigurazio bat antzeman du zure erabiltzaile id-arentzat \"%1$s\" domeinuan:
+\n%2$s"</string>
     <string name="autodiscover_well_known_autofill_confirm">Erabili konfigurazioa</string>
 
     <string name="action_mark_room_read">Markatu irakurritako gisa</string>

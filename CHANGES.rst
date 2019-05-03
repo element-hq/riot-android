@@ -3,6 +3,21 @@ Changes in Riot 0.9.00 (2019-04-23)
 
 /!\ This version is the first version published with app id "im.vector.app".
 
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.X.Y.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+
+Features:
+ - E2E: SAS Verification
+
+Improvements:
+ - Use heads-up alert UX for key-share and key-verification requests
+
+Other changes:
+ - Olm lib is now only a dependency of Matrix Sdk
+
+Bugfix:
+ - Fix mistake in Arabic translation (#3129)
 
 Changes in Riot 0.8.99 (2019-04-23)
 ===================================================

@@ -87,7 +87,6 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.listeners.YesNoListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
@@ -108,6 +107,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     private String mPendingMediaMimeType;
     private String mPendingFilename;
     private EncryptedFileInfo mPendingEncryptedFileInfo;
+
+    private static int VERIF_REQ_CODE = 12;
 
     public interface VectorMessageListFragmentListener {
         /**
@@ -222,6 +223,16 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     @Override
     public MatrixMessagesFragment createMessagesFragmentInstance(String roomId) {
         return VectorMessagesFragment.newInstance(roomId);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VERIF_REQ_CODE) {
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -378,18 +389,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         }
     };
 
-    private final YesNoListener mYesNoListener = new YesNoListener() {
-        @Override
-        public void yes() {
-            mAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void no() {
-            mAdapter.notifyDataSetChanged();
-        }
-    };
-
     /**
      * the user taps on the e2e icon
      *
@@ -488,7 +487,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mYesNoListener);
+                                    event.getSender(), mSession, getActivity(), VectorMessageListFragment.this, VERIF_REQ_CODE);
                         }
                     });
 
@@ -516,7 +515,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mYesNoListener);
+                                    event.getSender(), mSession, getActivity(), VectorMessageListFragment.this, VERIF_REQ_CODE);
                         }
                     });
 
