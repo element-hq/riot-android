@@ -23,7 +23,7 @@
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
 
         <!-- waiting view background -->
-        <item name="vctr_waiting_background_color">#AAAAAAAA</item>
+        <item name="vctr_waiting_background_color">@color/waiting_background_light</item>
 
         <!-- application bar text color -->
         <!-- Base Text Primary-->

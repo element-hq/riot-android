@@ -6,13 +6,13 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - E2E: SAS Verification
 
 Improvements:
- -
+ - Use heads-up alert UX for key-share and key-verification requests
 
 Other changes:
- -
+ - Olm lib is now only a dependency of Matrix Sdk
 
 Bugfix:
  - Fix mistake in Arabic translation (#3129)

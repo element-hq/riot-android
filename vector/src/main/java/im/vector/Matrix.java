@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
@@ -108,6 +109,10 @@ public class Matrix {
     public boolean mHasBeenDisconnected = false;
 
     public Map<String, KeysBackupStateManager.KeysBackupStateListener> keyBackupStateListeners = new HashMap<>();
+
+    // Request Handler
+    @Nullable
+    private KeyRequestHandler mKeyRequestHandler;
 
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
@@ -726,21 +731,31 @@ public class Matrix {
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
         dataHandler.addListener(new MXEventListener() {
+            // FIXME Use onCryptoSyncComplete() to instantiate mKeyRequestHandler?
+            @Override
+            public void onCryptoSyncComplete() {
+                Log.d(LOG_TAG, "onCryptoSyncComplete");
+            }
+
             @Override
             public void onInitialSyncComplete(String toToken) {
+                Log.d(LOG_TAG, "onInitialSyncComplete");
+
                 if (null != session.getCrypto()) {
+                    mKeyRequestHandler = new KeyRequestHandler(session);
+
                     session.getCrypto().addRoomKeysRequestListener(new MXCrypto.IRoomKeysRequestListener() {
                         @Override
                         public void onRoomKeyRequest(IncomingRoomKeyRequest request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequest(request);
+                            mKeyRequestHandler.handleKeyRequest(request);
                         }
 
                         @Override
                         public void onRoomKeyRequestCancellation(IncomingRoomKeyRequestCancellation request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
+                            mKeyRequestHandler.handleKeyRequestCancellation(request);
                         }
                     });
-
+                    IncomingVerificationRequestHandler.INSTANCE.initialize(session.getCrypto().getShortCodeVerificationManager());
                     registerKeyBackupStateListener(session);
                 }
             }

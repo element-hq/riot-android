@@ -17,14 +17,17 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -40,12 +43,15 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.SASVerificationActivity;
 import im.vector.adapters.VectorUnknownDevicesAdapter;
-import im.vector.listeners.YesNoListener;
 
 public class VectorUnknownDevicesFragment extends DialogFragment {
     private static final String ARG_SESSION_ID = "VectorUnknownDevicesFragment.ARG_SESSION_ID";
     private static final String ARG_IS_FOR_CALLING = "VectorUnknownDevicesFragment.ARG_IS_FOR_CALLING";
+
+
+    private static final int DEVICE_VERIF_REQ_CODE = 12;
 
     /**
      * Define the SendAnyway button listener
@@ -88,6 +94,35 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mSession = Matrix.getMXSession(getActivity(), getArguments().getString(ARG_SESSION_ID));
         mIsForCalling = getArguments().getBoolean(ARG_IS_FOR_CALLING);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == DEVICE_VERIF_REQ_CODE) {
+            // Update the status
+            String otherUserId = SASVerificationActivity.Companion.getOtherUserId(data);
+            String otherDeviceId = SASVerificationActivity.Companion.getOtherDeviceId(data);
+
+            if (mDevicesList != null && otherUserId != null && otherDeviceId != null) {
+                for (Pair<String, List<MXDeviceInfo>> pair : mDevicesList) {
+                    if (pair.first.equals(otherUserId)) {
+                        for (MXDeviceInfo mxDeviceInfo : pair.second) {
+                            if (mxDeviceInfo.deviceId.equals(otherDeviceId)) {
+                                mxDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED;
+                            }
+                        }
+                    }
+                }
+            }
+
+            ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
+            if (adapter instanceof VectorUnknownDevicesAdapter) {
+                ((VectorUnknownDevicesAdapter) adapter).notifyDataSetChanged();
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // current session
@@ -169,18 +204,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                                 aDeviceInfo.userId,
                                 mSession,
                                 getActivity(),
-                                new YesNoListener() {
-                                    @Override
-                                    public void yes() {
-                                        aDeviceInfo.mVerified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED;
-                                        refresh();
-                                    }
-
-                                    @Override
-                                    public void no() {
-                                        // Nothing to do
-                                    }
-                                });
+                                VectorUnknownDevicesFragment.this,
+                                DEVICE_VERIF_REQ_CODE
+                        );
                         break;
                 }
             }
