@@ -159,8 +159,13 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
-                            + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
+                        Log.e(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                                + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    } else {
+                        Log.d(LOG_TAG, "## onConsoleMessage() : " + consoleMessage.message()
+                                + " line " + consoleMessage.lineNumber() + " source Id " + consoleMessage.sourceId())
+                    }
                     return super.onConsoleMessage(consoleMessage)
                 }
             }

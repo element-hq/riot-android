@@ -15,3 +15,26 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+# Dont obfuscate
+-dontobfuscate
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+# Dont warn for excluded modules
+-dontwarn com.amplitude.api.*
+-dontwarn com.google.appengine.api.urlfetch.*
+-dontwarn com.google.firebase.analytics.connector.AnalyticsConnector
+
+# WebRTC rules
+-keep class org.webrtc.** { *; }
+-keepclasseswithmembernames class * { native <methods>; }
+
+# Serializable
+-keep class * implements java.io.Serializable { *; }
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+
+# Jitsi (else callbacks are not called)
+-keep class org.jitsi.meet.sdk.** { *; }

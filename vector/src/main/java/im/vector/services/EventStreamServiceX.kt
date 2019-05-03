@@ -313,7 +313,7 @@ class EventStreamServiceX : VectorService() {
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreCorrupted(accountId: String, description: String) {
+                override fun onStoreCorrupted(accountId: String?, description: String?) {
                     // start a new initial sync
                     if (null == store.eventStreamToken) {
                         startEventStream(session, store)
@@ -325,7 +325,7 @@ class EventStreamServiceX : VectorService() {
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreOOM(accountId: String, description: String) {
+                override fun onStoreOOM(accountId: String?, description: String?) {
                     val uiHandler = Handler(mainLooper)
 
                     uiHandler.post {
@@ -574,10 +574,15 @@ class EventStreamServiceX : VectorService() {
             val intent = Intent(context, EventStreamServiceX::class.java)
             intent.action = action
 
-            if (foreground) {
-                ContextCompat.startForegroundService(context, intent)
-            } else {
-                context.startService(intent)
+            try {
+                if (foreground) {
+                    ContextCompat.startForegroundService(context, intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (e: java.lang.Exception) {
+                //Can we recover here? in case of illegal state
+                Log.i(LOG_TAG, "## Failed to start event stream", e)
             }
         }
     }

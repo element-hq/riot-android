@@ -272,7 +272,7 @@ public class SlashCommandsParser {
                     isIRCCmdValid = true;
 
                     String user = messageParts[1];
-                    String reason = textMessage.substring(SlashCommand.BAN_USER.getCommand().length()
+                    String reason = textMessage.substring(SlashCommand.KICK_USER.getCommand().length()
                             + 1
                             + user.length()).trim();
 

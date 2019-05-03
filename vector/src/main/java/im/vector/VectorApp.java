@@ -2,6 +2,7 @@
  * Copyright 2014 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ package im.vector;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -66,7 +69,6 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.notifications.NotificationDrawerManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
-import im.vector.services.EventStreamServiceX;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
 import im.vector.tools.VectorUncaughtExceptionHandler;
@@ -141,6 +143,11 @@ public class VectorApp extends MultiDexApplication {
     }
 
     /**
+     * Lifecycle observer to start/stop eventstream service
+     */
+    private VectorLifeCycleObserver mLifeCycleListener;
+
+    /**
      * Calls manager
      */
     private CallsManager mCallsManager;
@@ -186,6 +193,9 @@ public class VectorApp extends MultiDexApplication {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+
+        mLifeCycleListener = new VectorLifeCycleObserver();
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
@@ -454,8 +464,6 @@ public class VectorApp extends MultiDexApplication {
                         mIsInBackground = true;
                         mIsCallingInBackground = (null != mCallsManager.getActiveCall());
 
-                        EventStreamServiceX.Companion.onAppGoingToBackground(VectorApp.this);
-
                         // if there is a pending call
                         // the application is not suspended
                         if (!mIsCallingInBackground) {
@@ -498,8 +506,6 @@ public class VectorApp extends MultiDexApplication {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-            // the event stream service has been killed
-            EventStreamServiceX.Companion.onAppGoingToForeground(VectorApp.this);
 
             // try to perform a FCM registration if it failed
             // or if the FCM server generated a new push key
@@ -539,7 +545,7 @@ public class VectorApp extends MultiDexApplication {
      *
      * @param activity the current activity, null if there is no more one.
      */
-    private void setCurrentActivity(Activity activity) {
+    private void setCurrentActivity(@Nullable Activity activity) {
         Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
 
         if (VectorApp.isAppInBackground() && (null != activity)) {
@@ -569,7 +575,7 @@ public class VectorApp extends MultiDexApplication {
         mCurrentActivity = activity;
 
         if (null != mCurrentActivity) {
-            KeyRequestHandler.getSharedInstance().processNextRequest();
+            PopupAlertManager.INSTANCE.onNewActivityDisplayed(mCurrentActivity);
         }
     }
 

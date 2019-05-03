@@ -110,6 +110,14 @@
     <!-- Jitsi libs require min API 21 and min is set to 16 -->
     <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,co.apptailor.googlesignin,com.BV.LinearGradient,com.calendarevents,com.corbt.keepawake,com.dylanvann.fastimage,com.oblador.vectoricons,com.ocetnik.timer,com.rnimmersive,com.zmxv.RNSound,com.i18n.reactnativei18n,org.webkit.androidjsc" />
 
+    <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
+    <uses-permission
+        android:name="android.permission.READ_CALENDAR"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.WRITE_CALENDAR"
+        tools:node="remove" />
+
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -421,6 +429,11 @@
             android:label="@string/encryption_message_recovery" />
         <activity android:name=".activity.DebugMenuActivity" />
 
+        <activity
+            android:name=".activity.SASVerificationActivity"
+            android:label="@string/title_activity_verify_device"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <!-- FileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -531,12 +544,7 @@
         <service
             android:name=".services.CallService"
             android:exported="false" />
-
-        <provider
-            android:name=".db.VectorContentProvider"
-            android:authorities="${applicationId}.VectorApp.provider"
-            android:exported="true" />
-
+    
     </application>
 
 </manifest>
