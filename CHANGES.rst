@@ -1,7 +1,5 @@
-Changes in Riot 0.9.00 (2019-04-23)
+Changes in Riot 0.9.01 (2019-XX-XX)
 ===================================================
-
-/!\ This version is the first version published with app id "im.vector.app".
 
 MatrixSdk:
  - Upgrade MatrixSdk to version 0.X.Y.
@@ -18,6 +16,17 @@ Other changes:
 
 Bugfix:
  - Fix mistake in Arabic translation (#3129)
+
+Translations:
+ -
+
+Build:
+ -
+
+Changes in Riot 0.9.00 (2019-04-23)
+===================================================
+
+/!\ This version is the first version published with app id "im.vector.app".
 
 Changes in Riot 0.8.99 (2019-04-23)
 ===================================================
@@ -1333,7 +1342,7 @@ Changes in Vector 0.2.0 (2016-04-14)
 =======================================================
 
 
-Changes in Riot 0.8.XX (2019-XX-XX)
+Changes in Riot 0.9.XX (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
