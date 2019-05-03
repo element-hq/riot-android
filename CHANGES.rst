@@ -1,9 +1,9 @@
-Changes in Riot 0.9.01 (2019-XX-XX)
+Changes in Riot 0.9.1 (2019-05-03)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+ - Upgrade MatrixSdk to version 0.9.23.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.23
 
 Features:
  - E2E: SAS Verification
@@ -17,12 +17,6 @@ Other changes:
 
 Bugfix:
  - Fix mistake in Arabic translation (#3129)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.9.00 (2019-04-23)
 ===================================================
