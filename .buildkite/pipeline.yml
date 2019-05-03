@@ -23,6 +23,10 @@ steps:
           image: "runmymind/docker-android-sdk"
 
   - label: "Build Google Play unsigned APK"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "medium"
     commands:
       - "./gradlew clean assembleAppRelease --stacktrace"
     artifact_paths:
