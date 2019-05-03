@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -74,6 +75,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -83,7 +85,6 @@ import im.vector.activity.VectorMediaViewerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
-import im.vector.db.VectorContentProvider;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -867,19 +868,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     } else {
                         // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
                         // user select an application to share the file
+                        // only files in this folder can be shared with external apps, with temporary read access
                         file = mediasCache.moveToShareFolder(file, trimmedFileName);
 
                         // shared / forward
                         Uri mediaUri = null;
                         try {
-                            mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), file.getAbsolutePath());
+                            mediaUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage(), e);
+                            Log.e(LOG_TAG, "onMediaAction Selected File cannot be shared " + e.getMessage(), e);
                         }
 
                         if (null != mediaUri) {
                             final Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
+                            // Grant temporary read permission to the content URI
+                            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             sendIntent.setType(mediaMimeType);
                             sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
 

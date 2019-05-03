@@ -95,7 +95,7 @@ android {
 
     productFlavors {
         app {
-            applicationId "im.vector.alpha"
+            applicationId "im.vector.app"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
