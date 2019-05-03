@@ -43,6 +43,10 @@ allprojects {
         maven {
             url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
         }
+        // For Matrix Android SDK
+        maven {
+            url 'https://jitpack.io'
+        }
     }
 }
 
