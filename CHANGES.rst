@@ -13,6 +13,7 @@ Improvements:
 
 Other changes:
  - Olm lib is now only a dependency of Matrix Sdk
+ - Matrix SDK library is now built and hosted by Jitpack (https://jitpack.io/#matrix-org/matrix-android-sdk/) (matrix-org/matrix-android-sdk#241)
 
 Bugfix:
  - Fix mistake in Arabic translation (#3129)
