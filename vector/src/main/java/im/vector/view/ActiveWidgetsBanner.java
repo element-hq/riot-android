@@ -24,8 +24,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;

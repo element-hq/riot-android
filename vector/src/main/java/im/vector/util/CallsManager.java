@@ -37,9 +37,9 @@ import org.matrix.androidsdk.call.IMXCallsManagerListener;
 import org.matrix.androidsdk.call.MXCallListener;
 import org.matrix.androidsdk.call.MXCallsManagerListener;
 import org.matrix.androidsdk.call.VideoLayoutConfiguration;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 

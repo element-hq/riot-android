@@ -16,7 +16,7 @@
 
 package im.vector.webview
 
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 private const val TAG = "DefaultWebViewEventListener"
 

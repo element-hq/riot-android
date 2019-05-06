@@ -20,8 +20,8 @@ import android.text.TextUtils;
 
 import com.google.gson.JsonElement;
 
-import org.matrix.androidsdk.util.JsonUtils;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.JsonUtils;
+import org.matrix.androidsdk.core.Log;
 
 import java.io.Serializable;
 import java.util.Map;

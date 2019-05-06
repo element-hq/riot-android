@@ -15,8 +15,8 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.RoomMediaMessage;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 

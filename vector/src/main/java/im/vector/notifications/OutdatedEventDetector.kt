@@ -17,7 +17,7 @@ package im.vector.notifications
 
 import android.content.Context
 import im.vector.Matrix
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 class OutdatedEventDetector(val context: Context) {
 

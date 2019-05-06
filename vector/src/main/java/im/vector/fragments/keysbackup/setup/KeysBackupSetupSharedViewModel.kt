@@ -24,14 +24,14 @@ import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.callback.SuccessErrorCallback
+import org.matrix.androidsdk.core.listeners.ProgressListener
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
 import org.matrix.androidsdk.crypto.keysbackup.MegolmBackupCreationInfo
-import org.matrix.androidsdk.listeners.ProgressListener
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SuccessErrorCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.keys.KeysVersion
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.crypto.model.keys.KeysVersion
 
 /**
  * The shared view model between all fragments.

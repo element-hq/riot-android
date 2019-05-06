@@ -4,3 +4,9 @@ include ':vector'
 // see build.gradle section Matrix SDK management
 //include ':matrix-sdk'
 //project(':matrix-sdk').projectDir = new File(settingsDir, '../matrix-android-sdk/matrix-sdk')
+
+//include ':matrix-sdk-crypto'
+//project(':matrix-sdk-crypto').projectDir = new File(settingsDir, '../matrix-android-sdk/matrix-sdk-crypto')
+
+//include ':matrix-sdk-core'
+//project(':matrix-sdk-core').projectDir = new File(settingsDir, '../matrix-android-sdk/matrix-sdk-core')
