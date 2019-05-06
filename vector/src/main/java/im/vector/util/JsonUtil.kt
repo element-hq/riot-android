@@ -18,8 +18,8 @@ package im.vector.util
 
 import com.google.gson.reflect.TypeToken
 import im.vector.types.JsonDict
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 

@@ -23,19 +23,19 @@ import android.content.Context
 import android.text.TextUtils
 import im.vector.activity.SASVerificationActivity
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap
+import org.matrix.androidsdk.crypto.model.rest.DeviceInfo
+import org.matrix.androidsdk.crypto.model.rest.DevicesListResponse
 import org.matrix.androidsdk.crypto.verification.SASVerificationTransaction
 import org.matrix.androidsdk.crypto.verification.VerificationManager
 import org.matrix.androidsdk.crypto.verification.VerificationTransaction
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.sync.DeviceInfo
-import org.matrix.androidsdk.rest.model.sync.DevicesListResponse
-import org.matrix.androidsdk.util.Log
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -85,7 +85,7 @@ class KeyRequestHandler(val session: MXSession) : VerificationManager.Verificati
         //Add a notification for every incoming request
         val context = VectorApp.getInstance()
 
-        session.crypto?.deviceList?.downloadKeys(Arrays.asList(userId), false, object : ApiCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        session.crypto?.getDeviceList()?.downloadKeys(Arrays.asList(userId), false, object : ApiCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(devicesMap: MXUsersDevicesMap<MXDeviceInfo>) {
                 val deviceInfo = devicesMap.getObject(deviceId, userId)
 

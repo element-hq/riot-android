@@ -30,6 +30,10 @@ ext {
 }
 
 allprojects {
+    ext.support_lib_version = '28.0.0'
+    ext.gson_version = '2.8.5'
+    ext.okhttp_version = '3.14.1'
+
     repositories {
         google()
         maven {
@@ -80,6 +84,22 @@ project(":vector") {
 
 if (findProject(':matrix-sdk') != null) {
     project(":matrix-sdk") {
+        sonarqube {
+            skipProject = true
+        }
+    }
+}
+
+if (findProject(':matrix-sdk-crypto') != null) {
+    project(":matrix-sdk-crypto") {
+        sonarqube {
+            skipProject = true
+        }
+    }
+}
+
+if (findProject(':matrix-sdk-core') != null) {
+    project(":matrix-sdk-core") {
         sonarqube {
             skipProject = true
         }

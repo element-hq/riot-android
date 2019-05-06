@@ -29,9 +29,9 @@ import im.vector.R
 import im.vector.adapters.VectorReadReceiptsAdapter
 import im.vector.extensions.withArgs
 import im.vector.fragments.base.VectorBaseDialogFragment
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.RoomMember
-import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**

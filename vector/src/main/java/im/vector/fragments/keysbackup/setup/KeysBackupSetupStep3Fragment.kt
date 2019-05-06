@@ -33,7 +33,7 @@ import im.vector.activity.CommonActivityUtils
 import im.vector.fragments.VectorBaseFragment
 import im.vector.ui.arch.LiveEvent
 import im.vector.util.*
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import java.io.ByteArrayInputStream
 import java.io.File
 

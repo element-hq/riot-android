@@ -30,7 +30,7 @@ import android.widget.TextView
 import androidx.core.animation.doOnEnd
 import im.vector.R
 import im.vector.ui.themes.ThemeUtils
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 
 /**

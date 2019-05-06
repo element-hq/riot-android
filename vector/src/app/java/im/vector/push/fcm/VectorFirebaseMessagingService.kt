@@ -29,7 +29,6 @@ import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
-import im.vector.activity.CommonActivityUtils
 import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.SimpleNotifiableEvent
@@ -37,9 +36,9 @@ import im.vector.push.PushManager
 import im.vector.services.EventStreamServiceX
 import im.vector.ui.badge.BadgeProxy
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.Log
 
 /**
  * Class extending FirebaseMessagingService.

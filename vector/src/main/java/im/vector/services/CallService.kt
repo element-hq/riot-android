@@ -26,7 +26,7 @@ import im.vector.Matrix
 import im.vector.VectorApp
 import im.vector.notifications.NotificationUtils
 import im.vector.util.CallsManager
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Foreground service to manage calls

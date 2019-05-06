@@ -25,10 +25,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;

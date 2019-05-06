@@ -26,7 +26,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import im.vector.R;
 import im.vector.VectorApp;

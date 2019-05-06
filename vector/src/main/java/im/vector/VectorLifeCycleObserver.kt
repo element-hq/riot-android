@@ -23,7 +23,7 @@ import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
 import android.os.Build
 import im.vector.services.EventStreamServiceX
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 
 class VectorLifeCycleObserver : LifecycleObserver {
