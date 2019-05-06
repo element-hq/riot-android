@@ -26,19 +26,10 @@ class OnApplicationUpgradeReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(LOG_TAG, "## onReceive() : Application has been upgraded, restart event stream service.")
-
-        when (intent.action) {
-            PERMANENT_LISTENT -> {
-                EventStreamServiceX.onForcePermanentEventListening(context)
-            }
-            else -> {
-                EventStreamServiceX.onApplicationUpgrade(context)
-            }
-        }
+        EventStreamServiceX.onApplicationUpgrade(context)
     }
 
     companion object {
-        const val PERMANENT_LISTENT = "PERMANENT_LISTENT"
         private val LOG_TAG = OnApplicationUpgradeReceiver::class.java.simpleName
     }
 }

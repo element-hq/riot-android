@@ -34,7 +34,7 @@ import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotificationUtils
 import im.vector.notifications.OutdatedEventDetector
 import im.vector.push.PushManager
-import im.vector.receiver.OnApplicationUpgradeReceiver
+import im.vector.receiver.VectorBootReceiver
 import im.vector.util.CallsManager
 import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.MXSession
@@ -325,10 +325,10 @@ class EventStreamServiceX : VectorService() {
             }
             NotifMode.FDROID_OPTIMIZED_FOR_REALTIME -> {
                 //we restart the service asap with permanent notification
-                val intent = Intent(this, OnApplicationUpgradeReceiver::class.java)
-                intent.action = OnApplicationUpgradeReceiver.PERMANENT_LISTENT
+                //TODO bad
+                val intent = Intent(this, VectorBootReceiver::class.java)
+                intent.action = VectorBootReceiver.PERMANENT_LISTENT
                 sendBroadcast(intent)
-
             }
             NotifMode.VIA_FCM,
             NotifMode.NOTHING -> {
