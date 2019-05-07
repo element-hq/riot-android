@@ -60,6 +60,7 @@ import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
+import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.preference.ProgressBarPreference
 import im.vector.preference.UserAvatarPreference
 import im.vector.preference.VectorGroupPreference
@@ -906,9 +907,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                             // Important, Battery optim white listing is needed in this mode;
                                             // Even if using foreground service with foreground notif, it stops to work
                                             // in doze mode for certain devices :/
+
+                                            if ( !isIgnoringBatteryOptimizations(requireContext())) {
+                                                requestDisablingBatteryOptimization(requireActivity(),
+                                                        this@VectorSettingsPreferencesFragment,
+                                                        REQUEST_BATTERY_OPTIMIZATION)
+
+                                            }
+
                                             pushManager.setFdroidSyncModeOptimizedForRealTime();
                                         }
                                         PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> {
+
                                             pushManager.setFdroidSyncModeOptimizedForBattery();
                                         }
                                         PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> {
@@ -3169,6 +3179,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         private const val REQUEST_PHONEBOOK_COUNTRY = 789
         private const val REQUEST_LOCALE = 777
         private const val REQUEST_CALL_RINGTONE = 999
+        private const val REQUEST_BATTERY_OPTIMIZATION = 500
 
         // preference name <-> rule Id
         private var mPrefKeyToBingRuleId = mapOf(
