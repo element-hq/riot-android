@@ -974,7 +974,9 @@ public class PreferencesManager {
 
     public static String getFdroidSyncBackgroundMode(Context context) {
         try {
-            return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY);
+            return PreferenceManager
+                    .getDefaultSharedPreferences(context)
+                    .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY);
         } catch (ClassCastException e) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()

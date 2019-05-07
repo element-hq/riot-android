@@ -44,7 +44,6 @@ public class VectorBootReceiver extends BroadcastReceiver {
                 Log.d(LOG_TAG, "## onReceive() : the autostart is disabled");
             }
         } else if (TextUtils.equals(intent.getAction(), PERMANENT_LISTENT)) {
-            
             EventStreamServiceX.Companion.onForcePermanentEventListening(context);
         }
     }
