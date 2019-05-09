@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix / crash in logout success
 
 Translations:
  -

@@ -337,14 +337,10 @@ public class CommonActivityUtils {
             // display a dummy activity until the logout is done
             Matrix.getInstance(context).getPushManager().clearPreferences();
 
-            Intent intent = new Intent(activity, LoggingOutActivity.class);
+            Intent intent = new Intent(context, LoggingOutActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
 
-            if (null != activity) {
-                activity.startActivity(intent);
-            } else {
-                context.startActivity(intent);
-            }
         }
 
         // clear credentials
