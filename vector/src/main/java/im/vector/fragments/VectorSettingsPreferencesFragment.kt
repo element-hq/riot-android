@@ -566,7 +566,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             if (!bNewValue) {
                 // Disable LazyLoading, just reload the sessions
                 PreferencesManager.setUserRefuseLazyLoading(appContext)
-                Matrix.getInstance(appContext).reloadSessions(appContext)
+                Matrix.getInstance(appContext).reloadSessions(appContext, true)
             } else {
                 // Try to enable LazyLoading
                 displayLoadingView()
@@ -578,7 +578,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             PreferencesManager.setUseLazyLoading(activity, true)
 
                             // Reload the sessions
-                            Matrix.getInstance(appContext).reloadSessions(appContext)
+                            Matrix.getInstance(appContext).reloadSessions(appContext, true)
                         } else {
                             // The server does not support lazy loading yet
                             hideLoadingView()
@@ -816,7 +816,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                Matrix.getInstance(appContext).reloadSessions(appContext)
+                Matrix.getInstance(appContext).reloadSessions(appContext, true)
                 false
             }
         }

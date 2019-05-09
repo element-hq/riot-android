@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix / Logged out and crashed (rageshake) #5159
 
 Translations:
  -
