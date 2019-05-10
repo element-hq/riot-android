@@ -190,6 +190,14 @@ class EventStreamServiceX : VectorService() {
             return START_NOT_STICKY
         }
 
+        if (mSession?.dataHandler == null || mSession?.dataHandler?.store == null) {
+            Log.e(LOG_TAG, "onStartCommand : invalid session")
+            //this might launch riot?
+            Matrix.getInstance(applicationContext)?.reloadSessions(applicationContext, false)
+            myStopSelf()
+            return START_NOT_STICKY
+        }
+
         when (action) {
             ACTION_START,
             ACTION_GO_TO_FOREGROUND ->
@@ -319,7 +327,7 @@ class EventStreamServiceX : VectorService() {
                         startEventStream(session, store)
                     } else {
                         // the data are out of sync
-                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext)
+                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext, true)
                     }
 
                     store.removeMXStoreListener(this)
@@ -330,7 +338,7 @@ class EventStreamServiceX : VectorService() {
 
                     uiHandler.post {
                         Toast.makeText(applicationContext, "$accountId : $description", Toast.LENGTH_LONG).show()
-                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext)
+                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext, true)
                     }
                 }
             })

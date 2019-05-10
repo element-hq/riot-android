@@ -1121,7 +1121,7 @@ public class CommonActivityUtils {
                     CommonActivityUtils.restartApp(activity);
                 } else {
                     Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
-                    Matrix.getInstance(activity).reloadSessions(activity);
+                    Matrix.getInstance(activity).reloadSessions(activity, true);
                 }
             } else {
                 Log.e(LOW_MEMORY_LOG_TAG, "Wait to be concerned");

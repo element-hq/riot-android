@@ -604,7 +604,7 @@ public class EventStreamService extends Service {
                         startEventStream(session, store);
                     } else {
                         // the data are out of sync
-                        Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                        Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext(), true);
                     }
                 }
 
@@ -614,7 +614,7 @@ public class EventStreamService extends Service {
 
                     uiHandler.post(() -> {
                         Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
-                        Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                        Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext(), true);
                     });
                 }
             });
@@ -659,7 +659,7 @@ public class EventStreamService extends Service {
 
         for (final MXSession session : mSessions) {
             // session == null has been reported by GA
-            if ((null == session) || (null == session.getDataHandler()) || (null == session.getDataHandler().getStore())) {
+            if ((null == session)) {
                 Log.i(LOG_TAG, "start : the session is not anymore valid.");
                 return;
             }
