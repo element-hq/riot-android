@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- - Fix / Logged out and crashed (rageshake) #5159
+ - Fix / Crash when session store is null in event stream #3158
 
 Translations:
  -
