@@ -245,7 +245,7 @@ dependencies {
 
     /************* analytics **************/
     // another tracking than GA
-    implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
+    implementation 'org.matomo.sdk:tracker:4.0.2'
 
     /************* flavors management **************/
 

@@ -62,7 +62,7 @@ import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
-import im.vector.analytics.PiwikAnalytics;
+import im.vector.analytics.MatomoAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -212,7 +212,7 @@ public class VectorApp extends MultiDexApplication {
 
         instance = this;
         mCallsManager = new CallsManager(this);
-        mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
+        mAppAnalytics = new AppAnalytics(this, new MatomoAnalytics(this));
         mDecryptionFailureTracker = new DecryptionFailureTracker(mAppAnalytics);
 
         mActivityTransitionTimer = null;
@@ -253,7 +253,7 @@ public class VectorApp extends MultiDexApplication {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                // piwik
+                // matomo
                 onNewScreen(activity);
             }
 

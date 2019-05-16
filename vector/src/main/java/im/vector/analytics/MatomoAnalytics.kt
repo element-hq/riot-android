@@ -18,22 +18,24 @@ package im.vector.analytics
 
 import android.content.Context
 import im.vector.R
-import org.piwik.sdk.Piwik
-import org.piwik.sdk.QueryParams
-import org.piwik.sdk.Tracker
-import org.piwik.sdk.TrackerConfig
-import org.piwik.sdk.extra.CustomVariables
-import org.piwik.sdk.extra.TrackHelper
+import org.matomo.sdk.Matomo
+import org.matomo.sdk.QueryParams
+import org.matomo.sdk.Tracker
+import org.matomo.sdk.TrackerBuilder
+import org.matomo.sdk.extra.CustomVariables
+import org.matomo.sdk.extra.TrackHelper
 
 /**
- * A class implementing the Analytics interface for the Piwik solution
+ * A class implementing the Analytics interface for the Matomo solution
  */
-class PiwikAnalytics(context: Context) : Analytics {
+class MatomoAnalytics(context: Context) : Analytics {
     private val tracker: Tracker
 
     init {
-        val config = TrackerConfig(context.getString(R.string.piwik_server_url), 1, " AndroidPiwikTracker")
-        tracker = Piwik.getInstance(context).newTracker(config)
+        val builder = TrackerBuilder(context.getString(R.string.matomo_server_url),
+                context.getString(R.string.matomo_site_id).toInt(),
+                context.getString(R.string.matomo_tracker_name))
+        tracker = builder.build(Matomo.getInstance(context))
     }
 
     override fun trackScreen(screen: String, title: String?) {
