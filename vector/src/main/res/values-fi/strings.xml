@@ -14,14 +14,14 @@
 
     <!-- button names -->
     <string name="ok">OK</string>
-    <string name="cancel">Peru</string>
+    <string name="cancel">Peruuta</string>
     <string name="save">Säästä</string>
     <string name="leave">Poistu</string>
     <string name="send">Lähetä</string>
     <string name="copy">Kopioi</string>
     <string name="resend">Lähetä uudelleen</string>
     <string name="redact">Poista</string> <!-- ??? -->
-    <string name="quote">Lainaus</string>
+    <string name="quote">Lainaa</string>
     <string name="share">Jaa</string>
     <string name="later">Myöhemmin</string>
     <string name="forward">Lähetä edelleen</string>
@@ -39,7 +39,7 @@
 \nLiity pelkällä %1$s tai %2$s kanssa</string>
     <string name="ongoing_conference_call_voice">äänellä</string>
     <string name="ongoing_conference_call_video">videon</string>
-    <string name="cannot_start_call">Ei voitu aloittaa puhelua, yritä uudelleen</string>
+    <string name="cannot_start_call">Puhelua ei voitu aloittaa, yritä myöhemmin uudelleen</string>
     <string name="missing_permissions_warning">Puuttuvien oikeuksien takia osa ominaisuuksista ei ole käytettävissä…</string>
     <string name="missing_permissions_to_start_conf_call">Sinulta puuttuu oikeus käynnistää ryhmäpuhelu tässä huoneessa</string>
     <string name="missing_permissions_title_to_start_conf_call">Puhelua ei voitu käynnistää</string>
@@ -67,7 +67,7 @@
     <string name="dialog_title_warning">Varoitus</string>
 
     <!-- Bottom navigation buttons -->
-    <string name="bottom_action_home">Home</string>
+    <string name="bottom_action_home">Koti</string>
     <string name="bottom_action_favourites">Suosikit</string>
     <string name="bottom_action_people">Ihmiset</string>
     <string name="bottom_action_rooms">Huoneet</string>
@@ -102,7 +102,7 @@
 
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
-    <string name="send_bug_report_include_screenshot">Send screenshot</string>
+    <string name="send_bug_report_include_screenshot">Lähetä näytönkaappauskuva</string>
     <string name="send_bug_report">Ilmoita virheestä</string>
     <string name="send_bug_report_description">Kuvaile virhettä. Mitä teit? Mitä odotit tapahtuvan? Mitä tapahtui?</string>
     <string name="send_bug_report_placeholder">Kuvaile ongelmaa</string>
@@ -118,7 +118,7 @@
 
     <string name="join_room">Liity huoneeseen</string>
     <string name="username">Käyttäjätunnus</string>
-    <string name="create_account">Luo tunnus</string>
+    <string name="create_account">Luo tili</string>
     <string name="login">Kirjaudu sisään</string>
     <string name="logout">Kirjaudu ulos</string>
     <string name="hs_url">Kotipalvelimen URL</string>
@@ -139,7 +139,7 @@
 
     <!-- Authentication -->
     <string name="auth_login">Kirjaudu sisään</string>
-    <string name="auth_register">Luo tunnus</string>
+    <string name="auth_register">Luo tili</string>
     <string name="auth_submit">Lähetä</string>
     <string name="auth_skip">Ohita</string>
     <string name="auth_send_reset_email">Lähetä nollaussähköposti</string>
@@ -149,9 +149,13 @@
     <string name="auth_new_password_placeholder">Uusi salasana</string>
     <string name="auth_user_name_placeholder">Käyttäjätunnus</string>
     <string name="auth_add_email_message">"Lisää sähköpostiosoite tiliisi antaaksesi muiden käyttäjien löytää sinut. Voit myös nollata salasanasi."</string>
-    <string name="auth_add_phone_message">"Lisää puhelinnumero tiliisi antaaksesi muiden käyttäjien löytää sinut."</string>
-    <string name="auth_add_email_phone_message">"Lisää sähköpostiosoite ja/tai puhelinnumero tiliisi antaaksesi muiden käyttäjien löytää sinut.\n\nSähköpostiosoitteella voit myös nollata salasanasi."</string>
-    <string name="auth_add_email_and_phone_message">"Lisää sähköpostiosoite ja puhelinnumero tiliisi antaaksesi muiden käyttäjien löytää sinut.\n\nSähköpostiosoitteella voit myös nollata salasanasi."</string>
+    <string name="auth_add_phone_message">Lisää puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.</string>
+    <string name="auth_add_email_phone_message">Lisää sähköpostiosoite ja/tai puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
+\n
+\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
+    <string name="auth_add_email_and_phone_message">Lisää sähköpostiosoite ja puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
+\n
+\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
     <string name="auth_email_placeholder">Sähköpostiosoite</string>
     <string name="auth_opt_email_placeholder">Sähköpostiosoite (valinnainen)</string>
     <string name="auth_phone_number_placeholder">Puhelinnumero</string>
@@ -182,8 +186,8 @@
     <string name="auth_reset_password_message">Nollataksesi salasanasi, anna tilisi sähköpostiosoite:</string>
     <string name="auth_reset_password_missing_email">Anna tilisi sähköpostiosoite.</string>
     <string name="auth_reset_password_missing_password">Anna uusi salasana.</string>
-    <string name="auth_reset_password_email_validation_message">Osoitteeseen %s on lähetetty sähköposti. Sen jälkeen, kun olet seurannut siinä olevaa linkkiä, paina alla olevaa nappia.</string> <!-- ???? -->
-    <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvitaminen epäonnistui. Varmistathan, että seurasit sähköpostissasi olevaa linkkiä</string>
+    <string name="auth_reset_password_email_validation_message">Osoitteeseen %s on lähetetty sähköposti. Kun olet avannut siinä olevan linkin, paina alla olevaa nappia.</string> <!-- ???? -->
+    <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvistaminen epäonnistui. Varmista, että klikkasit sähköpostissa olevaa linkkiä.</string>
     <string name="auth_reset_password_success_message">Salasanasi on vaihdettu.\n\nSinut on kirjauduttu ulos kaikista laitteistasi, etkä enää saa viesti-ilmoituksia. Ottaaksesi käyttöön ilmoitukset uudelleen, kirjaudu sisään uudelleen kaikilla laitteillasi.</string>
 
     <!-- Login Screen -->
@@ -199,10 +203,10 @@
     <string name="login_error_forbidden">Väärä käyttäjätunnus tai salasana</string>
     <string name="login_error_unknown_token">Annettua tunnistetta ei hyväksytty</string>
     <string name="login_error_bad_json">Epämuotoinen JSON</string>
-    <string name="login_error_not_json">Ei sisällä oikeamuotoista JSON:ia</string>
+    <string name="login_error_not_json">Ei sisällä kelvollista JSON:ia</string>
     <string name="login_error_limit_exceeded">Liian monta pyyntöä</string>
-    <string name="login_error_user_in_use">Käyttäjätunnus on jo käytössä</string>
-    <string name="login_error_login_email_not_yet">Sähköpostiisi lähetetty linkki, jota ei ole vielä seurattu</string> <!-- ??? -->
+    <string name="login_error_user_in_use">Käyttäjänimi on jo käytössä</string>
+    <string name="login_error_login_email_not_yet">Sähköpostiisi lähetetty linkki, jota ei ole vielä klikattu</string> <!-- ??? -->
 
     <!-- crypto warnings -->
     <string name="e2e_need_log_in_again">Sinun pitää kirjautua uudelleen, luodaksesi salausavaimet tälle laitteelle.</string>
@@ -222,8 +226,8 @@
     <!-- media upload / download messages -->
     <string name="attachment_cancel_download">Peru lataus?</string>
     <string name="attachment_cancel_upload">Peru lähetys?</string>
-    <string name="attachment_remaining_time_seconds">%d sek</string>
-    <string name="attachment_remaining_time_minutes">%1$d min %2$d sek</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$d min %2$d s</string>
 
     <!-- room creation dialog Screen -->
     <string name="yesterday">Eilen</string>
@@ -259,21 +263,25 @@
     <string name="permissions_rationale_popup_title">Huomio</string>
     <string name="permissions_rationale_msg_storage">Riot tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
     <string name="permissions_rationale_msg_camera">Riot tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
-    <string name="permissions_rationale_msg_camera_explanation">\n\nSalli kameran käyttö seuraavalla näytöllä aloittaaksesi tämä puhelu.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nSalli kameran käyttö seuraavalla näytöllä aloittaaksesi tämän puhelun."</string>
     <string name="permissions_rationale_msg_record_audio">Riot tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">\n\nSalli mikrofonin käyttö seuraavalla näytöllä aloittaaksesi tämä puhelu.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.\n\nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämä puhelu.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nSalli mikrofonin käyttö seuraavalla näytöllä aloittaaksesi tämän puhelun."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
+\n
+\nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
     <string name="permissions_rationale_msg_contacts">Riot tarvitsee luvan käyttää yhteystietojasi löytääkseen muita Matrix-käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella.
 
 Salli yhteystietojen käyttö seuraavalla näytöllä löytääksesi Matrix-tilit.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot tarvitsee käyttöluvan yhteystietoihin, löytääkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden avulla.
-
-Salli Riotin käyttää yhteystietojasi?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot tarvitsee käyttöluvan yhteystietoihin löytääkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden avulla. Salli Riotin käyttää yhteystietojasi\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Toimenpide epäonnistui puuttuvien käyttölupien takia</string>
 
     <!-- medias slider string -->
-    <string name="media_slider_saved">Säästetty</string>
+    <string name="media_slider_saved">Tallennettu</string>
     <string name="media_slider_saved_message">Tallenna latauskansioon\?</string>
     <string name="yes">KYLLÄ</string>
     <string name="no">EI</string>
@@ -714,7 +722,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="black_them">Musta teema</string>
 
     <string name="notification_sync_in_progress">Synkronoidaan…</string>
-    <string name="notification_listening_for_events">Seuraa tapahtumia</string>
+    <string name="notification_listening_for_events">Kuunnellaan tapahtumia</string>
     <string name="notification_noisy_notifications">Korostetut ilmoitukset</string>
     <string name="notification_silent_notifications">Hiljaiset ilmoitukset</string>
 
@@ -786,7 +794,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
     <string name="groups_header">Yhteisöt</string>
     <string name="no_group_placeholder">Ei ryhmiä</string>
 
-    <string name="start_new_chat_prompt_msg">Oletko varma, että haluat aloittaa uuden keskustelun %s kanssa?</string>
+    <string name="start_new_chat_prompt_msg">Oletko varma, että haluat aloittaa uuden keskustelun käyttäjän %s kanssa\?</string>
     <string name="start_voice_call_prompt_msg">Oletko varma että haluat aloittaa äänipuhelun?</string>
     <string name="start_video_call_prompt_msg">Oletko varma, että haluat aloittaa videopuhelun?</string>
 
@@ -883,7 +891,7 @@ Voit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
 Haluatko lisätä paketteja?</string>
 
-    <string name="auth_accept_policies">Tarkista ja hyväksy tämän kotipalvelimen käytännöt:</string>
+    <string name="auth_accept_policies">Lue ja hyväksy tämän kotipalvelimen käytännöt:</string>
 
     <string name="title_activity_keys_backup_setup">Avainten varmuuskopiointi</string>
     <string name="title_activity_keys_backup_restore">Käytä avainten varmuuskopiointia</string>
@@ -902,7 +910,7 @@ Haluatko lisätä paketteja?</string>
     <string name="speak">Puhu</string>
     <string name="clear">Tyhjennä</string>
     <string name="missing_permissions_error">Tätä toimintoa ei voi tehdä puuttuvien oikeuksien takia.</string>
-    <string name="call_anyway">Soita joka tapauksessa</string>
+    <string name="call_anyway">Soita silti</string>
     <string name="done">Valmis</string>
     <string name="abort">Keskeytä</string>
 
@@ -911,8 +919,8 @@ Haluatko lisätä paketteja?</string>
 
     <string name="option_send_voice">Lähetä ääntä</string>
 
-    <string name="go_on_with">mene…</string>
-    <string name="error_no_external_application_found">Yhtään ulkopuolista ohjelmaa tämän toiminnon suorittamiseksi ei löytynyt.</string>
+    <string name="go_on_with">jatka sovelluksella…</string>
+    <string name="error_no_external_application_found">Yhtään ulkopuolista sovellusta tämän toiminnon suorittamiseksi ei löytynyt.</string>
 
     <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muilta laitteiltasi.</string>
 
@@ -932,7 +940,7 @@ Haluatko lisätä paketteja?</string>
 
     <string name="list_members">Käyttäjälista</string>
     <string name="open_chat_header">Avaa otsikko</string>
-    <string name="room_sync_in_progress">Päivitetään…</string>
+    <string name="room_sync_in_progress">Synkronoidaan…</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">yksi aktiivinen käyttäjä</item>
         <item quantity="other">%d aktiivista käyttäjää</item>
@@ -1378,7 +1386,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="auth_login_sso">Kirjaudu sisään kertakirjautumisella</string>
     <string name="login_error_unknown_host">Tämä osoite ei ole saavutettavissa. Tarkistathan osoitteen</string>
-    <string name="login_error_ssl_handshake">Laitteesi käyttää vanhaentunutta, haavoittuvaista TLS-protokollan versiota. Turvallisuutesi vuoksi et pysty yhdistämään</string>
+    <string name="login_error_ssl_handshake">Laitteesi käyttää vanhentunutta, haavoittuvaista TLS-protokollan versiota. Turvallisuutesi vuoksi et pysty yhdistämään</string>
     <string name="settings_send_message_with_enter">Lähetä viesti enter-näppäimellä</string>
     <string name="settings_send_message_with_enter_summary">Näppäimistön enter-näppäin lähettää viestin sen sijaan, että se lisäisi rivinvaihdon</string>
 
@@ -1440,5 +1448,22 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="notification_inline_reply_failed">** Lähetys epäonnistui — avaathan huoneen</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 5.0 tai vanhempi)</string>
+
+<string name="encryption_information_unknown_ip">tuntematon IP-osoite</string>
+    <string name="you_added_a_new_device_with_info">Uusi laite pyytää salausavaimia.
+\nLaitteen nimi: %1$s
+\nViimeksi nähty: %2$s
+\nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
+    <string name="share_without_verifying_short_label">Jaa</string>
+    <string name="sas_security_advise">Parhaan turvallisuuden takaamiseksi suosittelemme, että teet tämän kasvotusten tai muun luotetun viestintäkeinon avulla.</string>
+    <string name="sas_view_request_action">Näytä pyyntö</string>
+    <string name="sas_got_it">Selvä</string>
+
+    <string name="sas_cancelled_dialog_title">Pyyntö peruttu</string>
+    <string name="sas_error_m_unexpected_message">Laite vastaanotti odottamattoman viestin</string>
+    <string name="sas_error_m_invalid_message">Virheellinen viesti vastaanotettu</string>
+    <string name="sas_error_m_key_mismatch">Avain ei täsmää</string>
+    <string name="sas_error_m_user_error">Käyttäjä ei täsmää</string>
+    <string name="sas_error_unknown">Tuntematon virhe</string>
 
 </resources>
