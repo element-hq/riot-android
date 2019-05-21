@@ -162,7 +162,7 @@ public class SplashActivity extends MXCActionBarActivity {
                     .apply();
 
             // Force a clear cache
-            Matrix.getInstance(this).reloadSessions(this);
+            Matrix.getInstance(this).reloadSessions(this, true);
             return;
         }
 
@@ -221,7 +221,7 @@ public class SplashActivity extends MXCActionBarActivity {
                             PreferencesManager.setUseLazyLoading(SplashActivity.this, true);
 
                             // Reload the sessions
-                            Matrix.getInstance(SplashActivity.this).reloadSessions(SplashActivity.this);
+                            Matrix.getInstance(SplashActivity.this).reloadSessions(SplashActivity.this, true);
                         } else {
                             // Maybe in the future this home server will support it
                             startEventStreamService(sessions);

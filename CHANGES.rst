@@ -16,6 +16,7 @@ Other changes:
 
 Bugfix:
  - Fix / crash in logout success
+ - Fix / Crash when session store is null in event stream #3158
 
 Translations:
  -

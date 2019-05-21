@@ -142,7 +142,7 @@ public class Matrix {
             if ((null != instance) && (null != instance.mMXSessions)) {
                 if (mClearCacheRequired && !VectorApp.isAppInBackground()) {
                     mClearCacheRequired = false;
-                    instance.reloadSessions(VectorApp.getInstance());
+                    instance.reloadSessions(VectorApp.getInstance(), true);
                 } else if (mRefreshUnreadCounter) {
                     PushManager pushManager = instance.getPushManager();
 
@@ -803,9 +803,10 @@ public class Matrix {
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
      *
-     * @param context the context
+     * @param context        the context
+     * @param launchActivity
      */
-    public void reloadSessions(final Context context) {
+    public void reloadSessions(final Context context, boolean launchActivity) {
         Log.e(LOG_TAG, "## reloadSessions");
 
         CommonActivityUtils.logout(context, getMXSessions(context), false, new SimpleApiCallback<Void>() {
@@ -825,18 +826,21 @@ public class Matrix {
                 Matrix.getInstance(context).getPushManager().clearFcmData(new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(final Void anything) {
-                        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.getApplicationContext().startActivity(intent);
+                        if (launchActivity) {
+                            Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            context.getApplicationContext().startActivity(intent);
+                        }
 
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
 
-                            if (context instanceof SplashActivity) {
-                                // Avoid bad visual effect, due to check of lazy loading status
-                                ((SplashActivity) context).overridePendingTransition(0, 0);
+                            if (launchActivity) {
+                                if (context instanceof SplashActivity) {
+                                    // Avoid bad visual effect, due to check of lazy loading status
+                                    ((SplashActivity) context).overridePendingTransition(0, 0);
+                                }
                             }
-
                         }
                     }
                 });

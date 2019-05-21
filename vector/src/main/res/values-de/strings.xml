@@ -739,7 +739,7 @@ Unbekannte Geräte:</string>
 
     <string name="login_mobile_device">Mobilgerät</string>
 
-    <string name="notification_sync_in_progress">Synchronisiere</string>
+    <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
