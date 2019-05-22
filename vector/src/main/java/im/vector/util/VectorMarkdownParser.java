@@ -26,7 +26,7 @@ import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;

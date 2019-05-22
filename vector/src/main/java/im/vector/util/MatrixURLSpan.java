@@ -26,8 +26,8 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import org.matrix.androidsdk.MXPatterns;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

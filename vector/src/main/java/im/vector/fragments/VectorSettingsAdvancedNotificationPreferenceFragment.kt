@@ -38,10 +38,10 @@ import im.vector.notifications.supportNotificationChannels
 import im.vector.preference.BingRulePreference
 import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.BingRulesManager
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.BingRulesManager
-import org.matrix.androidsdk.util.Log
 
 class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentCompat() {
 

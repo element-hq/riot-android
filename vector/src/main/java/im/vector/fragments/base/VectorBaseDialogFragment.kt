@@ -18,7 +18,7 @@ package im.vector.fragments.base
 
 import android.content.Context
 import android.support.v4.app.DialogFragment
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * this class can be used as a parent class for DialogFragment to manager the listener

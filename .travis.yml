@@ -33,7 +33,8 @@ before_cache:
 
 cache:
   directories:
-    - $HOME/.gradle/caches/
+# Travis is not happy with gradle cache (getting permission denied)
+#   - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 

@@ -28,14 +28,14 @@ import im.vector.VectorApp
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.NotificationUtils
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.MXCryptoError
 import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.Event
-import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.message.Message
-import org.matrix.androidsdk.util.Log
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)

@@ -26,7 +26,7 @@ import androidx.core.content.edit
 import im.vector.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 /**

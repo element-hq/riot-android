@@ -30,7 +30,7 @@ import android.support.v4.content.FileProvider
 import androidx.core.widget.toast
 import im.vector.BuildConfig
 import im.vector.R
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -238,5 +238,20 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
         activity.startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
+    }
+}
+
+/**
+ * Open the play store to the provided application Id
+ */
+fun openPlayStore(activity: Activity, appId: String) {
+    try {
+        activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
+    } catch (activityNotFoundException: android.content.ActivityNotFoundException) {
+        try {
+            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appId")))
+        } catch (activityNotFoundException: ActivityNotFoundException) {
+            activity.toast(R.string.error_no_external_application_found)
+        }
     }
 }

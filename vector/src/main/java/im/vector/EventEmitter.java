@@ -3,7 +3,7 @@ package im.vector;
 import android.os.Handler;
 import android.os.Looper;
 
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import java.util.HashSet;
 import java.util.Set;

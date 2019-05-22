@@ -23,13 +23,13 @@ import android.text.TextUtils;
 import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.EventDisplay;
+import org.matrix.androidsdk.core.JsonUtils;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.interfaces.HtmlToolbox;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.EventContent;
-import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.JsonUtils;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;

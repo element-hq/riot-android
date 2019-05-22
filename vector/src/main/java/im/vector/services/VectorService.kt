@@ -19,7 +19,7 @@ package im.vector.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Parent class for all services

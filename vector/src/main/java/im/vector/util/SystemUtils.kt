@@ -28,7 +28,7 @@ import androidx.core.widget.toast
 import im.vector.R
 import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 private const val LOG_TAG = "SystemUtils"

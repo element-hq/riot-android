@@ -227,7 +227,7 @@ class CustomLinkifyTest {
     private fun actAndAssert(format: String, matches: List<TestLinkMatch>) {
         // Arrange
         val textView = TextView(InstrumentationRegistry.getContext())
-        val displays = (matches.map { it.display }).toTypedArray()
+        val displays = matches.map { it.display }.toTypedArray()
         val testString = format.format(*displays)
         textView.text = testString
 

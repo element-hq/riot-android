@@ -29,7 +29,7 @@ import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.util.BugReporter
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Form to send a bug report

@@ -30,7 +30,7 @@ import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.startImportTextFromFileIntent
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
 

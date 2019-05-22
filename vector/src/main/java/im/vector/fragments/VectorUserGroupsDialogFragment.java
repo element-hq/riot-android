@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import java.util.ArrayList;
 import java.util.List;
