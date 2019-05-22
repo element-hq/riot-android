@@ -24,8 +24,6 @@ import im.vector.R
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsViewModel
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
 
 class KeysBackupManageActivity : SimpleFragmentActivity() {
 

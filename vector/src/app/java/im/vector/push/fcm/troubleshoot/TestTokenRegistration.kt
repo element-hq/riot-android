@@ -20,8 +20,8 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.fragments.troubleshoot.TroubleshootTest
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 
 /**
  * Force registration of the token to HomeServer

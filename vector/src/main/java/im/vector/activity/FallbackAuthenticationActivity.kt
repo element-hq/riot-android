@@ -32,9 +32,9 @@ import butterknife.BindView
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import im.vector.R
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.login.Credentials
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
 import java.net.URLDecoder
 import java.util.*
 

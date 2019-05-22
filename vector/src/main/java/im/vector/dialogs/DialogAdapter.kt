@@ -17,28 +17,25 @@
 package im.vector.dialogs
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import im.vector.R
 
-internal abstract class DialogAdapter(context: Context) : ArrayAdapter<DialogListItem>(context, R.layout.adapter_item_dialog) {
+internal abstract class DialogAdapter(context: Context) :
+        ArrayAdapter<DialogListItem>(context, R.layout.adapter_item_dialog, R.id.adapter_item_dialog_text) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = super.getView(position, convertView, parent)
 
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.adapter_item_dialog, parent, false)
-
+        if (view.tag == null) {
             view.tag = DialogListItemHolder(view)
         }
 
-        (view!!.tag as DialogListItemHolder).let {
+        (view.tag as DialogListItemHolder).let {
             it.icon.setImageResource(getItem(position).iconRes)
             it.text.setText(getItem(position).titleRes)
         }
-
 
         return view
     }

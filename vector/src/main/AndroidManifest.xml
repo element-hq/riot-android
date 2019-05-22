@@ -429,6 +429,11 @@
             android:label="@string/encryption_message_recovery" />
         <activity android:name=".activity.DebugMenuActivity" />
 
+        <activity
+            android:name=".activity.SASVerificationActivity"
+            android:label="@string/title_activity_verify_device"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <!-- FileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -539,12 +544,7 @@
         <service
             android:name=".services.CallService"
             android:exported="false" />
-
-        <provider
-            android:name=".db.VectorContentProvider"
-            android:authorities="${applicationId}.VectorApp.provider"
-            android:exported="true" />
-
+    
     </application>
 
 </manifest>

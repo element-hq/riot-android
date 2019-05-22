@@ -21,7 +21,7 @@ import android.support.annotation.StringRes
 import android.text.Html
 import com.binaryfork.spanny.Spanny
 import im.vector.R
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.model.MatrixError
 
 class ResourceLimitErrorFormatter(private val context: Context) {
 

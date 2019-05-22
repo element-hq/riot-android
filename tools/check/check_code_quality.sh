@@ -65,9 +65,14 @@ echo
 echo "Search for forbidden patterns in code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
+    ./vector/src/androidTest/java \
     ./vector/src/app/java \
     ./vector/src/appfdroid/java \
-    ./vector/src/main/java
+    ./vector/src/debug/java \
+    ./vector/src/main/java \
+    ./vector/src/matrixorg/java \
+    ./vector/src/release/java \
+    ./vector/src/test/java
 
 resultForbiddenStringInCode=$?
 
@@ -112,9 +117,14 @@ echo "Search for long files..."
 
 # TODO Decrease this limit in a near future...
 ${checkLongFilesScript} 4100 \
+    ./vector/src/androidTest/java \
     ./vector/src/app/java \
     ./vector/src/appfdroid/java \
+    ./vector/src/debug/java \
     ./vector/src/main/java \
+    ./vector/src/matrixorg/java \
+    ./vector/src/release/java \
+    ./vector/src/test/java \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/menu \
     ./vector/src/main/res/values \

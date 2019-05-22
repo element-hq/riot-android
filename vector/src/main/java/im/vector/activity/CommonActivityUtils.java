@@ -35,9 +35,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -48,16 +49,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediaCache;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -336,14 +337,10 @@ public class CommonActivityUtils {
             // display a dummy activity until the logout is done
             Matrix.getInstance(context).getPushManager().clearPreferences();
 
-            Intent intent = new Intent(activity, LoggingOutActivity.class);
+            Intent intent = new Intent(context, LoggingOutActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
 
-            if (null != activity) {
-                activity.startActivity(intent);
-            } else {
-                context.startActivity(intent);
-            }
         }
 
         // clear credentials
@@ -1120,7 +1117,7 @@ public class CommonActivityUtils {
                     CommonActivityUtils.restartApp(activity);
                 } else {
                     Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
-                    Matrix.getInstance(activity).reloadSessions(activity);
+                    Matrix.getInstance(activity).reloadSessions(activity, true);
                 }
             } else {
                 Log.e(LOW_MEMORY_LOG_TAG, "Wait to be concerned");
@@ -1155,12 +1152,38 @@ public class CommonActivityUtils {
      *
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
-                                                           final String sender,
-                                                           final MXSession session,
-                                                           Activity activity,
-                                                           @NonNull final YesNoListener yesNoListener) {
+    public static void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo,
+                                                       final String sender,
+                                                       final MXSession session,
+                                                       Activity activity,
+                                                       @Nullable Fragment fragment,
+                                                       int reqCode) {
+        // sanity check
+        if ((null == deviceInfo) || (null == sender) || (null == session)) {
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
+            return;
+        }
 
+        //Priority is to use new verification method, and fallback to older if user chooses to
+
+        Intent intent = SASVerificationActivity.Companion.outgoingIntent(activity, session.getMyUserId(), deviceInfo.userId, deviceInfo.deviceId);
+        if (fragment != null) {
+            fragment.startActivityForResult(intent, reqCode);
+        } else {
+            activity.startActivityForResult(intent, reqCode);
+        }
+    }
+
+    /**
+     * Display the device verification warning
+     *
+     * @param deviceInfo the device info
+     */
+    public static void displayDeviceVerificationDialogLegacy(final MXDeviceInfo deviceInfo,
+                                                             final String sender,
+                                                             final MXSession session,
+                                                             Activity activity,
+                                                             @NonNull final YesNoListener yesNoListener) {
         // sanity check
         if ((null == deviceInfo) || (null == sender) || (null == session)) {
             Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid input parameters");
