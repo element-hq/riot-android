@@ -32,10 +32,10 @@ class DebugReceiver : BroadcastReceiver() {
         Log.d(LOG_TAG, "Received debug action: ${intent.action}")
 
         when (intent.action) {
-            DEBUG_ACTION_DUMP_FILESYSTEM -> lsFiles(context)
-            DEBUG_ACTION_DUMP_PREFERENCES -> dumpPreferences(context)
+            DEBUG_ACTION_DUMP_FILESYSTEM    -> lsFiles(context)
+            DEBUG_ACTION_DUMP_PREFERENCES   -> dumpPreferences(context)
             DEBUG_ACTION_ALTER_SCALAR_TOKEN -> alterScalarToken(context)
-            DEBUG_ACTION_ALTER_AUTH_TOKEN -> alterAuthToken(context)
+            DEBUG_ACTION_ALTER_AUTH_TOKEN   -> alterAuthToken(context)
         }
     }
 
@@ -60,18 +60,23 @@ class DebugReceiver : BroadcastReceiver() {
             putString("SCALAR_TOKEN_PREFERENCE_KEY" + Matrix.getInstance(context).defaultSession.myUserId, "bad_token")
         }
     }
+
     private fun alterAuthToken(context: Context) {
         val session = Matrix.getInstance(context).defaultSession
         val alteredAccessToken = session.credentials.accessToken + "-ALT343D"
         session.credentials.accessToken = alteredAccessToken
-        session.cryptoRestClient.credentials = session.credentials
+        // session.cryptoRestClient.credentials = session.credentials
         session.accountDataRestClient.credentials = session.credentials
         session.callRestClient.credentials = session.credentials
         session.pushersRestClient.credentials = session.credentials
         session.filterRestClient.credentials = session.credentials
         session.mediaScanRestClient.credentials = session.credentials
-        session.roomKeysRestClient.credentials = session.credentials
+        // session.roomKeysRestClient.credentials = session.credentials
         session.thirdPidRestClient.credentials = session.credentials
+
+
+        val loginStorage = Matrix.getInstance(context)!!.loginStorage
+        loginStorage.replaceCredentials(session.homeServerConfig)
     }
 
 
