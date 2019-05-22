@@ -521,8 +521,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
     <string name="light_theme">Jasny motyw</string>
-    <string name="dark_theme">Ciemny Motyw</string>
-    <string name="black_them">Czarny Motyw</string>
+    <string name="dark_theme">Ciemny motyw</string>
+    <string name="black_them">Czarny motyw</string>
 
     <string name="call">Zadzwoń</string>
     <string name="avatar">Awatar</string>
@@ -1175,4 +1175,24 @@ Spróbuj uruchomić ponownie aplikację.</string>
 <string name="keys_backup_activate">Użyj kopii zapasowej klucza</string>
     <string name="keys_backup_info_title_signature">Podpis</string>
 
+    <string name="you_added_a_new_device_with_info">Nowe urządzenie żąda kluczy szyfrujących.
+\nNazwa urządzenia: %1$s
+\nOstatnio widziane: %2$s
+\nJeśli to nie Ty zalogowałeś(-aś) się na innym urządzeniu, zignoruj to żądanie.</string>
+    <string name="your_unverified_device_requesting_with_info">Nowe niezweryfikowane urządzenie żąda kluczy szyfrujących.
+\nNazwa urządzenia: %1$s
+\nOstatnio widziane: %2$s
+\nJeśli to nie Ty zalogowałeś(-aś) się na innym urządzeniu, zignoruj to żądanie.</string>
+
+    <string name="start_verification_short_label">Weryfikuj</string>
+    <string name="share_without_verifying_short_label">Udostępnij</string>
+    <string name="key_share_request">Żądanie udostępnienia klucza</string>
+    <string name="ignore_request_short_label">Ignoruj</string>
+
+    <string name="keys_backup_setup_step3_share_recovery_file">Udostępnij</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+	<item quantity="one">Przywrócono kopię zapasową z %d kluczem.</item>
+	<item quantity="few">Przywrócono kopię zapasową z %d kluczami.</item>
+	<item quantity="many">Przywrócono kopię zapasową z %d kluczami.</item>
+</plurals>
     </resources>
