@@ -19,7 +19,7 @@ package im.vector.analytics
 import android.content.Context
 import im.vector.BuildConfig
 import im.vector.util.PreferencesManager
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 class AppAnalytics(private val context: Context, private vararg val analytics: Analytics) : Analytics {
 

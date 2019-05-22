@@ -17,16 +17,16 @@
 package im.vector.features.hhs
 
 import org.matrix.androidsdk.MXDataHandler
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomState
 import org.matrix.androidsdk.data.RoomTag
 import org.matrix.androidsdk.listeners.MXEventListener
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 import org.matrix.androidsdk.rest.model.Event
-import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.ServerNoticeUsageLimitContent
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.

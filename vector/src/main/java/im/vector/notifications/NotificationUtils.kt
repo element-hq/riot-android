@@ -40,7 +40,7 @@ import im.vector.activity.VectorRoomActivity
 import im.vector.receiver.NotificationBroadcastReceiver
 import im.vector.util.PreferencesManager
 import im.vector.util.startNotificationChannelSettingsIntent
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 

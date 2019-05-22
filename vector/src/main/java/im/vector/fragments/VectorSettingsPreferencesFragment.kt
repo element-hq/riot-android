@@ -70,27 +70,28 @@ import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.BingRulesManager
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.ResourceUtils
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.listeners.IMXNetworkEventListener
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
+import org.matrix.androidsdk.crypto.model.rest.DeviceInfo
+import org.matrix.androidsdk.crypto.model.rest.DevicesListResponse
 import org.matrix.androidsdk.data.MyUser
 import org.matrix.androidsdk.data.Pusher
 import org.matrix.androidsdk.data.RoomMediaMessage
 import org.matrix.androidsdk.db.MXMediaCache
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.listeners.MXMediaUploadListener
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.rest.model.group.Group
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
-import org.matrix.androidsdk.rest.model.sync.DeviceInfo
-import org.matrix.androidsdk.rest.model.sync.DevicesListResponse
-import org.matrix.androidsdk.util.BingRulesManager
-import org.matrix.androidsdk.util.Log
-import org.matrix.androidsdk.util.ResourceUtils
+import org.matrix.androidsdk.rest.model.sync.DeviceInfoUtil
 import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -565,7 +566,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             if (!bNewValue) {
                 // Disable LazyLoading, just reload the sessions
                 PreferencesManager.setUserRefuseLazyLoading(appContext)
-                Matrix.getInstance(appContext).reloadSessions(appContext)
+                Matrix.getInstance(appContext).reloadSessions(appContext, true)
             } else {
                 // Try to enable LazyLoading
                 displayLoadingView()
@@ -577,7 +578,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             PreferencesManager.setUseLazyLoading(activity, true)
 
                             // Reload the sessions
-                            Matrix.getInstance(appContext).reloadSessions(appContext)
+                            Matrix.getInstance(appContext).reloadSessions(appContext, true)
                         } else {
                             // The server does not support lazy loading yet
                             hideLoadingView()
@@ -626,6 +627,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // Device list
         refreshDevicesList()
+
+        //Refresh Key Management section
+        refreshKeysManagementSection()
 
         // Advanced settings
 
@@ -815,7 +819,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                Matrix.getInstance(appContext).reloadSessions(appContext)
+                Matrix.getInstance(appContext).reloadSessions(appContext, true)
                 false
             }
         }
@@ -2187,23 +2191,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 true
             }
 
-
-            manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                context?.let {
-                    startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
-                }
-                false
-            }
-
-            exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                exportKeys()
-                true
-            }
-
-            importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                importKeys()
-                true
-            }
         }
 
         // crypto section: device key (fingerprint)
@@ -2244,6 +2231,27 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
+            true
+        }
+    }
+
+    private fun refreshKeysManagementSection() {
+        //If crypto is not enabled parent section will be removed
+        //TODO notice that this will not work when no network
+        manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            context?.let {
+                startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+            }
+            false
+        }
+
+        exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            exportKeys()
+            true
+        }
+
+        importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            importKeys()
             true
         }
     }
@@ -2326,7 +2334,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mDevicesNameList = aDeviceInfoList
 
             // sort before display: most recent first
-            DeviceInfo.sortByLastSeen(mDevicesNameList)
+            DeviceInfoUtil.sortByLastSeen(mDevicesNameList)
 
             // start from scratch: remove the displayed ones
             mDevicesListSettingsCategory.removeAll()
@@ -2880,7 +2888,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     /* ==========================================================================================
      * Companion
-     * ========================================================================================== */
+     * ========================================================================================= */
 
     companion object {
         private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName

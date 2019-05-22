@@ -45,11 +45,11 @@ import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.ui.animation.VectorTransitionSet
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
-import org.matrix.androidsdk.MXPatterns
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.MXPatterns
+import org.matrix.androidsdk.core.PermalinkUtils
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
-import org.matrix.androidsdk.util.Log
-import org.matrix.androidsdk.util.PermalinkUtils
 
 private const val LOG_TAG = "NotificationAreaView"
 

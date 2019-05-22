@@ -38,8 +38,8 @@ import im.vector.VectorApp
 import im.vector.ui.animation.VectorTransitionSet
 import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.URLPreview
-import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**

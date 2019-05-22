@@ -22,7 +22,7 @@ import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.widget.TextView
 import im.vector.R
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Use this class to create an EditTextPreference form code and avoid a crash (see https://code.google.com/p/android/issues/detail?id=231576)

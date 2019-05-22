@@ -37,7 +37,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -74,9 +73,15 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
-import org.matrix.androidsdk.MXPatterns;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.core.BingRulesManager;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
+import org.matrix.androidsdk.core.PermalinkUtils;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
@@ -87,13 +92,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -115,7 +114,6 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.util.RequestCodesKt;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
@@ -2404,13 +2402,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             }
 
             @Override
-            public void onEventDecrypted(Event event) {
-                RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
+            public void onEventDecrypted(String roomId, String eventId) {
+                RoomSummary summary = mSession.getDataHandler().getStore().getSummary(roomId);
 
                 if (null != summary) {
                     // test if the latest event is refreshed
                     Event latestReceivedEvent = summary.getLatestReceivedEvent();
-                    if ((null != latestReceivedEvent) && TextUtils.equals(latestReceivedEvent.eventId, event.eventId)) {
+                    if ((null != latestReceivedEvent) && TextUtils.equals(latestReceivedEvent.eventId, eventId)) {
                         onRoomDataUpdated();
                     }
                 }

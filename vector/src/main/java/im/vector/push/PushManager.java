@@ -29,13 +29,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Pusher;
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PushersResponse;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +44,9 @@ import java.util.TimerTask;
 
 import im.vector.BuildConfig;
 import im.vector.Matrix;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.push.fcm.FcmHelper;
 import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
-import im.vector.util.SystemUtilsKt;
 
 /**
  * Helper class to store the FCM registration ID in {@link SharedPreferences}

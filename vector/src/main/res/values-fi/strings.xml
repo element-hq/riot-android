@@ -1409,8 +1409,8 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tunnukseesi. Vaihda tunnuksesi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
     <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%s”:
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
 
     <string name="notification_sync_init">Alustetaan palvelua</string>

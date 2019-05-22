@@ -24,14 +24,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import butterknife.BindView
 import im.vector.R
-import im.vector.activity.CommonActivityUtils
 import im.vector.activity.KeysBackupRestoreActivity
 import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.util.WaitingViewData
 import im.vector.fragments.VectorBaseFragment
-import im.vector.listeners.YesNoListener
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
-import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
 class KeysBackupSettingsFragment : VectorBaseFragment(),
         KeysBackupSettingsRecyclerViewAdapter.AdapterListener {
@@ -74,7 +71,7 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                 when (keysBackupState) {
                     KeysBackupStateManager.KeysBackupState.Unknown,
                     KeysBackupStateManager.KeysBackupState.CheckingBackUpOnHomeserver -> {
-                        viewModel.loadingEvent.value = WaitingViewData("")
+                        viewModel.loadingEvent.value = WaitingViewData(context!!.getString(R.string.keys_backup_settings_checking_backup_state))
                     }
                     else -> {
                         viewModel.loadingEvent.value = null
@@ -99,12 +96,12 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
                 recyclerViewAdapter?.updateWithTrust(session, it)
             }
         })
-
     }
 
     override fun didSelectSetupMessageRecovery() {
         context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId ?: "", false))
+            startActivity(KeysBackupSetupActivity.intent(it, viewModel.session?.myUserId
+                    ?: "", false))
         }
     }
 
@@ -129,19 +126,4 @@ class KeysBackupSettingsFragment : VectorBaseFragment(),
         }
     }
 
-    override fun displayDeviceVerificationDialog(signature: KeysBackupVersionTrustSignature) {
-        CommonActivityUtils.displayDeviceVerificationDialog<Any>(signature.device,
-                signature.device?.userId ?: "",
-                viewModel.session,
-                activity,
-                object : YesNoListener {
-                    override fun yes() {
-                        //Need to do something?
-                    }
-
-                    override fun no() {
-                        // Nothing to do
-                    }
-                })
-    }
 }

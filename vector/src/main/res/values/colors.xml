@@ -34,8 +34,14 @@
     <!-- Dark/Background-->
     <color name="riot_primary_background_color_dark">#FF181B21</color>
     <!-- Black/Background-->
-    <color name="riot_primary_background_color_black">#F000</color>
+    <color name="riot_primary_background_color_black">#FF000000</color>
     <color name="riot_primary_background_color_status">#FFEEF2F5</color>
+
+    <!-- Opacity color to hide the screen -->
+    <color name="waiting_background_light">#AAAAAAAA</color>
+    <color name="waiting_background_dark">#AA181B21</color>
+    <color name="waiting_background_black">#AA000000</color>
+    <color name="waiting_background_status">#AAAAAAAA</color>
 
     <!--Default/Android Status Bar-->
     <color name="primary_color_dark_light">#FF1A2027</color>
@@ -143,8 +149,8 @@
     <color name="link_color_dark">#368BD6</color>
     <color name="link_color_status">#368BD6</color>
 
-    <!-- Notification (do not depends on theme -->
+    <!-- Notification (do not depends on theme) -->
     <color name="notification_accent_color">#368BD6</color>
-
+    <color name="key_share_req_accent_color">#ff812d</color>
 
 </resources>

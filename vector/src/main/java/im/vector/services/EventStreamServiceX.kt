@@ -36,6 +36,7 @@ import im.vector.notifications.OutdatedEventDetector
 import im.vector.push.PushManager
 import im.vector.util.CallsManager
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomState
 import org.matrix.androidsdk.data.store.IMXStore
@@ -43,7 +44,6 @@ import org.matrix.androidsdk.data.store.MXStoreListener
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.Log
 import java.util.concurrent.TimeUnit
 
 /**
@@ -184,8 +184,16 @@ class EventStreamServiceX : VectorService() {
 
         mSession = Matrix.getInstance(applicationContext)!!.defaultSession
 
-        if (null == mSession) {
+        if (null == mSession || !mSession!!.isAlive) {
             Log.e(LOG_TAG, "onStartCommand : no sessions")
+            myStopSelf()
+            return START_NOT_STICKY
+        }
+
+        if (mSession?.dataHandler == null || mSession?.dataHandler?.store == null) {
+            Log.e(LOG_TAG, "onStartCommand : invalid session")
+            //this might launch riot?
+            Matrix.getInstance(applicationContext)?.reloadSessions(applicationContext, false)
             myStopSelf()
             return START_NOT_STICKY
         }
@@ -313,24 +321,24 @@ class EventStreamServiceX : VectorService() {
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreCorrupted(accountId: String, description: String) {
+                override fun onStoreCorrupted(accountId: String?, description: String?) {
                     // start a new initial sync
                     if (null == store.eventStreamToken) {
                         startEventStream(session, store)
                     } else {
                         // the data are out of sync
-                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext)
+                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext, true)
                     }
 
                     store.removeMXStoreListener(this)
                 }
 
-                override fun onStoreOOM(accountId: String, description: String) {
+                override fun onStoreOOM(accountId: String?, description: String?) {
                     val uiHandler = Handler(mainLooper)
 
                     uiHandler.post {
                         Toast.makeText(applicationContext, "$accountId : $description", Toast.LENGTH_LONG).show()
-                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext)
+                        Matrix.getInstance(applicationContext)!!.reloadSessions(applicationContext, true)
                     }
                 }
             })

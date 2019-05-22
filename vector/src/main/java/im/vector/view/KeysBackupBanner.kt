@@ -31,7 +31,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import org.jetbrains.anko.defaultSharedPreferences
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * The view used in VectorHomeActivity to show some information about the keys backup state

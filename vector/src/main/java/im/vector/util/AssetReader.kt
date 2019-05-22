@@ -17,7 +17,7 @@
 package im.vector.util
 
 import android.content.Context
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.io.InputStreamReader
 
 /**

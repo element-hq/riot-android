@@ -28,8 +28,8 @@ import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep3Fragment
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 

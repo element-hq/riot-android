@@ -24,7 +24,7 @@ import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.VectorApp
 import im.vector.util.BugReporter
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.io.PrintWriter
 import java.io.StringWriter
 

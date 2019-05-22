@@ -40,7 +40,7 @@ import im.vector.ui.themes.ActivityOtherThemes
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.AssetReader
 import im.vector.util.BugReporter
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Parent class for all Activities in Vector application

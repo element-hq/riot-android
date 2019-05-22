@@ -31,7 +31,7 @@ import im.vector.R
 import im.vector.VectorApp
 import im.vector.util.SecretStoringUtils
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

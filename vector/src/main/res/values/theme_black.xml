@@ -21,8 +21,12 @@
         <!-- color for dividers in settings -->
         <item name="vctr_preference_divider_color">@color/list_divider_color_black</item>
 
+        <!-- default background color -->
         <item name="android:colorBackground">@color/riot_primary_background_color_black</item>
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
+
+        <!-- waiting view background -->
+        <item name="vctr_waiting_background_color">@color/waiting_background_black</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>

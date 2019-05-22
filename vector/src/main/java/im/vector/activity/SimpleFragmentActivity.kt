@@ -27,7 +27,7 @@ import im.vector.activity.util.WaitingViewData
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a mxSession.
  */
-open class SimpleFragmentActivity : MXCActionBarActivity() {
+abstract class SimpleFragmentActivity : MXCActionBarActivity() {
 
     override fun getLayoutRes() = R.layout.activity
 
