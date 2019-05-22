@@ -256,12 +256,17 @@ public class CommonActivityUtils {
                 .apply();
     }
 
+
+    public static void restartApp(Context activity) {
+        restartApp(activity, false);
+    }
+
     /**
      * Restart the application after 100ms
      *
      * @param activity activity
      */
-    public static void restartApp(Activity activity) {
+    public static void restartApp(Context activity, boolean invalidatedCredentials) {
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
@@ -277,8 +282,12 @@ public class CommonActivityUtils {
                     .putBoolean(RESTART_IN_PROGRESS_KEY, true)
                     .apply();
 
+            Intent loginIntent = new Intent(activity, LoginActivity.class);
+            if (invalidatedCredentials) {
+                loginIntent.putExtra(LoginActivity.EXTRA_RESTART_FROM_INVALID_CREDENTIALS, true);
+            }
             PendingIntent mPendingIntent =
-                    PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getActivity(activity, 314159, loginIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             // so restart the application after 100ms
             AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -287,7 +296,9 @@ public class CommonActivityUtils {
             System.exit(0);
         } else {
             Log.e(LOG_TAG, "The application is restarting, please wait !!");
-            activity.finish();
+            if (activity instanceof Activity) {
+                ((Activity) activity).finish();
+            }
         }
     }
 
@@ -299,6 +310,68 @@ public class CommonActivityUtils {
      */
     public static void logout(Activity activity) {
         logout(activity, true);
+    }
+
+    private static boolean isRecoveringFromInvalidatedToken = false;
+
+    public static void recoverInvalidatedToken() {
+
+        if (isRecoveringFromInvalidatedToken) {
+            //ignore, we are doing it
+            return;
+        }
+        isRecoveringFromInvalidatedToken = true;
+        Context context = VectorApp.getCurrentActivity() != null ? VectorApp.getCurrentActivity() : VectorApp.getInstance();
+
+        try {
+            VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+            EventStreamServiceX.Companion.onLogout(context);
+            // stopEventStream(context);
+
+            BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
+
+            MXSession session = Matrix.getInstance(context).getDefaultSession();
+
+            // Publish to the server that we're now offline
+            MyPresenceManager.getInstance(context, session).advertiseOffline();
+            MyPresenceManager.remove(session);
+
+            // clear the preferences
+            PreferencesManager.clearPreferences(context);
+
+            // reset the FCM
+            Matrix.getInstance(context).getPushManager().resetFCMRegistration();
+
+            // clear the preferences
+            Matrix.getInstance(context).getPushManager().clearPreferences();
+
+            // Clear the credentials
+            Matrix.getInstance(context).getLoginStorage().clear();
+
+            // clear the tmp store list
+            Matrix.getInstance(context).clearTmpStoresList();
+
+            // reset the contacts
+            PIDsRetriever.getInstance().reset();
+            ContactsManager.getInstance().reset();
+
+            MXMediaCache.clearThumbnailsCache(context);
+
+            Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
+
+                @Override
+                public void onSuccess(Void info) {
+
+                }
+            });
+            session.clear(context);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## recoverInvalidatedToken: Error while cleaning: ", e);
+        } finally {
+            // go to login page
+            CommonActivityUtils.restartApp(context, true);
+            isRecoveringFromInvalidatedToken = false;
+        }
     }
 
     /**

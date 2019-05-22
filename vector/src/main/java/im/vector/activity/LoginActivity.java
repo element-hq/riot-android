@@ -113,6 +113,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final int REQUEST_REGISTRATION_COUNTRY = 1245;
     private static final int REQUEST_LOGIN_COUNTRY = 5678;
 
+
+    public static final String EXTRA_RESTART_FROM_INVALID_CREDENTIALS = "EXTRA_RESTART_FROM_INVALID_CREDENTIALS";
+
+
     // activity modes
     // either the user logs in
     // or creates a new account
@@ -969,6 +973,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "## onResume(): IN");
+
+        if (isFirstCreation() && getIntent().getBooleanExtra(EXTRA_RESTART_FROM_INVALID_CREDENTIALS, false)) {
+            mLoginEmailTextViewTil.setError(getString(R.string.invalid_or_expired_credentials));
+        }
 
         // retrieve the home server path
         mHomeServerUrl = getHomeServerUrl();

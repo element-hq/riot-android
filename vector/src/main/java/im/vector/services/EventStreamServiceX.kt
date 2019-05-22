@@ -184,7 +184,7 @@ class EventStreamServiceX : VectorService() {
 
         mSession = Matrix.getInstance(applicationContext)!!.defaultSession
 
-        if (null == mSession) {
+        if (null == mSession || !mSession!!.isAlive) {
             Log.e(LOG_TAG, "onStartCommand : no sessions")
             myStopSelf()
             return START_NOT_STICKY

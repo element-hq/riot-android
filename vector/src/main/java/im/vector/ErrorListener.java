@@ -67,7 +67,7 @@ public class ErrorListener implements ApiFailureCallback {
 
         // The access token was not recognized: log out
         if (MatrixError.UNKNOWN_TOKEN.equals(e.errcode)) {
-            CommonActivityUtils.logout(mActivity);
+            CommonActivityUtils.recoverInvalidatedToken();
         }
     }
 

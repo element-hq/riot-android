@@ -1413,6 +1413,8 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
+    <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
+
     <string name="sas_verify_title">Verify by comparing a short text string.</string>
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
     <string name="sas_verify_start_button_title">Begin Verifying</string>

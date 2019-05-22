@@ -686,7 +686,7 @@ public class Matrix {
                 if (TextUtils.equals(matrixErrorCode, MatrixError.UNKNOWN_TOKEN)) {
                     if (null != VectorApp.getCurrentActivity()) {
                         Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
-                        CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+                        CommonActivityUtils.recoverInvalidatedToken();
                     }
                 }
             }
