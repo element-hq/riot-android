@@ -628,6 +628,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Device list
         refreshDevicesList()
 
+        //Refresh Key Management section
+        refreshKeysManagementSection()
+
         // Advanced settings
 
         // user account
@@ -2188,23 +2191,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 true
             }
 
-
-            manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                context?.let {
-                    startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
-                }
-                false
-            }
-
-            exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                exportKeys()
-                true
-            }
-
-            importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                importKeys()
-                true
-            }
         }
 
         // crypto section: device key (fingerprint)
@@ -2245,6 +2231,27 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
+            true
+        }
+    }
+
+    private fun refreshKeysManagementSection() {
+        //If crypto is not enabled parent section will be removed
+        //TODO notice that this will not work when no network
+        manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            context?.let {
+                startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+            }
+            false
+        }
+
+        exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            exportKeys()
+            true
+        }
+
+        importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            importKeys()
             true
         }
     }
@@ -2881,7 +2888,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     /* ==========================================================================================
      * Companion
-     * ========================================================================================== */
+     * ========================================================================================= */
 
     companion object {
         private val LOG_TAG = VectorSettingsPreferencesFragment::class.java.simpleName
