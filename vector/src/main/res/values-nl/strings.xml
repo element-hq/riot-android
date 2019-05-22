@@ -1456,4 +1456,22 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
 
-</resources>
+<string name="title_activity_verify_device">Apparaat verifiëren</string>
+
+    <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
+    <string name="you_added_a_new_device_with_info">Een nieuw apparaat vraagt versleutelingssleutels aan.
+\nApparaatnaam: %1$s
+\nLaatst gezien: %2$s
+\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
+    <string name="your_unverified_device_requesting_with_info">Een ongeverifieerd apparaat vraagt versleutelingssleutels aan.
+\nApparaatnaam: %1$s
+\nLaatst gezien: %2$s
+\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
+
+    <string name="start_verification_short_label">Verifiëren</string>
+    <string name="share_without_verifying_short_label">Delen</string>
+    <string name="key_share_request">Sleuteldeelverzoek</string>
+    <string name="ignore_request_short_label">Negeren</string>
+
+    <string name="sas_verify_title">Verifieer door een korte tekenreeks te vergelijken.</string>
+    </resources>
