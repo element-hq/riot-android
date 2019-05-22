@@ -23,6 +23,8 @@ import android.support.v7.app.AlertDialog
 import im.vector.R
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsViewModel
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 
 class KeysBackupManageActivity : SimpleFragmentActivity() {
