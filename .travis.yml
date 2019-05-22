@@ -35,8 +35,6 @@ cache:
   directories:
 # Travis is not happy with gradle cache (getting permission denied)
 #   - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
 
 # Build with the development SDK
 before_script:

@@ -16,6 +16,7 @@ Other changes:
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
+ - Fix / Keys Backup can be setup twice #9510
  - Fix / Infinite logout screen when token invalidated
  - Fix / Export keys not possible when no network (airplane)
  - Fix / crash in logout success

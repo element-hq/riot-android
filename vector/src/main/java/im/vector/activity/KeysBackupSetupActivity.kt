@@ -87,6 +87,17 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     setResult(RESULT_OK, resultIntent)
                     finish()
                 }
+                KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
+                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
+                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
+                                viewModel.forceCreateKeyBackup(this)
+                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
+                               viewModel.stopAndKeepAfterDetectingExistingOnServer()
+                            }
+                            .show()
+                }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
                     exportKeysManually()
                 }

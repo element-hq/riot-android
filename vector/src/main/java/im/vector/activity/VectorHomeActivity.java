@@ -664,6 +664,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         addBadgeEventsListener();
 
         checkNotificationPrivacySetting();
+
+        //Force remote backup state update to update the banner if needed
+        ViewModelProviders.of(this).get(SignOutViewModel.class).refreshRemoteStateIfNeeded();
     }
 
     /**
