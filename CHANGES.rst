@@ -12,7 +12,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Piwik SDK has been replaced by Matomo SDK (#3163)
 
 Bugfix:
  - Fix / crash in logout success
