@@ -174,7 +174,7 @@
     <string name="send_bug_report">Съобщи за грешка</string>
     <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
-    <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Доклада, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
+    <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Докладът, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
     <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
     <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да отворите екрана за изпращане на грешки?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
@@ -1390,4 +1390,27 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
 
-</resources>
+<string name="title_activity_verify_device">Удостоверяване на устройство</string>
+
+    <string name="auth_login_sso">Влез с единично вписване</string>
+    <string name="encryption_information_unknown_ip">неизвестен IP адрес</string>
+    <string name="you_added_a_new_device_with_info">Ново устройство изисква криптиращите ключове.
+\nИме на устройство: %1$s
+\nЗа последно видяно: %2$s
+\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.</string>
+    <string name="your_unverified_device_requesting_with_info">Непроверено устройство изисква криптиращите ключове.
+\nИме на устройство: %1$s
+\nЗа последно видяно: %2$s
+\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.</string>
+
+    <string name="start_verification_short_label">Удостовери</string>
+    <string name="share_without_verifying_short_label">Сподели</string>
+    <string name="key_share_request">Искане за споделяне на ключ</string>
+    <string name="ignore_request_short_label">Отхвърли</string>
+
+    <string name="sas_verify_title">Удостовери чрез сравняване на кратък текст.</string>
+    <string name="sas_security_advise">За максимална защита, препоръчваме да направите това лично или да използвате друго доверено комуникационно средство.</string>
+    <string name="sas_verify_start_button_title">Започни удостоверяване</string>
+    <string name="sas_incoming_request_title">Входящо искане за удостоверяване</string>
+    <string name="sas_incoming_request_description">Удостоверете това устройство, за да бъде отбелязано като надеждно. Доверените устройства на участниците ви дават допълнително спокойствие когато изпращате криптирани съобщения.</string>
+    </resources>
