@@ -121,7 +121,7 @@
     <string name="send_bug_report_description">Gjer vel og skildra feilen. Kva gjorde du\? Kva venta du at skulde henda\? Kva hende\?</string>
     <string name="send_bug_report_description_in_english">Um mogeleg, ver venleg og skriv skildringi på engelsk.</string>
     <string name="send_bug_report_placeholder">Skildra problemet ditt her</string>
-    <string name="send_bug_report_logs_description">Fyr å diagnostisera vanskar, vert loggar frå denna einingi sende saman med feilfråmeldingi. Feilfråmeldinga, saman med loggane og skjermbilætet, vil ikkje vera ålment synlege. Um du helder vil senda berre teksti yver, ver venleg og ta burt merket:</string>
+    <string name="send_bug_report_logs_description">Fyr å diagnostisera vanskar, vert loggar frå denna einingi sende saman med feilfråmeldingi. Feilfråmeldinga, saman med loggane og skjermbilætet, vil ikkje vera ålment synlege. Um du helder vil senda berre teksti yver, gjer vel og tak burt merket:</string>
     <string name="send_bug_report_alert_message">Det verkar som om du ristar mobilen i sinne. Vil du senda inn ein feilfråmelding\?</string>
     <string name="send_bug_report_app_crashed">Æppen kræsja fyrre gong. Vil du opna kræsjfråmeldingsvindauget\?</string>
     <string name="send_bug_report_rage_shake">Rista i sinne fyr å melda frå um feil</string>
@@ -295,89 +295,88 @@
 \nGjer vel og gjev åtgang på sprettvindauget som kjem fyr å kunna ringja."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot treng åtgang til kameraet og mikrofonen din fyr å videosamtala. 
 \nGjer vel og gjev åtgang på sprettvindauget som kjem fyr å kunna ringja.</string>
-    <string name="permissions_rationale_msg_contacts">Riot treng tilgang til adresseboka di for å finna andre Matrix-brukarar utifrå epostadressene og telefonnummera dei.
+    <string name="permissions_rationale_msg_contacts">Riot treng åtgang til adresseboki di fyr å finna andre Matrix-brukarar utifrå epostadressone og telefonnummeri deira.
+\n
+\nGjer vel og gjev løyve på sprettvindauget som kjem fyr å finna addressebokbrukarar som du kann nå frå Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot treng løyve til å gå inn i adresseboki di fyr å finna andre Matrix-brukarar ut ifrå epostadressone og telefonnummeri deira. 
+\n
+\nGje Riot løyve til å gå inn i kontaktane dine\?</string>
 
-Ver venleg og gjev tilgang på den neste popp-oppen for å finna addressebokbrukarar som kan nåast frå Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot treng tilgang til å gå inn i adresseboka di for å finna andre Matrix-brukarar ut ifrå epostadressene og telefonnummera deira.
-
-Tillat Riot å gå inn i kontaktane dine?</string>
-
-    <string name="permissions_action_not_performed_missing_permissions">Orsak… Handlinga vart ikkje gjennomført på grunn av vantande tilgang</string>
+    <string name="permissions_action_not_performed_missing_permissions">Orsak. Handlingi vart ikkje gjenomført på grunn av løyve som vantar</string>
 
     <string name="media_slider_saved">Lagra</string>
-    <string name="media_slider_saved_message">Lagr til nedlastingar?</string>
+    <string name="media_slider_saved_message">Lagra til nedlastingar\?</string>
     <string name="yes">JA</string>
     <string name="no">NEI</string>
     <string name="_continue">Gå fram</string>
 
-    <string name="remove">Fjern</string>
+    <string name="remove">Tak burt</string>
     <string name="join">Vert med</string>
-    <string name="preview">Førehandsvising</string>
-    <string name="reject">Avslå</string>
+    <string name="preview">Fyrehandsvising</string>
+    <string name="reject">Seg nei</string>
 
-    <string name="list_members">Listemedlemer</string>
-    <string name="open_chat_header">Opn tittel</string>
+    <string name="list_members">Syn fram medlemer</string>
+    <string name="open_chat_header">Opna yverskriften</string>
     <string name="room_sync_in_progress">Samstiller…</string>
-    <string name="room_jump_to_first_unread">Hopp til den fyrste ulesne meldigna.</string>
+    <string name="room_jump_to_first_unread">Hoppa til den fyrste ulesne meldigni.</string>
 
-    <string name="room_preview_invitation_format">Du vart boden inn til dette rommet av %s</string>
-    <string name="room_preview_unlinked_email_warning">Innbydinga vart send til %s, som ikkje er tilknytta denne brukaren.
-Du bør kanskje logga inn med ein annan brukar, eller leggja eposten din til denne brukaren.</string>
-    <string name="room_preview_try_join_an_unknown_room">Du prøver å gå inn i %s. Vil du verta med med so du kan taka del i meiningsutvekslinga?</string>
+    <string name="room_preview_invitation_format">Du vart boden inn til detta romet av %s</string>
+    <string name="room_preview_unlinked_email_warning">Innbjodingi vart send til %s, som ikkje er knytt til denna brukaren. Du byr kann henda logga inn med ein annan brukar, eller knyta eposten din til brukaren din.</string>
+    <string name="room_preview_try_join_an_unknown_room">Du freistar å gå inn i %s. Vil du verta med so du kan taka del i meiningsutvekslingi\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">eit rom</string>
-    <string name="room_preview_room_interactions_disabled">Dette er ei førehandsvising av rommet. Romsamhandlingar har vorte skrudd av.</string>
+    <string name="room_preview_room_interactions_disabled">Detta er ei fyrehandsvising av romet. Romsamhandlingar hev vorte skrudde av.</string>
 
-    <string name="room_creation_title">Ny Samtale</string>
-    <string name="room_creation_add_member">Legg ein medlem til</string>
+    <string name="room_creation_title">Ny samtala</string>
+    <string name="room_creation_add_member">Legg til ein medlem</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktiv medlem</item>
-        <item quantity="other">%d aktive medlemer</item>
-    </plurals>
+	<item quantity="one">1 verksam medlem</item>
+	<item quantity="other">%d verksame medlemer</item>
+</plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 medlem</item>
         <item quantity="other">%d medlemer</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
 
-    <string name="room_participants_leave_prompt_title">Far frå rom</string>
-    <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil fara frå rommet?</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil fjerna %s frå denne samtala?</string>
+    <string name="room_participants_leave_prompt_title">Far frå romet</string>
+    <string name="room_participants_leave_prompt_msg">Er du trygg på at du vil fara frå romet\?</string>
+    <string name="room_participants_remove_prompt_msg">Er du trygg på at du vil taka burt %s frå denna samtala\?</string>
     <string name="room_participants_create">Laga</string>
 
     <string name="room_participants_online">Tilkopla</string>
     <string name="room_participants_offline">Fråkopla</string>
     <string name="room_participants_idle">Fråverande</string>
     <string name="room_participants_now">%1$s no</string>
-    <string name="room_participants_ago">%1$s %2$s sia</string>
+    <string name="room_participants_ago">%1$s %2$s sidan</string>
 
-    <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTØY</string>
-    <string name="room_participants_header_call">RØYSTSAMTALE</string>
-    <string name="room_participants_header_direct_chats">DIREKTESAMTALE</string>
+    <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTY</string>
+    <string name="room_participants_header_call">RØYSTSAMTALA</string>
+    <string name="room_participants_header_direct_chats">BEINVEGES SAMTALOR</string>
     <string name="room_participants_header_devices">EININGAR</string>
 
-    <string name="room_participants_action_invite">Byd inn</string>
-    <string name="room_participants_action_leave">Far frå rommt</string>
-    <string name="room_participants_action_remove">Fjern frå dette rommet</string>
-    <string name="room_participants_action_ban">Steng ut</string>
-    <string name="room_participants_action_unban">Fjern utestengjing</string>
-    <string name="room_participants_action_set_default_power_level">Gjer attende til vanleg brukar</string>
+    <string name="room_participants_action_invite">Bjod inn</string>
+    <string name="room_participants_action_leave">Far frå romet</string>
+    <string name="room_participants_action_remove">Spark ut frå detta romet</string>
+    <string name="room_participants_action_ban">Steng ute</string>
+    <string name="room_participants_action_unban">Slepp inn att</string>
+    <string name="room_participants_action_set_default_power_level">Gjer til vanleg brukar</string>
     <string name="room_participants_action_set_moderator">Gjer til moderator</string>
     <string name="room_participants_action_set_admin">Gjer til administrator</string>
-    <string name="room_participants_action_ignore">Gøym alle meldingar frå denne brukaren</string>
-    <string name="room_participants_action_unignore">Vis alle meldingar frå denne brukaren</string>
-    <string name="room_participants_action_unignore_prompt">Vis alle meldingar frå denne brukaren?
-
-Merk deg at denne handlinga startar æppen på nytt og kan taka litt tid.</string>
-    <string name="room_participants_invite_search_another_user">Brukar-ID, Namn eller Epost</string>
+    <string name="room_participants_action_ignore">Gøym alle meldingar frå denna brukaren</string>
+    <string name="room_participants_action_unignore">Syn alle meldingar frå denna brukaren</string>
+    <string name="room_participants_action_unignore_prompt">Syn alle meldingar frå denne brukaren\? 
+\n
+\nMerk deg at denna handlingi startar æppen på nytt og kann taka litt tid.</string>
+    <string name="room_participants_invite_search_another_user">Brukar-ID, namn, eller epost</string>
     <string name="room_participants_action_mention">Nemn</string>
-    <string name="room_participants_action_devices_list">Vis einingsliste</string>
-    <string name="room_participants_power_level_prompt">Du vil ikkje kunna gjera om på denne forandringa fordi du hevjer ein brukar si høgd opp til di eiga. 
-Er du sikker?</string>
+    <string name="room_participants_action_devices_list">Syn einingslista</string>
+    <string name="room_participants_power_level_prompt">Du vil ikkje kunna gjera um på detta brigdet fyrdi du hev ein brukar si høgd upp til di eiga. 
+\nEr du trygg på detta\?</string>
 
-    <string name="room_participants_invite_prompt_msg">Er du sikker på at du vil byda %s inn til samtala?</string>
-    <string name="room_participants_ban_prompt_msg">Er du sikker på at du vil stengja brukaren ute frå samtala?</string>
+    <string name="room_participants_invite_prompt_msg">Er du trygg på at du vil bjoda %s inn til samtala\?</string>
+    <string name="room_participants_ban_prompt_msg">Er du trygg på at du vil stengja brukaren ute frå samtala\?</string>
 
-    <string name="people_search_invite_by_id"><u>Byd inn gjennom ID</u></string>
+    <string name="people_search_invite_by_id"><u>Bjod inn gjenom ID</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTAR (%d)</string>
     <string name="people_search_user_directory">BRUKARUTVAL (%s)</string>
     <string name="people_search_filter_text">Berre Matrix-brukarar</string>
@@ -402,22 +401,22 @@ Er du sikker?</string>
     <string name="room_resend_unsent_messages">Send usende meldingar på nytt</string>
     <string name="room_delete_unsent_messages">Slett usende meldingar</string>
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
-    <string name="room_do_not_have_permission_to_post">Du har ikkje tilgang til å senda meldingar i dette rommet</string>
+    <string name="room_do_not_have_permission_to_post">Du hev ikkje løyve til å senda meldingar i detta romet</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 ny melding</item>
         <item quantity="other">%d nye meldingar</item>
     </plurals>
 
-    <string name="ssl_trust">Stol på</string>
-    <string name="ssl_do_not_trust">Ikkje stol på</string>
-    <string name="ssl_logout_account">Logg av</string>
-    <string name="ssl_remain_offline">Oversjå</string>
+    <string name="ssl_trust">Lit på</string>
+    <string name="ssl_do_not_trust">Ikkje lit på</string>
+    <string name="ssl_logout_account">Logga ut</string>
+    <string name="ssl_remain_offline">Yversjå</string>
     <string name="ssl_fingerprint_hash">Fingeravtrykk (%s):</string>
-    <string name="ssl_could_not_verify">Klarte ikkje å stadfesta identiteten på fjerntenaren.</string>
-    <string name="ssl_cert_not_trust">Dette kan tyda at nokon tjuvlytter på trafikken din, eller at mobilen ikkje stoler på sertifikatet frå fjerntenaren.</string>
-    <string name="ssl_cert_new_account_expl">Viss tenaradministratoren har sagt at dette er å venta, pass på at fingeravtrykket under samsvarar med fingeravtrykket frå dei.</string>
+    <string name="ssl_could_not_verify">Fekk ikkje til å stadfesta identiteten på fjerrtenaren.</string>
+    <string name="ssl_cert_not_trust">Detta kann tyda at nokon tjuvlyder på koplingi di, eller at mobilen ikkje liter på sertifikatet frå fjerrtenaren.</string>
+    <string name="ssl_cert_new_account_expl">Um tenaradministratoren hev sagt at detta er å venta, pass på at fingeravtrykket under samsvarar med fingeravtrykket han gjev deg.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå ein som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det tilrådast å IKKJE GODKJENNA det nye sertifikatet.</string>
-    <string name="ssl_expected_existing_expl">"Sertifikatet har forandra seg frå ein som tidlegare var stolt på til eit som ikkje er det. Tenaren kan ha fornya sertifikatet sitt. Tak kontakt med tenaradministratoren for å få det forventa  fingeravtrykket."</string>
+    <string name="ssl_expected_existing_expl">"Sertifikatet hev brigda seg frå eit som tidlegare var lite på til eit som ikkje er det. Det kann henda at tenaren hev nya uppatt sertifikatet sitt. Snakk med tenaradministratoren fyr å få det venta  fingeravtrykket."</string>
     <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har gjeve ut eit fingeravtrykk som samsvarar med det over.</string>
 
     <string name="room_details_title">Romdetaljar</string>
@@ -986,5 +985,12 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_call_ringtone_dialog_title">Vel ringjetona til tilrop:</string>
 
     <string name="video_call_in_progress">Ei videosamtala er i gang…</string>
+
+    <string name="room_participants_action_kick">Spark</string>
+    <plurals name="room_participants_kick_prompt_msg">
+	<item quantity="one">Er du trygg på at du vil sparka denna brukaren frå samtala\?</item>
+	<item quantity="other">Er du trygg på at du vil sparka dessa brukarane frå samtala\?</item>
+</plurals>
+    <string name="reason_hint">Grunn</string>
 
     </resources>
