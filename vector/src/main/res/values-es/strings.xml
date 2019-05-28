@@ -1149,4 +1149,11 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="settings_troubleshoot_test_play_services_title">Prueba de servicios Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK de servicios de Google Play esta disponible y actualizado.</string>
-</resources>
+<string name="sign_out_bottom_sheet_warning_no_backup">Al cerrar la sesión se perderán los mensajes encriptados</string>
+    <string name="action_sign_out_confirmation_simple">¿Estás seguro que quieres cerrar la sesión\?</string>
+    <string name="login_error_unknown_host">Está URL no es válida, por favor compruébala</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">El diagnóstico base se ha completado con éxito. Si aun no recibes notificaciones, por favor mándanos un informe de error.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Una o más pruebas han fallado, por favor prueba las soluciones propuestas.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Una o más pruebas han fallado, por favor mándanos un informe de error para que podamos investigar.</string>
+
+    </resources>
