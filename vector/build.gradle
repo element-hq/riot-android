@@ -120,10 +120,6 @@ android {
     }
 
     repositories {
-        flatDir {
-            dir 'libs'
-        }
-
         maven {
             url "https://s3.amazonaws.com/repo.commonsware.com"
         }
