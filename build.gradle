@@ -35,21 +35,33 @@ allprojects {
     ext.okhttp_version = '3.14.1'
 
     repositories {
+        // For Matrix Android SDK.
+        // This has to be declared first, to ensure that Matrix Android SDK library is not downloaded from another repo
+        maven {
+            url 'https://jitpack.io'
+            content {
+                // Use this repo only for matrix SDK library
+                includeGroupByRegex "com\\.github\\.matrix-org"
+                // And Olm library
+                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
+                // And PhotoView
+                includeGroupByRegex "com\\.github\\.chrisbanes"
+            }
+        }
         google()
         maven {
             url "https://maven.google.com"
-        }
-        maven {
-            url "https://jitpack.io"
         }
         jcenter()
         // Jitsi repo
         maven {
             url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
         }
-        // For Matrix Android SDK
         maven {
-            url 'https://jitpack.io'
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
 }

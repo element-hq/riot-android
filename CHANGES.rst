@@ -27,6 +27,7 @@ Translations:
 
 Build:
  - Upgrade gradle version from 4.10.1 to 5.4.1
+ - Ensure MatrixSDK library is downloaded from the jitpack repository
 
 Changes in Riot 0.9.1 (2019-05-03)
 ===================================================
