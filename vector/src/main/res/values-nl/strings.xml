@@ -416,7 +416,7 @@
     <string name="room_recents_create_room">Gesprek aanmaken</string>
     <string name="room_recents_join_room">Gesprek toetreden</string>
     <string name="room_recents_join_room_title">Treed een gesprek toe</string>
-    <string name="room_recents_join_room_prompt">Voer een gespreks-ID of -alias in</string>
+    <string name="room_recents_join_room_prompt">Voer een gespreks(bij)naam in</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Catalogus doorbladeren</string>
@@ -594,8 +594,8 @@
     <string name="room_settings_addresses_no_local_addresses">Dit gesprek heeft geen lokale adressen</string>
     <string name="room_settings_addresses_add_new_address">Nieuw adres (bv. #foo:matrix.org)</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Ongeldig aliasformaat</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">‘%s’ is geen geldig aliasformaat</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Ongeldig bijnaamformaat</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">‘%s’ is geen geldig bijnaamformaat</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">U zult geen hoofdadres voor dit gesprek opgegeven hebben.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Hoofdadreswaarschuwingen</string>
 
@@ -992,7 +992,7 @@
     <string name="command_description_op_user">Stel het machtsniveau van een gebruiker in</string>
     <string name="command_description_deop_user">Neemt rechten van gebruiker met gegeven ID af</string>
     <string name="command_description_invite_user">Nodigt gebruiker met gegeven ID uit in het huidige gesprek</string>
-    <string name="command_description_join_room">Treedt toe tot gesprek met gegeven alias</string>
+    <string name="command_description_join_room">Treedt toe tot gesprek met gegeven bijnaam</string>
     <string name="command_description_part_room">Gesprek verlaten</string>
     <string name="command_description_topic">Onderwerp van het gesprek instellen</string>
     <string name="command_description_kick_user">Stuurt gebruiker met gegeven ID eruit</string>
