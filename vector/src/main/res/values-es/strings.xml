@@ -1162,20 +1162,39 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
 
-    <string name="settings_troubleshoot_test_fcm_title">Ficha Base</string>
-    <string name="settings_troubleshoot_test_fcm_success">Ficha FCM recuperada correctamente</string>
-    <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar Ficha FCM</string>
+    <string name="settings_troubleshoot_test_fcm_title">Token Base</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperada correctamente</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar token FCM</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">Este error esta fuera del control de Riot y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">Este error esta fuera del control de Riot. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">Este error esta fuera del control de Riot. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nEste error esta fuera del control de Riot. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">añadir cuenta</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token de registro</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado correctamente en el Servidor.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Error al registrar el token FCM en el Servidor</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Error al registrar el token FCM en el Servidor 
+\n%1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Servicio de notificaciones</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">El servicio de notificaciones esta funcionando.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">El servicio de notificaciones no esta funcionando.
 \nIntente reiniciar la aplicación.</string>
+    <string name="keys_backup_settings_deleting_backup">Borrando copia de seguridad…</string>
+    <string name="keys_backup_settings_delete_backup_error">Error al borrar la copia de seguridad (%s)</string>
+
+    <string name="keys_backup_settings_delete_confirm_title">Borrar copia de seguridad</string>
+    <string name="new_recovery_method_popup_title">nueva copia de seguridad</string>
+    <string name="new_recovery_method_popup_was_me">Ese era yo</string>
+    <string name="keys_backup_banner_setup_line1">nunca se pierden mensajes cifrados</string>
+    <string name="keys_backup_banner_setup_line2">Comenzar Copia de seguridad</string>
+
+    <string name="keys_backup_banner_recover_line1">Nunca pierde mensajes cifrados</string>
+    <string name="keys_backup_banner_update_line1">Nuevos mensajes clave cifrados</string>
+    <string name="keys_backup_banner_update_line2">Gestionar Copia de Seguridad</string>
+
+    <string name="keys_backup_banner_in_progress">Guardando copia de seguridad…</string>
+
+    <string name="keys_backup_info_title_version">Versión</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     </resources>
