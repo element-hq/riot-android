@@ -1156,4 +1156,25 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Una o más pruebas han fallado, por favor prueba las soluciones propuestas.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Una o más pruebas han fallado, por favor mándanos un informe de error para que podamos investigar.</string>
 
+    <string name="sign_out_bottom_sheet_warning_backing_up">Copia de seguridad en progreso. Si cierras sesión ahora perderás el acceso a tus mensajes encriptados.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">La copia de seguridad debería estar activa ahora en todos tus dispositivos para evitar la pérdida del acceso a tus mensajes encriptados.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente.</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
+
+    <string name="settings_troubleshoot_test_fcm_title">Ficha Base</string>
+    <string name="settings_troubleshoot_test_fcm_success">Ficha FCM recuperada correctamente</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar Ficha FCM</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">Este error esta fuera del control de Riot y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">Este error esta fuera del control de Riot. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">Este error esta fuera del control de Riot. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">añadir cuenta</string>
+
+    <string name="settings_troubleshoot_test_token_registration_title">Token de registro</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado correctamente en el Servidor.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Error al registrar el token FCM en el Servidor</string>
+
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Servicio de notificaciones</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">El servicio de notificaciones esta funcionando.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">El servicio de notificaciones no esta funcionando.
+\nIntente reiniciar la aplicación.</string>
     </resources>
