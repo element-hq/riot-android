@@ -463,7 +463,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_background_sync">Sincronización en segundo plano</string>
     <string name="settings_enable_background_sync">Habilitar sincronización en segundo plano</string>
     <string name="settings_set_sync_timeout">Venció el tiempo de espera para la solicitud de sincronización</string>
-    <string name="settings_set_sync_delay">Retraso entre dos solicitudes de sincronización</string>
+    <string name="settings_set_sync_delay">Retraso entre las solicitudes de sincronización</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundos</string>
 
@@ -509,14 +509,14 @@ Para continuar, ingresa tu contraseña por favor.</string>
 
     <string name="account_email_validation_title">Verificación Pendiente</string>
     <string name="account_email_validation_message">Por favor, consulta tu correo electrónico y haz clic en el enlace que contiene. Una vez hecho esto, haz clic en continuar.</string>
-    <string name="account_email_validation_error">No es posible verificar la dirección de correo electrónico. Por favor, consulta tu correo electrónico y haz clic en el enlace que contiene. Una vez hecho esto, haz clic en continuar</string>
+    <string name="account_email_validation_error">No es posible verificar la dirección de correo electrónico. Por favor, consulta tu correo electrónico y haz clic en el enlace que contiene. Una vez hecho esto, haz clic en continuar.</string>
 
-    <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está en uso</string>
-    <string name="account_email_not_found_error">No se pudo enviar el correo electrónico: No se encontró esta dirección de correo electrónico</string>
-    <string name="account_phone_number_already_used_error">Este número telefónico ya está en uso</string>
+    <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está en uso.</string>
+    <string name="account_email_not_found_error">No se encontró esta dirección de correo electrónico.</string>
+    <string name="account_phone_number_already_used_error">Este número telefónico ya está en uso.</string>
 
     <string name="settings_change_password">Cambiar contraseña</string>
-    <string name="settings_old_password">Contraseña anterior</string>
+    <string name="settings_old_password">Contraseña actual</string>
     <string name="settings_new_password">Contraseña nueva</string>
     <string name="settings_confirm_password">Confirmar contraseña</string>
     <string name="settings_fail_to_update_password">No se pudo actualizar la contraseña</string>
@@ -572,8 +572,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para crear un enlace a una sala, debe tener una dirección.</string>
     <string name="room_settings_room_access_entry_only_invited">Solo personas que han sido invitadas</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Cualquier persona que conozca el enlace a esta sala, excepto huéspedes</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Cualquier persona que conozca el enlace a esta sala, incluyendo huéspedes</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Cualquier persona que conozca el enlace a esta sala, excepto invitados</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Cualquier persona que conozca el enlace a esta sala, incluyendo invitados</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Usuarios vetados</string>
@@ -649,7 +649,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
     <string name="encryption_import_room_keys_summary">Importar las claves desde un archivo local</string>
     <string name="encryption_import_import">Importar</string>
     <string name="encryption_never_send_to_unverified_devices_title">Cifrar solo a dispositivos verificados</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos sin verificar desde este dispositivo</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos sin verificar desde este dispositivo.</string>
 
     <string name="encryption_information_not_verified">SIN Verificar</string>
     <string name="encryption_information_verified">Verificado</string>
@@ -691,14 +691,14 @@ Dispositivos desconocidos:</string>
     <!-- historical -->
     <string name="historical_placeholder">Buscar históricos</string>
     <string name="settings_user_interface">Interfaz de usuario</string>
-    <string name="settings_interface_language">Idioma de la Interfaz</string>
-    <string name="settings_select_language">Elige un idioma</string>
+    <string name="settings_interface_language">Idioma</string>
+    <string name="settings_select_language">Elige idioma</string>
 
     <string name="settings_start_on_boot">Iniciar en el arranque</string>
     <string name="settings_clear_media_cache">Borrar caché de medios</string>
     <string name="settings_keep_media">Guardar medios</string>
 
-    <string name="settings_always_show_timestamps">Siempre mostrar las marcas temporales de mensajes</string>
+    <string name="settings_always_show_timestamps">Mostrar marcas temporales de todos los mensajes</string>
 
     <string name="media_saving_period_3_days">3 días</string>
     <string name="media_saving_period_1_week">1 semana</string>
@@ -741,7 +741,7 @@ Dispositivos desconocidos:</string>
     <string name="settings_notification_ringtone">Sonido de notificación</string>
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
-    <string name="settings_12_24_timestamps">Mostrar marcas temporales en formato de 12 horas (ej. 2:30pm)</string>
+    <string name="settings_12_24_timestamps">Mostrar marcas temporales en formato de 12 horas</string>
 
     <string name="settings_analytics">Análisis de Estadísticas</string>
 
@@ -812,8 +812,8 @@ Dispositivos desconocidos:</string>
     <string name="room_settings_mute">Silenciar</string>
     <string name="room_settings_add_homescreen_shortcut">Añadir un Atajo a la Pantalla de Inicio</string>
 
-    <string name="settings_inline_url_preview">Habilitar vistas previas de URL en línea por defecto</string>
-    <string name="settings_vibrate_on_mention">Vibrar al mencionar</string>
+    <string name="settings_inline_url_preview">Vistas previas de URL en línea</string>
+    <string name="settings_vibrate_on_mention">Vibrar al mencionar un usuario</string>
 
     <string name="settings_flair">Insignia</string>
 
@@ -929,7 +929,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Privacidad reducida</string>
     <string name="settings_notification_privacy_need_permission">La aplicación necesita permiso para ejecutarse en segundo plano</string>
-    <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Las notificaciones se envían a través de Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Las notificaciones solo contienen metadatos</string>
     <string name="settings_notification_privacy_secure_message_content">• El contenido del mensaje de la notificación está <b>ubicado de forma segura directamente desde el servidor doméstico de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Las notificaciones contienen <b>datos de mensajes y metadatos</b></string>
@@ -948,7 +948,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="widget_integration_invalid_parameter">Un parámetro no es válido.</string>
     <string name="error_empty_field_your_password">Ingresa tu contraseña por favor.</string>
 
-    <string name="settings_labs_enable_send_voice">Enviar mensaje de voz (requiere una aplicación de terceros para grabar mensajes de voz)</string>
+    <string name="settings_labs_enable_send_voice">Enviar mensaje de voz</string>
 
     <string name="startup_notification_privacy_button_other">Elige otra opción</string>
 
@@ -968,7 +968,7 @@ La visibilidad de mensajes en Matrix es similar a la del correo electrónico. Qu
     <string name="e2e_re_request_encryption_key_sent">Solicitud de clave enviada.</string>
 
     <string name="startup_notification_privacy_title">Privacidad de Notificaciones</string>
-    <string name="startup_notification_privacy_message">Riot puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada (esto podría afectar el uso de la batería).</string>
+    <string name="startup_notification_privacy_message">Riot puede ejecutarse en segundo plano para gestionar tus notificaciones de forma segura y privada. Esto podría afectar la duración de la batería.</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análisis de estadísticas</string>
     <string name="settings_opt_in_of_analytics_summary">Riot recopila análisis de estadísticas anónimas para permitirnos mejorar la aplicación.</string>
     <string name="settings_opt_in_of_analytics_prompt">Por favor, habilita los análisis de estadísticas para ayudarnos a mejorar Riot.</string>
@@ -1067,7 +1067,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="passphrase_create_passphrase">Crear frase de contraseña</string>
     <string name="passphrase_passphrase_does_not_match">Las frases de contraseña deben coincidir</string>
     <string name="settings_lazy_loading_title">Utiliza carga diferida para los miembros de la sala</string>
-    <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista</string>
+    <string name="settings_lazy_loading_description">Aumenta el rendimiento cargando los miembros de la sala solo en la primera vista.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Tu servidor doméstico aún no admite la carga diferida de los miembros de la sala. Prueba más tarde.</string>
 
     <string name="unknown_error">Disculpas, ocurrió un error</string>
@@ -1158,7 +1158,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="sign_out_bottom_sheet_warning_backing_up">Copia de seguridad en progreso. Si cierras sesión ahora perderás el acceso a tus mensajes encriptados.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">La copia de seguridad debería estar activa ahora en todos tus dispositivos para evitar la pérdida del acceso a tus mensajes encriptados.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa los servicios de Google Play para entregar mensajes Push pero no parece estar configurado correctamente:
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Ficha Base</string>
