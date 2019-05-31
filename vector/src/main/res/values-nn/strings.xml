@@ -71,7 +71,7 @@
     <string name="action_historical">Sogalege</string>
     <string name="action_quick_reply">Snøggsvara</string>
     <string name="action_open">Opna</string>
-    <string name="action_close">Lukk</string>
+    <string name="action_close">Lat att</string>
     <string name="copied_to_clipboard">Rita av til utklippstavla</string>
     <string name="disable">Skru av</string>
 
@@ -388,14 +388,14 @@
     <string name="room_menu_search">Søk</string>
     <string name="room_one_user_is_typing">%s skriv…</string>
     <string name="room_two_users_are_typing">%1$s og %2$s skriv…</string>
-    <string name="room_many_users_are_typing">%1$s og %2$s og fleire skriv…</string>
+    <string name="room_many_users_are_typing">%1$s, %2$s og andre skriv…</string>
     <string name="room_message_placeholder_encrypted">Send ei kryptert melding…</string>
     <string name="room_message_placeholder_not_encrypted">Send ei melding (ikkje-kryptert)…</string>
     <string name="room_message_placeholder_reply_to_encrypted">Send eit kryptert svar…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Send eit svar (ikkje-kryptert)…</string>
-    <string name="room_offline_notification">Tilkolinga til tenaren gjekk tapt.</string>
+    <string name="room_offline_notification">Tilkoplinga til tenaren gjekk tapt.</string>
     <string name="room_unsent_messages_notification">Meldingane vart ikkje sende. %1$s eller %2$s no?</string>
-    <string name="room_unknown_devices_messages_notification">Meldingane vart ikkje sende fordi ukjende einingar er til stades. %1$s eller %2$s no?</string>
+    <string name="room_unknown_devices_messages_notification">Meldingane vart ikkje sende av di ukjende einingar er til stades. %1$s eller %2$s no\?</string>
     <string name="room_prompt_resend">Send alle på nytt</string>
     <string name="room_prompt_cancel">bryt alle av</string>
     <string name="room_resend_unsent_messages">Send usende meldingar på nytt</string>
@@ -423,21 +423,21 @@
     <string name="room_details_people">Folk</string>
     <string name="room_details_files">Filer</string>
     <string name="room_details_settings">Innstillingar</string>
-    <string name="malformed_id">Misforma ID. Det bør vera ei epostadresse eller ein Matrix-ID som \'@lokaldel:domene\'</string>
+    <string name="malformed_id">Misforma ID. Det bør vera ei epostadressa eller ein Matrix-ID som t.d. \'@lokaldel:domene\'</string>
     <string name="room_details_people_invited_group_name">BODNE INN</string>
-    <string name="room_details_people_present_group_name">KOMEN INN</string>
+    <string name="room_details_people_present_group_name">KOMNE INN</string>
 
-    <string name="room_event_action_report_prompt_reason">Grunnlaget for å melda frå om innhaldet</string>
-    <string name="room_event_action_report_prompt_ignore_user">Vil du gøyma alle meldingar frå denne brukaren?
-
-Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string>
-    <string name="room_event_action_cancel_upload">Bryt Opplasting av</string>
-    <string name="room_event_action_cancel_download">Bryt Nedlasting av</string>
+    <string name="room_event_action_report_prompt_reason">Grunnen til at du melder innhaldet</string>
+    <string name="room_event_action_report_prompt_ignore_user">Vil du gøyma alle meldingar frå denna brukaren\?
+\n
+\nMerk at detta vil starta æppen på nytt og kann taka litt tid.</string>
+    <string name="room_event_action_cancel_upload">Brjot av upplastingi</string>
+    <string name="room_event_action_cancel_download">Brjot av nedlastingi</string>
 
 
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommedlemer</string>
-    <string name="search_no_results">Ingen resultat</string>
+    <string name="search_no_results">Ingi treff</string>
     <string name="tab_title_search_rooms">ROM</string>
     <string name="tab_title_search_messages">MELDINGAR</string>
     <string name="tab_title_search_people">FOLK</string>
@@ -448,91 +448,91 @@ Merk at denne handlinga vil starta æppen på nytt og kan taka litt tid.</string
     <string name="room_recents_favourites">YNDLINGAR</string>
     <string name="room_recents_conversations">ROM</string>
     <string name="room_recents_low_priority">LÅGRETT</string>
-    <string name="room_recents_invites">INNBYDINGAR</string>
-    <string name="room_recents_start_chat">Byrj samtale</string>
+    <string name="room_recents_invites">INNBJODINGAR</string>
+    <string name="room_recents_start_chat">Byrja samtala</string>
     <string name="room_recents_create_room">Laga eit rom</string>
-    <string name="room_recents_join_room">Vert med i rommet</string>
+    <string name="room_recents_join_room">Vert med i romet</string>
     <string name="room_recents_join_room_title">Vert med i eit rom</string>
-    <string name="room_recents_join_room_prompt">Skriv ein rom-ID eller eit romalias inn</string>
+    <string name="room_recents_join_room_prompt">Skriv inn ein rom-ID eller eit romalias</string>
 
-    <string name="directory_search_results_title">Sjå gjennom Utvalet</string>
+    <string name="directory_search_results_title">Sjå gjenom utvalet</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 rom</item>
         <item quantity="other">%d rom</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-        <item quantity="one">Fant %1$s rom for %2$s</item>
-        <item quantity="other">Fant %1$s rom for %2$s</item>
-    </plurals>
+	<item quantity="one">Fann %1$s rom fyr %2$s</item>
+	<item quantity="other">Fann %1$s rom fyr %2$s</item>
+</plurals>
     <string name="directory_searching_title">Søkjer i utvalet..</string>
 
-    <string name="room_settings_all_messages_noisy">Alle meldingar (bråket)</string>
+    <string name="room_settings_all_messages_noisy">Alle meldingar (bråkete)</string>
     <string name="room_settings_all_messages">Alle meldingar</string>
     <string name="room_settings_mention_only">Berre nemningar</string>
-    <string name="room_settings_mute">Stiln</string>
+    <string name="room_settings_mute">Stilna</string>
     <string name="room_settings_favourite">Gjer til yndling</string>
-    <string name="room_settings_de_prioritize">Fjern høgrett</string>
-    <string name="room_settings_direct_chat">Direktesamtale</string>
-    <string name="room_settings_leave_conversation">Far frå Samtala</string>
+    <string name="room_settings_de_prioritize">Tak burt høgrett</string>
+    <string name="room_settings_direct_chat">Beinveges samtala</string>
+    <string name="room_settings_leave_conversation">Far frå samtala</string>
     <string name="room_settings_forget">Gløym</string>
-    <string name="room_settings_add_homescreen_shortcut">Legg til ein Heimskjerm-Snarveg</string>
+    <string name="room_settings_add_homescreen_shortcut">Laga snarveg på heimskjermen</string>
 
     <string name="room_sliding_menu_messages">Meldingar</string>
     <string name="room_sliding_menu_settings">Innstillingar</string>
-    <string name="room_sliding_menu_version">Utgåve</string>
-    <string name="room_sliding_menu_term_and_conditions">Vilkår og føresetnader</string>
-    <string name="room_sliding_menu_third_party_notices">Tredjepartivarsel</string>
-    <string name="room_sliding_menu_copyright">Opphavsrett</string>
-    <string name="room_sliding_menu_privacy_policy">Personvernretningsliner</string>
+    <string name="room_sliding_menu_version">Utgåva</string>
+    <string name="room_sliding_menu_term_and_conditions">Vilkår og fyresetnader</string>
+    <string name="room_sliding_menu_third_party_notices">Tridjepartivarsel</string>
+    <string name="room_sliding_menu_copyright">Upphavsrett</string>
+    <string name="room_sliding_menu_privacy_policy">Personvernretningslinor</string>
 
-    <string name="settings_profile_picture">Profilbilete</string>
+    <string name="settings_profile_picture">Profilbilæte</string>
     <string name="settings_display_name">Visingsnamn</string>
     <string name="settings_email_address">Epost</string>
-    <string name="settings_add_email_address">Legg ei epostadresse til</string>
+    <string name="settings_add_email_address">Legg til ei epostadressa</string>
     <string name="settings_phone_number">Telefon</string>
-    <string name="settings_add_phone_number">Legg eit telefonnummer til</string>
-    <string name="settings_app_info_link_summary">Æppsystem-infoskjerm</string>
+    <string name="settings_add_phone_number">Legg til eit telefonnummer</string>
+    <string name="settings_app_info_link_summary">Syn æppinfoen i systeminnstillingane</string>
     <string name="settings_app_info_link_title">Æppinfo</string>
 
     <string name="settings_notification_privacy">Varselpersonvern</string>
     <string name="settings_notification_privacy_normal">Vanleg</string>
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
-    <string name="settings_notification_privacy_need_permission">Æppen treng tilgang til å køyra i bakgrunnen</string>
+    <string name="settings_notification_privacy_need_permission">Æppen treng løyve til å køyra i bakgrunnen</string>
     <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
     <string name="settings_notification_privacy_metadata">• Varsel inneheld berre metadata</string>
-    <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhald i varselet <b>hentast trygt direkte frå Matrix-heimtenaren</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhaldet i varselet er<b>trygt henta beinveges frå Matrix-heimtenaren</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Varsel inneheld <b>meta- og meldingsdata</b></string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Varsel <b>viser ikkje meldingsinnhald</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Varsel <b>syner ikkje meldingsinnhald</b></string>
 
     <string name="settings_notification_ringtone">Varselljod</string>
-    <string name="settings_enable_all_notif">Skru varsel på for denne brukaren</string>
-    <string name="settings_enable_this_device">Skru varsel på for denne einina</string>
-    <string name="settings_turn_screen_on">Sku skjermen på i 3 sekundar</string>
+    <string name="settings_enable_all_notif">Skru på varsel fyr denne brukaren</string>
+    <string name="settings_enable_this_device">Skru på varsel fyr denna einingi</string>
+    <string name="settings_turn_screen_on">Skru skjermen på i 3 sekund</string>
 
     <string name="settings_containing_my_display_name">Meldingar som inneheld visingsnamnet mitt</string>
     <string name="settings_containing_my_user_name">Meldingar som inneheld brukarnamnet mitt</string>
-    <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtaler</string>
-    <string name="settings_messages_in_group_chat">Meldingar i gruppesamtaler</string>
+    <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtalor</string>
+    <string name="settings_messages_in_group_chat">Meldingar i gruppasamtalor</string>
     <string name="settings_invited_to_room">Når eg vert boden inn i eit rom</string>
-    <string name="settings_call_invitations">Røystsamtaleinnbydingar</string>
-    <string name="settings_messages_sent_by_bot">Meldingar frå ein bot</string>
+    <string name="settings_call_invitations">Røystsamtalainnbjodingar</string>
+    <string name="settings_messages_sent_by_bot">Meldingar frå botar</string>
 
-    <string name="settings_start_on_boot">Byrj på oppstart</string>
-    <string name="settings_background_sync">Bakgrunns-samstilling</string>
-    <string name="settings_enable_background_sync">Skru bakgrunns-samstilling på</string>
-    <string name="settings_set_sync_timeout">Samstillingsførespurnade fekk tidsavbrot</string>
+    <string name="settings_start_on_boot">Byrja ved uppstarten</string>
+    <string name="settings_background_sync">Bakgrunnsamstilling</string>
+    <string name="settings_enable_background_sync">Skru på bakgrunnsamstilling</string>
+    <string name="settings_set_sync_timeout">Samstillingsfyrespurnaden fekk tidsavbrot</string>
     <string name="settings_set_sync_delay">Forseining mellom to samstillingsførespurnader</string>
     <string name="settings_second">sekund</string>
-    <string name="settings_seconds">sekundar</string>
+    <string name="settings_seconds">sekund</string>
 
-    <string name="settings_version">Utgåve</string>
-    <string name="settings_olm_version">olm-utgåve</string>
-    <string name="settings_app_term_conditions">Vilkår og føresetnader</string>
-    <string name="settings_third_party_notices">Tredjepartivarsel</string>
-    <string name="settings_copyright">Opphavsrett</string>
-    <string name="settings_privacy_policy">Personvernsretningsliner</string>
-    <string name="settings_clear_cache">Tøm buffar</string>
-    <string name="settings_clear_media_cache">Tøm mediabuffar</string>
+    <string name="settings_version">Utgåva</string>
+    <string name="settings_olm_version">olm-utgåva</string>
+    <string name="settings_app_term_conditions">Vilkår og fyresetnader</string>
+    <string name="settings_third_party_notices">Tridjepartivarsel</string>
+    <string name="settings_copyright">Upphavsrett</string>
+    <string name="settings_privacy_policy">Personvernsretningslinor</string>
+    <string name="settings_clear_cache">Tøm buffaren</string>
+    <string name="settings_clear_media_cache">Tøm mediabuffaren</string>
     <string name="settings_keep_media">Hald på mediet</string>
 
     <string name="settings_user_settings">Brukarinnstillingar</string>
