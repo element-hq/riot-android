@@ -1189,7 +1189,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_banner_setup_line1">nunca se pierden mensajes cifrados</string>
     <string name="keys_backup_banner_setup_line2">Comenzar Copia de seguridad</string>
 
-    <string name="keys_backup_banner_recover_line1">Nunca pierde mensajes cifrados</string>
+    <string name="keys_backup_banner_recover_line1">Nunca pierdas mensajes cifrados</string>
     <string name="keys_backup_banner_update_line1">Nuevos mensajes clave cifrados</string>
     <string name="keys_backup_banner_update_line2">Gestionar Copia de Seguridad</string>
 
@@ -1197,4 +1197,5 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="keys_backup_info_title_version">Versión</string>
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Reinicio automático del servicio de notificaciones</string>
     </resources>
