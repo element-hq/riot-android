@@ -94,7 +94,7 @@
     <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Co powinno się wydarzyć? Co się stało?</string>
     <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
     <string name="send_bug_report_logs_description">W celu zdiagnozowania problemów, logi z tego klienta zostaną wysłane wraz z tym raportem o błędzie. Ten raport o błędzie, w tym dzienniki i zrzut ekranu, nie będzie publicznie widoczny. Jeśli wolisz wysłać tylko powyższy tekst, odznacz:</string>
-    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz zgłosić błąd?</string>
+    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz otworzyć ekran zgłaszania błędu\?</string>
     <string name="send_bug_report_app_crashed">Aplikacja nie została poprawnie zamknięta za ostatnim razem. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu?</string>
 
     <string name="send_bug_report_sent">Pomyślnie zgłoszono błąd</string>
@@ -937,8 +937,8 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="room_message_placeholder_reply_to_encrypted">Wyślij zaszyfrowaną odpowiedź…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Wyślij odpowiedź (niezaszyfrowaną)…</string>
     <string name="settings_labs_keyboard_options_to_send_message">Użyj klawisza enter na klawiaturze, aby wysłać wiadomość</string>
-    <string name="command_description_part_room">Opuść pokój</string>
-    <string name="command_description_markdown">Włącz/Wyłącz markdown</string>
+    <string name="command_description_part_room">Opuszcza pokój</string>
+    <string name="command_description_markdown">Włącza/Wyłącza markdown</string>
     <plurals name="group_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
@@ -1010,10 +1010,10 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="command_description_deop_user">Usuwa opa użytkownikowi z podanym ID</string>
     <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
     <string name="command_description_join_room">Dołącza do pokoju z podanym aliasem</string>
-    <string name="command_description_topic">Ustaw temat pokoju</string>
+    <string name="command_description_topic">Ustawia temat pokoju</string>
     <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
-    <string name="command_description_clear_scalar_token">Aby naprawić zarządzanie aplikacjami Matrix</string>
+    <string name="command_description_clear_scalar_token">Do naprawiania zarządzania aplikacjami Matrix</string>
 
     <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny</string>
     <string name="room_tombstone_continuation_link">Konwersacja jest kontynuowana tutaj</string>
@@ -1195,4 +1195,13 @@ Spróbuj uruchomić ponownie aplikację.</string>
 	<item quantity="few">Przywrócono kopię zapasową z %d kluczami.</item>
 	<item quantity="many">Przywrócono kopię zapasową z %d kluczami.</item>
 </plurals>
+    <string name="title_activity_keys_backup_restore">Użyj kopii zapasowej klucza</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Uruchamianie… (%1$d z %2$d)</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Ustawienia niestandardowe.</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Zarządzaj kopią zapasową klucza</string>
+
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Udostępnij klucz odzyskiwania z…</string>
+    <string name="keys_backup_settings_delete_confirm_message">Usunąć klucze szyfrowania z serwera\? Nie będziesz mógł/mogła używać klucza odzyskiwania do odczytywania historii zaszyfrowanych wiadomości.</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Wszystkie klucze mają kopię zapasową</string>
     </resources>
