@@ -1217,11 +1217,11 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricciones</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimización de la bateria</string>
-    <string name="settings_troubleshoot_test_battery_success">A Riot no le afecta la optimización de la bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">A Riot no le afecta la Optimización de la bateria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuario deja el dispositivo desenchufado e inmóvil durante cierto periodo de tiempo con la pantalla apagada, el dispositivo entrará en modo hibernación. Esto evita que las apps accedan a la red y postpone sus tareas, sincronizaciones y alarmas.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">ignorar optimización</string>
 
-    <string name="settings_notification_privacy_no_background_sync">La app <b>no</b> necesita conectarse al servidor doméstico en segundo plano, esto debería reducir el uso de la batería</string>
+    <string name="settings_notification_privacy_no_background_sync">Las apps <b>no</b> necesita conectarse al servidor doméstico en segundo plano, esto debería reducir el uso de la batería</string>
     <string name="settings_noisy_notifications_preferences">Configurar notificaciones de sonido</string>
     <string name="settings_call_notifications_preferences">Configurar notificaciones de llamada</string>
     <string name="settings_silent_notifications_preferences">Configurar notificaciones silenciadas</string>
@@ -1447,4 +1447,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 \n
 \nSi no ha establecido un nuevo método de recuperación, alguien podría estar intentando acceder a su cuenta. Cambie su contraseña y establezca un nuevo método de recuperación inmediatamente en ajustes.</string>
     <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
+    <string name="settings_play_shutter_sound">Activar sonido de obturación</string>
+
     </resources>
