@@ -502,7 +502,7 @@
     <string name="room_details_settings">সেটিংস</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -703,4 +703,50 @@
     <string name="new_recovery_method_popup_description">একটি নতুন সুরক্ষিত বার্তা কুঞ্জি ব্যাকআপ সনাক্ত করা হয়েছে।
 \n
 \nআপনি যদি নতুন পুনরুদ্ধারের পদ্ধতি সেট না করে থাকেন তবে একজন আক্রমণকারী আপনার অ্যাকাউন্ট অ্যাক্সেস করার চেষ্টা করছেন। আপনার অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন করুন এবং সেটিংসে অবিলম্বে একটি নতুন পুনরুদ্ধার পদ্ধতি সেট করুন।</string>
-</resources>
+<string name="title_activity_verify_device">ডিভাইস যাচাই করুন</string>
+
+    <string name="settings_notification_privacy_no_background_sync">অ্যাপগুলি ব্যাকগ্রাউন্ডে হোম সার্ভারের সাথে সংযোগ করার প্রয়োজন করার প্রয়োজন <b>নেই</b> , এটি ব্যাটারির ব্যবহারকে কমাতে পারে</string>
+    <string name="settings_notification_privacy_fcm">• বিজ্ঞপ্তি Firebase ক্লাউড মেসেজিং মাধ্যমে পাঠানো হয়</string>
+    <string name="settings_notification_privacy_metadata">• বিজ্ঞপ্তিগুলি তে শুধুমাত্র মেটাডেটা থাকে</string>
+    <string name="settings_notification_privacy_secure_message_content">• বিজ্ঞপ্তিটির বার্তা সামগ্রী <b>ম্যাট্রিক্স হোমসার্ভার থেকে নিরাপদে সরাসরি অবস্থিত হয়</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• বিজ্ঞপ্তিগুলি তে <b>মেটা এবং বার্তা ডেটা</b> থাকে</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• বিজ্ঞপ্তিগুলি <b>বার্তা সামগ্রী দেখাবে না</b></string>
+
+    <string name="settings_notification_ringtone">বিজ্ঞপ্তি শব্দ</string>
+    <string name="settings_enable_all_notif">এই অ্যাকাউন্টের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
+    <string name="settings_enable_this_device">এই ডিভাইসের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
+    <string name="settings_turn_screen_on">স্ক্রিন টি ৩ সেকেন্ডের জন্য চালু করুন</string>
+    <string name="settings_noisy_notifications_preferences">হাল্লা বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_call_notifications_preferences">কল বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_silent_notifications_preferences">নীরব বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
+    <string name="settings_system_preferences_summary">"LED\'র  রং, কম্পন, শব্দ নির্বাচন করুন…"</string>
+
+
+    <string name="settings_containing_my_display_name">আমার প্রদর্শন নাম ধারণকারী বার্তা</string>
+    <string name="settings_containing_my_user_name">আমার ব্যবহারকারী নাম ধারণকারী বার্তা</string>
+    <string name="settings_messages_in_one_to_one">এক থেকে এক চ্যাট বার্তা</string>
+    <string name="settings_messages_in_group_chat">গ্রুপ চ্যাটে বার্তা</string>
+    <string name="settings_invited_to_room">যখন আমি একটি রুম আমন্ত্রিত</string>
+    <string name="settings_call_invitations">কল এর আমন্ত্রণগুলি</string>
+    <string name="settings_messages_sent_by_bot">বোট দ্বারা পাঠানো বার্তাগুলি</string>
+
+    <string name="settings_background_sync">পটভূমি সিঙ্ক্রোনাইজেশন</string>
+    <string name="settings_start_on_boot">বুট করার সময় শুরু</string>
+    <string name="settings_enable_background_sync">ব্যাকগ্রাউন্ড সিঙ্ক সক্ষম করুন</string>
+    <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
+    <string name="settings_set_sync_delay">প্রতিটি অনুরোধের মধ্যে বিলম্ব</string>
+    <string name="settings_second">সেকেন্ড</string>
+    <string name="settings_seconds">সেকেন্ড</string>
+
+    <string name="settings_version">সংস্করণ</string>
+    <string name="settings_olm_version">olm সংস্করণ</string>
+    <string name="settings_app_term_conditions">শর্তাবলী</string>
+    <string name="settings_third_party_notices">তৃতীয় পক্ষের নোটিশ</string>
+    <string name="settings_copyright">কপিরাইট</string>
+    <string name="settings_privacy_policy">গোপনীয়তা নীতি</string>
+    <string name="settings_keep_media">মিডিয়া রাখুন</string>
+    <string name="settings_clear_cache">ক্যাশে পরিষ্কার করুন</string>
+    <string name="settings_clear_media_cache">মিডিয়া ক্যাশে পরিষ্কার করুন</string>
+
+    <string name="settings_notifications">বিজ্ঞপ্তিগুলি</string>
+    </resources>
