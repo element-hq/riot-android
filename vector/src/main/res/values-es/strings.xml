@@ -1187,7 +1187,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="new_recovery_method_popup_title">nueva copia de seguridad</string>
     <string name="new_recovery_method_popup_was_me">Ese era yo</string>
     <string name="keys_backup_banner_setup_line1">nunca se pierden mensajes cifrados</string>
-    <string name="keys_backup_banner_setup_line2">Comenzar Copia de seguridad</string>
+    <string name="keys_backup_banner_setup_line2">Configurar copia de seguridad de las claves de cifrado</string>
 
     <string name="keys_backup_banner_recover_line1">Nunca pierdas mensajes cifrados</string>
     <string name="keys_backup_banner_update_line1">Nuevos mensajes clave cifrados</string>
@@ -1428,7 +1428,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_info_title_signature">Firma</string>
 
     <string name="autodiscover_well_known_autofill_dialog_title">autocompletar opciones del servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectado una configuración personalizada del servidor para su ID de usuario \"%s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%s\":
 \n%s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuración de uso</string>
 
@@ -1440,10 +1440,11 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La copia de seguridad tiene una firma inválida del dispositivo no verificado %s</string>
     <string name="keys_backup_get_trust_error">Error al conseguir información de confianza para la copia de seguridad (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Para usar la copia de seguridad clave en este dispositivo introduzca su contraseña o su clave de recuperación ahora.</string>
+    <string name="keys_backup_settings_untrusted_backup">Para usar la copia de seguridad de la clave en este dispositivo introduzca su contraseña o su clave de recuperación ahora.</string>
     <string name="keys_backup_settings_delete_confirm_message">Desea borrar sus claves cifradas guardadas del servidor\? No podrás usar tu clave de recuperación para leer el historial de mensajes cifrados.</string>
 
     <string name="new_recovery_method_popup_description">Una nueva copia de seguridad de mensajes ha sido detectada.
 \n
 \nSi no ha establecido un nuevo método de recuperación, alguien podría estar intentando acceder a su cuenta. Cambie su contraseña y establezca un nuevo método de recuperación inmediatamente en ajustes.</string>
+    <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
     </resources>
