@@ -90,7 +90,7 @@
     <string name="later">По-късно</string>
     <string name="forward">Препрати</string>
     <string name="permalink">Permalink</string>
-    <string name="view_source">Прегледай източника</string>
+    <string name="view_source">Виж източника</string>
     <string name="delete">Изтрий</string>
     <string name="rename">Преименувай</string>
     <string name="report_content">Докладвай съдържанието</string>
@@ -106,7 +106,7 @@
     <string name="ongoing_conference_call_voice">Глас</string>
     <string name="ongoing_conference_call_video">Видео</string>
     <string name="cannot_start_call">Неуспешно започване на разговора. Моля, опитайте по-късно</string>
-    <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да липсват…</string>
+    <string name="missing_permissions_warning">Поради липсващи разрешения, някои функции може да отсъстват…</string>
     <string name="missing_permissions_to_start_conf_call">Трябва да имате разрешение за изпращане на покани, за да може да започнете групов разговор в тази стая</string>
     <string name="missing_permissions_title_to_start_conf_call">Неуспешно започване на разговор</string>
     <string name="device_information">Информация за устройство</string>
@@ -116,13 +116,13 @@
     <string name="invite">Покани</string>
     <string name="offline">Офлайн</string>
 
-    <string name="action_exit">Излез</string>
+    <string name="action_exit">Изход</string>
     <string name="actions">Действия</string>
-    <string name="action_sign_out">Изход</string>
-    <string name="action_voice_call">Гласов разговор</string>
-    <string name="action_video_call">Видео разговор</string>
+    <string name="action_sign_out">Отписване</string>
+    <string name="action_voice_call">Гласово обаждане</string>
+    <string name="action_video_call">Видео обаждане</string>
     <string name="action_global_search">Глобално търсене</string>
-    <string name="action_mark_all_as_read">Маркирай всички като прочетени</string>
+    <string name="action_mark_all_as_read">Отбележи всички като прочетени</string>
     <string name="action_historical">Архив</string>
     <string name="action_quick_reply">Бърз отговор</string>
     <string name="action_open">Отвори</string>
@@ -130,18 +130,18 @@
     <string name="disable">Изключи</string>
 
     <string name="dialog_title_confirmation">Потвърждение</string>
-    <string name="dialog_title_warning">Внимание</string>
+    <string name="dialog_title_warning">Предупреждение</string>
 
     <string name="bottom_action_home">Начало</string>
-    <string name="bottom_action_favourites">Любими</string>
+    <string name="bottom_action_favourites">Предпочитани</string>
     <string name="bottom_action_people">Хора</string>
     <string name="bottom_action_rooms">Стаи</string>
     <string name="bottom_action_groups">Общности</string>
 
     <string name="home_filter_placeholder_home">Филтрирай стаи</string>
-    <string name="home_filter_placeholder_favorites">Филтрирай любими</string>
+    <string name="home_filter_placeholder_favorites">Филтрирай предпочитаните</string>
     <string name="home_filter_placeholder_people">Филтрирай хора</string>
-    <string name="home_filter_placeholder_rooms">Филтрирай стаи</string>
+    <string name="home_filter_placeholder_rooms">Филтрирай имената на стаите</string>
     <string name="home_filter_placeholder_groups">Филтрирай общности</string>
 
     <string name="invitations_header">Покани</string>
@@ -152,7 +152,7 @@
     <string name="user_directory_header">Директория с потребители</string>
     <string name="matrix_only_filter">Само потребители на Matrix</string>
     <string name="no_conversation_placeholder">Няма разговори</string>
-    <string name="no_contact_access_placeholder">Не сте дали достъп на Riot до локалните Ви контакти</string>
+    <string name="no_contact_access_placeholder">Не сте дали достъп на Riot до локалните ви контакти</string>
     <string name="no_result_placeholder">Няма резултати</string>
 
     <string name="rooms_header">Стаи</string>
@@ -175,21 +175,21 @@
     <string name="send_bug_report_description">Моля, опишете грешката. Какво направихте? Какво очаквахте да стане? Какво стана всъщност?</string>
     <string name="send_bug_report_placeholder">Опишете своя проблем тук</string>
     <string name="send_bug_report_logs_description">За да се диагностицират проблемите, логовете от този клиент ще бъдат изпратени с този доклад за грешки. Докладът, заедно с логовете и скрийншота, няма да са видими публично. Ако предпочитате да изпратите само текста по-горе, моля, премахнете отметката:</string>
-    <string name="send_bug_report_alert_message">Изглежда, че разклащате телефона, което ни кара да мислим, че не сте доволни от Riot. Искате ли да изпратите съобщение за грешка?</string>
+    <string name="send_bug_report_alert_message">Изглежда, разклащате недоволно телефона. Искате ли да изпратите съобщение за грешка\?</string>
     <string name="send_bug_report_app_crashed">Приложението спря да работи последния път. Искате ли да отворите екрана за изпращане на грешки?</string>
     <string name="send_bug_report_rage_shake">Силно разклащане на телефона за изпращане на грешка</string>
 
-    <string name="send_bug_report_sent">Съобщението за грешка беше успешно изпратено</string>
+    <string name="send_bug_report_sent">Съобщението за грешка беше изпратено успешно</string>
     <string name="send_bug_report_failed">Неуспешно изпращане на съобщението за грешка (%s)</string>
     <string name="read_receipt">Прочетено</string>
 
-    <string name="join_room">Присъедини се към стая</string>
+    <string name="join_room">Влез в стая</string>
     <string name="username">Потребителско име</string>
     <string name="create_account">Създай акаунт</string>
-    <string name="login">Вход</string>
-    <string name="logout">Изход</string>
+    <string name="login">Вписване</string>
+    <string name="logout">Отписване</string>
     <string name="hs_url">URL на Home сървър</string>
-    <string name="identity_url">URL на сървър за самоличност</string>
+    <string name="identity_url">Адрес на сървър за самоличност</string>
     <string name="search">Търсене</string>
 
     <string name="start_new_chat">Започни нов чат</string>
@@ -796,7 +796,7 @@
     <string name="ignore_request">Игнорирай поканата</string>
 
     <!-- conference call -->
-    <string name="conference_call_warning_title">Внимание!</string>
+    <string name="conference_call_warning_title">Предупреждение!</string>
     <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
 
     <!-- slash commands -->
@@ -1014,7 +1014,7 @@
     <string name="x_plus">%d+</string>
 
     <string name="call_anyway">Звънни въпреки това</string>
-    <string name="accept">Разреши</string>
+    <string name="accept">Приемам</string>
 
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
 
@@ -1285,13 +1285,13 @@
     <string name="sign_out_bottom_sheet_backing_up_keys">Създаване на резервно копие на ключовете…</string>
     <string name="keys_backup_activate">Използвай резервно копие на ключовете</string>
     <string name="are_you_sure">Сигурни ли сте?</string>
-    <string name="backup">Направи резервно копие</string>
+    <string name="backup">Резервно копие</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ако не направите резервно копие на ключовете преди да излезете, ще загубите достъп до шифрованите съобщения.</string>
 
     <string name="stay">Остани</string>
     <string name="abort">Прекрати</string>
 
-    <string name="action_sign_out_confirmation_simple">Сигурни ли сте, че искате да излезете?</string>
+    <string name="action_sign_out_confirmation_simple">Сигурни ли сте, че искате да се отпишете\?</string>
     <string name="settings_data_save_mode_summary">Режим икономия на данни игнорира уведомленията за пишещи хора, както и информация за онлайн статуса на потребители.</string>
 
     <string name="encryption_message_recovery">Възстановяване на шифровани съобщения</string>
@@ -1345,7 +1345,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
-    <string name="ignore">Игнорирай</string>
+    <string name="ignore">Отхвърли</string>
 
     <string name="login_error_unknown_host">URL адресът не е достъпен, моля проверете</string>
     <string name="login_error_ssl_handshake">Устройството Ви използва остарял TLS протокол за сигурност, който е уязвим към атаки. За ваша безопасност няма да може да се свържете</string>
