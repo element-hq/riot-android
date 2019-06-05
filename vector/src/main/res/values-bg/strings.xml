@@ -95,7 +95,7 @@
     <string name="rename">Преименувай</string>
     <string name="report_content">Докладвай съдържанието</string>
     <string name="active_call">Активен разговор</string>
-    <string name="notification_listening_for_events">Следете за събития</string>
+    <string name="notification_listening_for_events">Следене за събития</string>
     <string name="notification_noisy_notifications">Шумни известия</string>
     <string name="notification_silent_notifications">Уведомления без звук</string>
 
@@ -1413,4 +1413,44 @@
     <string name="sas_verify_start_button_title">Започни удостоверяване</string>
     <string name="sas_incoming_request_title">Входящо искане за удостоверяване</string>
     <string name="sas_incoming_request_description">Удостоверете това устройство, за да бъде отбелязано като надеждно. Доверените устройства на участниците ви дават допълнително спокойствие когато изпращате криптирани съобщения.</string>
-    </resources>
+    <string name="sas_incoming_request_description_2">Потвърждаването на устройството ще го маркира като доверено и ще маркира Вашето като доверено при партньора.</string>
+
+    <string name="sas_emoji_description">Потвърдете това устройство като се уверите че следните емоджита се повяват на екрана на партньора</string>
+    <string name="sas_decimal_description">Потвърдете това устройство като се уверите че следните числа се повяват на екрана на партньора</string>
+
+    <string name="sas_incoming_verification_request_dialog">Получихте входяща заявка за потвърждение.</string>
+    <string name="sas_view_request_action">Виж заявката</string>
+    <string name="sas_waiting_for_partner">Изчакване на потвърждение от партньора…</string>
+
+    <string name="sas_verified">Потвърдено!</string>
+    <string name="sas_verified_successful">Успешно потвърдихте това устройство.</string>
+    <string name="sas_verified_successful_description">Защитените съобщения с този потребител са шифровани от край до край и не могат да бъдат прочетени от трети лица.</string>
+    <string name="sas_got_it">Разбрах</string>
+
+    <string name="sas_verifying_keys">Не се показва нищо\? Засега не всички клиенти поддържат интерактивно потвърждение. Използвайте стария метод за потвърждение.</string>
+    <string name="sas_legacy_verification_button_title">Потвърди по стария метод.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Потвърждение на ключа</string>
+    <string name="sas_cancelled_dialog_title">Заявката отказана</string>
+    <string name="sas_cancelled_by_other">Отсрещната страна отказа потвърждението.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Потвърждението е отказано.
+\nПричина: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Интерактивно потвърждение на устройство</string>
+    <string name="sas_incoming_request_notif_title">Заявка за потвърждение</string>
+    <string name="sas_incoming_request_notif_content">%s иска да потвърди устройството Ви</string>
+
+    <string name="sas_error_m_user">Потребителят отказа потвърждението</string>
+    <string name="sas_error_m_timeout">Времето за потвърждение изтече</string>
+    <string name="sas_error_m_unknown_transaction">Устройството не знае за тази транзакция</string>
+    <string name="sas_error_m_unknown_method">Устройството не може да се съгласи на уговорка за ключ, хеширане, MAC, или SAS метод</string>
+    <string name="sas_error_m_mismatched_commitment">Полученият хеш не съвпада</string>
+    <string name="sas_error_m_mismatched_sas">SAS не съвпада</string>
+    <string name="sas_error_m_unexpected_message">Устройството получи неочаквано съобщение</string>
+    <string name="sas_error_m_invalid_message">Беше получено невалидно съобщение</string>
+    <string name="sas_error_m_key_mismatch">Несъответствие в ключовете</string>
+    <string name="sas_error_m_user_error">Несъответствие в потребителя</string>
+    <string name="sas_error_unknown">Неизвестна грешка</string>
+
+</resources>
