@@ -162,7 +162,7 @@
     <string name="auth_reset_password_message">Aby przywrócić hasło, wprowadź adres e-mail powiązany z kontem:</string>
     <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
     <string name="auth_reset_password_missing_password">Należy wprowadzić nowe hasło.</string>
-    <string name="auth_reset_password_email_validation_message">Wysłano email na adres %s. Po otwarciu znajdującego się tam linku, naciśnij poniżej.</string>
+    <string name="auth_reset_password_email_validation_message">Wysłano e-mail na adres %s. Po otwarciu znajdującego się tam linku, naciśnij poniżej.</string>
     <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_must_start_http">URL musi zaczynać się od http[s]://</string>
     <string name="login_error_network_error">Nie udało się połączyć: Błąd sieci</string>
@@ -572,12 +572,12 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="option_take_photo">Zrób zdjęcie</string>
     <string name="option_take_video">Nagraj film</string>
 
-    <string name="auth_add_email_phone_message">Dodaj adres email i/lub nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-
-Adres email pozwoli ci również zresetować hasło.</string>
-    <string name="auth_add_email_and_phone_message">Dodaj adres email i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-
-Adres email pozwoli ci również zresetować hasło.</string>
+    <string name="auth_add_email_phone_message">Dodaj adres e-mail i/lub nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
+\n
+\nAdres e-mail pozwoli Ci również zresetować hasło.</string>
+    <string name="auth_add_email_and_phone_message">Dodaj adres e-mail i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
+\n
+\nAdres e-mail pozwoli Ci również zresetować hasło.</string>
     <string name="auth_threepid_warning_message">Rejestracja jednocześnie za pomocą numeru telefonu i adresu e-mail nie jest obsługiwana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
@@ -1204,4 +1204,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="keys_backup_settings_delete_confirm_message">Usunąć klucze szyfrowania z serwera\? Nie będziesz mógł/mogła używać klucza odzyskiwania do odczytywania historii zaszyfrowanych wiadomości.</string>
 
     <string name="keys_backup_info_keys_all_backup_up">Wszystkie klucze mają kopię zapasową</string>
+    <string name="settings_change_password_submit">Zaktualizuj hasło</string>
     </resources>
