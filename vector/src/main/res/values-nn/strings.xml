@@ -993,4 +993,34 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 </plurals>
     <string name="reason_hint">Grunn</string>
 
+    <string name="settings_notification_advanced">Umfattande varselinnstilingar</string>
+    <string name="settings_notification_advanced_summary">Set kor viktige varsel er ut ifrå hendingar, og stilla på ljod, LED, og risting</string>
+    <string name="settings_notification_by_event">Kor viktige varsel er ut ifrå hendingar</string>
+
+    <string name="settings_notification_troubleshoot">Leit etter vanskar med varsli</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnostikk fyr feilsøkjing</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Køyr prøvar</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Køyrer… (%1$d av %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Det grunnleggjande er i ordning. Um du framleis ikkje fær varsel, gjer vel og send inn ei feilmelding so me kann sjå nærare på det.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Éin eller fleire prøvar verka ikkje. Freista dessa løysingane.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Éin eller fleire prøvar gjekk galne. Gjer vel og send inn ei feilmelding so me kann sjå nærare på det.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_title">Systeminnstillingar.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Varsel er skrudde på i systeminnstillingane.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Varsel er skrudde av i systeminnstillingane.
+\nGjer vel og sjå på systeminnstillingane.</string>
+    <string name="open_settings">Opna innstillingane</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Brukarinnstillingar.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Varsel er skrudde på fyr brukaren din.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Varsel er skrudde av fyr brukaren din.
+\nGjer vel og sjå på brukarinnstillingane.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Skru på</string>
+
+    <string name="settings_troubleshoot_test_device_settings_title">Eininginnstillingar.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Varsel er skrudde på fyr denna einingi.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Varsel er ikkje skrudde på fyr denna einingi.
+\nGjer vel og sjå på Riot-innstillingane.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Skru på</string>
+
     </resources>
