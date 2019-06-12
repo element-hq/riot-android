@@ -1447,6 +1447,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 \n
 \nSi no ha establecido un nuevo método de recuperación, alguien podría estar intentando acceder a su cuenta. Cambie su contraseña y establezca un nuevo método de recuperación inmediatamente en ajustes.</string>
     <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
-    <string name="settings_play_shutter_sound">Activar sonido de obturación</string>
+    <string name="settings_play_shutter_sound">Reproducir sonido de cámara</string>
 
     </resources>
