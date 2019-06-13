@@ -992,4 +992,47 @@
 
     <string name="encryption_information_verify_device">ডিভাইস যাচাই করুন</string>
     <string name="encryption_information_verify_device_warning2">এটি মিললে, নীচের যাচাই বাটন টিপুন। যদি এটি না হয় তবে অন্য কেউ এই ডিভাইসটিকে আটক করছে এবং আপনাকে সম্ভবত এটি কালো তালিকাভুক্ত করা উচিত। ভবিষ্যতে এই যাচাই প্রক্রিয়া আরো পরিশীলিত হবে।</string>
+    <string name="encryption_information_verify_key_match">আমি যে কি মেলে মেলে যাচাই</string>
+
+    <string name="unknown_devices_alert_title">রুমে অজানা ডিভাইস রয়েছে</string>
+    <string name="unknown_devices_alert_message">এই রুমে অজানা ডিভাইস রয়েছে যা যাচাই করা হয়নি।
+\nএর অর্থ এই যে ডিভাইসগুলি যে ব্যবহারকারীদের দাবি করে সেগুলির সাথে ডিভাইসগুলির কোনও নিশ্চয়তা নেই।
+\nআমরা আপনাকে চালিয়ে যাওয়ার আগে প্রতিটি ডিভাইসের জন্য যাচাইকরণ প্রক্রিয়ার মধ্য দিয়ে যেতে পরামর্শ দিই তবে আপনি যদি পছন্দ করেন তবে যাচাই না করে বার্তাটি পুনরায় পাঠাতে পারেন।
+\n
+\nঅজানা ডিভাইস:</string>
+
+    <string name="select_room_directory">একটি রুম ডিরেক্টরি নির্বাচন করুন</string>
+    <string name="directory_server_fail_to_retrieve_server">সার্ভার অনুপলব্ধ বা ওভারলোড হতে পারে</string>
+    <string name="directory_server_type_homeserver">পাবলিক রুমগুলি তালিকায় পেতে একটি হোমসেরভের টাইপ করুন</string>
+    <string name="directory_server_placeholder">হোমসেরভের ইউআরএল</string>
+    <string name="directory_server_all_rooms_on_server">%s সার্ভার থেকে সব রুমগুলি</string>
+    <string name="directory_server_native_rooms">সমস্ত নেটিভ %s রুমগুলি</string>
+
+    <string name="lock_screen_hint">এখানে টাইপ করুন…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">১ টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+	<item quantity="other">%d টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">১ টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+	<item quantity="other">%d টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">১ টি রুম</item>
+	<item quantity="other">%d টি রুম</item>
+</plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: ১ টি বার্তা</item>
+	<item quantity="other">%1$s: %2$d টি বার্তা</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d টি বিজ্ঞপ্তি</item>
+	<item quantity="other">%d টি বিজ্ঞপ্তি</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%2$s এ %1$s</string>
+    <string name="notification_unknown_new_event">নতুন ইভেন্ট</string>
+    <string name="notification_unknown_room_name">রুম</string>
     </resources>
