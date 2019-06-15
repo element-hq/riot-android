@@ -1035,4 +1035,75 @@
     <string name="notification_unread_notified_messages_in_room">%2$s এ %1$s</string>
     <string name="notification_unknown_new_event">নতুন ইভেন্ট</string>
     <string name="notification_unknown_room_name">রুম</string>
+    <string name="notification_new_messages">নতুন বার্তাগুলি</string>
+    <string name="notification_new_invitation">নতুন আমন্ত্রণগুলি</string>
+    <string name="notification_sender_me">আমি</string>
+    <string name="notification_inline_reply_failed">** পাঠাতে ব্যর্থ - দয়া করে রুম খুলুন</string>
+
+    <string name="historical_placeholder">ঐতিহাসিক জন্য অনুসন্ধান করুন</string>
+
+    <string name="tiny">অতি ক্ষুদ্র</string>
+    <string name="small">ছোট</string>
+    <string name="normal">সাধারন</string>
+    <string name="large">বড়</string>
+    <string name="larger">বৃহত্তর</string>
+    <string name="largest">বৃহত্তম</string>
+    <string name="huge">বিপুল</string>
+
+    <string name="widget_no_power_to_manage">আপনি এই রুমে উইজেট পরিচালনা করার অনুমতি প্রয়োজন</string>
+    <string name="widget_creation_failure">উইজেট এর নির্মাণ ব্যর্থ হয়েছে</string>
+    <string name="event_formatter_widget_added">%1$s %2$s দ্বারা যোগ করা হয়েছে</string>
+    <string name="event_formatter_widget_removed">%1$s %2$s দ্বারা সরানো হয়েছে</string>
+    <string name="settings_labs_create_conference_with_jitsi">Jitsi সঙ্গে কনফারেন্স কল তৈরি করুন</string>
+    <string name="widget_delete_message_confirmation">আপনি কি এই রুমে উইজেট মুছে ফেলতে চান\?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">১ টি সক্রিয় উইজেট</item>
+	<item quantity="other">%d টা সক্রিয় উইজেট</item>
+</plurals>
+
+    <string name="error_jitsi_not_supported_on_old_device">দুঃখিত, জিটসির সাথে কনফারেন্স কলগুলি পুরোনো ডিভাইসগুলিতে সমর্থিত নয় (৫.০ এর নীচে এন্ড্রোইড অপারেটিং সিস্টেম সহ ডিভাইসগুলি)</string>
+
+    <string name="widget_integration_unable_to_create">উইজেট তৈরি করতে অক্ষম।</string>
+    <string name="widget_integration_failed_to_send_request">অনুরোধ পাঠাতে ব্যর্থ।</string>
+    <string name="widget_integration_positive_power_level">শক্তি স্তর ইতিবাচক পূর্ণসংখ্যা হতে হবে।</string>
+    <string name="widget_integration_must_be_in_room">আপনি এই রুমে নেই।</string>
+    <string name="widget_integration_no_permission_in_room">আপনি এই রুমে এটা করার অনুমতি নেই।</string>
+    <string name="widget_integration_missing_room_id">অনুরোধে room_id অনুপস্থিত।</string>
+    <string name="widget_integration_missing_user_id">অনুরোধে user_id অনুপস্থিত।</string>
+    <string name="widget_integration_room_not_visible">রুম %s দৃশ্যমান নয়।</string>
+    <string name="widget_integration_missing_parameter">একটি প্রয়োজনীয় প্যারামিটারটি অনুপস্থিত আছে।</string>
+    <string name="widget_integration_invalid_parameter">একটি পেরামিটার বৈধ নয়।</string>
+    <string name="room_add_matrix_apps">ম্যাট্রিক্স এপ্লিকেশনগুলি যোগ করুন</string>
+    <string name="settings_labs_native_camera">নেটিভ ক্যামেরা ব্যবহার করুন</string>
+    <string name="settings_labs_native_camera_summary">কাস্টম ক্যামেরা স্ক্রীনের পরিবর্তে সিস্টেম ক্যামেরাটি শুরু করে।</string>
+    <string name="settings_labs_keyboard_options_to_send_message">বার্তা পাঠাবার জন্য কীবোর্ড এর এন্টার বোতাম প্রয়োগ করুন</string>
+    <string name="settings_labs_enable_send_voice">ভয়েস বার্তা পাঠান</string>
+    <string name="settings_labs_enable_send_voice_summary">এই বিকল্প বার্তা রেকর্ড করার জন্য একটি তৃতীয় পক্ষের অ্যাপ্লিকেশন প্রয়োজন।</string>
+
+    <string name="you_added_a_new_device_with_info">একটি নতুন ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
+\nডিভাইসের নাম: %1$s
+\nশেষ দেখা হয়েছে: %2$s
+\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+    <string name="your_unverified_device_requesting">আপনার যাচাই না করা ডিভাইস \'%s\' এনক্রিপশন কুঞ্জি অনুরোধ করছে।</string>
+    <string name="your_unverified_device_requesting_with_info">একটি যাচাইকরণ ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
+\nডিভাইসের নাম: %1$s
+\nশেষ দেখা হয়েছে: %2$s
+\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+
+    <string name="start_verification">যাচাই শুরু করুন</string>
+    <string name="start_verification_short_label">যাচাই</string>
+    <string name="share_without_verifying">যাচাই না করে শেয়ার করুন</string>
+    <string name="share_without_verifying_short_label">ভাগ</string>
+    <string name="key_share_request">কুঞ্জি ভাগ অনুরোধ</string>
+    <string name="ignore_request">অনুরোধ উপেক্ষা করুন</string>
+    <string name="ignore_request_short_label">উপেক্ষা</string>
+
+    <string name="conference_call_warning_title">সতর্কবাণী!</string>
+    <string name="conference_call_warning_message">কনফারেন্স কল এখনো ডেভেলপমেন্ট এ আছে আর নির্ভরযোগ্য নাও হতে পারে।</string>
+
+    <string name="command_error">কম্যান্ড এর ত্রুটি</string>
+    <string name="unrecognized_command">অজ্ঞাত কম্যান্ড: %s</string>
+    <string name="command_problem_with_parameters">কমান্ড \"%s\" আরও পেরামিটার প্রয়োজন, অথবা কিছু পেরামিটার ভুল।</string>
+    <string name="command_description_emote">কর্ম প্রদর্শন করে</string>
+    <string name="command_description_ban_user">দেওয়া আইডি সঙ্গে ব্যবহারকারী কে নিষিদ্ধ করে</string>
     </resources>
