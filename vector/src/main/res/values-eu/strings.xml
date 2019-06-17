@@ -1400,7 +1400,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 5.0 baino zaharragoak)</string>
 
-<string name="title_activity_verify_device">Egiaztatu gailua</string>
+    <string name="title_activity_verify_device">Egiaztatu gailua</string>
 
     <string name="encryption_information_unknown_ip">ip ezezaguna</string>
     <string name="you_added_a_new_device_with_info">"Gailu berri bat zifratze gakoak eskatzen ari da.

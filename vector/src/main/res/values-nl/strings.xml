@@ -835,9 +835,9 @@
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s gesprek gevonden voor %2$s</item>
-	<item quantity="other">%1$s gesprekken gevonden voor %2$s</item>
-</plurals>
+        <item quantity="one">%1$s gesprek gevonden voor %2$s</item>
+        <item quantity="other">%1$s gesprekken gevonden voor %2$s</item>
+    </plurals>
     <string name="room_settings_all_messages_noisy">Alle berichten (luid)</string>
     <string name="room_settings_all_messages">Alle berichten</string>
     <string name="room_settings_mention_only">Alleen vermeldingen</string>
@@ -1456,7 +1456,7 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
 
-<string name="title_activity_verify_device">Apparaat verifiëren</string>
+    <string name="title_activity_verify_device">Apparaat verifiëren</string>
 
     <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
     <string name="you_added_a_new_device_with_info">Een nieuw apparaat vraagt versleutelingssleutels aan.

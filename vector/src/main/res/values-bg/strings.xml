@@ -1390,7 +1390,7 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
 
-<string name="title_activity_verify_device">Удостоверяване на устройство</string>
+    <string name="title_activity_verify_device">Удостоверяване на устройство</string>
 
     <string name="auth_login_sso">Влез с единично вписване</string>
     <string name="encryption_information_unknown_ip">неизвестен IP адрес</string>

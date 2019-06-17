@@ -1357,7 +1357,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
 
-<string name="title_activity_verify_device">驗證裝置</string>
+    <string name="title_activity_verify_device">驗證裝置</string>
 
     <string name="encryption_information_unknown_ip">未知的 IP</string>
     <string name="you_added_a_new_device_with_info">有新裝置正在要求加密金鑰。

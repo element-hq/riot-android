@@ -801,8 +801,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
         <item quantity="other">%d 部屋</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">%2$s に %1$s 部屋見つかりました</item>
-</plurals>
+        <item quantity="other">%2$s に %1$s 部屋見つかりました</item>
+    </plurals>
     <string name="forget_room">部屋の履歴を消す</string>
 
     <string name="avatar">アバター</string>
@@ -1014,7 +1014,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     </plurals>
     <string name="reason_hint">理由</string>
 
-<string name="notification_sync_init">サービスを初期化</string>
+    <string name="notification_sync_init">サービスを初期化</string>
     <string name="title_activity_keys_backup_setup">鍵のバックアップ</string>
     <string name="title_activity_keys_backup_restore">鍵のバックアップを使用</string>
     <string name="title_activity_verify_device">デバイスを認証</string>
@@ -1024,4 +1024,4 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 \n%1$s または %2$s として参加</string>
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">ビデオ</string>
-    </resources>
+</resources>

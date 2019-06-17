@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="encrypted_message">Versleuteld bericht</string>
+<resources>
+    <string name="encrypted_message">Versleuteld bericht</string>
 
     <string name="resources_language">vls</string>
     <string name="resources_country_code">BE</string>
@@ -36,4 +37,4 @@
     <string name="keys_backup_activate">Sleuterback-up gebruukn</string>
     <string name="are_you_sure">Zy je zeker\?</string>
     <string name="backup">Back-up moakn</string>
-    </resources>
+</resources>

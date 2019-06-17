@@ -887,9 +887,9 @@ Dispositivos desconocidos:</string>
         <item quantity="other">%d miembros activos</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 mensaje sin leer</item>
-	<item quantity="other">%d mensajes sin leer</item>
-</plurals>
+        <item quantity="one">1 mensaje sin leer</item>
+        <item quantity="other">%d mensajes sin leer</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 mensaje notificado sin leer</item>
         <item quantity="other">%d mensajes notificados sin leer</item>
@@ -1149,7 +1149,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="settings_troubleshoot_test_play_services_title">Prueba de servicios Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK de servicios de Google Play esta disponible y actualizado.</string>
-<string name="sign_out_bottom_sheet_warning_no_backup">Al cerrar la sesión se perderán los mensajes encriptados</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Al cerrar la sesión se perderán los mensajes encriptados</string>
     <string name="action_sign_out_confirmation_simple">¿Estás seguro que quieres cerrar la sesión\?</string>
     <string name="login_error_unknown_host">Está URL no es válida, por favor compruébala</string>
     <string name="settings_troubleshoot_diagnostic_success_status">El diagnóstico base se ha completado con éxito. Si aun no recibes notificaciones, por favor mándanos un informe de error.</string>
@@ -1163,10 +1163,10 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_troubleshoot_test_play_services_quickfix">solucionar error con los Servicios de Google Play</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Token Base</string>
-    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperada correctamente</string>
-    <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar token FCM</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">Este error esta fuera del control de Riot y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">Este error esta fuera del control de Riot. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperada correctamente:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Error al recuperar token FCM:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nEste error esta fuera del control de Riot y de acuerdo con Google, este error indica que el dispositivo tiene demasiadas apps registradas con FCM. Este error solo ocurre cuando existe un numero demasiado alto de apps por lo que no deberia afectar a un usuario promedio.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nEste error esta fuera del control de Riot. Puede ocurrir por numerosas razones. Probablemente funcione si vuelve a intentarlo mas tarde. También puede comprobar si los Servicios de Google Play están limitados por los ajustes del sistema o si la hora del dispositivo es correcta o si puede pasar en ROM personalizada.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nEste error esta fuera del control de Riot. No hay cuenta de googled registrada en este dispositivo. Por favor abre el gestor dde cuentas y añade una cuenta de Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">añadir cuenta</string>
@@ -1270,13 +1270,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="encryption_import_room_keys_success">%1$d/%2$d clave(s) importada(s) satisfactoriamente.</string>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 mensaje</item>
-	<item quantity="other">%1$s: %2$d mensajes</item>
-</plurals>
+        <item quantity="one">%1$s: 1 mensaje</item>
+        <item quantity="other">%1$s: %2$d mensajes</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d notificación</item>
-	<item quantity="other">%d notificaciones</item>
-</plurals>
+        <item quantity="one">%d notificación</item>
+        <item quantity="other">%d notificaciones</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Nuevo evento</string>
     <string name="notification_unknown_room_name">Sala</string>
@@ -1395,13 +1395,13 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_restore_success_title">Copia de seguridad restaurada %s !</string>
     <string name="keys_backup_restore_success_description">Se han restaurado %1$d claves de sesión y se han añadido %2$d nuevas claves que este dispositivo no conocía</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Copia de seguridad restaurada con la clave %d.</item>
-	<item quantity="other">Copia de seguridad restaurada con las claves %d.</item>
-</plurals>
+        <item quantity="one">Copia de seguridad restaurada con la clave %d.</item>
+        <item quantity="other">Copia de seguridad restaurada con las claves %d.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Se ha añadido %d como clave en este dispositivo.</item>
-	<item quantity="other">Se han añadido %d como claves en este dispositivo.</item>
-</plurals>
+        <item quantity="one">Se ha añadido %d como clave en este dispositivo.</item>
+        <item quantity="other">Se han añadido %d como claves en este dispositivo.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Error al recuperar la ultima versión de las claves (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La sesión crypto no esta activada</string>
@@ -1421,9 +1421,9 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="keys_backup_info_keys_all_backup_up">Todas las claves guardadas</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Cargando %d de la clave…</item>
-	<item quantity="other">Cargando %d de las claves…</item>
-</plurals>
+        <item quantity="one">Cargando %d de la clave…</item>
+        <item quantity="other">Cargando %d de las claves…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_signature">Firma</string>
 
@@ -1449,4 +1449,4 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
     <string name="settings_play_shutter_sound">Reproducir sonido de cámara</string>
 
-    </resources>
+</resources>
