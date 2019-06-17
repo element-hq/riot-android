@@ -1363,7 +1363,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
 
-<string name="title_activity_verify_device">Verifikoni pajisje</string>
+    <string name="title_activity_verify_device">Verifikoni pajisje</string>
 
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
     <string name="you_added_a_new_device_with_info">Një pajisje e re po kërkon kyçe fshehtëzimi.

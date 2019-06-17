@@ -954,17 +954,17 @@ Haluatko lisätä paketteja?</string>
         <item quantity="other">%d s</item>
     </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 min</item>
-	<item quantity="other">%d min</item>
-</plurals>
+        <item quantity="one">1 min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1 h</item>
         <item quantity="other">%d h</item>
     </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 pv</item>
-	<item quantity="other">%d pv</item>
-</plurals>
+        <item quantity="one">1 pv</item>
+        <item quantity="other">%d pv</item>
+    </plurals>
 
     <string name="room_participants_now">Nyt %1$s</string>
     <string name="room_participants_ago">Oli %1$s %2$s sitten</string>
@@ -974,9 +974,9 @@ Haluatko lisätä paketteja?</string>
 \n
 \nHuomioi, että tämä toiminto käynnistää Riotin uudelleen ja siinä voi kestää jonkin aikaa.</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Oletko varma, että haluat poistaa tämän käyttäjän tästä keskustelusta\?</item>
-	<item quantity="other">Oletko varma, että haluat poistaa nämä käyttäjät tästä keskustelusta\?</item>
-</plurals>
+        <item quantity="one">Oletko varma, että haluat poistaa tämän käyttäjän tästä keskustelusta\?</item>
+        <item quantity="other">Oletko varma, että haluat poistaa nämä käyttäjät tästä keskustelusta\?</item>
+    </plurals>
     <string name="reason_hint">Syy</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -1449,7 +1449,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 5.0 tai vanhempi)</string>
 
-<string name="encryption_information_unknown_ip">tuntematon IP-osoite</string>
+    <string name="encryption_information_unknown_ip">tuntematon IP-osoite</string>
     <string name="you_added_a_new_device_with_info">Uusi laite pyytää salausavaimia.
 \nLaitteen nimi: %1$s
 \nViimeksi nähty: %2$s

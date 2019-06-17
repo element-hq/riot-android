@@ -1449,7 +1449,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="error_jitsi_not_supported_on_old_device">Spiacenti, le chiamate di gruppo con Jitsi non sono supportate sui vecchi dispositivi (con Android precedenti al 5.0)</string>
 
-<string name="title_activity_verify_device">Verifica dispositivo</string>
+    <string name="title_activity_verify_device">Verifica dispositivo</string>
 
     <string name="encryption_information_unknown_ip">IP sconosciuto</string>
     <string name="you_added_a_new_device_with_info">Un nuovo dispositivo sta richiedendo le chiavi di cifratura.

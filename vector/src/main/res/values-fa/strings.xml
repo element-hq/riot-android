@@ -296,7 +296,7 @@
     <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
-<string name="status_theme">قالب Status.im</string>
+    <string name="status_theme">قالب Status.im</string>
 
     <string name="notification_sync_init">راه‌اندازی سرویس</string>
     <string name="notification_noisy_notifications">اعلان‌های باصدا</string>
@@ -350,4 +350,4 @@
     <string name="read_receipts_list">مشاهده گیرندگان</string>
 
     <string name="keys_backup_setup_skip_title">آیا مطمئن هستید؟</string>
-    </resources>
+</resources>
