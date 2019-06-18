@@ -502,12 +502,10 @@ Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvo
     <string name="permissions_rationale_msg_camera_and_audio">Riot a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 
 Veuillez autoriser l’accès dans les prochaines fenêtres contextuelles pour pouvoir effectuer l’appel.</string>
-    <string name="permissions_rationale_msg_contacts">Riot a besoin d’accéder aux contacts de votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail.
-
-Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables avec Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot a besoin d’accéder aux contacts de votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail.
-
-Autorisez-vous Riot à accéder à vos contacts ?</string>
+    <string name="permissions_rationale_msg_contacts">Riot peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail. Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables via Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur leur adresse e-mail et leur numéro de téléphone.
+\n
+\nAutorisez-vous Riot à accéder à vos contacts \?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Désolé. L’action n’a pas été réalisée, faute d’autorisations</string>
 
@@ -1467,4 +1465,23 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
     <string name="sas_error_unknown">Erreur inconnue</string>
 
-</resources>
+<string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre HomeServer</string>
+    <string name="keys_backup_setup_override_replace">Remplacer</string>
+    <string name="keys_backup_setup_override_stop">Arrêter</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Vérification de l\'état de la sauvegarde</string>
+    <string name="invalid_or_expired_credentials">Vous avez été déconnecté car vos identifiants sont incorrects ou ont expiré.</string>
+
+    <string name="edit">Modifier</string>
+    <string name="reply">Répondre</string>
+
+    <string name="global_retry">Réessayer</string>
+    <string name="send_you_invite">Vous a envoyé une invitation</string>
+    <string name="invited_by">Invité(e) par %s</string>
+
+    <string name="room_list_catchup_empty_title">Vous êtes à jour !</string>
+    <string name="room_list_catchup_empty_body">Vous n\'avez plus de messages non-lus</string>
+    <string name="room_list_people_empty_title">Discussions</string>
+    <string name="change_room_directory_network">Changer de réseau</string>
+    <string name="please_wait">Veuillez patienter…</string>
+    </resources>
