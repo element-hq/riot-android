@@ -1484,4 +1484,47 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="room_list_people_empty_title">Discussions</string>
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="please_wait">Veuillez patienter…</string>
-    </resources>
+    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis un autre appareil. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
+    <string name="room_list_empty">Rejoignez un salon pour commencer à utiliser l’application.</string>
+    <string name="room_list_catchup_welcome_title">Bienvenue chez vous !</string>
+    <string name="room_list_catchup_welcome_body">Rattrapez votre retard sur vos messages non lus ici</string>
+    <string name="room_list_people_empty_body">Vos conversations directes seront affichées ici</string>
+    <string name="room_list_rooms_empty_title">Salons</string>
+    <string name="room_list_rooms_empty_body">Vos salons seront affichés ici</string>
+
+    <string name="title_activity_emoji_reaction_picker">Réactions</string>
+    <string name="reactions_agree">D’accord</string>
+    <string name="reactions_like">J’aime</string>
+    <string name="message_add_reaction">Ajouter une réaction</string>
+    <string name="message_view_reaction">Voir les réactions</string>
+    <string name="reactions">Réactions</string>
+
+    <string name="event_redacted_by_user_reason">Évènement supprimé par l’utilisateur</string>
+    <string name="event_redacted_by_admin_reason">Évènement modéré par l’administrateur du salon</string>
+    <string name="last_edited_info_message">Dernière édition par %s le %s</string>
+
+
+    <string name="malformed_message">Évènement malformé, affichage impossible</string>
+    <string name="create_new_room">Créer un nouveau salon</string>
+    <string name="error_no_network">Aucun réseau. Vérifiez votre connexion à Internet.</string>
+    <string name="action_change">Changer</string>
+    <string name="group_all_communities">Toutes les communautés</string>
+
+    <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">L’aperçu des salons visibles par tout le monde n’est pas encore pris en charge par RiotX</string>
+
+    <string name="fab_menu_create_room">Salons</string>
+    <string name="fab_menu_create_chat">Messages directs</string>
+
+    <string name="create_room_title">Nouveau salon</string>
+    <string name="create_room_action_create">CRÉER</string>
+    <string name="create_room_name_hint">Nom du salon</string>
+    <string name="create_room_public_title">Public</string>
+    <string name="create_room_public_description">Tout le monde pourra rejoindre ce salon</string>
+    <string name="create_room_directory_title">Annuaire des salons</string>
+    <string name="create_room_directory_description">Publier ce salon dans l’annuaire des salons</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Une erreur est survenue lors de la récupération des informations de confiance</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Une erreur est survenue lors de la récupération des données de sauvegarde de clés</string>
+
+</resources>
