@@ -1465,22 +1465,22 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
     <string name="sas_error_unknown">Erreur inconnue</string>
 
-<string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre HomeServer</string>
+<string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
     <string name="keys_backup_setup_override_replace">Remplacer</string>
     <string name="keys_backup_setup_override_stop">Arrêter</string>
 
-    <string name="keys_backup_settings_checking_backup_state">Vérification de l\'état de la sauvegarde</string>
-    <string name="invalid_or_expired_credentials">Vous avez été déconnecté car vos identifiants sont incorrects ou ont expiré.</string>
+    <string name="keys_backup_settings_checking_backup_state">Vérification de l’état de la sauvegarde</string>
+    <string name="invalid_or_expired_credentials">Vous avez été déconnecté(e) car vos identifiants sont incorrects ou ont expiré.</string>
 
-    <string name="edit">Modifier</string>
+    <string name="edit">Éditer</string>
     <string name="reply">Répondre</string>
 
     <string name="global_retry">Réessayer</string>
     <string name="send_you_invite">Vous a envoyé une invitation</string>
     <string name="invited_by">Invité(e) par %s</string>
 
-    <string name="room_list_catchup_empty_title">Vous êtes à jour !</string>
-    <string name="room_list_catchup_empty_body">Vous n\'avez plus de messages non-lus</string>
+    <string name="room_list_catchup_empty_title">Vous êtes à jour !</string>
+    <string name="room_list_catchup_empty_body">Vous n’avez plus de messages non lus</string>
     <string name="room_list_people_empty_title">Discussions</string>
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="please_wait">Veuillez patienter…</string>
@@ -1506,7 +1506,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="malformed_message">Évènement malformé, affichage impossible</string>
     <string name="create_new_room">Créer un nouveau salon</string>
-    <string name="error_no_network">Aucun réseau. Vérifiez votre connexion à Internet.</string>
+    <string name="error_no_network">Aucun réseau. Vérifiez votre connexion Internet.</string>
     <string name="action_change">Changer</string>
     <string name="group_all_communities">Toutes les communautés</string>
 
