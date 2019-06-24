@@ -1083,7 +1083,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_call_category">Llamadas</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
-    <string name="settings_call_ringtone_dialog_title">Eligir sonido de llamadas:</string>
+    <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
 
     <string name="video_call_in_progress">Llamada de video en proceso…</string>
 
@@ -1106,7 +1106,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">No quiero mis mensajes cifrados</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Creando copia de seguridad de las claves…</string>
     <string name="keys_backup_activate">Usar copia de seguridad de la clave</string>
-    <string name="are_you_sure">¿Esta seguro\?</string>
+    <string name="are_you_sure">¿Estás seguro\?</string>
     <string name="backup">Copia de seguridad</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderá el acceso a sus mensajes cifrados si cierra sesión sin hacer una copia de seguridad de sus claves.</string>
 
