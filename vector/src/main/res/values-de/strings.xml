@@ -263,12 +263,9 @@ Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</str
     <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
-    <string name="permissions_rationale_msg_contacts">Riot benötigt die Berechtigung, auf deine Kontakte im Adressbuch zugreifen zu können, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse oder Telefonnummer zu finden.
-
-Bitte erlaube den Zugriff im nächsten Dialog, um Kontakte im Adressbuch zu finden, die über Riot erreichbar sind.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot benötigt die Berechtigung, auf deine Adressbuch-Kontakte zugreifen zu dürfen, um andere Matrix-Benutzer mit Hilfe ihrer E-Mail-Adresse und/oder ihrer Telefonnummer finden zu können.
-
-Soll Riot der Zugriff auf deine Kontakte erlaubt werden?</string>
+    <string name="permissions_rationale_msg_contacts">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden.
+\nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
 
