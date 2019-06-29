@@ -1222,4 +1222,11 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="create_room_name_hint">Nazwa pokoju</string>
     <string name="create_room_public_title">Publiczny</string>
     <string name="create_room_public_description">Każdy będzie mógł dołączyć do tego pokoju</string>
+    <string name="global_retry">Ponów</string>
+    <string name="room_list_people_empty_title">Rozmowy</string>
+    <string name="action_change">Zmień</string>
+    <string name="change_room_directory_network">Zmień sieć</string>
+    <string name="fab_menu_create_room">Pokoje</string>
+    <string name="create_room_directory_description">Opublikuj pokój do spisu pokojów</string>
+
     </resources>
