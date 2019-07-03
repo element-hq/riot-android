@@ -1486,7 +1486,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="sas_incoming_verification_request_dialog">Se ha recibido una solicitud de verificación.</string>
     <string name="sas_view_request_action">Ver solicitud</string>
-    <string name="sas_waiting_for_partner">Esperando confirmación de la contraparte...</string>
+    <string name="sas_waiting_for_partner">Esperando confirmación de la contraparte…</string>
 
     <string name="sas_verified">¡Verificado!</string>
     <string name="sas_verified_successful">Has verificado correctamente este dispositivo.</string>
@@ -1548,7 +1548,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="error_no_network">No hay red, por favor comprueba tu conexión a internet.</string>
     <string name="action_change">Cambiar</string>
     <string name="change_room_directory_network">Cambiar red</string>
-    <string name="please_wait">Espere por favor...</string>
+    <string name="please_wait">Espere por favor…</string>
     <string name="group_all_communities">Todas la comunidades</string>
 
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
