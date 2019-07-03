@@ -1515,4 +1515,22 @@
     <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
-</resources>
+<string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
+    <string name="alpha_disclaimer_content_line_1">Докато RiotX е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описание</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
+
+    <string name="import_e2e_keys_from_file">Импортирай e2e ключове от файл \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Matrix SDK версия</string>
+    <string name="navigate_to_room_when_already_in_the_room">Вече гледате тази стая!</string>
+
+    <string name="quick_reactions">Бързи реакции</string>
+
+    <string name="settings_general_title">Основни</string>
+    <string name="settings_preferences">Настройки</string>
+    <string name="settings_security_and_privacy">Сигурност и поверителност</string>
+    <string name="settings_expert">Експертни</string>
+    <string name="settings_push_rules">Правила за уведомление</string>
+    <string name="settings_push_rules_no_rules">Не са дефинирани правила за уведомление</string>
+    </resources>
