@@ -1465,7 +1465,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
     <string name="sas_error_unknown">Erreur inconnue</string>
 
-<string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
     <string name="keys_backup_setup_override_replace">Remplacer</string>
     <string name="keys_backup_setup_override_stop">Arrêter</string>
 

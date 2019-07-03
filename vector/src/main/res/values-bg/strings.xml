@@ -1453,7 +1453,7 @@
     <string name="sas_error_m_user_error">Несъответствие в потребителя</string>
     <string name="sas_error_unknown">Неизвестна грешка</string>
 
-<string name="keys_backup_setup_override_backup_prompt_tile">Вече съществува резервно копие на сървъра</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Вече съществува резервно копие на сървъра</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Изглежда вече сте настройли резервно копие от друго устройство. Искате ли да го замените с това, което създавате сега\?</string>
     <string name="keys_backup_setup_override_replace">Замени</string>
     <string name="keys_backup_setup_override_stop">Спри</string>

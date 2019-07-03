@@ -1460,7 +1460,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="sas_error_m_user_error">Erabiltzailea ez dator bat</string>
     <string name="sas_error_unknown">Errore ezezaguna</string>
 
-<string name="keys_backup_setup_override_backup_prompt_tile">Badago babes-kopia bat zure hasiera-zerbitzarian</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Badago babes-kopia bat zure hasiera-zerbitzarian</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Badirudi gakoen babes-kopia ezarri duzula beste gailu betetik. Orain sortzen ari zarenarekin ordeztu nahi duzu\?</string>
     <string name="keys_backup_setup_override_replace">Ordeztu</string>
     <string name="keys_backup_setup_override_stop">Gelditu</string>

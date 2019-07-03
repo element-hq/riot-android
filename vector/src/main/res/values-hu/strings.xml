@@ -1029,7 +1029,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1257,11 +1257,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1340,7 +1340,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1464,7 +1464,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="sas_error_m_user_error">A felhasználó nem egyezik</string>
     <string name="sas_error_unknown">Ismeretlen Hiba</string>
 
-<string name="keys_backup_setup_override_backup_prompt_tile">Mentés már létezik a Matrix szervereden</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Mentés már létezik a Matrix szervereden</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Úgy látszik már rendelkezel kulcs mentéssel egy másik eszközön. Lecseréled azzal amit most készítesz\?</string>
     <string name="keys_backup_setup_override_replace">Csere</string>
     <string name="keys_backup_setup_override_stop">Állj</string>

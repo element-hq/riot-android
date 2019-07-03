@@ -771,7 +771,7 @@ Dispositivos desconocidos:</string>
     <string name="settings_containing_my_display_name">Mensajes que contienen mi nombre público</string>
     <string name="settings_containing_my_user_name">Mensajes que contienen mi nombre de usuario</string>
     <string name="call_anyway">Llamar de todos modos</string>
-<string name="title_activity_verify_device">Verificar dispositivo</string>
+    <string name="title_activity_verify_device">Verificar dispositivo</string>
 
     <string name="settings_call_category">Llamadas</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Usar el tono de llamada normal de Riot para llamadas entrantes</string>
@@ -782,4 +782,4 @@ Dispositivos desconocidos:</string>
 
     <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
-    </resources>
+</resources>

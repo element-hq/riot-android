@@ -1452,7 +1452,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_jitsi_not_supported_on_old_device">Entschuldige, doch Konferenzgespräche mittels Jitsi wird auf alten Geräten nicht unterstützt (älter als Android 5.0)</string>
 
-<string name="title_activity_verify_device">Gerät verifizieren</string>
+    <string name="title_activity_verify_device">Gerät verifizieren</string>
 
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
     <string name="you_added_a_new_device_with_info">Ein neues Gerät fordert Verschlüsselungs-Schlüssel an.
@@ -1551,4 +1551,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="create_room_directory_title">Raumverzeichnis</string>
     <string name="create_room_directory_description">Veröffentliche diesen Raum ins Raumverzeichnis</string>
 
-    </resources>
+</resources>

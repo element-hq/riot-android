@@ -1449,7 +1449,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="autodiscover_invalid_response">Respuesta inválida del descubrimiento del servidor doméstico</string>
     <string name="settings_play_shutter_sound">Reproducir sonido de cámara</string>
 
-<string name="title_activity_verify_device">Verificar dispositivo</string>
+    <string name="title_activity_verify_device">Verificar dispositivo</string>
 
     <string name="encryption_information_unknown_ip">ip desconocida</string>
     <string name="you_added_a_new_device_with_info">Un nuevo dispositivo solicita claves de cifrado.
