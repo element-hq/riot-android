@@ -388,7 +388,7 @@ class EventStreamServiceX : VectorService() {
                         startEventStream(session, store)
                     } else {
                         // the data are out of sync
-                        Matrix.getInstance(applicationContext)?.reloadSessions(applicationContext)
+                        Matrix.getInstance(applicationContext)?.reloadSessions(applicationContext, false)
                     }
 
                     store.removeMXStoreListener(this)
