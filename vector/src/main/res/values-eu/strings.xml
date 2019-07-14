@@ -1476,7 +1476,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="send_you_invite">Gonbidapen bat bidali dizu</string>
     <string name="invited_by">%s erabiltzaileak gonbidatuta</string>
 
-    <string name="room_list_catchup_empty_title">Arrapatu zaituztete!</string>
+    <string name="room_list_catchup_empty_title">Egunean zaude!</string>
     <string name="room_list_catchup_empty_body">Ez duzu irakurri gabeko mezu gehiagorik</string>
     <string name="room_list_catchup_welcome_title">Ongi etorri etxera!</string>
     <string name="room_list_catchup_welcome_body">Jarri egunean hemengo irakurri gabeko mezuekin</string>
@@ -1574,4 +1574,5 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
 
-</resources>
+<string name="push_gateway_item_app_display_name">app_display_name:</string>
+    </resources>
