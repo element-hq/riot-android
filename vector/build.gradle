@@ -119,20 +119,6 @@ android {
         lintConfig file("lint.xml")
     }
 
-    repositories {
-        flatDir {
-            dir 'libs'
-        }
-
-        maven {
-            url "https://s3.amazonaws.com/repo.commonsware.com"
-        }
-
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
-    }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
