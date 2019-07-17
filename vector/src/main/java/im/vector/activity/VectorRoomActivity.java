@@ -91,7 +91,9 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -2626,7 +2628,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 state = new NotificationAreaView.State.Typing(mLatestTypingMessage);
             } else if (mRoom.getState().isVersioned()) {
                 final RoomTombstoneContent roomTombstoneContent = mRoom.getState().getRoomTombstoneContent();
-                state = new NotificationAreaView.State.Tombstone(roomTombstoneContent);
+                final List<Event> events = mRoom.getState().getStateEvents(new HashSet<>(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE)));
+
+                String sender = "";
+                if (events != null && !events.isEmpty()) {
+                    sender = events.get(0).sender;
+                }
+
+                state = new NotificationAreaView.State.Tombstone(roomTombstoneContent, sender);
             }
         }
         mNotificationsArea.render(state);

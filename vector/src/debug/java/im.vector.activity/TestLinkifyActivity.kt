@@ -219,5 +219,9 @@ abstract class MockMessageAdapterActionListener : IMessagesAdapterActionsListene
     override fun onSelectedEventChange(currentSelectedEvent: Event?) {
         TODO("not implemented")
     }
+
+    override fun onTombstoneLinkClicked(roomId: String?, senderId: String?) {
+        TODO("not implemented")
+    }
 }
 
