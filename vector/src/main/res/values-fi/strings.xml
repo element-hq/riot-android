@@ -1520,7 +1520,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="keys_backup_unable_to_get_trust_info">Luottamustietoa haettaessa tapahtui virhe</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Avainten varmuuskopioinnin tietoja haettaessa tapahtui virhe</string>
 
-<string name="your_unverified_device_requesting_with_info">Tuntematon laite pyytää salausavaimia
+    <string name="your_unverified_device_requesting_with_info">Tuntematon laite pyytää salausavaimia
 \nLaitteen nimi: %1$s
 \nViimeksi nähty: %2$s
 \nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
@@ -1533,4 +1533,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_preferences">Asetukset</string>
     <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
-    </resources>
+</resources>

@@ -1522,7 +1522,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
 
-<string name="alpha_disclaimer_title">Ongi etorri betara!</string>
+    <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
     <string name="alpha_disclaimer_content_line_1">Riot X oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
@@ -1574,5 +1574,5 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
 
-<string name="push_gateway_item_app_display_name">app_display_name:</string>
-    </resources>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+</resources>

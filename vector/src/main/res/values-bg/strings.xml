@@ -1515,7 +1515,7 @@
     <string name="keys_backup_unable_to_get_trust_info">Случи се грешка при извличане на информацията за довереността</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Случи се грешка при извличане на резервните данни за ключовете</string>
 
-<string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
+    <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
     <string name="alpha_disclaimer_content_line_1">Докато RiotX е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описание</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
