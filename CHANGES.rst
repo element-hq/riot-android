@@ -2,11 +2,8 @@ Changes in Riot 0.9.2 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
+ - Upgrade MatrixSdk to version 0.9.24.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.24
 
 Improvements:
  - Room upgrade: Use the `server_name` parameter when joining the new room (#3204)
