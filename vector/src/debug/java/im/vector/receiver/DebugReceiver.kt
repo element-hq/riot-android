@@ -32,9 +32,10 @@ class DebugReceiver : BroadcastReceiver() {
         Log.d(LOG_TAG, "Received debug action: ${intent.action}")
 
         when (intent.action) {
-            DEBUG_ACTION_DUMP_FILESYSTEM -> lsFiles(context)
-            DEBUG_ACTION_DUMP_PREFERENCES -> dumpPreferences(context)
+            DEBUG_ACTION_DUMP_FILESYSTEM    -> lsFiles(context)
+            DEBUG_ACTION_DUMP_PREFERENCES   -> dumpPreferences(context)
             DEBUG_ACTION_ALTER_SCALAR_TOKEN -> alterScalarToken(context)
+            DEBUG_ACTION_ALTER_AUTH_TOKEN   -> alterAuthToken(context)
         }
     }
 
@@ -60,17 +61,38 @@ class DebugReceiver : BroadcastReceiver() {
         }
     }
 
+    private fun alterAuthToken(context: Context) {
+        val session = Matrix.getInstance(context).defaultSession
+        val alteredAccessToken = session.credentials.accessToken + "-ALT343D"
+        session.credentials.accessToken = alteredAccessToken
+        // session.cryptoRestClient.credentials = session.credentials
+        session.accountDataRestClient.credentials = session.credentials
+        session.callRestClient.credentials = session.credentials
+        session.pushersRestClient.credentials = session.credentials
+        session.filterRestClient.credentials = session.credentials
+        session.mediaScanRestClient.credentials = session.credentials
+        // session.roomKeysRestClient.credentials = session.credentials
+        session.thirdPidRestClient.credentials = session.credentials
+
+
+        val loginStorage = Matrix.getInstance(context)!!.loginStorage
+        loginStorage.replaceCredentials(session.homeServerConfig)
+    }
+
+
     companion object {
         private const val LOG_TAG = "DebugReceiver"
 
         private const val DEBUG_ACTION_DUMP_FILESYSTEM = "im.vector.receiver.DEBUG_ACTION_DUMP_FILESYSTEM"
         private const val DEBUG_ACTION_DUMP_PREFERENCES = "im.vector.receiver.DEBUG_ACTION_DUMP_PREFERENCES"
         private const val DEBUG_ACTION_ALTER_SCALAR_TOKEN = "im.vector.receiver.DEBUG_ACTION_ALTER_SCALAR_TOKEN"
+        private const val DEBUG_ACTION_ALTER_AUTH_TOKEN = "im.vector.receiver.DEBUG_ACTION_ALTER_AUTH_TOKEN"
 
         fun getIntentFilter() = IntentFilter().apply {
             addAction(DEBUG_ACTION_DUMP_FILESYSTEM)
             addAction(DEBUG_ACTION_DUMP_PREFERENCES)
             addAction(DEBUG_ACTION_ALTER_SCALAR_TOKEN)
+            addAction(DEBUG_ACTION_ALTER_AUTH_TOKEN)
         }
     }
 }

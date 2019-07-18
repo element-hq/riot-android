@@ -36,11 +36,11 @@ import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 

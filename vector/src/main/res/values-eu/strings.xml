@@ -94,7 +94,7 @@
     <string name="send_bug_report_placeholder">Azaldu zure arazoa hemen</string>
     <string name="send_bug_report_logs_description">Akatsak aztertzeari begira, bezero honen egunkariak arazte-txosten honekin batera bidaliko dira. Arazte-txosten hau, egunkariak eta pantaila-argazkia barne, ez dira publikoki ikusgai egongo. Goiko testua besterik ez baduzu bidali nahi, desmarkatu:</string>
     <string name="send_bug_report_alert_message">Telefonoa amorruz astintzen zabiltzala dirudi. Arazte-txostena ireki nahi duzu?</string>
-    <string name="send_bug_report_app_crashed">Azken aldian aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu?</string>
+    <string name="send_bug_report_app_crashed">Aurrekoan aplikazioa kraskatu da. Kraskatze-txostena ireki nahi duzu\?</string>
 
     <string name="send_bug_report_sent">Arazte-txostena ongi bidali da</string>
     <string name="send_bug_report_failed">Huts egin du arazte-txostenaren bidalketak (%s)</string>
@@ -262,12 +262,10 @@ Barkatu eragozpenak.</string>
     <string name="permissions_rationale_msg_storage">Riotek zure argazki eta bideoen liburutegia atzitzeko baimena behar du eranskinak gorde ahal izateko.
 
 Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ahal izateko.</string>
-    <string name="permissions_rationale_msg_contacts">Riotek zure helbide-liburua atzitzeko baimen behar du beste Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko.
-
-Baimendu sarbidea hurrengo laster-leihoan Riot bitartez kontaktatu ditzakezun erabiltzaileak aurkitzeko.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riotek zure helbide-liburua atzitzeko baimen behar du beste Matrix erabiltzaileak bere e-mail helbide eta telefono zenbakiaren bidez aurkitzeko.
-
-Baimendu Riotek zure kontaktuak atzitzea?</string>
+    <string name="permissions_rationale_msg_contacts">Riot-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. Honetarako zure helbide-liburua partekatzea onartzen baduzu, sakatu onartu hurrengo laster-leihoan.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot-ek zure helbide-liburua egiaztatu dezake Matrix erabiltzaileak bere e-mail helbide edo telefono zenbakiaren bidez aurkitzeko. 
+\n
+\nHonetarako zure helbide-liburua partekatzea onartzen duzu\?</string>
 
     <string name="room_preview_unlinked_email_warning">Zure gonbidapena bidali da %s helbidera, hau ez dago kontu honetara lotuta. Beste kontu batekin hasi dezakezu saioa, edo e-mail hau zure kontura gehitu.</string>
     <string name="room_preview_try_join_an_unknown_room">%s taldera sartzen saiatzen ari zara. Elkartu taldera elkarrizketan parte hartzeko?</string>
@@ -1400,4 +1398,181 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 5.0 baino zaharragoak)</string>
 
+    <string name="title_activity_verify_device">Egiaztatu gailua</string>
+
+    <string name="encryption_information_unknown_ip">ip ezezaguna</string>
+    <string name="you_added_a_new_device_with_info">"Gailu berri bat zifratze gakoak eskatzen ari da.
+\nGailuaren izena: %1$s
+\nAzkenekoz ikusia:  %2$s
+\nEz baduzu saioa zuk hasi beste gailu batekin, ezikusi eskari hau."</string>
+    <string name="your_unverified_device_requesting_with_info">"Egiaztatu gabeko gailu bat zifratze gakoak eskatzen ari da.
+\nGailuaren izena: %1$s
+\nAzkenekoz ikusia:  %2$s
+\nEz baduzu saioa zuk hasi beste gailu batekin, ezikusi eskari hau."</string>
+
+    <string name="start_verification_short_label">Egiaztatu</string>
+    <string name="share_without_verifying_short_label">Partekatu</string>
+    <string name="key_share_request">Gakoa partekatzeko eskaria</string>
+    <string name="ignore_request_short_label">Ezikusi</string>
+
+    <string name="sas_verify_title">Egiaztatu testu kate labur bat alderatuz.</string>
+    <string name="sas_security_advise">Segurtasun gehiagorako, hau aurrez aurre edo komunikatzeko beste bide fidagarri bat erabiliz egitea aholkatzen dizugu.</string>
+    <string name="sas_verify_start_button_title">Hasi egiaztaketa</string>
+    <string name="sas_incoming_request_title">Jasotako egiaztaketa eskaria</string>
+    <string name="sas_incoming_request_description">Egiaztatu gailu hau fidagarri gisa markatzeko. Gailuak fidagarritzat jotzeak lasaitasuna ematen dizu muturretik muturrera zifratutako mezuak erabiltzean.</string>
+    <string name="sas_incoming_request_description_2">Gailu hau egiaztatzean fidagarri gisa markatuko da, eta zure gailua fidagarri gisa markatuko zaio ere zure kideari.</string>
+
+    <string name="sas_emoji_description">"Egiaztatu gailu hau honako emojia kidearen pantailan agertu  dela baieztatuz"</string>
+    <string name="sas_decimal_description">"Egiaztatu gailu hau honako zenbaki hauek kidearen pantailan agertu  direla baieztatuz"</string>
+
+    <string name="sas_incoming_verification_request_dialog">Egiaztaketa eskari bat jaso duzu.</string>
+    <string name="sas_view_request_action">Ikusi eskaria</string>
+    <string name="sas_waiting_for_partner">Kideak baieztatu bitartean zain…</string>
+
+    <string name="sas_verified">Egiaztatuta!</string>
+    <string name="sas_verified_successful">Ongi egiaztatu duzu gailu hau.</string>
+    <string name="sas_verified_successful_description">Kide honekin partekatutako mezu seguruak muturretik muturrera zifratuta daude eta ezin ditu beste inork irakurri.</string>
+    <string name="sas_got_it">Ulertuta</string>
+
+    <string name="sas_verifying_keys">Ez da ezer agertzen\? Bezero guztiek ez dute onartzen egiaztaketa interaktiboa oraindik. Erabili egiaztaketa metodo zaharra.</string>
+    <string name="sas_legacy_verification_button_title">Erabili egiaztaketa metodo zaharra.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Gako-egiaztaketa</string>
+    <string name="sas_cancelled_dialog_title">Eskaria ezeztatuta</string>
+    <string name="sas_cancelled_by_other">Beste aldeak egiaztaketa ezeztatu du.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Egiaztaketa ezeztatu da.
+\nArrazoia: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Gailu-egiaztaketa interaktiboa</string>
+    <string name="sas_incoming_request_notif_title">Egiaztaketa eskaria</string>
+    <string name="sas_incoming_request_notif_content">%s erabiltzaileak zure gailua egiaztatu nahi du</string>
+
+    <string name="sas_error_m_user">Erabiltzaileak egiaztaketa ezeztatu du</string>
+    <string name="sas_error_m_timeout">Egiaztaketarako denbora-muga agortu da</string>
+    <string name="sas_error_m_unknown_transaction">Gailuak ez du transakzio horren berri</string>
+    <string name="sas_error_m_unknown_method">Gailua ez dator bat gako adostasunean, hash, MAC, edo SAS metodoan</string>
+    <string name="sas_error_m_mismatched_commitment">Hash-a ez dator bat</string>
+    <string name="sas_error_m_mismatched_sas">SAS-a ez dator bat</string>
+    <string name="sas_error_m_unexpected_message">Gailuak ustekabeko mezu bat jaso du</string>
+    <string name="sas_error_m_invalid_message">Baliogabeko mezu bat jaso da</string>
+    <string name="sas_error_m_key_mismatch">Gakoa ez dator bat</string>
+    <string name="sas_error_m_user_error">Erabiltzailea ez dator bat</string>
+    <string name="sas_error_unknown">Errore ezezaguna</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Badago babes-kopia bat zure hasiera-zerbitzarian</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Badirudi gakoen babes-kopia ezarri duzula beste gailu betetik. Orain sortzen ari zarenarekin ordeztu nahi duzu\?</string>
+    <string name="keys_backup_setup_override_replace">Ordeztu</string>
+    <string name="keys_backup_setup_override_stop">Gelditu</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Babes-kopiaren egoera egiaztatzen</string>
+    <string name="invalid_or_expired_credentials">Zure saioa amaitu da baliogabeko edo iraungitako kredentzialak direla eta.</string>
+
+    <string name="edit">Editatu</string>
+    <string name="reply">Erantzun</string>
+
+    <string name="global_retry">Saiatu berriro</string>
+    <string name="room_list_empty">Elkartu gelaren batetara aplikazioa erabiltzen hasteko.</string>
+    <string name="send_you_invite">Gonbidapen bat bidali dizu</string>
+    <string name="invited_by">%s erabiltzaileak gonbidatuta</string>
+
+    <string name="room_list_catchup_empty_title">Egunean zaude!</string>
+    <string name="room_list_catchup_empty_body">Ez duzu irakurri gabeko mezu gehiagorik</string>
+    <string name="room_list_catchup_welcome_title">Ongi etorri etxera!</string>
+    <string name="room_list_catchup_welcome_body">Jarri egunean hemengo irakurri gabeko mezuekin</string>
+    <string name="room_list_people_empty_title">Elkarrizketak</string>
+    <string name="room_list_people_empty_body">Zure mezu zuzenetako elkarrizketak hemen bistaratuko dira</string>
+    <string name="room_list_rooms_empty_title">Gelak</string>
+    <string name="room_list_rooms_empty_body">Zure gelak hemen bistaratuko dira</string>
+
+    <string name="title_activity_emoji_reaction_picker">Erreakzioak</string>
+    <string name="reactions_agree">Ados</string>
+    <string name="reactions_like">Gogokoa</string>
+    <string name="message_add_reaction">Gehitu erreakzioa</string>
+    <string name="message_view_reaction">Ikusi errekzioak</string>
+    <string name="reactions">Erreakzioak</string>
+
+    <string name="event_redacted_by_user_reason">Gertaera ezabatu du erabiltzaileak</string>
+    <string name="event_redacted_by_admin_reason">Gertaera moderatu du gelako administratzaileak</string>
+    <string name="last_edited_info_message">%s erabiltzaileak editatuta, azkenekoz: %s</string>
+
+
+    <string name="malformed_message">Gaizki formatutako gertaera, ezin da bistaratu</string>
+    <string name="create_new_room">Sortu gela berria</string>
+    <string name="error_no_network">Sarerik ez. Egiaztatu zure internet konexioa.</string>
+    <string name="action_change">Aldatu</string>
+    <string name="change_room_directory_network">Aldatu sarea</string>
+    <string name="please_wait">Itxaron mesedez…</string>
+    <string name="group_all_communities">Komunitate guztiak</string>
+
+    <string name="room_preview_no_preview">Gela hau ezin da aurreikusi</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Munduak irakurtzeko moduko gelaren aurrebista ez da oraindik onartzen RiotX bezeroan</string>
+
+    <string name="fab_menu_create_room">Gelak</string>
+    <string name="fab_menu_create_chat">Mezu zuzenak</string>
+
+    <string name="create_room_title">Gela berria</string>
+    <string name="create_room_action_create">SORTU</string>
+    <string name="create_room_name_hint">Gelaren izena</string>
+    <string name="create_room_public_title">Publikoa</string>
+    <string name="create_room_public_description">Edonor elkartu daiteke gela honetara</string>
+    <string name="create_room_directory_title">Gelen direktorioa</string>
+    <string name="create_room_directory_description">Argitaratu gela hau gelen direktorioan</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Errore bat gertatu da konfiantzazko informazioa jasotzean</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Errore bat gertatu da gakoen babes-kopiaren datuak jasotzean</string>
+
+    <string name="alpha_disclaimer_title">Ongi etorri betara!</string>
+    <string name="alpha_disclaimer_content_line_1">RiotX oraindik garapenean dagoenez, ezaugarri batzuk faltan bota ditzakezu eta akatsen bat aurkitu dezakezu.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Azken ezaugarrien zerrenda hemen dago beti : %1$s, eta akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-ko deskripzioa</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Akatsak aurkitzen badituzu bidali mesedez akatsen txosten bat Hasiera pantailako goi ezkerreko menua erabiliz, eta ahalik eta lasterren konponduko dugu.</string>
+
+    <string name="import_e2e_keys_from_file">"Inportatu e2e gakoak \"%1$s\"  fitxategitik."</string>
+
+    <string name="settings_sdk_version">Matrix SDK bertsioa</string>
+    <string name="settings_other_third_party_notices">Beste hirugarrengoen adierazpenak</string>
+    <string name="navigate_to_room_when_already_in_the_room">Gela hau ikusten ari zara dagoeneko!</string>
+
+    <string name="quick_reactions">Erreakzio azkarrak</string>
+
+    <string name="settings_general_title">Orokorra</string>
+    <string name="settings_preferences">Hobespenak</string>
+    <string name="settings_security_and_privacy">Segurtasuna eta pribatutasuna</string>
+    <string name="settings_expert">Aditua</string>
+    <string name="settings_push_rules">Push arauak</string>
+    <string name="settings_push_rules_no_rules">Ez da push araurik zehaztu</string>
+    <string name="settings_push_gateway_no_pushers">Ez dago push arauentzako erregistratutako atebiderik</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_gakoa:</string>
+    <string name="push_gateway_item_device_name">gailu_izena:</string>
+    <string name="push_gateway_item_url">Url-a:</string>
+    <string name="push_gateway_item_format">Formatua:</string>
+
+    <string name="preference_voice_and_video">Ahotsa eta bideoa</string>
+    <string name="preference_root_help_about">Laguntza eta honi buruz</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Erregistratu token-a</string>
+
+    <string name="send_suggestion">Egin iradokizun bat</string>
+    <string name="send_suggestion_content">Idatzi zure iradokizuna azpian.</string>
+    <string name="send_suggestion_report_placeholder">Deskribatu zure iradokizuna hemen</string>
+    <string name="send_suggestion_sent">Eskerrik asko, iradokizuna ongi bidali da</string>
+    <string name="send_suggestion_failed">Huts egin su iradokizuna bidaltzean (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Erakutsi ezkutatutako gertaerak denbora lerroan</string>
+
+    <string name="store_riotx_title">RiotX - Hurrengo belaunaldiko Matrix bezeroa</string>
+    <string name="store_riotx_short_description">Matrix-erako bezero azkarrago eta arinago bat azken Android tresnak erabiliz eginak</string>
+    <string name="store_riotx_full_description">RiotX bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. RiotX Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
+\n
+\nAbisua: hau beta bertsio bat da. RiotX garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
+\n
+\nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
+\n
+\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
+
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
 </resources>

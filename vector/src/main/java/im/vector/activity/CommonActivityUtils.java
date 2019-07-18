@@ -49,16 +49,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediaCache;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -256,12 +256,17 @@ public class CommonActivityUtils {
                 .apply();
     }
 
+
+    public static void restartApp(Context activity) {
+        restartApp(activity, false);
+    }
+
     /**
      * Restart the application after 100ms
      *
      * @param activity activity
      */
-    public static void restartApp(Activity activity) {
+    public static void restartApp(Context activity, boolean invalidatedCredentials) {
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
@@ -277,8 +282,12 @@ public class CommonActivityUtils {
                     .putBoolean(RESTART_IN_PROGRESS_KEY, true)
                     .apply();
 
+            Intent loginIntent = new Intent(activity, LoginActivity.class);
+            if (invalidatedCredentials) {
+                loginIntent.putExtra(LoginActivity.EXTRA_RESTART_FROM_INVALID_CREDENTIALS, true);
+            }
             PendingIntent mPendingIntent =
-                    PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getActivity(activity, 314159, loginIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             // so restart the application after 100ms
             AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -287,7 +296,9 @@ public class CommonActivityUtils {
             System.exit(0);
         } else {
             Log.e(LOG_TAG, "The application is restarting, please wait !!");
-            activity.finish();
+            if (activity instanceof Activity) {
+                ((Activity) activity).finish();
+            }
         }
     }
 
@@ -299,6 +310,68 @@ public class CommonActivityUtils {
      */
     public static void logout(Activity activity) {
         logout(activity, true);
+    }
+
+    private static boolean isRecoveringFromInvalidatedToken = false;
+
+    public static void recoverInvalidatedToken() {
+
+        if (isRecoveringFromInvalidatedToken) {
+            //ignore, we are doing it
+            return;
+        }
+        isRecoveringFromInvalidatedToken = true;
+        Context context = VectorApp.getCurrentActivity() != null ? VectorApp.getCurrentActivity() : VectorApp.getInstance();
+
+        try {
+            VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
+            EventStreamServiceX.Companion.onLogout(context);
+            // stopEventStream(context);
+
+            BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
+
+            MXSession session = Matrix.getInstance(context).getDefaultSession();
+
+            // Publish to the server that we're now offline
+            MyPresenceManager.getInstance(context, session).advertiseOffline();
+            MyPresenceManager.remove(session);
+
+            // clear the preferences
+            PreferencesManager.clearPreferences(context);
+
+            // reset the FCM
+            Matrix.getInstance(context).getPushManager().resetFCMRegistration();
+
+            // clear the preferences
+            Matrix.getInstance(context).getPushManager().clearPreferences();
+
+            // Clear the credentials
+            Matrix.getInstance(context).getLoginStorage().clear();
+
+            // clear the tmp store list
+            Matrix.getInstance(context).clearTmpStoresList();
+
+            // reset the contacts
+            PIDsRetriever.getInstance().reset();
+            ContactsManager.getInstance().reset();
+
+            MXMediaCache.clearThumbnailsCache(context);
+
+            Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
+
+                @Override
+                public void onSuccess(Void info) {
+
+                }
+            });
+            session.clear(context);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## recoverInvalidatedToken: Error while cleaning: ", e);
+        } finally {
+            // go to login page
+            CommonActivityUtils.restartApp(context, true);
+            isRecoveringFromInvalidatedToken = false;
+        }
     }
 
     /**
@@ -337,14 +410,10 @@ public class CommonActivityUtils {
             // display a dummy activity until the logout is done
             Matrix.getInstance(context).getPushManager().clearPreferences();
 
-            Intent intent = new Intent(activity, LoggingOutActivity.class);
+            Intent intent = new Intent(context, LoggingOutActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
 
-            if (null != activity) {
-                activity.startActivity(intent);
-            } else {
-                context.startActivity(intent);
-            }
         }
 
         // clear credentials
@@ -1121,7 +1190,7 @@ public class CommonActivityUtils {
                     CommonActivityUtils.restartApp(activity);
                 } else {
                     Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
-                    Matrix.getInstance(activity).reloadSessions(activity);
+                    Matrix.getInstance(activity).reloadSessions(activity, true);
                 }
             } else {
                 Log.e(LOW_MEMORY_LOG_TAG, "Wait to be concerned");

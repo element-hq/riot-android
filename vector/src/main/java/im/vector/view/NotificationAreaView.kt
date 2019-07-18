@@ -45,11 +45,11 @@ import im.vector.listeners.IMessagesAdapterActionsListener
 import im.vector.ui.animation.VectorTransitionSet
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
-import org.matrix.androidsdk.MXPatterns
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.MXPatterns
+import org.matrix.androidsdk.core.PermalinkUtils
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
-import org.matrix.androidsdk.util.Log
-import org.matrix.androidsdk.util.PermalinkUtils
 
 private const val LOG_TAG = "NotificationAreaView"
 
@@ -180,8 +180,7 @@ class NotificationAreaView @JvmOverloads constructor(
         visibility = View.VISIBLE
         imageView.setImageResource(R.drawable.error)
         val roomTombstoneContent = state.tombstoneContent
-        val roomLink = PermalinkUtils.createPermalink(roomTombstoneContent.replacementRoom)
-        val urlSpan = MatrixURLSpan(roomLink, MXPatterns.PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID, delegate?.providesMessagesActionListener())
+        val urlSpan = MatrixURLSpan(roomTombstoneContent.replacementRoom, state.tombstoneEventSenderId, delegate?.providesMessagesActionListener())
         val textColorInt = ThemeUtils.getColor(context, R.attr.vctr_message_text_color)
         val message = Spanny(resources.getString(R.string.room_tombstone_versioned_description),
                 StyleSpan(Typeface.BOLD),
@@ -339,7 +338,7 @@ class NotificationAreaView @JvmOverloads constructor(
         object ConnectionError : State()
 
         // The room is dead
-        data class Tombstone(val tombstoneContent: RoomTombstoneContent) : State()
+        data class Tombstone(val tombstoneContent: RoomTombstoneContent, val tombstoneEventSenderId: String) : State()
 
         // Somebody is typing
         data class Typing(val message: String) : State()

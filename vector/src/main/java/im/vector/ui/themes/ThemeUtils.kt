@@ -32,7 +32,7 @@ import android.view.Menu
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.VectorGroupDetailsActivity
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 /**

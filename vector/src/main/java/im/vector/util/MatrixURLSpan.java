@@ -26,8 +26,8 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import org.matrix.androidsdk.MXPatterns;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,18 +56,43 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     // URL regex
     private final Pattern mPattern;
 
+    // is a tombstone link
+    private final boolean isTombstone;
+
+    // SenderId for the tombstone link
+    private final String senderId;
+
     // listener
     private final IMessagesAdapterActionsListener mActionsListener;
 
     public MatrixURLSpan(String url, Pattern pattern, IMessagesAdapterActionsListener actionsListener) {
         mURL = url;
         mPattern = pattern;
+        isTombstone = false;
+        senderId = null;
+        mActionsListener = actionsListener;
+    }
+
+    /**
+     * Create a URL Span for tombstone
+     *
+     * @param roomId
+     * @param senderId
+     * @param actionsListener
+     */
+    public MatrixURLSpan(String roomId, String senderId, IMessagesAdapterActionsListener actionsListener) {
+        mURL = roomId;
+        mPattern = null;
+        isTombstone = true;
+        this.senderId = senderId;
         mActionsListener = actionsListener;
     }
 
     private MatrixURLSpan(Parcel src) {
         mURL = src.readString();
         mPattern = null;
+        isTombstone = false;
+        senderId = null;
         mActionsListener = null;
     }
 
@@ -110,33 +135,39 @@ public class MatrixURLSpan extends ClickableSpan implements ParcelableSpan {
     @Override
     public void onClick(View widget) {
         try {
-            if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER) {
+            if (isTombstone) {
                 if (null != mActionsListener) {
-                    mActionsListener.onMatrixUserIdClick(mURL);
-                }
-            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ALIAS) {
-                if (null != mActionsListener) {
-                    mActionsListener.onRoomAliasClick(mURL);
-                }
-            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER) {
-                if (null != mActionsListener) {
-                    mActionsListener.onRoomIdClick(mURL);
-                }
-            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER) {
-                if (null != mActionsListener) {
-                    mActionsListener.onEventIdClick(mURL);
-                }
-            } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
-                if (null != mActionsListener) {
-                    mActionsListener.onGroupIdClick(mURL);
+                    mActionsListener.onTombstoneLinkClicked(mURL, senderId);
                 }
             } else {
-                Uri uri = Uri.parse(getURL());
-
-                if (null != mActionsListener) {
-                    mActionsListener.onURLClick(uri);
+                if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER) {
+                    if (null != mActionsListener) {
+                        mActionsListener.onMatrixUserIdClick(mURL);
+                    }
+                } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ALIAS) {
+                    if (null != mActionsListener) {
+                        mActionsListener.onRoomAliasClick(mURL);
+                    }
+                } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER) {
+                    if (null != mActionsListener) {
+                        mActionsListener.onRoomIdClick(mURL);
+                    }
+                } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER) {
+                    if (null != mActionsListener) {
+                        mActionsListener.onEventIdClick(mURL);
+                    }
+                } else if (mPattern == MXPatterns.PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER) {
+                    if (null != mActionsListener) {
+                        mActionsListener.onGroupIdClick(mURL);
+                    }
                 } else {
-                    ExternalApplicationsUtilKt.openUrlInExternalBrowser(widget.getContext(), uri);
+                    Uri uri = Uri.parse(getURL());
+
+                    if (null != mActionsListener) {
+                        mActionsListener.onURLClick(uri);
+                    } else {
+                        ExternalApplicationsUtilKt.openUrlInExternalBrowser(widget.getContext(), uri);
+                    }
                 }
             }
         } catch (Exception e) {

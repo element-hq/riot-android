@@ -25,8 +25,8 @@ import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 
 /**
  * Displays the Account deactivation screen.

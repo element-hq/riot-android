@@ -19,12 +19,12 @@ import android.app.Activity;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiFailureCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiFailureCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.Arrays;
 
@@ -67,7 +67,7 @@ public class ErrorListener implements ApiFailureCallback {
 
         // The access token was not recognized: log out
         if (MatrixError.UNKNOWN_TOKEN.equals(e.errcode)) {
-            CommonActivityUtils.logout(mActivity);
+            CommonActivityUtils.recoverInvalidatedToken();
         }
     }
 
