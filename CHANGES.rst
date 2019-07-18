@@ -9,7 +9,7 @@ Features:
  -
 
 Improvements:
- -
+ - Room upgrade: Use the `server_name` parameter when joining the new room (#3204)
 
 Other changes:
  - Piwik SDK has been replaced by Matomo SDK (#3163)

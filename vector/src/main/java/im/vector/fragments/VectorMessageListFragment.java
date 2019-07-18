@@ -49,6 +49,7 @@ import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
 import org.matrix.androidsdk.core.PermalinkUtils;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
@@ -769,6 +770,55 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         if (mListener != null && isAdded()) {
             mListener.onSelectedEventChange(currentSelectedEvent);
         }
+    }
+
+    @Override
+    public void onTombstoneLinkClicked(String roomId, String senderId) {
+        // Join the room and open it
+        showInitLoading();
+
+        // Extract the server name
+        String serverName = MXPatterns.extractServerNameFromId(senderId);
+
+        List<String> viaServers = null;
+
+        if (serverName != null) {
+            viaServers = Collections.singletonList(serverName);
+        }
+
+        mSession.joinRoom(roomId, viaServers, new ApiCallback<String>() {
+            @Override
+            public void onNetworkError(Exception e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(String info) {
+                hideInitLoading();
+
+                // Open the room
+                if (isAdded()) {
+                    Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                    intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, info);
+                    intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                }
+            }
+        });
     }
 
     /**
