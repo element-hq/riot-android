@@ -34,4 +34,8 @@
         <ignore path="**/dropbox-core-sdk*.jar" />
     </issue>
 
+    <!-- Ignore issue with gradle compatilility, because we can use core-ktx.
+     No other androidx library are used in this project (except the workmanager) -->
+    <issue id="GradleCompatible" severity="warning" />
+
 </lint>
