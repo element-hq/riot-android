@@ -1,12 +1,9 @@
-Changes in Riot 0.9.2 (2019-XX-XX)
+Changes in Riot 0.9.2 (2019-07-18)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
+ - Upgrade MatrixSdk to version 0.9.24.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.24
 
 Improvements:
  - Room upgrade: Use the `server_name` parameter when joining the new room (#3204)
@@ -21,9 +18,6 @@ Bugfix:
  - Fix / Export keys not possible when no network (airplane)
  - Fix / crash in logout success
  - Fix / Crash when session store is null in event stream #3158
-
-Translations:
- -
 
 Build:
  - Upgrade gradle version from 4.10.1 to 5.4.1
