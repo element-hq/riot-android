@@ -44,16 +44,7 @@ android {
         versionName rootProject.ext.versionNameProp
 
         ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-
-        packagingOptions {
-            // The project react-native does not provide 64-bit binaries at the
-            // time of this writing. Unfortunately, packaging any 64-bit
-            // binaries into the .apk will crash the app at runtime on 64-bit
-            // platforms.
-            exclude "lib/x86_64/libjingle_peerconnection_so.so"
-            exclude "lib/arm64-v8a/libjingle_peerconnection_so.so"
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
         }
 
         multiDexEnabled true
