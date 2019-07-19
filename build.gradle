@@ -42,6 +42,8 @@ allprojects {
             content {
                 // Use this repo only for matrix SDK library
                 includeGroupByRegex "com\\.github\\.matrix-org"
+                // Also add subgroups, due to SDK split into modules
+                includeGroupByRegex "com\\.github\\.matrix-org\\.matrix-android-sdk"
                 // And Olm library
                 includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
                 // And PhotoView
