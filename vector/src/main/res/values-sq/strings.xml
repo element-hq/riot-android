@@ -863,12 +863,10 @@
     <string name="permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, Riot-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.</string>
-    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i lyp leje të përdorë kontaktet e librit tuaj të adresave.
-\n
-\nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të zbulohen te libri i adresave përdorues të kapshëm që nga Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i lyp leje të përdorë kontakte nga libri juaj i adresave.
-\n
-\nTë lejohet Riot-i të hyjë në kontaktet tuaja\?</string>
+    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, Riot-i mund të kërkojë në librin tuaj të adresave. 
+\n 
+\nJeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
 
@@ -1362,5 +1360,175 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="notification_inline_reply_failed">** S’u arrit të dërgohej - ju lutemi, hapni dhomë</string>
 
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
+
+    <string name="title_activity_verify_device">Verifikoni pajisje</string>
+
+    <string name="encryption_information_unknown_ip">ip e panjohur</string>
+    <string name="you_added_a_new_device_with_info">Një pajisje e re po kërkon kyçe fshehtëzimi.
+\nEmër pajisje: %1$s
+\nParë së fundi më: %2$s
+\nNëse s’keni bërë hyrje në një tjetër pajisje, shpërfilleni këtë kërkesë.</string>
+    <string name="your_unverified_device_requesting_with_info">Një pajisje e paverifikuar po kërkon kyçe fshehtëzimi.
+\nEmër pajisjeje: %1$s
+\nParë së fundi: %2$s
+\nNëse s’keni bërë hyrje që nga një pajisje tjetër, shpërfilleni këtë kërkesë.</string>
+
+    <string name="start_verification_short_label">Verifikoje</string>
+    <string name="share_without_verifying_short_label">Ndaje</string>
+    <string name="key_share_request">Kërkesat Për Ndarje Kyçesh</string>
+    <string name="ignore_request_short_label">Shpërfille</string>
+
+    <string name="sas_verify_title">Verifikoje duke krahasuar një varg të shkurtër teksti.</string>
+    <string name="sas_security_advise">Për siguri maksimale, këshillojmë ta bëni këtë në prani të vetë personit, ose të përdorni një tjetër kanal të besuar komunikimesh.</string>
+    <string name="sas_verify_start_button_title">Po Verifikohet</string>
+    <string name="sas_incoming_request_title">Kërkesë Verifikimi e Ardhur</string>
+    <string name="sas_incoming_request_description">Që t’i vihet shenjë si e besuar, verifikojeni këtë pajisje. Besimi i pajisjeve të partnerëve ju jep ca qetësi më tepër kur përdoren mesazhe të fshehtëzuar skaj-më-skaj.</string>
+    <string name="sas_incoming_request_description_2">Verifikimi i kësaj pajisje do ta shënojë atë të besuar, dhe tuajën si të besuar te partneri.</string>
+
+    <string name="sas_emoji_description">Verifikojeni këtë pajisje duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit</string>
+    <string name="sas_decimal_description">Verifikojeni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e partnerit</string>
+
+    <string name="sas_incoming_verification_request_dialog">Morët një kërkesë verifikimi të ardhur.</string>
+    <string name="sas_view_request_action">Shihni kërkesën</string>
+    <string name="sas_waiting_for_partner">Po pritet ripohimi nga partneri…</string>
+
+    <string name="sas_verified">U verifikua!</string>
+    <string name="sas_verified_successful">E verifikuat me sukses këtë pajisje.</string>
+    <string name="sas_verified_successful_description">Mesazhet e sigurt me këtë përdorues fshehtëzohen skaj-më-skaj dhe janë të palexueshëm nga palë të treta.</string>
+    <string name="sas_got_it">E mora vesh</string>
+
+    <string name="sas_verifying_keys">S’duket gjë\? Jo të tërë klientët mbulojnë verifikim ndërveprues ende. Përdorni verifikimin në stil të vjetër.</string>
+    <string name="sas_legacy_verification_button_title">Përdor verifikim të dikurshëm.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verifikim Kyçi</string>
+    <string name="sas_cancelled_dialog_title">Kërkesa u Anulua</string>
+    <string name="sas_cancelled_by_other">Pala tjetër e anuloi verifikimin.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Verifikimi u anulua.
+\nArsye: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verifikim Ndërveprues Pajisjesh</string>
+    <string name="sas_incoming_request_notif_title">Kërkesë Verifikimi</string>
+    <string name="sas_incoming_request_notif_content">%s dëshiron të verifikojë pajisjen tuaj</string>
+
+    <string name="sas_error_m_user">Përdoruesi e anuloi verifikimin</string>
+    <string name="sas_error_m_timeout">Procesit të verifikimit i mbaroi koha</string>
+    <string name="sas_error_m_unknown_transaction">Pajisja s’di gjë rreth këtij transaksioni</string>
+    <string name="sas_error_m_unknown_method">Pajisja s’bie dot dakord për metodë marrëveshjeje kyçesh, hash, MAC, ose SAS</string>
+    <string name="sas_error_m_mismatched_sas">SAS s’u përputhën</string>
+    <string name="sas_error_m_unexpected_message">Pajisja mori përgjigje të papritur</string>
+    <string name="sas_error_m_invalid_message">U mor një mesazh i pavlefshëm</string>
+    <string name="sas_error_m_key_mismatch">Mospërputhje kyçesh</string>
+    <string name="sas_error_m_user_error">Mospërputhje përdoruesish</string>
+    <string name="sas_error_unknown">Gabim i Panjohur</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ka tashmë një kopjeruajtje te Shërbyesi juaj Home</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Duket sikur keni tashmë kopjeruajtje kyçesh nga një pajisje tjetër. Doni të zëvendësohet me atë që po krijoni\?</string>
+    <string name="keys_backup_setup_override_replace">Zëvendësoje</string>
+    <string name="keys_backup_setup_override_stop">Ndale</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Po kontrollohet gjendje kopjeruajtje</string>
+    <string name="invalid_or_expired_credentials">Jeni nxjerrë nga llogari për shkak kredencialesh të pavlefshme ose të skaduara.</string>
+
+    <string name="edit">Përpunoni</string>
+    <string name="reply">Përgjigjuni</string>
+
+    <string name="global_retry">Riprovo</string>
+    <string name="room_list_empty">Që të filloni të përdorni aplikacionin, merrni pjesë në një dhomë.</string>
+    <string name="send_you_invite">Ju dërgoi një ftesë</string>
+    <string name="invited_by">Ftuar nga %s</string>
+
+    <string name="room_list_catchup_empty_title">S’keni më!</string>
+    <string name="room_list_catchup_empty_body">S’keni më mesazhe të palexuar</string>
+    <string name="room_list_catchup_welcome_title">Mirë se vini në vatër!</string>
+    <string name="room_list_catchup_welcome_body">Mbaroni punë me mesazhet e palexuara</string>
+    <string name="room_list_people_empty_title">Biseda</string>
+    <string name="room_list_people_empty_body">Biseda përmes mesazhesh të drejtpërdrejta do të shfaqet këtu</string>
+    <string name="room_list_rooms_empty_title">Dhoma</string>
+    <string name="room_list_rooms_empty_body">Dhomat tuaja do të shfaqen këtu</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reagime</string>
+    <string name="reactions_agree">Pajtohem</string>
+    <string name="reactions_like">E pëlqej</string>
+    <string name="message_add_reaction">Shtoni Reagim</string>
+    <string name="message_view_reaction">Shihni Reagime</string>
+    <string name="reactions">Reagime</string>
+
+    <string name="event_redacted_by_user_reason">Veprimtari e fshirë nga përdorues</string>
+    <string name="event_redacted_by_admin_reason">Veprimtari e moderuar nga përgjegjës dhome</string>
+    <string name="last_edited_info_message">Përpunuar së fundi nga %s më %s</string>
+
+
+    <string name="malformed_message">Veprimtari e keqformuar, s’mund të shfaqet</string>
+    <string name="create_new_room">Krijoni Dhomë të Re</string>
+    <string name="error_no_network">S’ka rrjet. Ju lutemi, kontrolloni lidhjen tuaj në Internet.</string>
+    <string name="action_change">Ndryshoje</string>
+    <string name="change_room_directory_network">Ndryshoni rrjetin</string>
+    <string name="please_wait">Ju lutemi, pritni…</string>
+    <string name="group_all_communities">Krejt Bashkësitë</string>
+
+    <string name="room_preview_no_preview">Kjo dhomë s’mund të parashihet</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në RiotX</string>
+
+    <string name="fab_menu_create_room">Dhoma</string>
+    <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
+
+    <string name="create_room_title">Dhomë e Re</string>
+    <string name="create_room_action_create">KRIJOJE</string>
+    <string name="create_room_name_hint">Emër dhome</string>
+    <string name="create_room_public_title">Publike</string>
+    <string name="create_room_public_description">Kushdo do të jetë në gjendje të marrë pjesë në këtë dhomë</string>
+    <string name="create_room_directory_title">Drejtori Dhomash</string>
+    <string name="create_room_directory_description">Bëje publike këtë dhomë te drejtoria e dhomave</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh</string>
+
+    <string name="alpha_disclaimer_title">Mirë se vini në beta!</string>
+    <string name="alpha_disclaimer_content_line_1">Teksa RiotX është në fillimet e zhvillimit, disa veçori mund të mos jenë gati dhe mund të hasni të meta.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Lista e veçorive më të reja gjendet te %1$s, dhe nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Përshkrim në Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Nëse gjeni të meta, ju lutemi, parashtroni një njoftim te menuja majtas sipër te Home, dhe do t’i ndreqim sa më shpejt të mundemi.</string>
+
+    <string name="import_e2e_keys_from_file">Importo kyçe e2e prej kartelës \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Versioni Matrix SDK</string>
+    <string name="settings_other_third_party_notices">Shënime të tjera palësh të treta</string>
+    <string name="navigate_to_room_when_already_in_the_room">Po e shihni tashmë këtë dhomë!</string>
+
+    <string name="quick_reactions">Reagime të Shpejta</string>
+
+    <string name="settings_general_title">Të përgjithshme</string>
+    <string name="settings_preferences">Parapëlqime</string>
+    <string name="settings_security_and_privacy">Siguri &amp; Privatësi</string>
+    <string name="settings_expert">Ekspert</string>
+    <string name="settings_push_rules">Rregulla për Push</string>
+    <string name="settings_push_rules_no_rules">S’ka të përcaktuara rregulla për push</string>
+    <string name="settings_push_gateway_no_pushers">Pa kanale push të regjistruar</string>
+
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_voice_and_video">Zë &amp; Video</string>
+    <string name="preference_root_help_about">Ndihmë &amp; Mbi</string>
+
+
+    <string name="send_suggestion">Bëni një sugjerim</string>
+    <string name="send_suggestion_content">Ju lutemi, shkruajeni sugjerimin tuaj më poshtë.</string>
+    <string name="send_suggestion_report_placeholder">Përshkruani këtu sugjerimin tuaj</string>
+    <string name="send_suggestion_sent">Faleminderit, sugjerimi u dërgua me sukses</string>
+    <string name="send_suggestion_failed">S’u arrit të dërgohej sugjerimi (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
+
+    <string name="store_riotx_title">RiotX - Klient Matrix i Brezit të Ardhshëm</string>
+    <string name="store_riotx_short_description">Një klient më i shpejtë dhe më i lehtë për Matrix, që përdor mekanizmat më të rinj Android</string>
+    <string name="store_riotx_full_description">RiotX është një klient i ri për protokollin Matrix (Matrix.org): një rrjet i hapur për komunikim të sigurt, të centralizuar. RiotX është një rishkrim i plotë i klientit Riot Android, bazuar në një rishkrim të plotë të Matrix Android SDK-së.
+\n
+\nKlauzolë: Ky është një version beta. RiotX-i është ende nën zhivillim aktiv dhe përmban kufizime dhe (shpresojmë të mos jenë shumë) të meta. Mirëpresim krejt përshtypjet dhe sugjerimet!
+\n
+\nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
+\n
+\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
 
 </resources>

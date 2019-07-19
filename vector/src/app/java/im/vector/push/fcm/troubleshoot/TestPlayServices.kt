@@ -20,7 +20,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import im.vector.R
 import im.vector.fragments.troubleshoot.TroubleshootTest
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /*
 * Check that the play services APK is available an up-to-date. If needed provide quick fix to install it.

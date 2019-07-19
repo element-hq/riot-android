@@ -18,7 +18,7 @@ package im.vector.util
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 private const val LOG_TAG = "BitmapUtil"
 

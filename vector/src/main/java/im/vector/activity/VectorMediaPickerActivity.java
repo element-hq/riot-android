@@ -63,9 +63,9 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.jetbrains.annotations.NotNull;
-import org.matrix.androidsdk.util.ImageUtils;
-import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.util.ResourceUtils;
+import org.matrix.androidsdk.core.ImageUtils;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.ResourceUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

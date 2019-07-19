@@ -31,9 +31,9 @@ import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.fragments.VectorBaseFragment
 import im.vector.listeners.YesNoListener
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.crypto.verification.OutgoingSASVerificationRequest
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
 
 class SASVerificationStartFragment : VectorBaseFragment() {
 

@@ -44,16 +44,7 @@ android {
         versionName rootProject.ext.versionNameProp
 
         ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-
-        packagingOptions {
-            // The project react-native does not provide 64-bit binaries at the
-            // time of this writing. Unfortunately, packaging any 64-bit
-            // binaries into the .apk will crash the app at runtime on 64-bit
-            // platforms.
-            exclude "lib/x86_64/libjingle_peerconnection_so.so"
-            exclude "lib/arm64-v8a/libjingle_peerconnection_so.so"
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
         }
 
         multiDexEnabled true
@@ -119,20 +110,6 @@ android {
         lintConfig file("lint.xml")
     }
 
-    repositories {
-        flatDir {
-            dir 'libs'
-        }
-
-        maven {
-            url "https://s3.amazonaws.com/repo.commonsware.com"
-        }
-
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
-    }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -177,12 +154,12 @@ dependencies {
 
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:preference-v7:28.0.0'
-    implementation 'com.android.support:preference-v14:28.0.0'
+    implementation "com.android.support:appcompat-v7:$support_lib_version"
+    implementation "com.android.support:design:$support_lib_version"
+    implementation "com.android.support:cardview-v7:$support_lib_version"
+    implementation "com.android.support:recyclerview-v7:$support_lib_version"
+    implementation "com.android.support:preference-v7:$support_lib_version"
+    implementation "com.android.support:preference-v14:$support_lib_version"
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.android.support:support-v4:28.0.0'
@@ -207,7 +184,7 @@ dependencies {
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.google.code.gson:gson:$gson_version"
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
@@ -230,10 +207,12 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency
-    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.23'
+    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.24.3'
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
+    //implementation project(':matrix-sdk-crypto')
+    //implementation project(':matrix-sdk-core')
 
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {
@@ -243,7 +222,7 @@ dependencies {
 
     /************* analytics **************/
     // another tracking than GA
-    implementation 'org.piwik.sdk:piwik-sdk:2.0.0'
+    implementation 'org.matomo.sdk:tracker:4.0.2'
 
     /************* flavors management **************/
 

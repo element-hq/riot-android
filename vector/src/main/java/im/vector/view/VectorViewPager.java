@@ -22,7 +22,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 /**
  * Patch the issue "https://code.google.com/p/android/issues/detail?id=66620"

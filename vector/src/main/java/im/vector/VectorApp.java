@@ -40,7 +40,7 @@ import android.text.TextUtils;
 import com.facebook.stetho.Stetho;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -62,7 +62,7 @@ import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
-import im.vector.analytics.PiwikAnalytics;
+import im.vector.analytics.MatomoAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -212,7 +212,7 @@ public class VectorApp extends MultiDexApplication {
 
         instance = this;
         mCallsManager = new CallsManager(this);
-        mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
+        mAppAnalytics = new AppAnalytics(this, new MatomoAnalytics(this));
         mDecryptionFailureTracker = new DecryptionFailureTracker(mAppAnalytics);
 
         mActivityTransitionTimer = null;
@@ -230,8 +230,8 @@ public class VectorApp extends MultiDexApplication {
 
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
-        org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
-        org.matrix.androidsdk.util.Log.init("RiotLog");
+        org.matrix.androidsdk.core.Log.setLogDirectory(mLogsDirectoryFile);
+        org.matrix.androidsdk.core.Log.init("RiotLog");
 
         // log the application version to trace update
         // useful to track backward compatibility issues
@@ -253,7 +253,7 @@ public class VectorApp extends MultiDexApplication {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                // piwik
+                // matomo
                 onNewScreen(activity);
             }
 

@@ -22,7 +22,7 @@ import im.vector.Matrix
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.matrix.androidsdk.MXDataHandler
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 /**

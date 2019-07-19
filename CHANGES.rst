@@ -1,4 +1,4 @@
-Changes in Riot 0.9.2 (2019-XX-XX)
+Changes in Riot 0.9.3 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
@@ -21,7 +21,33 @@ Translations:
  -
 
 Build:
- -
+ - Include native libraries for 64 bits processors.
+
+
+Changes in Riot 0.9.2 (2019-07-18)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.24.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.24
+
+Improvements:
+ - Room upgrade: Use the `server_name` parameter when joining the new room (#3204)
+
+Other changes:
+ - Piwik SDK has been replaced by Matomo SDK (#3163)
+
+Bugfix:
+ - Fix / Illegal States exceptions when starting event stream service X
+ - Fix / Keys Backup can be setup twice #9510
+ - Fix / Infinite logout screen when token invalidated
+ - Fix / Export keys not possible when no network (airplane)
+ - Fix / crash in logout success
+ - Fix / Crash when session store is null in event stream #3158
+
+Build:
+ - Upgrade gradle version from 4.10.1 to 5.4.1
+ - Ensure MatrixSDK library is downloaded from the jitpack repository
 
 Changes in Riot 0.9.1 (2019-05-03)
 ===================================================

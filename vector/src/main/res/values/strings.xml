@@ -364,8 +364,8 @@
     <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
+    <string name="permissions_rationale_msg_contacts">Riot can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
@@ -1306,6 +1306,11 @@ Why choose Riot.im?
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
+    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another device. Do you want to replace it with the one you’re creating?</string>
+    <string name="keys_backup_setup_override_replace">Replace</string>
+    <string name="keys_backup_setup_override_stop">Stop</string>
+
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
@@ -1378,6 +1383,7 @@ Why choose Riot.im?
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
 
+    <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
 
@@ -1411,6 +1417,8 @@ Why choose Riot.im?
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
+
+    <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
 
     <string name="sas_verify_title">Verify by comparing a short text string.</string>
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
@@ -1455,5 +1463,169 @@ Why choose Riot.im?
     <string name="sas_error_m_key_mismatch">Key mismatch</string>
     <string name="sas_error_m_user_error">User mismatch</string>
     <string name="sas_error_unknown">Unknown Error</string>
+
+
+    <!-- String for RiotX -->
+    <string name="edit">Edit</string>
+    <string name="reply">Reply</string>
+
+    <string name="global_retry">"Retry"</string>
+    <string name="room_list_empty">"Join a room to start using the app."</string>
+    <string name="send_you_invite">"Sent you an invitation"</string>
+    <string name="invited_by">Invited by %s</string>
+
+    <string name="room_list_catchup_empty_title">You’re all caught up!</string>
+    <string name="room_list_catchup_empty_body">You have no more unread messages</string>
+    <string name="room_list_catchup_welcome_title">Welcome home!</string>
+    <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
+    <string name="room_list_people_empty_title">Conversations</string>
+    <string name="room_list_people_empty_body">Your direct message conversation will be displayed here</string>
+    <string name="room_list_rooms_empty_title">Rooms</string>
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reactions</string>
+    <string name="reactions_agree">Agree</string>
+    <string name="reactions_like">Like</string>
+    <string name="message_add_reaction">Add Reaction</string>
+    <string name="message_view_reaction">View Reactions</string>
+    <string name="reactions">Reactions</string>
+
+    <string name="event_redacted_by_user_reason">Event deleted by user</string>
+    <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
+    <string name="last_edited_info_message">Last edited by %s on %s</string>
+
+
+    <string name="malformed_message">Malformed event, cannot display</string>
+    <string name="create_new_room">Create New Room</string>
+    <string name="error_no_network">No network. Please check your Internet connection.</string>
+    <string name="action_change">"Change"</string>
+    <string name="change_room_directory_network">"Change network"</string>
+    <string name="please_wait">"Please wait…"</string>
+    <string name="group_all_communities">"All Communities"</string>
+
+    <string name="room_preview_no_preview">"This room can't be previewed"</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in RiotX"</string>
+
+    <string name="fab_menu_create_room">"Rooms"</string>
+    <string name="fab_menu_create_chat">"Direct Messages"</string>
+
+    <!-- Create room screen -->
+    <string name="create_room_title">"New Room"</string>
+    <string name="create_room_action_create">"CREATE"</string>
+    <string name="create_room_name_hint">"Room name"</string>
+    <string name="create_room_public_title">"Public"</string>
+    <string name="create_room_public_description">"Anyone will be able to join this room"</string>
+    <string name="create_room_directory_title">"Room Directory"</string>
+    <string name="create_room_directory_description">"Publish this room in the room directory"</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
+
+    <string name="alpha_disclaimer_title">Welcome to the beta!</string>
+    <string name="alpha_disclaimer_content_line_1">"While RiotX is in early development, some features may be missing and you may experience bugs."</string>
+    <!-- The parameter will be replaced by the value of string alpha_disclaimer_content_line_2_gplay_colored_part -->
+    <string name="alpha_disclaimer_content_line_2_gplay">"The latest feature list is always in the %1$s, and if you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">"Play Store description"</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">"If you find bugs please submit a report in the top left menu of Home, and we’ll fix them as quickly as we can."</string>
+
+    <string name="import_e2e_keys_from_file">"Import e2e keys from file \"%1$s\"."</string>
+
+    <string name="settings_sdk_version">Matrix SDK Version</string>
+    <string name="settings_other_third_party_notices">Other third party notices</string>
+    <string name="navigate_to_room_when_already_in_the_room">You are already viewing this room!</string>
+
+    <string name="quick_reactions">Quick Reactions</string>
+
+    <!-- Settings -->
+    <string name="settings_general_title">General</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_security_and_privacy">Security &amp; Privacy</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_rules">Push Rules</string>
+    <string name="settings_push_rules_no_rules">No push rules defined</string>
+    <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="preference_voice_and_video">Voice &amp; Video</string>
+    <string name="preference_root_help_about">Help &amp; About</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
+
+    <string name="send_suggestion">Make a suggestion</string>
+    <string name="send_suggestion_content">Please write your suggestion below.</string>
+    <string name="send_suggestion_report_placeholder">Describe your suggestion here</string>
+    <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
+    <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
+
+    <!-- String for Play Store, for RiotX -->
+    <string name="store_riotx_title">RiotX - Next Generation Matrix Client</string>
+    <string name="store_riotx_short_description">A faster and lighter client for Matrix using the latest Android frameworks</string>
+    <string name="store_riotx_full_description">"RiotX is a new client for the Matrix protocol (Matrix.org): an open network for secure, decentralised communication. RiotX is a full rewrite of the Riot Android client, based on a full rewrite of the Matrix Android SDK.
+
+Disclaimer: This is a beta version. RiotX is currently in active development and contains limitations and (we hope not too many) bugs. All feedback is welcome!
+
+RiotX supports:
+• Login to an existing account
+• Create room and join public rooms
+• Accept and reject invitations
+• List users rooms
+• View room details
+• Send text messages
+• Send attachment
+• Read and write messages in encrypted rooms
+• Crypto: E2E keys backup, advance device verification, key share request and answer
+• Push notification
+• Light, Dark and Black themes
+
+Not all features in Riot are implemented in RiotX yet. Main missing (and coming soon!) features:
+• Account creation
+• Room settings (list room members, etc.)
+• Creation of direct chat rooms
+• Calls
+• Widgets
+• …"</string>
+
+    <string name="bottom_action_people_x">Direct Messages</string>
+
+    <string name="send_file_step_idle">Waiting…</string>
+    <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>
+    <string name="send_file_step_sending_thumbnail">Sending thumbnail (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Encrypting file…</string>
+    <string name="send_file_step_sending_file">Sending file (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Downloading file %1$s…</string>
+    <string name="downloaded_file">File %1$s has been downloaded!</string>
+
+    <string name="edited_suffix">"(edited)"</string>
+
+    <!-- param will be replaced by the value of riotx_no_registration_notice_colored_part -->
+    <string name="riotx_no_registration_notice">%1$s to create an account.</string>
+    <string name="riotx_no_registration_notice_colored_part">Use the old app</string>
+
+
+    <string name="message_edits">Message Edits</string>
+    <string name="no_message_edits_found">No edits found</string>
+
+    <!-- Room filtering -->
+    <string name="room_filtering_filter_hint">Filter conversations…</string>
+    <string name="room_filtering_footer_title">Can’t find what you’re looking for?</string>
+    <string name="room_filtering_footer_create_new_room">Create a new room</string>
+    <string name="room_filtering_footer_create_new_direct_message">Send a new direct message</string>
+    <string name="room_filtering_footer_open_room_directory">View the room directory</string>
+
+    <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
+
+    <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
 </resources>
