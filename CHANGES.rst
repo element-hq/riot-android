@@ -21,7 +21,7 @@ Translations:
  -
 
 Build:
- -
+ - Include native libraries for 64 bits processors.
 
 
 Changes in Riot 0.9.2 (2019-07-18)
