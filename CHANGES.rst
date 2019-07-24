@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Crash on older android due to okhttp bumping requirements to Android 5+
 
 Translations:
  -

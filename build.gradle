@@ -32,7 +32,7 @@ ext {
 allprojects {
     ext.support_lib_version = '28.0.0'
     ext.gson_version = '2.8.5'
-    ext.okhttp_version = '3.14.1'
+    ext.okhttp_version = '3.12.3'
 
     repositories {
         // For Matrix Android SDK.
