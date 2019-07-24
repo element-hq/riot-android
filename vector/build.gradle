@@ -207,7 +207,7 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency
-    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.24.3'
+    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.26'
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
@@ -252,6 +252,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
 
+//Ensure we never move past okhttp 3.12.x
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'com.squareup.okhttp3' && details.requested.name == 'okhttp') {
+            details.useVersion '3.12.3'
+            details.because '3.13+ dropped support for android <5'
+        }
+    }
+}
 
 if (!getGradle().getStartParameter().getTaskRequests().toString().contains("Appfdroid")
         && !getGradle().getStartParameter().getTaskRequests().toString().contains("assembleAndroidTest")) {
