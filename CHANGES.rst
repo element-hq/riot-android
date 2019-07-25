@@ -1,9 +1,9 @@
-Changes in Riot 0.9.3 (2019-07-24)
+Changes in Riot 0.9.xx (2018-XX-XX)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.9.26.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.26
+ - Upgrade MatrixSdk to version 0.9.X.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.XX
 
 Features:
  -
@@ -15,10 +15,23 @@ Other changes:
  -
 
 Bugfix:
- - Crash on older android due to okhttp bumping requirements to Android 5+
+ -
 
 Translations:
  -
+
+Build:
+ -
+
+Changes in Riot 0.9.3 (2019-07-24)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.26.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.26
+
+Bugfix:
+ - Crash on older android due to okhttp bumping requirements to Android 5+
 
 Build:
  - Include native libraries for 64 bits processors.
