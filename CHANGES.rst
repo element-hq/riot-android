@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)
 
 Translations:
  -
