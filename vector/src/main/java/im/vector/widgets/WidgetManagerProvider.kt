@@ -29,17 +29,22 @@ object WidgetManagerProvider {
         if (widgetsManager != null) {
             return widgetsManager
         }
-        val serverURL = PreferencesManager.getIntegrationServerUrl(context)
-        if (serverURL.isNullOrBlank()) return null
+        val uiURl = PreferencesManager.getIntegrationServerUiUrl(context)
+        val apiURL = PreferencesManager.getIntegrationServerApiUrl(context)
+        val jitsiUrl = PreferencesManager.getIntegrationServerJitsiUrl(context)
+        if (uiURl.isNullOrBlank() || apiURL.isNullOrBlank() || jitsiUrl.isNullOrBlank()) return null
         return try {
-            URL(serverURL)
+            //Very basic validity check (well formed url)
+            URL(uiURl)
+            URL(apiURL)
+            URL(jitsiUrl)
             val defaultWhitelist = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context))
-            defaultWhitelist.add(0,"$serverURL/api")
+            defaultWhitelist.add(0,apiURL)
 
             val config = IntegrationManagerConfig(
-                    uiUrl = "$serverURL/",
-                    apiUrl = "$serverURL/api",
-                    jitsiUrl = "$serverURL/api/widgets/jitsi.html",
+                    uiUrl = uiURl,
+                    apiUrl = apiURL,
+                    jitsiUrl = jitsiUrl,
                     whiteListedUrls = defaultWhitelist)
             WidgetsManager(config).also {
                 this.widgetsManager = it
