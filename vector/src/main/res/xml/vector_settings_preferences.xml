@@ -424,6 +424,12 @@
             android:title="@string/settings_identity_server"
             tools:summary="@string/default_identity_server_url" />
 
+
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_INTEGRATION_SERVER_URL"
+            android:defaultValue="@string/integration_server_url"
+            android:title="@string/settings_integration_server"/>
+
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceDivider />

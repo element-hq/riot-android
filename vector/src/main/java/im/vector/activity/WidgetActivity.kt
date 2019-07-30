@@ -38,6 +38,7 @@ import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
+import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
@@ -73,6 +74,7 @@ class WidgetActivity : VectorAppCompatActivity() {
     private var mTokenAlreadyRefreshed = false
     private var mHistoryAlreadyCleared = false
 
+    private lateinit var widgetsManager: WidgetsManager
     /**
      * Widget events listener
      */
@@ -98,6 +100,12 @@ class WidgetActivity : VectorAppCompatActivity() {
 
         if (null == mWidget || null == mWidget!!.url) {
             Log.e(LOG_TAG, "## onCreate() : invalid widget")
+            finish()
+            return
+        }
+
+        widgetsManager = WidgetManagerProvider.getWidgetManager(this) ?: run {
+            Log.e(LOG_TAG, "## onCreate() : No widget manager ")
             finish()
             return
         }
@@ -138,7 +146,7 @@ class WidgetActivity : VectorAppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        WidgetsManager.addListener(mWidgetListener)
+        widgetsManager.addListener(mWidgetListener)
 
         mWidgetWebView.let {
             it.resumeTimers()
@@ -156,7 +164,7 @@ class WidgetActivity : VectorAppCompatActivity() {
             it.onPause()
         }
 
-        WidgetsManager.removeListener(mWidgetListener)
+        widgetsManager.removeListener(mWidgetListener)
     }
 
     /* ==========================================================================================
@@ -169,7 +177,7 @@ class WidgetActivity : VectorAppCompatActivity() {
                 .setMessage(R.string.widget_delete_message_confirmation)
                 .setPositiveButton(R.string.remove) { _, _ ->
                     showWaitingView()
-                    WidgetsManager.getSharedInstance().closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
+                    widgetsManager.closeWidget(mSession, mRoom, mWidget!!.widgetId, object : ApiCallback<Void> {
                         override fun onSuccess(info: Void?) {
                             hideWaitingView()
                             finish()
@@ -214,7 +222,7 @@ class WidgetActivity : VectorAppCompatActivity() {
      * Refresh the status bar
      */
     private fun refreshStatusBar() {
-        val canCloseWidget = null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom)
+        val canCloseWidget = null == widgetsManager.checkWidgetPermission(mSession, mRoom)
 
         // close widget button
         mCloseWidgetIcon.isInvisible = !canCloseWidget
@@ -273,14 +281,14 @@ class WidgetActivity : VectorAppCompatActivity() {
                     // In case of 403, try to refresh the scalar token
                     if (errorResponse?.statusCode == HttpsURLConnection.HTTP_FORBIDDEN
                             && !mTokenAlreadyRefreshed
-                            && WidgetsManager.isScalarUrl(this@WidgetActivity, mWidget!!.url)) {
+                            && widgetsManager.isScalarUrl(this@WidgetActivity, mWidget!!.url)) {
                         mTokenAlreadyRefreshed = true
                         mIsRefreshingToken = true
 
                         // Hide the webview because it's displaying an error message we try to fix by refreshing the token
                         mWidgetWebView.isVisible = false
 
-                        WidgetsManager.clearScalarToken(this@WidgetActivity, mSession)
+                        widgetsManager.clearScalarToken(this@WidgetActivity, mSession)
                         loadUrl()
                     }
                 }
@@ -320,7 +328,7 @@ class WidgetActivity : VectorAppCompatActivity() {
 
     private fun loadUrl() {
         showWaitingView()
-        WidgetsManager.getFormattedWidgetUrl(this, mWidget!!, object : ApiCallback<String> {
+        widgetsManager.getFormattedWidgetUrl(this, mWidget!!, object : ApiCallback<String> {
             override fun onSuccess(url: String) {
                 mIsRefreshingToken = false
 

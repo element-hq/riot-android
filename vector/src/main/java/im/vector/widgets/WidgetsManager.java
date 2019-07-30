@@ -1,6 +1,7 @@
 /*
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +72,15 @@ public class WidgetsManager {
      */
     private static final String SCALAR_TOKEN_PREFERENCE_KEY = "SCALAR_TOKEN_PREFERENCE_KEY";
 
+    private final IntegrationManagerConfig config;
+
+    public WidgetsManager(IntegrationManagerConfig config) {
+        this.config = config;
+    }
+
+    public String getUIUrl() {
+        return config.getUiUrl();
+    }
     /**
      * Widget error code
      */
@@ -90,17 +100,6 @@ public class WidgetsManager {
         }
     }
 
-    /**
-     * unique instance
-     */
-    private static final WidgetsManager mSharedInstance = new WidgetsManager();
-
-    /**
-     * @return the shared instance
-     */
-    public static WidgetsManager getSharedInstance() {
-        return mSharedInstance;
-    }
 
     /**
      * Pending widget creation callback
@@ -335,7 +334,7 @@ public class WidgetsManager {
         // TODO: This url may come from scalar API
         // Note: this url can be used as is inside a web container (like iframe for Riot-web)
         // Riot-iOS does not directly use it but extracts params from it (see `[JitsiViewController openWidget:withVideo:]`)
-        String url = "https://scalar.vector.im/api/widgets/jitsi.html?confId=" + confId
+        String url = config.getJitsiUrl() + "?confId=" + confId
                 + "&isAudioConf=" + (withVideo ? "false" : "true")
                 + "&displayName=$matrix_display_name&avatarUrl=$matrix_avatar_url&email=$matrix_user_id";
 
@@ -385,14 +384,14 @@ public class WidgetsManager {
         void onWidgetUpdate(Widget widget);
     }
 
-    private static final Set<onWidgetUpdateListener> mListeners = new HashSet<>();
+    private final Set<onWidgetUpdateListener> mListeners = new HashSet<>();
 
     /**
      * Add a listener.
      *
      * @param listener the listener to add
      */
-    public static void addListener(onWidgetUpdateListener listener) {
+    public void addListener(onWidgetUpdateListener listener) {
         if (null != listener) {
             synchronized (mListeners) {
                 mListeners.add(listener);
@@ -405,7 +404,7 @@ public class WidgetsManager {
      *
      * @param listener the listener to remove
      */
-    public static void removeListener(onWidgetUpdateListener listener) {
+    public void removeListener(onWidgetUpdateListener listener) {
         if (null != listener) {
             synchronized (mListeners) {
                 mListeners.remove(listener);
@@ -488,7 +487,7 @@ public class WidgetsManager {
      * @param widget   the widget
      * @param callback the callback
      */
-    public static void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
+    public void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
         if (isScalarUrl(context, widget.getUrl())) {
             getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
                 @Override
@@ -513,19 +512,13 @@ public class WidgetsManager {
      * @param url
      * @return true if the url is allowed to receive the scalar token in parameter
      */
-    public static boolean isScalarUrl(Context context, String url) {
-        String[] array = context.getResources().getStringArray(R.array.integrations_widgets_urls);
-
-        if (array.length == 0) {
-            array = new String[]{context.getString(R.string.integrations_rest_url)};
-        }
-
-        for (String allowedUrl : array) {
+    public boolean isScalarUrl(Context context, String url) {
+        List<String> allowed = config.getWhiteListedUrls();
+        for (String allowedUrl : allowed) {
             if (url.startsWith(allowedUrl)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -536,7 +529,7 @@ public class WidgetsManager {
      * @param session  the session
      * @param callback the asynchronous callback
      */
-    public static void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
+    public void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
         final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
 
         final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
@@ -547,7 +540,7 @@ public class WidgetsManager {
             session.openIdToken(new SimpleApiCallback<Map<Object, Object>>(callback) {
                 @Override
                 public void onSuccess(Map<Object, Object> tokensMap) {
-                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context);
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
 
                     widgetsRestClient.register(tokensMap, new SimpleApiCallback<Map<String, String>>(callback) {
                         @Override
@@ -577,7 +570,7 @@ public class WidgetsManager {
      * @param context Android context
      * @param session current session, to retrieve the current user
      */
-    public static void clearScalarToken(Context context, final MXSession session) {
+    public void clearScalarToken(Context context, final MXSession session) {
         final String preferenceKey = SCALAR_TOKEN_PREFERENCE_KEY + session.getMyUserId();
 
         PreferenceManager.getDefaultSharedPreferences(context)

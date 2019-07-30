@@ -42,6 +42,7 @@ import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -232,7 +233,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     protected void onStop() {
         super.onStop();
         JitsiMeetActivityDelegate.onHostPause(this);
-        WidgetsManager.removeListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm != null) {
+            wm.removeListener(mWidgetListener);
+        }
     }
 
     @Override
@@ -245,7 +249,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         super.onResume();
 
         JitsiMeetActivityDelegate.onHostResume(this);
-        WidgetsManager.addListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm != null) {
+            wm.addListener(mWidgetListener);
+        }
     }
 
     @Override

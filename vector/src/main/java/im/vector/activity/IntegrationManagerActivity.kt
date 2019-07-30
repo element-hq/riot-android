@@ -74,7 +74,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      */
     override fun buildInterfaceUrl(scalarToken: String?): String? {
         try {
-            return StringBuilder(getString(R.string.integrations_ui_url))
+            return StringBuilder(widgetManager.uiUrl)
                     .apply {
                         scalarToken?.let {
                             appendParamToUrl("scalar_token", it)
@@ -259,7 +259,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request to get widget in room " + mRoom!!.roomId)
 
-        val widgets = WidgetsManager.getSharedInstance().getActiveWidgets(mSession, mRoom)
+        val widgets = widgetManager.getActiveWidgets(mSession, mRoom)
         val responseData = ArrayList<JsonDict<Any>>()
 
         for (widget in widgets) {

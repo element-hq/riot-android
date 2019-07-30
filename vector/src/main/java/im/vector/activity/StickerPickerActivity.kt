@@ -55,7 +55,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
     }
 
     override fun canScalarTokenBeProvided(): Boolean {
-        return WidgetsManager.isScalarUrl(this, mWidgetUrl)
+        return widgetManager.isScalarUrl(this, mWidgetUrl)
     }
 
     /**
