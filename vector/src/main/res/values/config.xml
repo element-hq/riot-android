@@ -19,6 +19,7 @@
 
     <string-array name="integrations_widgets_urls" translatable="false">
         <item>https://scalar-staging.riot.im/scalar/api</item>
+        <item>https://scalar-staging.vector.im/api</item>
         <item>https://scalar.vector.im/api</item>
     </string-array>
 
