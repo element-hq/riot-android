@@ -109,6 +109,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     @Override
     @SuppressLint("NewApi")
     public void initUiAndData() {
+        if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) == null) {
+            finish();
+            return;
+        }
         // Waiting View
         setWaitingView(findViewById(R.id.jitsi_progress_layout));
 
