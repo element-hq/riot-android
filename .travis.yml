@@ -45,7 +45,7 @@ script:
   # Build app (assembleAppRelease assembleAppfdroidRelease)
   # Build Android test (assembleAndroidTest)
   # Code quality (lintAppRelease lintAppfdroidRelease)
-  - ./gradlew clean assembleAppRelease assembleAppfdroidRelease assembleAndroidTest lintAppRelease lintAppfdroidRelease --stacktrace
+  - ./gradlew clean assembleAppRelease assembleAppfdroidRelease assembleAndroidTest lintAppRelease lintAppfdroidRelease --stacktrace --no-daemon
   # Run unitary test (Disable for now, see https://travis-ci.org/vector-im/riot-android/builds/502504370)
   # - ./gradlew testAppReleaseUnitTest --stacktrace
   # Other code quality check
