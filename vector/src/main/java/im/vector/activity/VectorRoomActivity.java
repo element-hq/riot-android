@@ -126,6 +126,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SlashCommandsParser;
+import im.vector.util.TermsAcceptUtilsKt;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
@@ -1634,9 +1635,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mRoom == null) {
             return;
         }
-
         final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
-        startActivity(intent);
+        TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, null);
+//        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+//        if (wm == null) {
+//            //Should not happen this action is not activated if no wm
+//            return;
+//        }
+//        if (PreferencesManager.hasAgreedToIntegrationManager(this, mSession.getMyUserId(), wm.getUIUrl())) {
+//            final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
+//            startActivity(intent);
+//        } else {
+//            //Need to ask for consent
+//            new AlertDialog.Builder(this)
+//                    .setTitle(R.string.widget_integration_accept_terms_dialog_title)
+//                    .setMessage(R.string.widget_integration_accept_terms_dialog_message)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setNeutralButton(R.string.review, null)
+//                    .setPositiveButton(R.string.accept, null)
+//                    .setNegativeButton(R.string.decline, null)
+//                    .show();
+//        }
+
     }
 
     /**
@@ -2281,6 +2301,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     private void startStickerPickerActivity() {
+//        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+//        if (wm == null) {
+//            //Should not happen this action is not activated if no wm
+//            return;
+//        }
+//        if (!PreferencesManager.hasAgreedToIntegrationManager(this, mSession.getMyUserId(), wm.getUIUrl())) {
+//            //Need to ask for consent
+//            new AlertDialog.Builder(this)
+//                    .setTitle(R.string.widget_integration_accept_terms_dialog_title)
+//                    .setMessage(R.string.widget_integration_accept_terms_dialog_message)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setNeutralButton(R.string.review, null)
+//                    .setPositiveButton(R.string.accept, null)
+//                    .setNegativeButton(R.string.decline, null)
+//                    .show();
+//            return;
+//        }
         // Search for the sticker picker widget in the user account
         Map<String, Object> userWidgets = mSession.getUserWidgets();
 
@@ -2325,9 +2362,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
+            TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
 
-            startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
+//            Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
+//            startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
         }
+
     }
 
     /**
