@@ -34,6 +34,7 @@ import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
+import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.JsonUtils
@@ -76,6 +77,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     private var mHistoryAlreadyCleared = false
 
 
+    lateinit var widgetManager : WidgetsManager
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
@@ -94,6 +96,11 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
 
+        widgetManager = WidgetManagerProvider.getWidgetManager(this) ?: run {
+            finish()
+            return
+        }
+
         getScalarTokenAndLoadUrl()
     }
 
@@ -101,7 +108,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         if (canScalarTokenBeProvided()) {
             showWaitingView()
 
-            WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
+            widgetManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
                 override fun onSuccess(scalarToken: String) {
                     mIsRefreshingToken = false
                     hideWaitingView()
@@ -205,7 +212,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                             && !mTokenAlreadyRefreshed) {
                         mTokenAlreadyRefreshed = true
                         mIsRefreshingToken = true
-                        WidgetsManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
+                        widgetManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
 
                         // Hide the webview because it's displaying an error message we try to fix by refreshing the token
                         mWebView.isVisible = false

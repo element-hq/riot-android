@@ -645,6 +645,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
                 .summary = mSession.homeServerConfig.identityServerUri.toString()
 
+        findPreference(PreferencesManager.SETTINGS_INTEGRATION_SERVER_UI_URL)
+                .summary = PreferencesManager.getIntegrationServerUiUrl(context)
+
         // Analytics
 
         // Analytics tracking management

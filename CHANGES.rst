@@ -6,7 +6,7 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.XX
 
 Features:
- -
+ - Make Widget/Integration Manager optional (#3224)
 
 Improvements:
  -

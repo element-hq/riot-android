@@ -16,6 +16,7 @@
     <!-- Widget urls -->
     <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
     <string name="integrations_rest_url" translatable="false">"https://scalar.vector.im/api"</string>
+    <string name="integrations_jitsi_widget_url" translatable="false">"https://scalar.vector.im/api/widgets/jitsi.html"</string>
 
     <string-array name="integrations_widgets_urls" translatable="false">
         <item>https://scalar-staging.riot.im/scalar/api</item>
