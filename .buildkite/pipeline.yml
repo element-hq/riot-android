@@ -12,8 +12,8 @@ steps:
         queue: "medium"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean lintAppRelease assembleAppDebug --stacktrace --no-daemon"
-      - "./gradlew lintAppfdroidRelease assembleAppfdroidDebug --stacktrace --no-daemon"
+      - "./gradlew clean lintAppRelease assembleAppDebug --stacktrace"
+      - "./gradlew lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
