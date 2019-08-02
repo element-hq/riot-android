@@ -148,7 +148,9 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
 
     override fun onCleared() {
         super.onCleared()
-        session.crypto?.shortCodeVerificationManager?.removeListener(this)
+        if (::session.isInitialized) {
+            session.crypto?.shortCodeVerificationManager?.removeListener(this)
+        }
     }
 
 

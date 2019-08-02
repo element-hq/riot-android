@@ -16,6 +16,7 @@ Other changes:
 
 Bugfix:
  - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)
+ - SAS: fix crash when destroying activity (#3240)
 
 Translations:
  -
