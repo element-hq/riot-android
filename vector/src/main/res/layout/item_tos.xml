@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="8dp">
+
+    <CheckBox
+        android:id="@+id/term_accept_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/term_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
+        app:layout_constraintStart_toEndOf="@id/term_accept_checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Integration Mannager" />
+
+    <TextView
+        android:id="@+id/term_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textColor="?android:attr/textColorSecondary"
+        app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
+        app:layout_constraintStart_toStartOf="@+id/term_name"
+        app:layout_constraintTop_toBottomOf="@+id/term_name"
+        tools:text="Use bots, bridges, widget and sticker packs." />
+
+    <!-- Do not use drawableEnd on the TextView because of RTL support -->
+    <ImageView
+        android:id="@+id/term_policy_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="?android:attr/textColorPrimary"
+        android:rotationY="@integer/rtl_mirror_flip"
+        android:src="@drawable/ic_material_chevron_right_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--<Button-->
+    <!--android:id="@+id/terms_bottom_decline"-->
+    <!--style="@style/VectorButtonStyleFlat"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:text="@string/review"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/term_description" />-->
+
+</android.support.constraint.ConstraintLayout>

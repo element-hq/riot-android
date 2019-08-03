@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.util
+package im.vector.fragments.terms
 
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
 import im.vector.R
+import im.vector.util.PreferencesManager
+import im.vector.util.openUrlInExternalBrowser
 import im.vector.widgets.WidgetManagerProvider
 import org.matrix.androidsdk.MXSession
 
