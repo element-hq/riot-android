@@ -164,9 +164,9 @@ public class PreferencesManager {
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
     //Integrations
-    public static final String SETTINGS_INTEGRATION_SERVER_UI_URL = "SETTINGS_INTEGRATION_SERVER_UI_URL";
-    public static final String SETTINGS_INTEGRATION_SERVER_API_URL = "SETTINGS_INTEGRATION_SERVER_API_URL";
-    public static final String SETTINGS_INTEGRATION_SERVER_JITSI_URL = "SETTINGS_INTEGRATION_SERVER_JITSI_URL";
+    public static final String SETTINGS_INTEGRATION_MANAGER_UI_URL = "SETTINGS_INTEGRATION_MANAGER_UI_URL";
+    public static final String SETTINGS_INTEGRATION_MANAGER_API_URL = "SETTINGS_INTEGRATION_MANAGER_API_URL";
+    public static final String SETTINGS_INTEGRATION_MANAGER_JITSI_URL = "SETTINGS_INTEGRATION_MANAGER_JITSI_URL";
     public static final String SETTINGS_INTEGRATION_WHITELIST_URL = "SETTINGS_INTEGRATION_WHITELIST_URL";
 
     // other
@@ -274,40 +274,40 @@ public class PreferencesManager {
                 .apply();
     }
 
-    public static String getIntegrationServerUiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_SERVER_UI_URL,
+    public static String getIntegrationManagerUiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_UI_URL,
                 context.getString(R.string.integrations_ui_url));
     }
 
-    public static String getIntegrationServerApiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_SERVER_API_URL,
+    public static String getIntegrationManagerApiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_API_URL,
                 context.getString(R.string.integrations_rest_url));
     }
 
-    public static String getIntegrationServerJitsiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_SERVER_JITSI_URL,
+    public static String getIntegrationManagerJitsiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL,
                 context.getString(R.string.integrations_jitsi_widget_url));
     }
 
 
-    public static void setIntegrationServerUrls(Context context, String uiURl, String apiURl, String jitsyUrl) {
+    public static void setIntegrationManagerUrls(Context context, String uiURl, String apiURl, String jitsyUrl) {
         if (uiURl != null) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
-                    .putString(SETTINGS_INTEGRATION_SERVER_UI_URL, uiURl)
+                    .putString(SETTINGS_INTEGRATION_MANAGER_UI_URL, uiURl)
                     .apply();
         }
         if (apiURl != null) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
-                    .putString(SETTINGS_INTEGRATION_SERVER_API_URL, apiURl)
+                    .putString(SETTINGS_INTEGRATION_MANAGER_API_URL, apiURl)
                     .apply();
         }
 
         if (jitsyUrl != null) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
-                    .putString(SETTINGS_INTEGRATION_SERVER_JITSI_URL, jitsyUrl)
+                    .putString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL, jitsyUrl)
                     .apply();
         }
     }

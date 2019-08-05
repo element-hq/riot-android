@@ -16,7 +16,6 @@
 package im.vector.widgets
 
 import android.content.Context
-import im.vector.R
 import im.vector.util.PreferencesManager
 import java.net.MalformedURLException
 import java.net.URL
@@ -29,9 +28,9 @@ object WidgetManagerProvider {
         if (widgetsManager != null) {
             return widgetsManager
         }
-        val uiURl = PreferencesManager.getIntegrationServerUiUrl(context)
-        val apiURL = PreferencesManager.getIntegrationServerApiUrl(context)
-        val jitsiUrl = PreferencesManager.getIntegrationServerJitsiUrl(context)
+        val uiURl = PreferencesManager.getIntegrationManagerUiUrl(context)
+        val apiURL = PreferencesManager.getIntegrationManagerApiUrl(context)
+        val jitsiUrl = PreferencesManager.getIntegrationManagerJitsiUrl(context)
         if (uiURl.isNullOrBlank() || apiURL.isNullOrBlank() || jitsiUrl.isNullOrBlank()) return null
         return try {
             //Very basic validity check (well formed url)
@@ -39,7 +38,7 @@ object WidgetManagerProvider {
             URL(apiURL)
             URL(jitsiUrl)
             val defaultWhitelist = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context))
-            defaultWhitelist.add(0,apiURL)
+            defaultWhitelist.add(0, apiURL)
 
             val config = IntegrationManagerConfig(
                     uiUrl = uiURl,

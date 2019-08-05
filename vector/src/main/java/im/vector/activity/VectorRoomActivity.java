@@ -3996,7 +3996,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) == null) {
             // display the dialog with the info text
             new AlertDialog.Builder(this)
-                    .setMessage(R.string.widget_integration_no_server)
+                    .setMessage(R.string.integration_manager_not_configured)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(R.string.ok, null)
                     .show();
