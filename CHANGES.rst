@@ -22,7 +22,7 @@ Translations:
  -
 
 Build:
- -
+ - Split APK: generate one APK per arch, to reduce APK size
 
 Changes in Riot 0.9.3 (2019-07-24)
 ===================================================
