@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -21,6 +23,11 @@ buildscript {
 kapt {
     correctErrorTypes = true
 }
+
+// map for the version codes
+// x86 must have greater values than arm, see https://software.intel.com/en-us/android/articles/google-play-supports-cpu-architecture-filtering-for-multiple-apk
+// 64 bits have greater value than 32 bits
+ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
 android {
     compileSdkVersion 28
@@ -66,6 +73,13 @@ android {
 
             // Specifies that we do not want to also generate a universal APK that includes all ABIs.
             universalApk false
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+            output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
         }
     }
 
