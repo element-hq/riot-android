@@ -1029,7 +1029,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1257,11 +1257,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1340,7 +1340,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1578,5 +1578,37 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nRiotX ezeket támogatja: • Bejelentkezés létező fiókba • Szoba készítés és nyilvános szobába való belépés • Meghívók fogadása és elutasítás • Felhasználók szobáinak listázása • Szoba adatainak megtekintése • Szöveges üzenet küldése • Csatolmány küldése • Titkosított szobákban üzenetek olvasása és írása • Titkosítás: Végponttól végpontig titkosító kulcsok mentése, fejlett eszköz ellenőrzés, kulcs megosztás kérése és válasz • „Push” értesítések • Világos, sötét és fekete téma
 \n
 \nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Közvetlen beszélgetések indítása • Hívások • Kisalkalmazások • …</string>
+
+<string name="bottom_action_people_x">Közvetlen beszélgetés</string>
+
+    <string name="send_file_step_idle">Várakozik…</string>
+    <string name="send_file_step_encrypting_thumbnail">Bélyegképek titkosítása…</string>
+    <string name="send_file_step_sending_thumbnail">Bélyegképek küldése (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Fájl titkosítása…</string>
+    <string name="send_file_step_sending_file">Fájl küldése (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Fájl letöltése %1$s…</string>
+    <string name="downloaded_file">%1$s fájl letöltve!</string>
+
+    <string name="edited_suffix">(szerkesztve)</string>
+
+    <string name="riotx_no_registration_notice">%1$s fiók készítéshez.</string>
+    <string name="riotx_no_registration_notice_colored_part">Használd a régi alkalmazást</string>
+
+
+    <string name="message_edits">Üzenet szerkesztések</string>
+    <string name="no_message_edits_found">Szerkesztések nem találhatók</string>
+
+    <string name="room_filtering_filter_hint">Beszélgetések szűrése…</string>
+    <string name="room_filtering_footer_title">Nem találod amit keresel\?</string>
+    <string name="room_filtering_footer_create_new_room">Új szoba készítése</string>
+    <string name="room_filtering_footer_create_new_direct_message">Új közvetlen üzenet küldése</string>
+    <string name="room_filtering_footer_open_room_directory">Szoba lista megjelenítése</string>
+
+    <string name="room_directory_search_hint">Név vagy azonosító (#pelda:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Válasz engedélyezése húzással az idővonalon</string>
+
+    <string name="link_copied_to_clipboard">Hivatkozás a vágólapra másolva</string>
 
 </resources>
