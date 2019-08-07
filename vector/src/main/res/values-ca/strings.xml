@@ -12,7 +12,7 @@
     <string name="black_them">Tema negre</string>
 
     <!-- permanent notification subtitle -->
-    <string name="notification_sync_in_progress">Sincronitzant</string>
+    <string name="notification_sync_in_progress">S\'està sincronitzant…</string>
     <string name="notification_listening_for_events">Escolta esdeveniments</string>
     <string name="notification_noisy_notifications">Notificacions sorolloses</string>
     <string name="notification_silent_notifications">Notificacions silencioses</string>
@@ -889,7 +889,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega Riot a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="status_theme">Motiu Status.im</string>
+    <string name="status_theme">Tema Status.im</string>
 
     <string name="missing_permissions_error">Manquen permisos per a dur a terme aquesta acció.</string>
     <string name="dialog_title_error">Error</string>
