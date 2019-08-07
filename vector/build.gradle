@@ -50,6 +50,11 @@ android {
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
 
+        // Keep abiFilter for the universalApk
+        ndk {
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
+        }
+
         multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
