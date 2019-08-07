@@ -507,7 +507,7 @@
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
     <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
     <string name="room_prompt_resend">Resend all</string>
-    <string name="room_prompt_cancel">cancel all</string>
+    <string name="room_prompt_cancel">Cancel all</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
@@ -1630,5 +1630,14 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
+    <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="creating_direct_room">"Creating room…"</string>
+    <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
+    <string name="direct_room_start_search">"Start typing to get results"</string>
+    <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
+
+    <string name="joining_room">"Joining room…"</string>
+
+    <string name="message_view_edit_history">View Edit History</string>
 
 </resources>
