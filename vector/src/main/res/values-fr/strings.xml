@@ -1580,7 +1580,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \n
 \nToutes les fonctionnalités de Riot ne sont pas encore implémentées dans RiotX. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Création de compte • Réglages des salons (lister les membres du salon etc.) • Création de salons de discussion directe • Appels • Widgets • …</string>
 
-<string name="bottom_action_people_x">Messages directs</string>
+    <string name="bottom_action_people_x">Messages directs</string>
 
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>

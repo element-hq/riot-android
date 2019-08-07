@@ -1568,7 +1568,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_unable_to_get_trust_info">Error obteniendo información de confiabilidad</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
-<string name="room_list_catchup_empty_title">!Estás al día!</string>
+    <string name="room_list_catchup_empty_title">!Estás al día!</string>
     <string name="alpha_disclaimer_content_line_1">Mientras RiotX esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
@@ -1576,4 +1576,4 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="send_suggestion">Haz una sugerencia</string>
     <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
     <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
-    </resources>
+</resources>

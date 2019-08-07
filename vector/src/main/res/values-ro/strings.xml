@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">ro</string>
+<resources>
+    <string name="resources_language">ro</string>
     <string name="resources_country_code">RO</string>
 
     <string name="light_theme">Temă luminoasă</string>
@@ -16,4 +17,4 @@
     <string name="title_activity_home">Mesaje</string>
     <string name="title_activity_room">Cameră</string>
     <string name="title_activity_settings">Setări</string>
-    </resources>
+</resources>

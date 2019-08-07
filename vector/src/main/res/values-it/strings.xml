@@ -1623,7 +1623,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 \n
 \nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Creazione di stanze di chat diretta • Chiamate • Widget • …</string>
 
-<string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
+    <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
 
     <string name="send_file_step_idle">In attesa…</string>

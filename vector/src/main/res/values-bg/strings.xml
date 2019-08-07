@@ -1568,7 +1568,7 @@
 \n
 \nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Създаване на директни чатове • Обаждания • Приспособления • …</string>
 
-<string name="bottom_action_people_x">Директни съобщения</string>
+    <string name="bottom_action_people_x">Директни съобщения</string>
 
     <string name="send_file_step_idle">Изчакване…</string>
     <string name="send_file_step_encrypting_thumbnail">Шифроване на малката снимка…</string>

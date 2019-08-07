@@ -1532,7 +1532,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 直接聊天室建立 • 通話 • 小工具 • …</string>
 
-<string name="bottom_action_people_x">直接訊息</string>
+    <string name="bottom_action_people_x">直接訊息</string>
 
     <string name="send_file_step_idle">正在等待……</string>
     <string name="send_file_step_encrypting_thumbnail">正在加密縮圖……</string>

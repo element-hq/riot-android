@@ -1575,7 +1575,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
-<string name="bottom_action_people_x">Mezu zuzenak</string>
+    <string name="bottom_action_people_x">Mezu zuzenak</string>
 
     <string name="send_file_step_idle">Itxaroten…</string>
     <string name="send_file_step_encrypting_thumbnail">Iruditxoa zifratzen…</string>

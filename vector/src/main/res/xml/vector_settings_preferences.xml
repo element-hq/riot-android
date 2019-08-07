@@ -426,9 +426,9 @@
 
 
         <im.vector.preference.VectorPreference
-            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
             android:defaultValue="@string/integrations_ui_url"
-            android:title="@string/settings_integration_manager"/>
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
+            android:title="@string/settings_integration_manager" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
