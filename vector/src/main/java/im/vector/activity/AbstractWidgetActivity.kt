@@ -17,6 +17,7 @@
 package im.vector.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -42,6 +43,7 @@ import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.rest.client.TermsRestClient
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -77,7 +79,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     private var mHistoryAlreadyCleared = false
 
 
-    lateinit var widgetManager : WidgetsManager
+    lateinit var widgetManager: WidgetsManager
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
@@ -125,6 +127,12 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onMatrixError(e: MatrixError) {
+                    if (e.errcode == MatrixError.TERMS_NOT_SIGNED) {
+                        mIsRefreshingToken = false
+                        hideWaitingView()
+                        presentTermsForServices()
+                        return
+                    }
                     onError(e.localizedMessage)
                 }
 
@@ -136,6 +144,18 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
             // Scalar token cannot be provided
             launchUrl(null)
         }
+    }
+
+    fun presentTermsForServices() {
+        val wm = WidgetManagerProvider.getWidgetManager(this)
+        if (wm == null) {  // should not happen
+            finish()
+            return
+        }
+        startActivityForResult(ReviewTermsActivity.intent(this,
+                TermsRestClient.Companion.ServiceType.IntegrationManager,
+                wm.uiUrl), TERMS_REQ)
+
     }
 
     /* ==========================================================================================
@@ -150,6 +170,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == TERMS_REQ) {
+            if (resultCode == Activity.RESULT_OK) {
+                getScalarTokenAndLoadUrl()
+            } else {
+                finish()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
     /* ==========================================================================================
      * PRIVATE
      * ========================================================================================== */
@@ -540,6 +571,8 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
     companion object {
         private val LOG_TAG = AbstractWidgetActivity::class.java.simpleName
+
+        val TERMS_REQ = 1
 
         /**
          * the parameters

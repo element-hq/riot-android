@@ -1635,16 +1635,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mRoom == null) {
             return;
         }
-        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
-        TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, null);
-//        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
-//        if (wm == null) {
-//            //Should not happen this action is not activated if no wm
-//            return;
-//        }
+//        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
+//        startActivity(intent);
+//        final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
+//        TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, null);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm == null) {
+            //Should not happen this action is not activated if no wm
+            return;
+        }
 //        if (PreferencesManager.hasAgreedToIntegrationManager(this, mSession.getMyUserId(), wm.getUIUrl())) {
-//            final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
-//            startActivity(intent);
+            final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
+            startActivity(intent);
 //        } else {
 //            //Need to ask for consent
 //            new AlertDialog.Builder(this)
@@ -2361,11 +2363,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 return;
             }
 
-            Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
-            TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
-
 //            Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
-//            startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
+//            TermsAcceptUtilsKt.checkTermsForIntegrationMgr(this, mSession, intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
+
+            Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
+            startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
         }
 
     }

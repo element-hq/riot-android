@@ -15,8 +15,12 @@
  */
 package im.vector.activity
 
+import android.content.Context
+import android.content.Intent
 import im.vector.R
 import im.vector.fragments.terms.AcceptTermsFragment
+import im.vector.fragments.terms.ServiceTermsArgs
+import org.matrix.androidsdk.rest.client.TermsRestClient
 
 
 class ReviewTermsActivity : SimpleFragmentActivity() {
@@ -27,6 +31,17 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, AcceptTermsFragment.newInstance())
                     .commitNow()
+        }
+    }
+
+    companion object {
+
+        const val EXTRA_INFO = "EXTRA_INFO"
+
+        fun intent(context: Context, serviceType: TermsRestClient.Companion.ServiceType, baseUrl: String): Intent {
+            return Intent(context, ReviewTermsActivity::class.java).also {
+                it.putExtra(EXTRA_INFO, ServiceTermsArgs(serviceType, baseUrl))
+            }
         }
     }
 }

@@ -1103,6 +1103,7 @@
     <string name="settings_labs_enable_send_voice_summary">This option requires a third party application to record the messages.</string>
     <string name="widget_integration_accept_terms_dialog_title">Accept to continue</string>
     <string name="widget_integration_accept_terms_dialog_message">You must accept the Terms of Service to use bots, bridgets widgets &amp; sticker packs.</string>
+    <string name="widget_integration_review_terms">To continue you need to accept the Terms of this service.</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>

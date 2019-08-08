@@ -535,7 +535,32 @@ public class WidgetsManager {
         final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
 
         if (null != scalarToken) {
-            callback.onSuccess(scalarToken);
+//            callback.onSuccess(scalarToken);
+            WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
+            widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Map<String, String>>() {
+
+                @Override
+                public void onSuccess(Map<String, String> info) {
+                    if (null != callback) {
+                        callback.onSuccess(scalarToken);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    // TODO In case of 403, try to refresh the scalar token
+                    if (null != callback) {
+                        callback.onNetworkError(e);
+                    }
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    if (null != callback) {
+                        callback.onMatrixError(e);
+                    }
+                }
+            });
         } else {
             session.openIdToken(new SimpleApiCallback<Map<Object, Object>>(callback) {
                 @Override
@@ -547,16 +572,40 @@ public class WidgetsManager {
                         public void onSuccess(Map<String, String> response) {
                             String token = response.get("scalar_token");
 
-                            if (null != token) {
-                                PreferenceManager.getDefaultSharedPreferences(context)
-                                        .edit()
-                                        .putString(preferenceKey, token)
-                                        .apply();
-                            }
+                            // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
 
-                            if (null != callback) {
-                                callback.onSuccess(token);
-                            }
+                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Map<String, String>>() {
+                                @Override
+                                public void onSuccess(Map<String, String> info) {
+                                    if (null != token) {
+                                        PreferenceManager.getDefaultSharedPreferences(context)
+                                                .edit()
+                                                .putString(preferenceKey, token)
+                                                .apply();
+                                    }
+
+                                    if (null != callback) {
+                                        callback.onSuccess(token);
+                                    }
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    // In case of 403, try to refresh the scalar token
+                                    if (null != callback) {
+                                        callback.onNetworkError(e);
+                                    }
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (null != callback) {
+                                        callback.onMatrixError(e);
+                                    }
+                                }
+
+                            });
+
                         }
                     });
                 }
