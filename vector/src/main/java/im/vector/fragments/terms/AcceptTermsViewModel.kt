@@ -92,11 +92,7 @@ class AcceptTermsViewModel : ViewModel() {
         )
     }
 
-    fun reviewTerm(url: String) {
-
-    }
-
-    fun loadTerms() {
+    fun loadTerms(preferredLanguageCode: String) {
         isLoading.postValue(true)
         hasError.postValue(false)
 
@@ -104,23 +100,20 @@ class AcceptTermsViewModel : ViewModel() {
             override fun onSuccess(info: GetTermsResponse) {
 
                 val terms = mutableListOf<Term>()
-                info.serverResponse.getLocalizedPrivacyPolicies()?.let {
-                    Log.e("FOO", it.localizedUrl)
+                info.serverResponse.getLocalizedPrivacyPolicies(preferredLanguageCode)?.let {
                     terms.add(
                             Term(it.localizedUrl ?: "",
                                     it.localizedName ?: "",
-                                    // TODO i18n
-                                    "Utiliser des robots, des passerelles, des widgets ou des packs de stickers",
+                                    it.version,
                                     accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
                             )
                     )
                 }
-                info.serverResponse.getLocalizedTermOfServices()?.let {
+                info.serverResponse.getLocalizedTermOfServices(preferredLanguageCode)?.let {
                     terms.add(
                             Term(it.localizedUrl ?: "",
                                     it.localizedName ?: "",
-                                    // TODO i18n
-                                    "Utiliser des robots, des passerelles, des widgets ou des packs de stickers",
+                                    it.version,
                                     accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
                             )
                     )
@@ -157,7 +150,6 @@ class AcceptTermsViewModel : ViewModel() {
 data class Term(
         val url: String,
         val name: String,
-        val description: String? = null,
         val version: String? = null,
         val accepted: Boolean = false
 )

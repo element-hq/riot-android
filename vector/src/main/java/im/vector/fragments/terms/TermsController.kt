@@ -20,7 +20,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.R
 import im.vector.ui.epoxy.genericItemHeader
 
-class TermsController(private val listener: Listener) : TypedEpoxyController<List<Term>>() {
+class TermsController(private val itemDescription: String,
+                      private val listener: Listener) : TypedEpoxyController<List<Term>>() {
 
     override fun buildModels(data: List<Term>?) {
         data?.let {
@@ -32,9 +33,8 @@ class TermsController(private val listener: Listener) : TypedEpoxyController<Lis
                 terms {
                     id(term.url)
                     name(term.name)
-                    description(term.description)
+                    description(itemDescription)
                     checked(term.accepted)
-
 
                     clickListener(View.OnClickListener { listener.review(term) })
                     checkChangeListener { _, isChecked ->

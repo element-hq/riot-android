@@ -1645,8 +1645,10 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="message_view_edit_history">View Edit History</string>
 
-    <!-- TErms -->
+    <!-- Terms -->
     <string name="terms_of_service">Terms of Service</string>
     <string name="review_terms">Review Terms</string>
+    <string name="terms_description_for_identity_server">Be discoverable by others</string>
+    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
 
 </resources>

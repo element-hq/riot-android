@@ -30,6 +30,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.openUrlInExternalBrowser
+import org.matrix.androidsdk.features.terms.TermsManager
 
 class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
 
@@ -38,7 +39,7 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
 
     override fun getLayoutResId(): Int = R.layout.fragment_accept_terms
 
-    private val termsController = TermsController(this)
+    private lateinit var termsController: TermsController
 
     @BindView(R.id.terms_recycler_view)
     lateinit var termsList: EpoxyRecyclerView
@@ -55,11 +56,17 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        termsList.setController(termsController)
-
         viewModel = ViewModelProviders.of(requireActivity()).get(AcceptTermsViewModel::class.java)
 
-        viewModel.loadTerms()
+        val description = when (viewModel.termsArgs.type) {
+            TermsManager.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsManager.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
+        }
+
+        termsController = TermsController(description, this)
+        termsList.setController(termsController)
+
+        viewModel.loadTerms(getString(R.string.resources_language))
 
         viewModel.termsList.observe(this, Observer { terms ->
             if (terms != null) {
