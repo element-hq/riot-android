@@ -168,7 +168,6 @@ public class PreferencesManager {
     public static final String SETTINGS_INTEGRATION_MANAGER_API_URL = "SETTINGS_INTEGRATION_MANAGER_API_URL";
     public static final String SETTINGS_INTEGRATION_MANAGER_JITSI_URL = "SETTINGS_INTEGRATION_MANAGER_JITSI_URL";
     public static final String SETTINGS_INTEGRATION_WHITELIST_URL = "SETTINGS_INTEGRATION_WHITELIST_URL";
-    public static final String SETTINGS_INTEGRATION_AGREEMENT_PREFIX = "SETTINGS_INTEGRATION_AGREEMENT_PREFIX_";
 
     // other
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
@@ -575,11 +574,6 @@ public class PreferencesManager {
      */
     public static boolean useJitsiConfCall(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
-    }
-
-    public static boolean hasAgreedToIntegrationManager(Context context, String userID, String integrationMgrServer) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(SETTINGS_INTEGRATION_AGREEMENT_PREFIX + userID + "_" + integrationMgrServer, false);
     }
 
     /**

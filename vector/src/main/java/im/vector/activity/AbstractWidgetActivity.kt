@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
+import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
@@ -155,7 +156,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
         startActivityForResult(ReviewTermsActivity.intent(this,
                 TermsManager.ServiceType.IntegrationManager, wm.uiUrl, token),
-                TERMS_REQ)
+                TERMS_REQUEST_CODE)
     }
 
     /* ==========================================================================================
@@ -171,7 +172,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == TERMS_REQ) {
+        if (requestCode == TERMS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 getScalarTokenAndLoadUrl()
             } else {
@@ -571,8 +572,6 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
     companion object {
         private val LOG_TAG = AbstractWidgetActivity::class.java.simpleName
-
-        val TERMS_REQ = 1
 
         /**
          * the parameters

@@ -43,21 +43,11 @@
         android:id="@+id/term_policy_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tint="?android:attr/textColorPrimary"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_material_chevron_right_black"
+        android:tint="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--<Button-->
-    <!--android:id="@+id/terms_bottom_decline"-->
-    <!--style="@style/VectorButtonStyleFlat"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:text="@string/review"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@id/term_description" />-->
 
 </android.support.constraint.ConstraintLayout>
