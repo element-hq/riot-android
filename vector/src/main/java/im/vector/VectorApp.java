@@ -194,8 +194,8 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "onCreate");
 //        PreferencesManager.setIntegrationServerUrls(this,"https://scolar.vectir.im/",
 //                "https://scolar.vectir.im/","https://scolar.vectir.im/");
-        PreferencesManager.setIntegrationServerUrls(this,getString(R.string.integrations_ui_url),
-                getString(R.string.integrations_rest_url),getString(R.string.integrations_jitsi_widget_url));
+        PreferencesManager.setIntegrationServerUrls(this, getString(R.string.integrations_ui_url),
+                getString(R.string.integrations_rest_url), getString(R.string.integrations_jitsi_widget_url));
         super.onCreate();
 
         mLifeCycleListener = new VectorLifeCycleObserver();

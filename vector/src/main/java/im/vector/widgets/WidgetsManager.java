@@ -30,6 +30,7 @@ import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.features.terms.TermsNotSignedException;
 import org.matrix.androidsdk.rest.model.Event;
 
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class WidgetsManager {
     public String getUIUrl() {
         return config.getUiUrl();
     }
+
     /**
      * Widget error code
      */
@@ -537,7 +539,7 @@ public class WidgetsManager {
         if (null != scalarToken) {
 //            callback.onSuccess(scalarToken);
             WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
-            widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Map<String, String>>() {
+            widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Map<String, String>>(callback) {
 
                 @Override
                 public void onSuccess(Map<String, String> info) {
@@ -547,17 +549,13 @@ public class WidgetsManager {
                 }
 
                 @Override
-                public void onNetworkError(Exception e) {
-                    // TODO In case of 403, try to refresh the scalar token
-                    if (null != callback) {
-                        callback.onNetworkError(e);
-                    }
-                }
-
-                @Override
                 public void onMatrixError(MatrixError e) {
-                    if (null != callback) {
-                        callback.onMatrixError(e);
+                    if (MatrixError.TERMS_NOT_SIGNED.equals(e.errcode)) {
+                        if (null != callback) {
+                            callback.onUnexpectedError(new TermsNotSignedException(scalarToken));
+                        }
+                    } else {
+                        super.onMatrixError(e);
                     }
                 }
             });
@@ -572,38 +570,31 @@ public class WidgetsManager {
                         public void onSuccess(Map<String, String> response) {
                             String token = response.get("scalar_token");
 
+                            if (null != token) {
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putString(preferenceKey, token)
+                                        .apply();
+                            }
+
                             // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
 
-                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Map<String, String>>() {
+                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Map<String, String>>(callback) {
                                 @Override
                                 public void onSuccess(Map<String, String> info) {
-                                    if (null != token) {
-                                        PreferenceManager.getDefaultSharedPreferences(context)
-                                                .edit()
-                                                .putString(preferenceKey, token)
-                                                .apply();
-                                    }
-
                                     if (null != callback) {
                                         callback.onSuccess(token);
                                     }
                                 }
 
                                 @Override
-                                public void onNetworkError(Exception e) {
-                                    // In case of 403, try to refresh the scalar token
-                                    if (null != callback) {
-                                        callback.onNetworkError(e);
-                                    }
-                                }
-
-                                @Override
                                 public void onMatrixError(MatrixError e) {
-                                    if (null != callback) {
-                                        callback.onMatrixError(e);
+                                    if (MatrixError.TERMS_NOT_SIGNED.equals(e.errcode)) {
+                                        callback.onUnexpectedError(new TermsNotSignedException(token));
+                                    } else {
+                                        super.onMatrixError(e);
                                     }
                                 }
-
                             });
 
                         }

@@ -43,7 +43,8 @@ import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.client.TermsRestClient
+import org.matrix.androidsdk.features.terms.TermsManager
+import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -127,17 +128,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onMatrixError(e: MatrixError) {
-                    if (e.errcode == MatrixError.TERMS_NOT_SIGNED) {
-                        mIsRefreshingToken = false
-                        hideWaitingView()
-                        presentTermsForServices()
-                        return
-                    }
                     onError(e.localizedMessage)
                 }
 
                 override fun onUnexpectedError(e: Exception) {
-                    onError(e.localizedMessage)
+                    if (e is TermsNotSignedException) {
+                        mIsRefreshingToken = false
+                        hideWaitingView()
+                        presentTermsForServices(e.token)
+                    } else {
+                        onError(e.localizedMessage)
+                    }
                 }
             })
         } else {
@@ -146,16 +147,15 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
-    fun presentTermsForServices() {
+    private fun presentTermsForServices(token: String?) {
         val wm = WidgetManagerProvider.getWidgetManager(this)
         if (wm == null) {  // should not happen
             finish()
             return
         }
         startActivityForResult(ReviewTermsActivity.intent(this,
-                TermsRestClient.Companion.ServiceType.IntegrationManager,
-                wm.uiUrl), TERMS_REQ)
-
+                TermsManager.ServiceType.IntegrationManager, wm.uiUrl, token),
+                TERMS_REQ)
     }
 
     /* ==========================================================================================

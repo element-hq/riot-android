@@ -15,12 +15,14 @@
  */
 package im.vector.activity
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import im.vector.R
 import im.vector.fragments.terms.AcceptTermsFragment
+import im.vector.fragments.terms.AcceptTermsViewModel
 import im.vector.fragments.terms.ServiceTermsArgs
-import org.matrix.androidsdk.rest.client.TermsRestClient
+import org.matrix.androidsdk.features.terms.TermsManager
 
 
 class ReviewTermsActivity : SimpleFragmentActivity() {
@@ -32,15 +34,22 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
                     .replace(R.id.container, AcceptTermsFragment.newInstance())
                     .commitNow()
         }
+
+        val viewModel = ViewModelProviders.of(this).get(AcceptTermsViewModel::class.java)
+        viewModel.termsArgs = intent.getParcelableExtra(EXTRA_INFO)
+
+        mSession = getSession(intent)
+
+        viewModel.initSession(session)
     }
 
     companion object {
 
-        const val EXTRA_INFO = "EXTRA_INFO"
+        private const val EXTRA_INFO = "EXTRA_INFO"
 
-        fun intent(context: Context, serviceType: TermsRestClient.Companion.ServiceType, baseUrl: String): Intent {
+        fun intent(context: Context, serviceType: TermsManager.ServiceType, baseUrl: String, token: String?): Intent {
             return Intent(context, ReviewTermsActivity::class.java).also {
-                it.putExtra(EXTRA_INFO, ServiceTermsArgs(serviceType, baseUrl))
+                it.putExtra(EXTRA_INFO, ServiceTermsArgs(serviceType, baseUrl, token))
             }
         }
     }

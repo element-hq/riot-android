@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package im.vector.fragments.terms
 
 import android.app.Activity
@@ -13,7 +28,6 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.epoxy.EpoxyRecyclerView
 import im.vector.R
-import im.vector.activity.ReviewTermsActivity
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.openUrlInExternalBrowser
 
@@ -38,17 +52,13 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
     @BindView(R.id.termsBottomBar)
     lateinit var bottomBar: ViewGroup
 
-    lateinit var termsArgs: ServiceTermsArgs
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        termsArgs = requireActivity().intent.getParcelableExtra(ReviewTermsActivity.EXTRA_INFO)
-
         termsList.setController(termsController)
 
-        viewModel = ViewModelProviders.of(this).get(AcceptTermsViewModel::class.java)
-        viewModel.termsArgs = termsArgs
+        viewModel = ViewModelProviders.of(requireActivity()).get(AcceptTermsViewModel::class.java)
+
         viewModel.loadTerms()
 
         viewModel.termsList.observe(this, Observer { terms ->
@@ -72,6 +82,13 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
                             //?
                         }
                         .show()
+            }
+        })
+
+        viewModel.successfullyAccepted.observe(this, Observer {
+            if (it == true) {
+                activity?.setResult(Activity.RESULT_OK)
+                activity?.finish()
             }
         })
     }
@@ -103,7 +120,6 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
 
     @OnClick(R.id.terms_bottom_decline)
     fun onDeclineButton() {
-        activity?.setResult(Activity.RESULT_CANCELED)
         activity?.finish()
     }
 }
