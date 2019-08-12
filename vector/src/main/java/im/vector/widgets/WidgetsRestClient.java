@@ -25,8 +25,7 @@ import org.matrix.androidsdk.RestClient;
 import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
-
-import java.util.Map;
+import org.matrix.androidsdk.rest.model.openid.RequestOpenIdTokenResponse;
 
 class WidgetsRestClient extends RestClient<WidgetsApi> {
 
@@ -47,20 +46,20 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * Register to the server
      *
-     * @param params   the put params.
-     * @param callback the asynchronous callback called when finished
+     * @param requestOpenIdTokenResponse the response of a OpenId request (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
+     * @param callback                   the asynchronous callback called when finished
      */
-    public void register(final Map<Object, Object> params, final ApiCallback<Map<String, String>> callback) {
+    public void register(final RequestOpenIdTokenResponse requestOpenIdTokenResponse, final ApiCallback<RegisterResponse> callback) {
         final String description = "Register";
 
-        mApi.register(params, API_VERSION).enqueue(new RestAdapterCallback<>(description,
-                mUnsentEventsManager, callback, () -> register(params, callback)));
+        mApi.register(requestOpenIdTokenResponse, API_VERSION).enqueue(new RestAdapterCallback<>(description,
+                mUnsentEventsManager, callback, () -> register(requestOpenIdTokenResponse, callback)));
     }
 
     /**
      * Validates the scalar token to the server
      */
-    public void validateToken(final String scalarToken, final ApiCallback<Map<String, String>> callback) {
+    public void validateToken(final String scalarToken, final ApiCallback<Void> callback) {
         final String description = "Validate";
 
         mApi.validateToken(scalarToken, API_VERSION).enqueue(new RestAdapterCallback<>(description,

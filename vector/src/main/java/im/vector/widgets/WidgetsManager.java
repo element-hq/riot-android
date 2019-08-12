@@ -19,6 +19,7 @@
 package im.vector.widgets;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
@@ -31,6 +32,7 @@ import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.features.terms.TermsNotSignedException;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.openid.RequestOpenIdTokenResponse;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -527,28 +529,24 @@ public class WidgetsManager {
      * @param session  the session
      * @param callback the asynchronous callback
      */
-    public void getScalarToken(final Context context, final MXSession session, final ApiCallback<String> callback) {
+    public void getScalarToken(final Context context, final MXSession session, @NonNull final ApiCallback<String> callback) {
         final TokensStore tokensStore = new TokensStore(context);
 
         final String scalarToken = tokensStore.getToken(session.getMyUserId(), config.getApiUrl());
 
         if (null != scalarToken) {
             WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
-            widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Map<String, String>>(callback) {
+            widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Void>(callback) {
 
                 @Override
-                public void onSuccess(Map<String, String> info) {
-                    if (null != callback) {
-                        callback.onSuccess(scalarToken);
-                    }
+                public void onSuccess(Void info) {
+                    callback.onSuccess(scalarToken);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
                     if (MatrixError.TERMS_NOT_SIGNED.equals(e.errcode)) {
-                        if (null != callback) {
-                            callback.onUnexpectedError(new TermsNotSignedException(scalarToken));
-                        }
+                        callback.onUnexpectedError(new TermsNotSignedException(scalarToken));
                     } else if (e.mStatus == HttpURLConnection.HTTP_FORBIDDEN /* 403 */) {
                         // Refresh the token
                         Log.w(LOG_TAG, "Invalid token, clear it and get a new token");
@@ -560,15 +558,15 @@ public class WidgetsManager {
                 }
             });
         } else {
-            session.openIdToken(new SimpleApiCallback<Map<Object, Object>>(callback) {
+            session.openIdToken(new SimpleApiCallback<RequestOpenIdTokenResponse>(callback) {
                 @Override
-                public void onSuccess(Map<Object, Object> tokensMap) {
+                public void onSuccess(RequestOpenIdTokenResponse info) {
                     WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
 
-                    widgetsRestClient.register(tokensMap, new SimpleApiCallback<Map<String, String>>(callback) {
+                    widgetsRestClient.register(info, new SimpleApiCallback<RegisterResponse>(callback) {
                         @Override
-                        public void onSuccess(Map<String, String> response) {
-                            String token = response.get("scalar_token");
+                        public void onSuccess(RegisterResponse info) {
+                            String token = info.scalarToken;
 
                             if (null != token) {
                                 tokensStore.setToken(session.getMyUserId(), config.getApiUrl(), token);
@@ -576,12 +574,10 @@ public class WidgetsManager {
 
                             // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
 
-                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Map<String, String>>(callback) {
+                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Void>(callback) {
                                 @Override
-                                public void onSuccess(Map<String, String> info) {
-                                    if (null != callback) {
-                                        callback.onSuccess(token);
-                                    }
+                                public void onSuccess(Void info) {
+                                    callback.onSuccess(token);
                                 }
 
                                 @Override
