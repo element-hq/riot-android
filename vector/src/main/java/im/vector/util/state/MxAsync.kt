@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.activity.util
+package im.vector.util.state
 
-const val FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE = 314
+import android.support.annotation.StringRes
 
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
+sealed class MxAsync<out T> {
 
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
+    open operator fun invoke(): T? = null
 
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
+    class Loading<out T> : MxAsync<T>()
 
-//const val BATTERY_OPTIMIZATION_FCM_REQUEST_CODE = 14000
-const val BATTERY_OPTIMIZATION_FDROID_REQUEST_CODE = 14001
+    data class Error<out T>(@StringRes val stringResId: Int) : MxAsync<T>()
 
-const val TERMS_REQUEST_CODE = 15000
+    data class Success<out T>(val value: T) : MxAsync<T>() {
+        override operator fun invoke(): T = value
+    }
 
+}

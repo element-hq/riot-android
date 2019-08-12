@@ -7,6 +7,7 @@ MatrixSdk:
 
 Features:
  - Make Widget/Integration manager optional (#3224)
+ - Handle terms and condition approval for IntegrationManager (#3225)
 
 Improvements:
  -

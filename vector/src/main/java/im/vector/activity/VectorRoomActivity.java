@@ -1635,6 +1635,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm == null) {
+            //Should not happen this action is not activated if no wm
+            return;
+        }
+
         final Intent intent = IntegrationManagerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), null, screenId);
         startActivity(intent);
     }
@@ -2325,9 +2331,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
 
             Intent intent = StickerPickerActivity.Companion.getIntent(this, mMyUserId, mRoom.getRoomId(), stickerWidgetUrl, stickerWidgetId);
-
             startActivityForResult(intent, RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE);
         }
+
     }
 
     /**

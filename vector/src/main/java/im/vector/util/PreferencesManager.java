@@ -290,7 +290,7 @@ public class PreferencesManager {
     }
 
 
-    public static void setIntegrationManagerUrls(Context context, String uiURl, String apiURl, String jitsyUrl) {
+    public static void setIntegrationManagerUrls(Context context, String uiURl, String apiURl, String jitsiUrl) {
         if (uiURl != null) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
@@ -304,10 +304,10 @@ public class PreferencesManager {
                     .apply();
         }
 
-        if (jitsyUrl != null) {
+        if (jitsiUrl != null) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
-                    .putString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL, jitsyUrl)
+                    .putString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL, jitsiUrl)
                     .apply();
         }
     }

@@ -433,6 +433,10 @@
             android:name=".activity.SASVerificationActivity"
             android:label="@string/title_activity_verify_device"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.ReviewTermsActivity"
+            android:label="@string/review_terms"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- FileProvider -->
         <provider

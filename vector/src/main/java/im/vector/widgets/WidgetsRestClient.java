@@ -55,4 +55,14 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
         mApi.register(params, API_VERSION).enqueue(new RestAdapterCallback<>(description,
                 mUnsentEventsManager, callback, () -> register(params, callback)));
     }
+
+    /**
+     * Validates the scalar token to the server
+     */
+    public void validateToken(final String scalarToken, final ApiCallback<Map<String, String>> callback) {
+        final String description = "Validate";
+
+        mApi.validateToken(scalarToken, API_VERSION).enqueue(new RestAdapterCallback<>(description,
+                mUnsentEventsManager, callback, null));
+    }
 }

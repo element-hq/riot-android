@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.fragments.terms
 
-package im.vector.activity.util
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import org.matrix.androidsdk.features.terms.TermsManager
 
-const val FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE = 314
-
-const val CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316
-const val TERMS_CREATION_ACTIVITY_REQUEST_CODE = 317
-
-const val STICKER_PICKER_ACTIVITY_REQUEST_CODE = 12000
-
-const val INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE = 13000
-
-//const val BATTERY_OPTIMIZATION_FCM_REQUEST_CODE = 14000
-const val BATTERY_OPTIMIZATION_FDROID_REQUEST_CODE = 14001
-
-const val TERMS_REQUEST_CODE = 15000
-
+@Parcelize
+data class ServiceTermsArgs(
+        val type: TermsManager.ServiceType,
+        val baseURL: String,
+        val token: String?
+) : Parcelable

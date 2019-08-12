@@ -18,7 +18,7 @@ package im.vector.widgets
 
 /**
  * Configuration for an integration manager.
- * By default, it uses URLs defined in the app settings but they can be overidden.
+ * By default, it uses URLs defined in the app settings but they can be overridden.
  */
 data class IntegrationManagerConfig(
         val uiUrl: String,

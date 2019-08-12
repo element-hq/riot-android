@@ -17,6 +17,7 @@
 package im.vector.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -30,6 +31,7 @@ import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
+import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
@@ -42,6 +44,8 @@ import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.features.terms.TermsManager
+import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -77,7 +81,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     private var mHistoryAlreadyCleared = false
 
 
-    lateinit var widgetManager : WidgetsManager
+    lateinit var widgetManager: WidgetsManager
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
@@ -129,13 +133,30 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onUnexpectedError(e: Exception) {
-                    onError(e.localizedMessage)
+                    if (e is TermsNotSignedException) {
+                        mIsRefreshingToken = false
+                        hideWaitingView()
+                        presentTermsForServices(e.token)
+                    } else {
+                        onError(e.localizedMessage)
+                    }
                 }
             })
         } else {
             // Scalar token cannot be provided
             launchUrl(null)
         }
+    }
+
+    private fun presentTermsForServices(token: String?) {
+        val wm = WidgetManagerProvider.getWidgetManager(this)
+        if (wm == null) {  // should not happen
+            finish()
+            return
+        }
+        startActivityForResult(ReviewTermsActivity.intent(this,
+                TermsManager.ServiceType.IntegrationManager, wm.uiUrl, token),
+                TERMS_REQUEST_CODE)
     }
 
     /* ==========================================================================================
@@ -150,6 +171,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == TERMS_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                getScalarTokenAndLoadUrl()
+            } else {
+                finish()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
     /* ==========================================================================================
      * PRIVATE
      * ========================================================================================== */
