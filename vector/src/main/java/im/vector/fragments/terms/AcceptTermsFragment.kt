@@ -30,6 +30,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.openUrlInExternalBrowser
+import im.vector.util.state.MxAsync
 import org.matrix.androidsdk.features.terms.TermsManager
 
 class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
@@ -69,33 +70,49 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
         viewModel.loadTerms(getString(R.string.resources_language))
 
         viewModel.termsList.observe(this, Observer { terms ->
-            if (terms != null) {
-                updateState(terms)
-                bottomBar.isVisible = true
-                acceptButton.isEnabled = terms.all { it.accepted }
+            when (terms) {
+                is MxAsync.Loading -> {
+                    bottomBar.isVisible = false
+                    progressBar.isVisible = true
+                }
+                is MxAsync.Error   -> {
+                    progressBar.isVisible = false
+                    terms.stringResId.let { stringRes ->
+                        AlertDialog.Builder(requireActivity())
+                                .setMessage(stringRes)
+                                .setPositiveButton(R.string.ok) { dialog, which ->
+                                    activity?.finish()
+                                }
+                                .show()
+                    }
+                }
+                is MxAsync.Success -> {
+                    updateState(terms.value)
+                    progressBar.isVisible = false
+                    bottomBar.isVisible = true
+                    acceptButton.isEnabled = terms.value.all { it.accepted }
+                }
             }
         })
 
-        viewModel.isLoading.observe(this, Observer {
-            bottomBar.isVisible = it?.not() ?: false
-            progressBar.isVisible = it ?: false
-        })
-
-        viewModel.popError.observe(this, Observer {
-            it?.getContentIfNotHandled()?.let { stringRes ->
-                AlertDialog.Builder(requireActivity())
-                        .setMessage(stringRes)
-                        .setPositiveButton(R.string.ok) { dialog, which ->
-                            //?
-                        }
-                        .show()
-            }
-        })
-
-        viewModel.successfullyAccepted.observe(this, Observer {
-            if (it == true) {
-                activity?.setResult(Activity.RESULT_OK)
-                activity?.finish()
+        viewModel.acceptTerms.observe(this, Observer { request ->
+            when (request) {
+                is MxAsync.Loading -> {
+                    progressBar.isVisible = true
+                }
+                is MxAsync.Error   -> {
+                    progressBar.isVisible = false
+                    request.stringResId.let { stringRes ->
+                        AlertDialog.Builder(requireActivity())
+                                .setMessage(stringRes)
+                                .setPositiveButton(R.string.ok, null)
+                                .show()
+                    }
+                }
+                is MxAsync.Success -> {
+                    activity?.setResult(Activity.RESULT_OK)
+                    activity?.finish()
+                }
             }
         })
     }

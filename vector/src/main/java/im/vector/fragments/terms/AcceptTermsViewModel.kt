@@ -18,7 +18,7 @@ package im.vector.fragments.terms
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import im.vector.R
-import im.vector.ui.arch.LiveEvent
+import im.vector.util.state.MxAsync
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
@@ -30,23 +30,20 @@ class AcceptTermsViewModel : ViewModel() {
 
     lateinit var termsArgs: ServiceTermsArgs
 
-    var termsList: MutableLiveData<List<Term>> = MutableLiveData()
-    var isLoading: MutableLiveData<Boolean> = MutableLiveData()
-    var hasError: MutableLiveData<Boolean> = MutableLiveData()
-    var successfullyAccepted: MutableLiveData<Boolean> = MutableLiveData()
+    val termsList: MutableLiveData<MxAsync<List<Term>>> = MutableLiveData()
 
-    var popError: MutableLiveData<LiveEvent<Int>> = MutableLiveData()
+    val acceptTerms: MutableLiveData<MxAsync<Unit>> = MutableLiveData()
 
     var mxSession: MXSession? = null
     var termsManager: TermsManager? = null
 
     fun markTermAsAccepted(url: String, accepted: Boolean) {
-        termsList.value?.map {
+        termsList.value?.invoke()?.map {
             if (it.url == url) {
                 it.copy(accepted = accepted)
             } else it
         }?.let {
-            termsList.postValue(it)
+            termsList.postValue(MxAsync.Success(it))
         }
     }
 
@@ -56,9 +53,9 @@ class AcceptTermsViewModel : ViewModel() {
     }
 
     fun acceptTerms() {
-        val acceptedTerms = termsList.value ?: return
+        val acceptedTerms = termsList.value?.invoke() ?: return
 
-        isLoading.postValue(true)
+        acceptTerms.postValue(MxAsync.Loading())
         val agreedUrls = acceptedTerms.map { it.url }
 
         termsManager?.agreeToTerms(termsArgs.type,
@@ -67,25 +64,21 @@ class AcceptTermsViewModel : ViewModel() {
                 termsArgs.token,
                 object : ApiCallback<Unit> {
                     override fun onSuccess(info: Unit) {
-                        isLoading.postValue(false)
-                        successfullyAccepted.postValue(true)
+                        acceptTerms.postValue(MxAsync.Success(Unit))
                     }
 
                     override fun onUnexpectedError(e: java.lang.Exception?) {
-                        isLoading.postValue(false)
-                        popError.postValue(LiveEvent(R.string.unknown_error))
+                        acceptTerms.postValue(MxAsync.Error(R.string.unknown_error))
                         Log.e(LOG_TAG, "Failed to agree to terms ", e)
                     }
 
                     override fun onNetworkError(e: java.lang.Exception?) {
-                        isLoading.postValue(false)
-                        popError.postValue(LiveEvent(R.string.unknown_error))
+                        acceptTerms.postValue(MxAsync.Error(R.string.unknown_error))
                         Log.e(LOG_TAG, "Failed to agree to terms ", e)
                     }
 
                     override fun onMatrixError(e: MatrixError?) {
-                        isLoading.postValue(false)
-                        popError.postValue(LiveEvent(R.string.unknown_error))
+                        acceptTerms.postValue(MxAsync.Error(R.string.unknown_error))
                         Log.e(LOG_TAG, "Failed to agree to terms " + e?.message)
                     }
                 }
@@ -93,8 +86,7 @@ class AcceptTermsViewModel : ViewModel() {
     }
 
     fun loadTerms(preferredLanguageCode: String) {
-        isLoading.postValue(true)
-        hasError.postValue(false)
+        termsList.postValue(MxAsync.Loading())
 
         termsManager?.get(termsArgs.type, termsArgs.baseURL, object : ApiCallback<GetTermsResponse> {
             override fun onSuccess(info: GetTermsResponse) {
@@ -118,24 +110,21 @@ class AcceptTermsViewModel : ViewModel() {
                             )
                     )
                 }
-                isLoading.postValue(false)
-                termsList.postValue(terms)
+
+                termsList.postValue(MxAsync.Success(terms))
             }
 
 
             override fun onUnexpectedError(e: Exception?) {
-                hasError.postValue(true)
-                isLoading.postValue(false)
+                termsList.postValue(MxAsync.Error(R.string.unknown_error))
             }
 
             override fun onNetworkError(e: Exception?) {
-                hasError.postValue(true)
-                isLoading.postValue(false)
+                termsList.postValue(MxAsync.Error(R.string.unknown_error))
             }
 
             override fun onMatrixError(e: MatrixError?) {
-                hasError.postValue(true)
-                isLoading.postValue(false)
+                termsList.postValue(MxAsync.Error(R.string.unknown_error))
             }
 
         })
