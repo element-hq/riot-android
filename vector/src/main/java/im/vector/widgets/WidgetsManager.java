@@ -33,6 +33,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.features.terms.TermsNotSignedException;
 import org.matrix.androidsdk.rest.model.Event;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -537,7 +538,6 @@ public class WidgetsManager {
         final String scalarToken = PreferenceManager.getDefaultSharedPreferences(context).getString(preferenceKey, null);
 
         if (null != scalarToken) {
-//            callback.onSuccess(scalarToken);
             WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
             widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Map<String, String>>(callback) {
 
@@ -554,6 +554,11 @@ public class WidgetsManager {
                         if (null != callback) {
                             callback.onUnexpectedError(new TermsNotSignedException(scalarToken));
                         }
+                    } else if (e.mStatus == HttpURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                        // Refresh the token
+                        Log.w(LOG_TAG, "Invalid token, clear it and get a new token");
+                        clearScalarToken(context, session);
+                        getScalarToken(context, session, callback);
                     } else {
                         super.onMatrixError(e);
                     }
