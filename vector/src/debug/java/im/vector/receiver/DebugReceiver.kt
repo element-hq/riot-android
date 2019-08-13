@@ -65,14 +65,13 @@ class DebugReceiver : BroadcastReceiver() {
         val session = Matrix.getInstance(context).defaultSession
         val alteredAccessToken = session.credentials.accessToken + "-ALT343D"
         session.credentials.accessToken = alteredAccessToken
-        // session.cryptoRestClient.credentials = session.credentials
-        session.accountDataRestClient.credentials = session.credentials
-        session.callRestClient.credentials = session.credentials
-        session.pushersRestClient.credentials = session.credentials
-        session.filterRestClient.credentials = session.credentials
-        session.mediaScanRestClient.credentials = session.credentials
-        // session.roomKeysRestClient.credentials = session.credentials
-        session.thirdPidRestClient.credentials = session.credentials
+        // session.cryptoRestClient.setAccessToken(alteredAccessToken)
+        session.accountDataRestClient.setAccessToken(alteredAccessToken)
+        session.callRestClient.setAccessToken(alteredAccessToken)
+        session.pushersRestClient.setAccessToken(alteredAccessToken)
+        session.filterRestClient.setAccessToken(alteredAccessToken)
+        session.mediaScanRestClient.setAccessToken(alteredAccessToken)
+        // session.roomKeysRestClient.setAccessToken(alteredAccessToken)
 
 
         val loginStorage = Matrix.getInstance(context)!!.loginStorage
