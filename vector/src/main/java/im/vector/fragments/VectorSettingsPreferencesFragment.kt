@@ -646,7 +646,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // identity server
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.identityServerUri.toString()
+                .summary = mSession.homeServerConfig.identityServerUri?.toString() ?: getString(R.string.identity_server_not_defined)
 
         findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL)
                 .summary = PreferencesManager.getIntegrationManagerUiUrl(context)

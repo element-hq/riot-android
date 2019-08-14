@@ -433,54 +433,58 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         }
 
-        params.addParticipantIds(mSession.getHomeServerConfig(), ids);
+        boolean res = params.addParticipantIds(mSession.getHomeServerConfig(), ids);
 
-        mSession.createRoom(params, new ApiCallback<String>() {
-            @Override
-            public void onSuccess(final String roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Map<String, Object> params = new HashMap<>();
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                        CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
-                    }
-                });
-            }
-
-            private void onError(final String message) {
-                membersListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != message) {
-                            Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+        if (res) {
+            Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
+        } else {
+            mSession.createRoom(params, new ApiCallback<String>() {
+                @Override
+                public void onSuccess(final String roomId) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Map<String, Object> params = new HashMap<>();
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                            CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
                         }
-                        hideWaitingView();
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
+                private void onError(final String message) {
+                    membersListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (null != message) {
+                                Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+                            hideWaitingView();
+                        }
+                    });
+                }
 
-            @Override
-            public void onMatrixError(final MatrixError e) {
-                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                    hideWaitingView();
-
-                    getConsentNotGivenHelper().displayDialog(e);
-                } else {
+                @Override
+                public void onNetworkError(Exception e) {
                     onError(e.getLocalizedMessage());
                 }
-            }
 
-            @Override
-            public void onUnexpectedError(final Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onMatrixError(final MatrixError e) {
+                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        hideWaitingView();
+
+                        getConsentNotGivenHelper().displayDialog(e);
+                    } else {
+                        onError(e.getLocalizedMessage());
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(final Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        }
     }
 }

@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -869,7 +870,12 @@ public class VectorApp extends MultiDexApplication {
         final MXSession session = Matrix.getInstance(this).getDefaultSession();
         if (session != null) {
             mAppAnalytics.visitVariable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-            mAppAnalytics.visitVariable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+            Uri identityServerUri = session.getHomeServerConfig().getIdentityServerUri();
+            if (identityServerUri == null) {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", "");
+            } else {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", identityServerUri.toString());
+            }
         }
     }
 
