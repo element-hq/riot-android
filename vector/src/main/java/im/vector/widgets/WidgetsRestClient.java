@@ -17,7 +17,6 @@
  */
 package im.vector.widgets;
 
-import android.content.Context;
 import android.net.Uri;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -34,7 +33,7 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * {@inheritDoc}
      */
-    public WidgetsRestClient(Context context, IntegrationManagerConfig config) {
+    public WidgetsRestClient(IntegrationManagerConfig config) {
         super(new HomeServerConnectionConfig.Builder()
                         .withHomeServerUri(Uri.parse(config.getApiUrl()))
                         .build(),

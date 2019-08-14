@@ -535,7 +535,7 @@ public class WidgetsManager {
         final String scalarToken = tokensStore.getToken(session.getMyUserId(), config.getApiUrl());
 
         if (null != scalarToken) {
-            WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
+            WidgetsRestClient widgetsRestClient = new WidgetsRestClient(config);
             widgetsRestClient.validateToken(scalarToken, new SimpleApiCallback<Void>(callback) {
 
                 @Override
@@ -561,7 +561,7 @@ public class WidgetsManager {
             session.openIdToken(new SimpleApiCallback<RequestOpenIdTokenResponse>(callback) {
                 @Override
                 public void onSuccess(RequestOpenIdTokenResponse info) {
-                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(context, config);
+                    WidgetsRestClient widgetsRestClient = new WidgetsRestClient(config);
 
                     widgetsRestClient.register(info, new SimpleApiCallback<RegisterResponse>(callback) {
                         @Override
