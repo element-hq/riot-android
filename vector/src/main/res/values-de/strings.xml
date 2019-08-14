@@ -1625,4 +1625,39 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="creating_direct_room">Raum erstellen…</string>
     <string name="message_view_edit_history">Bearbeitungsverlauf anzeigen</string>
 
-</resources>
+<string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
+\n%s</string>
+    <string name="sas_error_m_unknown_method">Das Gerät kann sich nicht auf eine Schlüsselvereinbarung, eine Hash-, eine MAC- oder eine SAS-Methode einigen</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Die neueste Featureliste befindet sich immer in %1$s. Wenn Sie Fehler finden, senden Sie uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden den Fehler so schnell wie möglich beheben.</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Wenn Sie Fehler finden, senden Sie uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden diese so schnell wie möglich beheben.</string>
+
+    <string name="import_e2e_keys_from_file">Importieren Sie e2e-Schlüssel aus der Datei \"%1$s\".</string>
+
+    <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
+    <string name="send_suggestion_failed">Der Vorschlag konnte nicht gesendet werden (%s)</string>
+
+    <string name="store_riotx_title">RiotX - Matrix Client der nächsten Generation</string>
+    <string name="store_riotx_short_description">Ein schnellerer und leichterer Client für Matrix mit den neuesten Android-Frameworks</string>
+    <string name="send_file_step_sending_thumbnail">Miniaturbild wird gesendet (%1$s / %2$s)</string>
+    <string name="send_file_step_sending_file">Datei wird gesendet (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Datei %1$s wird heruntergeladen …</string>
+    <string name="downloaded_file">Die Datei %1$s wurde heruntergeladen!</string>
+
+    <string name="riotx_no_registration_notice">%1$s , um ein Konto zu erstellen.</string>
+    <string name="riotx_no_registration_notice_colored_part">Benutze die alte App</string>
+
+
+    <string name="room_filtering_footer_title">Können Sie nicht finden, wonach Sie suchen\?</string>
+    <string name="room_filtering_footer_create_new_room">Erstelle einen neuen Raum</string>
+    <string name="room_directory_search_hint">Name oder ID (#Beispiel: matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Aktivieren Sie das Streichen, um in der Zeitleiste zu antworten</string>
+
+    <string name="direct_room_no_known_users">Kein Ergebnis gefunden. Verwenden Sie Nach Matrix-ID hinzufügen, um auf dem Server zu suchen.</string>
+    <string name="direct_room_start_search">Beginnen Sie mit der Eingabe, um Ergebnisse zu erhalten</string>
+    <string name="direct_room_filter_hint">Filtern nach Benutzername oder ID…</string>
+
+    <string name="joining_room">Raum betreten…</string>
+
+    </resources>
