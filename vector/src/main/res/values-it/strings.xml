@@ -1656,4 +1656,17 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
 
+<string name="settings_integration_manager">Responsabile dell\'integrazione</string>
+
+    <string name="integration_manager_not_configured">Nessun gestore integrazione configurato.</string>
+    <string name="add_by_matrix_id">Aggiungi per ID matrice</string>
+    <string name="creating_direct_room">Creare una stanza …</string>
+    <string name="direct_room_no_known_users">Nessun risultato trovato, utilizzare Aggiungi per ID matrice per cercare sul server.</string>
+    <string name="direct_room_start_search">Inizia a digitare per ottenere risultati</string>
+    <string name="direct_room_filter_hint">Filtra per nome utente o ID …</string>
+
+    <string name="joining_room">Sto entrando nella stanza …</string>
+
+    <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
+
 </resources>
