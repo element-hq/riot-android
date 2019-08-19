@@ -20,6 +20,8 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.media.ExifInterface;
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -75,6 +77,10 @@ class VectorMessagesAdapterMediasHelper {
     private final int mNotSentMessageTextColor;
     private final int mDefaultMessageTextColor;
 
+    private final Handler handler = new Handler();
+    private Map<String, ImageView> mPlayImageViews = new HashMap<>();
+    private Map<String, MediaPlayer> mMediaPlayers;
+
     VectorMessagesAdapterMediasHelper(Context context,
                                       MXSession session,
                                       int maxImageWidth,
@@ -96,8 +102,9 @@ class VectorMessagesAdapterMediasHelper {
      *
      * @param listener teh events listener
      */
-    void setVectorMessagesAdapterActionsListener(IMessagesAdapterActionsListener listener) {
+    void setVectorMessagesAdapterActionsListener(IMessagesAdapterActionsListener listener, Map<String, MediaPlayer> mediaPlayers) {
         mVectorMessagesAdapterEventsListener = listener;
+        mMediaPlayers = mediaPlayers;
     }
 
     /**
@@ -178,6 +185,75 @@ class VectorMessagesAdapterMediasHelper {
         showUploadFailure(convertView, type, false);
         uploadSpinner.setVisibility((null == uploadStats) ? View.VISIBLE : View.GONE);
         refreshUploadViews(event, uploadStats, uploadProgressLayout);
+    }
+
+    void managePlayback(final View convertView, final Event event, final int type, final String mediaUrl) {
+        View playbackLayout = convertView.findViewById(R.id.content_media_playback_layout);
+        playbackLayout.setTag(mediaUrl);
+        final View playButton = playbackLayout.findViewById(R.id.media_playback);
+
+        if (null == playButton) return;
+
+        playButton.setTag(event);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((event == playButton.getTag()) && (null != mVectorMessagesAdapterEventsListener)) {
+                    ImageView imageView = playButton.findViewById(R.id.media_play_icon);
+                    if ((null != imageView.getTag()) && (imageView.getTag().equals("playing"))) {
+                        mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_pause_audio);
+                        imageView.setImageResource(R.drawable.ic_baseline_play_arrow_24px);
+                        imageView.setTag("paused");
+                    } else {
+                        mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_play_audio);
+                        imageView.setTag("playing");
+                        if (!mPlayImageViews.containsKey(mediaUrl)) {
+                            mPlayImageViews.put(mediaUrl, imageView);
+                        }
+                        refreshPlayImageViews();
+                        imageView.setImageResource(R.drawable.ic_baseline_pause_24px);
+                        final ProgressBar progressBar = playbackLayout.findViewById(R.id.media_progress_view);
+                        refreshPlaybackProgress(progressBar, mediaUrl);
+                    }
+                }
+            }
+        });
+    }
+
+    void refreshPlayImageViews() {
+        for (ImageView iv : mPlayImageViews.values()) {
+            iv.setImageResource(R.drawable.ic_baseline_play_arrow_24px);
+        }
+    }
+
+    void refreshPlaybackProgress(ProgressBar progressBar, String mediaUrl) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (null == mMediaPlayers) {
+                    return;
+                }
+                try {
+                    MediaPlayer mediaPlayer = mMediaPlayers.get(mediaUrl);
+
+                    if (mediaPlayer == null || mediaUrl == null) {
+                        mPlayImageViews.get(mediaUrl).setImageResource(R.drawable.ic_baseline_play_arrow_24px);
+                        progressBar.setProgress(0);
+                        return;
+                    }
+
+
+                    progressBar.setProgress((int) ((float) mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration() * progressBar.getMax()));
+                    if (mediaPlayer.isPlaying()) {
+                        refreshPlaybackProgress(progressBar, mediaUrl);
+                    } else {
+                        mPlayImageViews.get(mediaUrl).setImageResource(R.drawable.ic_baseline_play_arrow_24px);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 1000);
     }
 
     // the image / video bitmaps are set to null if the matching URL is not the same

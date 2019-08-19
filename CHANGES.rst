@@ -6,7 +6,7 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Add internal playback of audio files (#3207)
 
 Improvements:
  -
