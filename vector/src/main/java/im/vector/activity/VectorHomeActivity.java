@@ -116,6 +116,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.extensions.ViewExtensionsKt;
+import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
@@ -333,6 +334,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // track if the application update
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int version = preferences.getInt(PreferencesManager.VERSION_BUILD, 0);
+
+        new ProposeLogout(mSession, this).process();
 
         if (version != BuildConfig.VERSION_CODE) {
             Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + BuildConfig.VERSION_CODE);
@@ -1790,7 +1793,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        signOut();
+                        signOut(true);
                         break;
                     }
 
@@ -1855,8 +1858,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
-    private void signOut() {
-
+    public void signOut(boolean withConfirmationDialog) {
         if (SignOutViewModel.Companion.doYouNeedToBeDisplayed(mSession)) {
             SignOutBottomSheetDialogFragment signoutDialog = SignOutBottomSheetDialogFragment.Companion.newInstance(mSession.getMyUserId());
             signoutDialog.setOnSignOut(() -> {
@@ -1864,7 +1866,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 CommonActivityUtils.logout(VectorHomeActivity.this);
             });
             signoutDialog.show(getSupportFragmentManager(), "SO");
-        } else {
+        } else if (withConfirmationDialog) {
             // Display a simple confirmation dialog
             new AlertDialog.Builder(this)
                     .setTitle(R.string.action_sign_out)
@@ -1879,6 +1881,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
+        } else {
+            showWaitingView();
+
+            CommonActivityUtils.logout(VectorHomeActivity.this);
         }
     }
 

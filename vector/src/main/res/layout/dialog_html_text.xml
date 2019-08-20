@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:autoLink="all"
+    android:padding="?dialogPreferredPadding"
+    android:textColor="?android:textColorPrimary"
+    android:textColorLink="?vctr_toolbar_link_text_color"
+    android:textSize="16sp"
+    tools:text="test https://www.example.org" />

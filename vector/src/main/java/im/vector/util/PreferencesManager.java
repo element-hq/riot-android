@@ -219,7 +219,10 @@ public class PreferencesManager {
             SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
             SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
-            SETTINGS_USE_RAGE_SHAKE_KEY
+            SETTINGS_USE_RAGE_SHAKE_KEY,
+
+            // Technical keys
+            VERSION_BUILD
     );
 
     /**

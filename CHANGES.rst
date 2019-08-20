@@ -5,6 +5,9 @@ MatrixSdk:
  - Upgrade MatrixSdk to version 0.9.X.
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.XX
 
+Security:
+ - Prompt to renew the token after a security fix on Matrix SDK
+
 Features:
  - Make Widget/Integration manager optional (#3224)
  - Handle terms and condition approval for IntegrationManager (#3225)
