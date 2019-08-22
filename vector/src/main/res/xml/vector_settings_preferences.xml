@@ -363,7 +363,7 @@
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_name" />
+            android:title="@string/encryption_information_device_name_with_warning" />
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"

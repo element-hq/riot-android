@@ -804,10 +804,10 @@
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
-    <string name="devices_details_dialog_title">Device details</string>
+    <string name="devices_details_dialog_title">Device information</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Name</string>
-    <string name="devices_details_device_name">Device Name</string>
+    <string name="devices_details_name_title">Public Name</string>
+    <string name="devices_details_device_name">Update Public Name</string>
     <string name="devices_details_last_seen_title">Last seen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
@@ -972,9 +972,11 @@
     <string name="encryption_information_decryption_error">Decryption error</string>
 
     <string name="encryption_information_sender_device_information">Sender device information</string>
-    <string name="encryption_information_device_name">Device name</string>
-    <string name="encryption_information_name">Name</string>
-    <string name="encryption_information_device_id">Device ID</string>
+    <string name="encryption_information_device_name">Public name</string>
+    <string name="encryption_information_device_name_with_warning">Public name (visible to people you communicate with)</string>
+    <string name="device_name_warning">"A device's public name is visible to people you communicate with"</string>
+    <string name="encryption_information_name">Public name</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Device key</string>
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>

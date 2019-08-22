@@ -2479,6 +2479,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
 
+            layout.findViewById<TextView>(R.id.edit_text_content).let { tv ->
+                tv.visibility = View.VISIBLE
+                tv.setText(R.string.device_name_warning)
+            }
             val input = layout.findViewById<EditText>(R.id.edit_text)
             input.setText(aDeviceInfoToRename.display_name)
 
