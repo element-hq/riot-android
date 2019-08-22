@@ -6,7 +6,7 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Use the hashed v2 lookup API for 3PIDs (#3257)
 
 Improvements:
  -

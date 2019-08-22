@@ -292,19 +292,17 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_create_room:
                 if (mParticipants.isEmpty()) {
-                    createRoom(mParticipants);
+                    // Should not happen, mParticipant contain myself at first position
+                    // createRoom(mParticipants);
                 } else {
-                    // the first entry is self so ignore
-                    mParticipants.remove(0);
-
-                    if (mParticipants.isEmpty()) {
+                    if (mParticipants.size() == 1) {
                         // standalone case : should be accepted ?
                         createRoom(mParticipants);
-                    } else if (mParticipants.size() > 1) {
+                    } else if (mParticipants.size() > 2) {
                         createRoom(mParticipants);
                     } else {
                         // 1 other participant
-                        openOrCreateDirectChatRoom(mParticipants.get(0).mUserId);
+                        openOrCreateDirectChatRoom(mParticipants.get(1).mUserId);
                     }
                 }
                 return true;
@@ -426,8 +424,11 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         CreateRoomParams params = new CreateRoomParams();
 
+        // First participant is self, so remove
+        List<ParticipantAdapterItem> participantsWithoutMe = participants.subList(1, participants.size());
+
         List<String> ids = new ArrayList<>();
-        for (ParticipantAdapterItem item : participants) {
+        for (ParticipantAdapterItem item : participantsWithoutMe) {
             if (null != item.mUserId) {
                 ids.add(item.mUserId);
             }

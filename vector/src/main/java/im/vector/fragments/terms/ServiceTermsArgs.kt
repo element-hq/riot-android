@@ -23,5 +23,5 @@ import org.matrix.androidsdk.features.terms.TermsManager
 data class ServiceTermsArgs(
         val type: TermsManager.ServiceType,
         val baseURL: String,
-        val token: String?
+        val token: String
 ) : Parcelable

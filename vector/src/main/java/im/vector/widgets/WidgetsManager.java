@@ -568,28 +568,30 @@ public class WidgetsManager {
                         public void onSuccess(RegisterResponse info) {
                             String token = info.scalarToken;
 
-                            if (null != token) {
+                            if (token == null) {
+                                // Should not happen
+                                callback.onUnexpectedError(new IllegalStateException("token is null"));
+                            } else {
                                 tokensStore.setToken(session.getMyUserId(), config.getApiUrl(), token);
-                            }
 
-                            // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
+                                // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
 
-                            widgetsRestClient.validateToken(token, new SimpleApiCallback<Void>(callback) {
-                                @Override
-                                public void onSuccess(Void info) {
-                                    callback.onSuccess(token);
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    if (MatrixError.TERMS_NOT_SIGNED.equals(e.errcode)) {
-                                        callback.onUnexpectedError(new TermsNotSignedException(token));
-                                    } else {
-                                        super.onMatrixError(e);
+                                widgetsRestClient.validateToken(token, new SimpleApiCallback<Void>(callback) {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        callback.onSuccess(token);
                                     }
-                                }
-                            });
 
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        if (MatrixError.TERMS_NOT_SIGNED.equals(e.errcode)) {
+                                            callback.onUnexpectedError(new TermsNotSignedException(token));
+                                        } else {
+                                            super.onMatrixError(e);
+                                        }
+                                    }
+                                });
+                            }
                         }
                     });
                 }

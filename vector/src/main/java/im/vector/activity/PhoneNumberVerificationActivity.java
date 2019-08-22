@@ -147,7 +147,7 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
             } else {
                 showWaitingView();
-                mSession.getThirdPidRestClient().submitValidationToken(mThreePid.medium,
+                mSession.getIdentityServerManager().submitValidationToken(mThreePid.medium,
                         mPhoneNumberCode.getText().toString(),
                         mThreePid.clientSecret,
                         mThreePid.sid,

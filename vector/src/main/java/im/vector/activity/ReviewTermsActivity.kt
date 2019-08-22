@@ -47,7 +47,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
 
         private const val EXTRA_INFO = "EXTRA_INFO"
 
-        fun intent(context: Context, serviceType: TermsManager.ServiceType, baseUrl: String, token: String?): Intent {
+        fun intent(context: Context, serviceType: TermsManager.ServiceType, baseUrl: String, token: String): Intent {
             return Intent(context, ReviewTermsActivity::class.java).also {
                 it.putExtra(EXTRA_INFO, ServiceTermsArgs(serviceType, baseUrl, token))
             }

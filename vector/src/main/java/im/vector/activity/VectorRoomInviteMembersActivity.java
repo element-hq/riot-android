@@ -120,6 +120,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 }
             });
         }
+
+        @Override
+        public void onIdentityServerTermsNotSigned(String token) {
+            Log.w(LOG_TAG, "onIdentityServerTermsNotSigned()");
+        }
     };
 
     // refresh the presence asap

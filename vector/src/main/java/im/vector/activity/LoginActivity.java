@@ -61,6 +61,7 @@ import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.HttpException;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.login.AutoDiscovery;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
@@ -2360,7 +2361,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return null;
             }
 
-            if (!identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")) {
+            if (!TextUtils.isEmpty(identityServerUrlString) & !identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")) {
                 identityServerUrlString = "https://" + identityServerUrlString;
             }
 
