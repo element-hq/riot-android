@@ -17,6 +17,7 @@
 
 package im.vector.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ import androidx.appcompat.app.AlertDialog;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.MXPatterns;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.features.terms.TermsManager;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -50,6 +52,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
@@ -123,7 +126,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         @Override
         public void onIdentityServerTermsNotSigned(String token) {
-            Log.w(LOG_TAG, "onIdentityServerTermsNotSigned()");
+            startActivityForResult(ReviewTermsActivity.Companion.intent(VectorRoomInviteMembersActivity.this,
+                    TermsManager.ServiceType.IdentityService, mSession.getHomeServerConfig().getIdentityServerUri().toString(), token),
+                    RequestCodesKt.TERMS_REQUEST_CODE);
         }
     };
 
@@ -251,6 +256,15 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.getInstance().removeListener(mContactsListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RequestCodesKt.TERMS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Launch again the request
+            ContactsManager.getInstance().refreshLocalContactsSnapshot();
+            onPatternUpdate(false);
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ MatrixSdk:
 
 Features:
  - Use the hashed v2 lookup API for 3PIDs (#3257)
+ - Prompt to accept identity server policies before inviting them to a room (#3227)
 
 Improvements:
  -
