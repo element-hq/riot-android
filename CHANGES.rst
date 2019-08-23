@@ -13,7 +13,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - (Temporarily) remove Jitsi integration for the F-Droid version of the application (waiting for https://gitlab.com/fdroid/fdroiddata/issues/1601)
 
 Bugfix:
  - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)

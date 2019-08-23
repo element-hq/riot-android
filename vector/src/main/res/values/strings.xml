@@ -1082,6 +1082,7 @@
     </plurals>
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+    <string name="error_jitsi_not_supported_on_fdroid_version">Sorry, conference calls with Jitsi are not supported by the FDroid version of Riot</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>

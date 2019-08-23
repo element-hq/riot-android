@@ -1756,18 +1756,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if it is a video call
      */
     private void launchJitsiActivity(Widget widget, boolean aIsVideoCall) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            // Display a error dialog for old API
+        if (JitsiCallActivity.IS_SUPPORTED) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                // Display a error dialog for old API
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+            } else {
+                final Intent intent = new Intent(this, JitsiCallActivity.class);
+                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+                intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+                startActivity(intent);
+            }
+        } else {
+            // FDroid build does not support Jitsi
             new AlertDialog.Builder(this)
                     .setTitle(R.string.dialog_title_error)
-                    .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                    .setMessage(R.string.error_jitsi_not_supported_on_fdroid_version)
                     .setPositiveButton(R.string.ok, null)
                     .show();
-        } else {
-            final Intent intent = new Intent(this, JitsiCallActivity.class);
-            intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-            intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-            startActivity(intent);
         }
     }
 

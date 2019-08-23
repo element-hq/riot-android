@@ -49,6 +49,8 @@ import im.vector.widgets.WidgetsManager;
  * Inspired from JitsiMeetActivity
  */
 public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiMeetActivityInterface {
+    public static final boolean IS_SUPPORTED = true;
+
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**

@@ -269,10 +269,6 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/CallActivityTheme.Light" />
         <activity
-            android:name=".activity.JitsiCallActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen.Light" />
-        <activity
             android:name=".activity.WidgetActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar.FullScreen.Light" />

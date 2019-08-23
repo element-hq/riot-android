@@ -14,6 +14,12 @@
             </intent-filter>
         </service>
 
+        <!-- Jitsi -->
+        <activity
+            android:name="im.vector.activity.JitsiCallActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen.Light" />
+
     </application>
 
 </manifest>
