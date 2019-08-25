@@ -28,7 +28,7 @@
     <string name="ongoing_conference_call">Przychodzące połączenie grupowe.
 \nDołącz z %1$s lub %2$s</string>
     <string name="ongoing_conference_call_voice">Głos</string>
-    <string name="ongoing_conference_call_video">kamerą</string>
+    <string name="ongoing_conference_call_video">Wideo</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
     <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
     <string name="missing_permissions_to_start_conf_call">Musisz być uprawniony, aby rozpocząć połączenie grupowe</string>
@@ -84,7 +84,7 @@
         <item quantity="one">1 użytkownik</item>
         <item quantity="few">%d użytkowników</item>
         <item quantity="many">%d użytkowników</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Wyślij dzienniki</string>
@@ -287,7 +287,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_message_placeholder_not_encrypted">Wyślij wiadomość (niezaszyfrowaną)…</string>
     <string name="room_offline_notification">Utracono połączenie z serwerem.</string>
     <string name="room_prompt_resend">Wyślij ponownie wszystko</string>
-    <string name="room_prompt_cancel">anuluj wszystko</string>
+    <string name="room_prompt_cancel">Anuluj wszystko</string>
     <string name="room_resend_unsent_messages">Wyślij niewysłane wiadomości ponownie</string>
     <string name="room_delete_unsent_messages">Usuń niewysłane wiadomości</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
@@ -430,7 +430,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_phone_number_country_label">Kraj</string>
     <string name="settings_phone_number_country_error">Wybierz kraj</string>
     <string name="settings_phone_number_label">Numer telefonu</string>
-    <string name="settings_phone_number_verification">Weryfikacja numeru</string>
+    <string name="settings_phone_number_verification">Weryfikacja numeru telefonu</string>
     <string name="settings_phone_number_verification_error_empty_code">Wprowadź kod aktywacyjny</string>
     <string name="settings_phone_number_verification_error">Wystąpił błąd podczas weryfikowania numeru telefonu</string>
     <string name="settings_phone_number_code">Kod</string>
@@ -601,7 +601,7 @@ Przepraszamy za trudności.</string>
         <item quantity="one">%d zmiana członkostwa</item>
         <item quantity="few">%d zmiany członkostwa</item>
         <item quantity="many">%d zmian członkostwa</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="call_error_user_not_responding">Rozmówca nie połączył się.</string>
@@ -615,9 +615,9 @@ Zezwól na dostęp w następnym oknie aby móc wykonać połączenie.</string>
 
 Przyznaj dostęp w następnym oknie.</string>
     <string name="permissions_rationale_msg_contacts">Riot może sprawdzić Twoją książkę adresową, aby znajdywać innych użytkowników Matrixa bazując na ich adresie e-mail i numerze telefonu. Jeśli zgadzasz się na udostępnienie Twojej książki adresowej w tym celu, zezwól na dostęp w następnym okienku.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
-
-Zezwolić Riot na dostęp do kontaktów?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu. 
+\n
+\nZezwolić Riot na dostęp do kontaktów\?</string>
 
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
@@ -628,13 +628,13 @@ Zezwolić Riot na dostęp do kontaktów?</string>
         <item quantity="one">Jeden aktywny członek</item>
         <item quantity="few">Kilku aktywnych członków</item>
         <item quantity="many">%d aktywnych członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">kilku członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
@@ -651,7 +651,7 @@ Jesteś pewien?</string>
         <item quantity="one">Nowa wiadomość</item>
         <item quantity="few">Kilka nowych wiadomości</item>
         <item quantity="many">%d nowych wiadomości</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
@@ -665,13 +665,13 @@ Jesteś pewien?</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s pokój znaleziony dla %2$s</item>
         <item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
         <item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
@@ -821,13 +821,13 @@ Nieznane urządzenia:</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="active_widgets">
         <item quantity="one">1 aktywny widżet</item>
         <item quantity="few">%d aktywne widżety</item>
         <item quantity="many">%d aktywnych widżetów</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
@@ -849,13 +849,13 @@ Czy chcesz dodać teraz kilka?</string>
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
 
@@ -941,14 +941,14 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
 
@@ -964,25 +964,25 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="one">1 sekunda</item>
         <item quantity="few">%d sek.</item>
         <item quantity="many">%d sek.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1 minuta</item>
         <item quantity="few">%d min.</item>
         <item quantity="many">%d min.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1 godzina</item>
         <item quantity="few">%s godz.</item>
         <item quantity="many">%s godz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1 dzień</item>
         <item quantity="few">%d dni</item>
         <item quantity="many">%d dni</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="room_participants_action_unignore_prompt">Pokazać wszystkie wiadomości od tego użytkownika?
@@ -991,7 +991,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
         <item quantity="many">%d zaznaczonych</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_sliding_menu_version_x">Wersja %s</string>
     <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
@@ -1063,7 +1063,7 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
         <item quantity="one">Czy chcesz wyrzucić tego użytkownika z rozmowy?</item>
         <item quantity="few">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
         <item quantity="many">Czy chcesz wyrzucić tych użytkowników z rozmowy?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
@@ -1232,4 +1232,21 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="backup">Utwórz kopię zapasową</string>
     <string name="login_error_ssl_handshake">Twoje urządzenie używa przestarzałego protokołu bezpieczeństwa TSL, podatnego na ataki, dlatego dla Twojego bezpieczeństwa nie będziesz mógł się połączyć</string>
     <string name="keys_backup_settings_status_ok">Kopia zapasowa klucza została prawidłowo skonfigurowana dla tego urządzenia.</string>
-</resources>
+<string name="notification_sync_init">Inicjalizacja usługi</string>
+    <string name="auth_login_sso">Zaloguj się za pomocą logowania jednorazowego</string>
+    <string name="settings_notification_advanced_summary">Ustaw ważność powiadomienia za pomocą wydarzeń, skonfiguruj dźwięk, diodę LED, wibracje</string>
+    <string name="settings_notification_by_event">Ważność powiadomień ze względu na wydarzenie</string>
+
+    <string name="settings_notification_troubleshoot">Powiadomienia diagnostyczne</string>
+    <string name="settings_troubleshoot_diagnostic">Rozwiązywanie problemów</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnostyka podstawowa nie wykazała problemów. Jeżeli wciąż nie otrzymujesz powiadomień, prosimy o przesłanie raportu o błędach, w celu ich rozwiązania.</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikacja <b>nie</b> potrzebuje łączyć się z serwerem domowym w tle, powinno to zredukować użycie baterii</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Jeżeli nie pamiętasz swoich danych odzystkiwania, możesz %s.</string>
+
+    <string name="keys_backup_restore_with_key_helper">Zgubiłeś (-łaś) swój klucz odzyskiwania\? Możesz ustawić nowy w ustawieniach.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Kopia zapasowa posiada poprawną sygnaturę z niezweryfikowanego urządzenia %s</string>
+    <string name="new_recovery_method_popup_description">Wykryto nową, bezpieczną kopię kluczy wiadomości.
+\n
+\nJeżeli nie ustawiałeś nowej metody odzyskiwania, atakujący mogą uzyskać dostęp do Twojego konta. Zmień hasło konta i ustaw nową metodę odzyskiwania jak najszybciej w Ustawieniach.</string>
+    <string name="room_list_catchup_empty_title">Jesteś na bieżąco!</string>
+    </resources>
