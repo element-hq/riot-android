@@ -1249,4 +1249,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \n
 \nJeżeli nie ustawiałeś nowej metody odzyskiwania, atakujący mogą uzyskać dostęp do Twojego konta. Zmień hasło konta i ustaw nową metodę odzyskiwania jak najszybciej w Ustawieniach.</string>
     <string name="room_list_catchup_empty_title">Jesteś na bieżąco!</string>
+    <string name="login_error_unknown_host">Ten adres URL jest nieosiągalny, proszę sprawdź jego poprawność</string>
     </resources>
