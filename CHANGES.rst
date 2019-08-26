@@ -13,7 +13,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Widgets: Whitelist [MSC1961](https://github.com/matrix-org/matrix-doc/pull/1961) widget urls
 
 Bugfix:
  - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)
