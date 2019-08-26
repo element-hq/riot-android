@@ -1584,7 +1584,7 @@ Email также позволит вам при необходимости во�
     <string name="title_activity_emoji_reaction_picker">Реакция</string>
     <string name="reactions_agree">Соглашаться</string>
     <string name="reactions_like">Нравиться</string>
-    <string name="message_add_reaction">Добавить реакцию</string>
+    <string name="message_add_reaction">Добавить действие</string>
     <string name="message_view_reaction">Посмотреть реакции</string>
 <string name="settings_integration_manager">Менеджер интеграции</string>
 
@@ -1669,4 +1669,48 @@ Email также позволит вам при необходимости во�
 \n
 \nНе все функции RiotX пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) особенности: - Создание учетной записи - Настройки комнат (список членов комнат и т.д.) - Создание прямых чатов - Вызовы - Виджеты - .…</string>
 
-    </resources>
+    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается.</string>
+
+    <string name="bottom_action_people_x">Прямые сообщения</string>
+
+    <string name="send_file_step_idle">Ждите…</string>
+    <string name="send_file_step_encrypting_thumbnail">Шифрование миниатюры…</string>
+    <string name="send_file_step_sending_thumbnail">Отправка миниатюр (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Файл шифруется…</string>
+    <string name="send_file_step_sending_file">Файл отправляется (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Файл %1$s загружается…</string>
+    <string name="downloaded_file">Файл %1$s был загружен!</string>
+
+    <string name="edited_suffix">(отредактированный)</string>
+
+    <string name="riotx_no_registration_notice">%1$s для создания учетной записи.</string>
+    <string name="riotx_no_registration_notice_colored_part">Используйте старое приложение</string>
+
+
+    <string name="message_edits">Редактирование сообщений</string>
+    <string name="no_message_edits_found">Редактирование не найдено</string>
+
+    <string name="room_filtering_filter_hint">Отфильтровывать разговоры…</string>
+    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
+    <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
+    <string name="room_filtering_footer_create_new_direct_message">Отправить новое прямое сообщение</string>
+    <string name="room_filtering_footer_open_room_directory">Просмотр список комнат</string>
+
+    <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа в хронологии</string>
+
+    <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
+
+    <string name="add_by_matrix_id">Добавить по matrix ID</string>
+    <string name="creating_direct_room">Создание комнаты…</string>
+    <string name="direct_room_no_known_users">"Результат не найден, используйте добавить matrix ID  для поиска на сервере."</string>
+    <string name="direct_room_start_search">Начните печатать, чтобы получить результат</string>
+    <string name="direct_room_filter_hint">Фильтр по имени пользователя или ID…</string>
+
+    <string name="joining_room">Присоединение к комнате…</string>
+
+    <string name="message_view_edit_history">Просмотреть историю изменений</string>
+
+</resources>
