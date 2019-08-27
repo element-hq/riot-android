@@ -24,6 +24,7 @@ Translations:
 
 Build:
  - Split APK: generate one APK per arch, to reduce APK size
+ - Get Jitsi library dependency from a Maven repository we host, to get a LIBRE_BUILD
 
 Changes in Riot 0.9.3 (2019-07-24)
 ===================================================

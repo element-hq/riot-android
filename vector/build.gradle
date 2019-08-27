@@ -251,10 +251,7 @@ dependencies {
     //implementation project(':matrix-sdk-core')
 
     /************* jitsi **************/
-    implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {
-        transitive = true
-        exclude group: 'com.amplitude', module: 'android-sdk'
-    }
+    implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2')
 
     /************* analytics **************/
     // another tracking than GA
