@@ -17,13 +17,15 @@
 package im.vector.fragments;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
@@ -167,40 +169,40 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
         mInvitationsSection.setTitle(R.string.invitations_header);
         mInvitationsSection.setHideIfEmpty(true);
         mInvitationsSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mInvitationsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false),
+        mInvitationsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_invite, false, this, this, null);
 
         // Favourites
         mFavouritesSection.setTitle(R.string.bottom_action_favourites);
         mFavouritesSection.setHideIfEmpty(true);
         mFavouritesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mFavouritesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mFavouritesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
         mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
-        mDirectChatsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mDirectChatsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
-        mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Low priority
         mLowPrioritySection.setTitle(R.string.low_priority_header);
         mLowPrioritySection.setHideIfEmpty(true);
         mLowPrioritySection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mLowPrioritySection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mLowPrioritySection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Server notice
         mServerNoticesSection.setTitle(R.string.system_alerts_header);
         mServerNoticesSection.setHideIfEmpty(true);
         mServerNoticesSection.setPlaceholders(null, getString(R.string.no_result_placeholder));
-        mServerNoticesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false),
+        mServerNoticesSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         mHomeSectionViews = Arrays.asList(mInvitationsSection,

@@ -18,11 +18,11 @@ package im.vector.preference
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.v7.preference.PreferenceCategory
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.preference.PreferenceCategory
+import androidx.preference.PreferenceViewHolder
 
 /**
  * Customize PreferenceCategory class to redefine some attributes.

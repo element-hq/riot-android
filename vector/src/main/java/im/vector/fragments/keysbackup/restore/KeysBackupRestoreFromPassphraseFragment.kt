@@ -15,11 +15,8 @@
  */
 package im.vector.fragments.keysbackup.restore
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
@@ -29,6 +26,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.set
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
@@ -44,7 +43,7 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
     @BindView(R.id.keys_backup_passphrase_enter_til)
-    lateinit var mPassphraseInputLayout: TextInputLayout
+    lateinit var mPassphraseInputLayout: com.google.android.material.textfield.TextInputLayout
 
     @BindView(R.id.keys_backup_passphrase_enter_edittext)
     lateinit var mPassphraseTextEdit: EditText

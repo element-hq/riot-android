@@ -16,9 +16,9 @@
 package im.vector.notifications
 
 import android.content.Context
-import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.ImageView
+import androidx.core.app.NotificationCompat
 import im.vector.BuildConfig
 import im.vector.R
 import im.vector.util.RiotEventDisplay

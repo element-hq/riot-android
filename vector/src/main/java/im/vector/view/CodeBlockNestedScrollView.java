@@ -17,8 +17,9 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+
+import androidx.core.widget.NestedScrollView;
 
 public class CodeBlockNestedScrollView extends NestedScrollView {
 

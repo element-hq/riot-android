@@ -21,14 +21,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -139,7 +140,7 @@ public abstract class MXCActionBarActivity extends VectorAppCompatActivity {
     private static void dismissDialogs(FragmentActivity activity) {
         // close any opened dialog
         FragmentManager fm = activity.getSupportFragmentManager();
-        java.util.List<android.support.v4.app.Fragment> fragments = fm.getFragments();
+        java.util.List<Fragment> fragments = fm.getFragments();
 
         if (null != fragments) {
             for (Fragment fragment : fragments) {

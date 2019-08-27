@@ -17,8 +17,8 @@
 package im.vector.features.hhs
 
 import android.content.Context
-import android.support.annotation.StringRes
 import android.text.Html
+import androidx.annotation.StringRes
 import com.binaryfork.spanny.Spanny
 import im.vector.R
 import org.matrix.androidsdk.core.model.MatrixError

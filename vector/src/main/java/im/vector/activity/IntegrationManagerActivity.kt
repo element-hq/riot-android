@@ -19,8 +19,8 @@ package im.vector.activity
 
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.CallSuper
 import android.text.TextUtils
+import androidx.annotation.CallSuper
 import im.vector.R
 import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict

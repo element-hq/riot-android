@@ -19,10 +19,11 @@ package im.vector.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.util.Pair;
-import android.support.v7.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import androidx.core.util.Pair;
+import androidx.preference.PreferenceManager;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;

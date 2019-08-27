@@ -16,12 +16,12 @@
 package im.vector.activity
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AlertDialog
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.fragments.verification.*

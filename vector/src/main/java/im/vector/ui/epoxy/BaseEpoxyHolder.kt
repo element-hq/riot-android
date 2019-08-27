@@ -16,8 +16,8 @@
 
 package im.vector.ui.epoxy
 
-import android.support.annotation.CallSuper
 import android.view.View
+import androidx.annotation.CallSuper
 import butterknife.ButterKnife
 import com.airbnb.epoxy.EpoxyHolder
 

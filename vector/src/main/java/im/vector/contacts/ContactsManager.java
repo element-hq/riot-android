@@ -28,9 +28,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;

@@ -20,8 +20,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.preference.PreferenceManager
-import android.support.transition.TransitionManager
-import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextPaint
 import android.text.TextUtils
@@ -36,6 +34,8 @@ import android.widget.AbsListView
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.binaryfork.spanny.Spanny
@@ -46,8 +46,6 @@ import im.vector.ui.animation.VectorTransitionSet
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.MatrixURLSpan
 import org.matrix.androidsdk.core.Log
-import org.matrix.androidsdk.core.MXPatterns
-import org.matrix.androidsdk.core.PermalinkUtils
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomTombstoneContent
 

@@ -29,13 +29,6 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.annotation.StringRes
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v14.preference.SwitchPreference
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.preference.*
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -45,10 +38,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
+import androidx.preference.*
 import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.Matrix
@@ -69,6 +67,7 @@ import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
+import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.BingRulesManager
 import org.matrix.androidsdk.core.Log
@@ -1017,13 +1016,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 if (preference is SwitchPreference) {
                     when (preferenceKey) {
                         PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY ->
-                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isChecked = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
 
-                        PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
+                        PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY     -> {
                             preference.isChecked = pushManager?.isScreenTurnedOn ?: false
-                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed() ?: true
+                            preference.isEnabled = pushManager?.areDeviceNotificationsAllowed()
+                                    ?: true
                         }
-                        else -> {
+                        else                                                          -> {
                             preference.isEnabled = null != rules && isConnected
                             preference.isChecked = preferences.getBoolean(preferenceKey, false)
                         }
@@ -1037,7 +1038,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         val areNotificationAllowed = rules?.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL)?.isEnabled == true
 
         mNotificationPrivacyPreference.isEnabled = !areNotificationAllowed
-                && (pushManager?.areDeviceNotificationsAllowed() ?: true) && pushManager?.useFcm() ?: true
+                && (pushManager?.areDeviceNotificationsAllowed()
+                ?: true) && pushManager?.useFcm() ?: true
     }
 
     //==============================================================================================================
@@ -1160,7 +1162,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                 oldPasswordTil.error = getString(textResId)
                             } else {
                                 dialog.dismiss()
-                                activity.toast(textResId, Toast.LENGTH_LONG)
+                                activity.toast(textResId)
                             }
                         }
 
@@ -1204,7 +1206,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         when (preferenceKey) {
 
-            PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
+            PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY     -> {
                 if (pushManager.isScreenTurnedOn != newValue) {
                     pushManager.isScreenTurnedOn = newValue
                 }
@@ -1270,7 +1272,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // on some old android APIs,
             // the callback is called even if there is no user interaction
             // so the value will be checked to ensure there is really no update.
-            else -> {
+            else                                                          -> {
 
                 val ruleId = mPrefKeyToBingRuleId[preferenceKey]
                 val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
@@ -1399,7 +1401,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_CALL_RINGTONE -> {
+                REQUEST_CALL_RINGTONE         -> {
                     val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     val thisActivity = activity
                     if (callRingtoneUri != null && thisActivity != null) {
@@ -1408,15 +1410,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                 }
                 REQUEST_E2E_FILE_REQUEST_CODE -> importKeys(data)
-                REQUEST_NEW_PHONE_NUMBER -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY -> onPhonebookCountryUpdate(data)
-                REQUEST_LOCALE -> {
+                REQUEST_NEW_PHONE_NUMBER      -> refreshPhoneNumbersList()
+                REQUEST_PHONEBOOK_COUNTRY     -> onPhonebookCountryUpdate(data)
+                REQUEST_LOCALE                -> {
                     activity?.let {
                         startActivity(it.intent)
                         it.finish()
                     }
                 }
-                VectorUtils.TAKE_IMAGE -> {
+                VectorUtils.TAKE_IMAGE        -> {
                     val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, mSession.mediaCache)
 
                     if (null != thumbnailUri) {
@@ -1531,7 +1533,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         mSession.myUser.delete3Pid(pid, object : ApiCallback<Void> {
                             override fun onSuccess(info: Void?) {
                                 when (pid.medium) {
-                                    ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
+                                    ThreePid.MEDIUM_EMAIL  -> refreshEmailsList()
                                     ThreePid.MEDIUM_MSISDN -> refreshPhoneNumbersList()
                                 }
                                 onCommonDone(null)

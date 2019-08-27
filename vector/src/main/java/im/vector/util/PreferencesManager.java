@@ -24,9 +24,10 @@ import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.matrix.androidsdk.core.Log;
 

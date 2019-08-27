@@ -15,7 +15,7 @@
  */
 package im.vector.fragments.troubleshoot
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import im.vector.Matrix
 import im.vector.R
 

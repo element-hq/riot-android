@@ -19,12 +19,13 @@ package im.vector.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.fragment.app.DialogFragment;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
