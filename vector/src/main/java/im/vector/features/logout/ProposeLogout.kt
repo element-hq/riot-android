@@ -16,11 +16,11 @@
 
 package im.vector.features.logout
 
-import android.support.v7.app.AlertDialog
-import android.support.v7.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import im.vector.R
 import im.vector.activity.VectorHomeActivity
 import im.vector.util.PreferencesManager
