@@ -9,16 +9,16 @@
     android:paddingEnd="?dialogPreferredPadding"
     android:paddingRight="?dialogPreferredPadding">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/join_room_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/room_recents_join_room_prompt"
             android:textColor="?android:textColorPrimary" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

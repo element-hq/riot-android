@@ -20,9 +20,6 @@ package im.vector.view;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -33,6 +30,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.MultiAutoCompleteTextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;

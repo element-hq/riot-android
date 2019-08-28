@@ -15,9 +15,10 @@
  */
 package im.vector.push.fcm
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import im.vector.fragments.troubleshoot.*
-import im.vector.push.fcm.troubleshoot.*
+import im.vector.push.fcm.troubleshoot.TestAutoStartBoot
+import im.vector.push.fcm.troubleshoot.TestBackgroundRestrictions
 import org.matrix.androidsdk.MXSession
 
 class NotificationTroubleshootTestManagerFactory {

@@ -44,13 +44,13 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/login_user_name_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_user_name"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                             android:maxLines="1"
                             android:nextFocusDown="@+id/login_password" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,13 +96,13 @@
                             tools:text="FR"
                             tools:visibility="visible" />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_phone_number_value"
                                 style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
@@ -112,18 +112,18 @@
                                 android:maxLines="1"
                                 tools:text="0600000000" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/login_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_password"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                             android:inputType="textPassword"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -148,14 +148,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/auth_reset_password_message" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/forget_email_address_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_email_address"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -164,15 +164,15 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/forget_new_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_new_password"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -182,15 +182,15 @@
                             android:inputType="textPassword"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/forget_confirm_new_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_confirm_new_password"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -200,7 +200,7 @@
                             android:inputType="textPassword"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -212,13 +212,13 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/creation_your_name_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_your_name"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -227,15 +227,15 @@
                             android:inputType="text"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/creation_password1_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_password1"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -245,15 +245,15 @@
                             android:inputType="textPassword"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/creation_password2_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_password2"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                             android:inputType="textPassword"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -281,14 +281,14 @@
                         android:text="@string/auth_add_email_phone_message"
                         android:textSize="16sp" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/registration_email_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/registration_email"
                             style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:id="@+id/registration_phone_number"
@@ -325,13 +325,13 @@
                             tools:text="FR"
                             tools:visibility="visible" />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/registration_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/registration_phone_number_value"
                                 style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
@@ -341,7 +341,7 @@
                                 android:maxLines="1"
                                 tools:text="0600000000" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
@@ -378,14 +378,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_matrix_server_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_matrix_server_url"
                                 style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
@@ -394,16 +394,16 @@
                                 android:inputType="textUri"
                                 android:maxLines="1" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_identity_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_identity_url"
                                 style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
@@ -412,7 +412,7 @@
                                 android:inputType="textUri"
                                 android:maxLines="1" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 

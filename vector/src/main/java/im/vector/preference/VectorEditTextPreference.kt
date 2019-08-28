@@ -17,10 +17,10 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v7.preference.EditTextPreference
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.preference.EditTextPreference
+import androidx.preference.PreferenceViewHolder
 import im.vector.R
 import org.matrix.androidsdk.core.Log
 

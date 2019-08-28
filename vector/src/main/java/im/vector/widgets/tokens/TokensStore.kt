@@ -17,8 +17,8 @@
 package im.vector.widgets.tokens
 
 import android.content.Context
-import android.support.v7.preference.PreferenceManager
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import org.matrix.androidsdk.core.JsonUtils
 
 class TokensStore(context: Context) {

@@ -16,8 +16,8 @@
 
 package im.vector.dialogs
 
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import im.vector.R
 
 internal sealed class DialogListItem(@DrawableRes val iconRes: Int,

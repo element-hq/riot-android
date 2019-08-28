@@ -18,10 +18,11 @@
 
 package im.vector.util;
 
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;

@@ -103,7 +103,7 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/member_details_toolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"

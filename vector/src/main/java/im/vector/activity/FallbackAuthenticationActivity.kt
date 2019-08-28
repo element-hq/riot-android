@@ -22,12 +22,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
-import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AlertDialog
 import butterknife.BindView
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken

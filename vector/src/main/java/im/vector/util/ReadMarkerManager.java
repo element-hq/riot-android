@@ -20,12 +20,13 @@ package im.vector.util;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.support.annotation.IntDef;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.IntDef;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;

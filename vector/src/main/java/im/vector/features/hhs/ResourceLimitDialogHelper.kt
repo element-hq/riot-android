@@ -19,8 +19,8 @@ package im.vector.features.hhs
 import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.text.style.StyleSpan
+import androidx.appcompat.app.AlertDialog
 import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.activity.interfaces.Restorable

@@ -15,17 +15,16 @@
  */
 package im.vector.fragments.keysbackup.setup
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.support.transition.TransitionManager
 import android.text.TextUtils
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
@@ -50,7 +49,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     lateinit var mPassphraseTextEdit: EditText
 
     @BindView(R.id.keys_backup_passphrase_enter_til)
-    lateinit var mPassphraseInputLayout: TextInputLayout
+    lateinit var mPassphraseInputLayout: com.google.android.material.textfield.TextInputLayout
 
     @BindView(R.id.keys_backup_view_show_password)
     lateinit var mPassphraseReveal: ImageView
@@ -59,7 +58,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     lateinit var mPassphraseConfirmTextEdit: EditText
 
     @BindView(R.id.keys_backup_passphrase_confirm_til)
-    lateinit var mPassphraseConfirmInputLayout: TextInputLayout
+    lateinit var mPassphraseConfirmInputLayout: com.google.android.material.textfield.TextInputLayout
 
     @BindView(R.id.keys_backup_passphrase_security_progress)
     lateinit var mPassphraseProgressLevel: PasswordStrengthBar

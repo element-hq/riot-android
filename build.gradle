@@ -50,15 +50,15 @@ allprojects {
                 includeGroupByRegex "com\\.github\\.chrisbanes"
             }
         }
+        // Jitsi repo
+        maven {
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/releases"
+        }
         google()
         maven {
             url "https://maven.google.com"
         }
         jcenter()
-        // Jitsi repo
-        maven {
-            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
-        }
         maven {
             url "https://s3.amazonaws.com/repo.commonsware.com"
         }

@@ -18,7 +18,7 @@ package im.vector.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * This Activity is here only to display a logo when waiting for Riot Application to start

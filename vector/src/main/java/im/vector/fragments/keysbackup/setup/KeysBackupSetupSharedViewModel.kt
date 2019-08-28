@@ -16,9 +16,9 @@
 
 package im.vector.fragments.keysbackup.setup
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.nulabinc.zxcvbn.Strength
 import im.vector.R
 import im.vector.activity.util.WaitingViewData

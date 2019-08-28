@@ -18,7 +18,7 @@ package im.vector.dialogs
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.VectorWebViewActivity

@@ -15,8 +15,8 @@
  */
 package im.vector.ui.epoxy
 
-import android.support.annotation.StringRes
 import android.widget.TextView
+import androidx.annotation.StringRes
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass

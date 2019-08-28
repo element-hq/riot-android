@@ -17,8 +17,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -26,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;

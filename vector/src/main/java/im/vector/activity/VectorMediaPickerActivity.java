@@ -46,8 +46,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -61,6 +59,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.core.ImageUtils;

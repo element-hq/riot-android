@@ -18,7 +18,7 @@
         tools:text="@string/keys_backup_settings_restore_backup_button"
         tools:visibility="visible" />
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/keys_backup_settings_footer_button2"
         style="@style/VectorButtonStyle"
         android:layout_marginTop="16dp"

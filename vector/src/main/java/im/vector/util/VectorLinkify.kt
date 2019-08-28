@@ -15,13 +15,13 @@
  */
 package im.vector.util
 
-import android.support.v4.text.util.LinkifyCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import android.widget.TextView
+import androidx.core.text.util.LinkifyCompat
 import java.util.*
 
 /**

@@ -15,9 +15,9 @@
  */
 package im.vector.fragments.keysbackup.restore
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.view.KeysBackupBanner

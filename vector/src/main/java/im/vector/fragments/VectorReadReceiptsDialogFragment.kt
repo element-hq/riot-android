@@ -18,8 +18,6 @@ package im.vector.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -84,9 +82,9 @@ class VectorReadReceiptsDialogFragment : VectorBaseDialogFragment<VectorReadRece
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as RecyclerView)
+        return (inflater.inflate(R.layout.fragment_dialog_member_list, container, false) as androidx.recyclerview.widget.RecyclerView)
                 .apply {
-                    layoutManager = LinearLayoutManager(context)
+                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
                     adapter = mAdapter
                 }
     }

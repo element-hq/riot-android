@@ -15,11 +15,11 @@
  */
 package im.vector.activity
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.fragments.keysbackup.settings.KeysBackupSettingsViewModel
