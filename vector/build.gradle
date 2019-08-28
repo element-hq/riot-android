@@ -280,7 +280,6 @@ dependencies {
 
     // Robolectric
     androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
 }
