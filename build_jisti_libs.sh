@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+########
+# This script build the Jitsi library with LIBRE_BUILD flag.
+# Following instructions from here https://github.com/jitsi/jitsi-meet/tree/master/android#build-and-use-your-own-sdk-artifactsbinaries
+# It then export the library in a maven repository, that we host here https://github.com/vector-im/jitsi_libre_maven
+
 # exit on any error
 set -e
 
@@ -26,23 +31,23 @@ echo "npm install"
 echo "##################################################"
 
 npm install
-make
+#make
 
-echo
-echo "##################################################"
-echo "Build the Android library"
-echo "##################################################"
-
-pushd android
-./gradlew assembleRelease
-popd
-
-echo
-echo "##################################################"
-echo "Bundle with React Native"
-echo "##################################################"
-
-react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output index.android.bundle --assets-dest android/app/src/main/res/
+#echo
+#echo "##################################################"
+#echo "Build the Android library"
+#echo "##################################################"
+#
+#pushd android
+#./gradlew assembleRelease
+#popd
+#
+#echo
+#echo "##################################################"
+#echo "Bundle with React Native"
+#echo "##################################################"
+#
+#react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output index.android.bundle --assets-dest android/app/src/main/res/
 
 ./android/scripts/release-sdk.sh /tmp/jitsi2/
 
