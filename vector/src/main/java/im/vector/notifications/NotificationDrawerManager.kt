@@ -20,11 +20,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.PowerManager
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.Person
 import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.ImageView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.Person
 import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R

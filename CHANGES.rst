@@ -1,3 +1,39 @@
+Changes in Riot 0.9.4 (2019-08-28)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.27.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.27
+
+Security:
+ - Prompt to renew the token after a security fix on Matrix SDK
+
+Features:
+ - Make Widget/Integration manager optional (#3224)
+ - Handle terms and condition approval for IntegrationManager (#3225)
+
+Bugfix:
+ - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)
+ - SAS: fix crash when destroying activity (#3240)
+
+Build:
+ - Split APK: generate one APK per arch, to reduce APK size
+ - Get Jitsi library dependency from a Maven repository we host, to get a LIBRE_BUILD
+
+Changes in Riot 0.9.3 (2019-07-24)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.26.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.26
+
+Bugfix:
+ - Crash on older android due to okhttp bumping requirements to Android 5+
+
+Build:
+ - Include native libraries for 64 bits processors.
+
+
 Changes in Riot 0.9.2 (2019-07-18)
 ===================================================
 

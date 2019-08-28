@@ -7,7 +7,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
@@ -15,14 +15,14 @@
 
         <!-- The search view is added in the toolbar not in the menu
              to ensure that the overflow icon menu is not hidden.-->
-        <android.support.v7.widget.SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/historical_search_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:iconifiedByDefault="false"
             app:queryHint="@string/historical_placeholder" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- The main content view -->
     <FrameLayout
@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historical_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

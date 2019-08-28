@@ -18,15 +18,8 @@ package im.vector.fragments.signout
 
 import android.app.Activity
 import android.app.Dialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.transition.TransitionManager
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,16 +27,22 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.KeysBackupManageActivity
 import im.vector.activity.KeysBackupSetupActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.extensions.withArgs
+import org.jetbrains.anko.toast
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 
 
@@ -135,7 +134,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                         startActivity(KeysBackupManageActivity.intent(context, getExtraMatrixID()))
                                     }
                                 }
-                                KeysBackupStateManager.KeysBackupState.Disabled -> {
+                                KeysBackupStateManager.KeysBackupState.Disabled   -> {
                                     context?.let { context ->
                                         startActivityForResult(KeysBackupSetupActivity.intent(context, getExtraMatrixID(), true), EXPORT_REQ)
                                     }
@@ -145,7 +144,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                     //keys are already backing up please wait
                                     context?.toast(R.string.keys_backup_is_not_finished_please_wait)
                                 }
-                                else -> {
+                                else                                              -> {
                                     //nop
                                 }
                             }
@@ -194,7 +193,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
                 }
                 KeysBackupStateManager.KeysBackupState.BackingUp,
-                KeysBackupStateManager.KeysBackupState.WillBackUp -> {
+                KeysBackupStateManager.KeysBackupState.WillBackUp    -> {
                     backingUpStatusGroup.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
                     dontWantClickableView.isVisible = true
@@ -206,14 +205,14 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
 
                 }
-                KeysBackupStateManager.KeysBackupState.NotTrusted -> {
+                KeysBackupStateManager.KeysBackupState.NotTrusted    -> {
                     backingUpStatusGroup.isVisible = false
                     dontWantClickableView.isVisible = true
                     setupClickableView.isVisible = false
                     activateClickableView.isVisible = true
                     sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                 }
-                else -> {
+                else                                                 -> {
                     backingUpStatusGroup.isVisible = false
                     dontWantClickableView.isVisible = true
                     setupClickableView.isVisible = true
@@ -239,10 +238,10 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         //We want to force the bottom sheet initial state to expanded
-        (dialog as? BottomSheetDialog)?.let { bottomSheetDialog ->
+        (dialog as? com.google.android.material.bottomsheet.BottomSheetDialog)?.let { bottomSheetDialog ->
             bottomSheetDialog.setOnShowListener { dialog ->
-                val d = dialog as BottomSheetDialog
-                (d.findViewById<View>(android.support.design.R.id.design_bottom_sheet) as? FrameLayout)?.let {
+                val d = dialog as com.google.android.material.bottomsheet.BottomSheetDialog
+                (d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? FrameLayout)?.let {
                     BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }

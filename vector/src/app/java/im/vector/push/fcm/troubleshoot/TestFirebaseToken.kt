@@ -15,7 +15,7 @@
  */
 package im.vector.push.fcm.troubleshoot
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
 import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager

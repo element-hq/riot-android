@@ -17,30 +17,35 @@
 package im.vector.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
+import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
+import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
+import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
+import org.matrix.androidsdk.features.terms.TermsManager
+import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
@@ -76,6 +81,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     private var mHistoryAlreadyCleared = false
 
 
+    lateinit var widgetManager: WidgetsManager
     /* ==========================================================================================
      * LIFE CYCLE
      * ========================================================================================== */
@@ -94,6 +100,11 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
 
+        widgetManager = WidgetManagerProvider.getWidgetManager(this) ?: run {
+            finish()
+            return
+        }
+
         getScalarTokenAndLoadUrl()
     }
 
@@ -101,7 +112,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         if (canScalarTokenBeProvided()) {
             showWaitingView()
 
-            WidgetsManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
+            widgetManager.getScalarToken(this, mSession!!, object : ApiCallback<String> {
                 override fun onSuccess(scalarToken: String) {
                     mIsRefreshingToken = false
                     hideWaitingView()
@@ -122,13 +133,30 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                 }
 
                 override fun onUnexpectedError(e: Exception) {
-                    onError(e.localizedMessage)
+                    if (e is TermsNotSignedException) {
+                        mIsRefreshingToken = false
+                        hideWaitingView()
+                        presentTermsForServices(e.token)
+                    } else {
+                        onError(e.localizedMessage)
+                    }
                 }
             })
         } else {
             // Scalar token cannot be provided
             launchUrl(null)
         }
+    }
+
+    private fun presentTermsForServices(token: String?) {
+        val wm = WidgetManagerProvider.getWidgetManager(this)
+        if (wm == null) {  // should not happen
+            finish()
+            return
+        }
+        startActivityForResult(ReviewTermsActivity.intent(this,
+                TermsManager.ServiceType.IntegrationManager, wm.uiUrl, token),
+                TERMS_REQUEST_CODE)
     }
 
     /* ==========================================================================================
@@ -143,6 +171,17 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == TERMS_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                getScalarTokenAndLoadUrl()
+            } else {
+                finish()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
     /* ==========================================================================================
      * PRIVATE
      * ========================================================================================== */
@@ -205,7 +244,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
                             && !mTokenAlreadyRefreshed) {
                         mTokenAlreadyRefreshed = true
                         mIsRefreshingToken = true
-                        WidgetsManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
+                        widgetManager.clearScalarToken(this@AbstractWidgetActivity, mSession)
 
                         // Hide the webview because it's displaying an error message we try to fix by refreshing the token
                         mWebView.isVisible = false

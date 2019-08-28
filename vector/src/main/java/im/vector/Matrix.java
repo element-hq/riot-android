@@ -2,6 +2,7 @@
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +23,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
@@ -74,6 +76,7 @@ import im.vector.store.LoginStorage;
 import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PreferencesManager;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -131,7 +134,10 @@ public class Matrix {
             mRefreshUnreadCounter |= Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
 
             // TODO update to manage multisessions
-            WidgetsManager.getSharedInstance().onLiveEvent(instance.getDefaultSession(), event);
+            WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(VectorApp.getInstance().getApplicationContext());
+            if (wm != null) {
+                wm.onLiveEvent(instance.getDefaultSession(), event);
+            }
         }
 
         @Override

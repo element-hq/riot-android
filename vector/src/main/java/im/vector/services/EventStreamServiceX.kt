@@ -19,9 +19,9 @@ package im.vector.services
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder

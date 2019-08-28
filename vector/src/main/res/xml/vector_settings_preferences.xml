@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -424,6 +424,12 @@
             android:title="@string/settings_identity_server"
             tools:summary="@string/default_identity_server_url" />
 
+
+        <im.vector.preference.VectorPreference
+            android:defaultValue="@string/integrations_ui_url"
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
+            android:title="@string/settings_integration_manager" />
+
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceDivider />
@@ -506,4 +512,4 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

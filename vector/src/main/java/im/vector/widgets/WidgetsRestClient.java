@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +27,6 @@ import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
 
 import java.util.Map;
 
-import im.vector.R;
-
 class WidgetsRestClient extends RestClient<WidgetsApi> {
 
     private static final String API_VERSION = "1.1";
@@ -35,9 +34,9 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
     /**
      * {@inheritDoc}
      */
-    public WidgetsRestClient(Context context) {
+    public WidgetsRestClient(Context context, IntegrationManagerConfig config) {
         super(new HomeServerConnectionConfig.Builder()
-                        .withHomeServerUri(Uri.parse(context.getString(R.string.integrations_rest_url)))
+                        .withHomeServerUri(Uri.parse(config.getApiUrl()))
                         .build(),
                 WidgetsApi.class,
                 "",
@@ -53,12 +52,17 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
     public void register(final Map<Object, Object> params, final ApiCallback<Map<String, String>> callback) {
         final String description = "Register";
 
-        mApi.register(params, API_VERSION).enqueue(new RestAdapterCallback<Map<String, String>>(description,
-                mUnsentEventsManager, callback, new RestAdapterCallback.RequestRetryCallBack() {
-            @Override
-            public void onRetry() {
-                register(params, callback);
-            }
-        }));
+        mApi.register(params, API_VERSION).enqueue(new RestAdapterCallback<>(description,
+                mUnsentEventsManager, callback, () -> register(params, callback)));
+    }
+
+    /**
+     * Validates the scalar token to the server
+     */
+    public void validateToken(final String scalarToken, final ApiCallback<Map<String, String>> callback) {
+        final String description = "Validate";
+
+        mApi.validateToken(scalarToken, API_VERSION).enqueue(new RestAdapterCallback<>(description,
+                mUnsentEventsManager, callback, null));
     }
 }

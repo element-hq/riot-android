@@ -19,6 +19,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -30,4 +31,8 @@ interface WidgetsApi {
      */
     @POST("register")
     Call<Map<String, String>> register(@Body Map<Object, Object> body, @Query("v") String version);
+
+    @GET("account")
+    Call<Map<String, String>> validateToken( @Query("scalar_token") String scalarToken, @Query("v") String version);
+
 }

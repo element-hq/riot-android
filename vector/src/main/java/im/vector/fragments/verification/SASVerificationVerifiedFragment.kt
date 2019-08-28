@@ -15,8 +15,8 @@
  */
 package im.vector.fragments.verification
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import butterknife.OnClick
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment

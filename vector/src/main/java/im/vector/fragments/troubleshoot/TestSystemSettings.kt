@@ -15,8 +15,8 @@
  */
 package im.vector.fragments.troubleshoot
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
 import im.vector.R
 import im.vector.util.startNotificationSettingsIntent
 

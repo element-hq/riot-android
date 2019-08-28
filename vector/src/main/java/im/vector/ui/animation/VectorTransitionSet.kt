@@ -15,12 +15,12 @@
  */
 package im.vector.ui.animation
 
-import android.support.transition.ChangeBounds
-import android.support.transition.Fade
-import android.support.transition.Slide
-import android.support.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
+import androidx.transition.Slide
+import androidx.transition.TransitionSet
 
 class VectorTransitionSet : TransitionSet() {
 

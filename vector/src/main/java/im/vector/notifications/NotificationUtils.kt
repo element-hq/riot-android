@@ -27,10 +27,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.StringRes
-import android.support.v4.app.*
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
+import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.RemoteInput
+import androidx.core.app.TaskStackBuilder
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import im.vector.BuildConfig
 import im.vector.R
 import im.vector.activity.JoinRoomActivity

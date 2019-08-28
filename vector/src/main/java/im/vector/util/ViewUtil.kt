@@ -19,16 +19,15 @@ package im.vector.util
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.support.annotation.StringRes
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.StringRes
 import androidx.core.view.children
 import com.binaryfork.spanny.Spanny
 import im.vector.ui.themes.ThemeUtils
@@ -49,11 +48,11 @@ const val UTILS_OPACITY_NONE = 0f
 /**
  * Find all TextInputLayout in a ViewGroup and in all its descendants
  */
-fun ViewGroup.findAllTextInputLayout(): List<TextInputLayout> {
-    val res = ArrayList<TextInputLayout>()
+fun ViewGroup.findAllTextInputLayout(): List<com.google.android.material.textfield.TextInputLayout> {
+    val res = ArrayList<com.google.android.material.textfield.TextInputLayout>()
 
     children.forEach {
-        if (it is TextInputLayout) {
+        if (it is com.google.android.material.textfield.TextInputLayout) {
             res.add(it)
         } else if (it is ViewGroup) {
             // Recursive call
@@ -67,7 +66,7 @@ fun ViewGroup.findAllTextInputLayout(): List<TextInputLayout> {
 /**
  * Add a text change listener to all TextInputEditText to reset error on its TextInputLayout when the text is changed
  */
-fun autoResetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
+fun autoResetTextInputLayoutErrors(textInputLayouts: List<com.google.android.material.textfield.TextInputLayout>) {
     textInputLayouts.forEach {
         it.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -87,7 +86,7 @@ fun autoResetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
 /**
  * Reset error for all TextInputLayout
  */
-fun resetTextInputLayoutErrors(textInputLayouts: List<TextInputLayout>) {
+fun resetTextInputLayoutErrors(textInputLayouts: List<com.google.android.material.textfield.TextInputLayout>) {
     textInputLayouts.forEach { it.error = null }
 }
 

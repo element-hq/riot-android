@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -14,13 +16,18 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:5.9.0"
+        classpath "io.realm:realm-gradle-plugin:5.12.0"
     }
 }
 
 kapt {
     correctErrorTypes = true
 }
+
+// map for the version codes
+// x86 must have greater values than arm, see https://software.intel.com/en-us/android/articles/google-play-supports-cpu-architecture-filtering-for-multiple-apk
+// 64 bits have greater value than 32 bits
+ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
 android {
     compileSdkVersion 28
@@ -43,22 +50,42 @@ android {
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
 
+        // Keep abiFilter for the universalApk
         ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-
-        packagingOptions {
-            // The project react-native does not provide 64-bit binaries at the
-            // time of this writing. Unfortunately, packaging any 64-bit
-            // binaries into the .apk will crash the app at runtime on 64-bit
-            // platforms.
-            exclude "lib/x86_64/libjingle_peerconnection_so.so"
-            exclude "lib/arm64-v8a/libjingle_peerconnection_so.so"
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
         }
 
         multiDexEnabled true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
+    splits {
+        // Configures multiple APKs based on ABI.
+        abi {
+            // Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
+
+            // Resets the list of ABIs that Gradle should create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+
+            // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
+            universalApk true
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+            output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
+        }
     }
 
     dexOptions {
@@ -151,59 +178,59 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // Kotlin KTX (stick to this version, because project is not compatible with androidX)
-    implementation 'androidx.core:core-ktx:0.3'
+    // Kotlin KTX
+    implementation 'androidx.core:core-ktx:1.0.2'
 
     // Kotlin coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation "org.jetbrains.anko:anko-commons:0.10.8"
 
     // Note: do not upgrade to 1.0.3 because it lead to crashes at startup on Android 16
-    implementation 'com.android.support:multidex:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    implementation "com.android.support:appcompat-v7:$support_lib_version"
-    implementation "com.android.support:design:$support_lib_version"
-    implementation "com.android.support:cardview-v7:$support_lib_version"
-    implementation "com.android.support:recyclerview-v7:$support_lib_version"
-    implementation "com.android.support:preference-v7:$support_lib_version"
-    implementation "com.android.support:preference-v14:$support_lib_version"
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation 'com.android.support:support-v4:28.0.0'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Work manager
     // (Java only)
-    implementation "android.arch.work:work-runtime:1.0.0"
+    implementation "android.arch.work:work-runtime:1.0.1"
     // Kotlin + coroutines
-    implementation "android.arch.work:work-runtime-ktx:1.0.0"
+    implementation "android.arch.work:work-runtime-ktx:1.0.1"
 
     // UI
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.binaryfork:spanny:1.0.4'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
     // Epoxy (without androidx packages)
-    implementation 'com.airbnb.android:epoxy:2.19.0'
-    kapt 'com.airbnb.android:epoxy-processor:2.19.0'
+    implementation 'com.airbnb.android:epoxy:3.7.0'
+    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
 
     // Network
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation "com.google.code.gson:gson:$gson_version"
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.squareup.okio:okio:1.16.0'
+    implementation 'com.squareup.okio:okio:1.17.2'
 
     // Use Glide library to display image (Gif supported)
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.5'
@@ -211,12 +238,12 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
 
     //Alerter
-    implementation 'com.tapadoo.android:alerter:3.0.2'
+    implementation 'com.tapadoo.android:alerter:4.0.3'
 
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency
-    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.24.3'
+    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.27'
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
     //implementation project(':matrix-sdk')
@@ -224,10 +251,7 @@ dependencies {
     //implementation project(':matrix-sdk-core')
 
     /************* jitsi **************/
-    implementation('org.jitsi.react:jitsi-meet-sdk:2.0.0') {
-        transitive = true
-        exclude group: 'com.amplitude', module: 'android-sdk'
-    }
+    implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2')
 
     /************* analytics **************/
     // another tracking than GA
@@ -246,8 +270,8 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.12' // Test
-    testImplementation 'com.android.support.test:runner:1.0.2'
-    testImplementation 'com.android.support.test:rules:1.0.2'
+    testImplementation 'androidx.test:runner:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
     testImplementation 'org.mockito:mockito-core:2.23.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
@@ -256,11 +280,19 @@ dependencies {
 
     // Robolectric
     androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 }
 
+//Ensure we never move past okhttp 3.12.x
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'com.squareup.okhttp3' && details.requested.name == 'okhttp') {
+            details.useVersion '3.12.3'
+            details.because '3.13+ dropped support for android <5'
+        }
+    }
+}
 
 if (!getGradle().getStartParameter().getTaskRequests().toString().contains("Appfdroid")
         && !getGradle().getStartParameter().getTaskRequests().toString().contains("assembleAndroidTest")) {

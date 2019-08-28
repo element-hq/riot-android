@@ -22,7 +22,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,20 +34,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -67,9 +52,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
+
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXDataHandler;
@@ -115,6 +116,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.extensions.ViewExtensionsKt;
+import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
@@ -332,6 +334,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // track if the application update
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int version = preferences.getInt(PreferencesManager.VERSION_BUILD, 0);
+
+        new ProposeLogout(mSession, this).process();
 
         if (version != BuildConfig.VERSION_CODE) {
             Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + BuildConfig.VERSION_CODE);
@@ -1070,7 +1074,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         // Set color of toolbar search view
-        EditText edit = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
         edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
         edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
     }
@@ -1789,7 +1793,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     }
 
                     case R.id.sliding_menu_sign_out: {
-                        signOut();
+                        signOut(true);
                         break;
                     }
 
@@ -1854,8 +1858,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
-    private void signOut() {
-
+    public void signOut(boolean withConfirmationDialog) {
         if (SignOutViewModel.Companion.doYouNeedToBeDisplayed(mSession)) {
             SignOutBottomSheetDialogFragment signoutDialog = SignOutBottomSheetDialogFragment.Companion.newInstance(mSession.getMyUserId());
             signoutDialog.setOnSignOut(() -> {
@@ -1863,7 +1866,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 CommonActivityUtils.logout(VectorHomeActivity.this);
             });
             signoutDialog.show(getSupportFragmentManager(), "SO");
-        } else {
+        } else if (withConfirmationDialog) {
             // Display a simple confirmation dialog
             new AlertDialog.Builder(this)
                     .setTitle(R.string.action_sign_out)
@@ -1878,6 +1881,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
+        } else {
+            showWaitingView();
+
+            CommonActivityUtils.logout(VectorHomeActivity.this);
         }
     }
 
@@ -2061,7 +2068,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         int badgeOffsetX = (int) (18 * scale + 0.5f);
         int badgeOffsetY = (int) (7 * scale + 0.5f);
 
-        int largeTextHeight = getResources().getDimensionPixelSize(android.support.design.R.dimen.design_bottom_navigation_active_text_size);
+        int largeTextHeight = getResources().getDimensionPixelSize(com.google.android.material.R.dimen.design_bottom_navigation_active_text_size);
 
         for (int menuIndex = 0; menuIndex < mBottomNavigationView.getMenu().size(); menuIndex++) {
             try {

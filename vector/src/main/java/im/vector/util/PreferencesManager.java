@@ -2,6 +2,7 @@
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +24,15 @@ import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.matrix.androidsdk.core.Log;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -161,6 +164,12 @@ public class PreferencesManager {
     public static final String SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY";
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
+    //Integrations
+    public static final String SETTINGS_INTEGRATION_MANAGER_UI_URL = "SETTINGS_INTEGRATION_MANAGER_UI_URL";
+    public static final String SETTINGS_INTEGRATION_MANAGER_API_URL = "SETTINGS_INTEGRATION_MANAGER_API_URL";
+    public static final String SETTINGS_INTEGRATION_MANAGER_JITSI_URL = "SETTINGS_INTEGRATION_MANAGER_JITSI_URL";
+    public static final String SETTINGS_INTEGRATION_WHITELIST_URL = "SETTINGS_INTEGRATION_WHITELIST_URL";
+
     // other
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
     private static final String SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY";
@@ -210,7 +219,10 @@ public class PreferencesManager {
             SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
             SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
-            SETTINGS_USE_RAGE_SHAKE_KEY
+            SETTINGS_USE_RAGE_SHAKE_KEY,
+
+            // Technical keys
+            VERSION_BUILD
     );
 
     /**
@@ -266,9 +278,55 @@ public class PreferencesManager {
                 .apply();
     }
 
+    public static String getIntegrationManagerUiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_UI_URL,
+                context.getString(R.string.integrations_ui_url));
+    }
+
+    public static String getIntegrationManagerApiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_API_URL,
+                context.getString(R.string.integrations_rest_url));
+    }
+
+    public static String getIntegrationManagerJitsiUrl(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL,
+                context.getString(R.string.integrations_jitsi_widget_url));
+    }
+
+
+    public static void setIntegrationManagerUrls(Context context, String uiURl, String apiURl, String jitsiUrl) {
+        if (uiURl != null) {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .putString(SETTINGS_INTEGRATION_MANAGER_UI_URL, uiURl)
+                    .apply();
+        }
+        if (apiURl != null) {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .putString(SETTINGS_INTEGRATION_MANAGER_API_URL, apiURl)
+                    .apply();
+        }
+
+        if (jitsiUrl != null) {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .putString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL, jitsiUrl)
+                    .apply();
+        }
+    }
+
+    public static List<String> getIntegrationWhiteListedUrl(Context context) {
+        Set<String> defaultSet = new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.integrations_widgets_urls)));
+        Set<String> set = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(SETTINGS_INTEGRATION_WHITELIST_URL, defaultSet);
+        return new ArrayList<>(set);
+    }
+
+
     public static boolean didMigrateToNotificationRework(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, false);
     }
+
     public static void setDidMigrateToNotificationRework(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()

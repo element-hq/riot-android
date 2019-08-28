@@ -21,10 +21,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -155,10 +158,10 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        List<android.support.v4.app.Fragment> allFragments = getSupportFragmentManager().getFragments();
+        List<Fragment> allFragments = getSupportFragmentManager().getFragments();
 
         // dispatch the result to each fragments
-        for (android.support.v4.app.Fragment fragment : allFragments) {
+        for (Fragment fragment : allFragments) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }

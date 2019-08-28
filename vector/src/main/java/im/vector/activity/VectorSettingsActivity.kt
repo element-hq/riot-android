@@ -17,10 +17,9 @@ package im.vector.activity
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.fragment.app.Fragment
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsAdvancedNotificationPreferenceFragment
@@ -34,7 +33,7 @@ import im.vector.util.PreferencesManager
  */
 class VectorSettingsActivity : MXCActionBarActivity(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-        FragmentManager.OnBackStackChangedListener,
+        androidx.fragment.app.FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
     private lateinit var vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment

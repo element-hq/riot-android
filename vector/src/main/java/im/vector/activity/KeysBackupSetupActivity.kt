@@ -15,13 +15,12 @@
  */
 package im.vector.activity
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.dialogs.ExportKeysDialog
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
@@ -68,13 +67,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
             when (uxStateEvent?.getContentIfNotHandled()) {
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2 -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
                             .commit()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3 -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
                             .commit()
