@@ -261,7 +261,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     private void initViews() {
         RecyclerView roomDirectoryRecyclerView = findViewById(R.id.room_directory_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
         roomDirectoryRecyclerView.setLayoutManager(layoutManager);
         mRoomDirectoryAdapter = new RoomDirectoryAdapter(new ArrayList<RoomDirectoryData>(), this);
         roomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);

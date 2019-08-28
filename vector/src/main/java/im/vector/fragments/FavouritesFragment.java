@@ -163,7 +163,7 @@ public class FavouritesFragment extends AbsHomeFragment implements HomeRoomAdapt
         int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
 
         // favorites
-        mFavoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mFavoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         mFavoritesRecyclerView.setHasFixedSize(true);
         mFavoritesRecyclerView.setNestedScrollingEnabled(false);
 
