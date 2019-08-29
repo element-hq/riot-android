@@ -353,8 +353,6 @@ public class RegistrationManager {
                 if (mPassword != null) {
                     params.password = mPassword;
                 }
-                params.bind_email = mEmail != null;
-                params.bind_msisdn = mPhoneNumber != null;
             }
 
             if (authParams != null) {
@@ -430,7 +428,7 @@ public class RegistrationManager {
 
         registrationParams.auth.session = aSessionId;
 
-        // Note: username, password and bind_email must not be set in registrationParams
+        // Note: username, password must not be set in registrationParams
         mUsername = null;
         mPassword = null;
         clearThreePid();
