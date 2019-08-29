@@ -1,3 +1,28 @@
+Changes in Riot 0.9.5 (2019-XX-XX)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.X.Y.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in Riot 0.9.4 (2019-08-28)
 ===================================================
 
