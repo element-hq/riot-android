@@ -191,7 +191,7 @@
     <string name="forward">가져오기</string>
     <string name="active_call">현재 전화</string>
     <string name="ongoing_conference_call">회의 전화 진행 중.
-\n%1$s 또는 %1$s로 참가하세요</string>
+\n%1$s 또는 %2$s로 참가하세요</string>
     <string name="missing_permissions_to_start_conf_call">이 방에서 회의를 시작하려면 초대할 권한이 필요합니다</string>
     <string name="room_no_conference_call_in_encrypted_rooms">회의 전화는 암호화된 방에서 지원하지 않습니다</string>
     <string name="call_anyway">무시하고 통화</string>
@@ -575,7 +575,7 @@
     <string name="settings_notification_troubleshoot">알림 문제 해결</string>
     <string name="settings_troubleshoot_diagnostic">문제 해결 진단</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">테스트 실행</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">실행 중... (%2$d개 중 %1$d개 째)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">실행 중… (%2$d개 중 %1$d개 째)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">기본 진단은 괜찮습니다. 여전히 알림을 받지 못하고 있다면, 버그를 보고해서 우리가 조사할 수 있도록 도와주세요.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">1개 이상의 테스트가 실패했습니다, 제안된 수정을 시도하세요.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1개 이상의 테스트가 실패했습니다, 버그를 보고해서 우리가 조사할 수 있도록 도와주세요.</string>
@@ -1404,7 +1404,7 @@
     <string name="global_retry">다시 시도</string>
     <string name="room_list_empty">앱을 시작하면 방에 참가하기.</string>
     <string name="send_you_invite">초대장을 보냈습니다</string>
-    <string name="invited_by">%님이 초대했습니다</string>
+    <string name="invited_by">%1$s 님이 초대했습니다</string>
 
     <string name="room_list_catchup_empty_title">모두 읽었습니다!</string>
     <string name="room_list_catchup_empty_body">더 이상 읽지 않은 메시지가 없습니다</string>

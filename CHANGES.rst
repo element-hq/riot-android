@@ -18,7 +18,7 @@ Bugfix:
  -
 
 Translations:
- -
+ - Riot is fully translated into Korean thanks to paijai.
 
 Build:
  -
