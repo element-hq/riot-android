@@ -1625,4 +1625,21 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="message_view_edit_history">Voir l’historique des éditions</string>
 
+<string name="review">Examiner</string>
+    <string name="decline">Refuser</string>
+
+    <string name="widget_integration_review_terms">Pour continuer, vous devez accepter les conditions de ce service.</string>
+
+    <string name="security_warning_identity_server">Les versions précédentes de Riot avaient un problème de sécurité qui pouvait permettre à votre serveur d’identité (%1$s) d’accéder à votre compte. Si vous faites confiance à %2$s, vous pouvez ignorer cela ; sinon déconnectez-vous et reconnectez-vous.
+\n
+\nVous trouverez plus de détails ici :
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Conditions de service</string>
+    <string name="review_terms">Examiner les conditions</string>
+    <string name="terms_description_for_identity_server">Être découvrable par les autres</string>
+    <string name="terms_description_for_integration_manager">Utiliser des robots, passerelles, widgets et packs de stickers</string>
+
+    <string name="read_at">Lu à</string>
+
 </resources>
