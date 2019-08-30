@@ -69,6 +69,7 @@ import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
 import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.call.MXCallsManager
 import org.matrix.androidsdk.core.BingRulesManager
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.ResourceUtils
@@ -227,6 +228,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
     private val mUseRiotCallRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
+    }
+    private val mUseDefaultStunPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY) as SwitchPreference
     }
     private val mCallRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)
@@ -799,6 +803,23 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
             false
+        }
+
+        mUseDefaultStunPreference.let {
+            activity?.let { activity ->
+                it.isChecked = PreferencesManager.useDefaultTurnServer(activity)
+                val stun = activity.getString(R.string.default_stun_server)
+                it.summary = activity.getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    if (mUseDefaultStunPreference.isChecked) {
+                        MXCallsManager.defaultStunServerUri = stun
+                    } else {
+                        MXCallsManager.defaultStunServerUri = null
+                    }
+                    PreferencesManager.setUseDefaultTurnServer(activity,mUseDefaultStunPreference.isChecked)
+                    false
+                }
+            }
         }
 
         mCallRingtonePreference.let {

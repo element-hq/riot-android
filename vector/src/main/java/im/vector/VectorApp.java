@@ -41,6 +41,7 @@ import androidx.multidex.MultiDexApplication;
 import com.facebook.stetho.Stetho;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.core.Log;
 
 import java.io.File;
@@ -223,6 +224,12 @@ public class VectorApp extends MultiDexApplication {
 
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
+
+        if (PreferencesManager.useDefaultTurnServer(this)) {
+            MXCallsManager.defaultStunServerUri = getString(R.string.default_stun_server);
+        } else {
+            MXCallsManager.defaultStunServerUri = null;
+        }
 
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
         // not the first launch

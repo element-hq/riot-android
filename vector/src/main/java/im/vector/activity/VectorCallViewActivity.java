@@ -45,6 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
@@ -52,6 +53,7 @@ import org.matrix.androidsdk.call.CallSoundsManager;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallListener;
 import org.matrix.androidsdk.call.MXCallListener;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.call.VideoLayoutConfiguration;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -69,6 +71,7 @@ import im.vector.settings.VectorLocale;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
+import im.vector.util.PreferencesManager;
 import im.vector.util.VectorUtils;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.VectorPendingCallView;
@@ -137,6 +140,10 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
     private IMXCall mCall;
     private CallsManager mCallsManager;
 
+    // A boolean to track if P2P connection has been at least established before hangup
+    // This can help display some help to user
+    private boolean hasBeenConnectedBeforeEnd = false;
+
     // on Samsung devices, the application is suspended when the screen is turned off
     // so the call must not be suspended
     private boolean mIsScreenOff = false;
@@ -148,6 +155,9 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
+
+                    if (IMXCall.CALL_STATE_CONNECTING.equals(fState)) hasBeenConnectedBeforeEnd = false;
+                    if (IMXCall.CALL_STATE_CONNECTED.equals(fState)) hasBeenConnectedBeforeEnd = true;
 
                     manageSubViews();
 
@@ -1279,4 +1289,43 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         Log.d(LOG_TAG, "## onAccuracyChanged(): accuracy=" + accuracy);
     }
+
+    public void endCall() {
+        if (!hasBeenConnectedBeforeEnd && mCall != null && mCall.getIceServers().isEmpty()
+                && !PreferencesManager.useDefaultTurnServer(this)
+                && PreferencesManager.shouldAskForDefaultTurn(this)) {
+            //We should prompt and propose a turn server?
+            String defaultStun = getString(R.string.default_stun_server);
+            if (TextUtils.isEmpty(defaultStun)) {
+                finish();
+                return;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setTitle(R.string.call_failed_no_ice_title)
+                    .setMessage(
+                            getString(R.string.call_failed_no_ice_description,
+                                    Matrix.getInstance(this).getDefaultSession().getHomeServerConfig().getHomeserverUri(),
+                                    defaultStun)
+                    )
+                    .setPositiveButton(getString(R.string.call_failed_no_ice_use_alt, defaultStun), (dialog, which) -> {
+                        PreferencesManager.setUseDefaultTurnServer(this, true);
+                        MXCallsManager.defaultStunServerUri = defaultStun;
+                        finish();
+                    })
+                    .setNeutralButton(R.string.call_failed_dont_ask_again, (dialog, which) -> {
+                        PreferencesManager.setShouldAskForDefaultTurn(this, false);
+                        finish();
+                    })
+                    .setNegativeButton(R.string.ok, (dialog, which) -> {
+                        finish();
+                    })
+                    .show();
+            return;
+        }
+        finish();
+    }
+
+
 }

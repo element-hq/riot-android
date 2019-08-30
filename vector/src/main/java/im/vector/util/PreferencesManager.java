@@ -151,6 +151,8 @@ public class PreferencesManager {
     // Calls
     public static final String SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY";
     public static final String SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY";
+    public static final String SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY = "SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY";
+    public static final String SETTINGS_CALL_USE_DEFAULT_ASK_DEFAULT_STUN_PREFERENCE_KEY = "SETTINGS_CALL_USE_DEFAULT_ASK_DEFAULT_STUN_PREFERENCE_KEY";
 
     // labs
     public static final String SETTINGS_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_LAZY_LOADING_PREFERENCE_KEY";
@@ -578,6 +580,34 @@ public class PreferencesManager {
      */
     public static boolean useJitsiConfCall(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true);
+    }
+
+    /**
+     * Tells if the default turn server must be used when none is provided by the server
+     *
+     * @param context the context
+     * @return true if the conference call must be done with jitsi.
+     */
+    public static boolean useDefaultTurnServer(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY, false);
+    }
+
+    public static void setUseDefaultTurnServer(Context context, boolean use) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY, use)
+                .apply();
+    }
+
+    public static boolean shouldAskForDefaultTurn(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_CALL_USE_DEFAULT_ASK_DEFAULT_STUN_PREFERENCE_KEY, true);
+    }
+
+    public static void setShouldAskForDefaultTurn(Context context, boolean ask) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(SETTINGS_CALL_USE_DEFAULT_ASK_DEFAULT_STUN_PREFERENCE_KEY, ask)
+                .apply();
     }
 
     /**
