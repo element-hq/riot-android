@@ -1612,7 +1612,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
 
-<string name="settings_integration_manager">Gestionnaire d’intégrations</string>
+    <string name="settings_integration_manager">Gestionnaire d’intégrations</string>
 
     <string name="integration_manager_not_configured">Aucun gestionnaire d’intégrations n’est configuré.</string>
     <string name="add_by_matrix_id">Ajouter par identifiant matrix</string>

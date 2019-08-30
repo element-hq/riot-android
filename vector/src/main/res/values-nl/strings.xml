@@ -903,9 +903,9 @@
     <string name="avatar">Avatar</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 ongelezen bericht waarin u vermeld bent</item>
-	<item quantity="other">%d ongelezen berichten waarin u vermeld bent</item>
-</plurals>
+        <item quantity="one">1 ongelezen bericht waarin u vermeld bent</item>
+        <item quantity="other">%d ongelezen berichten waarin u vermeld bent</item>
+    </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
 

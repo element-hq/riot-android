@@ -1531,7 +1531,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \n
 \nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
 
-<string name="settings_integration_manager">Përgjegjës Integrimesh</string>
+    <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
 
     <string name="integration_manager_not_configured">Pa përgjegjës Integrimesh të formësuar.</string>
     <string name="push_gateway_item_app_id">app_id:</string>

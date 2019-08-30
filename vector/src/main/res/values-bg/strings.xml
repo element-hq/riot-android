@@ -1600,7 +1600,7 @@
 
     <string name="link_copied_to_clipboard">Връзката беше копирана</string>
 
-<string name="settings_integration_manager">Мениджър на интеграции</string>
+    <string name="settings_integration_manager">Мениджър на интеграции</string>
 
     <string name="integration_manager_not_configured">Не е конфигуриран мениджър на интеграции.</string>
     <string name="add_by_matrix_id">Добави по Matrix идентификатор</string>

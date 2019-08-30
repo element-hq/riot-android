@@ -1533,7 +1533,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_preferences">Asetukset</string>
     <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
-<string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
+    <string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
     <string name="last_edited_info_message">Viimeksi muokannut %s %s</string>
 
 
@@ -1585,7 +1585,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="message_view_edit_history">Näytä muokkaushistoria</string>
 
-<string name="title_activity_verify_device">Vahvista laite</string>
+    <string name="title_activity_verify_device">Vahvista laite</string>
 
     <string name="start_verification_short_label">Vahvista</string>
     <string name="key_share_request">Avaimen jakopyyntö</string>
@@ -1612,4 +1612,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvaus</string>
     <string name="settings_push_rules">Push-säännöt</string>
     <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
-    </resources>
+</resources>

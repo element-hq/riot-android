@@ -1607,7 +1607,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="link_copied_to_clipboard">Esteka arbelera kopiatu da</string>
 
-<string name="settings_integration_manager">Integrazio kudeatzailea</string>
+    <string name="settings_integration_manager">Integrazio kudeatzailea</string>
 
     <string name="integration_manager_not_configured">Ez da integrazio kudeatzailerik konfiguratu.</string>
     <string name="add_by_matrix_id">Gehitu matrix ID bidez</string>

@@ -141,8 +141,8 @@
     <string name="action_mark_room_read">읽음으로 표시</string>
     <string name="no_contact_access_placeholder">Riot이 주소록에 접근할 수 없게 되어 있습니다</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d 명의 사용자</item>
-</plurals>
+        <item quantity="other">%d 명의 사용자</item>
+    </plurals>
 
     <string name="groups_invite_header">초대</string>
     <string name="groups_header">커뮤니티</string>
@@ -178,7 +178,7 @@
 \n모든 기기에서 로그아웃되고 알림도 가지 않을 거에요. 다시 알림을 받으려면, 각 기기에 다시 로그인하세요.</string>
     <string name="login_mobile_device">모바일</string>
 
-<string name="notification_listening_for_events">이벤트 청취하기</string>
+    <string name="notification_listening_for_events">이벤트 청취하기</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">키 백업이 진행 중입니다. 지금 로그아웃하면 암호화된 메시지에 접근할 수 없습니다.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">암호화된 메시지에 대한 접근을 읽지 않도록 모든 장치에서 보안 키 백업이 활성화되어 있어야 합니다.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">암호화된 메시지를 원하지 않습니다</string>
@@ -289,8 +289,8 @@
     <string name="groups_list">그룹 목록</string>
 
     <plurals name="membership_changes">
-	<item quantity="other">%d 구성원십 변경</item>
-</plurals>
+        <item quantity="other">%d 구성원십 변경</item>
+    </plurals>
 
     <string name="compression_options">이렇게 보내기</string>
     <string name="compression_opt_list_original">원본</string>
@@ -381,25 +381,25 @@
     <string name="room_creation_title">새 대화</string>
     <string name="room_creation_add_member">구성원 추가</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="other">%d명의 활동 중인 구성원</item>
-</plurals>
+        <item quantity="other">%d명의 활동 중인 구성원</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="other">%d명의 구성원</item>
-</plurals>
+        <item quantity="other">%d명의 구성원</item>
+    </plurals>
     <string name="room_title_one_member">1명의 구성원</string>
 
     <plurals name="format_time_s">
-	<item quantity="other">%d초</item>
-</plurals>
+        <item quantity="other">%d초</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="other">%d분</item>
-</plurals>
+        <item quantity="other">%d분</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="other">%d시</item>
-</plurals>
+        <item quantity="other">%d시</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="other">%d일</item>
-</plurals>
+        <item quantity="other">%d일</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">방 떠나기</string>
     <string name="room_participants_leave_prompt_msg">방을 떠나겠습니까\?</string>
@@ -438,8 +438,8 @@
 \n확신합니까\?</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="other">이 사용자들을 이 대화에서 추방하겠습니까\?</item>
-</plurals>
+        <item quantity="other">이 사용자들을 이 대화에서 추방하겠습니까\?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 차단하겠습니까\?</string>
     <string name="reason_hint">이유</string>
 
@@ -475,8 +475,8 @@
     <string name="room_message_file_not_found">파일을 찾을 수 없음</string>
     <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="other">%d개의 새 메시지</item>
-</plurals>
+        <item quantity="other">%d개의 새 메시지</item>
+    </plurals>
 
     <string name="ssl_trust">신뢰함</string>
     <string name="ssl_do_not_trust">신뢰하지 않음</string>
@@ -495,8 +495,8 @@
     <string name="room_details_files">파일</string>
     <string name="room_details_settings">설정</string>
     <plurals name="room_details_selected">
-	<item quantity="other">%d개 선택됨</item>
-</plurals>
+        <item quantity="other">%d개 선택됨</item>
+    </plurals>
     <string name="malformed_id">잘못된 ID입니다. 이메일 주소나 \'@localpart:domain\'와 같은 Matrix ID이어야 합니다</string>
     <string name="room_details_people_invited_group_name">초대받음</string>
     <string name="room_details_people_present_group_name">참가함</string>
@@ -530,11 +530,11 @@
 
     <string name="directory_search_results_title">디렉토리 찾기</string>
     <plurals name="directory_search_rooms">
-	<item quantity="other">%d개의 방</item>
-</plurals>
+        <item quantity="other">%d개의 방</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="other">%2$s 검색 결과로 %1$s개의 방을 찾음</item>
-</plurals>
+        <item quantity="other">%2$s 검색 결과로 %1$s개의 방을 찾음</item>
+    </plurals>
     <string name="directory_searching_title">디렉토리 검색 중…</string>
 
     <string name="room_settings_all_messages_noisy">모든 메시지 (소리)</string>
@@ -981,21 +981,21 @@
     <string name="lock_screen_hint">여기에 입력…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="other">%d개의 읽지 않은 알림 메시지</item>
-</plurals>
+        <item quantity="other">%d개의 읽지 않은 알림 메시지</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="other">%d개의 읽지 않은 알림 메시지</item>
-</plurals>
+        <item quantity="other">%d개의 읽지 않은 알림 메시지</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="other">%d개의 방</item>
-</plurals>
+        <item quantity="other">%d개의 방</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="other">%1$s: %2$d개의 메시지</item>
-</plurals>
+        <item quantity="other">%1$s: %2$d개의 메시지</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="other">%d개의 알림</item>
-</plurals>
+        <item quantity="other">%d개의 알림</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%2$s에서 %1$s님</string>
     <string name="notification_unknown_new_event">새 이벤트</string>
@@ -1023,8 +1023,8 @@
     <string name="settings_labs_create_conference_with_jitsi">Jitsi로 회의 전화 만들기</string>
     <string name="widget_delete_message_confirmation">이 방에서 위젯을 삭제하겠습니까\?</string>
     <plurals name="active_widgets">
-	<item quantity="other">%d개의 활성 위젯</item>
-</plurals>
+        <item quantity="other">%d개의 활성 위젯</item>
+    </plurals>
 
     <string name="error_jitsi_not_supported_on_old_device">죄송합니다, Jitsi로 회의 전화는 오래된 기기에서 지원하지 않습니다 (안드로이드 OS가 5.0 이하인 기기)</string>
 
@@ -1113,12 +1113,12 @@
     <string name="filter_group_rooms">방 그룹 필터</string>
 
     <plurals name="group_members">
-	<item quantity="other">%d명의 구성원</item>
-</plurals>
+        <item quantity="other">%d명의 구성원</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="other">%d개의 방</item>
-</plurals>
+        <item quantity="other">%d개의 방</item>
+    </plurals>
     <string name="group_no_long_description">커뮤니티 관리자가 이 커뮤니티에 대한 자세한 설명을 제공하지 않았습니다.</string>
 
     <string name="has_been_kicked">%2$s님에 의해 %1$s에서 추방당했습니다</string>
@@ -1286,11 +1286,11 @@
     <string name="keys_backup_restore_success_title">백업이 복구되었습니다 %s !</string>
     <string name="keys_backup_restore_success_description">%1$d개의 세션 키를 복구했고, 이 기기에서 알려지지 않은 %2$d개의 새 키를 추가함</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="other">%d개의 키와 함께 백업을 복구했습니다.</item>
-</plurals>
+        <item quantity="other">%d개의 키와 함께 백업을 복구했습니다.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="other">%d개의 새 키가 이 기기에 추가되었습니다.</item>
-</plurals>
+        <item quantity="other">%d개의 새 키가 이 기기에 추가되었습니다.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">최신 복구 키 버전을 가져오는 데 실패했습니다 (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">세션 암호화가 활성화되지 않았습니다</string>
@@ -1337,8 +1337,8 @@
 
     <string name="keys_backup_info_keys_all_backup_up">모든 키가 백업됨</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="other">%d개의 키를 백업 중…</item>
-</plurals>
+        <item quantity="other">%d개의 키를 백업 중…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">버전</string>
     <string name="keys_backup_info_title_algorithm">알고리즘</string>

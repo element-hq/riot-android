@@ -1551,7 +1551,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="create_room_directory_title">Raumverzeichnis</string>
     <string name="create_room_directory_description">Veröffentliche diesen Raum ins Raumverzeichnis</string>
 
-<string name="settings_integration_manager">Integrationsmanager</string>
+    <string name="settings_integration_manager">Integrationsmanager</string>
 
     <string name="integration_manager_not_configured">Kein Integrationsmanager konfiguriert.</string>
     <string name="key_share_request">Schlüsselfreigabe Anfordern</string>
@@ -1625,7 +1625,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="creating_direct_room">Raum erstellen…</string>
     <string name="message_view_edit_history">Bearbeitungsverlauf anzeigen</string>
 
-<string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
+    <string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
 \n%s</string>
     <string name="sas_error_m_unknown_method">Das Gerät kann sich nicht auf eine Schlüsselvereinbarung, eine Hash-, eine MAC- oder eine SAS-Methode einigen</string>
     <string name="alpha_disclaimer_content_line_2_gplay">Die neueste Featureliste befindet sich immer in %1$s. Wenn Sie Fehler finden, senden Sie uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden den Fehler so schnell wie möglich beheben.</string>
@@ -1660,4 +1660,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="joining_room">Raum betreten…</string>
 
-    </resources>
+</resources>

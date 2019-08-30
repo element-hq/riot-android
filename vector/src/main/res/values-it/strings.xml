@@ -1656,7 +1656,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
 
-<string name="settings_integration_manager">Gestore dell\'integrazione</string>
+    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
 
     <string name="integration_manager_not_configured">Nessun gestore integrazione configurato.</string>
     <string name="add_by_matrix_id">Aggiungi per ID matrix</string>

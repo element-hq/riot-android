@@ -1564,7 +1564,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="link_copied_to_clipboard">連結已複製到剪貼簿</string>
 
-<string name="settings_integration_manager">整合管理員</string>
+    <string name="settings_integration_manager">整合管理員</string>
 
     <string name="integration_manager_not_configured">未設定整合管理員。</string>
     <string name="add_by_matrix_id">透過 matrix ID 新增</string>
