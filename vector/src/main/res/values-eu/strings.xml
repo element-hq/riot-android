@@ -129,14 +129,6 @@
     <string name="auth_password_placeholder">Pasahitza</string>
     <string name="auth_new_password_placeholder">Pasahitz berria</string>
     <string name="auth_user_name_placeholder">Erabiltzaile-izena</string>
-    <string name="auth_add_email_message">Gehitu e-mail helbide bat zure kontura erabiltzaileek zu aurkitzea baimentzeko, eta zuk pasahitza berrezarri ahal izateko.</string>
-    <string name="auth_add_phone_message">Gehitu telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.</string>
-    <string name="auth_add_email_phone_message">Gehitu e-mail helbide bat eta/edo telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.
-
-E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
-    <string name="auth_add_email_and_phone_message">Gehitu e-mail helbide bat eta telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.
-
-E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
     <string name="auth_email_placeholder">E-mail helbidea</string>
     <string name="auth_opt_email_placeholder">E-mail helbidea (aukerakoa)</string>
     <string name="auth_phone_number_placeholder">Telefono zenbakia</string>

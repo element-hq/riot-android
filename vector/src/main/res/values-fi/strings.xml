@@ -148,14 +148,6 @@
     <string name="auth_password_placeholder">Salasana</string>
     <string name="auth_new_password_placeholder">Uusi salasana</string>
     <string name="auth_user_name_placeholder">Käyttäjätunnus</string>
-    <string name="auth_add_email_message">"Lisää sähköpostiosoite tiliisi antaaksesi muiden käyttäjien löytää sinut. Voit myös nollata salasanasi."</string>
-    <string name="auth_add_phone_message">Lisää puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.</string>
-    <string name="auth_add_email_phone_message">Lisää sähköpostiosoite ja/tai puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
-\n
-\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
-    <string name="auth_add_email_and_phone_message">Lisää sähköpostiosoite ja puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
-\n
-\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
     <string name="auth_email_placeholder">Sähköpostiosoite</string>
     <string name="auth_opt_email_placeholder">Sähköpostiosoite (valinnainen)</string>
     <string name="auth_phone_number_placeholder">Puhelinnumero</string>

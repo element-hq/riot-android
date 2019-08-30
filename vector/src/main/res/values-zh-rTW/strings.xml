@@ -159,14 +159,6 @@
     <string name="auth_password_placeholder">密碼</string>
     <string name="auth_new_password_placeholder">新密碼</string>
     <string name="auth_user_name_placeholder">使用者名稱</string>
-    <string name="auth_add_email_message">輸入電子郵件位址來讓其他人找到您，以及方便您重設密碼。</string>
-    <string name="auth_add_phone_message">新增電話號碼來讓其他人找到您。</string>
-    <string name="auth_add_email_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
-
-電子郵件位址也可以用來重設密碼。</string>
-    <string name="auth_add_email_and_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
-
-電子郵件位址也可以用來重設密碼。</string>
     <string name="auth_email_placeholder">電子郵件地址</string>
     <string name="auth_opt_email_placeholder">電子郵件位址（選擇性）</string>
     <string name="auth_phone_number_placeholder">電話號碼</string>

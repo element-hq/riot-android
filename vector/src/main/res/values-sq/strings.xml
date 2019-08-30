@@ -138,7 +138,6 @@
     <string name="auth_password_placeholder">Fjalëkalim</string>
     <string name="auth_new_password_placeholder">Fjalëkalim i ri</string>
     <string name="auth_user_name_placeholder">Emër përdoruesi</string>
-    <string name="auth_add_phone_message">Shtoni te llogaria juaj një numër telefoni, që përdoruesit të mund t’ju zbulojnë.</string>
     <string name="auth_email_placeholder">Adresë email</string>
     <string name="auth_opt_email_placeholder">Adresë email (në daçi)</string>
     <string name="auth_phone_number_placeholder">Numër telefoni</string>
@@ -745,13 +744,6 @@
     <string name="logout">Dilni</string>
     <string name="option_send_voice">Dërgoni mesazh zanor</string>
 
-    <string name="auth_add_email_message">Shtoni te llogaria juaj një adresë email, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë dhe që t’ju lejojë të ricaktoni fjalëkalimin.</string>
-    <string name="auth_add_email_phone_message">Shtoni te llogaria juaj një adresë email dhe/ose një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
-\n
-\nAdresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
-    <string name="auth_add_email_and_phone_message">Shtoni te llogaria juaj një adresë email dhe një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
-\n
-\nAdresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
     <string name="auth_threepid_warning_message">Regjistrimi me email dhe me numër telefoni njëherazi nuk mbulohet ende, deri sa të ketë API. Do të merret parasysh vetëm numri i telefonit.
 \n
 \nEmail-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>

@@ -666,18 +666,18 @@ public class RegistrationManager {
             if (isRequired(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
                     && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 // Both required
-                instructionRes = R.string.auth_add_email_and_phone_message;
+                instructionRes = R.string.auth_add_email_and_phone_message_2;
             } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                     // Both supported but not both required
-                    instructionRes = R.string.auth_add_email_phone_message;
+                    instructionRes = R.string.auth_add_email_phone_message_2;
                 } else {
                     // Only email
-                    instructionRes = R.string.auth_add_email_message;
+                    instructionRes = R.string.auth_add_email_message_2;
                 }
             } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 // Only phone number
-                instructionRes = R.string.auth_add_phone_message;
+                instructionRes = R.string.auth_add_phone_message_2;
             }
         }
         return instructionRes != -1 ? context.getString(instructionRes) : "";

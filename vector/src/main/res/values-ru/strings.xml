@@ -142,14 +142,6 @@
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новый пароль</string>
     <string name="auth_user_name_placeholder">Логин</string>
-    <string name="auth_add_email_message">Добавьте адрес электронной почты к вашему аккаунту, чтобы другие пользователи могли найти вас, а также, чтобы иметь возможность сбросить пароль.</string>
-    <string name="auth_add_phone_message">"Добавьте телефон к вашему аккаунту, чтобы другие пользователи могли найти вас."</string>
-    <string name="auth_add_email_phone_message">Добавьте электронную почту и/или телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
-
-Электронная почта также позволит вам при необходимости восстановить пароль.</string>
-    <string name="auth_add_email_and_phone_message">Добавьте email и телефон к вашему аккаунту, чтобы другие пользователи могли найти вас.
-
-Email также позволит вам при необходимости восстановить пароль.</string>
     <string name="auth_email_placeholder">Адрес электронной почты</string>
     <string name="auth_opt_email_placeholder">Адрес электронной почты (не обязательно)</string>
     <string name="auth_phone_number_placeholder">Номер телефона</string>

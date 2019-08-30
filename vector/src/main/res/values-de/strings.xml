@@ -140,14 +140,6 @@
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
     <string name="auth_user_name_placeholder">Benutzername</string>
-    <string name="auth_add_email_message">Füge eine E-Mail-Adresse zu deinem Account hinzu, damit andere Benutzer dich finden können und du dein Passwort zurücksetzen kannst.</string>
-    <string name="auth_add_phone_message">Füge eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.</string>
-    <string name="auth_add_email_phone_message">Füge eine E-Mail-Adresse und/oder eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
-
-Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
-    <string name="auth_add_email_and_phone_message">Füge eine E-Mail-Adresse und eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
-
-Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
     <string name="auth_email_placeholder">E-Mail-Adresse</string>
     <string name="auth_opt_email_placeholder">E-Mail-Adresse (optional)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
