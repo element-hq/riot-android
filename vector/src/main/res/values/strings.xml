@@ -1651,4 +1651,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="terms_description_for_identity_server">Be discoverable by others</string>
     <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
 
+    <string name="read_at">Read at</string>
+
 </resources>
