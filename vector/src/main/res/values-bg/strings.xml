@@ -1613,4 +1613,21 @@
 
     <string name="message_view_edit_history">Виж историята на редакциите</string>
 
+<string name="review">Прегледай</string>
+    <string name="decline">Откажи</string>
+
+    <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
+
+    <string name="security_warning_identity_server">Предишни версии на Riot имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
+\n
+\nНаучете повече подробности тук:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Условия за ползване</string>
+    <string name="review_terms">Прегледай условията</string>
+    <string name="terms_description_for_identity_server">Бъдете откриваеми от други</string>
+    <string name="terms_description_for_integration_manager">Използвайте ботове, връзки с други мрежи, приспособления и стикери</string>
+
+    <string name="read_at">Прочетете на</string>
+
 </resources>
