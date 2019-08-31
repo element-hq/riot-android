@@ -1650,7 +1650,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="room_filtering_footer_title">Können Sie nicht finden, wonach Sie suchen\?</string>
     <string name="room_filtering_footer_create_new_room">Erstelle einen neuen Raum</string>
-    <string name="room_directory_search_hint">Name oder ID (#Beispiel: matrix.org)</string>
+    <string name="room_directory_search_hint">Name oder ID (#beispiel:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Aktivieren Sie das Streichen, um in der Zeitleiste zu antworten</string>
 
@@ -1660,4 +1660,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="joining_room">Raum betreten…</string>
 
-</resources>
+<string name="decline">Ablehnen</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    </resources>
