@@ -9,7 +9,8 @@ Features:
  - Privacy: Use the hashed v2 lookup API for 3PIDs (#3257)
  - Privacy: Prompt to accept identity server policies before inviting them to a room (#3227)
  - Privacy: Make clear that device names are publicly readable (#3265)
- - Privacy: Email help text on registration should be updated without binding (#3278).
+ - Privacy: Email help text on registration should be updated without binding (#3278)
+ - Privacy: Use wellknown to discover the IS of a HS (#3283)
 
 Improvements:
  -

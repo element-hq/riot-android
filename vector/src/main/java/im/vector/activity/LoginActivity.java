@@ -52,6 +52,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.JsonUtils;
@@ -935,17 +936,52 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mSwitchToRegisterButton.setVisibility(View.VISIBLE);
             }
 
-            if (checkFlowOnUpdate) {
-                checkFlows();
-            }
+            // Wellknown request, to fill identity server Url
+            new AutoDiscovery()
+                    .getIdentityServer(mHomeServerUrl, new ApiCallback<String>() {
 
-            // Check if we have to display the identity server url field
-            checkIdentityServerUrlField();
+                        @Override
+                        public void onSuccess(@Nullable String info) {
+                            if (!TextUtils.isEmpty(info)) {
+                                mIdentityServerUrl = info;
+                            } else {
+                                // Use default
+                                mIdentityServerUrl = ServerUrlsRepository.INSTANCE.getLastIdentityServerUrl(LoginActivity.this);
+                            }
+                            mIdentityServerText.setText(mIdentityServerUrl);
+
+                            onHomeServerUrlUpdateStep2(checkFlowOnUpdate);
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onHomeServerUrlUpdateStep2(checkFlowOnUpdate);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onHomeServerUrlUpdateStep2(checkFlowOnUpdate);
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onHomeServerUrlUpdateStep2(checkFlowOnUpdate);
+                        }
+                    });
 
             return true;
         }
 
         return false;
+    }
+
+    private void onHomeServerUrlUpdateStep2(boolean checkFlowOnUpdate) {
+        if (checkFlowOnUpdate) {
+            checkFlows();
+        }
+
+        // Check if we have to display the identity server url field
+        checkIdentityServerUrlField();
     }
 
     private void checkIdentityServerUrlField() {
