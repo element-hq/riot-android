@@ -1418,7 +1418,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
 
-    <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Heimservers</string>
+    <string name="autodiscover_invalid_response">Ungültige Antwort beim entdecken des Home-Servers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
 \n%2$s</string>
