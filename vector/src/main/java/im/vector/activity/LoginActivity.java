@@ -61,7 +61,6 @@ import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.HttpException;
 import org.matrix.androidsdk.core.model.MatrixError;
-import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.login.AutoDiscovery;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
@@ -940,10 +939,44 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 checkFlows();
             }
 
+            // Check if we have to display the identity server url field
+            checkIdentityServerUrlField();
+
             return true;
         }
 
         return false;
+    }
+
+    private void checkIdentityServerUrlField() {
+        mIdentityServerTextTil.setVisibility(View.GONE);
+
+        if (mMode == MODE_ACCOUNT_CREATION) {
+            new LoginRestClient(getHsConfig())
+                    .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
+                        @Override
+                        public void onNetworkError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Boolean info) {
+                            if (info) {
+                                mIdentityServerTextTil.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+        }
     }
 
     /**

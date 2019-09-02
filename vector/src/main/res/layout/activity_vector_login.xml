@@ -396,12 +396,15 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <!-- Visibility of this field depends on the homeserver: it can be displayed only when registering on a old HS -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_identity_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:textColorHint="?attr/vctr_default_text_hint_color">
+                            android:textColorHint="?attr/vctr_default_text_hint_color"
+                            android:visibility="gone"
+                            tools:visibility="visible">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_identity_url"
