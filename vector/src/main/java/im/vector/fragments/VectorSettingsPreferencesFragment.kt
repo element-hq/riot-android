@@ -91,6 +91,7 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.rest.model.group.Group
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
+import org.matrix.androidsdk.rest.model.sync.AccountDataElement
 import org.matrix.androidsdk.rest.model.sync.DeviceInfoUtil
 import java.lang.ref.WeakReference
 import java.text.DateFormat
@@ -118,6 +119,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             refreshDisplay()
+        }
+
+        override fun onAccountDataUpdated(accountDataElement: AccountDataElement) {
+            if (accountDataElement.type == AccountDataElement.ACCOUNT_DATA_TYPE_IDENTITY_SERVER) {
+                (findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as EditTextPreference).let {
+                    updateIdentityServerPref()
+                }
+            }
         }
     }
 
@@ -272,6 +281,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
+    }
+    private val identityServerPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as EditTextPreference
     }
 
     /* ==========================================================================================
@@ -645,8 +657,40 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 .summary = mSession.homeServerConfig.homeserverUri.toString()
 
         // identity server
-        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.identityServerUri?.toString() ?: getString(R.string.identity_server_not_defined)
+        updateIdentityServerPref()
+        // TODO A click on this pref will open the discovery Fragment, which will manage the update of the IS
+        identityServerPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            displayLoadingView()
+
+            var newIdentityServer = newValue as String
+            if (!newIdentityServer.isBlank() && !newIdentityServer.startsWith("http")) {
+                newIdentityServer = "https://$newIdentityServer"
+            }
+
+            mSession.identityServerManager.setIdentityServerUrl(newIdentityServer, object : ApiCallback<Void?> {
+                override fun onSuccess(info: Void?) {
+                    hideLoadingView()
+                    updateIdentityServerPref()
+                }
+
+                override fun onUnexpectedError(e: java.lang.Exception) {
+                    onCommonDone(e.localizedMessage)
+                    updateIdentityServerPref()
+                }
+
+                override fun onNetworkError(e: java.lang.Exception) {
+                    onCommonDone(e.localizedMessage)
+                    updateIdentityServerPref()
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    onCommonDone(e.localizedMessage)
+                    updateIdentityServerPref()
+                }
+
+            })
+            true
+        }
 
         findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL)
                 .summary = PreferencesManager.getIntegrationManagerUiUrl(context)
@@ -856,6 +900,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             false
         }
+    }
+
+    private fun updateIdentityServerPref() {
+        identityServerPreference.summary = mSession.identityServerManager?.getIdentityServerUrl()
+                ?: getString(R.string.identity_server_not_defined)
+        identityServerPreference.text = mSession.identityServerManager?.getIdentityServerUrl() ?: ""
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

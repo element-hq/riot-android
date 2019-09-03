@@ -568,7 +568,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     public void onIdentityServerTermsNotSigned(String token) {
         if (isAdded()) {
             startActivityForResult(ReviewTermsActivity.Companion.intent(getActivity(),
-                    TermsManager.ServiceType.IdentityService, mSession.getHomeServerConfig().getIdentityServerUri().toString(), token),
+                    TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
                     RequestCodesKt.TERMS_REQUEST_CODE);
         }
     }

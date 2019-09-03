@@ -127,7 +127,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         @Override
         public void onIdentityServerTermsNotSigned(String token) {
             startActivityForResult(ReviewTermsActivity.Companion.intent(VectorRoomInviteMembersActivity.this,
-                    TermsManager.ServiceType.IdentityService, mSession.getHomeServerConfig().getIdentityServerUri().toString(), token),
+                    TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* cannot be null */, token),
                     RequestCodesKt.TERMS_REQUEST_CODE);
         }
     };

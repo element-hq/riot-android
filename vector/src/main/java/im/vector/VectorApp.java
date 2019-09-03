@@ -870,11 +870,11 @@ public class VectorApp extends MultiDexApplication {
         final MXSession session = Matrix.getInstance(this).getDefaultSession();
         if (session != null) {
             mAppAnalytics.visitVariable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-            Uri identityServerUri = session.getHomeServerConfig().getIdentityServerUri();
-            if (identityServerUri == null) {
+            String identityServerUrl = session.getIdentityServerManager().getIdentityServerUrl();
+            if (identityServerUrl == null) {
                 mAppAnalytics.visitVariable(8, "Identity Server URL", "");
             } else {
-                mAppAnalytics.visitVariable(8, "Identity Server URL", identityServerUri.toString());
+                mAppAnalytics.visitVariable(8, "Identity Server URL", identityServerUrl);
             }
         }
     }
