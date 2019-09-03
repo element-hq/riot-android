@@ -1669,4 +1669,21 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
 
+<string name="review">Leggi</string>
+    <string name="decline">Rifiuta</string>
+
+    <string name="widget_integration_review_terms">Per continuare, devi accettare i termini di servizio.</string>
+
+    <string name="security_warning_identity_server">Le precedenti versioni di Riot avevano un errore di sicurezza che poteva dare accesso al tuo account al tuo Server di Identità (%1$s). Se ti fidi di %2$s, puoi ignorare; altrimenti disconnettiti e riaccedi di nuovo.
+\n
+\nLeggi maggiori dettagli qui:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Termini di servizio</string>
+    <string name="review_terms">Leggi i termini</string>
+    <string name="terms_description_for_identity_server">Diventa trovabile dagli altri</string>
+    <string name="terms_description_for_integration_manager">Usa bot, bridge, widget e pacchetti di adesivi</string>
+
+    <string name="read_at">Leggi su</string>
+
 </resources>
