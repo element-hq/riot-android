@@ -987,7 +987,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void checkIdentityServerUrlField() {
         mIdentityServerTextTil.setVisibility(View.GONE);
 
-        if (mMode == MODE_ACCOUNT_CREATION) {
+        if (mMode == MODE_ACCOUNT_CREATION || mMode == MODE_FORGOT_PASSWORD) {
             new LoginRestClient(getHsConfig())
                     .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
                         @Override
@@ -1250,25 +1250,60 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         //Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
         Log.d(LOG_TAG, "onForgotPasswordClick");
 
+        enableLoadingScreen(true);
+
         Uri identityServerUri = hsConfig.getIdentityServerUri();
-        if (identityServerUri == null) {
-            Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
+        if (identityServerUri == null || identityServerUri.toString().isEmpty()) {
+            // Check if the HS require an identity server
+            new LoginRestClient(getHsConfig())
+                    .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            enableLoadingScreen(false);
+                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            enableLoadingScreen(false);
+                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            enableLoadingScreen(false);
+                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onSuccess(Boolean info) {
+                            if (info) {
+                                enableLoadingScreen(false);
+                                Toast.makeText(LoginActivity.this, R.string.identity_server_not_defined_for_password_reset, Toast.LENGTH_LONG).show();
+                            } else {
+                                doForgetPasswordRequest(hsConfig, email, null);
+                            }
+                        }
+                    });
         } else {
-            enableLoadingScreen(true);
+            doForgetPasswordRequest(hsConfig, email, identityServerUri.getHost());
+        }
+    }
 
-            ProfileRestClient pRest = new ProfileRestClient(hsConfig);
+    private void doForgetPasswordRequest(HomeServerConnectionConfig hsConfig, String email, @Nullable String identityServerHost) {
+        ProfileRestClient pRest = new ProfileRestClient(hsConfig);
 
-            pRest.forgetPassword(email, new ApiCallback<ThreePid>() {
-                @Override
-                public void onSuccess(ThreePid thirdPid) {
-                    if (mMode == MODE_FORGOT_PASSWORD) {
-                        Log.d(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken succeeds");
+        pRest.forgetPassword(email, new ApiCallback<ThreePid>() {
+            @Override
+            public void onSuccess(ThreePid thirdPid) {
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    Log.d(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken succeeds");
 
-                        enableLoadingScreen(false);
+                    enableLoadingScreen(false);
 
-                        // refresh the messages
-                        hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
-                        mButtonsView.setVisibility(View.VISIBLE);
+                    // refresh the messages
+                    hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
+                    mButtonsView.setVisibility(View.VISIBLE);
 
                         mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                         refreshDisplay(true);
@@ -1279,65 +1314,65 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         mForgotPid.sid = thirdPid.getSid();
                     }
                 }
+            }
 
-                /**
-                 * Display a toast to warn that the operation failed
-                 *
-                 * @param errorMessage the error message.
-                 */
-                private void onError(final String errorMessage) {
-                    Log.e(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken fails with error " + errorMessage);
+            /**
+             * Display a toast to warn that the operation failed
+             *
+             * @param errorMessage the error message.
+             */
+            private void onError(final String errorMessage) {
+                Log.e(LOG_TAG, "onForgotPasswordClick : requestEmailValidationToken fails with error " + errorMessage);
 
-                    if (mMode == MODE_FORGOT_PASSWORD) {
-                        enableLoadingScreen(false);
-                        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                    }
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    enableLoadingScreen(false);
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
+            }
 
-                @Override
-                public void onNetworkError(final Exception e) {
-                    if (mMode == MODE_FORGOT_PASSWORD) {
-                        UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                        if (unrecCertEx != null) {
-                            final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+            @Override
+            public void onNetworkError(final Exception e) {
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                    if (unrecCertEx != null) {
+                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
 
-                            UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                                @Override
-                                public void onAccept() {
-                                    onForgotPasswordClick();
-                                }
+                        UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                            @Override
+                            public void onAccept() {
+                                onForgotPasswordClick();
+                            }
 
-                                @Override
-                                public void onIgnore() {
-                                    onError(e.getLocalizedMessage());
-                                }
+                            @Override
+                            public void onIgnore() {
+                                onError(e.getLocalizedMessage());
+                            }
 
-                                @Override
-                                public void onReject() {
-                                    onError(e.getLocalizedMessage());
-                                }
-                            });
-                        } else {
-                            onError(e.getLocalizedMessage());
-                        }
-                    }
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    if (TextUtils.equals(MatrixError.THREEPID_NOT_FOUND, e.errcode)) {
-                        onError(getString(R.string.account_email_not_found_error));
+                            @Override
+                            public void onReject() {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
                     } else {
                         onError(e.getLocalizedMessage());
                     }
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (TextUtils.equals(MatrixError.THREEPID_NOT_FOUND, e.errcode)) {
+                    onError(getString(R.string.account_email_not_found_error));
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
+            }
+        });
     }
 
     /**

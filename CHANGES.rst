@@ -13,6 +13,7 @@ Features:
  - Privacy: Use wellknown to discover the IS of a HS (#3283)
  - Privacy: Remove the bind true flag from 3PID adds in settings (#3254)
  - Privacy: Remove the ability to set an IS at login/registration (#3264)
+ - Privacy: Allow password reset when no IS (#3261)
 
 Improvements:
  -
