@@ -2842,6 +2842,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onIdentityServerMissing() {
+        Log.d(LOG_TAG, "## onIdentityServerMissing()");
+        enableLoadingScreen(false);
+        showMainLayout();
+        refreshDisplay();
         Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_SHORT).show();
     }
 

@@ -14,6 +14,7 @@ Features:
  - Privacy: Remove the bind true flag from 3PID adds in settings (#3254)
  - Privacy: Remove the ability to set an IS at login/registration (#3264)
  - Privacy: Allow password reset when no IS (#3261)
+ - Privacy: Allow email registration when no IS (#3260)
 
 Improvements:
  -
