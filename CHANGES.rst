@@ -6,7 +6,7 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
 
 Improvements:
  -

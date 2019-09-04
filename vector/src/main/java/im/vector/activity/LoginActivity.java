@@ -97,6 +97,7 @@ import im.vector.activity.policies.AccountCreationTermsActivity;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
 import im.vector.push.fcm.FcmHelper;
+import im.vector.receiver.LoginConfig;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
@@ -117,6 +118,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
 
     public static final String EXTRA_RESTART_FROM_INVALID_CREDENTIALS = "EXTRA_RESTART_FROM_INVALID_CREDENTIALS";
+    public static final String EXTRA_CONFIG = "EXTRA_CONFIG";
 
 
     // activity modes
@@ -722,6 +724,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 }
             }
         });
+
+        // Get config extra
+        LoginConfig loginConfig = getIntent().getParcelableExtra(EXTRA_CONFIG);
+        if (isFirstCreation() && loginConfig != null) {
+            mHomeServerText.setText(loginConfig.getHomeServerUrl());
+            mIdentityServerText.setText(loginConfig.getIdentityServerUrl());
+            mUseCustomHomeServersCheckbox.performClick();
+        }
     }
 
     private void tryAutoDiscover(String possibleDomain) {
