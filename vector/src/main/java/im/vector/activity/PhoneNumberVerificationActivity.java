@@ -186,7 +186,7 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
     }
 
     private void registerAfterPhoneNumberValidation(final ThreePid pid) {
-        mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
+        mSession.getMyUser().add3Pid(pid, false, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 Intent intent = new Intent();

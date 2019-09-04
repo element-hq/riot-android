@@ -11,6 +11,7 @@ Features:
  - Privacy: Make clear that device names are publicly readable (#3265)
  - Privacy: Email help text on registration should be updated without binding (#3278)
  - Privacy: Use wellknown to discover the IS of a HS (#3283)
+ - Privacy: Remove the bind true flag from 3PID adds in settings (#3254)
 
 Improvements:
  -

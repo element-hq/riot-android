@@ -1931,7 +1931,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
+                        // We do not bind anymore emails when registering, so let's do the same here
+                        mSession.myUser.add3Pid(pid, false, object : ApiCallback<Void> {
                             override fun onSuccess(info: Void?) {
                                 it.runOnUiThread {
                                     hideLoadingView()
