@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorBackgroundFloating"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingBottom="8dp">
+
+
+    <TextView
+        android:id="@+id/settings_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="15sp"
+        tools:text="foo@bar.test" />
+
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:minWidth="70dp"
+        android:layout_height="40dp">
+
+        <Button
+            android:id="@+id/settings_item_button"
+            style="@style/VectorButtonStyleFlat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"
+            android:visibility="invisible"
+            tools:text="@string/share">
+        </Button>
+
+        <ProgressBar
+            android:id="@+id/settings_item_button_spinner"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="20dp"
+            tools:visibility="invisible"
+            android:visibility="invisible"
+            android:layout_height="20dp"
+            />
+    </FrameLayout>
+
+
+</LinearLayout>

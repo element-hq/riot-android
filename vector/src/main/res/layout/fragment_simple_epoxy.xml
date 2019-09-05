@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?vctr_bottom_nav_background_color"
+    android:orientation="vertical">
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:background="?vctr_bottom_nav_background_color"
+        android:id="@+id/epoxyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_settings_simple_item"
+        tools:itemCount="3"
+        android:overScrollMode="always" />
+
+</LinearLayout>

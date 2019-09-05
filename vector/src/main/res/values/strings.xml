@@ -72,6 +72,9 @@
     <string name="view_decrypted_source">View Decrypted Source</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
+    <string name="none">None</string>
+    <string name="revoke">Revoke</string>
+    <string name="disconnect">Disconnect</string>
     <string name="report_content">Report content</string>
     <string name="active_call">Active call</string>
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
@@ -783,8 +786,8 @@
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
-
-    <!-- startup -->
+    <string name="settings_discovery_category">Discovery</string>
+    <string name="settings_discovery_manage">Manage your discovery settings.</string>
     <string name="startup_notification_privacy_title">Notification Privacy</string>
     <string name="startup_notification_privacy_message">Riot can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
@@ -1666,5 +1669,17 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
 
     <string name="read_at">Read at</string>
+
+
+    <string name="identity_server">Identity Server</string>
+    <string name="choose_identity_server">Choose Identity Server</string>
+    <string name="add_identity_server">Add Identity Server</string>
+    <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
+    <string name="settings_discovery_identity_server_info_none">You cannot discover or be discoverable by existing contacts you know.</string>
+    <string name="settings_discovery_emails_title">Email addresses</string>
+    <string name="settings_discovery_no_mails">Discovery options will appear once you have added an email.</string>
+    <string name="settings_discovery_no_pn">Discovery options will appear once you have added a phone number.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Disconnecting from your identity server will mean you won’t be discoverable by other users and you won’t be able to invite others by email or phone.</string>
+    <string name="settings_discovery_pn_title">Phone numbers</string>
 
 </resources>

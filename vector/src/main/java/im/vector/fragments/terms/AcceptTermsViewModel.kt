@@ -61,7 +61,7 @@ class AcceptTermsViewModel : ViewModel() {
         termsManager?.agreeToTerms(termsArgs.type,
                 termsArgs.baseURL,
                 agreedUrls,
-                termsArgs.token,
+                termsArgs.token ?: "",
                 object : ApiCallback<Unit> {
                     override fun onSuccess(info: Unit) {
                         acceptTerms.postValue(MxAsync.Success(Unit))
