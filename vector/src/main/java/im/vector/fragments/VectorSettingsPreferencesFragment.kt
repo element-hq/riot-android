@@ -662,12 +662,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         identityServerPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             displayLoadingView()
 
-            var newIdentityServer = newValue as String
-            if (!newIdentityServer.isBlank() && !newIdentityServer.startsWith("http")) {
-                newIdentityServer = "https://$newIdentityServer"
-            }
-
-            mSession.identityServerManager.setIdentityServerUrl(newIdentityServer, object : ApiCallback<Void?> {
+            mSession.identityServerManager.setIdentityServerUrl(newValue as String, object : ApiCallback<Void?> {
                 override fun onSuccess(info: Void?) {
                     hideLoadingView()
                     updateIdentityServerPref()
