@@ -96,7 +96,7 @@
         <item quantity="one">%d пользователь</item>
         <item quantity="few">%d пользователя</item>
         <item quantity="many">%d пользователей</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="send_bug_report_include_logs">Отправить логи</string>
@@ -851,13 +851,13 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s в %2$s</string>
 
@@ -865,7 +865,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d активный виджет</item>
         <item quantity="few">%d активных виджета</item>
         <item quantity="many">%d активных виджетов</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -875,45 +875,45 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d активный участник</item>
         <item quantity="few">%d активных участника</item>
         <item quantity="many">%d активных участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d новое сообщение</item>
         <item quantity="few">%d новых сообщения</item>
         <item quantity="many">%d новых сообщений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s комната найдена для %2$s</item>
         <item quantity="few">%1$s комнаты найдено для %2$s</item>
         <item quantity="many">%1$s комнат найдено для %2$s</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
         <item quantity="many">%d изменений членства</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d непрочитанное уведомление</item>
         <item quantity="few">%d непрочитанных уведомления</item>
         <item quantity="many">%d непрочитанных уведомлений</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
@@ -1028,13 +1028,13 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%dm</item>
         <item quantity="few">%dm</item>
         <item quantity="many">%dm</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">%dh</item>
         <item quantity="few">%dh</item>
         <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
@@ -1053,20 +1053,20 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="group_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
         <item quantity="many">%d участников</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
         <item quantity="many">%d комнат</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
 
@@ -1354,7 +1354,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
         <item quantity="few">%d новых ключа были добавлены к этому устройству.</item>
         <item quantity="many">%d новых ключей были добавлены к этому устройству.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <plurals name="keys_backup_restore_success_description_part1">
@@ -1406,7 +1406,7 @@ Email также позволит вам при необходимости во�
         <item quantity="one">Резервное копирование %d ключа…</item>
         <item quantity="few">Резервное копирование %d ключей…</item>
         <item quantity="many">Резервное копирование %d ключей…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_keys_all_backup_up">Все ключи сохранены</string>
@@ -1637,7 +1637,7 @@ Email также позволит вам при необходимости во�
     <string name="settings_preferences">Установки</string>
     <string name="settings_security_and_privacy">Безопасность &amp; Конфиденциальность</string>
     <string name="settings_expert">Профессионал</string>
-    <string name="settings_push_rules">Нажать Правила</string>
+    <string name="settings_push_rules">Пуш-Правила</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
@@ -1699,7 +1699,7 @@ Email также позволит вам при необходимости во�
 
     <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
 
-    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа в хронологии</string>
+    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа по хронологии</string>
 
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
 
@@ -1712,5 +1712,25 @@ Email также позволит вам при необходимости во�
     <string name="joining_room">Присоединение к комнате…</string>
 
     <string name="message_view_edit_history">Просмотреть историю изменений</string>
+
+<string name="review">Обзор</string>
+    <string name="decline">Отклонить</string>
+
+    <string name="widget_integration_review_terms">Для продолжения Вам необходимо принять Условия данного сервиса.</string>
+
+    <string name="security_warning_identity_server">В предыдущих версиях Riot была ошибка безопасности, которая могла дать вашему серверу идентификации (%1$s) доступ к вашей учетной записи. Если вы доверяете %2$s, вы можете проигнорировать это; в противном случае, пожалуйста, выйдите из системы и войдите снова.
+\n
+\nПодробнее об этом читайте здесь:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="settings_push_rules_no_rules">Правила пуш не определены</string>
+    <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>
+
+    <string name="terms_of_service">Условия предоставления услуг</string>
+    <string name="review_terms">Условия просмотра</string>
+    <string name="terms_description_for_identity_server">Быть доступным для других</string>
+    <string name="terms_description_for_integration_manager">Используйте ботов, мосты, виджеты и стикеры</string>
+
+    <string name="read_at">Читать в</string>
 
 </resources>
