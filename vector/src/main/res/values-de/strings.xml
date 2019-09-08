@@ -1663,4 +1663,5 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 <string name="decline">Ablehnen</string>
 
     <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="review">Überprüfung</string>
     </resources>
