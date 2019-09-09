@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix reset password broken UI (#3125)
 
 Translations:
  - Riot is fully translated into Korean thanks to paijai.
