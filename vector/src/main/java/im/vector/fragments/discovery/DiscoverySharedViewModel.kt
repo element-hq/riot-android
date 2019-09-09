@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.terms
+package im.vector.fragments.discovery
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-import org.matrix.androidsdk.features.terms.TermsManager
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import im.vector.ui.arch.LiveEvent
 
-@Parcelize
-data class ServiceTermsArgs(
-        val type: TermsManager.ServiceType,
-        val baseURL: String,
-        val token: String? = null
-) : Parcelable
+class DiscoverySharedViewModel : ViewModel() {
+
+    var navigateEvent = MutableLiveData<LiveEvent<Pair<String, String>>>()
+
+    companion object {
+        const val NEW_IDENTITY_SERVER_SET_REQUEST = "NEW_IDENTITY_SERVER_SET_REQUEST"
+    }
+
+    fun requestChangeToIdentityServer(server: String) {
+        navigateEvent.postValue(LiveEvent(NEW_IDENTITY_SERVER_SET_REQUEST to server))
+    }
+}

@@ -1676,10 +1676,18 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="add_identity_server">Add Identity Server</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
     <string name="settings_discovery_identity_server_info_none">You cannot discover or be discoverable by existing contacts you know.</string>
-    <string name="settings_discovery_emails_title">Email addresses</string>
+    <string name="settings_discovery_emails_title">Discoverable email addresses</string>
     <string name="settings_discovery_no_mails">Discovery options will appear once you have added an email.</string>
     <string name="settings_discovery_no_pn">Discovery options will appear once you have added a phone number.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Disconnecting from your identity server will mean you won’t be discoverable by other users and you won’t be able to invite others by email or phone.</string>
-    <string name="settings_discovery_pn_title">Phone numbers</string>
+    <string name="settings_discovery_pn_title">Discoverable phone numbers</string>
+    <string name="settings_discovery_confirm_mail">We sent you a confirm email to, check your email and click on the confirmation link</string>
+    <string name="settings_discovery_mail_pending">Pending</string>
+
+    <string name="settings_discovery_enter_indentity_server">Enter a new identity server</string>
+    <string name="settings_discovery_bad_indentity_server">Could not connect to identity server</string>
+    <string name="settings_discovery_please_enter_server">Please enter server</string>
+    <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
+    <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
 
 </resources>

@@ -17,8 +17,10 @@ package im.vector.fragments.discovery
 
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass

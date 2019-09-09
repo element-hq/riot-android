@@ -15,14 +15,12 @@
  */
 package im.vector.fragments.discovery
 
+import android.content.res.ColorStateList
 import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.BindView
@@ -31,6 +29,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.R
 import im.vector.ui.epoxy.BaseEpoxyHolder
+import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.setTextOrHide
 
 
@@ -40,6 +39,11 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     enum class ButtonStyle {
         POSITIVE,
         DESCTRUCTIVE
+    }
+
+    enum class ButtonType {
+        NORMAL,
+        SWITCH
     }
 
     @EpoxyAttribute
@@ -59,12 +63,33 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     @EpoxyAttribute
     var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
+
+    @EpoxyAttribute
+    var buttonType: ButtonType = ButtonType.NORMAL
+
     @EpoxyAttribute
     var buttonIndeterminate: Boolean = false
 
+    @EpoxyAttribute
+    var checked: Boolean? = null
 
     @EpoxyAttribute
     var buttonClickListener: View.OnClickListener? = null
+
+    @EpoxyAttribute
+    var switchChangeListener: CompoundButton.OnCheckedChangeListener? = null
+
+    @EpoxyAttribute
+    var infoMessage: String? = null
+
+    @EpoxyAttribute
+    @StringRes
+    var infoMessageId: Int? = null
+
+    @EpoxyAttribute
+    @ColorRes
+    var infoMessageTintColorId: Int = R.color.vector_error_color
+
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -84,25 +109,51 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
         if (buttonIndeterminate) {
             holder.spinner.isVisible = true
             holder.button.isInvisible = true
+            holder.switchButton.isInvisible = true
             holder.button.setOnClickListener(null)
         } else {
             holder.spinner.isVisible = false
-            holder.button.isVisible = true
-            holder.button.setOnClickListener(buttonClickListener)
+            when (buttonType) {
+                ButtonType.NORMAL -> {
+                    holder.button.isVisible = true
+                    holder.switchButton.isVisible = false
+                    when (buttonStyle) {
+                        ButtonStyle.POSITIVE     -> {
+                            holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_success_color))
+                        }
+                        ButtonStyle.DESCTRUCTIVE -> {
+                            holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_error_color))
+                        }
+                    }
+                    holder.button.setOnClickListener(buttonClickListener)
+                }
+                ButtonType.SWITCH -> {
+                    holder.button.isVisible = false
+                    holder.switchButton.isVisible = true
+                    checked?.let { holder.switchButton.isChecked = it }
+                    holder.switchButton.setOnCheckedChangeListener(switchChangeListener)
+                }
+            }
         }
 
 
-
-        when (buttonStyle) {
-            ButtonStyle.POSITIVE     -> {
-                holder.button.setTextColor(ContextCompat.getColor(holder.main.context,R.color.vector_success_color))
+        val errorMessage = infoMessageId?.let { holder.main.context.getString(it) } ?: infoMessage
+        if (errorMessage != null) {
+            holder.errorTextView.isVisible = true
+            holder.errorTextView.setTextOrHide(errorMessage)
+            val errorColor = ContextCompat.getColor(holder.main.context, infoMessageTintColorId)
+            ContextCompat.getDrawable(holder.main.context, R.drawable.ic_notification_privacy_warning)?.apply {
+                ThemeUtils.tintDrawableWithColor(this, errorColor)
+                holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
+                holder.textView.compoundDrawablePadding = 4
             }
-            ButtonStyle.DESCTRUCTIVE -> {
-                holder.button.setTextColor(ContextCompat.getColor(holder.main.context,R.color.vector_error_color))
-            }
+            holder.errorTextView.setTextColor(errorColor)
+        } else {
+            holder.errorTextView.isVisible = false
+            holder.errorTextView.text = null
+            holder.textView.setCompoundDrawables(null, null, null, null)
         }
 
-        holder.button.setOnClickListener(buttonClickListener)
     }
 
     class Holder : BaseEpoxyHolder() {
@@ -113,7 +164,13 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
         @BindView(R.id.settings_item_button)
         lateinit var button: Button
 
+        @BindView(R.id.settings_item_switch)
+        lateinit var switchButton: Switch
+
         @BindView(R.id.settings_item_button_spinner)
         lateinit var spinner: ProgressBar
+
+        @BindView(R.id.settings_item_error_message)
+        lateinit var errorTextView: TextView
     }
 }

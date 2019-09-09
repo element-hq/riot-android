@@ -16,7 +16,6 @@
 package im.vector.fragments.discovery
 
 import android.widget.TextView
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -25,7 +24,6 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.R
 import im.vector.ui.epoxy.BaseEpoxyHolder
 import im.vector.ui.util.setTextOrHide
-
 
 @EpoxyModelClass(layout = R.layout.item_settings_section_title)
 abstract class SettingsSectionTitle : EpoxyModelWithHolder<SettingsSectionTitle.Holder>() {
@@ -37,19 +35,18 @@ abstract class SettingsSectionTitle : EpoxyModelWithHolder<SettingsSectionTitle.
     @StringRes
     var titleResId: Int? = null
 
-
     override fun bind(holder: Holder) {
         super.bind(holder)
 
         if (titleResId != null) {
-            holder.text.setText(titleResId!!)
+            holder.textView.setText(titleResId!!)
         } else {
-            holder.text.setTextOrHide(title)
+            holder.textView.setTextOrHide(title)
         }
     }
 
     class Holder : BaseEpoxyHolder() {
-        @BindView(R.id.settings_section_title)
-        lateinit var text: TextView
+        @BindView(R.id.settings_section_title_text)
+        lateinit var textView: TextView
     }
 }

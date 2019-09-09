@@ -15,8 +15,10 @@
  */
 package im.vector.fragments.discovery
 
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.*
 import im.vector.Matrix
+import im.vector.ui.arch.LiveEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.matrix.androidsdk.MXSession
@@ -25,16 +27,24 @@ import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager
 
 
-data class PIState(
+data class PidInfo(
         val value: String,
-        val isShared: Async<Boolean>
-)
+        val isShared: Async<SharedState>
+) {
+    enum class SharedState {
+        SHARED,
+        NOT_SHARED,
+        PENDING
+    }
+}
+
+data class PidState(val value: String, val isShared: Async<Boolean>)
 
 data class DiscoverySettingsState(
         val modalLoadingState: Async<Boolean> = Success(false),
         val identityServer: Async<String?> = Success(null),
-        val emailList: Async<List<PIState>> = Success(emptyList()),
-        val phoneNumbersList: Async<List<PIState>> = Success(emptyList())
+        val emailList: Async<List<PidInfo>> = Success(emptyList()),
+        val phoneNumbersList: Async<List<PidInfo>> = Success(emptyList())
 ) : MvRxState
 
 class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession?) : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
@@ -52,6 +62,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                             identityServer = Success(server)
                     )
                 }
+                refreshModel()
             }
 
             override fun onUnexpectedError(e: Exception?) {
@@ -117,7 +128,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 copy(emailList = Success(
                         currentMails.map {
                             if (it.value == email) {
-                                it.copy(isShared = Success(true))
+                                it.copy(isShared = Success(PidInfo.SharedState.PENDING))
                             } else {
                                 it
                             }
@@ -147,7 +158,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 copy(emailList = Success(
                         currentMails.map {
                             if (it.value == email) {
-                                it.copy(isShared = Success(false))
+                                it.copy(isShared = Success(PidInfo.SharedState.NOT_SHARED))
                             } else {
                                 it
                             }
@@ -177,7 +188,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 copy(phoneNumbersList = Success(
                         currentPN.map {
                             if (it.value == pn) {
-                                it.copy(isShared = Success(false))
+                                it.copy(isShared = Success(PidInfo.SharedState.NOT_SHARED))
                             } else {
                                 it
                             }
@@ -207,7 +218,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 copy(phoneNumbersList = Success(
                         currentPN.map {
                             if (it.value == pn) {
-                                it.copy(isShared = Success(false))
+                                it.copy(isShared = Success(PidInfo.SharedState.SHARED))
                             } else {
                                 it
                             }
@@ -271,7 +282,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 setState {
                     copy(
                             emailList = Success(
-                                    linkedMailsInfo?.map { PIState(it.address, Loading()) }
+                                    linkedMailsInfo?.map { PidInfo(it.address, Loading()) }
                                             ?: emptyList()
                             )
                     )
@@ -284,10 +295,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                                 setState {
                                     copy(
                                             emailList = Success(linkedMailsInfo.map {
-                                                PIState(
+                                                val hasMatrxId = info?.get(knownEmailList.indexOf(it.address))?.isBlank()?.not()
+                                                        ?: false
+                                                PidInfo(
                                                         value = it.address,
-                                                        isShared = Success(info?.get(knownEmailList.indexOf(it.address))?.isBlank()?.not()
-                                                                ?: false)
+                                                        isShared = Success( PidInfo.SharedState.SHARED.takeIf { hasMatrxId } ?: PidInfo.SharedState.NOT_SHARED)
                                                 )
                                             })
                                     )
@@ -313,7 +325,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 setState {
                     copy(
                             phoneNumbersList = Success(
-                                    linkedPNInfo?.map { PIState(it.address, Loading()) }
+                                    linkedPNInfo?.map { PidInfo(it.address, Loading()) }
                                             ?: emptyList()
                             )
                     )
@@ -326,10 +338,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                                 setState {
                                     copy(
                                             phoneNumbersList = Success(linkedPNInfo.map {
-                                                PIState(
+                                                val hasMatrixId = (info?.get(knownPns.indexOf(it.address))?.isBlank()?.not()
+                                                        ?: false)
+                                                PidInfo(
                                                         value = it.address,
-                                                        isShared = Success(info?.get(knownPns.indexOf(it.address))?.isBlank()?.not()
-                                                                ?: false)
+                                                        isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
                                                 )
                                             })
                                     )

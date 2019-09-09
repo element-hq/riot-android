@@ -18,10 +18,16 @@ package im.vector.fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import butterknife.ButterKnife
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import im.vector.R
 import im.vector.activity.VectorAppCompatActivity
 import java.util.*
 
@@ -34,6 +40,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var mvrxPersistedViewId: String
     final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
 
+    @LayoutRes
+    abstract fun getLayoutResId(): Int
 
     protected var vectorActivity: VectorAppCompatActivity? = null
 
@@ -49,6 +57,11 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         vectorActivity = null
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(getLayoutResId(), container, false)
+        ButterKnife.bind(this, view)
+        return view
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewModelStore.restoreViewModels(this, savedInstanceState)

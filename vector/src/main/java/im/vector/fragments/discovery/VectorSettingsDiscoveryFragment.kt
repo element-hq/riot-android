@@ -18,12 +18,11 @@ package im.vector.fragments.discovery
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.*
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.extensions.withArgs
@@ -39,8 +38,9 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
     private lateinit var controller: SettingsDiscoveryController
 
-
     private var mLoadingView: View? = null
+
+    lateinit var sharedViewModel: DiscoverySharedViewModel
 
     @BindView(R.id.epoxyRecyclerView)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
@@ -48,12 +48,19 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(DiscoverySharedViewModel::class.java)
+
         controller = SettingsDiscoveryController(requireContext(), this).also {
             epoxyRecyclerView.setController(it)
         }
 
         mLoadingView = requireActivity().findViewById(R.id.vector_settings_spinner_views)
 
+        sharedViewModel.navigateEvent.observe(this, Observer {
+            if (it.peekContent().first == DiscoverySharedViewModel.NEW_IDENTITY_SERVER_SET_REQUEST) {
+                viewModel.changeIdentityServer(it.peekContent().second)
+            }
+        })
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -93,10 +100,22 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     override fun onTapSharePN(pn: String) {
         viewModel.sharePN(pn)
     }
+
     override fun onSetIdentityServer(server: String?) {
         viewModel.changeIdentityServer(server)
     }
 
+
+    override fun onChangeIdentityServer(): Unit = withState(viewModel) { state ->
+        SetIdentityServerFragment.newInstance( args<String>().toString(), state.identityServer.invoke()).also {
+            requireFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom,
+                            R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
+                    .replace(R.id.vector_settings_page, it, getString(R.string.identity_server))
+                    .addToBackStack(null)
+                    .commit()
+        }
+    }
 
     companion object {
         fun newInstance(matrixId: String) = VectorSettingsDiscoveryFragment()
