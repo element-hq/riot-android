@@ -9,7 +9,7 @@ Features:
  - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
 
 Improvements:
- -
+ - Handle correctly the error 404 when entering a homeserver URL on the login screen
 
 Other changes:
  -

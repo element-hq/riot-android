@@ -2126,7 +2126,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        // Handle correctly the 404, the Matrix SDK should be patched later
+                        if (e instanceof HttpException
+                                && ((HttpException) e).getHttpError().getHttpCode() == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                            onError(getString(R.string.login_error_homeserver_not_found));
+                        } else {
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
