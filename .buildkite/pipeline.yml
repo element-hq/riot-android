@@ -5,7 +5,7 @@
 # Build debug version of the Riot application, from the develop branch and the features branches, with the develop branch of the matrix SDK
 
 steps:
-  - label: "Assemble Debug version"
+  - label: "Assemble GPlay Debug version"
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
@@ -13,9 +13,22 @@ steps:
     commands:
       - "./set_debug_env.sh"
       - "./gradlew clean lintAppRelease assembleAppDebug --stacktrace"
-      - "./gradlew lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
+    branches: "develop feature/*"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+  - label: "Assemble FDroid Debug version"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "medium"
+    commands:
+      - "./set_debug_env.sh"
+      - "./gradlew clean lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
+    artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
     plugins:

@@ -213,7 +213,7 @@ dependencies {
     implementation 'com.binaryfork:spanny:1.0.4'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
-    // Epoxy (without androidx packages)
+    // Epoxy
     implementation 'com.airbnb.android:epoxy:3.7.0'
     kapt 'com.airbnb.android:epoxy-processor:3.7.0'
 

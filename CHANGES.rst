@@ -1,3 +1,18 @@
+Changes in Riot 0.9.5 (2019-09-10)
+===================================================
+
+Features:
+ - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
+
+Improvements:
+ - Handle correctly the error 404 when entering a homeserver URL on the login screen
+
+Bugfix:
+ - Restore correctly the login form when coming back from SSO login form.
+
+Translations:
+ - Riot is fully translated into Korean thanks to paijai.
+
 Changes in Riot 0.9.4 (2019-08-28)
 ===================================================
 

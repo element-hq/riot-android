@@ -294,7 +294,7 @@ Per favore consenti l\'accesso nella prossima finestra per potere effettuare la 
     <string name="reject">Rifiuta</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Primo messaggio non letto.</string>
+    <string name="room_jump_to_first_unread">Vai al primo messaggio non letto.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Sei stato invitato ad unirti in questa stanza da %s</string>
@@ -362,7 +362,7 @@ Sicuro di procedere?</string>
     <string name="room_unsent_messages_notification">Messaggi non inviati. %1$s o %2$s ora?</string>
     <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa di dispositivi sconosciuti qui presenti. %1$s o %2$s ora?</string>
     <string name="room_prompt_resend">Rispedisci tutto</string>
-    <string name="room_prompt_cancel">annulla tutto</string>
+    <string name="room_prompt_cancel">Annulla tutto</string>
     <string name="room_resend_unsent_messages">Rinvia messaggi non spediti</string>
     <string name="room_delete_unsent_messages">Elimina messaggi non spediti</string>
     <string name="room_message_file_not_found">File non trovato</string>
@@ -1655,5 +1655,35 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="labs_swipe_to_reply_in_timeline">Attiva swipe per rispondere nella timeline</string>
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
+
+    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
+
+    <string name="integration_manager_not_configured">Nessun gestore integrazione configurato.</string>
+    <string name="add_by_matrix_id">Aggiungi per ID matrix</string>
+    <string name="creating_direct_room">Creare una stanza …</string>
+    <string name="direct_room_no_known_users">Nessun risultato trovato, usa \"Aggiungi per ID matrix\" per cercare sul server.</string>
+    <string name="direct_room_start_search">Inizia a digitare per ottenere risultati</string>
+    <string name="direct_room_filter_hint">Filtra per nome utente o ID …</string>
+
+    <string name="joining_room">Sto entrando nella stanza …</string>
+
+    <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
+
+    <string name="review">Leggi</string>
+    <string name="decline">Rifiuta</string>
+
+    <string name="widget_integration_review_terms">Per continuare, devi accettare i termini di servizio.</string>
+
+    <string name="security_warning_identity_server">Le precedenti versioni di Riot avevano un errore di sicurezza che poteva dare accesso al tuo account al tuo Server di Identità (%1$s). Se ti fidi di %2$s, puoi ignorare; altrimenti disconnettiti e riaccedi di nuovo.
+\n
+\nLeggi maggiori dettagli qui:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Termini di servizio</string>
+    <string name="review_terms">Leggi i termini</string>
+    <string name="terms_description_for_identity_server">Diventa trovabile dagli altri</string>
+    <string name="terms_description_for_integration_manager">Usa bot, bridge, widget e pacchetti di adesivi</string>
+
+    <string name="read_at">Leggi su</string>
 
 </resources>
