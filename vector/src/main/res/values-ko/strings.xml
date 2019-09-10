@@ -141,8 +141,8 @@
     <string name="action_mark_room_read">읽음으로 표시</string>
     <string name="no_contact_access_placeholder">Riot이 연락처에 접근할 수 없게 되어 있습니다</string>
     <plurals name="public_room_nb_users">
-	<item quantity="other">%d명의 사용자</item>
-</plurals>
+        <item quantity="other">%d명의 사용자</item>
+    </plurals>
 
     <string name="groups_invite_header">초대</string>
     <string name="groups_header">커뮤니티</string>
@@ -289,8 +289,8 @@
     <string name="groups_list">그룹 목록</string>
 
     <plurals name="membership_changes">
-	<item quantity="other">%d명의 구성원 변경 사항</item>
-</plurals>
+        <item quantity="other">%d명의 구성원 변경 사항</item>
+    </plurals>
 
     <string name="compression_options">이렇게 보내기</string>
     <string name="compression_opt_list_original">원본</string>
@@ -1547,7 +1547,7 @@
 
     <string name="message_view_edit_history">편집 기록 보기</string>
 
-<string name="review">검토</string>
+    <string name="review">검토</string>
     <string name="decline">끊기</string>
 
     <string name="widget_integration_review_terms">계속 하려면 이 서비스 약관에 동의해야 합니다.</string>

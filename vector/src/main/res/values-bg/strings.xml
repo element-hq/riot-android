@@ -1613,7 +1613,7 @@
 
     <string name="message_view_edit_history">Виж историята на редакциите</string>
 
-<string name="review">Прегледай</string>
+    <string name="review">Прегледай</string>
     <string name="decline">Откажи</string>
 
     <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>

@@ -1625,7 +1625,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="message_view_edit_history">Voir l’historique des éditions</string>
 
-<string name="review">Examiner</string>
+    <string name="review">Examiner</string>
     <string name="decline">Refuser</string>
 
     <string name="widget_integration_review_terms">Pour continuer, vous devez accepter les conditions de ce service.</string>

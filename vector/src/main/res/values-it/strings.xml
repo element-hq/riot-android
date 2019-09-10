@@ -1669,7 +1669,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
 
-<string name="review">Leggi</string>
+    <string name="review">Leggi</string>
     <string name="decline">Rifiuta</string>
 
     <string name="widget_integration_review_terms">Per continuare, devi accettare i termini di servizio.</string>

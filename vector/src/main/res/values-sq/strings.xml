@@ -1578,7 +1578,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="message_view_edit_history">Shihni Historik Përpunimesh</string>
 
-<string name="review">Shqyrtojeni</string>
+    <string name="review">Shqyrtojeni</string>
     <string name="decline">Hidhe poshtw</string>
 
     <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
