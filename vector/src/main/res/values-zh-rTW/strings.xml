@@ -1577,4 +1577,21 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="message_view_edit_history">檢視編輯歷史</string>
 
+<string name="review">審閱</string>
+    <string name="decline">婉拒</string>
+
+    <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
+
+    <string name="security_warning_identity_server">先前版本的 Riot 有一個安全性問題，讓您的身份識別伺服器 (%1$s) 存取您的帳號。如果您信任 %2$s，您可以忽略這個；否則請登出再登入。
+\n
+\n在此閱讀更多詳細資訊：
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">服務條款</string>
+    <string name="review_terms">審閱條款</string>
+    <string name="terms_description_for_identity_server">可被其他人探索</string>
+    <string name="terms_description_for_integration_manager">使用機器人、橋接、小工具與貼紙包</string>
+
+    <string name="read_at">閱讀於</string>
+
 </resources>
