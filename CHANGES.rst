@@ -1,9 +1,5 @@
-Changes in Riot 0.9.5 (2019-XX-XX)
+Changes in Riot 0.9.5 (2019-09-10)
 ===================================================
-
-MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
  - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
@@ -11,17 +7,11 @@ Features:
 Improvements:
  - Handle correctly the error 404 when entering a homeserver URL on the login screen
 
-Other changes:
- -
-
 Bugfix:
  - Restore correctly the login form when coming back from SSO login form.
 
 Translations:
  - Riot is fully translated into Korean thanks to paijai.
-
-Build:
- -
 
 Changes in Riot 0.9.4 (2019-08-28)
 ===================================================
