@@ -97,6 +97,7 @@ import im.vector.activity.policies.AccountCreationTermsActivity;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.features.hhs.ResourceLimitDialogHelper;
 import im.vector.push.fcm.FcmHelper;
+import im.vector.receiver.LoginConfig;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.repositories.ServerUrlsRepository;
@@ -117,6 +118,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
 
     public static final String EXTRA_RESTART_FROM_INVALID_CREDENTIALS = "EXTRA_RESTART_FROM_INVALID_CREDENTIALS";
+    public static final String EXTRA_CONFIG = "EXTRA_CONFIG";
 
 
     // activity modes
@@ -375,7 +377,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 if (networkInfo != null && networkInfo.isConnected()) {
                     // refresh only once
                     if (mIsWaitingNetworkConnection) {
-                        refreshDisplay();
+                        refreshDisplay(true);
                     } else {
                         removeNetworkStateNotificationListener();
                     }
@@ -581,7 +583,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             @Override
             public void onClick(View view) {
                 mMode = MODE_FORGOT_PASSWORD;
-                refreshDisplay();
+                refreshDisplay(true);
             }
         });
 
@@ -601,7 +603,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         mIdentityServerUrl = null;
                         onIdentityServerUrlUpdate(false);
                         onHomeServerUrlUpdate(false);
-                        refreshDisplay();
+                        refreshDisplay(true);
                     }
                 });
             }
@@ -722,6 +724,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 }
             }
         });
+
+        // Get config extra
+        LoginConfig loginConfig = getIntent().getParcelableExtra(EXTRA_CONFIG);
+        if (isFirstCreation() && loginConfig != null) {
+            mHomeServerText.setText(loginConfig.getHomeServerUrl());
+            mIdentityServerText.setText(loginConfig.getIdentityServerUrl());
+            mUseCustomHomeServersCheckbox.performClick();
+        }
     }
 
     private void tryAutoDiscover(String possibleDomain) {
@@ -990,7 +1000,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mUseCustomHomeServersCheckbox.setChecked(true);
         }
 
-        refreshDisplay();
+        refreshDisplay(true);
     }
 
     /**
@@ -1009,7 +1019,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
 
         mMode = MODE_LOGIN;
-        refreshDisplay();
+        refreshDisplay(true);
     }
 
     /**
@@ -1024,7 +1034,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
 
         mMode = MODE_ACCOUNT_CREATION;
-        refreshDisplay();
+        refreshDisplay(true);
     }
 
     @Override
@@ -1186,7 +1196,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
 
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
-                    refreshDisplay();
+                    refreshDisplay(true);
 
                     mForgotPid = new ThreePidCredentials();
                     mForgotPid.clientSecret = thirdPid.clientSecret;
@@ -1263,7 +1273,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mIsPasswordReset = false;
             mMode = MODE_LOGIN;
             showMainLayout();
-            refreshDisplay();
+            refreshDisplay(true);
         } else {
             ProfileRestClient profileRestClient = new ProfileRestClient(hsConfig);
             enableLoadingScreen(true);
@@ -1281,7 +1291,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         // refresh the messages
                         hideMainLayoutAndToast(getString(R.string.auth_reset_password_success_message));
                         mIsPasswordReset = true;
-                        refreshDisplay();
+                        refreshDisplay(true);
                     }
                 }
 
@@ -1301,7 +1311,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         if (cancel) {
                             showMainLayout();
                             mMode = MODE_LOGIN;
-                            refreshDisplay();
+                            refreshDisplay(true);
                         }
                     }
                 }
@@ -1514,7 +1524,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     enableLoadingScreen(false);
                     setActionButtonsEnabled(false);
                     showMainLayout();
-                    refreshDisplay();
+                    refreshDisplay(true);
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
 
@@ -1737,7 +1747,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void onRegistrationNotAllowed() {
         // Registration not supported by the server
         mMode = MODE_LOGIN;
-        refreshDisplay();
+        refreshDisplay(true);
 
         mSwitchToRegisterButton.setVisibility(View.GONE);
     }
@@ -1774,7 +1784,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // the user switches to another mode
         if (mMode != MODE_ACCOUNT_CREATION) {
             mMode = MODE_ACCOUNT_CREATION;
-            refreshDisplay();
+            refreshDisplay(true);
         }
     }
 
@@ -1883,7 +1893,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             showMainLayout();
 
             mMode = MODE_LOGIN;
-            refreshDisplay();
+            refreshDisplay(true);
         }
     }
 
@@ -2079,8 +2089,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (isSsoDetected) {
                                 // SSO has priority over password
                                 mMode = MODE_LOGIN_SSO;
-                                refreshDisplay();
+                                refreshDisplay(true);
                             } else if (isTypePasswordDetected) {
+                                // In case we were previously in SSO mode
+                                refreshDisplay(false);
                                 if (mIsPendingLogin) {
                                     onLoginClick();
                                 }
@@ -2116,7 +2128,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        // Handle correctly the 404, the Matrix SDK should be patched later
+                        if (e instanceof HttpException
+                                && ((HttpException) e).getHttpError().getHttpCode() == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                            onError(getString(R.string.login_error_homeserver_not_found));
+                        } else {
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
                     }
 
                     @Override
@@ -2185,9 +2203,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Refresh the visibility of mHomeServerText
      */
-    private void refreshDisplay() {
+    private void refreshDisplay(boolean checkFlow) {
         // check if the device supported the dedicated mode
-        checkFlows();
+        if (checkFlow) {
+            checkFlows();
+        }
 
         TransitionManager.beginDelayedTransition(mMainContainer);
 
@@ -2678,7 +2698,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.e(LOG_TAG, "## onRegistrationFailed(): " + message);
         showMainLayout();
         enableLoadingScreen(false);
-        refreshDisplay();
+        refreshDisplay(true);
         Toast.makeText(this, R.string.login_error_unable_register, Toast.LENGTH_LONG).show();
     }
 
@@ -2735,7 +2755,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         Log.d(LOG_TAG, "## onThreePidRequestFailed():" + message);
         enableLoadingScreen(false);
         showMainLayout();
-        refreshDisplay();
+        refreshDisplay(true);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -2751,7 +2771,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 showMainLayout();
                 mMode = MODE_ACCOUNT_CREATION_THREE_PID;
                 initThreePidView();
-                refreshDisplay();
+                refreshDisplay(true);
             } else {
                 // Start registration
                 createAccount();

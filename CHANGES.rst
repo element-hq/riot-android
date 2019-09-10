@@ -6,16 +6,16 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
 
 Improvements:
- -
+ - Handle correctly the error 404 when entering a homeserver URL on the login screen
 
 Other changes:
  -
 
 Bugfix:
- -
+ - Restore correctly the login form when coming back from SSO login form.
 
 Translations:
  - Riot is fully translated into Korean thanks to paijai.
