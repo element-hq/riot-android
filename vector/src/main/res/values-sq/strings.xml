@@ -1578,4 +1578,21 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="message_view_edit_history">Shihni Historik Përpunimesh</string>
 
+<string name="review">Shqyrtojeni</string>
+    <string name="decline">Hidhe poshtw</string>
+
+    <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
+
+    <string name="security_warning_identity_server">Versione të dikurshëm të Riot-it përmbanin një të metë sigurie, e cila mund t’i lejonte Shërbyesit tuaj të Identiteteve (%1$s) hyrje në llogarinë tuaj. Nëse i besoni %2$s, mund ta shpërfillni këtë sinjalizim; përndryshe dilni nga llogaria dhe ribëni hyrjen.
+\n
+\nLexoni më tepër hollësi këtu:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Kushte Shërbimi</string>
+    <string name="review_terms">Shqyrtoni Kushtet</string>
+    <string name="terms_description_for_identity_server">Jini i zbulueshëm nga të tjerët</string>
+    <string name="terms_description_for_integration_manager">Përdorni robotë, ura, widget-e dhe paketa ngjitësish</string>
+
+    <string name="read_at">Lexoni te</string>
+
 </resources>
