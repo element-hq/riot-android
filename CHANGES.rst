@@ -15,7 +15,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Restore correctly the login form when coming back from SSO login form.
 
 Translations:
  - Riot is fully translated into Korean thanks to paijai.
