@@ -3,11 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?vctr_bottom_nav_background_color"
     android:orientation="vertical">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
-        android:background="?vctr_bottom_nav_background_color"
         android:id="@+id/epoxyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

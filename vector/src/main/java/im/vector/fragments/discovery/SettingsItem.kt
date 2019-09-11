@@ -26,6 +26,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.R
 import im.vector.ui.epoxy.BaseEpoxyHolder
+import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_settings_simple_item)
@@ -60,6 +61,13 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
             holder.descriptionText.setText(descriptionResId!!)
         } else {
             holder.descriptionText.setTextOrHide(description)
+        }
+
+        //If there is only a description, use primary color
+        if (holder.titleText.text.isNullOrBlank()) {
+            ThemeUtils.getColor(holder.main.context, android.R.attr.textColorPrimary)
+        } else {
+            ThemeUtils.getColor(holder.main.context, android.R.attr.textColorSecondary)
         }
 
         holder.switchButton.isVisible = false

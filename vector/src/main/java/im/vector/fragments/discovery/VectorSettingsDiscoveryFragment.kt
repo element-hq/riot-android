@@ -82,7 +82,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun onSelectIdentityServer() = withState(viewModel) { state ->
-        IdentityServerChooseBottomSheet.newInstance(listOf("vector.im"), state.identityServer.invoke()).show(requireActivity().supportFragmentManager, "IS")
+
     }
 
     override fun onTapRevokeEmail(email: String) {
@@ -91,6 +91,10 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
     override fun onTapShareEmail(email: String) {
         viewModel.shareEmail(email)
+    }
+
+    override fun checkEmailVerification(email: String) {
+        viewModel.add3pid(email, true)
     }
 
     override fun onTapRevokePN(pn: String) {
@@ -107,7 +111,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
 
     override fun onChangeIdentityServer(): Unit = withState(viewModel) { state ->
-        SetIdentityServerFragment.newInstance( args<String>().toString(), state.identityServer.invoke()).also {
+        SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer.invoke()).also {
             requireFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom,
                             R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)

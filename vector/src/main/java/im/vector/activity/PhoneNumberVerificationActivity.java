@@ -19,6 +19,7 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -186,7 +187,9 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
     }
 
     private void registerAfterPhoneNumberValidation(final ThreePid pid) {
-        mSession.getMyUser().add3Pid(pid, false, new ApiCallback<Void>() {
+        String idServer = mSession.getIdentityServerManager().getIdentityServerUrl();
+        if (idServer == null) return;
+        mSession.getMyUser().add3Pid(Uri.parse(idServer), pid, false, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 Intent intent = new Intent();

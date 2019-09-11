@@ -42,6 +42,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.preference.*
 import com.bumptech.glide.Glide
@@ -1892,7 +1893,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         displayLoadingView()
 
-        mSession.myUser.requestEmailValidationToken(pid, object : ApiCallback<Void> {
+        mSession.myUser.requestEmailValidationToken(
+                mSession.identityServerManager.getIdentityServerUrl()?.toUri(),
+                pid, object : ApiCallback<Void> {
             override fun onSuccess(info: Void?) {
                 activity?.runOnUiThread { showEmailValidationDialog(pid) }
             }
@@ -1927,33 +1930,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
                         // We do not bind anymore emails when registering, so let's do the same here
-                        mSession.myUser.add3Pid(pid, false, object : ApiCallback<Void> {
-                            override fun onSuccess(info: Void?) {
-                                it.runOnUiThread {
-                                    hideLoadingView()
-                                    refreshEmailsList()
-                                }
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                        val idServer = mSession.identityServerManager.getIdentityServerUrl()
+                        if (idServer == null) {
+                            onCommonDone(requireContext().getString(R.string.identity_server_not_defined))
+                        } else {
+                            mSession.myUser.add3Pid(idServer.toUri(), pid, false, object : ApiCallback<Void> {
+                                override fun onSuccess(info: Void?) {
                                     it.runOnUiThread {
                                         hideLoadingView()
-                                        it.toast(R.string.account_email_validation_error)
+                                        refreshEmailsList()
                                     }
-                                } else {
+                                }
+
+                                override fun onNetworkError(e: Exception) {
                                     onCommonDone(e.localizedMessage)
                                 }
-                            }
 
-                            override fun onUnexpectedError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-                        })
+                                override fun onMatrixError(e: MatrixError) {
+                                    if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                                        it.runOnUiThread {
+                                            hideLoadingView()
+                                            it.toast(R.string.account_email_validation_error)
+                                        }
+                                    } else {
+                                        onCommonDone(e.localizedMessage)
+                                    }
+                                }
+
+                                override fun onUnexpectedError(e: Exception) {
+                                    onCommonDone(e.localizedMessage)
+                                }
+                            })
+                        }
                     }
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         hideLoadingView()

@@ -20,6 +20,7 @@ import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.R
 
@@ -69,13 +70,10 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                             id(piState.value)
                             val phoneNumber = PhoneNumberUtil.getInstance().parse("+${piState.value}", null)
                             title(PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL))
-                            when (piState.isShared.invoke()) {
-                                null                           -> {
-                                    buttonIndeterminate(true)
-                                }
-                                PidInfo.SharedState.SHARED,
-                                PidInfo.SharedState.NOT_SHARED -> {
-                                    checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
+                            when {
+                                piState.isShared is Loading -> buttonIndeterminate(true)
+                                piState.isShared is Fail    -> {
+                                    checked(false) //TODO previous state?
                                     buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                     switchChangeListener { b, checked ->
                                         if (checked) {
@@ -84,12 +82,27 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                             interactionListener?.onTapRevokePN(piState.value)
                                         }
                                     }
+                                    infoMessage(piState.isShared.error.message)
                                 }
-                                PidInfo.SharedState.PENDING    -> {
-                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonTitleId(R.string.settings_discovery_mail_pending)
-                                    infoMessageTintColorId(R.color.vector_info_color)
-                                    infoMessageId(R.string.settings_discovery_confirm_mail)
+                                piState.isShared is Success -> when (piState.isShared.invoke()) {
+                                    PidInfo.SharedState.SHARED,
+                                    PidInfo.SharedState.NOT_SHARED   -> {
+                                        checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
+                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
+                                        switchChangeListener { b, checked ->
+                                            if (checked) {
+                                                interactionListener?.onTapSharePN(piState.value)
+                                            } else {
+                                                interactionListener?.onTapRevokePN(piState.value)
+                                            }
+                                        }
+                                    }
+                                    PidInfo.SharedState.NOT_VERIFIED -> {
+                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                        buttonTitleId(R.string.settings_discovery_mail_pending)
+                                        infoMessageTintColorId(R.color.vector_info_color)
+                                        infoMessageId(R.string.settings_discovery_confirm_mail)
+                                    }
                                 }
                             }
                         }
@@ -123,27 +136,36 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                         settingsTextButtonItem {
                             id(piState.value)
                             title(piState.value)
-                            when (piState.isShared.invoke()) {
-                                null -> {
-                                    buttonIndeterminate(true)
-                                }
-                                PidInfo.SharedState.SHARED,
-                                PidInfo.SharedState.NOT_SHARED -> {
-                                    checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
-                                    buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
-                                    switchChangeListener { b, checked ->
-                                        if (checked) {
-                                            interactionListener?.onTapShareEmail(piState.value)
-                                        } else {
-                                            interactionListener?.onTapRevokeEmail(piState.value)
+                            if (piState.isShared is Loading) {
+                                buttonIndeterminate(true)
+                            } else if (piState.isShared is Fail) {
+                                checked(false) //TODO previous state?
+                                buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                buttonTitle("")
+                                infoMessage(piState.isShared.error.message)
+                            } else {
+                                when (piState.isShared.invoke()) {
+                                    PidInfo.SharedState.SHARED,
+                                    PidInfo.SharedState.NOT_SHARED   -> {
+                                        checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
+                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
+                                        switchChangeListener { b, checked ->
+                                            if (checked) {
+                                                interactionListener?.onTapShareEmail(piState.value)
+                                            } else {
+                                                interactionListener?.onTapRevokeEmail(piState.value)
+                                            }
                                         }
                                     }
-                                }
-                                PidInfo.SharedState.PENDING    -> {
-                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonTitleId(R.string.settings_discovery_mail_pending)
-                                    infoMessageTintColorId(R.color.vector_info_color)
-                                    infoMessageId(R.string.settings_discovery_confirm_mail)
+                                    PidInfo.SharedState.NOT_VERIFIED -> {
+                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                        buttonTitleId(R.string._continue)
+                                        infoMessageTintColorId(R.color.vector_info_color)
+                                        infoMessageId(R.string.settings_discovery_confirm_mail)
+                                        buttonClickListener(View.OnClickListener {
+                                            interactionListener?.checkEmailVerification(piState.value)
+                                        })
+                                    }
                                 }
                             }
                         }
@@ -202,6 +224,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         fun onSelectIdentityServer()
         fun onTapRevokeEmail(email: String)
         fun onTapShareEmail(email: String)
+        fun checkEmailVerification(email: String)
         fun onTapRevokePN(pn: String)
         fun onTapSharePN(pn: String)
         fun onSetIdentityServer(server: String?)

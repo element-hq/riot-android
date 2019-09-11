@@ -916,7 +916,9 @@ public class RegistrationManager {
                         nextLink += "&is_url=" + isUrl;
                     }
                     nextLink += "&session_id=" + mRegistrationResponse.session;
-                    pid.requestEmailValidationToken(getProfileRestClient(), nextLink, true, new ApiCallback<Void>() {
+                    pid.requestEmailValidationToken(
+                            null,
+                            getProfileRestClient(), nextLink, true, new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             listener.onThreePidRequested(pid);
