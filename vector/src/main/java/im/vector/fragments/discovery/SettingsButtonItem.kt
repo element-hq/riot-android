@@ -17,16 +17,15 @@ package im.vector.fragments.discovery
 
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.R
 import im.vector.ui.epoxy.BaseEpoxyHolder
+import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.setTextOrHide
 
 
@@ -57,7 +56,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
 
         when (buttonStyle) {
             SettingsTextButtonItem.ButtonStyle.POSITIVE     -> {
-                holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_success_color))
+                holder.button.setTextColor(ThemeUtils.getColor(holder.main.context, R.attr.colorAccent))
             }
             SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE -> {
                 holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_error_color))

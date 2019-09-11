@@ -120,7 +120,7 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
                         ButtonStyle.POSITIVE     -> {
-                            holder.button.setTextColor(ThemeUtils.getColor(holder.main.context, R.attr.colorPrimary))
+                            holder.button.setTextColor(ThemeUtils.getColor(holder.main.context, R.attr.colorAccent))
                         }
                         ButtonStyle.DESCTRUCTIVE -> {
                             holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_error_color))
