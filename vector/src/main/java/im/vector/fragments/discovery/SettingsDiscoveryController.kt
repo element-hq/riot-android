@@ -55,7 +55,10 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                 }
             }
             data.phoneNumbersList is Fail    -> {
-                //Todo
+                settingsInfoItem {
+                    id("pnListError")
+                    helperText((data.emailList as Fail).error.message)
+                }
             }
             else                             -> {
                 val phones = data.phoneNumbersList.invoke()!!
@@ -120,10 +123,15 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         }
         when {
             data.emailList is Loading -> {
-
+                settingsLoadingItem {
+                    id("mailLoading")
+                }
             }
             data.emailList is Error   -> {
-
+                settingsInfoItem {
+                    id("mailListError")
+                    helperText((data.emailList as Fail).error.message)
+                }
             }
             else                      -> {
                 val emails = data.emailList.invoke()!!

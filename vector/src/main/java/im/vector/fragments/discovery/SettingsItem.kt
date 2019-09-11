@@ -64,11 +64,13 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
         }
 
         //If there is only a description, use primary color
-        if (holder.titleText.text.isNullOrBlank()) {
-            ThemeUtils.getColor(holder.main.context, android.R.attr.textColorPrimary)
-        } else {
-            ThemeUtils.getColor(holder.main.context, android.R.attr.textColorSecondary)
-        }
+//        holder.descriptionText.setTextColor(
+//                if (holder.titleText.text.isNullOrBlank()) {
+//                    ThemeUtils.getColor(holder.main.context, android.R.attr.textColorPrimary)
+//                } else {
+//                    ThemeUtils.getColor(holder.main.context, android.R.attr.textColorSecondary)
+//                }
+//        )
 
         holder.switchButton.isVisible = false
 
