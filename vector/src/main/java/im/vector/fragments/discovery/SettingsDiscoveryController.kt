@@ -86,7 +86,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                 }
                                 piState.isShared is Success -> when (piState.isShared.invoke()) {
                                     PidInfo.SharedState.SHARED,
-                                    PidInfo.SharedState.NOT_SHARED   -> {
+                                    PidInfo.SharedState.NOT_SHARED              -> {
                                         checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
@@ -97,7 +97,8 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                             }
                                         }
                                     }
-                                    PidInfo.SharedState.NOT_VERIFIED -> {
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitleId(R.string.settings_discovery_mail_pending)
                                         infoMessageTintColorId(R.color.vector_info_color)
@@ -146,7 +147,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                             } else {
                                 when (piState.isShared.invoke()) {
                                     PidInfo.SharedState.SHARED,
-                                    PidInfo.SharedState.NOT_SHARED   -> {
+                                    PidInfo.SharedState.NOT_SHARED              -> {
                                         checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
@@ -157,13 +158,15 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                             }
                                         }
                                     }
-                                    PidInfo.SharedState.NOT_VERIFIED -> {
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitleId(R.string._continue)
                                         infoMessageTintColorId(R.color.vector_info_color)
                                         infoMessageId(R.string.settings_discovery_confirm_mail)
                                         buttonClickListener(View.OnClickListener {
-                                            interactionListener?.checkEmailVerification(piState.value)
+                                            val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                            interactionListener?.checkEmailVerification(piState.value, bind)
                                         })
                                     }
                                 }
@@ -224,7 +227,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         fun onSelectIdentityServer()
         fun onTapRevokeEmail(email: String)
         fun onTapShareEmail(email: String)
-        fun checkEmailVerification(email: String)
+        fun checkEmailVerification(email: String, bind: Boolean)
         fun onTapRevokePN(pn: String)
         fun onTapSharePN(pn: String)
         fun onSetIdentityServer(server: String?)

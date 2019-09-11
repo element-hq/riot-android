@@ -73,6 +73,18 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         super.onResume()
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
         viewModel.startListenToIdentityManager()
+
+        //If some 3pids are pending, we can try to check if they have been verified here
+        withState(viewModel) { state ->
+            state.emailList.invoke()?.forEach { info ->
+                when (info.isShared.invoke()) {
+                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                        viewModel.add3pid(info.value, info.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
+                    }
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -93,8 +105,8 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         viewModel.shareEmail(email)
     }
 
-    override fun checkEmailVerification(email: String) {
-        viewModel.add3pid(email, true)
+    override fun checkEmailVerification(email: String, bind: Boolean) {
+        viewModel.add3pid(email, bind)
     }
 
     override fun onTapRevokePN(pn: String) {

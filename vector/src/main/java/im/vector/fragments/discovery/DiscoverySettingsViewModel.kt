@@ -37,7 +37,8 @@ data class PidInfo(
     enum class SharedState {
         SHARED,
         NOT_SHARED,
-        NOT_VERIFIED
+        NOT_VERIFIED_FOR_BIND,
+        NOT_VERIFIED_FOR_UNBIND
     }
 }
 
@@ -119,7 +120,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
         mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
             override fun onSuccess(info: Void?) {
-                request3pidToken(email)
+                request3pidToken(email, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -154,7 +155,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         })
     }
 
-    private fun request3pidToken(email: String) {
+    private fun request3pidToken(email: String, state: PidInfo.SharedState) {
         val threePid = ThreePid(email, ThreePid.MEDIUM_EMAIL)
         mxSession?.myUser?.requestEmailValidationToken(
                 mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
@@ -168,7 +169,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                                         if (it.value == email) {
                                             it.copy(
                                                     _3pid = threePid,
-                                                    isShared = Success(PidInfo.SharedState.NOT_VERIFIED)
+                                                    isShared = Success(state)
                                             )
                                         } else {
                                             it
@@ -216,15 +217,59 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     fun revokeEmail(email: String) = withState { state ->
         //Fake call
+        if (state.identityServer.invoke() == null) return@withState
         val currentMails = state.emailList.invoke() ?: return@withState
-        val updated = currentMails.map {
-            if (it.value == email) {
-                it.copy(isShared = Loading())
-            } else {
-                it
-            }
+        setState {
+            copy(emailList = Success(
+                    currentMails.map {
+                        if (it.value == email) {
+                            it.copy(isShared = Loading())
+                        } else {
+                            it
+                        }
+                    })
+            )
         }
 
+        val pid = ThirdPartyIdentifier().apply {
+            medium = ThreePid.MEDIUM_EMAIL
+            address = email
+        }
+        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                request3pidToken(email, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+            }
+
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                handleDeleteError(e)
+            }
+
+            override fun onNetworkError(e: java.lang.Exception) {
+                handleDeleteError(e)
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                handleDeleteError(Exception(e.message))
+            }
+
+
+            private fun handleDeleteError(e: java.lang.Exception) {
+                setState {
+                    val currentMails = emailList.invoke() ?: emptyList()
+                    copy(emailList = Success(
+                            currentMails.map {
+                                if (it.value == email) {
+                                    it.copy(
+                                            isShared = Fail(e))
+                                } else {
+                                    it
+                                }
+                            }
+                    ))
+                }
+            }
+
+        })
     }
 
     fun revokePN(pn: String) = withState { state ->
@@ -481,7 +526,13 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                                         currentMails.map {
                                             if (it.value == email) {
                                                 it.copy(
-                                                        isShared = Success(PidInfo.SharedState.NOT_VERIFIED)
+                                                        isShared = Success(
+                                                                if (bind) {
+                                                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                                                } else {
+                                                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND
+                                                                }
+                                                        )
                                                 )
                                             } else {
                                                 it

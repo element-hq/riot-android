@@ -110,6 +110,7 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
             holder.spinner.isVisible = true
             holder.button.isInvisible = true
             holder.switchButton.isInvisible = true
+            holder.switchButton.setOnCheckedChangeListener(null)
             holder.button.setOnClickListener(null)
         } else {
             holder.spinner.isVisible = false
@@ -130,6 +131,8 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
                 ButtonType.SWITCH -> {
                     holder.button.isVisible = false
                     holder.switchButton.isVisible = true
+                    //set to null before changing the state
+                    holder.switchButton.setOnCheckedChangeListener(null)
                     checked?.let { holder.switchButton.isChecked = it }
                     holder.switchButton.setOnCheckedChangeListener(switchChangeListener)
                 }
