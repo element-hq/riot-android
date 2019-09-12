@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
+import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -52,6 +53,8 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_set_identity_server
 
+    override fun getMenuRes() = R.menu.menu_phone_number_addition
+
     @BindView(R.id.discovery_identity_server_enter_til)
     lateinit var mKeyInputLayout: com.google.android.material.textfield.TextInputLayout
 
@@ -79,6 +82,20 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
             mKeyTextEdit.setText(newText)
         }
         mKeyInputLayout.error = state.errorMessageId?.let { getString(it) }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add_phone_number -> {
+                withState(viewModel) { state ->
+                    if (!state.isVerifyingServer) {
+                        viewModel.doChangeServerName()
+                    }
+                }
+                return true
+            }
+            else                         -> return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
