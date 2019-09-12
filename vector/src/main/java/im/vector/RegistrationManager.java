@@ -919,37 +919,37 @@ public class RegistrationManager {
                     pid.requestEmailValidationToken(
                             null,
                             getProfileRestClient(), nextLink, true, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            listener.onThreePidRequested(pid);
-                        }
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    listener.onThreePidRequested(pid);
+                                }
 
-                        @Override
-                        public void onNetworkError(final Exception e) {
-                            warnAfterCertificateError(context, e, pid, listener);
-                        }
+                                @Override
+                                public void onNetworkError(final Exception e) {
+                                    warnAfterCertificateError(context, e, pid, listener);
+                                }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            String errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
-                            listener.onThreePidRequestFailed(errorMessage);
-                        }
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    String errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            String errorMessage = null;
-                            if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_email_already_used_error, null);
-                            } else {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
-                            }
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    String errorMessage = null;
+                                    if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_email_already_used_error, null);
+                                    } else {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                                    }
 
-                            listener.onThreePidRequestFailed(errorMessage);
-                        }
-                    });
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
+                            });
                     break;
                 case ThreePid.MEDIUM_MSISDN:
-                    pid.requestPhoneNumberValidationToken(getProfileRestClient(), true, new ApiCallback<Void>() {
+                    pid.requestPhoneNumberValidationToken(null, getProfileRestClient(), true, new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             mPhoneNumber = pid;
@@ -1132,63 +1132,63 @@ public class RegistrationManager {
         }
     }
 
-/*
- * *********************************************************************************************
- * Private listeners
- * *********************************************************************************************
- */
-
-private interface InternalRegistrationListener {
-    void onRegistrationSuccess();
-
-    void onRegistrationFailed(String message);
-
-    void onResourceLimitExceeded(MatrixError e);
-}
-
-/*
- * *********************************************************************************************
- * Public listeners
- * *********************************************************************************************
- */
-
-public interface ThreePidRequestListener {
-    void onIdentityServerMissing();
-
-    void onThreePidRequested(ThreePid pid);
-
-    void onThreePidRequestFailed(String errorMessage);
-}
-
-public interface ThreePidValidationListener {
-    void onThreePidValidated(boolean isSuccess);
-}
-
-public interface UsernameValidityListener {
-    void onUsernameAvailabilityChecked(boolean isAvailable);
-}
-
-public interface RegistrationListener {
-    void onRegistrationSuccess(String warningMessage);
-
-    void onRegistrationFailed(String message);
-
-    void onWaitingEmailValidation();
-
-    void onIdentityServerMissing();
-
-    /**
-     * @param publicKey the Captcha public key
+    /*
+     * *********************************************************************************************
+     * Private listeners
+     * *********************************************************************************************
      */
-    void onWaitingCaptcha(String publicKey);
 
-    /**
-     * @param localizedFlowDataLoginTerms list of LocalizedFlowDataLoginTerms the user has to accept
+    private interface InternalRegistrationListener {
+        void onRegistrationSuccess();
+
+        void onRegistrationFailed(String message);
+
+        void onResourceLimitExceeded(MatrixError e);
+    }
+
+    /*
+     * *********************************************************************************************
+     * Public listeners
+     * *********************************************************************************************
      */
-    void onWaitingTerms(List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms);
 
-    void onThreePidRequestFailed(String message);
+    public interface ThreePidRequestListener {
+        void onIdentityServerMissing();
 
-    void onResourceLimitExceeded(MatrixError e);
-}
+        void onThreePidRequested(ThreePid pid);
+
+        void onThreePidRequestFailed(String errorMessage);
+    }
+
+    public interface ThreePidValidationListener {
+        void onThreePidValidated(boolean isSuccess);
+    }
+
+    public interface UsernameValidityListener {
+        void onUsernameAvailabilityChecked(boolean isAvailable);
+    }
+
+    public interface RegistrationListener {
+        void onRegistrationSuccess(String warningMessage);
+
+        void onRegistrationFailed(String message);
+
+        void onWaitingEmailValidation();
+
+        void onIdentityServerMissing();
+
+        /**
+         * @param publicKey the Captcha public key
+         */
+        void onWaitingCaptcha(String publicKey);
+
+        /**
+         * @param localizedFlowDataLoginTerms list of LocalizedFlowDataLoginTerms the user has to accept
+         */
+        void onWaitingTerms(List<LocalizedFlowDataLoginTerms> localizedFlowDataLoginTerms);
+
+        void onThreePidRequestFailed(String message);
+
+        void onResourceLimitExceeded(MatrixError e);
+    }
 }

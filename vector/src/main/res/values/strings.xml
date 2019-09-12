@@ -1689,5 +1689,5 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_please_enter_server">Please enter server</string>
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
-
+    <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
 </resources>

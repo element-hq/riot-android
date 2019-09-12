@@ -18,9 +18,9 @@ package im.vector.fragments.discovery
 import android.text.TextUtils
 import androidx.core.net.toUri
 import com.airbnb.mvrx.*
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.Matrix
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import im.vector.util.PhoneNumberUtils
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
@@ -102,25 +102,16 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     fun shareEmail(email: String) = withState { state ->
         if (state.identityServer.invoke() == null) return@withState
         val currentMails = state.emailList.invoke() ?: return@withState
-        setState {
-            copy(emailList = Success(
-                    currentMails.map {
-                        if (it.value == email) {
-                            it.copy(isShared = Loading())
-                        } else {
-                            it
-                        }
-                    })
-            )
-        }
-
+        changeMailState(email, Loading())
         val pid = ThirdPartyIdentifier().apply {
             medium = ThreePid.MEDIUM_EMAIL
             address = email
         }
+        val existing3pid = state.emailList.invoke()?.find { it.value == email }?.let { it._3pid }
+
         mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
             override fun onSuccess(info: Void?) {
-                request3pidToken(email, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
+                request3pidToken(existing3pid, ThreePid.MEDIUM_EMAIL, email, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -135,109 +126,143 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 handleDeleteError(Exception(e.message))
             }
 
-
             private fun handleDeleteError(e: java.lang.Exception) {
-                setState {
-                    val currentMails = emailList.invoke() ?: emptyList()
-                    copy(emailList = Success(
-                            currentMails.map {
-                                if (it.value == email) {
-                                    it.copy(
-                                            isShared = Fail(e))
-                                } else {
-                                    it
-                                }
-                            }
-                    ))
-                }
+                changeMailState(email, Fail(e))
             }
 
         })
     }
 
-    private fun request3pidToken(email: String, state: PidInfo.SharedState) {
-        val threePid = ThreePid(email, ThreePid.MEDIUM_EMAIL)
-        mxSession?.myUser?.requestEmailValidationToken(
-                mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
-                threePid,
-                object : ApiCallback<Void?> {
-                    override fun onSuccess(info: Void?) {
-                        setState {
-                            val currentMails = emailList.invoke() ?: emptyList()
-                            copy(emailList = Success(
-                                    currentMails.map {
-                                        if (it.value == email) {
-                                            it.copy(
-                                                    _3pid = threePid,
-                                                    isShared = Success(state)
-                                            )
-                                        } else {
-                                            it
-                                        }
-                                    }
-                            ))
-                        }
-                    }
+    private fun request3pidToken(existingPid: ThreePid?, medium: String, address: String, state: PidInfo.SharedState) {
+        var threePid: ThreePid? = existingPid
+        if (threePid == null) {
+            if (medium == ThreePid.MEDIUM_EMAIL) {
+                threePid = ThreePid(address, medium)
+            } else if (medium == ThreePid.MEDIUM_MSISDN) {
+                val phoneNumber = PhoneNumberUtil.getInstance()
+                        .parse("+${address}", null)
+                val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
+                threePid = ThreePid(PhoneNumberUtils.getE164format(phoneNumber), countryCode, ThreePid.MEDIUM_MSISDN)
+            }
+        }
 
-                    override fun onUnexpectedError(e: java.lang.Exception) {
-                        reportError(e)
-                    }
+        //mm should not happen
+        if (threePid == null) return
 
-                    override fun onNetworkError(e: java.lang.Exception) {
-                        reportError(e)
-                    }
+        val callback = object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                if (medium == ThreePid.MEDIUM_EMAIL) {
+                    changeMailState(address, Success(state), threePid)
+                } else if (medium == ThreePid.MEDIUM_MSISDN) {
+                    changePNState(address, Success(state), threePid)
+                }
+            }
 
-                    private fun reportError(e: java.lang.Exception) {
-                        setState {
-                            val currentMails = emailList.invoke() ?: emptyList()
-                            copy(emailList = Success(
-                                    currentMails.map {
-                                        if (it.value == email) {
-                                            it.copy(isShared = Fail(e))
-                                        } else {
-                                            it
-                                        }
-                                    }
-                            ))
-                        }
-                    }
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                reportError(e)
+            }
+
+            override fun onNetworkError(e: java.lang.Exception) {
+                reportError(e)
+            }
+
+            private fun reportError(e: java.lang.Exception) {
+                if (medium == ThreePid.MEDIUM_EMAIL) {
+                    changeMailState(address, Fail(e), threePid)
+                } else if (medium == ThreePid.MEDIUM_MSISDN) {
+                    changePNState(address, Fail(e))
+                }
+            }
 
 
-                    override fun onMatrixError(e: MatrixError) {
-                        reportError(java.lang.Exception(e.message))
-                        if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                            // This may just mean they are dealing with an old homeserver,
-                            // versus the 3PID already being bound on this homeserver by another user.
-                            // -> Delete 3pid then retry?
-                        }
-                    }
+            override fun onMatrixError(e: MatrixError) {
+                reportError(java.lang.Exception(e.message))
+                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                    // This may just mean they are dealing with an old homeserver,
+                    // versus the 3PID already being bound on this homeserver by another user.
+                    // -> Delete 3pid then retry?
+                }
+            }
 
-                })
+        }
+        if (medium == ThreePid.MEDIUM_EMAIL) {
+            mxSession?.myUser?.requestEmailValidationToken(
+                    mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
+                    threePid,
+                    callback)
+        } else if (medium == ThreePid.MEDIUM_MSISDN) {
+            mxSession?.myUser?.requestPhoneNumberValidationToken(
+                    mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
+                    threePid,
+                    callback)
+        }
+
     }
 
-    fun revokeEmail(email: String) = withState { state ->
-        //Fake call
-        if (state.identityServer.invoke() == null) return@withState
-        val currentMails = state.emailList.invoke() ?: return@withState
+    private fun changeMailState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
         setState {
+            val currentMails = emailList.invoke() ?: emptyList()
             copy(emailList = Success(
                     currentMails.map {
-                        if (it.value == email) {
-                            it.copy(isShared = Loading())
+                        if (it.value == address) {
+                            it.copy(
+                                    _3pid = threePid,
+                                    isShared = state
+                            )
                         } else {
                             it
                         }
-                    })
-            )
+                    }
+            ))
         }
+    }
+
+    private fun changeMailState(address: String, state: Async<PidInfo.SharedState>) {
+        setState {
+            val currentMails = emailList.invoke() ?: emptyList()
+            copy(emailList = Success(
+                    currentMails.map {
+                        if (it.value == address) {
+                            it.copy(isShared = state)
+                        } else {
+                            it
+                        }
+                    }
+            ))
+        }
+    }
+
+    private fun changePNState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
+        setState {
+            val phones = phoneNumbersList.invoke() ?: emptyList()
+            copy(phoneNumbersList = Success(
+                    phones.map {
+                        if (it.value == address) {
+                            it.copy(
+                                    _3pid = threePid,
+                                    isShared = state
+                            )
+                        } else {
+                            it
+                        }
+                    }
+            ))
+        }
+    }
+
+    fun revokeEmail(email: String) = withState { state ->
+        if (state.identityServer.invoke() == null) return@withState
+        if (state.emailList.invoke() == null) return@withState
+        changeMailState(email, Loading())
 
         val pid = ThirdPartyIdentifier().apply {
             medium = ThreePid.MEDIUM_EMAIL
             address = email
         }
+
         mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
             override fun onSuccess(info: Void?) {
-                request3pidToken(email, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+                request3pidToken(null, ThreePid.MEDIUM_EMAIL, email, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -252,83 +277,122 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 handleDeleteError(Exception(e.message))
             }
 
-
             private fun handleDeleteError(e: java.lang.Exception) {
-                setState {
-                    val currentMails = emailList.invoke() ?: emptyList()
-                    copy(emailList = Success(
-                            currentMails.map {
-                                if (it.value == email) {
-                                    it.copy(
-                                            isShared = Fail(e))
-                                } else {
-                                    it
-                                }
-                            }
-                    ))
-                }
+                changeMailState(email, Fail(e))
             }
 
         })
     }
 
     fun revokePN(pn: String) = withState { state ->
-        //Fake call
-        val currentPN = state.phoneNumbersList.invoke() ?: return@withState
-        val updated = currentPN.map {
-            if (it.value == pn) {
-                it.copy(isShared = Loading())
-            } else {
-                it
+        if (state.identityServer.invoke() == null) return@withState
+        if (state.emailList.invoke() == null) return@withState
+        changePNState(pn, Loading())
+
+        val pid = ThirdPartyIdentifier().apply {
+            medium = ThreePid.MEDIUM_MSISDN
+            address = pn
+        }
+
+        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                request3pidToken(null, ThreePid.MEDIUM_MSISDN, pn, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
             }
-        }
-        setState {
-            copy(phoneNumbersList = Success(updated))
-        }
-        GlobalScope.launch {
-            kotlinx.coroutines.delay(1000)
-            setState {
-                val currentPN = phoneNumbersList.invoke() ?: emptyList()
-                copy(phoneNumbersList = Success(
-                        currentPN.map {
-                            if (it.value == pn) {
-                                it.copy(isShared = Success(PidInfo.SharedState.NOT_SHARED))
-                            } else {
-                                it
-                            }
-                        }
-                ))
+
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                handleDeleteError(e)
             }
-        }
+
+            override fun onNetworkError(e: java.lang.Exception) {
+                handleDeleteError(e)
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                handleDeleteError(Exception(e.message))
+            }
+
+            private fun handleDeleteError(e: java.lang.Exception) {
+                changePNState(pn, Fail(e))
+            }
+
+        })
     }
 
     fun sharePN(pn: String) = withState { state ->
+        if (state.identityServer.invoke() == null) return@withState
+        changePNState(pn, Loading())
+
+        val pid = ThirdPartyIdentifier().apply {
+            medium = ThreePid.MEDIUM_MSISDN
+            address = pn
+        }
+
+        val existing3pid = state.phoneNumbersList.invoke()?.find { it.value == pn }?.let { it._3pid }
+
+        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                request3pidToken(existing3pid, ThreePid.MEDIUM_MSISDN, pn, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
+            }
+
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                handleDeleteError(e)
+            }
+
+            override fun onNetworkError(e: java.lang.Exception) {
+                handleDeleteError(e)
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                handleDeleteError(Exception(e.message))
+            }
+
+
+            private fun handleDeleteError(e: java.lang.Exception) {
+                changePNState(pn, Fail(e))
+            }
+
+        })
         //Fake call
-        val currentPN = state.phoneNumbersList.invoke() ?: return@withState
-        val updated = currentPN.map {
-            if (it.value == pn) {
-                it.copy(isShared = Loading())
-            } else {
-                it
-            }
-        }
+//        val currentPN = state.phoneNumbersList.invoke() ?: return@withState
+//        val updated = currentPN.map {
+//            if (it.value == pn) {
+//                it.copy(isShared = Loading())
+//            } else {
+//                it
+//            }
+//        }
+//        setState {
+//            copy(phoneNumbersList = Success(updated))
+//        }
+//        GlobalScope.launch {
+//            kotlinx.coroutines.delay(1000)
+//            setState {
+//                val currentPN = phoneNumbersList.invoke() ?: emptyList()
+//                copy(phoneNumbersList = Success(
+//                        currentPN.map {
+//                            if (it.value == pn) {
+//                                it.copy(isShared = Success(PidInfo.SharedState.SHARED))
+//                            } else {
+//                                it
+//                            }
+//                        }
+//                ))
+//            }
+//        }
+    }
+
+    private fun changePNState(pn: String, sharedState: Async<PidInfo.SharedState>) {
         setState {
-            copy(phoneNumbersList = Success(updated))
-        }
-        GlobalScope.launch {
-            kotlinx.coroutines.delay(1000)
-            setState {
-                val currentPN = phoneNumbersList.invoke() ?: emptyList()
-                copy(phoneNumbersList = Success(
-                        currentPN.map {
-                            if (it.value == pn) {
-                                it.copy(isShared = Success(PidInfo.SharedState.SHARED))
-                            } else {
-                                it
-                            }
+            val currentPNS = phoneNumbersList.invoke()!!
+            copy(phoneNumbersList = Success(
+                    currentPNS.map {
+                        if (it.value == pn) {
+                            it.copy(isShared = sharedState)
+                        } else {
+                            it
                         }
-                ))
-            }
+                    })
+            )
         }
     }
 
@@ -474,40 +538,59 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         })
     }
 
-    fun add3pid(email: String, bind: Boolean) {
-        setState {
-            val currentMails = emailList.invoke() ?: emptyList()
-            copy(emailList = Success(
-                    currentMails.map {
-                        if (it.value == email) {
-                            it.copy(isShared = Loading())
-                        } else {
-                            it
-                        }
+    fun submitPNToken(msisdn: String, code: String, bind: Boolean) = withState { state ->
+        val pid = state.phoneNumbersList.invoke()?.find { it.value == msisdn }?._3pid
+                ?: return@withState
+
+        mxSession?.identityServerManager?.submitValidationToken(ThreePid.MEDIUM_MSISDN,
+                code,
+                pid.clientSecret,
+                pid.sid,
+                object : ApiCallback<Boolean> {
+                    override fun onSuccess(info: Boolean?) {
+                        add3pid(ThreePid.MEDIUM_MSISDN, msisdn, bind)
                     }
-            ))
+
+                    override fun onNetworkError(e: java.lang.Exception) {
+                        changePNState(msisdn, Fail(e))
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        changePNState(msisdn, Fail(Throwable(e.message)))
+                    }
+
+                    override fun onUnexpectedError(e: java.lang.Exception) {
+                        changePNState(msisdn, Fail(e))
+                    }
+
+                }
+        )
+    }
+
+    fun add3pid(medium: String, address: String, bind: Boolean) {
+        if (medium == ThreePid.MEDIUM_EMAIL) {
+            changeMailState(address, Loading())
+        } else {
+            changePNState(address, Loading())
         }
         withState { state ->
-            val _3pid = state.emailList.invoke()?.find { it.value == email }?._3pid
+            val _3pid = if (medium == ThreePid.MEDIUM_EMAIL) {
+                state.emailList.invoke()?.find { it.value == address }?._3pid
+            } else {
+                state.phoneNumbersList.invoke()?.find { it.value == address }?._3pid
+            }
+
             mxSession?.myUser?.add3Pid(
                     mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
                     _3pid,
                     bind,
                     object : ApiCallback<Void?> {
                         override fun onSuccess(info: Void?) {
-                            setState {
-                                val currentMails = emailList.invoke() ?: emptyList()
-                                copy(emailList = Success(
-                                        currentMails.map {
-                                            if (it.value == email) {
-                                                it.copy(isShared = Success(
-                                                        if (bind) PidInfo.SharedState.SHARED else PidInfo.SharedState.NOT_SHARED
-                                                ))
-                                            } else {
-                                                it
-                                            }
-                                        }
-                                ))
+                            val sharedState = Success(if (bind) PidInfo.SharedState.SHARED else PidInfo.SharedState.NOT_SHARED)
+                            if (medium == ThreePid.MEDIUM_EMAIL) {
+                                changeMailState(address, sharedState, null)
+                            } else {
+                                changePNState(address, sharedState, null)
                             }
                         }
 
@@ -520,25 +603,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         }
 
                         private fun reportError(e: java.lang.Exception) {
-                            setState {
-                                val currentMails = emailList.invoke() ?: emptyList()
-                                copy(emailList = Success(
-                                        currentMails.map {
-                                            if (it.value == email) {
-                                                it.copy(
-                                                        isShared = Success(
-                                                                if (bind) {
-                                                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                                                } else {
-                                                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND
-                                                                }
-                                                        )
-                                                )
-                                            } else {
-                                                it
-                                            }
-                                        }
-                                ))
+                            val sharedState = Success(if (bind) PidInfo.SharedState.NOT_VERIFIED_FOR_BIND else PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+                            if (medium == ThreePid.MEDIUM_EMAIL) {
+                                changeMailState(address, sharedState)
+                            } else {
+                                changePNState(address, sharedState)
                             }
                         }
 

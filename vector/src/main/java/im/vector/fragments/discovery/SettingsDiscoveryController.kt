@@ -69,10 +69,15 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                     }
                 } else {
                     phones.forEach { piState ->
+                        val phoneNumber = PhoneNumberUtil.getInstance()
+                                .parse("+${piState.value}", null)
+                                ?.let {
+                                    PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+                                }
+
                         settingsTextButtonItem {
                             id(piState.value)
-                            val phoneNumber = PhoneNumberUtil.getInstance().parse("+${piState.value}", null)
-                            title(PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL))
+                            title(phoneNumber)
                             when {
                                 piState.isShared is Loading -> buttonIndeterminate(true)
                                 piState.isShared is Fail    -> {
@@ -103,11 +108,26 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
                                     PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitleId(R.string.settings_discovery_mail_pending)
-                                        infoMessageTintColorId(R.color.vector_info_color)
-                                        infoMessageId(R.string.settings_discovery_confirm_mail)
+                                        buttonTitle("")
                                     }
                                 }
+                            }
+                        }
+                        when (piState.isShared.invoke()) {
+                            PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                            PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                                settingsItemText {
+                                    id("tverif" + piState.value)
+                                    descriptionText(context.getString(R.string.settings_text_message_sent, phoneNumber))
+                                    interactionListener(object : SettingsItemText.Listener {
+                                        override fun onValidate(code: String) {
+                                            val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                            interactionListener?.checkPNVerification(piState.value, code , bind)
+                                        }
+                                    })
+                                }
+                            }
+                            else                                        -> {
                             }
                         }
                     }
@@ -236,6 +256,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         fun onTapRevokeEmail(email: String)
         fun onTapShareEmail(email: String)
         fun checkEmailVerification(email: String, bind: Boolean)
+        fun checkPNVerification(msisdn: String, code: String,  bind: Boolean)
         fun onTapRevokePN(pn: String)
         fun onTapSharePN(pn: String)
         fun onSetIdentityServer(server: String?)

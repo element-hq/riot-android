@@ -19,6 +19,7 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -39,6 +40,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
 
 import im.vector.Matrix;
@@ -261,7 +263,11 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
             final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
             final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
 
-            mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
+            Uri identityServer = null;
+            if (mSession.getIdentityServerManager().getIdentityServerUrl() != null) {
+                identityServer = Uri.parse(mSession.getIdentityServerManager().getIdentityServerUrl());
+            }
+            mSession.getMyUser().requestPhoneNumberValidationToken(identityServer,pid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     hideWaitingView();

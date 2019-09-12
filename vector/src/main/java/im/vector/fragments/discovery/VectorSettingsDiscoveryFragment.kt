@@ -27,6 +27,7 @@ import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.extensions.withArgs
 import im.vector.fragments.VectorBaseMvRxFragment
+import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 
 class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscoveryController.InteractionListener {
@@ -80,7 +81,8 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 when (info.isShared.invoke()) {
                     PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
                     PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                        viewModel.add3pid(info.value, info.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
+                        val bind = info.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
                     }
                 }
             }
@@ -106,7 +108,11 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun checkEmailVerification(email: String, bind: Boolean) {
-        viewModel.add3pid(email, bind)
+        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, email, bind)
+    }
+
+    override fun checkPNVerification(msisdn: String, code: String, bind: Boolean) {
+        viewModel.submitPNToken(msisdn, code, bind)
     }
 
     override fun onTapRevokePN(pn: String) {
