@@ -1672,10 +1672,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
 
     <string name="identity_server">Identity Server</string>
-    <string name="choose_identity_server">Choose Identity Server</string>
+    <string name="disconnect_identity_server">Disconnect Identity Server</string>
     <string name="add_identity_server">Add Identity Server</string>
+    <string name="change_identity_server">Change Identity Server</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
-    <string name="settings_discovery_identity_server_info_none">You cannot discover or be discoverable by existing contacts you know.</string>
+    <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.</string>
     <string name="settings_discovery_emails_title">Discoverable email addresses</string>
     <string name="settings_discovery_no_mails">Discovery options will appear once you have added an email.</string>
     <string name="settings_discovery_no_pn">Discovery options will appear once you have added a phone number.</string>
@@ -1690,4 +1691,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
     <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %s. You will need to reconnect to %s to stop sharing them.</string>
+
 </resources>

@@ -17,6 +17,7 @@ package im.vector.fragments.discovery
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -123,12 +124,66 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         viewModel.sharePN(pn)
     }
 
-    override fun onSetIdentityServer(server: String?) {
-        viewModel.changeIdentityServer(server)
+    override fun onTapChangeIdentityServer(): Unit = withState(viewModel) { state ->
+
+        //we should prompt if there are bound items with current is
+        withState(viewModel) { state ->
+            val pidList = ArrayList<PidInfo>().apply {
+                state.emailList.invoke()?.let { addAll(it) }
+                state.phoneNumbersList.invoke()?.let { addAll(it) }
+            }
+
+            val hasBoundIds = pidList.any { it.isShared.invoke() == PidInfo.SharedState.SHARED }
+
+            if (hasBoundIds) {
+                //we should prompt
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.change_identity_server)
+                        .setMessage(
+                                requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
+                                        state.identityServer, state.identityServer)
+                        )
+                        .setNegativeButton(R.string._continue) { _, _ ->
+                            navigateToChangeIsFragment(state)
+                        }
+                        .setPositiveButton(R.string.cancel, null)
+                        .show()
+                return@withState
+            }
+            navigateToChangeIsFragment(state)
+        }
     }
 
+    override fun onTapDisconnectIdentityServer() {
+        //we should prompt if there are bound items with current is
+        withState(viewModel) { state ->
+            val pidList = ArrayList<PidInfo>().apply {
+                state.emailList.invoke()?.let { addAll(it) }
+                state.phoneNumbersList.invoke()?.let { addAll(it) }
+            }
 
-    override fun onChangeIdentityServer(): Unit = withState(viewModel) { state ->
+            val hasBoundIds = pidList.any { it.isShared.invoke() == PidInfo.SharedState.SHARED }
+
+            if (hasBoundIds) {
+                //we should prompt
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.disconnect_identity_server)
+                        .setMessage(
+                                requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
+                                        state.identityServer, state.identityServer)
+                        )
+                        .setNegativeButton(R.string._continue) { _, _ ->
+                            viewModel.changeIdentityServer(null)
+                        }
+                        .setPositiveButton(R.string.cancel, null)
+                        .show()
+                return@withState
+            }
+            viewModel.changeIdentityServer(null)
+        }
+    }
+
+    private fun navigateToChangeIsFragment(state: DiscoverySettingsState) {
         SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer.invoke()).also {
             requireFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom,

@@ -122,7 +122,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
                                             val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            interactionListener?.checkPNVerification(piState.value, code , bind)
+                                            interactionListener?.checkPNVerification(piState.value, code, bind)
                                         }
                                     })
                                 }
@@ -222,15 +222,27 @@ class SettingsDiscoveryController(private val context: Context, private val inte
 
         settingsInfoItem {
             id("idServerFooter")
-            helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
+            apply {
+                if (data.identityServer.invoke() != null) {
+                    helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
+                } else {
+                    helperTextResId(R.string.settings_discovery_identity_server_info_none)
+                }
+            }
         }
 
         settingsButtonItem {
             id("change")
-            buttonTitleId(R.string.action_change)
+            apply {
+                if (data.identityServer.invoke() != null) {
+                    buttonTitleId(R.string.change_identity_server)
+                } else {
+                    buttonTitleId(R.string.add_identity_server)
+                }
+            }
             buttonStyle(SettingsTextButtonItem.ButtonStyle.POSITIVE)
             buttonClickListener(View.OnClickListener {
-                interactionListener?.onChangeIdentityServer()
+                interactionListener?.onTapChangeIdentityServer()
             })
         }
 
@@ -241,10 +253,10 @@ class SettingsDiscoveryController(private val context: Context, private val inte
             }
             settingsButtonItem {
                 id("remove")
-                buttonTitleId(R.string.disconnect)
+                buttonTitleId(R.string.disconnect_identity_server)
                 buttonStyle(SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
-                    interactionListener?.onSetIdentityServer(null)
+                    interactionListener?.onTapDisconnectIdentityServer()
                 })
             }
         }
@@ -256,11 +268,11 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         fun onTapRevokeEmail(email: String)
         fun onTapShareEmail(email: String)
         fun checkEmailVerification(email: String, bind: Boolean)
-        fun checkPNVerification(msisdn: String, code: String,  bind: Boolean)
+        fun checkPNVerification(msisdn: String, code: String, bind: Boolean)
         fun onTapRevokePN(pn: String)
         fun onTapSharePN(pn: String)
-        fun onSetIdentityServer(server: String?)
-        fun onChangeIdentityServer()
+        fun onTapChangeIdentityServer()
+        fun onTapDisconnectIdentityServer()
     }
 }
 
