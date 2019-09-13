@@ -1,27 +1,8 @@
-Changes in Riot 0.9.6 (2019-XX-XX)
+Changes in Riot 0.9.6 (2019-09-13)
 ===================================================
-
-MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
-
-Features:
- -
-
-Improvements:
- -
 
 Other changes:
  - Get around Google limitation of SSO through WebView by modifying the WebView user agent
-
-Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.9.5 (2019-09-10)
 ===================================================
