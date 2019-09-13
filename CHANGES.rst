@@ -1,3 +1,9 @@
+Changes in Riot 0.9.6 (2019-09-13)
+===================================================
+
+Other changes:
+ - Get around Google limitation of SSO through WebView by modifying the WebView user agent
+
 Changes in Riot 0.9.5 (2019-09-10)
 ===================================================
 
