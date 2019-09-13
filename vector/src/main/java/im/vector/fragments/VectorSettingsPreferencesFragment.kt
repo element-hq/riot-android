@@ -98,6 +98,7 @@ import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.Logger
 
 class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -331,6 +332,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             onPasswordUpdateClick()
             false
         }
+
 
         // Add Email
         (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
@@ -943,6 +945,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
+            refreshEmailsList()
+            refreshPhoneNumbersList()
         }
 
         interactionListener?.requestedKeyToHighlight()?.let { key ->
@@ -1760,6 +1764,59 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the emails list
      */
     private fun refreshEmailsList() {
+
+        val isURL = mSession.identityServerManager.getIdentityServerUrl()
+        if (isURL != null) {
+            updateMailSection()
+        } else {
+
+            //If there is no identity server configured, we can just remove this section
+            //as the user won't be able to add/remove 3pids
+            //Though there is a special case when HS (checked via capabilities) can manage msisdn/mails by
+            //themselves without an identity server.
+
+            mSession.doesServerRequireIdentityServerParam(object : ApiCallback<Boolean> {
+                override fun onSuccess(requiresIdentityServer: Boolean) {
+                    if (requiresIdentityServer) {
+                        run {
+                            var index = 0
+                            while (true) {
+                                val preference = mUserSettingsCategory.findPreference(EMAIL_PREFERENCE_KEY_BASE + index)
+
+                                if (null != preference) {
+                                    mUserSettingsCategory.removePreference(preference)
+                                } else {
+                                    break
+                                }
+                                index++
+                            }
+                        }
+                        mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)?.let {
+                            it.isVisible = false
+                        }
+                    } else {
+                        updateMailSection()
+                    }
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onNetworkError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    Log.e(LOG_TAG, "Failed to get version ${e.message}")
+                }
+
+            })
+        }
+
+    }
+
+    private fun updateMailSection() {
         val currentEmail3PID = ArrayList(mSession.myUser.getlinkedEmails())
 
         val newEmailsList = ArrayList<String>()
@@ -1823,6 +1880,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             addEmailBtn.order = order
+            addEmailBtn.isVisible = true
         }
     }
 
@@ -1945,10 +2003,60 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     // Phone number management
     //==============================================================================================================
 
+
     /**
      * Refresh phone number list
      */
     private fun refreshPhoneNumbersList() {
+            val isURL = mSession.identityServerManager.getIdentityServerUrl()
+        if (isURL != null) {
+            updatePhoneNumbersList()
+        } else {
+            //If there is no identity server configured, we can just remove this section
+            //as the user won't be able to add/remove 3pids
+            //Though there is a special case when HS (checked via capabilities) can manage msisdn/mails by
+            //themselves without an identity server.
+            mSession.doesServerRequireIdentityServerParam(object : ApiCallback<Boolean> {
+                override fun onSuccess(requiresIdentityServer: Boolean) {
+                    if (requiresIdentityServer) {
+                        run {
+                            var index = 0
+                            while (true) {
+                                val preference = mUserSettingsCategory.findPreference(PHONE_NUMBER_PREFERENCE_KEY_BASE + index)
+
+                                if (null != preference) {
+                                    mUserSettingsCategory.removePreference(preference)
+                                } else {
+                                    break
+                                }
+                                index++
+                            }
+                        }
+                        mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)?.let {
+                            it.isVisible = false
+                        }
+                    } else {
+                        updatePhoneNumbersList()
+                    }
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onNetworkError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    Log.e(LOG_TAG, "Failed to get version ${e.message}")
+                }
+
+            })
+        }
+    }
+
+    private fun updatePhoneNumbersList() {
         val currentPhoneNumber3PID = ArrayList(mSession.myUser.getlinkedPhoneNumbers())
 
         val phoneNumberList = ArrayList<String>()
@@ -2020,6 +2128,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             addPhoneBtn.order = order
+            addPhoneBtn.isVisible = true
         }
 
     }
