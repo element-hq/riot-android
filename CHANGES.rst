@@ -12,7 +12,7 @@ Improvements:
  -
 
 Other changes:
- -
+ - Get around Google limitation of SSO through WebView by modifying the WebView user agent
 
 Bugfix:
  -
