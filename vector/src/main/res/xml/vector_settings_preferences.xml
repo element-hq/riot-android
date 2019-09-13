@@ -431,10 +431,11 @@
             android:title="@string/settings_home_server"
             tools:summary="@string/default_hs_server_url" />
 
-        <im.vector.preference.VectorEditTextPreference
+        <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url" />
+            tools:summary="@string/default_identity_server_url"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
 
 
         <im.vector.preference.VectorPreference

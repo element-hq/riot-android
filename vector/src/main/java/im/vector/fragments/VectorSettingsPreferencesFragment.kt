@@ -284,7 +284,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
     }
     private val identityServerPreference by lazy {
-        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as EditTextPreference
+        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
     }
 
     /* ==========================================================================================
@@ -659,34 +659,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // identity server
         updateIdentityServerPref()
-        // TODO A click on this pref will open the discovery Fragment, which will manage the update of the IS
-        identityServerPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            displayLoadingView()
-
-            mSession.identityServerManager.setIdentityServerUrl(newValue as String, object : ApiCallback<Void?> {
-                override fun onSuccess(info: Void?) {
-                    hideLoadingView()
-                    updateIdentityServerPref()
-                }
-
-                override fun onUnexpectedError(e: java.lang.Exception) {
-                    onCommonDone(e.localizedMessage)
-                    updateIdentityServerPref()
-                }
-
-                override fun onNetworkError(e: java.lang.Exception) {
-                    onCommonDone(e.localizedMessage)
-                    updateIdentityServerPref()
-                }
-
-                override fun onMatrixError(e: MatrixError) {
-                    onCommonDone(e.localizedMessage)
-                    updateIdentityServerPref()
-                }
-
-            })
-            true
-        }
 
         findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL)
                 .summary = PreferencesManager.getIntegrationManagerUiUrl(context)
@@ -901,7 +873,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun updateIdentityServerPref() {
         identityServerPreference.summary = mSession.identityServerManager?.getIdentityServerUrl()
                 ?: getString(R.string.identity_server_not_defined)
-        identityServerPreference.text = mSession.identityServerManager?.getIdentityServerUrl() ?: ""
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

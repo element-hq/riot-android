@@ -95,15 +95,16 @@ class VectorSettingsActivity : MXCActionBarActivity(),
         if (session == null) {
             return false
         }
-        
-        val oFragment = when {
-            PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
+
+        val oFragment = when (pref.key) {
+            PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY ->
                 VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
-            PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
+            PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY     ->
                 VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
-            PreferencesManager.SETTINGS_DISCOVERY_PREFERENCE_KEY == pref.key                 ->
+            PreferencesManager.SETTINGS_DISCOVERY_PREFERENCE_KEY,
+            PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY           ->
                 VectorSettingsDiscoveryFragment.newInstance(session.myUserId)
-            else                                                                             -> null
+            else                                                                 -> null
         }
 
         if (oFragment != null) {

@@ -141,7 +141,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                         .setTitle(R.string.change_identity_server)
                         .setMessage(
                                 requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
-                                        state.identityServer, state.identityServer)
+                                        state.identityServer.invoke(), state.identityServer.invoke())
                         )
                         .setNegativeButton(R.string._continue) { _, _ ->
                             navigateToChangeIsFragment(state)
@@ -170,7 +170,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                         .setTitle(R.string.disconnect_identity_server)
                         .setMessage(
                                 requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
-                                        state.identityServer, state.identityServer)
+                                        state.identityServer.invoke(), state.identityServer.invoke())
                         )
                         .setNegativeButton(R.string._continue) { _, _ ->
                             viewModel.changeIdentityServer(null)
