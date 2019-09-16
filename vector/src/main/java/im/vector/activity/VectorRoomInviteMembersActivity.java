@@ -130,6 +130,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* cannot be null */, token),
                     RequestCodesKt.TERMS_REQUEST_CODE);
         }
+
+        @Override
+        public void onNoIdentityServerDefined() {
+
+        }
     };
 
     // refresh the presence asap

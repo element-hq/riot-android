@@ -91,6 +91,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     private int mContactsSnapshotSession = -1;
     private MXEventListener mEventsListener;
 
+
     /*
      * *********************************************************************************************
      * Static methods
@@ -571,6 +572,11 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                     TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
                     RequestCodesKt.TERMS_REQUEST_CODE);
         }
+    }
+
+    @Override
+    public void onNoIdentityServerDefined() {
+
     }
 
     @Override

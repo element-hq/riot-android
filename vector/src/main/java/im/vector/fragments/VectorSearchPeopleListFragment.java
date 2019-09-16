@@ -95,6 +95,11 @@ public class VectorSearchPeopleListFragment extends VectorBaseFragment {
         public void onIdentityServerTermsNotSigned(String token) {
             Log.w("VectorSearchPeopleListFragment", "onIdentityServerTermsNotSigned()");
         }
+
+        @Override
+        public void onNoIdentityServerDefined() {
+
+        }
     };
 
     // refresh the presence asap

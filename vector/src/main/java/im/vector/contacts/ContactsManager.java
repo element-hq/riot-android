@@ -80,6 +80,9 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Called when the Terms of the Identity server has not being accepted
          */
         void onIdentityServerTermsNotSigned(String token);
+
+
+        void onNoIdentityServerDefined();
     }
 
     // singleton
@@ -171,6 +174,17 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     listener.onIdentityServerTermsNotSigned(token);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "onTermsNotSigned failed " + e.getMessage(), e);
+                }
+            }
+        }
+
+        @Override
+        public void onNoIdentityServer() {
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onNoIdentityServerDefined();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onNoIdentityServerDefined failed " + e.getMessage(), e);
                 }
             }
         }
