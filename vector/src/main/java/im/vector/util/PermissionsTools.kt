@@ -54,6 +54,7 @@ const val PERMISSIONS_FOR_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_ROOM_AVATAR = PERMISSION_CAMERA
 const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
+const val PERMISSIONS_FOR_VOICE_MESSAGE = PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_WRITING_FILES = PERMISSION_WRITE_EXTERNAL_STORAGE
 
 private const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
@@ -67,6 +68,7 @@ const val PERMISSION_REQUEST_CODE_AUDIO_CALL = 571
 const val PERMISSION_REQUEST_CODE_VIDEO_CALL = 572
 const val PERMISSION_REQUEST_CODE_EXPORT_KEYS = 573
 const val PERMISSION_REQUEST_CODE_CHANGE_AVATAR = 574
+const val PERMISSION_REQUEST_CODE_VOICE_MESSAGE = 575
 
 /**
  * Log the used permissions statuses.
@@ -155,6 +157,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_VOICE_MESSAGE != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap) {
         Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
@@ -209,9 +212,14 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     // Both missing
                     explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_and_audio)
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                    // Audio missing
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio_explanation)
+                    if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+                        // Audio missing
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio_explanation)
+                    } else {
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_voice_message)
+                        explanationMessage += activity.getString(R.string.permissions_rationale_msg_voice_message_explanation)
+                    }
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
                     // Camera missing
                     explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
@@ -230,7 +238,11 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             if (!TextUtils.isEmpty(explanationMessage)) {
                                 explanationMessage += "\n\n"
                             }
-                            explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
+                            explanationMessage += if (requestCode == PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+                                activity.getString(R.string.permissions_rationale_msg_record_audio)
+                            } else {
+                                activity.getString(R.string.permissions_rationale_msg_voice_message)
+                            }
                         }
                         Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
                             if (!TextUtils.isEmpty(explanationMessage)) {

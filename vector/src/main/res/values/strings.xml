@@ -371,6 +371,8 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <string name="permissions_rationale_msg_contacts">Riot can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
+    <string name="permissions_rationale_msg_voice_message">Riot needs permission to access your microphone to send voice messages.</string>
+    <string name="permissions_rationale_msg_voice_message_explanation">\n\nPlease allow access on the next pop-up to be able to send a voice message.</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
@@ -517,6 +519,7 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
+    <string name="room_message_placeholder_voice">Recording …</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 new message</item>
         <item quantity="other">%d new messages</item>
@@ -1477,6 +1480,8 @@ Why choose Riot.im?
 
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
+    <string name="voice_recording_no_file">Recorded voice message could not be found.</string>
+
     <!-- String for RiotX -->
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
@@ -1657,5 +1662,4 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
 
     <string name="read_at">Read at</string>
-
 </resources>

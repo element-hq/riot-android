@@ -334,6 +334,18 @@
                     android:tint="?attr/colorAccent" />
 
                 <ImageView
+                        android:id="@+id/room_send_voice_view"
+                        android:layout_width="38dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom"
+                        android:contentDescription="@string/send"
+                        android:padding="8dp"
+                        android:rotationY="@integer/rtl_mirror_flip"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/vector_micro_green"
+                        android:tint="?attr/colorAccent" />
+
+                <ImageView
                     android:id="@+id/room_start_call_image_view"
                     android:layout_width="38dp"
                     android:layout_height="56dp"

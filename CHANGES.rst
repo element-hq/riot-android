@@ -7,6 +7,7 @@ MatrixSdk:
 
 Features:
  - Add internal playback of audio files (#3207)
+ - Add internal recording of voice messages (#xxxx)
 
 Improvements:
  -
