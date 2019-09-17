@@ -1292,7 +1292,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private void doForgetPasswordRequest(HomeServerConnectionConfig hsConfig, String email, @Nullable String identityServerHost) {
         ProfileRestClient pRest = new ProfileRestClient(hsConfig);
-        pRest.forgetPassword(hsConfig.getIdentityServerUri(), email, new ApiCallback<ThreePid>() {
+        Uri idUri = (identityServerHost != null) ? Uri.parse(identityServerHost) : null;
+        pRest.forgetPassword(idUri, email, new ApiCallback<ThreePid>() {
             @Override
             public void onSuccess(ThreePid thirdPid) {
                 if (mMode == MODE_FORGOT_PASSWORD) {
