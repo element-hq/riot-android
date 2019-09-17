@@ -125,9 +125,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         @Override
         public void onReceive(Context context, Intent intent) {
             if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
-                for (MediaPlayer mp : mMediaPlayers.values()) {
-                    mp.pause();
-                }
+                pauseMediaPlayers();
             }
         }
     };
@@ -266,13 +264,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
     }
 
+    public void pauseMediaPlayers() {
+        for (MediaPlayer mediaPlayer : mMediaPlayers.values()) {
+            mediaPlayer.pause();
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
 
-        for (MediaPlayer mediaPlayer : mMediaPlayers.values()) {
-            mediaPlayer.pause();
-        }
+        pauseMediaPlayers();
         getContext().unregisterReceiver(mBecomingNoisyReceiver);
         mAdapter.setVectorMessagesAdapterActionsListener(null, mMediaPlayers);
         mAdapter.onPause();
@@ -947,9 +949,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     if (menuAction == ACTION_VECTOR_OPEN && mediaMimeType.startsWith("audio/")) {
                         Log.e(LOG_TAG, "Using Media player " + file.getAbsolutePath());
 
-                        for (MediaPlayer mp : mMediaPlayers.values()) {
-                            mp.pause();
-                        }
+                        pauseMediaPlayers();
 
                         MediaPlayer mediaPlayer;
                         if (!mMediaPlayers.containsKey(mediaUrl)) {
@@ -970,6 +970,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                            if (getActivity() instanceof VectorRoomActivity) {
+                                VectorRoomActivity roomActivity = (VectorRoomActivity) getActivity();
+                                roomActivity.stopAndDeleteRecording();
+                            }
+                            mediaPlayer.start();
                         } else {
                             mediaPlayer = mMediaPlayers.get(mediaUrl);
                         }
