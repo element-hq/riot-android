@@ -46,13 +46,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.JsonUtils;
@@ -1292,8 +1292,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private void doForgetPasswordRequest(HomeServerConnectionConfig hsConfig, String email, @Nullable String identityServerHost) {
         ProfileRestClient pRest = new ProfileRestClient(hsConfig);
-
-        pRest.forgetPassword(email, new ApiCallback<ThreePid>() {
+        pRest.forgetPassword(hsConfig.getIdentityServerUri(), email, new ApiCallback<ThreePid>() {
             @Override
             public void onSuccess(ThreePid thirdPid) {
                 if (mMode == MODE_FORGOT_PASSWORD) {

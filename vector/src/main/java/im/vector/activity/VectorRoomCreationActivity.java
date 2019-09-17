@@ -434,7 +434,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         }
 
-        boolean res = params.addParticipantIds(mSession.getHomeServerConfig(), ids);
+        boolean res = params.addParticipantIds(mSession.getIdentityServerManager().getIdentityServerUri(), mSession.getHomeServerConfig(), ids);
 
         if (res) {
             Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
