@@ -82,6 +82,7 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
@@ -3591,7 +3592,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mRoom != null && (null != userIds) && (userIds.size() > 0)) {
             showWaitingView();
 
-            mRoom.invite(userIds, new ApiCallback<Void>() {
+            mRoom.invite(mSession, userIds, new ApiCallback<Void>() {
 
                 private void onDone(String errorMessage) {
                     if (!TextUtils.isEmpty(errorMessage)) {
@@ -3617,7 +3618,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    onDone(e.getMessage());
+                    if (e instanceof IdentityServerNotConfiguredException) {
+                        onDone(getString(R.string.invite_no_identity_server_error));
+                    } else {
+                        onDone(e.getMessage());
+                    }
                 }
             });
         }

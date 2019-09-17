@@ -168,7 +168,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
             sendSuccess(eventData)
         } else {
-            mRoom!!.invite(userId, WidgetApiCallback(eventData, description))
+            mRoom!!.invite(mSession, userId, WidgetApiCallback(eventData, description))
         }
     }
 
