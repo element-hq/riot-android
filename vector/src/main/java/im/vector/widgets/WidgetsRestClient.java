@@ -22,6 +22,7 @@ import android.net.Uri;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.RestClient;
+import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.RestAdapterCallback;
 
@@ -40,7 +41,7 @@ class WidgetsRestClient extends RestClient<WidgetsApi> {
                         .build(),
                 WidgetsApi.class,
                 "",
-                false);
+                JsonUtils.getGson(false));
     }
 
     /**
