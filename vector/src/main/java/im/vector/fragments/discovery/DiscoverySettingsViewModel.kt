@@ -16,7 +16,6 @@
 package im.vector.fragments.discovery
 
 import android.text.TextUtils
-import androidx.core.net.toUri
 import com.airbnb.mvrx.*
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.Matrix
@@ -25,6 +24,7 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager
+import org.matrix.androidsdk.rest.model.SuccessResult
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
@@ -101,101 +101,31 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     fun shareEmail(email: String) = withState { state ->
         if (state.identityServer.invoke() == null) return@withState
-        val currentMails = state.emailList.invoke() ?: return@withState
-        changeMailState(email, Loading())
-        val pid = ThirdPartyIdentifier().apply {
-            medium = ThreePid.MEDIUM_EMAIL
-            address = email
-        }
-        val existing3pid = state.emailList.invoke()?.find { it.value == email }?.let { it._3pid }
+        changeMailState(email, Loading(), null)
 
-        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                request3pidToken(existing3pid, ThreePid.MEDIUM_EMAIL, email, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
-            }
+        mxSession?.identityServerManager?.startBindSessionForEmail(email, null,
+                object : ApiCallback<ThreePid> {
+                    override fun onSuccess(threePid: ThreePid) {
+                        changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), threePid)
+                    }
 
-            override fun onUnexpectedError(e: java.lang.Exception) {
-                handleDeleteError(e)
-            }
+                    override fun onUnexpectedError(e: java.lang.Exception) {
+                        handleDeleteError(e)
+                    }
 
-            override fun onNetworkError(e: java.lang.Exception) {
-                handleDeleteError(e)
-            }
+                    override fun onNetworkError(e: java.lang.Exception) {
+                        handleDeleteError(e)
+                    }
 
-            override fun onMatrixError(e: MatrixError) {
-                handleDeleteError(Exception(e.message))
-            }
+                    override fun onMatrixError(e: MatrixError) {
+                        handleDeleteError(Exception(e.message))
+                    }
 
-            private fun handleDeleteError(e: java.lang.Exception) {
-                changeMailState(email, Fail(e))
-            }
+                    private fun handleDeleteError(e: java.lang.Exception) {
+                        changeMailState(email, Fail(e))
+                    }
 
-        })
-    }
-
-    private fun request3pidToken(existingPid: ThreePid?, medium: String, address: String, state: PidInfo.SharedState) {
-        var threePid: ThreePid? = existingPid
-        if (threePid == null) {
-            if (medium == ThreePid.MEDIUM_EMAIL) {
-                threePid = ThreePid(address, medium)
-            } else if (medium == ThreePid.MEDIUM_MSISDN) {
-                val phoneNumber = PhoneNumberUtil.getInstance()
-                        .parse("+${address}", null)
-                val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
-                threePid = ThreePid(PhoneNumberUtils.getE164format(phoneNumber), countryCode, ThreePid.MEDIUM_MSISDN)
-            }
-        }
-
-        //mm should not happen
-        if (threePid == null) return
-
-        val callback = object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                if (medium == ThreePid.MEDIUM_EMAIL) {
-                    changeMailState(address, Success(state), threePid)
-                } else if (medium == ThreePid.MEDIUM_MSISDN) {
-                    changePNState(address, Success(state), threePid)
-                }
-            }
-
-            override fun onUnexpectedError(e: java.lang.Exception) {
-                reportError(e)
-            }
-
-            override fun onNetworkError(e: java.lang.Exception) {
-                reportError(e)
-            }
-
-            private fun reportError(e: java.lang.Exception) {
-                if (medium == ThreePid.MEDIUM_EMAIL) {
-                    changeMailState(address, Fail(e), threePid)
-                } else if (medium == ThreePid.MEDIUM_MSISDN) {
-                    changePNState(address, Fail(e))
-                }
-            }
-
-
-            override fun onMatrixError(e: MatrixError) {
-                reportError(java.lang.Exception(e.message))
-                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                    // This may just mean they are dealing with an old homeserver,
-                    // versus the 3PID already being bound on this homeserver by another user.
-                    // -> Delete 3pid then retry?
-                }
-            }
-
-        }
-        if (medium == ThreePid.MEDIUM_EMAIL) {
-            mxSession?.myUser?.requestEmailValidationToken(
-                    mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
-                    threePid,
-                    callback)
-        } else if (medium == ThreePid.MEDIUM_MSISDN) {
-            mxSession?.myUser?.requestPhoneNumberValidationToken(
-                    mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
-                    threePid,
-                    callback)
-        }
+                })
 
     }
 
@@ -255,14 +185,13 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         if (state.emailList.invoke() == null) return@withState
         changeMailState(email, Loading())
 
-        val pid = ThirdPartyIdentifier().apply {
-            medium = ThreePid.MEDIUM_EMAIL
-            address = email
-        }
-
-        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                request3pidToken(null, ThreePid.MEDIUM_EMAIL, email, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+        mxSession?.identityServerManager?.startUnBindSession(ThreePid.MEDIUM_EMAIL, email, null, object : ApiCallback<Pair<Boolean, ThreePid?>> {
+            override fun onSuccess(info: Pair<Boolean, ThreePid?>) {
+                if (info.first /*requires mail validation */) {
+                    changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), info.second)
+                } else {
+                    changeMailState(email, Success(PidInfo.SharedState.NOT_SHARED))
+                }
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -282,6 +211,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
         })
+
     }
 
     fun revokePN(pn: String) = withState { state ->
@@ -289,14 +219,17 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         if (state.emailList.invoke() == null) return@withState
         changePNState(pn, Loading())
 
-        val pid = ThirdPartyIdentifier().apply {
-            medium = ThreePid.MEDIUM_MSISDN
-            address = pn
-        }
+        val phoneNumber = PhoneNumberUtil.getInstance()
+                .parse("+${pn}", null)
+        val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
 
-        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                request3pidToken(null, ThreePid.MEDIUM_MSISDN, pn, PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+        mxSession?.identityServerManager?.startUnBindSession(ThreePid.MEDIUM_MSISDN, pn, countryCode, object : ApiCallback<Pair<Boolean, ThreePid?>> {
+            override fun onSuccess(info: Pair<Boolean, ThreePid?>) {
+                if (info.first /*requires mail validation */) {
+                    changePNState(pn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), info.second)
+                } else {
+                    changePNState(pn, Success(PidInfo.SharedState.NOT_SHARED))
+                }
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -316,22 +249,21 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
         })
+
     }
 
     fun sharePN(pn: String) = withState { state ->
         if (state.identityServer.invoke() == null) return@withState
         changePNState(pn, Loading())
 
-        val pid = ThirdPartyIdentifier().apply {
-            medium = ThreePid.MEDIUM_MSISDN
-            address = pn
-        }
+        val phoneNumber = PhoneNumberUtil.getInstance()
+                .parse("+${pn}", null)
+        val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
 
-        val existing3pid = state.phoneNumbersList.invoke()?.find { it.value == pn }?.let { it._3pid }
 
-        mxSession?.myUser?.delete3Pid(pid, object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                request3pidToken(existing3pid, ThreePid.MEDIUM_MSISDN, pn, PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)
+        mxSession?.identityServerManager?.startBindSessionForPhoneNumber(pn, countryCode, null, object : ApiCallback<ThreePid> {
+            override fun onSuccess(id: ThreePid) {
+                changePNState(pn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), id)
             }
 
             override fun onUnexpectedError(e: java.lang.Exception) {
@@ -352,33 +284,6 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
         })
-        //Fake call
-//        val currentPN = state.phoneNumbersList.invoke() ?: return@withState
-//        val updated = currentPN.map {
-//            if (it.value == pn) {
-//                it.copy(isShared = Loading())
-//            } else {
-//                it
-//            }
-//        }
-//        setState {
-//            copy(phoneNumbersList = Success(updated))
-//        }
-//        GlobalScope.launch {
-//            kotlinx.coroutines.delay(1000)
-//            setState {
-//                val currentPN = phoneNumbersList.invoke() ?: emptyList()
-//                copy(phoneNumbersList = Success(
-//                        currentPN.map {
-//                            if (it.value == pn) {
-//                                it.copy(isShared = Success(PidInfo.SharedState.SHARED))
-//                            } else {
-//                                it
-//                            }
-//                        }
-//                ))
-//            }
-//        }
     }
 
     private fun changePNState(pn: String, sharedState: Async<PidInfo.SharedState>) {
@@ -542,12 +447,10 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         val pid = state.phoneNumbersList.invoke()?.find { it.value == msisdn }?._3pid
                 ?: return@withState
 
-        mxSession?.identityServerManager?.submitValidationToken(ThreePid.MEDIUM_MSISDN,
+        mxSession?.identityServerManager?.submitValidationToken(pid,
                 code,
-                pid.clientSecret,
-                pid.sid,
-                object : ApiCallback<Boolean> {
-                    override fun onSuccess(info: Boolean?) {
+                object : ApiCallback<SuccessResult> {
+                    override fun onSuccess(info: SuccessResult) {
                         add3pid(ThreePid.MEDIUM_MSISDN, msisdn, bind)
                     }
 
@@ -567,57 +470,52 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         )
     }
 
-    fun add3pid(medium: String, address: String, bind: Boolean) {
+    fun add3pid(medium: String, address: String, bind: Boolean) = withState { state ->
+        val _3pid: ThreePid
         if (medium == ThreePid.MEDIUM_EMAIL) {
             changeMailState(address, Loading())
+            _3pid = state.emailList.invoke()?.find { it.value == address }?._3pid
+                    ?: return@withState
         } else {
             changePNState(address, Loading())
+            _3pid = state.phoneNumbersList.invoke()?.find { it.value == address }?._3pid
+                    ?: return@withState
         }
-        withState { state ->
-            val _3pid = if (medium == ThreePid.MEDIUM_EMAIL) {
-                state.emailList.invoke()?.find { it.value == address }?._3pid
-            } else {
-                state.phoneNumbersList.invoke()?.find { it.value == address }?._3pid
+
+        mxSession?.identityServerManager?.finalizeBindSessionFor3PID(_3pid, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                val sharedState = Success(if (bind) PidInfo.SharedState.SHARED else PidInfo.SharedState.NOT_SHARED)
+                if (medium == ThreePid.MEDIUM_EMAIL) {
+                    changeMailState(address, sharedState, null)
+                } else {
+                    changePNState(address, sharedState, null)
+                }
             }
 
-            mxSession?.myUser?.add3Pid(
-                    mxSession.identityServerManager.getIdentityServerUrl()?.toUri(),
-                    _3pid,
-                    bind,
-                    object : ApiCallback<Void?> {
-                        override fun onSuccess(info: Void?) {
-                            val sharedState = Success(if (bind) PidInfo.SharedState.SHARED else PidInfo.SharedState.NOT_SHARED)
-                            if (medium == ThreePid.MEDIUM_EMAIL) {
-                                changeMailState(address, sharedState, null)
-                            } else {
-                                changePNState(address, sharedState, null)
-                            }
-                        }
+            override fun onUnexpectedError(e: java.lang.Exception) {
+                reportError(e)
+            }
 
-                        override fun onUnexpectedError(e: java.lang.Exception) {
-                            reportError(e)
-                        }
+            override fun onNetworkError(e: java.lang.Exception) {
+                reportError(e)
+            }
 
-                        override fun onNetworkError(e: java.lang.Exception) {
-                            reportError(e)
-                        }
-
-                        private fun reportError(e: java.lang.Exception) {
-                            val sharedState = Success(if (bind) PidInfo.SharedState.NOT_VERIFIED_FOR_BIND else PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
-                            if (medium == ThreePid.MEDIUM_EMAIL) {
-                                changeMailState(address, sharedState)
-                            } else {
-                                changePNState(address, sharedState)
-                            }
-                        }
+            private fun reportError(e: java.lang.Exception) {
+                val sharedState = Success(if (bind) PidInfo.SharedState.NOT_VERIFIED_FOR_BIND else PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
+                if (medium == ThreePid.MEDIUM_EMAIL) {
+                    changeMailState(address, sharedState)
+                } else {
+                    changePNState(address, sharedState)
+                }
+            }
 
 
-                        override fun onMatrixError(e: MatrixError) {
-                            reportError(java.lang.Exception(e.message))
-                        }
+            override fun onMatrixError(e: MatrixError) {
+                reportError(java.lang.Exception(e.message))
+            }
 
-                    })
-        }
+        })
+
     }
 
     companion object : MvRxViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> {

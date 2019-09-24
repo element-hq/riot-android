@@ -42,7 +42,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.preference.*
 import com.bumptech.glide.Glide
@@ -98,7 +97,6 @@ import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.Logger
 
 class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -1562,7 +1560,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param preferenceSummary the displayed 3pid
      */
     private fun displayDelete3PIDConfirmationDialog(pid: ThirdPartyIdentifier, preferenceSummary: CharSequence) {
-        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.applicationLocale)
+        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, requireContext()).toLowerCase(VectorLocale.applicationLocale)
         val dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary)
 
         activity?.let {
@@ -1918,33 +1916,32 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             return
         }
 
-        val pid = ThreePid(email, ThreePid.MEDIUM_EMAIL)
+        val pid = ThreePid.fromEmail(email)
 
         displayLoadingView()
 
-        mSession.myUser.requestEmailValidationToken(
-                mSession.identityServerManager.getIdentityServerUrl()?.toUri(),
-                pid, object : ApiCallback<Void> {
-            override fun onSuccess(info: Void?) {
-                activity?.runOnUiThread { showEmailValidationDialog(pid) }
-            }
+        mSession.identityServerManager.startAddSessionForEmail(pid, null,
+                object : ApiCallback<ThreePid> {
+                    override fun onSuccess(info: ThreePid) {
+                        activity?.runOnUiThread { showEmailValidationDialog(pid) }
+                    }
 
-            override fun onNetworkError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
+                    override fun onNetworkError(e: Exception) {
+                        onCommonDone(e.localizedMessage)
+                    }
 
-            override fun onMatrixError(e: MatrixError) {
-                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                    onCommonDone(getString(R.string.account_email_already_used_error))
-                } else {
-                    onCommonDone(e.localizedMessage)
-                }
-            }
+                    override fun onMatrixError(e: MatrixError) {
+                        if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                            onCommonDone(getString(R.string.account_email_already_used_error))
+                        } else {
+                            onCommonDone(e.localizedMessage)
+                        }
+                    }
 
-            override fun onUnexpectedError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
-        })
+                    override fun onUnexpectedError(e: Exception) {
+                        onCommonDone(e.localizedMessage)
+                    }
+                })
     }
 
     /**
@@ -1958,39 +1955,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        // We do not bind anymore emails when registering, so let's do the same here
-                        val idServer = mSession.identityServerManager.getIdentityServerUrl()
-                        if (idServer == null) {
-                            onCommonDone(requireContext().getString(R.string.identity_server_not_defined))
-                        } else {
-                            mSession.myUser.add3Pid(idServer.toUri(), pid, false, object : ApiCallback<Void> {
-                                override fun onSuccess(info: Void?) {
+                        mSession.identityServerManager.finalizeAddSessionForEmail(pid, object : ApiCallback<Void?> {
+                            override fun onSuccess(info: Void?) {
+                                it.runOnUiThread {
+                                    hideLoadingView()
+                                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>(){
+                                        override fun onSuccess(info: Void?) {
+                                            refreshEmailsList()
+                                        }
+                                    })
+                                }
+                            }
+
+                            override fun onNetworkError(e: Exception) {
+                                onCommonDone(e.localizedMessage)
+                            }
+
+                            override fun onMatrixError(e: MatrixError) {
+                                if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
                                     it.runOnUiThread {
                                         hideLoadingView()
-                                        refreshEmailsList()
+                                        it.toast(R.string.account_email_validation_error)
                                     }
-                                }
-
-                                override fun onNetworkError(e: Exception) {
+                                } else {
                                     onCommonDone(e.localizedMessage)
                                 }
+                            }
 
-                                override fun onMatrixError(e: MatrixError) {
-                                    if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                                        it.runOnUiThread {
-                                            hideLoadingView()
-                                            it.toast(R.string.account_email_validation_error)
-                                        }
-                                    } else {
-                                        onCommonDone(e.localizedMessage)
-                                    }
-                                }
+                            override fun onUnexpectedError(e: Exception) {
+                                onCommonDone(e.localizedMessage)
+                            }
+                        })
 
-                                override fun onUnexpectedError(e: Exception) {
-                                    onCommonDone(e.localizedMessage)
-                                }
-                            })
-                        }
                     }
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         hideLoadingView()
@@ -2008,7 +2004,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh phone number list
      */
     private fun refreshPhoneNumbersList() {
-            val isURL = mSession.identityServerManager.getIdentityServerUrl()
+        val isURL = mSession.identityServerManager.getIdentityServerUrl()
         if (isURL != null) {
             updatePhoneNumbersList()
         } else {

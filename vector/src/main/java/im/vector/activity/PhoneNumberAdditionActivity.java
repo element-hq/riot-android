@@ -261,15 +261,11 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
             final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
             // Extract from phone number object instead of using mCurrentRegionCode just in case
             final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-            final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
+            final ThreePid pid = ThreePid.Companion.fromPhoneNumber(e164phone, countryCode);
 
-            Uri identityServer = null;
-            if (mSession.getIdentityServerManager().getIdentityServerUrl() != null) {
-                identityServer = Uri.parse(mSession.getIdentityServerManager().getIdentityServerUrl());
-            }
-            mSession.getMyUser().requestPhoneNumberValidationToken(identityServer,pid, new ApiCallback<Void>() {
+            mSession.getIdentityServerManager().startAddSessionForPhoneNumber(pid,null, new ApiCallback<ThreePid>() {
                 @Override
-                public void onSuccess(Void info) {
+                public void onSuccess(ThreePid pid) {
                     hideWaitingView();
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);

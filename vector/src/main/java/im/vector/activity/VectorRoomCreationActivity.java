@@ -36,8 +36,10 @@ import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.rest.model.CreateRoomParams;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.pid.Invite3Pid;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,6 +50,7 @@ import java.util.Map;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
+import kotlin.Pair;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // tags
@@ -434,11 +437,14 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         }
 
-        boolean res = params.addParticipantIds(mSession.getIdentityServerManager().getIdentityServerUri(), mSession.getHomeServerConfig(), ids);
+        try {
+            Pair<List<Invite3Pid>, List<String>> listPair = mSession.
+                    getIdentityServerManager().
+                    getInvite3pid(mSession.getHomeServerConfig().getCredentials().userId, ids);
 
-        if (res) {
-            Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
-        } else {
+            params.invite3pids = listPair.getFirst();
+            params.invitedUserIds = listPair.getSecond();
+
             mSession.createRoom(params, new ApiCallback<String>() {
                 @Override
                 public void onSuccess(final String roomId) {
@@ -486,6 +492,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     onError(e.getLocalizedMessage());
                 }
             });
+        } catch (IdentityServerNotConfiguredException e) {
+            Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
         }
+
     }
 }

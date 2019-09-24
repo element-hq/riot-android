@@ -1308,11 +1308,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
                         refreshDisplay(true);
 
-                        mForgotPid = new ThreePidCredentials();
-                        mForgotPid.clientSecret = thirdPid.getClientSecret();
-                        mForgotPid.idServer = identityServerUri.getHost();
-                        mForgotPid.sid = thirdPid.getSid();
-                    }
+                    mForgotPid = new ThreePidCredentials();
+                    mForgotPid.clientSecret = thirdPid.getClientSecret();
+                    mForgotPid.idServer = identityServerHost;
+                    mForgotPid.sid = thirdPid.getSid();
                 }
             }
 
@@ -2281,7 +2280,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mUniversalLinkUri = savedInstanceState.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
         }
 
-        mPendingEmailValidation = (ThreePid) savedInstanceState.getSerializable(SAVED_CREATION_EMAIL_THREEPID);
+        mPendingEmailValidation = savedInstanceState.getParcelable(SAVED_CREATION_EMAIL_THREEPID);
     }
 
     @Override
@@ -2302,7 +2301,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             // Retrieve the current email three pid
             ThreePid email3pid = mRegistrationManager.getEmailThreePid();
             if (null != email3pid) {
-                savedInstanceState.putSerializable(SAVED_CREATION_EMAIL_THREEPID, email3pid);
+                savedInstanceState.putParcelable(SAVED_CREATION_EMAIL_THREEPID, email3pid);
             }
         }
 
@@ -2667,7 +2666,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (!TextUtils.isEmpty(email)) {
             // Communicate email to singleton (will be validated later on)
-            mRegistrationManager.addEmailThreePid(new ThreePid(email, ThreePid.MEDIUM_EMAIL));
+            mRegistrationManager.addEmailThreePid(ThreePid.Companion.fromEmail(email));
         }
 
         if (mRegistrationPhoneNumberHandler.getPhoneNumber() != null) {
@@ -2684,7 +2683,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 @Override
                                 public void onThreePidRequested(ThreePid pid) {
                                     enableLoadingScreen(false);
-                                    if (!TextUtils.isEmpty(pid.sid)) {
+                                    if (!TextUtils.isEmpty(pid.getSid())) {
                                         onPhoneNumberSidReceived(pid);
                                     }
                                 }
