@@ -191,7 +191,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitleId(R.string._continue)
                                         infoMessageTintColorId(R.color.vector_info_color)
-                                        infoMessageId(R.string.settings_discovery_confirm_mail)
+                                        infoMessage(context.getString(R.string.settings_discovery_confirm_mail, piState.value))
                                         buttonClickListener(View.OnClickListener {
                                             val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
                                             interactionListener?.checkEmailVerification(piState.value, bind)
