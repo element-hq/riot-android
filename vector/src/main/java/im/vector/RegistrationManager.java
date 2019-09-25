@@ -876,38 +876,39 @@ public class RegistrationManager {
      */
     private void requestValidationToken(final Context context, final ThreePid pid, final ThreePidRequestListener listener) {
         Uri identityServerUri = mHsConfig.getIdentityServerUri();
-        if (identityServerUri == null) {
-            // Check if identity server is required
-            new LoginRestClient(mHsConfig)
-                    .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            listener.onThreePidRequestFailed(e.getLocalizedMessage());
-                        }
+        new LoginRestClient(mHsConfig)
+                .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            listener.onThreePidRequestFailed(e.getLocalizedMessage());
-                        }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            listener.onThreePidRequestFailed(e.getLocalizedMessage());
-                        }
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onSuccess(Boolean info) {
-                            if (info) {
+                    @Override
+                    public void onSuccess(Boolean info) {
+                        if (info) {
+                            if (identityServerUri == null) {
                                 listener.onIdentityServerMissing();
                             } else {
-                                // Ok, not mandatory
-                                doRequestValidationToken(context, pid, null, listener);
+                                doRequestValidationToken(context, pid, identityServerUri.toString(), listener);
                             }
+
+                        } else {
+                            // Ok, not mandatory
+                            doRequestValidationToken(context, pid, null, listener);
                         }
-                    });
-        } else {
-            doRequestValidationToken(context, pid, identityServerUri.toString(), listener);
-        }
+                    }
+                });
+
     }
 
     private void doRequestValidationToken(final Context context,
