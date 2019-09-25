@@ -139,7 +139,7 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
                         withState(viewModel) { state ->
                             ReviewTermsActivity.intent(requireContext(),
                                     TermsManager.ServiceType.IdentityService,
-                                    viewModel.sanitatizeBaseURL(state.newIdentityServer ?: ""),
+                                    SetIdentityServerViewModel.sanitatizeBaseURL(state.newIdentityServer ?: ""),
                                     null).also {
                                 startActivityForResult(it, TERMS_REQUEST_CODE)
                             }

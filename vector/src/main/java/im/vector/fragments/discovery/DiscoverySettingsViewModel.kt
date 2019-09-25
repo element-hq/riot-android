@@ -15,17 +15,15 @@
  */
 package im.vector.fragments.discovery
 
-import android.text.TextUtils
 import com.airbnb.mvrx.*
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.Matrix
-import im.vector.util.PhoneNumberUtils
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager
+import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import org.matrix.androidsdk.rest.model.SuccessResult
-import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 
@@ -48,7 +46,8 @@ data class DiscoverySettingsState(
         val modalLoadingState: Async<Boolean> = Success(false),
         val identityServer: Async<String?> = Success(null),
         val emailList: Async<List<PidInfo>> = Success(emptyList()),
-        val phoneNumbersList: Async<List<PidInfo>> = Success(emptyList())
+        val phoneNumbersList: Async<List<PidInfo>> = Success(emptyList()),
+        val termsNotSigned: Boolean = false
 ) : MvRxState
 
 class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession?) : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
@@ -69,29 +68,29 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 refreshModel()
             }
 
-            override fun onUnexpectedError(e: Exception?) {
+            override fun onUnexpectedError(e: Exception) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false)
-//                            identityServer = Success(server)
+                            modalLoadingState = Success(false),
+                            identityServer = Fail(e)
                     )
                 }
             }
 
-            override fun onNetworkError(e: Exception?) {
+            override fun onNetworkError(e: Exception) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false)
-//                            identityServer = Success(server)
+                            modalLoadingState = Success(false),
+                            identityServer = Fail(e)
                     )
                 }
             }
 
-            override fun onMatrixError(e: MatrixError?) {
+            override fun onMatrixError(e: MatrixError) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false)
-//                            identityServer = Success(server)
+                            modalLoadingState = Success(false),
+                            identityServer = Fail(Throwable(e.message))
                     )
                 }
             }
@@ -109,11 +108,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), threePid)
                     }
 
-                    override fun onUnexpectedError(e: java.lang.Exception) {
+                    override fun onUnexpectedError(e: Exception) {
                         handleDeleteError(e)
                     }
 
-                    override fun onNetworkError(e: java.lang.Exception) {
+                    override fun onNetworkError(e: Exception) {
                         handleDeleteError(e)
                     }
 
@@ -121,7 +120,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         handleDeleteError(Exception(e.message))
                     }
 
-                    private fun handleDeleteError(e: java.lang.Exception) {
+                    private fun handleDeleteError(e: Exception) {
                         changeMailState(email, Fail(e))
                     }
 
@@ -194,11 +193,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 }
             }
 
-            override fun onUnexpectedError(e: java.lang.Exception) {
+            override fun onUnexpectedError(e: Exception) {
                 handleDeleteError(e)
             }
 
-            override fun onNetworkError(e: java.lang.Exception) {
+            override fun onNetworkError(e: Exception) {
                 handleDeleteError(e)
             }
 
@@ -206,7 +205,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 handleDeleteError(Exception(e.message))
             }
 
-            private fun handleDeleteError(e: java.lang.Exception) {
+            private fun handleDeleteError(e: Exception) {
                 changeMailState(email, Fail(e))
             }
 
@@ -232,11 +231,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 }
             }
 
-            override fun onUnexpectedError(e: java.lang.Exception) {
+            override fun onUnexpectedError(e: Exception) {
                 handleDeleteError(e)
             }
 
-            override fun onNetworkError(e: java.lang.Exception) {
+            override fun onNetworkError(e: Exception) {
                 handleDeleteError(e)
             }
 
@@ -244,7 +243,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 handleDeleteError(Exception(e.message))
             }
 
-            private fun handleDeleteError(e: java.lang.Exception) {
+            private fun handleDeleteError(e: Exception) {
                 changePNState(pn, Fail(e))
             }
 
@@ -266,11 +265,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 changePNState(pn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), id)
             }
 
-            override fun onUnexpectedError(e: java.lang.Exception) {
+            override fun onUnexpectedError(e: Exception) {
                 handleDeleteError(e)
             }
 
-            override fun onNetworkError(e: java.lang.Exception) {
+            override fun onNetworkError(e: Exception) {
                 handleDeleteError(e)
             }
 
@@ -279,7 +278,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
 
-            private fun handleDeleteError(e: java.lang.Exception) {
+            private fun handleDeleteError(e: Exception) {
                 changePNState(pn, Fail(e))
             }
 
@@ -332,13 +331,13 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
 
         mxSession?.myUser?.refreshThirdPartyIdentifiers(object : ApiCallback<Void> {
-            override fun onUnexpectedError(e: java.lang.Exception) {
+            override fun onUnexpectedError(e: Exception) {
                 setState {
                     copy(emailList = Fail(e))
                 }
             }
 
-            override fun onNetworkError(e: java.lang.Exception) {
+            override fun onNetworkError(e: Exception) {
                 setState {
                     copy(emailList = Fail(e))
                 }
@@ -362,6 +361,9 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 }
 
                 val knownEmailList = linkedMailsInfo.map { it.address }
+                setState {
+                    copy(termsNotSigned = false)
+                }
                 mxSession.identityServerManager?.lookup3Pids(knownEmailList, linkedMailsInfo.map { it.medium },
                         object : ApiCallback<List<String>> {
                             override fun onSuccess(info: List<String>?) {
@@ -381,16 +383,34 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                             }
 
 
-                            override fun onUnexpectedError(e: java.lang.Exception?) {
-                                //What to do?
+                            override fun onUnexpectedError(e: Exception) {
+                                if (e is TermsNotSignedException) {
+                                    setState {
+                                        copy(termsNotSigned = true)
+                                    }
+                                }
+                                onError(e)
                             }
 
-                            override fun onNetworkError(e: java.lang.Exception?) {
-                                //What to do?
+                            override fun onNetworkError(e: Exception) {
+                                onError(e)
                             }
 
-                            override fun onMatrixError(e: MatrixError?) {
-                                //What to do?
+                            override fun onMatrixError(e: MatrixError) {
+                                onError(Throwable(e.message))
+                            }
+
+                            fun onError(e: Throwable) {
+                                setState {
+                                    copy(
+                                            emailList = Success(linkedMailsInfo.map {
+                                                PidInfo(
+                                                        value = it.address,
+                                                        isShared = Fail(e)
+                                                )
+                                            })
+                                    )
+                                }
                             }
 
                         })
@@ -425,16 +445,34 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                             }
 
 
-                            override fun onUnexpectedError(e: java.lang.Exception?) {
-                                //What to do?
+                            override fun onUnexpectedError(e: Exception) {
+                                if (e is TermsNotSignedException) {
+                                    setState {
+                                        copy(termsNotSigned = true)
+                                    }
+                                }
+                                onError(e)
                             }
 
-                            override fun onNetworkError(e: java.lang.Exception?) {
-                                //What to do?
+                            override fun onNetworkError(e: Exception) {
+                                onError(e)
                             }
 
-                            override fun onMatrixError(e: MatrixError?) {
-                                //What to do?
+                            override fun onMatrixError(e: MatrixError) {
+                                onError(Throwable(e.message))
+                            }
+
+                            fun onError(e: Throwable) {
+                                setState {
+                                    copy(
+                                            phoneNumbersList = Success(linkedPNInfo.map {
+                                                PidInfo(
+                                                        value = it.address,
+                                                        isShared = Fail(e)
+                                                )
+                                            })
+                                    )
+                                }
                             }
 
                         })
@@ -454,7 +492,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         add3pid(ThreePid.MEDIUM_MSISDN, msisdn, bind)
                     }
 
-                    override fun onNetworkError(e: java.lang.Exception) {
+                    override fun onNetworkError(e: Exception) {
                         changePNState(msisdn, Fail(e))
                     }
 
@@ -462,7 +500,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         changePNState(msisdn, Fail(Throwable(e.message)))
                     }
 
-                    override fun onUnexpectedError(e: java.lang.Exception) {
+                    override fun onUnexpectedError(e: Exception) {
                         changePNState(msisdn, Fail(e))
                     }
 
@@ -492,15 +530,15 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 }
             }
 
-            override fun onUnexpectedError(e: java.lang.Exception) {
+            override fun onUnexpectedError(e: Exception) {
                 reportError(e)
             }
 
-            override fun onNetworkError(e: java.lang.Exception) {
+            override fun onNetworkError(e: Exception) {
                 reportError(e)
             }
 
-            private fun reportError(e: java.lang.Exception) {
+            private fun reportError(e: Exception) {
                 val sharedState = Success(if (bind) PidInfo.SharedState.NOT_VERIFIED_FOR_BIND else PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
                 if (medium == ThreePid.MEDIUM_EMAIL) {
                     changeMailState(address, sharedState)
@@ -511,7 +549,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
 
             override fun onMatrixError(e: MatrixError) {
-                reportError(java.lang.Exception(e.message))
+                reportError(Exception(e.message))
             }
 
         })

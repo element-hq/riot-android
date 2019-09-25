@@ -120,17 +120,18 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                 })
     }
 
-    fun sanitatizeBaseURL(baseUrl: String): String {
-        var baseUrl1 = baseUrl
-        if (!baseUrl1.startsWith("http://") && !baseUrl1.startsWith("https://")) {
-            baseUrl1 = "https://$baseUrl1"
-        }
-        return baseUrl1
-    }
+
 
 
     companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
 
+        fun sanitatizeBaseURL(baseUrl: String): String {
+            var baseUrl1 = baseUrl
+            if (!baseUrl1.startsWith("http://") && !baseUrl1.startsWith("https://")) {
+                baseUrl1 = "https://$baseUrl1"
+            }
+            return baseUrl1
+        }
         const val NAVIGATE_SHOW_TERMS = "NAVIGATE_SHOW_TERMS"
         const val NAVIGATE_NO_TERMS = "NAVIGATE_NO_TERMS"
         const val NAVIGATE_TERMS_ACCEPTED = "NAVIGATE_TERMS_ACCEPTED"

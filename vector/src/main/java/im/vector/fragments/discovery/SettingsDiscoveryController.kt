@@ -217,16 +217,22 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         settingsItem {
             id("idServer")
             description(identityServer)
-            itemClickListener(View.OnClickListener { interactionListener?.onSelectIdentityServer() })
         }
 
         settingsInfoItem {
             id("idServerFooter")
             apply {
-                if (data.identityServer.invoke() != null) {
-                    helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
+                if (data.termsNotSigned) {
+                    helperText(context.getString(R.string.settings_agree_to_terms, identityServer))
+                    showCompoundDrawable(true)
+                    itemClickListener(View.OnClickListener { interactionListener?.onSelectIdentityServer() })
                 } else {
-                    helperTextResId(R.string.settings_discovery_identity_server_info_none)
+                    showCompoundDrawable(false)
+                    if (data.identityServer.invoke() != null) {
+                        helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
+                    } else {
+                        helperTextResId(R.string.settings_discovery_identity_server_info_none)
+                    }
                 }
             }
         }

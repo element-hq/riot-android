@@ -15,6 +15,8 @@
  */
 package im.vector.fragments.discovery
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -26,8 +28,11 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.*
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
+import im.vector.activity.ReviewTermsActivity
+import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.extensions.withArgs
 import im.vector.fragments.VectorBaseMvRxFragment
+import org.matrix.androidsdk.features.terms.TermsManager
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 
@@ -90,6 +95,17 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == TERMS_REQUEST_CODE) {
+            if (Activity.RESULT_OK == resultCode) {
+                viewModel.refreshModel()
+            } else {
+                //add some error?
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onPause() {
         mLoadingView?.isVisible = false
         super.onPause()
@@ -97,7 +113,14 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun onSelectIdentityServer() = withState(viewModel) { state ->
-
+        if (state.termsNotSigned) {
+            ReviewTermsActivity.intent(requireContext(),
+                    TermsManager.ServiceType.IdentityService,
+                    SetIdentityServerViewModel.sanitatizeBaseURL(state.identityServer.invoke() ?: ""),
+                    null).also {
+                startActivityForResult(it, TERMS_REQUEST_CODE)
+            }
+        }
     }
 
     override fun onTapRevokeEmail(email: String) {
