@@ -934,18 +934,18 @@ public class RegistrationManager {
         if (getThirdPidRestClient() != null) {
             switch (pid.getMedium()) {
                 case ThreePid.MEDIUM_EMAIL:
-                    String nextLink = NEXTLINK_BASE_URL + "/#/register?client_secret=" + pid.getClientSecret();
-                    nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
-                    if (isUrl != null) {
-                        nextLink += "&is_url=" + isUrl;
-                    }
-                    nextLink += "&session_id=" + mRegistrationResponse.session;
+//                    String nextLink = NEXTLINK_BASE_URL + "/#/register?client_secret=" + pid.getClientSecret();
+//                    nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
+//                    if (isUrl != null) {
+//                        nextLink += "&is_url=" + isUrl;
+//                    }
+//                    nextLink += "&session_id=" + mRegistrationResponse.session;
 
                     getProfileRestClient().requestEmailValidationToken(IdentityServerManager.Companion.removeProtocol(isUrl),
                             pid.getEmailAddress(),
                             pid.getClientSecret(),
                             pid.getSendAttempt(),
-                            nextLink,
+                            /*nextLink*/null,
                             true,
                             new ApiCallback<RequestEmailValidationResponse>() {
                                 @Override
