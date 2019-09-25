@@ -30,6 +30,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.login.RegistrationToolsKt;
@@ -106,6 +107,8 @@ public class RegistrationManager {
     // True when the user entered both email and phone but only phone will be used for account registration
     private boolean mShowThreePidWarning;
 
+    private boolean mDoesRequireIdentityServer = false;
+
     /*
      * *********************************************************************************************
      * Constructor
@@ -149,6 +152,7 @@ public class RegistrationManager {
         mTermsApproved = false;
 
         mShowThreePidWarning = false;
+        mDoesRequireIdentityServer = false;
     }
 
     /**
@@ -161,6 +165,16 @@ public class RegistrationManager {
         mLoginRestClient = null;
         mThirdPidRestClient = null;
         mProfileRestClient = null;
+        //XXX do that as early as possible, this is need deeper refactoring to be handled correctly
+        LoginRestClient loginRestClient = getLoginRestClient();
+        if (loginRestClient != null) {
+            loginRestClient.doesServerRequireIdentityServerParam(new SimpleApiCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean info) {
+                    mDoesRequireIdentityServer = info;
+                }
+            });
+        }
     }
 
     /**
@@ -849,7 +863,9 @@ public class RegistrationManager {
         AuthParamsThreePid authParams = new AuthParamsThreePid(medium);
 
         authParams.threePidCredentials.clientSecret = clientSecret;
-        authParams.threePidCredentials.idServer = host;
+        if (mDoesRequireIdentityServer) {
+            authParams.threePidCredentials.idServer = host;
+        }
         authParams.threePidCredentials.sid = sid;
 
         return authParams;
