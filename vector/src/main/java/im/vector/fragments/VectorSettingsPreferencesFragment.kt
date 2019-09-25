@@ -1773,9 +1773,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             //Though there is a special case when HS (checked via capabilities) can manage msisdn/mails by
             //themselves without an identity server.
 
-            mSession.doesServerRequireIdentityServerParam(object : ApiCallback<Boolean> {
-                override fun onSuccess(requiresIdentityServer: Boolean) {
-                    if (requiresIdentityServer) {
+            mSession.doesServerSeparatesAddAndBind(object : ApiCallback<Boolean> {
+                override fun onSuccess(separatesAddAndBind: Boolean) {
+                    if (separatesAddAndBind) {
+                        updateMailSection()
+                    } else {
+                        //hide
                         run {
                             var index = 0
                             while (true) {
@@ -1792,8 +1795,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)?.let {
                             it.isVisible = false
                         }
-                    } else {
-                        updateMailSection()
                     }
                 }
 
