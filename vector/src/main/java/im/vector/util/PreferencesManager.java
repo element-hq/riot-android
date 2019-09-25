@@ -586,7 +586,7 @@ public class PreferencesManager {
      * Tells if the default turn server must be used when none is provided by the server
      *
      * @param context the context
-     * @return true if the conference call must be done with jitsi.
+     * @return true if the default turn server must be used.
      */
     public static boolean useDefaultTurnServer(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY, false);

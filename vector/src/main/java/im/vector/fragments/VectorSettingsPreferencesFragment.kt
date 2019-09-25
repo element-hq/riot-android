@@ -808,8 +808,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mUseDefaultStunPreference.let {
             activity?.let { activity ->
                 it.isChecked = PreferencesManager.useDefaultTurnServer(activity)
-                val stun = activity.getString(R.string.default_stun_server)
-                it.summary = activity.getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
+                val stun = getString(R.string.default_stun_server)
+                it.summary = getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     if (mUseDefaultStunPreference.isChecked) {
                         MXCallsManager.defaultStunServerUri = stun

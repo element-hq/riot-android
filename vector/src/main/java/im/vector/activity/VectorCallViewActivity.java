@@ -1318,7 +1318,7 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
                         PreferencesManager.setShouldAskForDefaultTurn(this, false);
                         finish();
                     })
-                    .setNegativeButton(R.string.ok, (dialog, which) -> {
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
                         finish();
                     })
                     .show();
