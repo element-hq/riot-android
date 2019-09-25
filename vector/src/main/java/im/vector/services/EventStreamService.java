@@ -833,6 +833,9 @@ public class EventStreamService extends Service {
                 || (mForegroundNotificationState == ForegroundNotificationState.CALL_IN_PROGRESS)) {
             Log.i(LOG_TAG, "## refreshForegroundNotification : does nothing as there is a pending call");
             return;
+        } else {
+            // cancel call in progress notifications if there's no pending call.
+            hideCallNotifications();
         }
 
         // GA issue
