@@ -22,7 +22,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.Matrix
 import im.vector.R
-import im.vector.activity.ReviewTermsActivity
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
@@ -74,14 +73,12 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                             copy(isVerifyingServer = false)
                         }
                         val resp = info.serverResponse
-                        val tos = resp.getLocalizedPrivacyPolicies(userLanguage)
-                        val policy = resp.getLocalizedPrivacyPolicies(userLanguage)
-                        if (tos == null && policy == null) {
+                        val tos = resp.getLocalizedTerms(userLanguage)
+                        if (tos.isEmpty()) {
                             //prompt do not define policy
                             navigateEvent.value = LiveEvent(NAVIGATE_NO_TERMS)
                         } else {
-                            val shouldPrompt = listOf(tos, policy)
-                                    .filter { it != null && !info.alreadyAcceptedTermUrls.contains(it.localizedUrl) }.isNotEmpty()
+                            val shouldPrompt = tos.any { !info.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
                             if (shouldPrompt) {
                                 navigateEvent.value = LiveEvent(NAVIGATE_SHOW_TERMS)
                             } else {
@@ -121,8 +118,6 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
     }
 
 
-
-
     companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
 
         fun sanitatizeBaseURL(baseUrl: String): String {
@@ -132,6 +127,7 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
             }
             return baseUrl1
         }
+
         const val NAVIGATE_SHOW_TERMS = "NAVIGATE_SHOW_TERMS"
         const val NAVIGATE_NO_TERMS = "NAVIGATE_NO_TERMS"
         const val NAVIGATE_TERMS_ACCEPTED = "NAVIGATE_TERMS_ACCEPTED"
