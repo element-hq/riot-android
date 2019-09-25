@@ -1252,42 +1252,40 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         enableLoadingScreen(true);
 
-        Uri identityServerUri = hsConfig.getIdentityServerUri();
-        if (identityServerUri == null || identityServerUri.toString().isEmpty()) {
-            // Check if the HS require an identity server
-            new LoginRestClient(getHsConfig())
-                    .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            enableLoadingScreen(false);
-                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
+        // Check if the HS require an identity server
+        new LoginRestClient(getHsConfig())
+                .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        enableLoadingScreen(false);
+                        Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            enableLoadingScreen(false);
-                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        enableLoadingScreen(false);
+                        Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            enableLoadingScreen(false);
-                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        enableLoadingScreen(false);
+                        Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
 
-                        @Override
-                        public void onSuccess(Boolean info) {
-                            if (info) {
-                                enableLoadingScreen(false);
-                                Toast.makeText(LoginActivity.this, R.string.identity_server_not_defined_for_password_reset, Toast.LENGTH_LONG).show();
-                            } else {
-                                doForgetPasswordRequest(hsConfig, email, null);
-                            }
+                    @Override
+                    public void onSuccess(Boolean requiresIdentityServer) {
+                        Uri identityServerUri = hsConfig.getIdentityServerUri();
+                        if (requiresIdentityServer
+                                && (identityServerUri == null || identityServerUri.toString().isEmpty())) {
+                            enableLoadingScreen(false);
+                            Toast.makeText(LoginActivity.this, R.string.identity_server_not_defined_for_password_reset, Toast.LENGTH_LONG).show();
+
+                        } else {
+                            doForgetPasswordRequest(hsConfig, email, null);
                         }
-                    });
-        } else {
-            doForgetPasswordRequest(hsConfig, email, identityServerUri.getHost());
-        }
+                    }
+                });
     }
 
     private void doForgetPasswordRequest(HomeServerConnectionConfig hsConfig, String email, @Nullable String identityServerHost) {
@@ -1305,8 +1303,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     hideMainLayoutAndToast(getString(R.string.auth_reset_password_email_validation_message, email));
                     mButtonsView.setVisibility(View.VISIBLE);
 
-                        mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
-                        refreshDisplay(true);
+                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+                    refreshDisplay(true);
 
                     mForgotPid = new ThreePidCredentials();
                     mForgotPid.clientSecret = thirdPid.getClientSecret();
