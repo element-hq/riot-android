@@ -325,162 +325,176 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     }
 
     fun refreshModel() = withState { state ->
-
         if (state.identityServer().isNullOrBlank()) return@withState
 
         setState {
-            copy(emailList = Loading())
+            copy(
+                    emailList = Loading(),
+                    phoneNumbersList = Loading()
+            )
         }
 
         mxSession.myUser.refreshThirdPartyIdentifiers(object : ApiCallback<Void> {
             override fun onUnexpectedError(e: Exception) {
                 setState {
-                    copy(emailList = Fail(e))
+                    copy(
+                            emailList = Fail(e),
+                            phoneNumbersList = Fail(e)
+                    )
                 }
             }
 
             override fun onNetworkError(e: Exception) {
                 setState {
-                    copy(emailList = Fail(e))
+                    copy(
+                            emailList = Fail(e),
+                            phoneNumbersList = Fail(e)
+                    )
                 }
             }
 
             override fun onMatrixError(e: MatrixError) {
                 setState {
-                    copy(emailList = Fail(Throwable(e.message)))
+                    copy(
+                            emailList = Fail(Throwable(e.message)),
+                            phoneNumbersList = Fail(Throwable(e.message))
+                    )
                 }
             }
 
             override fun onSuccess(info: Void?) {
-                val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
-                setState {
-                    copy(
-                            emailList = Success(
-                                    linkedMailsInfo?.map { PidInfo(it.address, Loading()) }
-                                            ?: emptyList()
-                            )
-                    )
-                }
-
-                val knownEmailList = linkedMailsInfo.map { it.address }
                 setState {
                     copy(termsNotSigned = false)
                 }
-                mxSession.identityServerManager.lookup3Pids(knownEmailList, linkedMailsInfo.map { it.medium },
-                        object : ApiCallback<List<String>> {
-                            override fun onSuccess(info: List<String>?) {
-                                setState {
-                                    copy(
-                                            emailList = Success(linkedMailsInfo.map {
-                                                val hasMatrxId = info?.get(knownEmailList.indexOf(it.address))?.isBlank()?.not()
-                                                        ?: false
-                                                PidInfo(
-                                                        value = it.address,
-                                                        isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrxId }
-                                                                ?: PidInfo.SharedState.NOT_SHARED)
-                                                )
-                                            })
-                                    )
-                                }
-                            }
 
-
-                            override fun onUnexpectedError(e: Exception) {
-                                if (e is TermsNotSignedException) {
-                                    setState {
-                                        copy(termsNotSigned = true)
-                                    }
-                                }
-                                onError(e)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onError(e)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onError(Throwable(e.message))
-                            }
-
-                            fun onError(e: Throwable) {
-                                setState {
-                                    copy(
-                                            emailList = Success(linkedMailsInfo.map {
-                                                PidInfo(
-                                                        value = it.address,
-                                                        isShared = Fail(e)
-                                                )
-                                            })
-                                    )
-                                }
-                            }
-
-                        })
-
-                val linkedPNInfo = mxSession.myUser.getlinkedPhoneNumbers()
-                setState {
-                    copy(
-                            phoneNumbersList = Success(
-                                    linkedPNInfo?.map { PidInfo(it.address, Loading()) }
-                                            ?: emptyList()
-                            )
-                    )
-                }
-
-                val knownPns = linkedPNInfo.map { it.address }
-                mxSession.identityServerManager.lookup3Pids(knownPns, linkedPNInfo.map { it.medium },
-                        object : ApiCallback<List<String>> {
-                            override fun onSuccess(info: List<String>?) {
-                                setState {
-                                    copy(
-                                            phoneNumbersList = Success(linkedPNInfo.map {
-                                                val hasMatrixId = (info?.get(knownPns.indexOf(it.address))?.isBlank()?.not()
-                                                        ?: false)
-                                                PidInfo(
-                                                        value = it.address,
-                                                        isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId }
-                                                                ?: PidInfo.SharedState.NOT_SHARED)
-                                                )
-                                            })
-                                    )
-                                }
-                            }
-
-
-                            override fun onUnexpectedError(e: Exception) {
-                                if (e is TermsNotSignedException) {
-                                    setState {
-                                        copy(termsNotSigned = true)
-                                    }
-                                }
-                                onError(e)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onError(e)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onError(Throwable(e.message))
-                            }
-
-                            fun onError(e: Throwable) {
-                                setState {
-                                    copy(
-                                            phoneNumbersList = Success(linkedPNInfo.map {
-                                                PidInfo(
-                                                        value = it.address,
-                                                        isShared = Fail(e)
-                                                )
-                                            })
-                                    )
-                                }
-                            }
-
-                        })
+                retrieveEmailsBinding()
+                retrievePhonesBinding()
             }
         })
     }
+
+    private fun retrieveEmailsBinding() {
+        val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
+        setState {
+            copy(
+                    emailList = Success(
+                            linkedMailsInfo?.map { PidInfo(it.address, Loading()) }
+                                    ?: emptyList()
+                    )
+            )
+        }
+
+        val knownEmailList = linkedMailsInfo.map { it.address }
+        mxSession.identityServerManager.lookup3Pids(knownEmailList, linkedMailsInfo.map { it.medium },
+                object : ApiCallback<List<String>> {
+                    override fun onSuccess(info: List<String>) {
+                        setState {
+                            copy(
+                                    emailList = Success(linkedMailsInfo.map {
+                                        val hasMatrixId = info[knownEmailList.indexOf(it.address)].isNotBlank()
+                                        PidInfo(
+                                                value = it.address,
+                                                isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
+                                        )
+                                    })
+                            )
+                        }
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        if (e is TermsNotSignedException) {
+                            setState {
+                                copy(termsNotSigned = true)
+                            }
+                        }
+                        onError(e)
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        onError(e)
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        onError(Throwable(e.message))
+                    }
+
+                    fun onError(e: Throwable) {
+                        setState {
+                            copy(
+                                    emailList = Success(linkedMailsInfo.map {
+                                        PidInfo(
+                                                value = it.address,
+                                                isShared = Fail(e)
+                                        )
+                                    })
+                            )
+                        }
+                    }
+
+                })
+    }
+
+    private fun retrievePhonesBinding() {
+        val linkedPNInfo = mxSession.myUser.getlinkedPhoneNumbers()
+        setState {
+            copy(
+                    phoneNumbersList = Success(
+                            linkedPNInfo?.map { PidInfo(it.address, Loading()) }
+                                    ?: emptyList()
+                    )
+            )
+        }
+
+        val knownPns = linkedPNInfo.map { it.address }
+        mxSession.identityServerManager.lookup3Pids(knownPns, linkedPNInfo.map { it.medium },
+                object : ApiCallback<List<String>> {
+                    override fun onSuccess(info: List<String>) {
+                        setState {
+                            copy(
+                                    phoneNumbersList = Success(linkedPNInfo.map {
+                                        val hasMatrixId = info[knownPns.indexOf(it.address)].isNotBlank()
+                                        PidInfo(
+                                                value = it.address,
+                                                isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId }
+                                                        ?: PidInfo.SharedState.NOT_SHARED)
+                                        )
+                                    })
+                            )
+                        }
+                    }
+
+                    override fun onUnexpectedError(e: Exception) {
+                        if (e is TermsNotSignedException) {
+                            setState {
+                                copy(termsNotSigned = true)
+                            }
+                        }
+                        onError(e)
+                    }
+
+                    override fun onNetworkError(e: Exception) {
+                        onError(e)
+                    }
+
+                    override fun onMatrixError(e: MatrixError) {
+                        onError(Throwable(e.message))
+                    }
+
+                    fun onError(e: Throwable) {
+                        setState {
+                            copy(
+                                    phoneNumbersList = Success(linkedPNInfo.map {
+                                        PidInfo(
+                                                value = it.address,
+                                                isShared = Fail(e)
+                                        )
+                                    })
+                            )
+                        }
+                    }
+                })
+    }
+
 
     fun submitPNToken(msisdn: String, code: String, bind: Boolean) = withState { state ->
         val pid = state.phoneNumbersList()?.find { it.value == msisdn }?._3pid ?: return@withState
