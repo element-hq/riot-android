@@ -24,7 +24,6 @@ import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager
 import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import org.matrix.androidsdk.rest.model.SuccessResult
-import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 
@@ -376,22 +375,23 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     private fun retrieveEmailsBinding() {
         val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
+        val knownEmailList = linkedMailsInfo.map { it.address }
+        // Note: it will be a list of "email"
+        val knownEmailMedium = linkedMailsInfo.map { it.medium }
+
         setState {
             copy(
-                    emailList = Success(
-                            linkedMailsInfo?.map { PidInfo(it.address, Loading()) }
-                                    ?: emptyList()
-                    )
+                    emailList = Success(knownEmailList.map { PidInfo(it, Loading()) })
             )
         }
 
-        val knownEmailList = linkedMailsInfo.map { it.address }
-        mxSession.identityServerManager.lookup3Pids(knownEmailList, linkedMailsInfo.map { it.medium },
+        mxSession.identityServerManager.lookup3Pids(knownEmailList,
+                knownEmailMedium,
                 object : ApiCallback<List<String>> {
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    emailList = Success(toPidInfoList(knownEmailList, linkedMailsInfo, info))
+                                    emailList = Success(toPidInfoList(knownEmailList, info))
                             )
                         }
                     }
@@ -413,15 +413,10 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                         onError(Throwable(e.message))
                     }
 
-                    fun onError(e: Throwable) {
+                    private fun onError(e: Throwable) {
                         setState {
                             copy(
-                                    emailList = Success(linkedMailsInfo.map {
-                                        PidInfo(
-                                                value = it.address,
-                                                isShared = Fail(e)
-                                        )
-                                    })
+                                    emailList = Success(knownEmailList.map { PidInfo(it, Fail(e)) })
                             )
                         }
                     }
@@ -430,23 +425,24 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     }
 
     private fun retrievePhonesBinding() {
-        val linkedPNInfo = mxSession.myUser.getlinkedPhoneNumbers()
+        val linkedPnsInfo = mxSession.myUser.getlinkedPhoneNumbers()
+        val knownPnsList = linkedPnsInfo.map { it.address }
+        // Note: it will be a list of "msisdn"
+        val knownPnsMedium = linkedPnsInfo.map { it.medium }
+
         setState {
             copy(
-                    phoneNumbersList = Success(
-                            linkedPNInfo?.map { PidInfo(it.address, Loading()) }
-                                    ?: emptyList()
-                    )
+                    phoneNumbersList = Success(knownPnsList.map { PidInfo(it, Loading()) })
             )
         }
 
-        val knownPns = linkedPNInfo.map { it.address }
-        mxSession.identityServerManager.lookup3Pids(knownPns, linkedPNInfo.map { it.medium },
+        mxSession.identityServerManager.lookup3Pids(knownPnsList,
+                knownPnsMedium,
                 object : ApiCallback<List<String>> {
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    phoneNumbersList = Success(toPidInfoList(knownPns, linkedPNInfo, info))
+                                    phoneNumbersList = Success(toPidInfoList(knownPnsList, info))
                             )
                         }
                     }
@@ -471,23 +467,18 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     fun onError(e: Throwable) {
                         setState {
                             copy(
-                                    phoneNumbersList = Success(linkedPNInfo.map {
-                                        PidInfo(
-                                                value = it.address,
-                                                isShared = Fail(e)
-                                        )
-                                    })
+                                    phoneNumbersList = Success(knownPnsList.map { PidInfo(it, Fail(e)) })
                             )
                         }
                     }
                 })
     }
 
-    private fun toPidInfoList(addressList: List<String>, linked3pidInfo: List<ThirdPartyIdentifier>, matrixIds: List<String>): List<PidInfo> {
-        return linked3pidInfo.map {
-            val hasMatrixId = matrixIds[addressList.indexOf(it.address)].isNotBlank()
+    private fun toPidInfoList(addressList: List<String>, matrixIds: List<String>): List<PidInfo> {
+        return addressList.map {
+            val hasMatrixId = matrixIds[addressList.indexOf(it)].isNotBlank()
             PidInfo(
-                    value = it.address,
+                    value = it,
                     isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
             )
         }
