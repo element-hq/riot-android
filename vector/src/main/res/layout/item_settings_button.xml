@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <Button
-        style="@style/VectorButtonStyleFlat"
         android:id="@+id/settings_item_button"
+        style="@style/VectorButtonStyleFlat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         tools:text="@string/action_change" />
 
-</LinearLayout>
+</FrameLayout>

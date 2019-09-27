@@ -83,11 +83,11 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
         //If some 3pids are pending, we can try to check if they have been verified here
         withState(viewModel) { state ->
-            state.emailList.invoke()?.forEach { info ->
-                when (info.isShared.invoke()) {
+            state.emailList()?.forEach { info ->
+                when (info.isShared()) {
                     PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
                     PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                        val bind = info.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                        val bind = info.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
                         viewModel.add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
                     }
                 }
@@ -116,7 +116,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         if (state.termsNotSigned) {
             ReviewTermsActivity.intent(requireContext(),
                     TermsManager.ServiceType.IdentityService,
-                    SetIdentityServerViewModel.sanitatizeBaseURL(state.identityServer.invoke() ?: ""),
+                    SetIdentityServerViewModel.sanitatizeBaseURL(state.identityServer() ?: ""),
                     null).also {
                 startActivityForResult(it, TERMS_REQUEST_CODE)
             }
@@ -152,20 +152,17 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         //we should prompt if there are bound items with current is
         withState(viewModel) { state ->
             val pidList = ArrayList<PidInfo>().apply {
-                state.emailList.invoke()?.let { addAll(it) }
-                state.phoneNumbersList.invoke()?.let { addAll(it) }
+                state.emailList()?.let { addAll(it) }
+                state.phoneNumbersList()?.let { addAll(it) }
             }
 
-            val hasBoundIds = pidList.any { it.isShared.invoke() == PidInfo.SharedState.SHARED }
+            val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
 
             if (hasBoundIds) {
                 //we should prompt
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.change_identity_server)
-                        .setMessage(
-                                requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
-                                        state.identityServer.invoke(), state.identityServer.invoke())
-                        )
+                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                         .setNegativeButton(R.string._continue) { _, _ ->
                             navigateToChangeIsFragment(state)
                         }
@@ -181,19 +178,17 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         //we should prompt if there are bound items with current is
         withState(viewModel) { state ->
             val pidList = ArrayList<PidInfo>().apply {
-                state.emailList.invoke()?.let { addAll(it) }
-                state.phoneNumbersList.invoke()?.let { addAll(it) }
+                state.emailList()?.let { addAll(it) }
+                state.phoneNumbersList()?.let { addAll(it) }
             }
 
-            val hasBoundIds = pidList.any { it.isShared.invoke() == PidInfo.SharedState.SHARED }
+            val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
 
             if (hasBoundIds) {
                 //we should prompt
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.disconnect_identity_server)
-                        .setMessage(
-                                requireContext().getString(R.string.settings_discovery_disconnect_with_bound_pid,
-                                        state.identityServer.invoke(), state.identityServer.invoke())
+                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer())
                         )
                         .setNegativeButton(R.string._continue) { _, _ ->
                             viewModel.changeIdentityServer(null)
@@ -207,7 +202,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     private fun navigateToChangeIsFragment(state: DiscoverySettingsState) {
-        SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer.invoke()).also {
+        SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer()).also {
             requireFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom,
                             R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)

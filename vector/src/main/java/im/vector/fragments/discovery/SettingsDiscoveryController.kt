@@ -32,7 +32,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
 
         buildIdentityServerSection(data)
 
-        val hasIdentityServer = data.identityServer.invoke().isNullOrBlank().not()
+        val hasIdentityServer = data.identityServer().isNullOrBlank().not()
 
         if (hasIdentityServer) {
             buildMailSection(data)
@@ -48,20 +48,20 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         }
 
 
-        when {
-            data.phoneNumbersList is Loading -> {
+        when (data.phoneNumbersList) {
+            is Loading -> {
                 settingsLoadingItem {
                     id("phoneLoading")
                 }
             }
-            data.phoneNumbersList is Fail    -> {
+            is Fail    -> {
                 settingsInfoItem {
                     id("pnListError")
                     helperText((data.emailList as Fail).error.message)
                 }
             }
-            else                             -> {
-                val phones = data.phoneNumbersList.invoke()!!
+            is Success -> {
+                val phones = data.phoneNumbersList.invoke()
                 if (phones.isEmpty()) {
                     settingsInfoItem {
                         id("no_pns")
@@ -92,10 +92,10 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     }
                                     infoMessage(piState.isShared.error.message)
                                 }
-                                piState.isShared is Success -> when (piState.isShared.invoke()) {
+                                piState.isShared is Success -> when (piState.isShared()) {
                                     PidInfo.SharedState.SHARED,
                                     PidInfo.SharedState.NOT_SHARED              -> {
-                                        checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
+                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
                                             if (checked) {
@@ -113,7 +113,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                 }
                             }
                         }
-                        when (piState.isShared.invoke()) {
+                        when (piState.isShared()) {
                             PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
                             PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
                                 settingsItemText {
@@ -121,7 +121,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     descriptionText(context.getString(R.string.settings_text_message_sent, phoneNumber))
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
-                                            val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
                                             interactionListener?.checkPNVerification(piState.value, code, bind)
                                         }
                                     })
@@ -141,20 +141,20 @@ class SettingsDiscoveryController(private val context: Context, private val inte
             id("emails")
             titleResId(R.string.settings_discovery_emails_title)
         }
-        when {
-            data.emailList is Loading -> {
+        when (data.emailList) {
+            is Loading -> {
                 settingsLoadingItem {
                     id("mailLoading")
                 }
             }
-            data.emailList is Error   -> {
+            is Error   -> {
                 settingsInfoItem {
                     id("mailListError")
                     helperText((data.emailList as Fail).error.message)
                 }
             }
-            else                      -> {
-                val emails = data.emailList.invoke()!!
+            is Success -> {
+                val emails = data.emailList.invoke()
                 if (emails.isEmpty()) {
                     settingsInfoItem {
                         id("no_emails")
@@ -165,18 +165,18 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                         settingsTextButtonItem {
                             id(piState.value)
                             title(piState.value)
-                            if (piState.isShared is Loading) {
-                                buttonIndeterminate(true)
-                            } else if (piState.isShared is Fail) {
-                                checked(false) //TODO previous state?
-                                buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                buttonTitle("")
-                                infoMessage(piState.isShared.error.message)
-                            } else {
-                                when (piState.isShared.invoke()) {
+                            when (piState.isShared) {
+                                is Loading -> buttonIndeterminate(true)
+                                is Fail    -> {
+                                    checked(false) //TODO previous state?
+                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                    buttonTitle("")
+                                    infoMessage(piState.isShared.error.message)
+                                }
+                                is Success -> when (piState.isShared()) {
                                     PidInfo.SharedState.SHARED,
                                     PidInfo.SharedState.NOT_SHARED              -> {
-                                        checked(piState.isShared.invoke() == PidInfo.SharedState.SHARED)
+                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
                                             if (checked) {
@@ -193,7 +193,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                         infoMessageTintColorId(R.color.vector_info_color)
                                         infoMessage(context.getString(R.string.settings_discovery_confirm_mail, piState.value))
                                         buttonClickListener(View.OnClickListener {
-                                            val bind = piState.isShared.invoke() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
                                             interactionListener?.checkEmailVerification(piState.value, bind)
                                         })
                                     }
@@ -207,7 +207,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
     }
 
     private fun buildIdentityServerSection(data: DiscoverySettingsState) {
-        val identityServer = data.identityServer.invoke() ?: context.getString(R.string.none)
+        val identityServer = data.identityServer() ?: context.getString(R.string.none)
 
         settingsSectionTitle {
             id("idsTitle")
@@ -228,7 +228,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                     itemClickListener(View.OnClickListener { interactionListener?.onSelectIdentityServer() })
                 } else {
                     showCompoundDrawable(false)
-                    if (data.identityServer.invoke() != null) {
+                    if (data.identityServer() != null) {
                         helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
                     } else {
                         helperTextResId(R.string.settings_discovery_identity_server_info_none)
@@ -240,7 +240,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
         settingsButtonItem {
             id("change")
             apply {
-                if (data.identityServer.invoke() != null) {
+                if (data.identityServer() != null) {
                     buttonTitleId(R.string.change_identity_server)
                 } else {
                     buttonTitleId(R.string.add_identity_server)
@@ -252,7 +252,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
             })
         }
 
-        if (data.identityServer.invoke() != null) {
+        if (data.identityServer() != null) {
             settingsInfoItem {
                 id("removeInfo")
                 helperTextResId(R.string.settings_discovery_disconnect_identity_server_info)

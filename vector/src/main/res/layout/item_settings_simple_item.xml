@@ -3,18 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="?attr/colorBackgroundFloating"
-    android:paddingStart="8dp"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingEnd="8dp"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-
         android:orientation="vertical">
 
         <TextView

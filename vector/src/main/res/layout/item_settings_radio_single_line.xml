@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:background="?attr/colorBackgroundFloating"
     android:orientation="horizontal"
-    android:paddingStart="8dp"
+    android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
-    android:paddingEnd="8dp"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
 
@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:src="@drawable/unit_test" />
+
     </FrameLayout>
 
     <TextView
@@ -35,6 +36,5 @@
         android:textColor="?android:textColorPrimary"
         android:textSize="15sp"
         tools:text="An option" />
-
 
 </LinearLayout>

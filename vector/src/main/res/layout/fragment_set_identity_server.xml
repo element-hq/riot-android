@@ -27,7 +27,7 @@
                 android:id="@+id/discovery_identity_server_enter_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/settings_discovery_enter_indentity_server"
+                android:hint="@string/settings_discovery_enter_identity_server"
                 android:imeOptions="actionDone"
                 android:inputType="textUri"
                 android:maxLines="3"

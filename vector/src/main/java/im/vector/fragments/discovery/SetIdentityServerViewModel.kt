@@ -15,6 +15,7 @@
  */
 package im.vector.fragments.discovery
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.MvRxState
@@ -32,7 +33,7 @@ import org.matrix.androidsdk.features.terms.TermsManager
 data class SetIdentityServerState(
         val existingIdentityServer: String? = null,
         val newIdentityServer: String? = null,
-        val errorMessageId: Int? = null,
+        @StringRes val errorMessageId: Int? = null,
         val isVerifyingServer: Boolean = false
 ) : MvRxState
 
@@ -91,7 +92,7 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                         setState {
                             copy(
                                     isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_indentity_server
+                                    errorMessageId = R.string.settings_discovery_bad_identity_server
                             )
                         }
                     }
@@ -100,7 +101,7 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                         setState {
                             copy(
                                     isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_indentity_server
+                                    errorMessageId = R.string.settings_discovery_bad_identity_server
                             )
                         }
                     }
@@ -109,7 +110,7 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                         setState {
                             copy(
                                     isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_indentity_server
+                                    errorMessageId = R.string.settings_discovery_bad_identity_server
                             )
                         }
                     }
