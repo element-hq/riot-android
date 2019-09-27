@@ -177,7 +177,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
     }
 
-    private fun changePNState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
+    private fun changeMsisdnState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
         setState {
             val phones = phoneNumbersList() ?: emptyList()
             copy(phoneNumbersList = Success(
@@ -229,21 +229,21 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     }
 
-    fun revokePN(pn: String) = withState { state ->
+    fun revokeMsisdn(msisdn: String) = withState { state ->
         if (state.identityServer() == null) return@withState
         if (state.emailList() == null) return@withState
-        changePNState(pn, Loading())
+        changeMsisdnState(msisdn, Loading())
 
         val phoneNumber = PhoneNumberUtil.getInstance()
-                .parse("+${pn}", null)
+                .parse("+$msisdn", null)
         val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
 
-        mxSession.identityServerManager.startUnBindSession(ThreePid.MEDIUM_MSISDN, pn, countryCode, object : ApiCallback<Pair<Boolean, ThreePid?>> {
+        mxSession.identityServerManager.startUnBindSession(ThreePid.MEDIUM_MSISDN, msisdn, countryCode, object : ApiCallback<Pair<Boolean, ThreePid?>> {
             override fun onSuccess(info: Pair<Boolean, ThreePid?>) {
                 if (info.first /*requires mail validation */) {
-                    changePNState(pn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), info.second)
+                    changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), info.second)
                 } else {
-                    changePNState(pn, Success(PidInfo.SharedState.NOT_SHARED))
+                    changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_SHARED))
                 }
             }
 
@@ -260,25 +260,25 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             private fun handleDeleteError(e: Exception) {
-                changePNState(pn, Fail(e))
+                changeMsisdnState(msisdn, Fail(e))
             }
 
         })
 
     }
 
-    fun sharePN(pn: String) = withState { state ->
+    fun shareMsisdn(msisdn: String) = withState { state ->
         if (state.identityServer() == null) return@withState
-        changePNState(pn, Loading())
+        changeMsisdnState(msisdn, Loading())
 
         val phoneNumber = PhoneNumberUtil.getInstance()
-                .parse("+${pn}", null)
+                .parse("+$msisdn", null)
         val countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
 
 
-        mxSession.identityServerManager.startBindSessionForPhoneNumber(pn, countryCode, null, object : ApiCallback<ThreePid> {
+        mxSession.identityServerManager.startBindSessionForPhoneNumber(msisdn, countryCode, null, object : ApiCallback<ThreePid> {
             override fun onSuccess(id: ThreePid) {
-                changePNState(pn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), id)
+                changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), id)
             }
 
             override fun onUnexpectedError(e: Exception) {
@@ -295,18 +295,18 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
 
             private fun handleDeleteError(e: Exception) {
-                changePNState(pn, Fail(e))
+                changeMsisdnState(msisdn, Fail(e))
             }
 
         })
     }
 
-    private fun changePNState(pn: String, sharedState: Async<PidInfo.SharedState>) {
+    private fun changeMsisdnState(msisdn: String, sharedState: Async<PidInfo.SharedState>) {
         setState {
-            val currentPNS = phoneNumbersList()!!
+            val currentMsisdns = phoneNumbersList()!!
             copy(phoneNumbersList = Success(
-                    currentPNS.map {
-                        if (it.value == pn) {
+                    currentMsisdns.map {
+                        if (it.value == msisdn) {
                             it.copy(isShared = sharedState)
                         } else {
                             it
@@ -377,7 +377,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
         val knownEmailList = linkedMailsInfo.map { it.address }
         // Note: it will be a list of "email"
-        val knownEmailMedium = linkedMailsInfo.map { it.medium }
+        val knownMedium = linkedMailsInfo.map { it.medium }
 
         setState {
             copy(
@@ -386,7 +386,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
 
         mxSession.identityServerManager.lookup3Pids(knownEmailList,
-                knownEmailMedium,
+                knownMedium,
                 object : ApiCallback<List<String>> {
                     override fun onSuccess(info: List<String>) {
                         setState {
@@ -425,24 +425,24 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     }
 
     private fun retrievePhonesBinding() {
-        val linkedPnsInfo = mxSession.myUser.getlinkedPhoneNumbers()
-        val knownPnsList = linkedPnsInfo.map { it.address }
+        val linkedMsisdnsInfo = mxSession.myUser.getlinkedPhoneNumbers()
+        val knownMsisdns = linkedMsisdnsInfo.map { it.address }
         // Note: it will be a list of "msisdn"
-        val knownPnsMedium = linkedPnsInfo.map { it.medium }
+        val knownMedium = linkedMsisdnsInfo.map { it.medium }
 
         setState {
             copy(
-                    phoneNumbersList = Success(knownPnsList.map { PidInfo(it, Loading()) })
+                    phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Loading()) })
             )
         }
 
-        mxSession.identityServerManager.lookup3Pids(knownPnsList,
-                knownPnsMedium,
+        mxSession.identityServerManager.lookup3Pids(knownMsisdns,
+                knownMedium,
                 object : ApiCallback<List<String>> {
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    phoneNumbersList = Success(toPidInfoList(knownPnsList, info))
+                                    phoneNumbersList = Success(toPidInfoList(knownMsisdns, info))
                             )
                         }
                     }
@@ -467,7 +467,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     fun onError(e: Throwable) {
                         setState {
                             copy(
-                                    phoneNumbersList = Success(knownPnsList.map { PidInfo(it, Fail(e)) })
+                                    phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Fail(e)) })
                             )
                         }
                     }
@@ -484,7 +484,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
     }
 
-    fun submitPNToken(msisdn: String, code: String, bind: Boolean) = withState { state ->
+    fun submitMsisdnToken(msisdn: String, code: String, bind: Boolean) = withState { state ->
         val pid = state.phoneNumbersList()?.find { it.value == msisdn }?._3pid ?: return@withState
 
         mxSession.identityServerManager.submitValidationToken(pid,
@@ -495,15 +495,15 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     }
 
                     override fun onNetworkError(e: Exception) {
-                        changePNState(msisdn, Fail(e))
+                        changeMsisdnState(msisdn, Fail(e))
                     }
 
                     override fun onMatrixError(e: MatrixError) {
-                        changePNState(msisdn, Fail(Throwable(e.message)))
+                        changeMsisdnState(msisdn, Fail(Throwable(e.message)))
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        changePNState(msisdn, Fail(e))
+                        changeMsisdnState(msisdn, Fail(e))
                     }
 
                 }
@@ -516,7 +516,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             changeMailState(address, Loading())
             _3pid = state.emailList()?.find { it.value == address }?._3pid ?: return@withState
         } else {
-            changePNState(address, Loading())
+            changeMsisdnState(address, Loading())
             _3pid = state.phoneNumbersList()?.find { it.value == address }?._3pid ?: return@withState
         }
 
@@ -526,7 +526,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 if (medium == ThreePid.MEDIUM_EMAIL) {
                     changeMailState(address, sharedState, null)
                 } else {
-                    changePNState(address, sharedState, null)
+                    changeMsisdnState(address, sharedState, null)
                 }
             }
 
@@ -543,7 +543,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 if (medium == ThreePid.MEDIUM_EMAIL) {
                     changeMailState(address, sharedState)
                 } else {
-                    changePNState(address, sharedState)
+                    changeMsisdnState(address, sharedState)
                 }
             }
 

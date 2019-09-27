@@ -123,16 +123,16 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         viewModel.add3pid(ThreePid.MEDIUM_EMAIL, email, bind)
     }
 
-    override fun checkPNVerification(msisdn: String, code: String, bind: Boolean) {
-        viewModel.submitPNToken(msisdn, code, bind)
+    override fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean) {
+        viewModel.submitMsisdnToken(msisdn, code, bind)
     }
 
-    override fun onTapRevokePN(pn: String) {
-        viewModel.revokePN(pn)
+    override fun onTapRevokeMsisdn(msisdn: String) {
+        viewModel.revokeMsisdn(msisdn)
     }
 
-    override fun onTapSharePN(pn: String) {
-        viewModel.sharePN(pn)
+    override fun onTapShareMsisdn(msisdn: String) {
+        viewModel.shareMsisdn(msisdn)
     }
 
     override fun onTapChangeIdentityServer() = withState(viewModel) { state ->

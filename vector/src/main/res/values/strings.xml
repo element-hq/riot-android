@@ -1680,9 +1680,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, configure one below.</string>
     <string name="settings_discovery_emails_title">Discoverable email addresses</string>
     <string name="settings_discovery_no_mails">Discovery options will appear once you have added an email.</string>
-    <string name="settings_discovery_no_pn">Discovery options will appear once you have added a phone number.</string>
+    <string name="settings_discovery_no_msisdn">Discovery options will appear once you have added a phone number.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Disconnecting from your identity server will mean you won’t be discoverable by other users and you won’t be able to invite others by email or phone.</string>
-    <string name="settings_discovery_pn_title">Discoverable phone numbers</string>
+    <string name="settings_discovery_msisdn_title">Discoverable phone numbers</string>
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
 

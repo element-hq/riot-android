@@ -56,8 +56,8 @@ class SettingsDiscoveryController(private val context: Context,
 
     private fun buildPhoneNumberSection(data: DiscoverySettingsState) {
         settingsSectionTitle {
-            id("pns")
-            titleResId(R.string.settings_discovery_pn_title)
+            id("msisdn")
+            titleResId(R.string.settings_discovery_msisdn_title)
         }
 
 
@@ -69,7 +69,7 @@ class SettingsDiscoveryController(private val context: Context,
             }
             is Fail    -> {
                 settingsInfoItem {
-                    id("pnListError")
+                    id("msisdnListError")
                     helperText(data.phoneNumbersList.error.message)
                 }
             }
@@ -77,8 +77,8 @@ class SettingsDiscoveryController(private val context: Context,
                 val phones = data.phoneNumbersList.invoke()
                 if (phones.isEmpty()) {
                     settingsInfoItem {
-                        id("no_pns")
-                        helperText(context.getString(R.string.settings_discovery_no_pn))
+                        id("no_msisdn")
+                        helperText(context.getString(R.string.settings_discovery_no_msisdn))
                     }
                 } else {
                     phones.forEach { piState ->
@@ -98,9 +98,9 @@ class SettingsDiscoveryController(private val context: Context,
                                     buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                     switchChangeListener { b, checked ->
                                         if (checked) {
-                                            interactionListener.onTapSharePN(piState.value)
+                                            interactionListener.onTapShareMsisdn(piState.value)
                                         } else {
-                                            interactionListener.onTapRevokePN(piState.value)
+                                            interactionListener.onTapRevokeMsisdn(piState.value)
                                         }
                                     }
                                     infoMessage(piState.isShared.error.message)
@@ -112,9 +112,9 @@ class SettingsDiscoveryController(private val context: Context,
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
                                             if (checked) {
-                                                interactionListener.onTapSharePN(piState.value)
+                                                interactionListener.onTapShareMsisdn(piState.value)
                                             } else {
-                                                interactionListener.onTapRevokePN(piState.value)
+                                                interactionListener.onTapRevokeMsisdn(piState.value)
                                             }
                                         }
                                     }
@@ -135,7 +135,7 @@ class SettingsDiscoveryController(private val context: Context,
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
                                             val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            interactionListener.checkPNVerification(piState.value, code, bind)
+                                            interactionListener.checkMsisdnVerification(piState.value, code, bind)
                                         }
                                     })
                                 }
@@ -283,9 +283,9 @@ class SettingsDiscoveryController(private val context: Context,
         fun onTapRevokeEmail(email: String)
         fun onTapShareEmail(email: String)
         fun checkEmailVerification(email: String, bind: Boolean)
-        fun checkPNVerification(msisdn: String, code: String, bind: Boolean)
-        fun onTapRevokePN(pn: String)
-        fun onTapSharePN(pn: String)
+        fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean)
+        fun onTapRevokeMsisdn(msisdn: String)
+        fun onTapShareMsisdn(msisdn: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()
     }
