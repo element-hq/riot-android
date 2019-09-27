@@ -871,7 +871,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     private fun updateIdentityServerPref() {
-        identityServerPreference.summary = mSession.identityServerManager?.getIdentityServerUrl()
+        identityServerPreference.summary = mSession.identityServerManager?.identityServerUrl
                 ?: getString(R.string.identity_server_not_defined)
     }
 
@@ -1763,7 +1763,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      */
     private fun refreshEmailsList() {
 
-        val isURL = mSession.identityServerManager.getIdentityServerUrl()
+        val isURL = mSession.identityServerManager.identityServerUrl
         if (isURL != null) {
             updateMailSection()
         } else {
@@ -2005,7 +2005,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh phone number list
      */
     private fun refreshPhoneNumbersList() {
-        val isURL = mSession.identityServerManager.getIdentityServerUrl()
+        val isURL = mSession.identityServerManager.identityServerUrl
         if (isURL != null) {
             updatePhoneNumbersList()
         } else {

@@ -25,20 +25,33 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.R
 
 
-class SettingsDiscoveryController(private val context: Context, private val interactionListener: InteractionListener) : TypedEpoxyController<DiscoverySettingsState>() {
+class SettingsDiscoveryController(private val context: Context,
+                                  private val interactionListener: InteractionListener) : TypedEpoxyController<DiscoverySettingsState>() {
 
-    override fun buildModels(data: DiscoverySettingsState?) {
-        if (data == null) return
+    override fun buildModels(data: DiscoverySettingsState) {
+        when (data.identityServer) {
+            is Loading -> {
+                settingsLoadingItem {
+                    id("identityServerLoading")
+                }
+            }
+            is Fail    -> {
+                settingsInfoItem {
+                    id("identityServerError")
+                    helperText(data.identityServer.error.message)
+                }
+            }
+            is Success -> {
+                buildIdentityServerSection(data)
 
-        buildIdentityServerSection(data)
+                val hasIdentityServer = data.identityServer().isNullOrBlank().not()
 
-        val hasIdentityServer = data.identityServer().isNullOrBlank().not()
-
-        if (hasIdentityServer) {
-            buildMailSection(data)
-            buildPhoneNumberSection(data)
+                if (hasIdentityServer) {
+                    buildMailSection(data)
+                    buildPhoneNumberSection(data)
+                }
+            }
         }
-
     }
 
     private fun buildPhoneNumberSection(data: DiscoverySettingsState) {
@@ -57,7 +70,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
             is Fail    -> {
                 settingsInfoItem {
                     id("pnListError")
-                    helperText((data.emailList as Fail).error.message)
+                    helperText(data.phoneNumbersList.error.message)
                 }
             }
             is Success -> {
@@ -147,10 +160,10 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                     id("mailLoading")
                 }
             }
-            is Error   -> {
+            is Fail    -> {
                 settingsInfoItem {
                     id("mailListError")
-                    helperText((data.emailList as Fail).error.message)
+                    helperText(data.emailList.error.message)
                 }
             }
             is Success -> {
@@ -221,30 +234,26 @@ class SettingsDiscoveryController(private val context: Context, private val inte
 
         settingsInfoItem {
             id("idServerFooter")
-            apply {
-                if (data.termsNotSigned) {
-                    helperText(context.getString(R.string.settings_agree_to_terms, identityServer))
-                    showCompoundDrawable(true)
-                    itemClickListener(View.OnClickListener { interactionListener.onSelectIdentityServer() })
+            if (data.termsNotSigned) {
+                helperText(context.getString(R.string.settings_agree_to_terms, identityServer))
+                showCompoundDrawable(true)
+                itemClickListener(View.OnClickListener { interactionListener.onSelectIdentityServer() })
+            } else {
+                showCompoundDrawable(false)
+                if (data.identityServer() != null) {
+                    helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
                 } else {
-                    showCompoundDrawable(false)
-                    if (data.identityServer() != null) {
-                        helperText(context.getString(R.string.settings_discovery_identity_server_info, identityServer))
-                    } else {
-                        helperTextResId(R.string.settings_discovery_identity_server_info_none)
-                    }
+                    helperTextResId(R.string.settings_discovery_identity_server_info_none)
                 }
             }
         }
 
         settingsButtonItem {
             id("change")
-            apply {
-                if (data.identityServer() != null) {
-                    buttonTitleId(R.string.change_identity_server)
-                } else {
-                    buttonTitleId(R.string.add_identity_server)
-                }
+            if (data.identityServer() != null) {
+                buttonTitleId(R.string.change_identity_server)
+            } else {
+                buttonTitleId(R.string.add_identity_server)
             }
             buttonStyle(SettingsTextButtonItem.ButtonStyle.POSITIVE)
             buttonClickListener(View.OnClickListener {

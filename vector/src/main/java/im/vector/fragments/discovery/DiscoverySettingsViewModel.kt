@@ -40,32 +40,47 @@ data class PidInfo(
     }
 }
 
-data class PidState(val value: String, val isShared: Async<Boolean>)
-
 data class DiscoverySettingsState(
-        val modalLoadingState: Async<Boolean> = Success(false),
-        val identityServer: Async<String?> = Success(null),
-        val emailList: Async<List<PidInfo>> = Success(emptyList()),
-        val phoneNumbersList: Async<List<PidInfo>> = Success(emptyList()),
+        val identityServer: Async<String?> = Uninitialized,
+        val emailList: Async<List<PidInfo>> = Uninitialized,
+        val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
         val termsNotSigned: Boolean = false
 ) : MvRxState
 
 class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession) : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
 
+    private val identityServerManagerListener = object : IdentityServerManager.IdentityServerManagerListener {
+        override fun onIdentityServerChange() = withState { state ->
+            val identityServerUrl = mxSession.identityServerManager.identityServerUrl
+            val currentIS = state.identityServer()
+            setState {
+                copy(identityServer = Success(identityServerUrl))
+            }
+            if (currentIS != identityServerUrl) refreshModel()
+        }
+    }
+
     init {
+        startListenToIdentityManager()
         refreshModel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopListenToIdentityManager()
     }
 
     fun changeIdentityServer(server: String?) {
         setState {
-            copy(modalLoadingState = Loading())
+            copy(
+                    identityServer = Loading()
+            )
         }
 
         mxSession.identityServerManager.setIdentityServerUrl(server, object : ApiCallback<Void?> {
             override fun onSuccess(info: Void?) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false),
                             identityServer = Success(server)
                     )
                 }
@@ -75,7 +90,6 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             override fun onUnexpectedError(e: Exception) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false),
                             identityServer = Fail(e)
                     )
                 }
@@ -84,7 +98,6 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             override fun onNetworkError(e: Exception) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false),
                             identityServer = Fail(e)
                     )
                 }
@@ -93,7 +106,6 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             override fun onMatrixError(e: MatrixError) {
                 setState {
                     copy(
-                            modalLoadingState = Success(false),
                             identityServer = Fail(Throwable(e.message))
                     )
                 }
@@ -304,26 +316,12 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         }
     }
 
-    fun startListenToIdentityManager() {
-        setState {
-            copy(identityServer = Success(mxSession.identityServerManager.getIdentityServerUrl()))
-        }
+    private fun startListenToIdentityManager() {
         mxSession.identityServerManager.addListener(identityServerManagerListener)
     }
 
-    fun stopListenToIdentityManager() {
+    private fun stopListenToIdentityManager() {
         mxSession.identityServerManager.addListener(identityServerManagerListener)
-    }
-
-    private val identityServerManagerListener = object : IdentityServerManager.IdentityServerManagerListener {
-        override fun onIdentityServerChange() = withState { state ->
-            val identityServerUrl = mxSession.identityServerManager.getIdentityServerUrl()
-            val currentIS = state.identityServer()
-            setState {
-                copy(identityServer = Success(identityServerUrl))
-            }
-            if (currentIS != identityServerUrl) refreshModel()
-        }
     }
 
     fun refreshModel() = withState { state ->
@@ -569,7 +567,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             val mxSession = Matrix.getInstance(viewModelContext.activity).getSession(matrixId)
 
             return DiscoverySettingsState(
-                    identityServer = Success(mxSession.identityServerManager.getIdentityServerUrl()),
+                    identityServer = Success(mxSession.identityServerManager.identityServerUrl),
                     emailList = Success(emptyList()),
                     phoneNumbersList = Success(emptyList())
             )

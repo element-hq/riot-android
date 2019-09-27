@@ -18,14 +18,15 @@ package im.vector.fragments.discovery
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.ReviewTermsActivity
@@ -45,8 +46,6 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
     private lateinit var controller: SettingsDiscoveryController
 
-    private var mLoadingView: View? = null
-
     lateinit var sharedViewModel: DiscoverySharedViewModel
 
     @BindView(R.id.epoxyRecyclerView)
@@ -61,8 +60,6 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
             epoxyRecyclerView.setController(it)
         }
 
-        mLoadingView = requireActivity().findViewById(R.id.vector_settings_spinner_views)
-
         sharedViewModel.navigateEvent.observe(this, Observer {
             if (it.peekContent().first == DiscoverySharedViewModel.NEW_IDENTITY_SERVER_SET_REQUEST) {
                 viewModel.changeIdentityServer(it.peekContent().second)
@@ -71,15 +68,12 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        mLoadingView?.isVisible = state.modalLoadingState is Loading
-
         controller.setData(state)
     }
 
     override fun onResume() {
         super.onResume()
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
-        viewModel.startListenToIdentityManager()
 
         //If some 3pids are pending, we can try to check if they have been verified here
         withState(viewModel) { state ->
@@ -104,12 +98,6 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onPause() {
-        mLoadingView?.isVisible = false
-        super.onPause()
-        viewModel.stopListenToIdentityManager()
     }
 
     override fun onSelectIdentityServer() = withState(viewModel) { state ->
@@ -161,8 +149,8 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
             AlertDialog.Builder(requireContext())
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                    .setNegativeButton(R.string._continue) { _, _ -> navigateToChangeIsFragment(state) }
-                    .setPositiveButton(R.string.cancel, null)
+                    .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIsFragment(state) }
+                    .setNegativeButton(R.string.cancel, null)
                     .show()
             Unit
         } else {
@@ -186,8 +174,8 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.disconnect_identity_server)
                         .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                        .setNegativeButton(R.string._continue) { _, _ -> viewModel.changeIdentityServer(null) }
-                        .setPositiveButton(R.string.cancel, null)
+                        .setPositiveButton(R.string._continue) { _, _ -> viewModel.changeIdentityServer(null) }
+                        .setNegativeButton(R.string.cancel, null)
                         .show()
             } else {
                 viewModel.changeIdentityServer(null)

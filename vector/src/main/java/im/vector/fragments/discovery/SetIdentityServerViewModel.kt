@@ -73,7 +73,8 @@ class SetIdentityServerViewModel(private val mxSession: MXSession,
             copy(isVerifyingServer = true)
         }
 
-        mxSession.termsManager.get(TermsManager.ServiceType.IdentityService, baseUrl,
+        mxSession.termsManager.get(TermsManager.ServiceType.IdentityService,
+                baseUrl,
                 object : ApiCallback<GetTermsResponse> {
                     override fun onSuccess(info: GetTermsResponse) {
                         //has all been accepted?
