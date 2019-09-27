@@ -24,6 +24,7 @@ import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.identityserver.IdentityServerManager
 import org.matrix.androidsdk.features.terms.TermsNotSignedException
 import org.matrix.androidsdk.rest.model.SuccessResult
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 
@@ -390,13 +391,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    emailList = Success(linkedMailsInfo.map {
-                                        val hasMatrixId = info[knownEmailList.indexOf(it.address)].isNotBlank()
-                                        PidInfo(
-                                                value = it.address,
-                                                isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
-                                        )
-                                    })
+                                    emailList = Success(toPidInfoList(knownEmailList, linkedMailsInfo, info))
                             )
                         }
                     }
@@ -451,14 +446,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    phoneNumbersList = Success(linkedPNInfo.map {
-                                        val hasMatrixId = info[knownPns.indexOf(it.address)].isNotBlank()
-                                        PidInfo(
-                                                value = it.address,
-                                                isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId }
-                                                        ?: PidInfo.SharedState.NOT_SHARED)
-                                        )
-                                    })
+                                    phoneNumbersList = Success(toPidInfoList(knownPns, linkedPNInfo, info))
                             )
                         }
                     }
@@ -495,6 +483,15 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 })
     }
 
+    private fun toPidInfoList(addressList: List<String>, linked3pidInfo: List<ThirdPartyIdentifier>, matrixIds: List<String>): List<PidInfo> {
+        return linked3pidInfo.map {
+            val hasMatrixId = matrixIds[addressList.indexOf(it.address)].isNotBlank()
+            PidInfo(
+                    value = it.address,
+                    isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
+            )
+        }
+    }
 
     fun submitPNToken(msisdn: String, code: String, bind: Boolean) = withState { state ->
         val pid = state.phoneNumbersList()?.find { it.value == msisdn }?._3pid ?: return@withState
