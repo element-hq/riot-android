@@ -120,7 +120,7 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
             it.getContentIfNotHandled()?.let { event ->
 
                 when (event) {
-                    SetIdentityServerViewModel.NAVIGATE_NO_TERMS       -> {
+                    is NavigateEvent.NoTerms       -> {
                         AlertDialog.Builder(requireContext())
                                 .setTitle(R.string.settings_discovery_no_terms_title)
                                 .setMessage(R.string.settings_discovery_no_terms)
@@ -131,21 +131,19 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
                                 .show()
                     }
 
-                    SetIdentityServerViewModel.NAVIGATE_TERMS_ACCEPTED -> {
+                    is NavigateEvent.TermsAccepted -> {
                         processIdentityServerChange()
                     }
 
-                    SetIdentityServerViewModel.NAVIGATE_SHOW_TERMS     -> {
-                        withState(viewModel) { state ->
-                            ReviewTermsActivity.intent(requireContext(),
-                                    TermsManager.ServiceType.IdentityService,
-                                    SetIdentityServerViewModel.sanitatizeBaseURL(state.newIdentityServer ?: ""),
-                                    null).also {
-                                startActivityForResult(it, TERMS_REQUEST_CODE)
-                            }
+                    is NavigateEvent.ShowTerms     -> {
+                        ReviewTermsActivity.intent(requireContext(),
+                                TermsManager.ServiceType.IdentityService,
+                                SetIdentityServerViewModel.sanitatizeBaseURL(event.newIdentityServer),
+                                null).also {
+                            startActivityForResult(it, TERMS_REQUEST_CODE)
                         }
                     }
-                    else                                               -> {
+                    else                           -> {
                     }
 
                 }

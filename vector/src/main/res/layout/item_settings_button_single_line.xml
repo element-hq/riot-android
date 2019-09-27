@@ -73,10 +73,11 @@
         android:id="@+id/settings_item_error_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawablePadding="2dp"
+        android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:textSize="12sp"
         android:visibility="gone"
+        tools:drawableStart="@drawable/ic_notification_privacy_warning"
         tools:text="Error Message"
         tools:textColor="@color/vector_info_color"
         tools:visibility="visible">

@@ -15,11 +15,9 @@
  */
 package im.vector.fragments.discovery
 
-import android.content.res.ColorStateList
 import android.view.View
 import android.widget.*
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -149,7 +147,6 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
             ContextCompat.getDrawable(holder.main.context, R.drawable.ic_notification_privacy_warning)?.apply {
                 ThemeUtils.tintDrawableWithColor(this, errorColor)
                 holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
-                holder.textView.compoundDrawablePadding = 4
             }
             holder.errorTextView.setTextColor(errorColor)
         } else {

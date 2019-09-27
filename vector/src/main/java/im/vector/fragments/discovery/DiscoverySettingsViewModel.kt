@@ -52,6 +52,10 @@ data class DiscoverySettingsState(
 
 class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession) : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
 
+    init {
+        refreshModel()
+    }
+
     fun changeIdentityServer(server: String?) {
         setState {
             copy(modalLoadingState = Loading())
@@ -330,7 +334,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             copy(emailList = Loading())
         }
 
-        mxSession.myUser?.refreshThirdPartyIdentifiers(object : ApiCallback<Void> {
+        mxSession.myUser.refreshThirdPartyIdentifiers(object : ApiCallback<Void> {
             override fun onUnexpectedError(e: Exception) {
                 setState {
                     copy(emailList = Fail(e))
@@ -477,7 +481,6 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
                         })
             }
-
         })
     }
 
@@ -558,23 +561,15 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         override fun create(viewModelContext: ViewModelContext, state: DiscoverySettingsState): DiscoverySettingsViewModel? {
             val matrixId = viewModelContext.args<String>()
             val mxSession = Matrix.getInstance(viewModelContext.activity).getSession(matrixId)
-            val viewModel = DiscoverySettingsViewModel(state, mxSession)
-
-            mxSession.identityServerManager.getIdentityServerUrl().let {
-                viewModel.setState {
-                    copy(identityServer = Success(it))
-                }
-            }
-
-            viewModel.refreshModel()
-
-            return viewModel
+            return DiscoverySettingsViewModel(state, mxSession)
         }
 
         override fun initialState(viewModelContext: ViewModelContext): DiscoverySettingsState? {
+            val matrixId = viewModelContext.args<String>()
+            val mxSession = Matrix.getInstance(viewModelContext.activity).getSession(matrixId)
 
             return DiscoverySettingsState(
-                    identityServer = Success(null),
+                    identityServer = Success(mxSession.identityServerManager.getIdentityServerUrl()),
                     emailList = Success(emptyList()),
                     phoneNumbersList = Success(emptyList())
             )

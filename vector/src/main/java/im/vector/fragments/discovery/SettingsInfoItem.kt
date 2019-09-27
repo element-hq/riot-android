@@ -17,17 +17,14 @@ package im.vector.fragments.discovery
 
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.R
 import im.vector.ui.epoxy.BaseEpoxyHolder
-import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.setTextOrHide
 
 
@@ -64,12 +61,9 @@ abstract class SettingsInfoItem : EpoxyModelWithHolder<SettingsInfoItem.Holder>(
         holder.main.setOnClickListener(itemClickListener)
 
         if (showCompoundDrawable) {
-            ContextCompat.getDrawable(holder.main.context, compoundDrawable)?.apply {
-                holder.text.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
-                holder.text.compoundDrawablePadding = 4
-            }
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, 0, 0)
         } else {
-            holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
         }
     }
 

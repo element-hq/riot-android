@@ -147,32 +147,29 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         viewModel.sharePN(pn)
     }
 
-    override fun onTapChangeIdentityServer(): Unit = withState(viewModel) { state ->
-
+    override fun onTapChangeIdentityServer() = withState(viewModel) { state ->
         //we should prompt if there are bound items with current is
-        withState(viewModel) { state ->
-            val pidList = ArrayList<PidInfo>().apply {
-                state.emailList()?.let { addAll(it) }
-                state.phoneNumbersList()?.let { addAll(it) }
-            }
+        val pidList = ArrayList<PidInfo>().apply {
+            state.emailList()?.let { addAll(it) }
+            state.phoneNumbersList()?.let { addAll(it) }
+        }
 
-            val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
+        val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
 
-            if (hasBoundIds) {
-                //we should prompt
-                AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.change_identity_server)
-                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                        .setNegativeButton(R.string._continue) { _, _ ->
-                            navigateToChangeIsFragment(state)
-                        }
-                        .setPositiveButton(R.string.cancel, null)
-                        .show()
-                return@withState
-            }
+        if (hasBoundIds) {
+            //we should prompt
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.change_identity_server)
+                    .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
+                    .setNegativeButton(R.string._continue) { _, _ -> navigateToChangeIsFragment(state) }
+                    .setPositiveButton(R.string.cancel, null)
+                    .show()
+            Unit
+        } else {
             navigateToChangeIsFragment(state)
         }
     }
+
 
     override fun onTapDisconnectIdentityServer() {
         //we should prompt if there are bound items with current is
@@ -188,24 +185,20 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 //we should prompt
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.disconnect_identity_server)
-                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer())
-                        )
-                        .setNegativeButton(R.string._continue) { _, _ ->
-                            viewModel.changeIdentityServer(null)
-                        }
+                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
+                        .setNegativeButton(R.string._continue) { _, _ -> viewModel.changeIdentityServer(null) }
                         .setPositiveButton(R.string.cancel, null)
                         .show()
-                return@withState
+            } else {
+                viewModel.changeIdentityServer(null)
             }
-            viewModel.changeIdentityServer(null)
         }
     }
 
     private fun navigateToChangeIsFragment(state: DiscoverySettingsState) {
         SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer()).also {
             requireFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom,
-                            R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
+                    .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
                     .replace(R.id.vector_settings_page, it, getString(R.string.identity_server))
                     .addToBackStack(null)
                     .commit()
@@ -217,7 +210,5 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 .withArgs {
                     putString(MvRx.KEY_ARG, matrixId)
                 }
-
     }
-
 }

@@ -37,12 +37,19 @@ data class SetIdentityServerState(
         val isVerifyingServer: Boolean = false
 ) : MvRxState
 
-class SetIdentityServerViewModel(private val mxSession: MXSession?,
+
+sealed class NavigateEvent {
+    data class ShowTerms(val newIdentityServer: String) : NavigateEvent()
+    object NoTerms : NavigateEvent()
+    object TermsAccepted : NavigateEvent()
+}
+
+class SetIdentityServerViewModel(private val mxSession: MXSession,
                                  private val userLanguage: String,
                                  initialState: SetIdentityServerState)
     : BaseMvRxViewModel<SetIdentityServerState>(initialState, false) {
 
-    var navigateEvent = MutableLiveData<LiveEvent<String>>()
+    var navigateEvent = MutableLiveData<LiveEvent<NavigateEvent>>()
 
     fun updateServerName(server: String) {
         setState {
@@ -66,7 +73,7 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
             copy(isVerifyingServer = true)
         }
 
-        mxSession?.termsManager?.get(TermsManager.ServiceType.IdentityService, baseUrl,
+        mxSession.termsManager.get(TermsManager.ServiceType.IdentityService, baseUrl,
                 object : ApiCallback<GetTermsResponse> {
                     override fun onSuccess(info: GetTermsResponse) {
                         //has all been accepted?
@@ -77,13 +84,13 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
                         val tos = resp.getLocalizedTerms(userLanguage)
                         if (tos.isEmpty()) {
                             //prompt do not define policy
-                            navigateEvent.value = LiveEvent(NAVIGATE_NO_TERMS)
+                            navigateEvent.value = LiveEvent(NavigateEvent.NoTerms)
                         } else {
                             val shouldPrompt = tos.any { !info.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
                             if (shouldPrompt) {
-                                navigateEvent.value = LiveEvent(NAVIGATE_SHOW_TERMS)
+                                navigateEvent.value = LiveEvent(NavigateEvent.ShowTerms(baseUrl))
                             } else {
-                                navigateEvent.value = LiveEvent(NAVIGATE_TERMS_ACCEPTED)
+                                navigateEvent.value = LiveEvent(NavigateEvent.TermsAccepted)
                             }
                         }
                     }
@@ -128,10 +135,6 @@ class SetIdentityServerViewModel(private val mxSession: MXSession?,
             }
             return baseUrl1
         }
-
-        const val NAVIGATE_SHOW_TERMS = "NAVIGATE_SHOW_TERMS"
-        const val NAVIGATE_NO_TERMS = "NAVIGATE_NO_TERMS"
-        const val NAVIGATE_TERMS_ACCEPTED = "NAVIGATE_TERMS_ACCEPTED"
 
         override fun create(viewModelContext: ViewModelContext, state: SetIdentityServerState): SetIdentityServerViewModel? {
             val fArgs = viewModelContext.args<SetIdentityServerFragmentArgs>()

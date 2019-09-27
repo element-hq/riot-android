@@ -25,7 +25,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.R
 
 
-class SettingsDiscoveryController(private val context: Context, private val interactionListener: InteractionListener?) : TypedEpoxyController<DiscoverySettingsState>() {
+class SettingsDiscoveryController(private val context: Context, private val interactionListener: InteractionListener) : TypedEpoxyController<DiscoverySettingsState>() {
 
     override fun buildModels(data: DiscoverySettingsState?) {
         if (data == null) return
@@ -85,9 +85,9 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                     switchChangeListener { b, checked ->
                                         if (checked) {
-                                            interactionListener?.onTapSharePN(piState.value)
+                                            interactionListener.onTapSharePN(piState.value)
                                         } else {
-                                            interactionListener?.onTapRevokePN(piState.value)
+                                            interactionListener.onTapRevokePN(piState.value)
                                         }
                                     }
                                     infoMessage(piState.isShared.error.message)
@@ -99,9 +99,9 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
                                             if (checked) {
-                                                interactionListener?.onTapSharePN(piState.value)
+                                                interactionListener.onTapSharePN(piState.value)
                                             } else {
-                                                interactionListener?.onTapRevokePN(piState.value)
+                                                interactionListener.onTapRevokePN(piState.value)
                                             }
                                         }
                                     }
@@ -122,7 +122,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
                                             val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            interactionListener?.checkPNVerification(piState.value, code, bind)
+                                            interactionListener.checkPNVerification(piState.value, code, bind)
                                         }
                                     })
                                 }
@@ -180,9 +180,9 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { b, checked ->
                                             if (checked) {
-                                                interactionListener?.onTapShareEmail(piState.value)
+                                                interactionListener.onTapShareEmail(piState.value)
                                             } else {
-                                                interactionListener?.onTapRevokeEmail(piState.value)
+                                                interactionListener.onTapRevokeEmail(piState.value)
                                             }
                                         }
                                     }
@@ -194,7 +194,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                                         infoMessage(context.getString(R.string.settings_discovery_confirm_mail, piState.value))
                                         buttonClickListener(View.OnClickListener {
                                             val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            interactionListener?.checkEmailVerification(piState.value, bind)
+                                            interactionListener.checkEmailVerification(piState.value, bind)
                                         })
                                     }
                                 }
@@ -225,7 +225,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                 if (data.termsNotSigned) {
                     helperText(context.getString(R.string.settings_agree_to_terms, identityServer))
                     showCompoundDrawable(true)
-                    itemClickListener(View.OnClickListener { interactionListener?.onSelectIdentityServer() })
+                    itemClickListener(View.OnClickListener { interactionListener.onSelectIdentityServer() })
                 } else {
                     showCompoundDrawable(false)
                     if (data.identityServer() != null) {
@@ -248,7 +248,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
             }
             buttonStyle(SettingsTextButtonItem.ButtonStyle.POSITIVE)
             buttonClickListener(View.OnClickListener {
-                interactionListener?.onTapChangeIdentityServer()
+                interactionListener.onTapChangeIdentityServer()
             })
         }
 
@@ -262,7 +262,7 @@ class SettingsDiscoveryController(private val context: Context, private val inte
                 buttonTitleId(R.string.disconnect_identity_server)
                 buttonStyle(SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
-                    interactionListener?.onTapDisconnectIdentityServer()
+                    interactionListener.onTapDisconnectIdentityServer()
                 })
             }
         }
