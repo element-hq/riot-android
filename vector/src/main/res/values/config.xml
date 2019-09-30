@@ -12,6 +12,7 @@
     <string name="matomo_site_id" translatable="false">1</string>
     <string name="matomo_tracker_name" translatable="false">AndroidMatomoTracker</string>
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <string name="default_stun_server" translatable="false">turn.matrix.org</string>
 
     <!-- Widget urls -->
     <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
