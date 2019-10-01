@@ -52,8 +52,16 @@ steps:
 # Code quality
 
   - label: "Code quality"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # gradle build is long
+      queue: "medium"
     commands:
       - "./tools/check/check_code_quality.sh"
       - "./set_debug_env.sh"
       - "./gradlew clean lintAppfdroidRelease --stacktrace"
       - "./gradlew clean lintAppRelease --stacktrace"
+    branches: "develop feature/*"
+    plugins:
+      - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
