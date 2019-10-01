@@ -37,7 +37,7 @@
         android:paddingBottom="4dp"
         android:textColor="?android:attr/textColorSecondary"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/item_generic_action_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item_generic_radio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
