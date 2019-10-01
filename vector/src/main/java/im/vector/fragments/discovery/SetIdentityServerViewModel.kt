@@ -140,7 +140,11 @@ class SetIdentityServerViewModel(private val mxSession: MXSession,
         override fun create(viewModelContext: ViewModelContext, state: SetIdentityServerState): SetIdentityServerViewModel? {
             val fArgs = viewModelContext.args<SetIdentityServerFragmentArgs>()
             val session = Matrix.getInstance(viewModelContext.activity).getSession(fArgs.matrixId)
-            return SetIdentityServerViewModel(session, viewModelContext.activity.getString(R.string.resources_language), SetIdentityServerState(fArgs.serverName))
+            return SetIdentityServerViewModel(
+                    session,
+                    viewModelContext.activity.getString(R.string.resources_language),
+                    SetIdentityServerState(fArgs.serverName)
+            )
         }
     }
 }

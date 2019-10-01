@@ -33,6 +33,7 @@ import im.vector.ui.util.setTextOrHide
 abstract class SettingsItemText : EpoxyModelWithHolder<SettingsItemText.Holder>() {
 
     @EpoxyAttribute var descriptionText: String? = null
+    @EpoxyAttribute var errorText: String? = null
 
     @EpoxyAttribute
     var interactionListener: Listener? = null
@@ -42,7 +43,15 @@ abstract class SettingsItemText : EpoxyModelWithHolder<SettingsItemText.Holder>(
         holder.textView.setTextOrHide(descriptionText)
 
         holder.validateButton.setOnClickListener {
-            interactionListener?.onValidate(holder.editText.text.toString())
+            val code = holder.editText.text.toString()
+            holder.editText.text.clear()
+            interactionListener?.onValidate(code)
+        }
+
+        if (errorText.isNullOrBlank()) {
+            holder.textInputLayout.error = null
+        } else {
+            holder.textInputLayout.error = errorText
         }
 
         holder.editText.setOnEditorActionListener { tv, actionId, _ ->
