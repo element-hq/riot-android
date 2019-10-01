@@ -12,7 +12,7 @@ steps:
         queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew --no-daemon clean assembleAppDebug --stacktrace"
+      - "./gradlew --no-daemon clean lintAppRelease assembleAppDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
     branches: "develop feature/*"
@@ -27,7 +27,7 @@ steps:
         queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew --no-daemon clean assembleAppfdroidDebug --stacktrace"
+      - "./gradlew --no-daemon clean lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
@@ -52,16 +52,5 @@ steps:
 # Code quality
 
   - label: "Code quality"
-    agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
-      queue: "xlarge"
     commands:
       - "./tools/check/check_code_quality.sh"
-      - "./set_debug_env.sh"
-      - "./gradlew --no-daemon clean lintAppfdroidRelease --stacktrace"
-      - "./gradlew --no-daemon clean lintAppRelease --stacktrace"
-    branches: "develop feature/*"
-    plugins:
-      - docker#v3.1.0:
-          image: "runmymind/docker-android-sdk"
