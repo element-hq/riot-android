@@ -252,7 +252,6 @@
     <string name="room_unsent_messages_notification">సందేశాలు పంపబడలేదు. ఇప్పుడు %1$s లేదా %2$s?</string>
     <string name="room_unknown_devices_messages_notification">తెలియని పరికరాల కారణంగా ఉన్న సందేశాలు పంపబడలేదు. ఇప్పుడు %1$s లేదా %2$s?</string>
     <string name="room_prompt_resend">అన్నీ మళ్లీ పంపు</string>
-    <string name="auth_add_phone_message">వాడుకరులు మిమ్మల్ని కనుగొనడానికి మీ ఖాతాకు ఒక ఫోన్ నంబర్ను జోడించండి.</string>
     <string name="people_search_filter_text">మ్యాట్రిక్స్ వాడుకరులు మాత్రమే</string>
     <string name="room_prompt_cancel">అన్నింటినీ రద్దు చేయండి</string>
     <string name="room_resend_unsent_messages">పంపని సందేశాలను తిరిగి పంపండి</string>

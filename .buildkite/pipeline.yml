@@ -27,7 +27,7 @@ steps:
         queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew --no-daemon clean assembleAppfdroidDebug --stacktrace --scan"
+      - "./gradlew --no-daemon clean assembleAppfdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
