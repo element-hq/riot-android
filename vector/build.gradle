@@ -96,9 +96,6 @@ android {
     buildTypes {
         debug {
 
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
-
             resValue "bool", "debug_mode", "true"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
