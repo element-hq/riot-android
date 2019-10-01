@@ -12,7 +12,7 @@ steps:
         queue: "medium"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean assembleAppDebug --stacktrace"
+      - "./gradlew clean assembleAppDebug --stacktrace --scan"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
     branches: "develop feature/*"
@@ -27,7 +27,7 @@ steps:
         queue: "medium"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean assembleAppfdroidDebug --stacktrace"
+      - "./gradlew clean assembleAppfdroidDebug --stacktrace --scan"
     artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
