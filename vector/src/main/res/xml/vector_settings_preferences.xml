@@ -42,9 +42,16 @@
             android:title="@string/settings_add_phone_number"
             app:iconTint="?attr/vctr_settings_icon_tint_color" />
 
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
+            android:order="1000"
+            android:persistent="false"
+            android:title="@string/settings_discovery_category"
+            android:summary="@string/settings_discovery_manage"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
@@ -363,7 +370,7 @@
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_name" />
+            android:title="@string/encryption_information_device_name_with_warning" />
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
@@ -427,7 +434,8 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url" />
+            tools:summary="@string/default_identity_server_url"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
 
 
         <im.vector.preference.VectorPreference

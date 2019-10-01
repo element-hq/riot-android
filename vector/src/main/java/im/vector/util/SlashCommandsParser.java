@@ -32,6 +32,7 @@ import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -157,6 +158,15 @@ public class SlashCommandsParser {
                         activity.getConsentNotGivenHelper().displayDialog(e);
                     }
                 }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    if (e instanceof IdentityServerNotConfiguredException) {
+                        Toast.makeText(activity, activity.getString(R.string.invite_no_identity_server_error), Toast.LENGTH_LONG).show();
+                    } else {
+                        super.onUnexpectedError(e);
+                    }
+                }
             };
 
             String[] messageParts = null;
@@ -266,7 +276,7 @@ public class SlashCommandsParser {
 
                 if (messageParts.length >= 2) {
                     isIRCCmdValid = true;
-                    room.invite(messageParts[1], callback);
+                    room.invite(session, messageParts[1], callback);
                 }
             } else if (TextUtils.equals(firstPart, SlashCommand.KICK_USER.getCommand())) {
                 isIRCCmd = true;

@@ -439,14 +439,6 @@
 
     <string name="send_bug_report_sent">Le rapport d’erreur a bien été envoyé</string>
     <string name="send_bug_report_failed">L’envoi du rapport d’erreur a échoué (%s)</string>
-    <string name="auth_add_email_message">Ajoutez une adresse e-mail à votre compte pour permettre aux autres utilisateurs de vous retrouver et pour pouvoir réinitialiser votre mot de passe.</string>
-    <string name="auth_add_phone_message">Ajoutez un numéro de téléphone à votre compte pour permettre aux autres utilisateurs de vous retrouver.</string>
-    <string name="auth_add_email_phone_message">Ajoutez une adresse e-mail et / ou un numéro de téléphone à votre compte pour permettre aux autres utilisateurs de vous retrouver.
-
-L’adresse e-mail vous permettra également de réinitialiser votre mot de passe.</string>
-    <string name="auth_add_email_and_phone_message">Ajoutez une adresse e-mail et un numéro de téléphone à votre compte pour permettre aux autres utilisateurs de vous retrouver.
-
-L’adresse e-mail vous permettra également de réinitialiser votre mot de passe.</string>
     <string name="auth_invalid_user_name">Les noms d’utilisateurs ne peuvent contenir que des lettres, des nombres, des points, des traits d’union et des tirets bas</string>
     <string name="auth_invalid_email">Cela ne ressemble pas à une adresse e-mail valide</string>
     <string name="auth_invalid_phone">Cela ne ressemble pas à un numéro de téléphone valide</string>

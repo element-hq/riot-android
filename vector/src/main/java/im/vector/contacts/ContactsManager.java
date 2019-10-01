@@ -75,6 +75,14 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Called when an user presence has been updated
          */
         void onContactPresenceUpdate(Contact contact, String matrixId);
+
+        /**
+         * Called when the Terms of the Identity server has not being accepted
+         */
+        void onIdentityServerTermsNotSigned(String token);
+
+
+        void onNoIdentityServerDefined();
     }
 
     // singleton
@@ -157,6 +165,28 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
             // warn that the current request failed.
             // Thus, if the listeners display a spinner (or so), it should be hidden.
             onPIDsUpdate();
+        }
+
+        @Override
+        public void onIdentityServerTermsNotSigned(String token) {
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onIdentityServerTermsNotSigned(token);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onTermsNotSigned failed " + e.getMessage(), e);
+                }
+            }
+        }
+
+        @Override
+        public void onNoIdentityServer() {
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onNoIdentityServerDefined();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onNoIdentityServerDefined failed " + e.getMessage(), e);
+                }
+            }
         }
 
         @Override

@@ -6,13 +6,22 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Privacy: Use the hashed v2 lookup API for 3PIDs (#3257)
+ - Privacy: Prompt to accept identity server policies before inviting them to a room (#3227)
+ - Privacy: Make clear that device names are publicly readable (#3265)
+ - Privacy: Email help text on registration should be updated without binding (#3278)
+ - Privacy: Use wellknown to discover the IS of a HS (#3283)
+ - Privacy: Remove the bind true flag from 3PID adds in settings (#3254)
+ - Privacy: Remove the ability to set an IS at login/registration (#3264)
+ - Privacy: Allow password reset when no IS (#3261)
+ - Privacy: Allow email registration when no IS (#3260)
+ - Privacy: Separate Add and Bind for 3PID #3300
 
 Improvements:
  -
 
 Other changes:
- -
+ - Privacy: Remove the bind true flag from 3PID calls on registration (#3252)
 
 Bugfix:
  - Fix reset password broken UI (#3125)

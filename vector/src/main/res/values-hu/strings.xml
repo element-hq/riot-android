@@ -129,14 +129,6 @@
     <string name="auth_password_placeholder">Jelszó</string>
     <string name="auth_new_password_placeholder">Új jelszó</string>
     <string name="auth_user_name_placeholder">Felhasználónév</string>
-    <string name="auth_add_email_message">Adj meg egy e-mail címet a fiókodhoz, hogy mások megtalálhassanak és hogy visszaállíthasd a jelszavadat.</string>
-    <string name="auth_add_phone_message">Adj meg telefonszámot a fiókodhoz, hogy mások megtalálhassanak.</string>
-    <string name="auth_add_email_phone_message">Adj meg e-mail címet és/vagy telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
-
- Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
-    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet és telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
-
- Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
     <string name="auth_email_placeholder">E-mail cím</string>
     <string name="auth_opt_email_placeholder">E-mail cím (nem kötelező)</string>
     <string name="auth_phone_number_placeholder">Telefonszám</string>

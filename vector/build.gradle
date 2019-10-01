@@ -215,6 +215,7 @@ dependencies {
 
     // Epoxy
     implementation 'com.airbnb.android:epoxy:3.7.0'
+    implementation 'com.airbnb.android:mvrx:1.0.1'
     kapt 'com.airbnb.android:epoxy-processor:3.7.0'
 
     // Network

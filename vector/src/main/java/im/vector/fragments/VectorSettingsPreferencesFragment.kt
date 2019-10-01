@@ -91,6 +91,7 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.rest.model.group.Group
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
+import org.matrix.androidsdk.rest.model.sync.AccountDataElement
 import org.matrix.androidsdk.rest.model.sync.DeviceInfoUtil
 import java.lang.ref.WeakReference
 import java.text.DateFormat
@@ -118,6 +119,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             refreshDisplay()
+        }
+
+        override fun onAccountDataUpdated(accountDataElement: AccountDataElement) {
+            if (accountDataElement.type == AccountDataElement.ACCOUNT_DATA_TYPE_IDENTITY_SERVER) {
+                (findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as EditTextPreference).let {
+                    updateIdentityServerPref()
+                }
+            }
         }
     }
 
@@ -273,6 +282,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
     }
+    private val identityServerPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
+    }
 
     /* ==========================================================================================
      * Life cycle
@@ -318,6 +330,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             onPasswordUpdateClick()
             false
         }
+
 
         // Add Email
         (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
@@ -645,8 +658,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 .summary = mSession.homeServerConfig.homeserverUri.toString()
 
         // identity server
-        findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.identityServerUri.toString()
+        updateIdentityServerPref()
 
         findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL)
                 .summary = PreferencesManager.getIntegrationManagerUiUrl(context)
@@ -858,6 +870,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
     }
 
+    private fun updateIdentityServerPref() {
+        identityServerPreference.summary = mSession.identityServerManager?.identityServerUrl
+                ?: getString(R.string.identity_server_not_defined)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
@@ -926,6 +943,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
+            refreshEmailsList()
+            refreshPhoneNumbersList()
         }
 
         interactionListener?.requestedKeyToHighlight()?.let { key ->
@@ -1541,7 +1560,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * @param preferenceSummary the displayed 3pid
      */
     private fun displayDelete3PIDConfirmationDialog(pid: ThirdPartyIdentifier, preferenceSummary: CharSequence) {
-        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.applicationLocale)
+        val mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, requireContext()).toLowerCase(VectorLocale.applicationLocale)
         val dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary)
 
         activity?.let {
@@ -1743,6 +1762,60 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      * Refresh the emails list
      */
     private fun refreshEmailsList() {
+
+        val isURL = mSession.identityServerManager.identityServerUrl
+        if (isURL != null) {
+            updateMailSection()
+        } else {
+
+            //If there is no identity server configured, we can just remove this section
+            //as the user won't be able to add/remove 3pids
+            //Though there is a special case when HS (checked via capabilities) can manage msisdn/mails by
+            //themselves without an identity server.
+
+            mSession.doesServerSeparatesAddAndBind(object : ApiCallback<Boolean> {
+                override fun onSuccess(separatesAddAndBind: Boolean) {
+                    if (separatesAddAndBind) {
+                        updateMailSection()
+                    } else {
+                        //hide
+                        run {
+                            var index = 0
+                            while (true) {
+                                val preference = mUserSettingsCategory.findPreference(EMAIL_PREFERENCE_KEY_BASE + index)
+
+                                if (null != preference) {
+                                    mUserSettingsCategory.removePreference(preference)
+                                } else {
+                                    break
+                                }
+                                index++
+                            }
+                        }
+                        mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)?.let {
+                            it.isVisible = false
+                        }
+                    }
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onNetworkError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    Log.e(LOG_TAG, "Failed to get version ${e.message}")
+                }
+
+            })
+        }
+
+    }
+
+    private fun updateMailSection() {
         val currentEmail3PID = ArrayList(mSession.myUser.getlinkedEmails())
 
         val newEmailsList = ArrayList<String>()
@@ -1806,6 +1879,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             addEmailBtn.order = order
+            addEmailBtn.isVisible = true
         }
     }
 
@@ -1843,31 +1917,32 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             return
         }
 
-        val pid = ThreePid(email, ThreePid.MEDIUM_EMAIL)
+        val pid = ThreePid.fromEmail(email)
 
         displayLoadingView()
 
-        mSession.myUser.requestEmailValidationToken(pid, object : ApiCallback<Void> {
-            override fun onSuccess(info: Void?) {
-                activity?.runOnUiThread { showEmailValidationDialog(pid) }
-            }
+        mSession.identityServerManager.startAddSessionForEmail(pid, null,
+                object : ApiCallback<ThreePid> {
+                    override fun onSuccess(info: ThreePid) {
+                        activity?.runOnUiThread { showEmailValidationDialog(pid) }
+                    }
 
-            override fun onNetworkError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
+                    override fun onNetworkError(e: Exception) {
+                        onCommonDone(e.localizedMessage)
+                    }
 
-            override fun onMatrixError(e: MatrixError) {
-                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                    onCommonDone(getString(R.string.account_email_already_used_error))
-                } else {
-                    onCommonDone(e.localizedMessage)
-                }
-            }
+                    override fun onMatrixError(e: MatrixError) {
+                        if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                            onCommonDone(getString(R.string.account_email_already_used_error))
+                        } else {
+                            onCommonDone(e.localizedMessage)
+                        }
+                    }
 
-            override fun onUnexpectedError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
-        })
+                    override fun onUnexpectedError(e: Exception) {
+                        onCommonDone(e.localizedMessage)
+                    }
+                })
     }
 
     /**
@@ -1881,11 +1956,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        mSession.myUser.add3Pid(pid, true, object : ApiCallback<Void> {
+                        mSession.identityServerManager.finalizeAddSessionForEmail(pid, object : ApiCallback<Void?> {
                             override fun onSuccess(info: Void?) {
                                 it.runOnUiThread {
                                     hideLoadingView()
-                                    refreshEmailsList()
+                                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>(){
+                                        override fun onSuccess(info: Void?) {
+                                            refreshEmailsList()
+                                        }
+                                    })
                                 }
                             }
 
@@ -1908,6 +1987,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                 onCommonDone(e.localizedMessage)
                             }
                         })
+
                     }
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         hideLoadingView()
@@ -1920,10 +2000,60 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     // Phone number management
     //==============================================================================================================
 
+
     /**
      * Refresh phone number list
      */
     private fun refreshPhoneNumbersList() {
+        val isURL = mSession.identityServerManager.identityServerUrl
+        if (isURL != null) {
+            updatePhoneNumbersList()
+        } else {
+            //If there is no identity server configured, we can just remove this section
+            //as the user won't be able to add/remove 3pids
+            //Though there is a special case when HS (checked via capabilities) can manage msisdn/mails by
+            //themselves without an identity server.
+            mSession.doesServerRequireIdentityServerParam(object : ApiCallback<Boolean> {
+                override fun onSuccess(requiresIdentityServer: Boolean) {
+                    if (requiresIdentityServer) {
+                        run {
+                            var index = 0
+                            while (true) {
+                                val preference = mUserSettingsCategory.findPreference(PHONE_NUMBER_PREFERENCE_KEY_BASE + index)
+
+                                if (null != preference) {
+                                    mUserSettingsCategory.removePreference(preference)
+                                } else {
+                                    break
+                                }
+                                index++
+                            }
+                        }
+                        mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)?.let {
+                            it.isVisible = false
+                        }
+                    } else {
+                        updatePhoneNumbersList()
+                    }
+                }
+
+                override fun onUnexpectedError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onNetworkError(e: Exception) {
+                    Log.e(LOG_TAG, "Failed to get version", e)
+                }
+
+                override fun onMatrixError(e: MatrixError) {
+                    Log.e(LOG_TAG, "Failed to get version ${e.message}")
+                }
+
+            })
+        }
+    }
+
+    private fun updatePhoneNumbersList() {
         val currentPhoneNumber3PID = ArrayList(mSession.myUser.getlinkedPhoneNumbers())
 
         val phoneNumberList = ArrayList<String>()
@@ -1995,6 +2125,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             }
 
             addPhoneBtn.order = order
+            addPhoneBtn.isVisible = true
         }
 
     }
@@ -2479,6 +2610,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
 
+            layout.findViewById<TextView>(R.id.edit_text_content).let { tv ->
+                tv.visibility = View.VISIBLE
+                tv.setText(R.string.device_name_warning)
+            }
             val input = layout.findViewById<EditText>(R.id.edit_text)
             input.setText(aDeviceInfoToRename.display_name)
 

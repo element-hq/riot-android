@@ -144,14 +144,6 @@
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">Nuova password</string>
     <string name="auth_user_name_placeholder">Nome utente</string>
-    <string name="auth_add_email_message">Aggiungi un indirizzo email al tuo account per farti trovare e per poter resettare la password.</string>
-    <string name="auth_add_phone_message">Aggiungi un numero di telefono al tuo account per farti trovare.</string>
-    <string name="auth_add_email_phone_message">Aggiungi un indirizzo email e/o un numero di telefono al tuo account per farti trovare.
-
-L\'indirizzo email ti permetterà anche di resettare la password.</string>
-    <string name="auth_add_email_and_phone_message">Aggiungi un indirizzo email ed un numero di telefono al tuo account per farti trovare.
-
-L\'indirizzo email ti permetterà anche di resettare la password.</string>
     <string name="auth_email_placeholder">Indirizzo email</string>
     <string name="auth_opt_email_placeholder">Indirizzo email (facoltativo)</string>
     <string name="auth_phone_number_placeholder">Numero di telefono</string>
