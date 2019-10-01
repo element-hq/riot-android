@@ -12,7 +12,7 @@ steps:
         queue: "medium"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean assembleAppDebug --stacktrace --scan"
+      - "./gradlew --no-daemon clean assembleAppDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
     branches: "develop feature/*"
@@ -27,7 +27,7 @@ steps:
         queue: "medium"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean assembleAppfdroidDebug --stacktrace --scan"
+      - "./gradlew --no-daemon clean assembleAppfdroidDebug --stacktrace --scan"
     artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
@@ -41,7 +41,7 @@ steps:
         # gradle build is long
         queue: "medium"
     commands:
-      - "./gradlew clean assembleAppRelease --stacktrace"
+      - "./gradlew --no-daemon clean assembleAppRelease --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/release/*.apk"
     branches: "master"
@@ -59,8 +59,8 @@ steps:
     commands:
       - "./tools/check/check_code_quality.sh"
       - "./set_debug_env.sh"
-      - "./gradlew clean lintAppfdroidRelease --stacktrace"
-      - "./gradlew clean lintAppRelease --stacktrace"
+      - "./gradlew --no-daemon clean lintAppfdroidRelease --stacktrace"
+      - "./gradlew --no-daemon clean lintAppRelease --stacktrace"
     branches: "develop feature/*"
     plugins:
       - docker#v3.1.0:
