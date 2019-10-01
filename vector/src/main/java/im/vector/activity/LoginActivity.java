@@ -2462,7 +2462,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return null;
             }
 
-            if (!TextUtils.isEmpty(identityServerUrlString) & !identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")) {
+            if (!TextUtils.isEmpty(identityServerUrlString)
+                    && !identityServerUrlString.startsWith("http://")
+                    && !identityServerUrlString.startsWith("https://")) {
                 identityServerUrlString = "https://" + identityServerUrlString;
             }
 

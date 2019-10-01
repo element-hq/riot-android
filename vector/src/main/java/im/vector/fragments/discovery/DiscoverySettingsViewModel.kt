@@ -47,7 +47,8 @@ data class DiscoverySettingsState(
         val termsNotSigned: Boolean = false
 ) : MvRxState
 
-class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession) : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
+class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private val mxSession: MXSession)
+    : BaseMvRxViewModel<DiscoverySettingsState>(initialState, false) {
 
     private val identityServerManagerListener = object : IdentityServerManager.IdentityServerManagerListener {
         override fun onIdentityServerChange() = withState { state ->
@@ -479,7 +480,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             val hasMatrixId = matrixIds[addressList.indexOf(it)].isNotBlank()
             PidInfo(
                     value = it,
-                    isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
+                    isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId }
+                            ?: PidInfo.SharedState.NOT_SHARED)
             )
         }
     }
@@ -517,7 +519,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             _3pid = state.emailList()?.find { it.value == address }?._3pid ?: return@withState
         } else {
             changeMsisdnState(address, Loading())
-            _3pid = state.phoneNumbersList()?.find { it.value == address }?._3pid ?: return@withState
+            _3pid = state.phoneNumbersList()?.find { it.value == address }?._3pid
+                    ?: return@withState
         }
 
         mxSession.identityServerManager.finalizeBindSessionFor3PID(_3pid, object : ApiCallback<Void?> {

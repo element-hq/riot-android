@@ -216,16 +216,21 @@ public class LoginHandler {
                                            final ApiCallback<Boolean> aRespCallback) {
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        restClient.submitValidationToken(ThreePid.MEDIUM_EMAIL, aToken, aClientSecret, aSid, new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
-            @Override
-            public void onSuccess(Boolean info) {
-                aRespCallback.onSuccess(info);
-            }
+        restClient.submitValidationToken(
+                ThreePid.MEDIUM_EMAIL,
+                aToken,
+                aClientSecret,
+                aSid,
+                new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
+                    @Override
+                    public void onSuccess(Boolean info) {
+                        aRespCallback.onSuccess(info);
+                    }
 
-            @Override
-            public void onAcceptedCert() {
-                submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
-            }
-        });
+                    @Override
+                    public void onAcceptedCert() {
+                        submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
+                    }
+                });
     }
 }
