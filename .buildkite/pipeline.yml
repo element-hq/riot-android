@@ -9,7 +9,7 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
       - "./gradlew --no-daemon clean assembleAppDebug --stacktrace"
@@ -24,7 +24,7 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
       - "./gradlew --no-daemon clean assembleAppfdroidDebug --stacktrace --scan"
@@ -39,7 +39,7 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
       - "./gradlew --no-daemon clean assembleAppRelease --stacktrace"
     artifact_paths:
@@ -55,7 +55,7 @@ steps:
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
-      queue: "medium"
+      queue: "xlarge"
     commands:
       - "./tools/check/check_code_quality.sh"
       - "./set_debug_env.sh"
