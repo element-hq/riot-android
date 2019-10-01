@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -883,6 +884,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      */
     public void onPause() {
         mEventFormattedTsMap.clear();
+        mMediasHelper.refreshPlayImageViews();
     }
 
     /**
@@ -952,9 +954,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      *
      * @param listener teh events listener
      */
-    public void setVectorMessagesAdapterActionsListener(IMessagesAdapterActionsListener listener) {
+    public void setVectorMessagesAdapterActionsListener(IMessagesAdapterActionsListener listener, Map<String, MediaPlayer> mediaPlayers) {
         mVectorMessagesAdapterEventsListener = listener;
-        mMediasHelper.setVectorMessagesAdapterActionsListener(listener);
+        mMediasHelper.setVectorMessagesAdapterActionsListener(listener, mediaPlayers);
         mHelper.setVectorMessagesAdapterActionsListener(listener);
 
         if (null != mLinkMovementMethod) {
@@ -1590,6 +1592,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
             mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
+            mMediasHelper.managePlayback(convertView, event, ROW_TYPE_FILE, fileMessage.getUrl());
 
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);

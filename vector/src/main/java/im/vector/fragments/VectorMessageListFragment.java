@@ -20,11 +20,17 @@ package im.vector.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,7 +76,10 @@ import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -109,6 +118,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     private String mPendingMediaMimeType;
     private String mPendingFilename;
     private EncryptedFileInfo mPendingEncryptedFileInfo;
+
+    private Map<String, MediaPlayer> mMediaPlayers = new HashMap<>();
+    private IntentFilter mBecomingNoisyIntentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+    private BroadcastReceiver mBecomingNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                pauseMediaPlayers();
+            }
+        }
+    };
 
     private static int VERIF_REQ_CODE = 12;
 
@@ -244,22 +264,40 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
     }
 
+    public void pauseMediaPlayers() {
+        for (MediaPlayer mediaPlayer : mMediaPlayers.values()) {
+            mediaPlayer.pause();
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
 
-        mAdapter.setVectorMessagesAdapterActionsListener(null);
+        pauseMediaPlayers();
+        getContext().unregisterReceiver(mBecomingNoisyReceiver);
+        mAdapter.setVectorMessagesAdapterActionsListener(null, mMediaPlayers);
         mAdapter.onPause();
 
         mVectorImageGetter.setListener(null);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        for (MediaPlayer mediaPlayer : mMediaPlayers.values()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        mAdapter.setVectorMessagesAdapterActionsListener(this);
+        getContext().registerReceiver(mBecomingNoisyReceiver, mBecomingNoisyIntentFilter);
+        mAdapter.setVectorMessagesAdapterActionsListener(this, mMediaPlayers);
 
         mVectorImageGetter.setListener(new VectorImageGetter.OnImageDownloadListener() {
             @Override
@@ -752,6 +790,20 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                         }
                     })
                     .show();
+        } else if (action == R.id.ic_action_play_audio) {
+            Message message = JsonUtils.toMessage(event.getContent());
+            FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+
+            if (null != fileMessage.getUrl()) {
+                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+            }
+        } else if (action == R.id.ic_action_pause_audio) {
+            Message message = JsonUtils.toMessage(event.getContent());
+            FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+
+            if (null != fileMessage.getUrl() && mMediaPlayers.containsKey(fileMessage.getUrl())) {
+                mMediaPlayers.get(fileMessage.getUrl()).pause();
+            }
         }
     }
 
@@ -894,7 +946,40 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                         return;
                     }
 
-                    if (menuAction == ACTION_VECTOR_SAVE || menuAction == ACTION_VECTOR_OPEN) {
+                    if (menuAction == ACTION_VECTOR_OPEN && mediaMimeType.startsWith("audio/")) {
+                        Log.e(LOG_TAG, "Using Media player " + file.getAbsolutePath());
+
+                        pauseMediaPlayers();
+
+                        MediaPlayer mediaPlayer;
+                        if (!mMediaPlayers.containsKey(mediaUrl)) {
+                            mediaPlayer = new MediaPlayer();
+                            mMediaPlayers.put(mediaUrl, mediaPlayer);
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            try {
+                                int size = (int) file.length();
+                                byte[] callData = new byte[size];
+                                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                                buf.read(callData, 0, callData.length);
+                                buf.close();
+                                String base64EncodedString = Base64.encodeToString(callData, Base64.DEFAULT);
+
+                                String url = "data:audio/amr;base64," + base64EncodedString;
+                                mediaPlayer.setDataSource(url);
+                                mediaPlayer.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (getActivity() instanceof VectorRoomActivity) {
+                                VectorRoomActivity roomActivity = (VectorRoomActivity) getActivity();
+                                roomActivity.stopAndDeleteRecording();
+                            }
+                            mediaPlayer.start();
+                        } else {
+                            mediaPlayer = mMediaPlayers.get(mediaUrl);
+                        }
+                        mediaPlayer.start();
+                    } else if (menuAction == ACTION_VECTOR_SAVE || menuAction == ACTION_VECTOR_OPEN) {
                         if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_WRITING_FILES,
                                 VectorMessageListFragment.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE)) {
                             CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, trimmedFileName, mediaMimeType, new SimpleApiCallback<String>() {
@@ -1152,7 +1237,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
                     getActivity().startActivity(viewImageIntent);
                 }
-            } else if (Message.MSGTYPE_FILE.equals(message.msgtype) || Message.MSGTYPE_AUDIO.equals(message.msgtype)) {
+            } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
                 FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                 if (null != fileMessage.getUrl()) {

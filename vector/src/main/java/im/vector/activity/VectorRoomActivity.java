@@ -29,10 +29,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -92,6 +95,8 @@ import org.matrix.androidsdk.rest.model.StateEvent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,6 +143,8 @@ import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
+
+import static org.matrix.androidsdk.rest.model.message.Message.MSGTYPE_AUDIO;
 
 /**
  * Displays a single room with messages.
@@ -207,6 +214,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
 
+    // voice message recorder
+    private static final String VOICE_MESSAGE_FILE = "/voice_message.aac";
+    private MediaRecorder mRecorder;
+    private long mRecorderStartTime = 0L;
+
     @Nullable
     private Room mRoom;
 
@@ -226,6 +238,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     @BindView(R.id.room_send_image_view)
     ImageView mSendImageView;
+
+    @BindView(R.id.room_send_voice_view)
+    ImageView mSendVoiceView;
 
     @BindView(R.id.editText_messageBox)
     VectorAutoCompleteTextView mEditText;
@@ -1092,6 +1107,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (mRecorder != null) {
+            mRecorder.stop();
+            mRecorder.release();
+        }
+        mRecorder = null;
 
         if (mReadMarkerManager != null) {
             mReadMarkerManager.onPause();
@@ -2427,6 +2448,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
+        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VOICE_MESSAGE) {
+            if (PermissionsToolsKt.allGranted(grantResults)) {
+                runOnUiThread(() -> startAudioRecording());
+            } else {
+                Toast.makeText(this, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show();
+            }
         } else {
             // Transmit to Fragment
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2438,7 +2465,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageSendMoreButtons() {
         int img = R.drawable.ic_material_file;
-        if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
+        if ((!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) || mRecorder != null) {
             img = R.drawable.ic_material_send_green;
         } else {
             switch (PreferencesManager.getSelectedDefaultMediaSource(this)) {
@@ -2459,6 +2486,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         }
         mSendImageView.setImageResource(img);
+        if (mEditText.getText().length() > 0) {
+            mSendVoiceView.setVisibility(View.GONE);
+        } else {
+            mSendVoiceView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -3889,6 +3921,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     void onSendClick() {
         if (!TextUtils.isEmpty(mEditText.getText()) && !PreferencesManager.sendMessageWithEnter(this)) {
             sendTextMessage();
+        } else if (mRecorder != null) {
+            stopAudioRecording();
+
+            File file = new File(getExternalCacheDir().getAbsolutePath() + VOICE_MESSAGE_FILE);
+            if (file.exists()) {
+                RoomMediaMessage mediaMessage = new RoomMediaMessage(Uri.fromFile(file), "Voice Message");
+                mediaMessage.setMessageType(MSGTYPE_AUDIO);
+                mVectorMessageListFragment.sendMediaMessage(mediaMessage);
+                // TODO file.delete() when sent
+            } else {
+                Toast.makeText(this.getApplicationContext(), getString(R.string.voice_recording_no_file), Toast.LENGTH_LONG);
+            }
+
+            // Restore UI
+            mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
+                    R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+            mEditText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            mSendVoiceView.setImageResource(R.drawable.vector_micro_green);
+            manageSendMoreButtons();
         } else {
             boolean useNativeCamera = PreferencesManager.useNativeCamera(this);
             boolean isVoiceFeatureEnabled = PreferencesManager.isSendVoiceFeatureEnabled(this);
@@ -3939,6 +3990,79 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         chooseMediaSource(useNativeCamera, isVoiceFeatureEnabled);
 
         return true;
+    }
+
+    @OnClick(R.id.room_send_voice_view)
+    void onSendVoiceClick() {
+        if (mRecorder == null) {
+            if (PermissionsToolsKt.checkPermissions(PermissionsToolsKt.PERMISSIONS_FOR_VOICE_MESSAGE,
+                    VectorRoomActivity.this, PermissionsToolsKt.PERMISSION_REQUEST_CODE_VOICE_MESSAGE)) {
+                startAudioRecording();
+            }
+        } else { // Delete clicked
+            stopAndDeleteRecording();
+        }
+    }
+
+    private void startAudioRecording() {
+        stopAudioRecording();
+        mVectorMessageListFragment.pauseMediaPlayers();
+        try {
+            final String fileName = getExternalCacheDir().getAbsolutePath() + VOICE_MESSAGE_FILE;
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mRecorder.setOutputFile(fileName);
+            mRecorder.prepare();
+            mRecorder.start();
+            mRecorderStartTime = System.currentTimeMillis();
+            refreshRecordingProgress();
+            mEditText.setHint(getString(R.string.room_message_placeholder_voice) + " 0:00");
+            mEditText.setInputType(InputType.TYPE_NULL);
+            mSendImageView.setImageResource(R.drawable.ic_material_send_green);
+            mSendVoiceView.setImageResource(R.drawable.ic_material_delete);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "AudioRecorder: " + e.getMessage());
+        }
+    }
+
+    public void stopAndDeleteRecording() {
+        stopAudioRecording();
+        File file = new File(getExternalCacheDir().getAbsolutePath() + VOICE_MESSAGE_FILE);
+        file.delete();
+        mEditText.setHint((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ?
+                R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
+        mEditText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mSendVoiceView.setImageResource(R.drawable.vector_micro_green);
+        manageSendMoreButtons();
+    }
+
+    private void stopAudioRecording() {
+        if (mRecorder != null) {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        }
+    }
+
+    private void refreshRecordingProgress() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mRecorder == null || mEditText == null) return;
+
+                final long recordingTime = System.currentTimeMillis() - mRecorderStartTime;
+                int seconds = (int) (recordingTime / 1000);
+                int minutes = seconds / 60;
+                seconds %= 60;
+                final String durString = String.format("%d:%02d", minutes, seconds);
+                mEditText.setHint(getString(R.string.room_message_placeholder_voice) + " " + durString);
+
+                handler.postDelayed(this, 100);
+            }
+        }, 100);
     }
 
     private void onSendChoiceClicked(DialogListItem dialogListItem) {
