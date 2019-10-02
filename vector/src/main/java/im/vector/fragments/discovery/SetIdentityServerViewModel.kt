@@ -26,6 +26,7 @@ import im.vector.R
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.HttpException
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.features.terms.GetTermsResponse
 import org.matrix.androidsdk.features.terms.TermsManager
@@ -97,11 +98,18 @@ class SetIdentityServerViewModel(private val mxSession: MXSession,
                     }
 
                     override fun onUnexpectedError(e: Exception) {
-                        setState {
-                            copy(
-                                    isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_identity_server
-                            )
+                        if (e is HttpException && e.httpError.httpCode == 404) {
+                            setState {
+                                copy(isVerifyingServer = false)
+                            }
+                            navigateEvent.value = LiveEvent(NavigateEvent.NoTerms)
+                        } else {
+                            setState {
+                                copy(
+                                        isVerifyingServer = false,
+                                        errorMessageId = R.string.settings_discovery_bad_identity_server
+                                )
+                            }
                         }
                     }
 
