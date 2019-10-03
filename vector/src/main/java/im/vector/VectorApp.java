@@ -419,8 +419,6 @@ public class VectorApp extends MultiDexApplication {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
-                session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
 
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
@@ -537,8 +535,6 @@ public class VectorApp extends MultiDexApplication {
             for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
-                session.setSyncDelay(0);
-                session.setSyncTimeout(0);
                 addSyncingSession(session);
             }
 

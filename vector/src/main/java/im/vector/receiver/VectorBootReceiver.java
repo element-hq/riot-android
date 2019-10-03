@@ -29,6 +29,8 @@ import im.vector.util.PreferencesManager;
 public class VectorBootReceiver extends BroadcastReceiver {
     private static final String LOG_TAG = VectorBootReceiver.class.getSimpleName();
 
+    public static final String PERMANENT_LISTENT = "PERMANENT_LISTENT";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "## onReceive() : " + intent.getAction());
@@ -41,6 +43,8 @@ public class VectorBootReceiver extends BroadcastReceiver {
             } else {
                 Log.d(LOG_TAG, "## onReceive() : the autostart is disabled");
             }
+        } else if (TextUtils.equals(intent.getAction(), PERMANENT_LISTENT)) {
+            EventStreamServiceX.Companion.onForcePermanentEventListening(context);
         }
     }
 }
