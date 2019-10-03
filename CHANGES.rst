@@ -15,10 +15,10 @@ Features:
  - Privacy: Remove the ability to set an IS at login/registration (#3264)
  - Privacy: Allow password reset when no IS (#3261)
  - Privacy: Allow email registration when no IS (#3260)
- - Privacy: Separate Add and Bind for 3PID #3300
+ - Privacy: Separate Add and Bind for 3PID (#3300)
 
 Improvements:
- -
+ - Notification [Fdroid] Add a new mode for notification (#3122)
 
 Other changes:
  - Privacy: Remove the bind true flag from 3PID calls on registration (#3252)
