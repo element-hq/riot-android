@@ -1586,4 +1586,10 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="read_at">閱讀於</string>
 
-</resources>
+<string name="none">無</string>
+    <string name="revoke">撤銷</string>
+    <string name="disconnect">斷線</string>
+    <string name="people_no_identity_server">未設定身份識別伺服器。</string>
+
+    <string name="call_failed_no_ice_title">因為錯誤設定的伺服器導致通話失敗</string>
+    </resources>
