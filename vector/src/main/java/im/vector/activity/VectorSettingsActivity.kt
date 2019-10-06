@@ -17,16 +17,15 @@ package im.vector.activity
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import im.vector.Matrix
 import im.vector.R
 import im.vector.fragments.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.fragments.VectorSettingsFragmentInteractionListener
 import im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.fragments.VectorSettingsPreferencesFragment
+import im.vector.fragments.discovery.VectorSettingsDiscoveryFragment
 import im.vector.util.PreferencesManager
 
 /**
@@ -34,7 +33,7 @@ import im.vector.util.PreferencesManager
  */
 class VectorSettingsActivity : MXCActionBarActivity(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-        FragmentManager.OnBackStackChangedListener,
+        androidx.fragment.app.FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
     private lateinit var vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment
@@ -85,7 +84,7 @@ class VectorSettingsActivity : MXCActionBarActivity(),
         }
     }
 
-    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat?, pref: Preference?): Boolean {
+    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
 
         var session = getSession(intent)
 
@@ -97,12 +96,15 @@ class VectorSettingsActivity : MXCActionBarActivity(),
             return false
         }
 
-        var oFragment: Fragment? = null
-
-        if (PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
-        } else if (PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref?.key) {
-            oFragment = VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
+        val oFragment = when (pref.key) {
+            PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY ->
+                VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
+            PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY     ->
+                VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
+            PreferencesManager.SETTINGS_DISCOVERY_PREFERENCE_KEY,
+            PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY           ->
+                VectorSettingsDiscoveryFragment.newInstance(session.myUserId)
+            else                                                                 -> null
         }
 
         if (oFragment != null) {

@@ -16,8 +16,8 @@
 
 package im.vector.fragments.signout
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 
@@ -85,6 +85,12 @@ class SignOutViewModel : ViewModel(), KeysBackupStateManager.KeysBackupStateList
 
     override fun onStateChange(newState: KeysBackupStateManager.KeysBackupState) {
         keysBackupState.value = newState
+    }
+
+    fun refreshRemoteStateIfNeeded() {
+        if (keysBackupState.value == KeysBackupStateManager.KeysBackupState.Disabled) {
+            mxSession?.crypto?.keysBackup?.checkAndStartKeysBackup()
+        }
     }
 
     companion object {

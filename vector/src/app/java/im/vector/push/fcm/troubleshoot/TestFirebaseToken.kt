@@ -15,13 +15,13 @@
  */
 package im.vector.push.fcm.troubleshoot
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.R
 import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import im.vector.util.startAddGoogleAccountIntent
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /*
 * Test that app can successfully retrieve a token via firebase

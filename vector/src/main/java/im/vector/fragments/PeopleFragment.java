@@ -17,33 +17,35 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomPreviewData;
+import org.matrix.androidsdk.features.terms.TermsManager;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 import org.matrix.androidsdk.rest.model.search.SearchUsersResponse;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,9 +57,9 @@ import java.util.Map;
 import butterknife.BindView;
 import im.vector.BuildConfig;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.ReviewTermsActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.util.RequestCodesKt;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.PeopleAdapter;
 import im.vector.adapters.RoomAdapter;
@@ -94,6 +96,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     // way to detect that the contacts list has been updated
     private int mContactsSnapshotSession = -1;
     private MXEventListener mEventsListener;
+
 
     /*
      * *********************************************************************************************
@@ -148,6 +151,14 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
         }
 
         initKnownContacts();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RequestCodesKt.TERMS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Launch again the request
+            ContactsManager.getInstance().retrievePids();
+        }
     }
 
     @Override
@@ -243,7 +254,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
      */
     private void initViews() {
         int margin = (int) getResources().getDimension(R.dimen.item_decoration_left_margin);
-        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         mRecycler.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, margin));
         mRecycler.addItemDecoration(new EmptyViewItemDecoration(getActivity(), DividerItemDecoration.VERTICAL, 40, 16, 14));
         mAdapter = new SabaPeopleAdapter(getActivity(), new SabaPeopleAdapter.OnSelectItemListener() {
@@ -654,6 +665,20 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
     @Override
     public void onContactPresenceUpdate(Contact contact, String matrixId) {
         //TODO
+    }
+
+    @Override
+    public void onIdentityServerTermsNotSigned(String token) {
+        if (isAdded()) {
+            startActivityForResult(ReviewTermsActivity.Companion.intent(getActivity(),
+                    TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
+                    RequestCodesKt.TERMS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onNoIdentityServerDefined() {
+
     }
 
     @Override

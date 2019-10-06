@@ -11,7 +11,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
@@ -23,25 +23,47 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 83000
-    versionNameProp = "0.8.30-dev"
+    versionCodeProp = 90700
+    versionNameProp = "0.9.7-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
 
 allprojects {
+    ext.support_lib_version = '28.0.0'
+    ext.gson_version = '2.8.5'
+    ext.okhttp_version = '3.12.3'
+
     repositories {
+        // For Matrix Android SDK.
+        // This has to be declared first, to ensure that Matrix Android SDK library is not downloaded from another repo
+        maven {
+            url 'https://jitpack.io'
+            content {
+                // Use this repo only for matrix SDK library
+                includeGroupByRegex "com\\.github\\.matrix-org"
+                // Also add subgroups, due to SDK split into modules
+                includeGroupByRegex "com\\.github\\.matrix-org\\.matrix-android-sdk"
+                // And Olm library
+                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
+                // And PhotoView
+                includeGroupByRegex "com\\.github\\.chrisbanes"
+            }
+        }
+        // Jitsi repo
+        maven {
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/releases"
+        }
         google()
         maven {
             url "https://maven.google.com"
         }
-        maven {
-            url "https://jitpack.io"
-        }
         jcenter()
-        // Jitsi repo
         maven {
-            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
 }
@@ -56,7 +78,7 @@ sonarqube {
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/riot-android/"
-        property "sonar.links.ci", "https://matrix.org/jenkins/view/MatrixView/job/VectorAndroidDevelop/"
+        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/riot-android"
         property "sonar.links.scm", "https://github.com/vector-im/riot-android/"
         property "sonar.links.issue", "https://github.com/vector-im/riot-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
@@ -76,6 +98,22 @@ project(":vector") {
 
 if (findProject(':matrix-sdk') != null) {
     project(":matrix-sdk") {
+        sonarqube {
+            skipProject = true
+        }
+    }
+}
+
+if (findProject(':matrix-sdk-crypto') != null) {
+    project(":matrix-sdk-crypto") {
+        sonarqube {
+            skipProject = true
+        }
+    }
+}
+
+if (findProject(':matrix-sdk-core') != null) {
+    project(":matrix-sdk-core") {
         sonarqube {
             skipProject = true
         }

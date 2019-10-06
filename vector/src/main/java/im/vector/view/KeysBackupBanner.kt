@@ -17,8 +17,6 @@
 package im.vector.view
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.transition.TransitionManager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -26,12 +24,13 @@ import android.widget.AbsListView
 import android.widget.TextView
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.R
 import org.jetbrains.anko.defaultSharedPreferences
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * The view used in VectorHomeActivity to show some information about the keys backup state
@@ -41,7 +40,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
+) : androidx.constraintlayout.widget.ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
     @BindView(R.id.view_keys_backup_banner_text_1)
     lateinit var textView1: TextView

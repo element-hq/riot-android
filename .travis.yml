@@ -29,14 +29,12 @@ android:
     - android-28
 
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -fr $HOME/.gradle/caches
 
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
+# Travis is not happy with gradle cache (getting permission denied)
+#   - $HOME/.gradle/caches/
 
 # Build with the development SDK
 before_script:

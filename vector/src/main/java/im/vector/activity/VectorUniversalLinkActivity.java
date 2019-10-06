@@ -20,17 +20,20 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,7 @@ import java.util.Map;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.receiver.LoginConfig;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
@@ -47,6 +51,8 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 @SuppressLint("LongLogTag")
 public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
+
+    private static final String SUPPORTED_PATH_CONFIG = "/config/config";
 
     @Override
     public int getLayoutRes() {
@@ -99,6 +105,17 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
                     intentAction = null;
                     emailBinding(intentUri, mailRegParams);
                 }
+            } else if (SUPPORTED_PATH_CONFIG.equals(getIntent().getData().getPath())) {
+                MXSession mSession = Matrix.getInstance(this).getDefaultSession();
+
+                if (null == mSession) {
+                    // user is not yet logged in, this is the nominal case
+                    startLoginActivity();
+                    return;
+                } else {
+                    displayAlreadyLoginPopup();
+                    return;
+                }
             } else {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
             }
@@ -118,6 +135,49 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
             sendBroadcast(myBroadcastIntent);
             finish();
         }
+    }
+
+    /**
+     * Start the login screen with identity server and home server pre-filled
+     */
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LoginActivity.EXTRA_CONFIG, LoginConfig.Companion.parse(getIntent().getData()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Propose to disconnect from a previous HS, when clicking on an auto config link
+     */
+    private void displayAlreadyLoginPopup() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.error_user_already_logged_in)
+                .setCancelable(false)
+                .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CommonActivityUtils.logout(VectorUniversalLinkActivity.this,
+                                Matrix.getMXSessions(VectorUniversalLinkActivity.this),
+                                true,
+                                new SimpleApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        Log.d(LOG_TAG, "## displayAlreadyLoginPopup(): logout succeeded");
+                                        startLoginActivity();
+                                    }
+                                });
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     /**

@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;

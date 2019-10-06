@@ -23,12 +23,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
-import android.support.v4.app.Fragment
-import androidx.core.widget.toast
+import androidx.fragment.app.Fragment
 import im.vector.R
 import im.vector.notifications.supportNotificationChannels
 import im.vector.settings.VectorLocale
-import org.matrix.androidsdk.util.Log
+import org.jetbrains.anko.toast
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 private const val LOG_TAG = "SystemUtils"

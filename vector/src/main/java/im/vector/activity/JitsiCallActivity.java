@@ -33,8 +33,8 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.Map;
 
@@ -42,6 +42,7 @@ import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -108,6 +109,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     @Override
     @SuppressLint("NewApi")
     public void initUiAndData() {
+        if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) == null) {
+            finish();
+            return;
+        }
         // Waiting View
         setWaitingView(findViewById(R.id.jitsi_progress_layout));
 
@@ -232,7 +237,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     protected void onStop() {
         super.onStop();
         JitsiMeetActivityDelegate.onHostPause(this);
-        WidgetsManager.removeListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm != null) {
+            wm.removeListener(mWidgetListener);
+        }
     }
 
     @Override
@@ -245,7 +253,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         super.onResume();
 
         JitsiMeetActivityDelegate.onHostResume(this);
-        WidgetsManager.addListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        if (wm != null) {
+            wm.addListener(mWidgetListener);
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="SETTINGS_NOTIFICATION_LEVEL"
@@ -63,4 +63,4 @@
         android:summary="@string/settings_system_preferences_summary"
         android:title="@string/settings_call_notifications_preferences" />
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -25,8 +25,8 @@ import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict
 import im.vector.widgets.WidgetsManager
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
 
 class StickerPickerActivity : AbstractWidgetActivity() {
 
@@ -55,7 +55,7 @@ class StickerPickerActivity : AbstractWidgetActivity() {
     }
 
     override fun canScalarTokenBeProvided(): Boolean {
-        return WidgetsManager.isScalarUrl(this, mWidgetUrl)
+        return widgetManager.isScalarUrl(this, mWidgetUrl)
     }
 
     /**

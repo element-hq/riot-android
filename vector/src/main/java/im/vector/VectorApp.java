@@ -21,7 +21,6 @@ package im.vector;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,17 +28,22 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.call.MXCallsManager;
+import org.matrix.androidsdk.core.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -61,7 +65,7 @@ import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.WidgetActivity;
 import im.vector.analytics.Analytics;
 import im.vector.analytics.AppAnalytics;
-import im.vector.analytics.PiwikAnalytics;
+import im.vector.analytics.MatomoAnalytics;
 import im.vector.analytics.e2e.DecryptionFailureTracker;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -193,6 +197,11 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
+        PreferencesManager.setIntegrationManagerUrls(this,
+                getString(R.string.integrations_ui_url),
+                getString(R.string.integrations_rest_url),
+                getString(R.string.integrations_jitsi_widget_url));
+
         mLifeCycleListener = new VectorLifeCycleObserver();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);
 
@@ -211,11 +220,17 @@ public class VectorApp extends MultiDexApplication {
 
         instance = this;
         mCallsManager = new CallsManager(this);
-        mAppAnalytics = new AppAnalytics(this, new PiwikAnalytics(this));
+        mAppAnalytics = new AppAnalytics(this, new MatomoAnalytics(this));
         mDecryptionFailureTracker = new DecryptionFailureTracker(mAppAnalytics);
 
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
+
+        if (PreferencesManager.useDefaultTurnServer(this)) {
+            MXCallsManager.defaultStunServerUri = getString(R.string.default_stun_server);
+        } else {
+            MXCallsManager.defaultStunServerUri = null;
+        }
 
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
         // not the first launch
@@ -229,8 +244,8 @@ public class VectorApp extends MultiDexApplication {
 
         mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
 
-        org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
-        org.matrix.androidsdk.util.Log.init("RiotLog");
+        org.matrix.androidsdk.core.Log.setLogDirectory(mLogsDirectoryFile);
+        org.matrix.androidsdk.core.Log.init("RiotLog");
 
         // log the application version to trace update
         // useful to track backward compatibility issues
@@ -252,7 +267,7 @@ public class VectorApp extends MultiDexApplication {
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
-                // piwik
+                // matomo
                 onNewScreen(activity);
             }
 
@@ -404,8 +419,6 @@ public class VectorApp extends MultiDexApplication {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
-                session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
 
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
@@ -522,8 +535,6 @@ public class VectorApp extends MultiDexApplication {
             for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
-                session.setSyncDelay(0);
-                session.setSyncTimeout(0);
                 addSyncingSession(session);
             }
 
@@ -544,7 +555,7 @@ public class VectorApp extends MultiDexApplication {
      *
      * @param activity the current activity, null if there is no more one.
      */
-    private void setCurrentActivity(Activity activity) {
+    private void setCurrentActivity(@Nullable Activity activity) {
         Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
 
         if (VectorApp.isAppInBackground() && (null != activity)) {
@@ -574,7 +585,7 @@ public class VectorApp extends MultiDexApplication {
         mCurrentActivity = activity;
 
         if (null != mCurrentActivity) {
-            KeyRequestHandler.getSharedInstance().processNextRequest();
+            PopupAlertManager.INSTANCE.onNewActivityDisplayed(mCurrentActivity);
         }
     }
 
@@ -855,7 +866,12 @@ public class VectorApp extends MultiDexApplication {
         final MXSession session = Matrix.getInstance(this).getDefaultSession();
         if (session != null) {
             mAppAnalytics.visitVariable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-            mAppAnalytics.visitVariable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+            String identityServerUrl = session.getIdentityServerManager().getIdentityServerUrl();
+            if (identityServerUrl == null) {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", "");
+            } else {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", identityServerUrl);
+            }
         }
     }
 

@@ -18,7 +18,7 @@
 
 branch=${TRAVIS_BRANCH}
 
-# echo ${TRAVIS_BRANCH}
+echo ${TRAVIS_BRANCH}
 
 # If not on develop, exit, else we cannot get the list of modified files
 # It is ok to check only when on develop branch

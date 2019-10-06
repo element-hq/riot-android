@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +25,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
 import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -166,8 +168,12 @@ public class ActiveWidgetsBanner extends FrameLayout {
      * Refresh the view visibility
      */
     private void refresh() {
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm == null) {
+            return;
+        }
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> activeWidgets = WidgetsManager.getSharedInstance().getActiveWebviewWidgets(mSession, mRoom);
+            List<Widget> activeWidgets = wm.getActiveWebviewWidgets(mSession, mRoom);
             Widget firstWidget = null;
 
             if ((activeWidgets.size() != mActiveWidgets.size()) || !mActiveWidgets.containsAll(activeWidgets)) {
@@ -193,7 +199,7 @@ public class ActiveWidgetsBanner extends FrameLayout {
             setVisibility((mActiveWidgets.size() > 0) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ?
+            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == wm.checkWidgetPermission(mSession, mRoom))) ?
                     View.VISIBLE : View.GONE);
         }
     }
@@ -203,13 +209,19 @@ public class ActiveWidgetsBanner extends FrameLayout {
      */
     public void onActivityResume() {
         refresh();
-        WidgetsManager.getSharedInstance().addListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm != null) {
+            wm.addListener(mWidgetListener);
+        }
     }
 
     /**
      * The parent activity is suspended
      */
     public void onActivityPause() {
-        WidgetsManager.getSharedInstance().removeListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm != null) {
+            wm.removeListener(mWidgetListener);
+        }
     }
 }

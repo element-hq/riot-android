@@ -18,10 +18,11 @@
 package im.vector.activity;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
+
+import androidx.fragment.app.FragmentManager;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;

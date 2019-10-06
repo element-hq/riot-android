@@ -2,6 +2,7 @@
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +23,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.BingRulesManager;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequest;
 import org.matrix.androidsdk.crypto.IncomingRoomKeyRequestCancellation;
-import org.matrix.androidsdk.crypto.MXCrypto;
+import org.matrix.androidsdk.crypto.RoomKeysRequestListener;
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup;
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager;
 import org.matrix.androidsdk.data.Room;
@@ -42,17 +51,11 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.store.MXFileStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediaCache;
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
-import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +76,7 @@ import im.vector.store.LoginStorage;
 import im.vector.tools.VectorUncaughtExceptionHandler;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PreferencesManager;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -109,6 +113,10 @@ public class Matrix {
 
     public Map<String, KeysBackupStateManager.KeysBackupStateListener> keyBackupStateListeners = new HashMap<>();
 
+    // Request Handler
+    @Nullable
+    private KeyRequestHandler mKeyRequestHandler;
+
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
         boolean mClearCacheRequired = false;
@@ -126,7 +134,10 @@ public class Matrix {
             mRefreshUnreadCounter |= Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
 
             // TODO update to manage multisessions
-            WidgetsManager.getSharedInstance().onLiveEvent(instance.getDefaultSession(), event);
+            WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(VectorApp.getInstance().getApplicationContext());
+            if (wm != null) {
+                wm.onLiveEvent(instance.getDefaultSession(), event);
+            }
         }
 
         @Override
@@ -137,7 +148,7 @@ public class Matrix {
             if ((null != instance) && (null != instance.mMXSessions)) {
                 if (mClearCacheRequired && !VectorApp.isAppInBackground()) {
                     mClearCacheRequired = false;
-                    instance.reloadSessions(VectorApp.getInstance());
+                    instance.reloadSessions(VectorApp.getInstance(), true);
                 } else if (mRefreshUnreadCounter) {
                     PushManager pushManager = instance.getPushManager();
 
@@ -681,7 +692,7 @@ public class Matrix {
                 if (TextUtils.equals(matrixErrorCode, MatrixError.UNKNOWN_TOKEN)) {
                     if (null != VectorApp.getCurrentActivity()) {
                         Log.e(LOG_TAG, "## createSession() : onTokenCorrupted");
-                        CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+                        CommonActivityUtils.recoverInvalidatedToken();
                     }
                 }
             }
@@ -726,21 +737,31 @@ public class Matrix {
         session.setUseDataSaveMode(PreferencesManager.useDataSaveMode(context));
 
         dataHandler.addListener(new MXEventListener() {
+            // FIXME Use onCryptoSyncComplete() to instantiate mKeyRequestHandler?
+            @Override
+            public void onCryptoSyncComplete() {
+                Log.d(LOG_TAG, "onCryptoSyncComplete");
+            }
+
             @Override
             public void onInitialSyncComplete(String toToken) {
+                Log.d(LOG_TAG, "onInitialSyncComplete");
+
                 if (null != session.getCrypto()) {
-                    session.getCrypto().addRoomKeysRequestListener(new MXCrypto.IRoomKeysRequestListener() {
+                    mKeyRequestHandler = new KeyRequestHandler(session);
+
+                    session.getCrypto().addRoomKeysRequestListener(new RoomKeysRequestListener() {
                         @Override
                         public void onRoomKeyRequest(IncomingRoomKeyRequest request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequest(request);
+                            mKeyRequestHandler.handleKeyRequest(request);
                         }
 
                         @Override
                         public void onRoomKeyRequestCancellation(IncomingRoomKeyRequestCancellation request) {
-                            KeyRequestHandler.getSharedInstance().handleKeyRequestCancellation(request);
+                            mKeyRequestHandler.handleKeyRequestCancellation(request);
                         }
                     });
-
+                    IncomingVerificationRequestHandler.INSTANCE.initialize(session.getCrypto().getShortCodeVerificationManager());
                     registerKeyBackupStateListener(session);
                 }
             }
@@ -788,9 +809,10 @@ public class Matrix {
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
      *
-     * @param context the context
+     * @param context        the context
+     * @param launchActivity
      */
-    public void reloadSessions(final Context context) {
+    public void reloadSessions(final Context context, boolean launchActivity) {
         Log.e(LOG_TAG, "## reloadSessions");
 
         CommonActivityUtils.logout(context, getMXSessions(context), false, new SimpleApiCallback<Void>() {
@@ -810,18 +832,21 @@ public class Matrix {
                 Matrix.getInstance(context).getPushManager().clearFcmData(new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(final Void anything) {
-                        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.getApplicationContext().startActivity(intent);
+                        if (launchActivity) {
+                            Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            context.getApplicationContext().startActivity(intent);
+                        }
 
                         if (null != VectorApp.getCurrentActivity()) {
                             VectorApp.getCurrentActivity().finish();
 
-                            if (context instanceof SplashActivity) {
-                                // Avoid bad visual effect, due to check of lazy loading status
-                                ((SplashActivity) context).overridePendingTransition(0, 0);
+                            if (launchActivity) {
+                                if (context instanceof SplashActivity) {
+                                    // Avoid bad visual effect, due to check of lazy loading status
+                                    ((SplashActivity) context).overridePendingTransition(0, 0);
+                                }
                             }
-
                         }
                     }
                 });

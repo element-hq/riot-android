@@ -16,7 +16,7 @@
 
 package im.vector.ui.themes
 
-import android.support.annotation.StyleRes
+import androidx.annotation.StyleRes
 import im.vector.R
 
 /**

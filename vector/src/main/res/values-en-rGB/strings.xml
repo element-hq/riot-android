@@ -9,7 +9,7 @@
     <string name="status_theme">Status.im Theme</string>
 
     <string name="notification_sync_init">Initializing service</string>
-    <string name="notification_sync_in_progress">Synchronising</string>
+    <string name="notification_sync_in_progress">Synchronising…</string>
     <string name="notification_listening_for_events">Listening for events</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
@@ -70,4 +70,5 @@
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">Due to missing permissions, this action is not possible.</string>
+    <string name="missing_permissions_to_start_conf_call">Potrzebujesz uprawnień, aby rozpocząć połączenie grupowe</string>
 </resources>

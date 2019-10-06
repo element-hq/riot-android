@@ -17,13 +17,13 @@
 package im.vector
 
 import android.app.ActivityManager
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
 import android.os.Build
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import im.vector.services.EventStreamServiceX
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 
 class VectorLifeCycleObserver : LifecycleObserver {

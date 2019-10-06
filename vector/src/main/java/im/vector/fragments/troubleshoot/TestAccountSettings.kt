@@ -15,11 +15,11 @@
  */
 package im.vector.fragments.troubleshoot
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import im.vector.R
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.BingRulesManager
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.BingRulesManager
 
 /**
  * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup

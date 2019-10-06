@@ -20,17 +20,18 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import androidx.annotation.NonNull;
+
 import org.matrix.androidsdk.adapters.MessageRow;
+import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,8 +18,9 @@ package im.vector.services
 
 import android.app.Service
 import android.content.Intent
+import android.os.Handler
 import android.os.IBinder
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * Parent class for all services
@@ -48,8 +49,10 @@ abstract class VectorService : Service() {
     }
 
     protected fun myStopSelf() {
-        mIsSelfDestroyed = true
-        stopSelf()
+        Handler().postDelayed({
+            mIsSelfDestroyed = true
+            stopSelf()
+        }, 100)
     }
 
     override fun onBind(intent: Intent?): IBinder? {

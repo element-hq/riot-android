@@ -19,14 +19,14 @@ package im.vector.features.hhs
 import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.text.style.StyleSpan
+import androidx.appcompat.app.AlertDialog
 import com.binaryfork.spanny.Spanny
 import im.vector.R
 import im.vector.activity.interfaces.Restorable
 import im.vector.dialogs.DialogLocker
 import im.vector.util.openUri
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.model.MatrixError
 
 private const val LOG_TAG = "ResourceLimitDialogHelper"
 

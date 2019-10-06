@@ -22,15 +22,16 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceManager;
 import android.widget.ImageView;
 
+import androidx.preference.PreferenceManager;
+
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -162,7 +163,7 @@ public class SplashActivity extends MXCActionBarActivity {
                     .apply();
 
             // Force a clear cache
-            Matrix.getInstance(this).reloadSessions(this);
+            Matrix.getInstance(this).reloadSessions(this, true);
             return;
         }
 
@@ -221,7 +222,7 @@ public class SplashActivity extends MXCActionBarActivity {
                             PreferencesManager.setUseLazyLoading(SplashActivity.this, true);
 
                             // Reload the sessions
-                            Matrix.getInstance(SplashActivity.this).reloadSessions(SplashActivity.this);
+                            Matrix.getInstance(SplashActivity.this).reloadSessions(SplashActivity.this, true);
                         } else {
                             // Maybe in the future this home server will support it
                             startEventStreamService(sessions);

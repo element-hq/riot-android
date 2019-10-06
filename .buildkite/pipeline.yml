@@ -1,0 +1,56 @@
+# Use Docker file from https://hub.docker.com/r/runmymind/docker-android-sdk
+# Last docker plugin version can be found here:
+# https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
+
+# Build debug version of the Riot application, from the develop branch and the features branches, with the develop branch of the matrix SDK
+
+steps:
+  - label: "Assemble GPlay Debug version"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "xlarge"
+    commands:
+      - "./set_debug_env.sh"
+      - "./gradlew --no-daemon clean lintAppRelease assembleAppDebug --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/app/debug/*.apk"
+    branches: "develop feature/*"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+  - label: "Assemble FDroid Debug version"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "xlarge"
+    commands:
+      - "./set_debug_env.sh"
+      - "./gradlew --no-daemon clean lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/appfdroid/debug/*.apk"
+    branches: "develop feature/*"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+  - label: "Build Google Play unsigned APK"
+    agents:
+        # We use a medium sized instance instead of the normal small ones because
+        # gradle build is long
+        queue: "xlarge"
+    commands:
+      - "./gradlew --no-daemon clean assembleAppRelease --stacktrace"
+    artifact_paths:
+      - "vector/build/outputs/apk/app/release/*.apk"
+    branches: "master"
+    plugins:
+    - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+
+# Code quality
+
+  - label: "Code quality"
+    commands:
+      - "./tools/check/check_code_quality.sh"

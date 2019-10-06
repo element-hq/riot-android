@@ -3,20 +3,21 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.RoomMediaMessage;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
     }
 
     private void setupRecyclerView(@NonNull final List<RoomMediaMessage> sharedDataItems) {
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         mPreviewerRecyclerView.setLayoutManager(linearLayoutManager);
         final MediaPreviewAdapter mediaPreviewAdapter = new MediaPreviewAdapter(sharedDataItems, this);
         mPreviewerRecyclerView.setAdapter(mediaPreviewAdapter);

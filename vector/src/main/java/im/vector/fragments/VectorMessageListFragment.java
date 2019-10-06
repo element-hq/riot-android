@@ -24,10 +24,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,6 +35,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -46,26 +48,27 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
 import org.matrix.androidsdk.adapters.MessageRow;
+import org.matrix.androidsdk.core.JsonUtils;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
+import org.matrix.androidsdk.core.PermalinkUtils;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.crypto.model.crypto.EncryptedEventContent;
+import org.matrix.androidsdk.crypto.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedEventContent;
-import org.matrix.androidsdk.rest.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
-import org.matrix.androidsdk.util.JsonUtils;
-import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,6 +77,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -83,10 +87,8 @@ import im.vector.activity.VectorMediaViewerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
-import im.vector.db.VectorContentProvider;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.listeners.YesNoListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
@@ -107,6 +109,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     private String mPendingMediaMimeType;
     private String mPendingFilename;
     private EncryptedFileInfo mPendingEncryptedFileInfo;
+
+    private static int VERIF_REQ_CODE = 12;
 
     public interface VectorMessageListFragmentListener {
         /**
@@ -221,6 +225,16 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     @Override
     public MatrixMessagesFragment createMessagesFragmentInstance(String roomId) {
         return VectorMessagesFragment.newInstance(roomId);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VERIF_REQ_CODE) {
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -377,18 +391,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         }
     };
 
-    private final YesNoListener mYesNoListener = new YesNoListener() {
-        @Override
-        public void yes() {
-            mAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void no() {
-            mAdapter.notifyDataSetChanged();
-        }
-    };
-
     /**
      * the user taps on the e2e icon
      *
@@ -487,7 +489,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mYesNoListener);
+                                    event.getSender(), mSession, getActivity(), VectorMessageListFragment.this, VERIF_REQ_CODE);
                         }
                     });
 
@@ -515,7 +517,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo,
-                                    event.getSender(), mSession, getActivity(), mYesNoListener);
+                                    event.getSender(), mSession, getActivity(), VectorMessageListFragment.this, VERIF_REQ_CODE);
                         }
                     });
 
@@ -771,6 +773,55 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         }
     }
 
+    @Override
+    public void onTombstoneLinkClicked(String roomId, String senderId) {
+        // Join the room and open it
+        showInitLoading();
+
+        // Extract the server name
+        String serverName = MXPatterns.extractServerNameFromId(senderId);
+
+        List<String> viaServers = null;
+
+        if (serverName != null) {
+            viaServers = Collections.singletonList(serverName);
+        }
+
+        mSession.joinRoom(roomId, viaServers, new ApiCallback<String>() {
+            @Override
+            public void onNetworkError(Exception e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                hideInitLoading();
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(String info) {
+                hideInitLoading();
+
+                // Open the room
+                if (isAdded()) {
+                    Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                    intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, info);
+                    intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                }
+            }
+        });
+    }
+
     /**
      * The user reports a content problem to the server
      *
@@ -868,19 +919,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     } else {
                         // Move the file to the Share folder, to avoid it to be deleted because the Activity will be paused while the
                         // user select an application to share the file
+                        // only files in this folder can be shared with external apps, with temporary read access
                         file = mediasCache.moveToShareFolder(file, trimmedFileName);
 
                         // shared / forward
                         Uri mediaUri = null;
                         try {
-                            mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), file.getAbsolutePath());
+                            mediaUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".fileProvider", file);
                         } catch (Exception e) {
-                            Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getMessage(), e);
+                            Log.e(LOG_TAG, "onMediaAction Selected File cannot be shared " + e.getMessage(), e);
                         }
 
                         if (null != mediaUri) {
                             final Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
+                            // Grant temporary read permission to the content URI
+                            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             sendIntent.setType(mediaMimeType);
                             sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
 

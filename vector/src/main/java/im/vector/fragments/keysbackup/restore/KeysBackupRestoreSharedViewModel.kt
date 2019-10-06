@@ -15,18 +15,18 @@
  */
 package im.vector.fragments.keysbackup.restore
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
+import org.matrix.androidsdk.crypto.model.keys.KeysVersionResult
 
 class KeysBackupRestoreSharedViewModel : ViewModel() {
 

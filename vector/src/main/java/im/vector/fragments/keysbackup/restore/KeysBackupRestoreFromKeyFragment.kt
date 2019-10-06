@@ -16,21 +16,20 @@
 package im.vector.fragments.keysbackup.restore
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.startImportTextFromFileIntent
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
 
@@ -46,7 +45,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
     @BindView(R.id.keys_backup_key_enter_til)
-    lateinit var mKeyInputLayout: TextInputLayout
+    lateinit var mKeyInputLayout: com.google.android.material.textfield.TextInputLayout
     @BindView(R.id.keys_restore_key_enter_edittext)
     lateinit var mKeyTextEdit: EditText
 

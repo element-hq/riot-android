@@ -79,10 +79,11 @@ class DecryptionFailureTracker(
     /**
      * Reacts when an event is decrypted.
      * Potentially removes a previously reported failure
-     * @param event the event who is decrypted
+     * @param roomId the room ID of the event who is decrypted
+     * @param eventId the event ID of the event who is decrypted
      */
-    override fun onEventDecrypted(event: Event?) {
-        reportedFailures.remove(event?.eventId)
+    override fun onEventDecrypted(roomId: String?, eventId: String?) {
+        reportedFailures.remove(eventId)
     }
 
     //region Private methods

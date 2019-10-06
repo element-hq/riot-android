@@ -22,14 +22,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import butterknife.OnCheckedChanged
 import butterknife.OnTextChanged
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.util.BugReporter
-import org.matrix.androidsdk.util.Log
+import org.jetbrains.anko.toast
+import org.matrix.androidsdk.core.Log
 
 /**
  * Form to send a bug report
@@ -165,7 +165,7 @@ class BugReportActivity : MXCActionBarActivity() {
 
                     override fun onUploadSucceed() {
                         try {
-                            VectorApp.getInstance()?.toast(R.string.send_bug_report_sent, Toast.LENGTH_LONG)
+                            VectorApp.getInstance()?.toast(R.string.send_bug_report_sent)
                         } catch (e: Exception) {
                             Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.message, e)
                         }

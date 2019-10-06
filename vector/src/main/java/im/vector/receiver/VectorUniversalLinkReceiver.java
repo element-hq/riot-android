@@ -22,17 +22,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.PermalinkUtils;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.Log;
-import org.matrix.androidsdk.util.PermalinkUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,6 +91,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
         Log.d(LOG_TAG, "## onReceive() IN");
 
+        // sanity check
+        if (aIntent == null) {
+            return;
+        }
+
         // get session
         mSession = Matrix.getInstance(aContext).getDefaultSession();
 
@@ -105,73 +111,68 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             return;
         }
 
-        // sanity check
-        if (null != aIntent) {
+        action = aIntent.getAction();
+        uriString = aIntent.getDataString();
+        boolean isSessionActive = mSession.isAlive();
+        boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
 
-            action = aIntent.getAction();
-            uriString = aIntent.getDataString();
-            boolean isSessionActive = mSession.isAlive();
-            boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
+        Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString + " isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
 
-            Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString + "isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
+        if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)) {
+            Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK");
+            intentUri = aIntent.getData();
+        } else if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME)) {
+            Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK_RESUME");
 
-            if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)) {
-                Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK");
-                intentUri = aIntent.getData();
+            // A first BROADCAST_ACTION_UNIVERSAL_LINK has been received with a room alias that could not be translated to a room ID.
+            // Translation has been asked to server, and the response is processed here.
+            // ......................
+            intentUri = aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_URI);
+            // aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_SENDER_ID);
+        } else {
+            // unknown action (very unlikely)
+            Log.e(LOG_TAG, "## onReceive() Unknown action received (" + action + ") - unable to proceed URL link");
+            return;
+        }
 
-            } else if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME)) {
-                Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK_RESUME");
+        if (null != intentUri) {
+            Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost()
+                    + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
+            //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
-                // A first BROADCAST_ACTION_UNIVERSAL_LINK has been received with a room alias that could not be translated to a room ID.
-                // Translation has been asked to server, and the response is processed here.
-                // ......................
-                intentUri = aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_URI);
-                // aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_SENDER_ID);
-            } else {
-                // unknown action (very unlikely)
-                Log.e(LOG_TAG, "## onReceive() Unknown action received (" + action + ") - unable to proceed URL link");
-                return;
-            }
+            Map<String, String> params = parseUniversalLink(intentUri);
 
-            if (null != intentUri) {
-                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost()
-                        + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
-                //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
+            if (null != params) {
 
-                Map<String, String> params = parseUniversalLink(intentUri);
-
-                if (null != params) {
-
-                    if (!isSessionActive) {
-                        Log.w(LOG_TAG, "## onReceive() Warning: Session is not alive");
-                    }
-
-                    if (!isLoginStepDone) {
-                        Log.w(LOG_TAG, "## onReceive() Warning: Session is not complete - start Login Activity");
-
-                        // Start the login activity and wait for BROADCAST_ACTION_UNIVERSAL_LINK_RESUME.
-                        // Once the login process flow is complete, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME is
-                        // sent back to resume the URL link processing.
-                        Intent intent = new Intent(aContext, LoginActivity.class);
-                        intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        aContext.startActivity(intent);
-                    } else {
-                        mParameters = params;
-
-                        if (mParameters.containsKey(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
-                            manageRoomOnActivity(aContext);
-                        } else if (mParameters.containsKey(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY)) {
-                            manageMemberDetailsActivity(aContext);
-                        } else if (mParameters.containsKey(PermalinkUtils.ULINK_GROUP_ID_KEY)) {
-                            manageGroupDetailsActivity(aContext);
-                        } else {
-                            Log.e(LOG_TAG, "## onReceive() : nothing to do");
-                        }
-                    }
-                } else {
-                    Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
+                if (!isSessionActive) {
+                    Log.w(LOG_TAG, "## onReceive() Warning: Session is not alive");
                 }
+
+                if (!isLoginStepDone) {
+                    Log.w(LOG_TAG, "## onReceive() Warning: Session is not complete - start Login Activity");
+
+                    // Start the login activity and wait for BROADCAST_ACTION_UNIVERSAL_LINK_RESUME.
+                    // Once the login process flow is complete, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME is
+                    // sent back to resume the URL link processing.
+                    Intent intent = new Intent(aContext, LoginActivity.class);
+                    intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    aContext.startActivity(intent);
+                } else {
+                    mParameters = params;
+
+                    if (mParameters.containsKey(PermalinkUtils.ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                        manageRoomOnActivity(aContext);
+                    } else if (mParameters.containsKey(PermalinkUtils.ULINK_MATRIX_USER_ID_KEY)) {
+                        manageMemberDetailsActivity(aContext);
+                    } else if (mParameters.containsKey(PermalinkUtils.ULINK_GROUP_ID_KEY)) {
+                        manageGroupDetailsActivity(aContext);
+                    } else {
+                        Log.e(LOG_TAG, "## onReceive() : nothing to do");
+                    }
+                }
+            } else {
+                Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
             }
         }
     }

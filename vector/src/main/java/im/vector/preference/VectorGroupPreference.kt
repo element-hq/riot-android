@@ -17,8 +17,6 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,6 +24,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.preference.PreferenceViewHolder
+import androidx.preference.SwitchPreference
 import im.vector.R
 import im.vector.util.VectorUtils
 import org.matrix.androidsdk.MXSession

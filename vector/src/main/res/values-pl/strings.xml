@@ -25,9 +25,10 @@
     <string name="rename">Zmień nazwę</string>
     <string name="report_content">Zgłoś zawartość</string>
     <string name="active_call">Aktywne połączenie</string>
-    <string name="ongoing_conference_call">Przychodzące połączenie grupowe.\nDołącz z %1$s lub z %2$s.</string>
-    <string name="ongoing_conference_call_voice">mikrofonem</string>
-    <string name="ongoing_conference_call_video">kamerą</string>
+    <string name="ongoing_conference_call">Przychodzące połączenie grupowe.
+\nDołącz z %1$s lub %2$s</string>
+    <string name="ongoing_conference_call_voice">Głos</string>
+    <string name="ongoing_conference_call_video">Wideo</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
     <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
     <string name="missing_permissions_to_start_conf_call">Musisz być uprawniony, aby rozpocząć połączenie grupowe</string>
@@ -93,8 +94,8 @@
     <string name="send_bug_report_description">Opisz błąd. Co zrobiłeś? Co powinno się wydarzyć? Co się stało?</string>
     <string name="send_bug_report_placeholder">Opisz swój problem tutaj</string>
     <string name="send_bug_report_logs_description">W celu zdiagnozowania problemów, logi z tego klienta zostaną wysłane wraz z tym raportem o błędzie. Ten raport o błędzie, w tym dzienniki i zrzut ekranu, nie będzie publicznie widoczny. Jeśli wolisz wysłać tylko powyższy tekst, odznacz:</string>
-    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz zgłosić błąd?</string>
-    <string name="send_bug_report_app_crashed">Aplikacja nie została poprawnie zamknięta za ostatnim razem. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu?</string>
+    <string name="send_bug_report_alert_message">Wygląda na to, że potrząsasz telefonem ze zdenerwowania. Czy chcesz otworzyć ekran zgłaszania błędu\?</string>
+    <string name="send_bug_report_app_crashed">Przy wcześniejszym użyciu aplikacja napotkała błąd. Czy chcesz zgłosić raport o nieoczekiwanym zamknięciu\?</string>
 
     <string name="send_bug_report_sent">Pomyślnie zgłoszono błąd</string>
     <string name="send_bug_report_failed">Nie udało się zgłosić błędu (%s)</string>
@@ -132,8 +133,6 @@
     <string name="auth_password_placeholder">Hasło</string>
     <string name="auth_new_password_placeholder">Nowe hasło</string>
     <string name="auth_user_name_placeholder">Nazwa użytkownika</string>
-    <string name="auth_add_email_message">Dodaj do konta adres e-mail, aby użytkownicy mogli Cię odnaleźć, oraz abyś mógł przywrócić swoje hasło.</string>
-    <string name="auth_add_phone_message">Dodaj numer telefonu, aby użytkownicy mogli Cię odnaleźć.</string>
     <string name="auth_email_placeholder">Adres e-mail</string>
     <string name="auth_opt_email_placeholder">Adres e-mail (nieobowiązkowy)</string>
     <string name="auth_phone_number_placeholder">Numer telefonu</string>
@@ -161,14 +160,14 @@
     <string name="auth_reset_password_message">Aby przywrócić hasło, wprowadź adres e-mail powiązany z kontem:</string>
     <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
     <string name="auth_reset_password_missing_password">Należy wprowadzić nowe hasło.</string>
-    <string name="auth_reset_password_email_validation_message">Wysłano email na adres %s. Po otwarciu znajdującego się tam linku, naciśnij poniżej.</string>
+    <string name="auth_reset_password_email_validation_message">Wysłano e-mail na adres %s. Po otwarciu znajdującego się tam linku, naciśnij poniżej.</string>
     <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_must_start_http">URL musi zaczynać się od http[s]://</string>
     <string name="login_error_network_error">Nie udało się połączyć: Błąd sieci</string>
     <string name="login_error_unable_login">Logowanie nie powiodło się</string>
     <string name="login_error_registration_network_error">Nie udało się zarejestrować: Błąd sieci</string>
     <string name="login_error_unable_register">Nie udało się zarejestrować</string>
-    <string name="login_error_invalid_home_server">Wprowadź prawidłowy URL</string>
+    <string name="login_error_invalid_home_server">Proszę wprowadzić prawidłowy adres URL</string>
 
     <string name="login_error_forbidden">Nieprawidłowa nazwa użytkownika/hasło</string>
     <string name="login_error_not_json">Nie zawiera prawidłowego JSON</string>
@@ -286,7 +285,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_message_placeholder_not_encrypted">Wyślij wiadomość (niezaszyfrowaną)…</string>
     <string name="room_offline_notification">Utracono połączenie z serwerem.</string>
     <string name="room_prompt_resend">Wyślij ponownie wszystko</string>
-    <string name="room_prompt_cancel">anuluj wszystko</string>
+    <string name="room_prompt_cancel">Anuluj wszystko</string>
     <string name="room_resend_unsent_messages">Wyślij niewysłane wiadomości ponownie</string>
     <string name="room_delete_unsent_messages">Usuń niewysłane wiadomości</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
@@ -429,7 +428,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="settings_phone_number_country_label">Kraj</string>
     <string name="settings_phone_number_country_error">Wybierz kraj</string>
     <string name="settings_phone_number_label">Numer telefonu</string>
-    <string name="settings_phone_number_verification">Weryfikacja numeru</string>
+    <string name="settings_phone_number_verification">Weryfikacja numeru telefonu</string>
     <string name="settings_phone_number_verification_error_empty_code">Wprowadź kod aktywacyjny</string>
     <string name="settings_phone_number_verification_error">Wystąpił błąd podczas weryfikowania numeru telefonu</string>
     <string name="settings_phone_number_code">Kod</string>
@@ -520,8 +519,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="largest">Ogromny</string>
     <string name="huge">P O T Ę Ż N Y</string>
     <string name="light_theme">Jasny motyw</string>
-    <string name="dark_theme">Ciemny Motyw</string>
-    <string name="black_them">Czarny Motyw</string>
+    <string name="dark_theme">Ciemny motyw</string>
+    <string name="black_them">Czarny motyw</string>
 
     <string name="call">Zadzwoń</string>
     <string name="avatar">Awatar</string>
@@ -542,8 +541,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="create">Utwórz</string>
     <string name="notification_off">Off</string>
     <string name="conference_call_warning_title">Uwaga!</string>
-    <string name="notification_sync_in_progress">W trakcie synchronizacji</string>
-    <string name="notification_listening_for_events">Nasłuchuj zdarzeń</string>
+    <string name="notification_sync_in_progress">Synchronizowanie…</string>
+    <string name="notification_listening_for_events">Nasłuchiwanie zdarzeń</string>
     <string name="notification_noisy_notifications">Głośne powiadomienia</string>
     <string name="notification_silent_notifications">Ciche powiadomienia</string>
 
@@ -571,12 +570,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="option_take_photo">Zrób zdjęcie</string>
     <string name="option_take_video">Nagraj film</string>
 
-    <string name="auth_add_email_phone_message">Dodaj adres email i/lub nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-
-Adres email pozwoli ci również zresetować hasło.</string>
-    <string name="auth_add_email_and_phone_message">Dodaj adres email i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-
-Adres email pozwoli ci również zresetować hasło.</string>
     <string name="auth_threepid_warning_message">Rejestracja jednocześnie za pomocą numeru telefonu i adresu e-mail nie jest obsługiwana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
@@ -613,12 +606,10 @@ Zezwól na dostęp w następnym oknie aby móc wykonać połączenie.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot wymaga dostępu do kamery i mikrofonu, aby przeprowadzać rozmowy wideo.
 
 Przyznaj dostęp w następnym oknie.</string>
-    <string name="permissions_rationale_msg_contacts">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
-
-Proszę przyznaj dostęp w następnym oknie, aby odkryć użytkowników książki adresowej osiągalnych z Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu.
-
-Zezwolić Riot na dostęp do kontaktów?</string>
+    <string name="permissions_rationale_msg_contacts">Riot może sprawdzić Twoją książkę adresową, aby znajdywać innych użytkowników Matrixa bazując na ich adresie e-mail i numerze telefonu. Jeśli zgadzasz się na udostępnienie Twojej książki adresowej w tym celu, zezwól na dostęp w następnym okienku.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot wymaga dostępu do kontaktów, aby znajdywać innych użytkowników Matrixa bazując na adresie e-mail i numerze telefonu. 
+\n
+\nZezwolić Riot na dostęp do kontaktów\?</string>
 
     <string name="list_members">Lista uczestników</string>
     <string name="open_chat_header">Otwarty nagłówek</string>
@@ -936,8 +927,8 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="room_message_placeholder_reply_to_encrypted">Wyślij zaszyfrowaną odpowiedź…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Wyślij odpowiedź (niezaszyfrowaną)…</string>
     <string name="settings_labs_keyboard_options_to_send_message">Użyj klawisza enter na klawiaturze, aby wysłać wiadomość</string>
-    <string name="command_description_part_room">Opuść pokój</string>
-    <string name="command_description_markdown">Włącz/Wyłącz markdown</string>
+    <string name="command_description_part_room">Opuszcza pokój</string>
+    <string name="command_description_markdown">Włącza/Wyłącza markdown</string>
     <plurals name="group_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
@@ -1009,10 +1000,10 @@ Pamiętaj ta akcja może zresetować aplikacje i potrwać jakiś czas.</string>
     <string name="command_description_deop_user">Usuwa opa użytkownikowi z podanym ID</string>
     <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
     <string name="command_description_join_room">Dołącza do pokoju z podanym aliasem</string>
-    <string name="command_description_topic">Ustaw temat pokoju</string>
+    <string name="command_description_topic">Ustawia temat pokoju</string>
     <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
-    <string name="command_description_clear_scalar_token">Aby naprawić zarządzanie aplikacjami Matrix</string>
+    <string name="command_description_clear_scalar_token">Do naprawiania zarządzania aplikacjami Matrix</string>
 
     <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny</string>
     <string name="room_tombstone_continuation_link">Konwersacja jest kontynuowana tutaj</string>
@@ -1131,7 +1122,7 @@ Aby upewnić się, że niczego nie przegapisz, po prostu miej włączone aktuali
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Usługa Powiadomień jest uruchomiona.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Usługa Powiadomień nie jest uruchomiona.
 Spróbuj uruchomić ponownie aplikację.</string>
-    <string name="video_call_in_progress">W trakcie połączenia wideo…</string>
+    <string name="video_call_in_progress">Połączenie wideo trwa…</string>
 
     <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
@@ -1161,4 +1152,94 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Usuń kopię zapasową</string>
     <string name="keys_backup_info_title_version">Wersja</string>
+    <string name="title_activity_verify_device">Zweryfikuj urządzenie</string>
+
+    <string name="action_mark_room_read">Oznacz jako przeczytane</string>
+    <string name="sas_verified">Zweryfikowano!</string>
+    <string name="sas_verification_request_notification_channel_title">Weryfikacja klucza</string>
+    <string name="sas_incoming_request_notif_title">Żądanie weryfikacji</string>
+    <string name="sas_incoming_request_notif_content">%s chce zweryfikować twoje urządzenie</string>
+
+    <string name="sas_error_unknown">Nieznany błąd</string>
+
+    <string name="keys_backup_activate">Użyj kopii zapasowej klucza</string>
+    <string name="keys_backup_info_title_signature">Podpis</string>
+
+    <string name="you_added_a_new_device_with_info">Nowe urządzenie żąda kluczy szyfrujących.
+\nNazwa urządzenia: %1$s
+\nOstatnio widziane: %2$s
+\nJeśli to nie Ty zalogowałeś(-aś) się na innym urządzeniu, zignoruj to żądanie.</string>
+    <string name="your_unverified_device_requesting_with_info">Nowe niezweryfikowane urządzenie żąda kluczy szyfrujących.
+\nNazwa urządzenia: %1$s
+\nOstatnio widziane: %2$s
+\nJeśli to nie Ty zalogowałeś(-aś) się na innym urządzeniu, zignoruj to żądanie.</string>
+
+    <string name="start_verification_short_label">Weryfikuj</string>
+    <string name="share_without_verifying_short_label">Udostępnij</string>
+    <string name="key_share_request">Żądanie udostępnienia klucza</string>
+    <string name="ignore_request_short_label">Ignoruj</string>
+
+    <string name="keys_backup_setup_step3_share_recovery_file">Udostępnij</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Przywrócono kopię zapasową z %d kluczem.</item>
+        <item quantity="few">Przywrócono kopię zapasową z %d kluczami.</item>
+        <item quantity="many">Przywrócono kopię zapasową z %d kluczami.</item>
+    </plurals>
+    <string name="title_activity_keys_backup_restore">Użyj kopii zapasowej klucza</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Uruchamianie… (%1$d z %2$d)</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Ustawienia niestandardowe.</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Zarządzaj kopią zapasową klucza</string>
+
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Udostępnij klucz odzyskiwania z…</string>
+    <string name="keys_backup_settings_delete_confirm_message">Usunąć klucze szyfrowania z serwera\? Nie będziesz mógł/mogła używać klucza odzyskiwania do odczytywania historii zaszyfrowanych wiadomości.</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Wszystkie klucze mają kopię zapasową</string>
+    <string name="settings_change_password_submit">Zaktualizuj hasło</string>
+    <string name="done">Zrobione</string>
+    <string name="keys_backup_setup_step3_button_title">Zrobione</string>
+    <string name="edit">Edytuj</string>
+    <string name="reply">Odpowiedz</string>
+
+    <string name="room_list_rooms_empty_title">Pokoje</string>
+    <string name="message_add_reaction">Dodaj reakcję</string>
+    <string name="create_new_room">Utwórz nowy pokój</string>
+    <string name="group_all_communities">Wszystkie społeczności</string>
+
+    <string name="fab_menu_create_chat">Rozmowy bezpośrednie</string>
+
+    <string name="create_room_title">Nowy pokój</string>
+    <string name="create_room_action_create">STWÓRZ</string>
+    <string name="create_room_name_hint">Nazwa pokoju</string>
+    <string name="create_room_public_title">Publiczny</string>
+    <string name="create_room_public_description">Każdy będzie mógł dołączyć do tego pokoju</string>
+    <string name="global_retry">Ponów</string>
+    <string name="room_list_people_empty_title">Rozmowy</string>
+    <string name="action_change">Zmień</string>
+    <string name="change_room_directory_network">Zmień sieć</string>
+    <string name="fab_menu_create_room">Pokoje</string>
+    <string name="create_room_directory_description">Opublikuj pokój do spisu pokojów</string>
+
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Aby nie utracić dostępu do Twoich zaszyfrowanych wiadomości, powinienieś aktywować kopię zapasową klucza na wszystkich swoich urządzeniach.</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Tworzenie kopii zapasowej kluczy…</string>
+    <string name="backup">Utwórz kopię zapasową</string>
+    <string name="login_error_ssl_handshake">Twoje urządzenie używa przestarzałego protokołu bezpieczeństwa TSL, podatnego na ataki, dlatego dla Twojego bezpieczeństwa nie będziesz mógł się połączyć</string>
+    <string name="keys_backup_settings_status_ok">Kopia zapasowa klucza została prawidłowo skonfigurowana dla tego urządzenia.</string>
+    <string name="notification_sync_init">Inicjalizacja usługi</string>
+    <string name="auth_login_sso">Zaloguj się za pomocą logowania jednorazowego</string>
+    <string name="settings_notification_advanced_summary">Ustaw ważność powiadomienia za pomocą wydarzeń, skonfiguruj dźwięk, diodę LED, wibracje</string>
+    <string name="settings_notification_by_event">Ważność powiadomień ze względu na wydarzenie</string>
+
+    <string name="settings_notification_troubleshoot">Powiadomienia diagnostyczne</string>
+    <string name="settings_troubleshoot_diagnostic">Rozwiązywanie problemów</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnostyka podstawowa nie wykazała problemów. Jeżeli wciąż nie otrzymujesz powiadomień, prosimy o przesłanie raportu o błędach, w celu ich rozwiązania.</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikacja <b>nie</b> potrzebuje łączyć się z serwerem domowym w tle, powinno to zredukować użycie baterii</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Jeżeli nie pamiętasz swoich danych odzystkiwania, możesz %s.</string>
+
+    <string name="keys_backup_restore_with_key_helper">Zgubiłeś (-łaś) swój klucz odzyskiwania\? Możesz ustawić nowy w ustawieniach.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Kopia zapasowa posiada poprawną sygnaturę z niezweryfikowanego urządzenia %s</string>
+    <string name="new_recovery_method_popup_description">Wykryto nową, bezpieczną kopię kluczy wiadomości.
+\n
+\nJeżeli nie ustawiałeś nowej metody odzyskiwania, atakujący mogą uzyskać dostęp do Twojego konta. Zmień hasło konta i ustaw nową metodę odzyskiwania jak najszybciej w Ustawieniach.</string>
+    <string name="room_list_catchup_empty_title">Jesteś na bieżąco!</string>
+    <string name="login_error_unknown_host">Ten adres URL jest nieosiągalny, proszę sprawdź jego poprawność</string>
 </resources>

@@ -108,7 +108,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- Jitsi libs require min API 21 and min is set to 16 -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,co.apptailor.googlesignin,com.BV.LinearGradient,com.calendarevents,com.corbt.keepawake,com.dylanvann.fastimage,com.oblador.vectoricons,com.ocetnik.timer,com.rnimmersive,com.zmxv.RNSound,com.i18n.reactnativei18n,org.webkit.androidjsc" />
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,co.apptailor.googlesignin,com.BV.LinearGradient,com.calendarevents,com.corbt.keepawake,com.dylanvann.fastimage,com.oblador.vectoricons,com.ocetnik.timer,com.rnimmersive,com.zmxv.RNSound,com.i18n.reactnativei18n,org.webkit.androidjsc,com.reactnativecommunity.asyncstorage" />
 
     <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
     <uses-permission
@@ -369,6 +369,7 @@
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
+                <data android:pathPrefix="/config/" />
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
@@ -429,9 +430,18 @@
             android:label="@string/encryption_message_recovery" />
         <activity android:name=".activity.DebugMenuActivity" />
 
+        <activity
+            android:name=".activity.SASVerificationActivity"
+            android:label="@string/title_activity_verify_device"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.ReviewTermsActivity"
+            android:label="@string/review_terms"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <!-- FileProvider -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -539,12 +549,7 @@
         <service
             android:name=".services.CallService"
             android:exported="false" />
-
-        <provider
-            android:name=".db.VectorContentProvider"
-            android:authorities="${applicationId}.VectorApp.provider"
-            android:exported="true" />
-
+    
     </application>
 
 </manifest>

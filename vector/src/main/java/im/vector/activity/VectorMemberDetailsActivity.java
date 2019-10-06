@@ -21,9 +21,6 @@ import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -34,24 +31,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXPatterns;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,7 +70,6 @@ import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.adapters.VectorMemberDetailsDevicesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.fragments.VectorUnknownDevicesFragment;
-import im.vector.listeners.YesNoListener;
 import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
@@ -111,6 +112,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     private static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
+
+
+    private static final int DEVICE_VERIFICATION_REQ_CODE = 12;
 
     // internal info
     private Room mRoom;
@@ -240,6 +244,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == DEVICE_VERIFICATION_REQ_CODE) {
+            refreshUserDevicesList();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     // Room action listeners. Every time an action is detected the UI must be updated.
     private final ApiCallback<Void> mRoomActionsListener = new SimpleApiCallback<Void>(this) {
         @Override
@@ -265,7 +278,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            if (e instanceof IdentityServerNotConfiguredException) {
+                Toast.makeText(VectorMemberDetailsActivity.this, getString(R.string.invite_no_identity_server_error), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
             updateUi();
         }
     };
@@ -436,7 +453,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 Log.d(LOG_TAG, "## performItemAction(): Invite");
                 if (null != mRoom) {
                     enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.invite(mRoomMember.getUserId(), mRoomActionsListener);
+                    mRoom.invite(mSession, mRoomMember.getUserId(), mRoomActionsListener);
                 }
                 break;
 
@@ -1188,7 +1205,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // use a toolbar instead of the actionbar
             // to be able to display a large header
-            android.support.v7.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
+            androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
             setSupportActionBar(toolbar);
 
             if (null != getSupportActionBar()) {
@@ -1524,7 +1541,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 mRoom.addEventListener(mLiveEventsListener);
             }
             mSession.getDataHandler().addListener(mPresenceEventsListener);
-
+            refreshUserDevicesList();
             updateAdapterListViewItems();
         }
     }
@@ -1594,17 +1611,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
             default: // Blocked
-                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, new YesNoListener() {
-                    @Override
-                    public void yes() {
-                        refreshUserDevicesList();
-                    }
-
-                    @Override
-                    public void no() {
-                        // Nothing to do
-                    }
-                });
+                CommonActivityUtils
+                        .displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, null, DEVICE_VERIFICATION_REQ_CODE);
                 break;
         }
     }

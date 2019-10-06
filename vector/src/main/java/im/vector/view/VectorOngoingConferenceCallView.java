@@ -1,6 +1,7 @@
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +36,8 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallsManagerListener;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.call.MXCallsManagerListener;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import im.vector.R;
 import im.vector.widgets.Widget;
+import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -239,8 +241,12 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * Refresh the view visibility
      */
     public void refresh() {
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm == null) {
+            return;
+        }
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> mActiveWidgets = WidgetsManager.getSharedInstance().getActiveJitsiWidgets(mSession, mRoom);
+            List<Widget> mActiveWidgets = wm.getActiveJitsiWidgets(mSession, mRoom);
             Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
 
             if (mActiveWidget != widget) {
@@ -258,7 +264,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.getSharedInstance().checkWidgetPermission(mSession, mRoom))) ?
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == wm.checkWidgetPermission(mSession, mRoom))) ?
                     View.VISIBLE : View.GONE);
         }
     }
@@ -272,8 +278,10 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
-
-        WidgetsManager.addListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm != null) {
+            wm.addListener(mWidgetListener);
+        }
     }
 
     /**
@@ -283,8 +291,10 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
-
-        WidgetsManager.removeListener(mWidgetListener);
+        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        if (wm != null) {
+            wm.removeListener(mWidgetListener);
+        }
     }
 
     /**

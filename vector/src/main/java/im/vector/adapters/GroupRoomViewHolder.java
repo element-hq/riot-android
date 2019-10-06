@@ -17,15 +17,16 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.rest.model.group.GroupRoom;
-import org.matrix.androidsdk.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

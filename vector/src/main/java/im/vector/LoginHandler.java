@@ -23,10 +23,10 @@ import android.text.TextUtils;
 
 import org.matrix.androidsdk.HomeServerConnectionConfig;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
@@ -214,19 +214,23 @@ public class LoginHandler {
                                            final String aClientSecret,
                                            final String aSid,
                                            final ApiCallback<Boolean> aRespCallback) {
-        final ThreePid pid = new ThreePid(null, ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
-            @Override
-            public void onSuccess(Boolean info) {
-                aRespCallback.onSuccess(info);
-            }
+        restClient.submitValidationToken(
+                ThreePid.MEDIUM_EMAIL,
+                aToken,
+                aClientSecret,
+                aSid,
+                new UnrecognizedCertApiCallback<Boolean>(aHomeServerConfig, aRespCallback) {
+                    @Override
+                    public void onSuccess(Boolean info) {
+                        aRespCallback.onSuccess(info);
+                    }
 
-            @Override
-            public void onAcceptedCert() {
-                submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
-            }
-        });
+                    @Override
+                    public void onAcceptedCert() {
+                        submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
+                    }
+                });
     }
 }

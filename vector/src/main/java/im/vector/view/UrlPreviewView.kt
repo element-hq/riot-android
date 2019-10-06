@@ -16,8 +16,6 @@
 package im.vector.view
 
 import android.content.Context
-import android.support.transition.TransitionManager
-import android.support.v7.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -30,6 +28,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -38,8 +38,8 @@ import im.vector.VectorApp
 import im.vector.ui.animation.VectorTransitionSet
 import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.URLPreview
-import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**

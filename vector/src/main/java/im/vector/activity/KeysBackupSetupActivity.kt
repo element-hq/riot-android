@@ -15,21 +15,20 @@
  */
 package im.vector.activity
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.dialogs.ExportKeysDialog
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep1Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep2Fragment
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupStep3Fragment
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
@@ -68,13 +67,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observe(this, Observer { uxStateEvent ->
             when (uxStateEvent?.getContentIfNotHandled()) {
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2 -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
                             .commit()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3 -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
                             .commit()
@@ -86,6 +85,17 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     }
                     setResult(RESULT_OK, resultIntent)
                     finish()
+                }
+                KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
+                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
+                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
+                                viewModel.forceCreateKeyBackup(this)
+                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
+                               viewModel.stopAndKeepAfterDetectingExistingOnServer()
+                            }
+                            .show()
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
                     exportKeysManually()

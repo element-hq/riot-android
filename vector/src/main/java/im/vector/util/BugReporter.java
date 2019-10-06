@@ -24,15 +24,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.RestClient;
-import org.matrix.androidsdk.util.Log;
+import org.matrix.androidsdk.core.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -156,7 +157,7 @@ public class BugReporter {
                 List<File> gzippedFiles = new ArrayList<>();
 
                 if (withDevicesLogs) {
-                    List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
+                    List<File> files = org.matrix.androidsdk.core.Log.addLogFiles(new ArrayList<File>());
 
                     for (File f : files) {
                         if (!mIsCancelled) {

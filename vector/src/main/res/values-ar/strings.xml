@@ -41,8 +41,8 @@
     <string name="room_no_conference_call_in_encrypted_rooms">مكالمات الاجتماعات ليست مدعومة في الغرفة المعمّاة</string>
     <string name="send_anyway">أرسِل بأي حال</string>
     <string name="action_sign_out">اخرج</string>
-    <string name="action_voice_call">مكالمة صورية</string>
-    <string name="action_video_call">مكالمة صوتية</string>
+    <string name="action_voice_call">مكالمة صوتية</string>
+    <string name="action_video_call">مكالمة صورية</string>
     <string name="action_global_search">بحث عمومي</string>
     <string name="action_mark_all_as_read">علّمها كلّها كمقروءة</string>
     <string name="action_open">افتح</string>
@@ -111,8 +111,6 @@
     <string name="auth_password_placeholder">كلمة السر</string>
     <string name="auth_new_password_placeholder">كلمة السر الجديدة</string>
     <string name="auth_user_name_placeholder">اسم المستخدم</string>
-    <string name="auth_add_email_message">أضِف عنوان بريد إلكتروني إلى حسابك ليستطيع الغير اكتشافك على الشبكة، وأيضا لإتاحة خاصية تصفير كلمة السر.</string>
-    <string name="auth_add_phone_message">أضِف رقم هاتف إلى حسابك ليستطيع الغير اكتشافك على الشبكة.</string>
     <string name="auth_email_placeholder">عنوان البريد الإلكتروني</string>
     <string name="auth_opt_email_placeholder">عنوان البريد الإلكتروني (اختياري)</string>
     <string name="auth_phone_number_placeholder">رقم الهاتف</string>
@@ -533,12 +531,6 @@
     <string name="start_voice_call_prompt_msg">أمتأكد من بدء محادثة صوتية؟</string>
     <string name="start_video_call_prompt_msg">أمتأكد من بدء محادثة صورية؟</string>
 
-    <string name="auth_add_email_phone_message">أضِف عنوان بريد إلكتروني و/أو رقم هاتف لحسابك ليستطيع الناس اكتشافك.
-
-ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
-    <string name="auth_add_email_and_phone_message">أضِف عنوان بريد إلكتروني ورقم هاتف لحسابك ليستطيع الناس اكتشافك.
-
-ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
     <string name="auth_email_already_defined">عنوان البريد مُعرّف بالفعل.</string>
     <string name="auth_invalid_token">الأمارة غير صالحة</string>
     <string name="auth_threepid_warning_message">التسجيل عبر البريد ورقم الهاتف معا ليس مدعوما إلى حين توفر واجهة API لذلك. سيُستخدم رقم الهاتف فقط دون البريد.
@@ -1081,4 +1073,11 @@
 
     <string name="room_sliding_menu_version_x">الإصدار %s</string>
     <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
+    <string name="title_activity_verify_device">توثق من الجهاز</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">تأمين المفاتيح لم ينته، يرجى الانتظار</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">عند تسجيل الخروج الآن ستخسر مفاتيحك</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">تأمين المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المشفرة</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل تأمين المفاتيح على كل أجهزتك كي لا تخسر رسائلك المشفرة</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">يتم تأمين المفاتيح</string>
 </resources>

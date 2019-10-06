@@ -22,13 +22,15 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import org.matrix.androidsdk.util.Log;
+import androidx.viewpager.widget.ViewPager;
+
+import org.matrix.androidsdk.core.Log;
 
 /**
  * Patch the issue "https://code.google.com/p/android/issues/detail?id=66620"
  * and https://issuetracker.google.com/issues/36931456
  */
-public class VectorViewPager extends android.support.v4.view.ViewPager {
+public class VectorViewPager extends ViewPager {
     private static final String LOG_TAG = VectorViewPager.class.getSimpleName();
 
     public VectorViewPager(Context context) {

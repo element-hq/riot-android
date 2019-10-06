@@ -20,15 +20,14 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import im.vector.Matrix
 import im.vector.R
@@ -42,10 +41,10 @@ import im.vector.view.SimpleDividerItemDecoration
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
 import java.util.*
 
 /**
@@ -61,7 +60,7 @@ class HistoricalRoomsActivity : VectorAppCompatActivity(),
     internal lateinit var mSearchView: SearchView
 
     @BindView(R.id.historical_recycler_view)
-    internal lateinit var mHistoricalRecyclerView: RecyclerView
+    internal lateinit var mHistoricalRecyclerView: androidx.recyclerview.widget.RecyclerView
 
     @BindView(R.id.historical_no_results)
     internal lateinit var mHistoricalPlaceHolder: TextView
@@ -134,7 +133,7 @@ class HistoricalRoomsActivity : VectorAppCompatActivity(),
         mHistoricalAdapter = HomeRoomAdapter(this, R.layout.adapter_item_room_view, this, null, this)
 
         mHistoricalRecyclerView.let {
-            it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            it.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             it.setHasFixedSize(true)
             it.isNestedScrollingEnabled = false
             it.addItemDecoration(SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, margin))

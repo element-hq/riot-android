@@ -22,19 +22,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
-import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AlertDialog
 import butterknife.BindView
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import im.vector.R
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.login.Credentials
-import org.matrix.androidsdk.util.JsonUtils
-import org.matrix.androidsdk.util.Log
 import java.net.URLDecoder
 import java.util.*
 
@@ -65,6 +65,9 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
         mMode = intent.getIntExtra(EXTRA_IN_MODE, MODE_LOGIN)
 
         mWebView.settings.javaScriptEnabled = true
+        // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
+        // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
+        mWebView.settings.userAgentString = "Mozilla/5.0 Google"
 
         mHomeServerUrl = getString(R.string.default_hs_server_url)
 

@@ -11,12 +11,12 @@
     android:paddingRight="?dialogPreferredPadding"
     android:paddingBottom="12dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_e2e_keys_passphrase_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:inputType="textPassword"
             android:textColor="?android:textColorPrimary" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/dialog_e2e_keys_import_button"

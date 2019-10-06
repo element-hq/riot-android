@@ -21,14 +21,13 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.View
 import androidx.core.content.edit
-import androidx.core.widget.toast
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreference
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
@@ -37,11 +36,12 @@ import im.vector.notifications.NotificationUtils
 import im.vector.notifications.supportNotificationChannels
 import im.vector.preference.BingRulePreference
 import im.vector.util.PreferencesManager
+import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.BingRulesManager
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.BingRulesManager
-import org.matrix.androidsdk.util.Log
 
 class VectorSettingsAdvancedNotificationPreferenceFragment : PreferenceFragmentCompat() {
 

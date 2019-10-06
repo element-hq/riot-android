@@ -24,18 +24,19 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
+import org.matrix.androidsdk.core.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Pusher;
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PushersResponse;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,9 @@ import java.util.TimerTask;
 
 import im.vector.BuildConfig;
 import im.vector.Matrix;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.push.fcm.FcmHelper;
 import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
-import im.vector.util.SystemUtilsKt;
 
 /**
  * Helper class to store the FCM registration ID in {@link SharedPreferences}
@@ -1037,7 +1036,7 @@ public final class PushManager {
          * Notifications are displayed with low detail (X messages in RoomY).
          * Only message metadata is sent through the push service.
          */
-       // LOW_DETAIL,
+        // LOW_DETAIL,
 
         /**
          * Normal: full detailed notifications by keeping user privacy.
@@ -1182,6 +1181,33 @@ public final class PushManager {
         // when FCM is disabled, enable / disable the "Listen for events" notifications
         EventStreamServiceX.Companion.onPushUpdate(mContext);
     }
+
+
+    public void setFdroidSyncModeOptimizedForBattery() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY);
+        setBackgroundSyncAllowed(true);
+    }
+
+    public void setFdroidSyncModeOptimizedForRealTime() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME);
+        setBackgroundSyncAllowed(true);
+    }
+
+    public void setFdroidSyncModeDisabled() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED);
+        setBackgroundSyncAllowed(false);
+    }
+
+    public boolean idFdroidSyncModeOptimizedForBattery() {
+        return isBackgroundSyncAllowed()
+                && (PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.equals(PreferencesManager.getFdroidSyncBackgroundMode(mContext)));
+    }
+
+    public boolean idFdroidSyncModeOptimizedForRealTime() {
+        return isBackgroundSyncAllowed()
+                && (PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME.equals(PreferencesManager.getFdroidSyncBackgroundMode(mContext)));
+    }
+
 
     /**
      * Tell if the application can be restarted in background

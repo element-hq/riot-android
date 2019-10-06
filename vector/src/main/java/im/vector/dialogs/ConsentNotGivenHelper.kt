@@ -18,14 +18,14 @@ package im.vector.dialogs
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.VectorWebViewActivity
 import im.vector.activity.interfaces.Restorable
 import im.vector.webview.WebViewMode
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.model.MatrixError
 
 private const val LOG_TAG = "ConsentNotGivenHelper"
 

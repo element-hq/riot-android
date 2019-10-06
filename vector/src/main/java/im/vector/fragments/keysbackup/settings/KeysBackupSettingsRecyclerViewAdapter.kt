@@ -16,12 +16,12 @@
 package im.vector.fragments.keysbackup.settings
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.R
@@ -30,7 +30,6 @@ import im.vector.ui.list.GenericRecyclerViewItem
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrust
-import org.matrix.androidsdk.crypto.keysbackup.KeysBackupVersionTrustSignature
 
 class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -229,7 +228,6 @@ class KeysBackupSettingsRecyclerViewAdapter(val context: Context) : RecyclerView
         fun didSelectSetupMessageRecovery()
         fun didSelectRestoreMessageRecovery()
         fun didSelectDeleteSetupMessageRecovery()
-        fun displayDeviceVerificationDialog(signature: KeysBackupVersionTrustSignature)
     }
 
 }

@@ -15,20 +15,20 @@
  */
 package im.vector.fragments.keysbackup.restore
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.view.KeysBackupBanner
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.listeners.StepProgressListener
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.crypto.data.ImportRoomKeysResult
 import org.matrix.androidsdk.crypto.keysbackup.KeysBackup
-import org.matrix.androidsdk.listeners.StepProgressListener
-import org.matrix.androidsdk.rest.callback.ApiCallback
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
-import org.matrix.androidsdk.rest.model.MatrixError
-import org.matrix.androidsdk.rest.model.keys.KeysVersionResult
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.crypto.model.keys.KeysVersionResult
 
 class KeysBackupRestoreFromPassphraseViewModel : ViewModel() {
 

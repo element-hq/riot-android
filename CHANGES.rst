@@ -1,4 +1,4 @@
-Changes in Riot 0.8.30 (2019-XX-XX)
+Changes in Riot 0.9.7 (2019-XX-XX)
 ===================================================
 
 MatrixSdk:
@@ -6,10 +6,148 @@ MatrixSdk:
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
 Features:
- -
+ - Privacy: Use the hashed v2 lookup API for 3PIDs (#3257)
+ - Privacy: Prompt to accept identity server policies before inviting them to a room (#3227)
+ - Privacy: Make clear that device names are publicly readable (#3265)
+ - Privacy: Email help text on registration should be updated without binding (#3278)
+ - Privacy: Use wellknown to discover the IS of a HS (#3283)
+ - Privacy: Remove the bind true flag from 3PID adds in settings (#3254)
+ - Privacy: Remove the ability to set an IS at login/registration (#3264)
+ - Privacy: Allow password reset when no IS (#3261)
+ - Privacy: Allow email registration when no IS (#3260)
+ - Privacy: Separate Add and Bind for 3PID (#3300)
 
 Improvements:
+ - Notification [Fdroid] Add a new mode for notification (#3122)
+
+Other changes:
+ - Privacy: Remove the bind true flag from 3PID calls on registration (#3252)
+
+Bugfix:
+ - Fix reset password broken UI (#3125)
+
+Translations:
  -
+
+Build:
+ -
+
+Changes in Riot 0.9.6 (2019-09-13)
+===================================================
+
+Other changes:
+ - Get around Google limitation of SSO through WebView by modifying the WebView user agent
+
+Changes in Riot 0.9.5 (2019-09-10)
+===================================================
+
+Features:
+ - Auto configure homeserver and identity server URLs of LoginActivity with a magic link (#3294)
+
+Improvements:
+ - Handle correctly the error 404 when entering a homeserver URL on the login screen
+
+Bugfix:
+ - Restore correctly the login form when coming back from SSO login form.
+
+Translations:
+ - Riot is fully translated into Korean thanks to paijai.
+
+Changes in Riot 0.9.4 (2019-08-28)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.27.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.27
+
+Security:
+ - Prompt to renew the token after a security fix on Matrix SDK
+
+Features:
+ - Make Widget/Integration manager optional (#3224)
+ - Handle terms and condition approval for IntegrationManager (#3225)
+
+Bugfix:
+ - Widgets: Whitelist https://scalar-staging.vector.im/api (#3234)
+ - SAS: fix crash when destroying activity (#3240)
+
+Build:
+ - Split APK: generate one APK per arch, to reduce APK size
+ - Get Jitsi library dependency from a Maven repository we host, to get a LIBRE_BUILD
+
+Changes in Riot 0.9.3 (2019-07-24)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.26.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.26
+
+Bugfix:
+ - Crash on older android due to okhttp bumping requirements to Android 5+
+
+Build:
+ - Include native libraries for 64 bits processors.
+
+
+Changes in Riot 0.9.2 (2019-07-18)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.24.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.24
+
+Improvements:
+ - Room upgrade: Use the `server_name` parameter when joining the new room (#3204)
+
+Other changes:
+ - Piwik SDK has been replaced by Matomo SDK (#3163)
+
+Bugfix:
+ - Fix / Illegal States exceptions when starting event stream service X
+ - Fix / Keys Backup can be setup twice #9510
+ - Fix / Infinite logout screen when token invalidated
+ - Fix / Export keys not possible when no network (airplane)
+ - Fix / crash in logout success
+ - Fix / Crash when session store is null in event stream #3158
+
+Build:
+ - Upgrade gradle version from 4.10.1 to 5.4.1
+ - Ensure MatrixSDK library is downloaded from the jitpack repository
+
+Changes in Riot 0.9.1 (2019-05-03)
+===================================================
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.23.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.23
+
+Features:
+ - E2E: SAS Verification
+
+Improvements:
+ - Use heads-up alert UX for key-share and key-verification requests
+
+Other changes:
+ - Olm lib is now only a dependency of Matrix Sdk
+ - Matrix SDK library is now built and hosted by Jitpack (https://jitpack.io/#matrix-org/matrix-android-sdk/) (matrix-org/matrix-android-sdk#241)
+
+Bugfix:
+ - Fix mistake in Arabic translation (#3129)
+
+Changes in Riot 0.9.00 (2019-04-23)
+===================================================
+
+/!\ This version is the first version published with app id "im.vector.app".
+
+Changes in Riot 0.8.99 (2019-04-23)
+===================================================
+
+/!\ This version is the last version published with app id "im.vector.alpha". It contains a screen which introduce the new application "im.vector.app"
+/!\ This release contains security related bugfixes, users should upgrade asap
+
+MatrixSdk:
+ - Upgrade MatrixSdk to version 0.9.22.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.22
 
 Other changes:
  - Remove Amplitude tracker and Calendars permissions added by Jitsi lib (jitsi/jitsi-meet#4068, jitsi/jitsi-meet#4080)
@@ -17,12 +155,11 @@ Other changes:
 
 Bugfix:
  - Fix / Illegal States exceptions when starting event stream service X
-
-Translations:
- -
+ - Security Fix / Remove obsolete and buggy ContentProvider which could allow a malicious local app to compromise account data. Many thanks to Julien Thomas (twitter.com/@julien_thomas) from Protektoid Project (https://protektoid.com) for identifying this and responsibly disclosing it!
 
 Build:
  - Exclude Firebase analytics code (#2481)
+
 
 Changes in Riot 0.8.29 (2019-04-04)
 ===================================================
@@ -1316,7 +1453,7 @@ Changes in Vector 0.2.0 (2016-04-14)
 =======================================================
 
 
-Changes in Riot 0.8.XX (2019-XX-XX)
+Changes in Riot 0.9.XX (2019-XX-XX)
 ===================================================
 
 MatrixSdk:

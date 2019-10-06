@@ -15,17 +15,16 @@
  */
 package im.vector.fragments.keysbackup.setup
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.R
@@ -33,7 +32,7 @@ import im.vector.activity.CommonActivityUtils
 import im.vector.fragments.VectorBaseFragment
 import im.vector.ui.arch.LiveEvent
 import im.vector.util.*
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import java.io.ByteArrayInputStream
 import java.io.File
 
@@ -105,7 +104,7 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     @OnClick(R.id.keys_backup_setup_step3_copy_button)
     fun onCopyButtonClicked() {
-        val dialog = BottomSheetDialog(activity!!)
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(activity!!)
         dialog.setContentView(R.layout.bottom_sheet_save_recovery_key)
         dialog.setCanceledOnTouchOutside(true)
         val recoveryKey = viewModel.recoveryKey.value!!

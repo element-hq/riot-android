@@ -17,18 +17,18 @@
 package im.vector.dialogs
 
 import android.app.Activity
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import im.vector.R
 
 class ExportKeysDialog {
 
-    fun show(activity: Activity, exportKeyDialogListener: ExportKeysDialog.ExportKeyDialogListener) {
+    fun show(activity: Activity, exportKeyDialogListener: ExportKeyDialogListener) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
         val builder = AlertDialog.Builder(activity)
                 .setTitle(R.string.encryption_export_room_keys)
@@ -49,7 +49,7 @@ class ExportKeysDialog {
 
             override fun afterTextChanged(s: Editable) {
                 when {
-                    TextUtils.isEmpty(passPhrase1EditText.text) -> {
+                    TextUtils.isEmpty(passPhrase1EditText.text)                          -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = null
                     }
@@ -57,7 +57,7 @@ class ExportKeysDialog {
                         exportButton.isEnabled = true
                         passPhrase2Til.error = null
                     }
-                    else -> {
+                    else                                                                 -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
                     }

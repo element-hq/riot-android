@@ -23,10 +23,12 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
+import org.matrix.androidsdk.features.terms.TermsNotSignedException;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +56,10 @@ public class PIDsRetriever {
          * Called the PIDs retrieval fails.
          */
         void onFailure(String accountId);
+
+        void onIdentityServerTermsNotSigned(String token);
+
+        void onNoIdentityServer();
     }
 
     // current instance
@@ -268,7 +274,17 @@ public class PIDsRetriever {
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onError(e.getMessage());
+                        if (e instanceof TermsNotSignedException) {
+                            if (null != mListener) {
+                                mListener.onIdentityServerTermsNotSigned(((TermsNotSignedException) e).getToken());
+                            }
+                        } else if (e instanceof IdentityServerNotConfiguredException) {
+                            if (null != mListener) {
+                                mListener.onNoIdentityServer();
+                            }
+                        } else {
+                            onError(e.getMessage());
+                        }
                     }
                 });
             }

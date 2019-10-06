@@ -20,19 +20,18 @@ package im.vector.ui.themes
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.support.design.widget.TabLayout
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Menu
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.preference.PreferenceManager
 import im.vector.R
 import im.vector.VectorApp
 import im.vector.activity.VectorGroupDetailsActivity
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 import java.util.*
 
 /**
@@ -106,7 +105,7 @@ object ThemeUtils {
      * @param activity the activity
      * @param layout   the layout
      */
-    fun setTabLayoutTheme(activity: Activity, layout: TabLayout) {
+    fun setTabLayoutTheme(activity: Activity, layout: com.google.android.material.tabs.TabLayout) {
         if (activity is VectorGroupDetailsActivity) {
             val textColor: Int
             val underlineColor: Int

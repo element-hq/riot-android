@@ -29,7 +29,6 @@ import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp
-import im.vector.activity.CommonActivityUtils
 import im.vector.notifications.NotifiableEventResolver
 import im.vector.notifications.NotifiableMessageEvent
 import im.vector.notifications.SimpleNotifiableEvent
@@ -37,9 +36,9 @@ import im.vector.push.PushManager
 import im.vector.services.EventStreamServiceX
 import im.vector.ui.badge.BadgeProxy
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.Event
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
-import org.matrix.androidsdk.util.Log
 
 /**
  * Class extending FirebaseMessagingService.
@@ -60,11 +59,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param message the message
      */
-    override fun onMessageReceived(message: RemoteMessage?) {
-        if (message == null || message.data == null) {
-            Log.e(LOG_TAG, "## onMessageReceived() : received a null message or message with no data")
-            return
-        }
+    override fun onMessageReceived(message: RemoteMessage) {
+
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Log.i(LOG_TAG, "## onMessageReceived()" + message.data.toString())
             Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.priority)
@@ -87,7 +83,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * when the InstanceID token is initially generated, so this is where
      * you retrieve the token.
      */
-    override fun onNewToken(refreshedToken: String?) {
+    override fun onNewToken(refreshedToken: String) {
         Log.i(LOG_TAG, "onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
         Matrix.getInstance(this)?.pushManager?.resetFCMRegistration(refreshedToken)

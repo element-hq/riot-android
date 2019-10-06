@@ -17,7 +17,7 @@
 package im.vector.extensions
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 

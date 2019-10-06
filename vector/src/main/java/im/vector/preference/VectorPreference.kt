@@ -22,15 +22,15 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
+import androidx.preference.Preference
+import androidx.preference.PreferenceViewHolder
 import im.vector.R
 import im.vector.ui.themes.ThemeUtils
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 
 /**

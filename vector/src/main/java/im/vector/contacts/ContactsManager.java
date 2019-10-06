@@ -28,16 +28,17 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.ContactsContract;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,6 +75,14 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
          * Called when an user presence has been updated
          */
         void onContactPresenceUpdate(Contact contact, String matrixId);
+
+        /**
+         * Called when the Terms of the Identity server has not being accepted
+         */
+        void onIdentityServerTermsNotSigned(String token);
+
+
+        void onNoIdentityServerDefined();
     }
 
     // singleton
@@ -156,6 +165,28 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
             // warn that the current request failed.
             // Thus, if the listeners display a spinner (or so), it should be hidden.
             onPIDsUpdate();
+        }
+
+        @Override
+        public void onIdentityServerTermsNotSigned(String token) {
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onIdentityServerTermsNotSigned(token);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onTermsNotSigned failed " + e.getMessage(), e);
+                }
+            }
+        }
+
+        @Override
+        public void onNoIdentityServer() {
+            for (ContactsManagerListener listener : mListeners) {
+                try {
+                    listener.onNoIdentityServerDefined();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onNoIdentityServerDefined failed " + e.getMessage(), e);
+                }
+            }
         }
 
         @Override

@@ -19,7 +19,6 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -28,11 +27,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.MXPatterns;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +63,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     private final String mNoContactAccessPlaceholder;
     private final String mNoResultPlaceholder;
+    private final String mNoIdentityServerPlaceholder;
 
     /*
      * *********************************************************************************************
@@ -79,6 +81,7 @@ public class PeopleAdapter extends AbsAdapter {
         // ButterKnife.bind(this); cannot be applied here
         mNoContactAccessPlaceholder = context.getString(R.string.no_contact_access_placeholder);
         mNoResultPlaceholder = context.getString(R.string.no_result_placeholder);
+        mNoIdentityServerPlaceholder = context.getString(R.string.people_no_identity_server);
 
         mDirectChatsSection = new AdapterSection<>(context,
                 context.getString(R.string.direct_chats_header),
@@ -97,8 +100,8 @@ public class PeopleAdapter extends AbsAdapter {
                 TYPE_HEADER_LOCAL_CONTACTS, TYPE_CONTACT,
                 new ArrayList<ParticipantAdapterItem>(),
                 ParticipantAdapterItem.alphaComparator);
-        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ?
-                mNoContactAccessPlaceholder : mNoResultPlaceholder);
+
+        updateLocalContactsPlaceHolders();
 
         mKnownContactsSection = new KnownContactsAdapterSection(context, context.getString(R.string.user_directory_header), -1,
                 R.layout.adapter_item_contact_view, TYPE_HEADER_DEFAULT, TYPE_CONTACT, new ArrayList<ParticipantAdapterItem>(), null);
@@ -108,6 +111,18 @@ public class PeopleAdapter extends AbsAdapter {
         addSection(mDirectChatsSection);
         addSection(mLocalContactsSection);
         addSection(mKnownContactsSection);
+    }
+
+    private void updateLocalContactsPlaceHolders() {
+        String noItemPlaceholder = mNoResultPlaceholder;
+        if (!ContactsManager.getInstance().isContactBookAccessAllowed()) {
+            noItemPlaceholder = mNoContactAccessPlaceholder;
+        } else {
+            if (mSession.getIdentityServerManager().getIdentityServerUrl() == null) {
+                noItemPlaceholder = mNoIdentityServerPlaceholder;
+            }
+        }
+        mLocalContactsSection.setEmptyViewPlaceholder(noItemPlaceholder);
     }
 
     /*
@@ -201,8 +216,7 @@ public class PeopleAdapter extends AbsAdapter {
 
     public void setLocalContacts(final List<ParticipantAdapterItem> localContacts) {
         // updates the placeholder according to the local contacts permissions
-        mLocalContactsSection.setEmptyViewPlaceholder(!ContactsManager.getInstance().isContactBookAccessAllowed() ?
-                mNoContactAccessPlaceholder : mNoResultPlaceholder);
+        updateLocalContactsPlaceHolders();
         mLocalContactsSection.setItems(localContacts, mCurrentFilterPattern);
         if (!TextUtils.isEmpty(mCurrentFilterPattern)) {
             filterLocalContacts(String.valueOf(mCurrentFilterPattern));

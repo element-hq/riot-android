@@ -19,18 +19,18 @@ package im.vector.activity
 
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.CallSuper
 import android.text.TextUtils
+import androidx.annotation.CallSuper
 import im.vector.R
 import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetsManager
-import org.matrix.androidsdk.rest.callback.ApiCallback
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.Event
-import org.matrix.androidsdk.rest.model.MatrixError
 import org.matrix.androidsdk.rest.model.RoomMember
-import org.matrix.androidsdk.util.Log
 import java.util.*
 
 class IntegrationManagerActivity : AbstractWidgetActivity() {
@@ -74,7 +74,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
      */
     override fun buildInterfaceUrl(scalarToken: String?): String? {
         try {
-            return StringBuilder(getString(R.string.integrations_ui_url))
+            return StringBuilder(widgetManager.uiUrl)
                     .apply {
                         scalarToken?.let {
                             appendParamToUrl("scalar_token", it)
@@ -168,7 +168,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
             sendSuccess(eventData)
         } else {
-            mRoom!!.invite(userId, WidgetApiCallback(eventData, description))
+            mRoom!!.invite(mSession, userId, WidgetApiCallback(eventData, description))
         }
     }
 
@@ -259,7 +259,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request to get widget in room " + mRoom!!.roomId)
 
-        val widgets = WidgetsManager.getSharedInstance().getActiveWidgets(mSession, mRoom)
+        val widgets = widgetManager.getActiveWidgets(mSession, mRoom)
         val responseData = ArrayList<JsonDict<Any>>()
 
         for (widget in widgets) {

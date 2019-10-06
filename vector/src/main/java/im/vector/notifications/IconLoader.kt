@@ -19,12 +19,12 @@ package im.vector.notifications
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
-import android.support.annotation.WorkerThread
-import android.support.v4.graphics.drawable.IconCompat
+import androidx.annotation.WorkerThread
+import androidx.core.graphics.drawable.IconCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
-import org.matrix.androidsdk.util.Log
+import org.matrix.androidsdk.core.Log
 
 /**
  * FIXME It works, but it does not refresh the notification, when it's already displayed
