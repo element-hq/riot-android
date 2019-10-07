@@ -21,9 +21,6 @@ import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -33,6 +30,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -47,6 +48,7 @@ import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -276,7 +278,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            if (e instanceof IdentityServerNotConfiguredException) {
+                Toast.makeText(VectorMemberDetailsActivity.this, getString(R.string.invite_no_identity_server_error), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
             updateUi();
         }
     };
@@ -447,7 +453,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 Log.d(LOG_TAG, "## performItemAction(): Invite");
                 if (null != mRoom) {
                     enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.invite(mRoomMember.getUserId(), mRoomActionsListener);
+                    mRoom.invite(mSession, mRoomMember.getUserId(), mRoomActionsListener);
                 }
                 break;
 
@@ -1199,7 +1205,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // use a toolbar instead of the actionbar
             // to be able to display a large header
-            android.support.v7.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
+            androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.member_details_toolbar);
             setSupportActionBar(toolbar);
 
             if (null != getSupportActionBar()) {

@@ -16,7 +16,7 @@
 
 package im.vector.activity
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 // This activity is not accessible
 class DebugMenuActivity : AppCompatActivity()

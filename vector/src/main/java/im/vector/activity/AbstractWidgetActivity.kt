@@ -22,10 +22,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.support.annotation.CallSuper
 import android.webkit.*
+import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
-import androidx.core.widget.toast
 import butterknife.BindView
 import com.google.gson.reflect.TypeToken
 import im.vector.Matrix
@@ -38,6 +37,7 @@ import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
 import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
+import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.core.Log
@@ -148,7 +148,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
-    private fun presentTermsForServices(token: String?) {
+    private fun presentTermsForServices(token: String) {
         val wm = WidgetManagerProvider.getWidgetManager(this)
         if (wm == null) {  // should not happen
             finish()

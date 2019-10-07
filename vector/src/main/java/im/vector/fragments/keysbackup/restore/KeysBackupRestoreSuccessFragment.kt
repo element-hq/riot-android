@@ -15,9 +15,9 @@
  */
 package im.vector.fragments.keysbackup.restore
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.R

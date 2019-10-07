@@ -16,11 +16,11 @@
 
 package im.vector.extensions
 
-import android.support.v7.widget.SearchView
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import im.vector.R
 
 /**

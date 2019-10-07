@@ -621,7 +621,11 @@ public class CallsManager {
                     @Override
                     public void onMediaReadyToPlay() {
                         if (null != mCallActivity) {
-                            mCallActivity.finish();
+                            if (mCallActivity instanceof VectorCallViewActivity) {
+                                ((VectorCallViewActivity) mCallActivity).endCall();
+                            } else {
+                                mCallActivity.finish();
+                            }
                             mCallActivity = null;
                         }
                     }

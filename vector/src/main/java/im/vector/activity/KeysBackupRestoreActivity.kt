@@ -16,12 +16,11 @@
 package im.vector.activity
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromKeyFragment
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
@@ -92,7 +91,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                             .commit()
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction()
                             .replace(R.id.container, KeysBackupRestoreSuccessFragment.newInstance())
                             .commit()

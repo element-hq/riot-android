@@ -19,8 +19,7 @@ package im.vector.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -31,6 +30,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -39,6 +40,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
 
 import im.vector.Matrix;
@@ -259,11 +261,11 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
             final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
             // Extract from phone number object instead of using mCurrentRegionCode just in case
             final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-            final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
+            final ThreePid pid = ThreePid.Companion.fromPhoneNumber(e164phone, countryCode);
 
-            mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<Void>() {
+            mSession.getIdentityServerManager().startAddSessionForPhoneNumber(pid,null, new ApiCallback<ThreePid>() {
                 @Override
-                public void onSuccess(Void info) {
+                public void onSuccess(ThreePid pid) {
                     hideWaitingView();
                     Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);

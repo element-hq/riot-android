@@ -20,14 +20,15 @@ package im.vector.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filter;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -113,7 +114,7 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
 
-            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
             searchAutoComplete.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_default_text_hint_color));
         }
         return true;
@@ -138,7 +139,7 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
 
         mCountryRecyclerView = findViewById(R.id.country_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
         mCountryRecyclerView.setLayoutManager(layoutManager);
         mCountryAdapter = new CountryAdapter(PhoneNumberUtils.getCountriesWithIndicator(), mWithIndicator, this);
         mCountryRecyclerView.setAdapter(mCountryAdapter);

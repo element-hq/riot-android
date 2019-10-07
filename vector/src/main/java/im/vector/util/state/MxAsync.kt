@@ -16,7 +16,7 @@
 
 package im.vector.util.state
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 sealed class MxAsync<out T> {
 

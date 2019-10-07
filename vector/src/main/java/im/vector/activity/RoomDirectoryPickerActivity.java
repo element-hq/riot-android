@@ -20,15 +20,16 @@ package im.vector.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
@@ -260,7 +261,7 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
     private void initViews() {
         RecyclerView roomDirectoryRecyclerView = findViewById(R.id.room_directory_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
         roomDirectoryRecyclerView.setLayoutManager(layoutManager);
         mRoomDirectoryAdapter = new RoomDirectoryAdapter(new ArrayList<RoomDirectoryData>(), this);
         roomDirectoryRecyclerView.setAdapter(mRoomDirectoryAdapter);

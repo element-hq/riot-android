@@ -21,7 +21,6 @@ package im.vector;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,17 +28,21 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.core.Log;
 
 import java.io.File;
@@ -222,6 +225,12 @@ public class VectorApp extends MultiDexApplication {
 
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
+
+        if (PreferencesManager.useDefaultTurnServer(this)) {
+            MXCallsManager.defaultStunServerUri = getString(R.string.default_stun_server);
+        } else {
+            MXCallsManager.defaultStunServerUri = null;
+        }
 
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true, true);
         // not the first launch
@@ -410,8 +419,6 @@ public class VectorApp extends MultiDexApplication {
         for (MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
-                session.setSyncDelay(pushManager.isBackgroundSyncAllowed() ? pushManager.getBackgroundSyncDelay() : 0);
-                session.setSyncTimeout(pushManager.getBackgroundSyncTimeOut());
 
                 // remove older medias
                 if ((System.currentTimeMillis() - mLastMediasCheck) < (24 * 60 * 60 * 1000)) {
@@ -528,8 +535,6 @@ public class VectorApp extends MultiDexApplication {
             for (MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
-                session.setSyncDelay(0);
-                session.setSyncTimeout(0);
                 addSyncingSession(session);
             }
 
@@ -861,7 +866,12 @@ public class VectorApp extends MultiDexApplication {
         final MXSession session = Matrix.getInstance(this).getDefaultSession();
         if (session != null) {
             mAppAnalytics.visitVariable(7, "Homeserver URL", session.getHomeServerConfig().getHomeserverUri().toString());
-            mAppAnalytics.visitVariable(8, "Identity Server URL", session.getHomeServerConfig().getIdentityServerUri().toString());
+            String identityServerUrl = session.getIdentityServerManager().getIdentityServerUrl();
+            if (identityServerUrl == null) {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", "");
+            } else {
+                mAppAnalytics.visitVariable(8, "Identity Server URL", identityServerUrl);
+            }
         }
     }
 

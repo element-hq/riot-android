@@ -15,8 +15,8 @@
  */
 package im.vector.fragments.terms
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import im.vector.R
 import im.vector.util.state.MxAsync
 import org.matrix.androidsdk.MXSession
@@ -91,26 +91,13 @@ class AcceptTermsViewModel : ViewModel() {
         termsManager?.get(termsArgs.type, termsArgs.baseURL, object : ApiCallback<GetTermsResponse> {
             override fun onSuccess(info: GetTermsResponse) {
 
-                val terms = mutableListOf<Term>()
-                info.serverResponse.getLocalizedPrivacyPolicies(preferredLanguageCode)?.let {
-                    terms.add(
-                            Term(it.localizedUrl ?: "",
-                                    it.localizedName ?: "",
-                                    it.version,
-                                    accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
-                            )
+                val terms = info.serverResponse.getLocalizedTerms(preferredLanguageCode).map {
+                    Term(it.localizedUrl ?: "",
+                            it.localizedName ?: "",
+                            it.version,
+                            accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
                     )
                 }
-                info.serverResponse.getLocalizedTermOfServices(preferredLanguageCode)?.let {
-                    terms.add(
-                            Term(it.localizedUrl ?: "",
-                                    it.localizedName ?: "",
-                                    it.version,
-                                    accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
-                            )
-                    )
-                }
-
                 termsList.postValue(MxAsync.Success(terms))
             }
 

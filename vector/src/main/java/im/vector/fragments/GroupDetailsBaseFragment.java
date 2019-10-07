@@ -18,9 +18,10 @@ package im.vector.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.CallSuper;
 
 import org.matrix.androidsdk.MXSession;
 

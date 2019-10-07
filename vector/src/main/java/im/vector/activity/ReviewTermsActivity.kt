@@ -15,9 +15,9 @@
  */
 package im.vector.activity
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.fragments.terms.AcceptTermsFragment
 import im.vector.fragments.terms.AcceptTermsViewModel

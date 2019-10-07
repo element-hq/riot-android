@@ -19,9 +19,9 @@ package im.vector.services
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import im.vector.Matrix
 import im.vector.VectorApp
 import im.vector.notifications.NotificationUtils

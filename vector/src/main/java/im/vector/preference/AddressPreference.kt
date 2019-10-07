@@ -17,11 +17,10 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
-
+import androidx.preference.PreferenceViewHolder
 import im.vector.R
 
 /**

@@ -17,7 +17,7 @@ package im.vector.fragments.troubleshoot
 
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import kotlin.properties.Delegates
 
 class NotificationTroubleshootTestManager(val fragment: Fragment) {

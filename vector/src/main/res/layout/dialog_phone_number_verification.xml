@@ -10,13 +10,13 @@
     android:paddingEnd="?dialogPreferredPadding"
     android:paddingRight="?dialogPreferredPadding">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phone_number_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="?attr/vctr_default_text_hint_color">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phone_number_code_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,5 +27,5 @@
             android:textColor="?android:textColorPrimary"
             tools:text="123456" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

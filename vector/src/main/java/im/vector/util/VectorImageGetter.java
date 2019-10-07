@@ -21,8 +21,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.ContentManager;

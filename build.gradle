@@ -23,8 +23,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 90400
-    versionNameProp = "0.9.4-dev"
+    versionCodeProp = 90700
+    versionNameProp = "0.9.7-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }
@@ -50,15 +50,15 @@ allprojects {
                 includeGroupByRegex "com\\.github\\.chrisbanes"
             }
         }
+        // Jitsi repo
+        maven {
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/releases"
+        }
         google()
         maven {
             url "https://maven.google.com"
         }
         jcenter()
-        // Jitsi repo
-        maven {
-            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
-        }
         maven {
             url "https://s3.amazonaws.com/repo.commonsware.com"
         }

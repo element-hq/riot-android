@@ -19,8 +19,8 @@ package im.vector.activity
 
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.CallSuper
 import android.text.TextUtils
+import androidx.annotation.CallSuper
 import im.vector.R
 import im.vector.extensions.appendParamToUrl
 import im.vector.types.JsonDict
@@ -168,7 +168,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
         if (null != member && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
             sendSuccess(eventData)
         } else {
-            mRoom!!.invite(userId, WidgetApiCallback(eventData, description))
+            mRoom!!.invite(mSession, userId, WidgetApiCallback(eventData, description))
         }
     }
 

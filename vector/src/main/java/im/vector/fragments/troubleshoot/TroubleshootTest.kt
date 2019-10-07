@@ -15,7 +15,7 @@
  */
 package im.vector.fragments.troubleshoot
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import kotlin.properties.Delegates
 
 abstract class TroubleshootTest(@StringRes val titleResId: Int) {

@@ -18,10 +18,10 @@ package im.vector
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
 import android.util.Log
 import android.view.View
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
 import im.vector.activity.SASVerificationActivity

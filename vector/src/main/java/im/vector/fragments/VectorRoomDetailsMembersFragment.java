@@ -25,9 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -44,6 +41,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.jetbrains.anko.ToastsKt;
 import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
@@ -53,6 +55,7 @@ import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediaCache;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -66,7 +69,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.core.widget.ToastKt;
 import butterknife.BindView;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -200,7 +202,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
                             }
                         });
                     } else {
-                        ToastKt.toast(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+                        ToastsKt.toast(getActivity(), errorMessage);
                     }
                 }
             });
@@ -315,7 +317,11 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
 
         @Override
         public void onUnexpectedError(Exception e) {
-            onError(e.getLocalizedMessage());
+            if (e instanceof IdentityServerNotConfiguredException) {
+               onError(getString(R.string.invite_no_identity_server_error));
+            } else {
+                onError(e.getLocalizedMessage());
+            }
         }
     };
 
@@ -1036,7 +1042,7 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
      * @param userIds the user IDs list
      */
     private void inviteUserIds(List<String> userIds) {
-        mRoom.invite(userIds, new ApiCallback<Void>() {
+        mRoom.invite(mSession,userIds, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 mIsInvitingNewMembers = false;

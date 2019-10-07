@@ -16,14 +16,14 @@
 package im.vector.fragments.terms
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.epoxy.EpoxyRecyclerView

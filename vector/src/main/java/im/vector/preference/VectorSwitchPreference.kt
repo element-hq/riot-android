@@ -17,10 +17,10 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.preference.PreferenceViewHolder
+import androidx.preference.SwitchPreference
 
 /**
  * Switch preference with title on multiline (only used in XML)

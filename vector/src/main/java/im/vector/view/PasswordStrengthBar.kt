@@ -16,11 +16,11 @@
 package im.vector.view
 
 import android.content.Context
-import android.support.annotation.IntRange
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.IntRange
 import butterknife.BindColor
 import butterknife.BindView
 import butterknife.ButterKnife

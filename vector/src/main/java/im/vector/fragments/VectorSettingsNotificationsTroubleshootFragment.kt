@@ -19,14 +19,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.transition.TransitionManager
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.Matrix
 import im.vector.R
@@ -41,7 +38,7 @@ import org.matrix.androidsdk.MXSession
 class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     @BindView(R.id.troubleshoot_test_recycler_view)
-    lateinit var mRecyclerView: RecyclerView
+    lateinit var mRecyclerView: androidx.recyclerview.widget.RecyclerView
     @BindView(R.id.troubleshoot_bottom_view)
     lateinit var mBottomView: ViewGroup
     @BindView(R.id.toubleshoot_summ_description)
@@ -70,10 +67,10 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         mRecyclerView.layoutManager = layoutManager
 
-        val dividerItemDecoration = DividerItemDecoration(mRecyclerView.context,
+        val dividerItemDecoration = androidx.recyclerview.widget.DividerItemDecoration(mRecyclerView.context,
                 layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 

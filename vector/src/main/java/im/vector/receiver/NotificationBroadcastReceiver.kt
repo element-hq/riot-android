@@ -19,9 +19,9 @@ package im.vector.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.RemoteInput
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.core.app.RemoteInput
 import im.vector.Matrix
 import im.vector.R
 import im.vector.VectorApp

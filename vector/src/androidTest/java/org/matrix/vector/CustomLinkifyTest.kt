@@ -15,12 +15,12 @@
  */
 package org.matrix.vector
 
-import android.support.test.InstrumentationRegistry
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.URLSpan
 import android.widget.TextView
 import androidx.core.text.toSpannable
+import androidx.test.InstrumentationRegistry
 import im.vector.util.vectorCustomLinkify
 import org.junit.Assert.assertEquals
 import org.junit.Test

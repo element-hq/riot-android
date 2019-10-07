@@ -24,9 +24,10 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
@@ -1035,7 +1036,7 @@ public final class PushManager {
          * Notifications are displayed with low detail (X messages in RoomY).
          * Only message metadata is sent through the push service.
          */
-       // LOW_DETAIL,
+        // LOW_DETAIL,
 
         /**
          * Normal: full detailed notifications by keeping user privacy.
@@ -1180,6 +1181,33 @@ public final class PushManager {
         // when FCM is disabled, enable / disable the "Listen for events" notifications
         EventStreamServiceX.Companion.onPushUpdate(mContext);
     }
+
+
+    public void setFdroidSyncModeOptimizedForBattery() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY);
+        setBackgroundSyncAllowed(true);
+    }
+
+    public void setFdroidSyncModeOptimizedForRealTime() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME);
+        setBackgroundSyncAllowed(true);
+    }
+
+    public void setFdroidSyncModeDisabled() {
+        PreferencesManager.setFdroidSyncBackgroundMode(this.mContext, PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED);
+        setBackgroundSyncAllowed(false);
+    }
+
+    public boolean idFdroidSyncModeOptimizedForBattery() {
+        return isBackgroundSyncAllowed()
+                && (PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.equals(PreferencesManager.getFdroidSyncBackgroundMode(mContext)));
+    }
+
+    public boolean idFdroidSyncModeOptimizedForRealTime() {
+        return isBackgroundSyncAllowed()
+                && (PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME.equals(PreferencesManager.getFdroidSyncBackgroundMode(mContext)));
+    }
+
 
     /**
      * Tell if the application can be restarted in background

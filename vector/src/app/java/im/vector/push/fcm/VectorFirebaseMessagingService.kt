@@ -59,11 +59,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param message the message
      */
-    override fun onMessageReceived(message: RemoteMessage?) {
-        if (message == null || message.data == null) {
-            Log.e(LOG_TAG, "## onMessageReceived() : received a null message or message with no data")
-            return
-        }
+    override fun onMessageReceived(message: RemoteMessage) {
+
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Log.i(LOG_TAG, "## onMessageReceived()" + message.data.toString())
             Log.i(LOG_TAG, "## onMessageReceived() from FCM with priority " + message.priority)
@@ -86,7 +83,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * when the InstanceID token is initially generated, so this is where
      * you retrieve the token.
      */
-    override fun onNewToken(refreshedToken: String?) {
+    override fun onNewToken(refreshedToken: String) {
         Log.i(LOG_TAG, "onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
         Matrix.getInstance(this)?.pushManager?.resetFCMRegistration(refreshedToken)

@@ -15,7 +15,7 @@
  */
 package im.vector.notifications
 
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 
 data class SimpleNotifiableEvent(
         override var matrixID: String?,

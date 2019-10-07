@@ -18,8 +18,8 @@ package im.vector.tools
 
 import android.content.Context
 import android.os.Build
-import android.support.v7.preference.PreferenceManager
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import im.vector.BuildConfig
 import im.vector.Matrix
 import im.vector.VectorApp

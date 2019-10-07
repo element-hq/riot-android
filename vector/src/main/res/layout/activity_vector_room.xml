@@ -20,7 +20,7 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
 
             <include layout="@layout/vector_message_action_bar_custom_layout" />
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
     </FrameLayout>
 
