@@ -91,26 +91,13 @@ class AcceptTermsViewModel : ViewModel() {
         termsManager?.get(termsArgs.type, termsArgs.baseURL, object : ApiCallback<GetTermsResponse> {
             override fun onSuccess(info: GetTermsResponse) {
 
-                val terms = mutableListOf<Term>()
-                info.serverResponse.getLocalizedPrivacyPolicies(preferredLanguageCode)?.let {
-                    terms.add(
-                            Term(it.localizedUrl ?: "",
-                                    it.localizedName ?: "",
-                                    it.version,
-                                    accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
-                            )
+                val terms = info.serverResponse.getLocalizedTerms(preferredLanguageCode).map {
+                    Term(it.localizedUrl ?: "",
+                            it.localizedName ?: "",
+                            it.version,
+                            accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
                     )
                 }
-                info.serverResponse.getLocalizedTermOfServices(preferredLanguageCode)?.let {
-                    terms.add(
-                            Term(it.localizedUrl ?: "",
-                                    it.localizedName ?: "",
-                                    it.version,
-                                    accepted = info.alreadyAcceptedTermUrls.contains(it.localizedUrl)
-                            )
-                    )
-                }
-
                 termsList.postValue(MxAsync.Success(terms))
             }
 

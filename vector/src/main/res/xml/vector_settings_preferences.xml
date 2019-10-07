@@ -42,9 +42,16 @@
             android:title="@string/settings_add_phone_number"
             app:iconTint="?attr/vctr_settings_icon_tint_color" />
 
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
+            android:order="1000"
+            android:persistent="false"
+            android:title="@string/settings_discovery_category"
+            android:summary="@string/settings_discovery_manage"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
@@ -212,32 +219,41 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <!--<im.vector.preference.VectorPreferenceDivider />-->
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         android:title="@string/settings_background_sync">
 
-        <im.vector.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
-            android:title="@string/settings_start_on_boot" />
 
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:title="@string/settings_enable_background_sync" />
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
+            android:title="@string/settings_background_fdroid_sync_mode" />
+
+
+        <!-- Move to Advanced? -->
+
+        <!-- Preference for work manager-->
+        <im.vector.preference.VectorEditTextPreference
+            android:key="SETTINGS_WORK_MANAGER_DELAY_PREFERENCE_KEY"
+            android:inputType="numberDecimal"
+            android:digits="0123456789"
+            android:title="@string/settings_set_workmanager_delay" />
 
         <im.vector.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay" />
+
+        <im.vector.preference.VectorEditTextPreference
             android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
             android:numeric="integer"
             android:title="@string/settings_set_sync_timeout" />
 
-        <im.vector.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_delay" />
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+            android:title="@string/settings_start_on_boot" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -299,6 +315,11 @@
             android:key="SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
             android:title="@string/settings_call_ringtone_title" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY"
+            android:title="@string/settings_call_ringtone_use_default_stun" />
+
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceDivider />
@@ -358,7 +379,7 @@
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_name" />
+            android:title="@string/encryption_information_device_name_with_warning" />
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
@@ -422,7 +443,8 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url" />
+            tools:summary="@string/default_identity_server_url"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
 
 
         <im.vector.preference.VectorPreference

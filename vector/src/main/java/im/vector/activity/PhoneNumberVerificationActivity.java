@@ -35,6 +35,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.rest.model.SuccessResult;
 import org.matrix.androidsdk.rest.model.pid.ThreePid;
 
 import im.vector.Matrix;
@@ -102,7 +103,7 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
             return;
         }
 
-        mThreePid = (ThreePid) intent.getSerializableExtra(EXTRA_PID);
+        mThreePid = intent.getParcelableExtra(EXTRA_PID);
 
         mPhoneNumberCode.addTextChangedListener(this);
         mPhoneNumberCode.setOnEditorActionListener(this);
@@ -147,14 +148,11 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
                 mPhoneNumberCodeLayout.setError(getString(R.string.settings_phone_number_verification_error_empty_code));
             } else {
                 showWaitingView();
-                mSession.getThirdPidRestClient().submitValidationToken(mThreePid.medium,
-                        mPhoneNumberCode.getText().toString(),
-                        mThreePid.clientSecret,
-                        mThreePid.sid,
-                        new ApiCallback<Boolean>() {
+                mSession.getIdentityServerManager().submitValidationToken(mThreePid, mPhoneNumberCode.getText().toString(),
+                        new ApiCallback<SuccessResult>() {
                             @Override
-                            public void onSuccess(Boolean isSuccess) {
-                                if (isSuccess) {
+                            public void onSuccess(SuccessResult result) {
+                                if (result.success) {
                                     // the validation of mail ownership succeed, just resume the registration flow
                                     // next step: just register
                                     Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - registerAfterEmailValidations() started");
@@ -186,7 +184,7 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
     }
 
     private void registerAfterPhoneNumberValidation(final ThreePid pid) {
-        mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
+        mSession.getIdentityServerManager().finalizeAddSessionForEmail(pid, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 Intent intent = new Intent();

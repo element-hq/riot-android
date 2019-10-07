@@ -48,6 +48,7 @@ import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -277,7 +278,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            if (e instanceof IdentityServerNotConfiguredException) {
+                Toast.makeText(VectorMemberDetailsActivity.this, getString(R.string.invite_no_identity_server_error), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
             updateUi();
         }
     };
@@ -448,7 +453,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 Log.d(LOG_TAG, "## performItemAction(): Invite");
                 if (null != mRoom) {
                     enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mRoom.invite(mRoomMember.getUserId(), mRoomActionsListener);
+                    mRoom.invite(mSession, mRoomMember.getUserId(), mRoomActionsListener);
                 }
                 break;
 

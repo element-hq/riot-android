@@ -36,8 +36,10 @@ import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
 import org.matrix.androidsdk.rest.model.CreateRoomParams;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.pid.Invite3Pid;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,6 +50,7 @@ import java.util.Map;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
+import kotlin.Pair;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // tags
@@ -292,19 +295,17 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_create_room:
                 if (mParticipants.isEmpty()) {
-                    createRoom(mParticipants);
+                    // Should not happen, mParticipant contain myself at first position
+                    // createRoom(mParticipants);
                 } else {
-                    // the first entry is self so ignore
-                    mParticipants.remove(0);
-
-                    if (mParticipants.isEmpty()) {
+                    if (mParticipants.size() == 1) {
                         // standalone case : should be accepted ?
                         createRoom(mParticipants);
-                    } else if (mParticipants.size() > 1) {
+                    } else if (mParticipants.size() > 2) {
                         createRoom(mParticipants);
                     } else {
                         // 1 other participant
-                        openOrCreateDirectChatRoom(mParticipants.get(0).mUserId);
+                        openOrCreateDirectChatRoom(mParticipants.get(1).mUserId);
                     }
                 }
                 return true;
@@ -426,61 +427,74 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         CreateRoomParams params = new CreateRoomParams();
 
+        // First participant is self, so remove
+        List<ParticipantAdapterItem> participantsWithoutMe = participants.subList(1, participants.size());
+
         List<String> ids = new ArrayList<>();
-        for (ParticipantAdapterItem item : participants) {
+        for (ParticipantAdapterItem item : participantsWithoutMe) {
             if (null != item.mUserId) {
                 ids.add(item.mUserId);
             }
         }
 
-        params.addParticipantIds(mSession.getHomeServerConfig(), ids);
+        try {
+            Pair<List<Invite3Pid>, List<String>> listPair = mSession.
+                    getIdentityServerManager().
+                    getInvite3pid(mSession.getHomeServerConfig().getCredentials().userId, ids);
 
-        mSession.createRoom(params, new ApiCallback<String>() {
-            @Override
-            public void onSuccess(final String roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Map<String, Object> params = new HashMap<>();
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                        CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
-                    }
-                });
-            }
+            params.invite3pids = listPair.getFirst();
+            params.invitedUserIds = listPair.getSecond();
 
-            private void onError(final String message) {
-                membersListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != message) {
-                            Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+            mSession.createRoom(params, new ApiCallback<String>() {
+                @Override
+                public void onSuccess(final String roomId) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Map<String, Object> params = new HashMap<>();
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                            CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
                         }
-                        hideWaitingView();
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
+                private void onError(final String message) {
+                    membersListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (null != message) {
+                                Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+                            hideWaitingView();
+                        }
+                    });
+                }
 
-            @Override
-            public void onMatrixError(final MatrixError e) {
-                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                    hideWaitingView();
-
-                    getConsentNotGivenHelper().displayDialog(e);
-                } else {
+                @Override
+                public void onNetworkError(Exception e) {
                     onError(e.getLocalizedMessage());
                 }
-            }
 
-            @Override
-            public void onUnexpectedError(final Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onMatrixError(final MatrixError e) {
+                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        hideWaitingView();
+
+                        getConsentNotGivenHelper().displayDialog(e);
+                    } else {
+                        onError(e.getLocalizedMessage());
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(final Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        } catch (IdentityServerNotConfiguredException e) {
+            Toast.makeText(this, R.string.identity_server_not_defined, Toast.LENGTH_LONG).show();
+        }
+
     }
 }

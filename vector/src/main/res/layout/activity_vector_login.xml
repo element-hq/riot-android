@@ -278,8 +278,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:text="@string/auth_add_email_phone_message"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:text="@string/auth_add_email_phone_message_2" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/registration_email_til"
@@ -396,12 +396,15 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <!-- Visibility of this field depends on the homeserver: it can be displayed only when registering on a old HS -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_identity_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:textColorHint="?attr/vctr_default_text_hint_color">
+                            android:textColorHint="?attr/vctr_default_text_hint_color"
+                            android:visibility="gone"
+                            tools:visibility="visible">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_identity_url"
@@ -436,6 +439,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
+                android:padding="16dp"
                 android:visibility="gone"
                 tools:text="A text here"
                 tools:visibility="visible" />
@@ -520,9 +524,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:text="@string/auth_send_reset_email"
                 android:visibility="gone"
                 tools:layout_marginTop="138dp"
+                tools:text="@string/auth_reset_password_next_step_button"
                 tools:visibility="visible" />
 
             <Button
