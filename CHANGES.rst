@@ -21,6 +21,7 @@ Improvements:
  - Notification [Fdroid] Add a new mode for notification (#3122)
 
 Other changes:
+ - Widgets: Whitelist [MSC1961](https://github.com/matrix-org/matrix-doc/pull/1961) widget urls
  - Privacy: Remove the bind true flag from 3PID calls on registration (#3252)
 
 Bugfix:
