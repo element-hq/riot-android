@@ -1,9 +1,9 @@
-Changes in Riot 0.9.7 (2019-XX-XX)
+Changes in Riot 0.9.7 (2019-10-07)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+ - Upgrade MatrixSdk to version 0.9.29.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.29
 
 Features:
  - Privacy: Use the hashed v2 lookup API for 3PIDs (#3257)
@@ -27,12 +27,6 @@ Other changes:
 Bugfix:
  - Fix reset password broken UI (#3125)
  - Execute 1 request instead of 2 for 3Pid lookup (#3344)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in Riot 0.9.6 (2019-09-13)
 ===================================================
