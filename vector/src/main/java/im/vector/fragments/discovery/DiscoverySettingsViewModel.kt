@@ -368,31 +368,37 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     copy(termsNotSigned = false)
                 }
 
-                retrieveEmailsBinding()
-                retrievePhonesBinding()
+                retrieveBinding()
             }
         })
     }
 
-    private fun retrieveEmailsBinding() {
+    private fun retrieveBinding() {
         val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
-        val knownEmailList = linkedMailsInfo.map { it.address }
+        val knownEmails = linkedMailsInfo.map { it.address }
         // Note: it will be a list of "email"
-        val knownMedium = linkedMailsInfo.map { it.medium }
+        val knownEmailMedium = linkedMailsInfo.map { it.medium }
+
+        val linkedMsisdnsInfo = mxSession.myUser.getlinkedPhoneNumbers()
+        val knownMsisdns = linkedMsisdnsInfo.map { it.address }
+        // Note: it will be a list of "msisdn"
+        val knownMsisdnMedium = linkedMsisdnsInfo.map { it.medium }
 
         setState {
             copy(
-                    emailList = Success(knownEmailList.map { PidInfo(it, Loading()) })
+                    emailList = Success(knownEmails.map { PidInfo(it, Loading()) }),
+                    phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Loading()) })
             )
         }
 
-        mxSession.identityServerManager.lookup3Pids(knownEmailList,
-                knownMedium,
+        mxSession.identityServerManager.lookup3Pids(knownEmails + knownMsisdns,
+                knownEmailMedium + knownMsisdnMedium,
                 object : ApiCallback<List<String>> {
                     override fun onSuccess(info: List<String>) {
                         setState {
                             copy(
-                                    emailList = Success(toPidInfoList(knownEmailList, info))
+                                    emailList = Success(toPidInfoList(knownEmails, info.take(knownEmails.size))),
+                                    phoneNumbersList = Success(toPidInfoList(knownMsisdns, info.takeLast(knownMsisdns.size)))
                             )
                         }
                     }
@@ -417,61 +423,12 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     private fun onError(e: Throwable) {
                         setState {
                             copy(
-                                    emailList = Success(knownEmailList.map { PidInfo(it, Fail(e)) })
-                            )
-                        }
-                    }
-
-                })
-    }
-
-    private fun retrievePhonesBinding() {
-        val linkedMsisdnsInfo = mxSession.myUser.getlinkedPhoneNumbers()
-        val knownMsisdns = linkedMsisdnsInfo.map { it.address }
-        // Note: it will be a list of "msisdn"
-        val knownMedium = linkedMsisdnsInfo.map { it.medium }
-
-        setState {
-            copy(
-                    phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Loading()) })
-            )
-        }
-
-        mxSession.identityServerManager.lookup3Pids(knownMsisdns,
-                knownMedium,
-                object : ApiCallback<List<String>> {
-                    override fun onSuccess(info: List<String>) {
-                        setState {
-                            copy(
-                                    phoneNumbersList = Success(toPidInfoList(knownMsisdns, info))
-                            )
-                        }
-                    }
-
-                    override fun onUnexpectedError(e: Exception) {
-                        if (e is TermsNotSignedException) {
-                            setState {
-                                copy(termsNotSigned = true)
-                            }
-                        }
-                        onError(e)
-                    }
-
-                    override fun onNetworkError(e: Exception) {
-                        onError(e)
-                    }
-
-                    override fun onMatrixError(e: MatrixError) {
-                        onError(Throwable(e.message))
-                    }
-
-                    fun onError(e: Throwable) {
-                        setState {
-                            copy(
+                                    emailList = Success(knownEmails.map { PidInfo(it, Fail(e)) }),
                                     phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Fail(e)) })
                             )
                         }
                     }
+
                 })
     }
 
@@ -480,8 +437,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             val hasMatrixId = matrixIds[addressList.indexOf(it)].isNotBlank()
             PidInfo(
                     value = it,
-                    isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId }
-                            ?: PidInfo.SharedState.NOT_SHARED)
+                    isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
             )
         }
     }
