@@ -1456,25 +1456,25 @@ Changes in Vector 0.2.0 (2016-04-14)
 Changes in Riot 0.9.XX (2019-XX-XX)
 ===================================================
 
-MatrixSdk:
+MatrixSdk 🚀:
  - Upgrade MatrixSdk to version 0.X.Y.
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
-Features:
+Features ✨:
  -
 
-Improvements:
+Improvements 🙌:
  -
 
 Other changes:
  -
 
-Bugfix:
+Bug fixes 🐛:
  -
 
-Translations:
+Translations 🗣:
  -
 
-Build:
+Build 🧱:
  -
 
