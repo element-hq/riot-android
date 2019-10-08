@@ -1,3 +1,28 @@
+Changes in Riot 0.9.XX (2019-XX-XX)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade to version 0.X.Y.
+
+Features ✨:
+ -
+
+Improvementss 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+
 Changes in Riot 0.9.7 (2019-10-07)
 ===================================================
 
