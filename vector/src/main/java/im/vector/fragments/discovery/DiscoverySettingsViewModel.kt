@@ -15,9 +15,12 @@
  */
 package im.vector.fragments.discovery
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.*
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.Matrix
+import im.vector.ui.arch.LiveEvent
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
@@ -60,6 +63,10 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             if (currentIS != identityServerUrl) refreshModel()
         }
     }
+
+    private val _errorLiveEvent = MutableLiveData<LiveEvent<Throwable>>()
+    val errorLiveEvent: LiveData<LiveEvent<Throwable>>
+        get() = _errorLiveEvent
 
     init {
         startListenToIdentityManager()
@@ -138,11 +145,11 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     }
 
                     private fun handleDeleteError(e: Exception) {
+                        _errorLiveEvent.postValue(LiveEvent(e))
+
                         changeMailState(email, Fail(e))
                     }
-
                 })
-
     }
 
     private fun changeMailState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
@@ -223,6 +230,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             private fun handleDeleteError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
                 changeMailState(email, Fail(e))
             }
 
@@ -261,6 +270,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             private fun handleDeleteError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
                 changeMsisdnState(msisdn, Fail(e))
             }
 
@@ -296,6 +307,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
 
             private fun handleDeleteError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
                 changeMsisdnState(msisdn, Fail(e))
             }
 
@@ -337,6 +350,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
         mxSession.myUser.refreshThirdPartyIdentifiers(object : ApiCallback<Void> {
             override fun onUnexpectedError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
                 setState {
                     copy(
                             emailList = Fail(e),
@@ -346,6 +361,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             override fun onNetworkError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
                 setState {
                     copy(
                             emailList = Fail(e),
@@ -355,6 +372,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             override fun onMatrixError(e: MatrixError) {
+                _errorLiveEvent.postValue(LiveEvent(Exception(e.message)))
+
                 setState {
                     copy(
                             emailList = Fail(Throwable(e.message)),
@@ -421,6 +440,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     }
 
                     private fun onError(e: Throwable) {
+                        _errorLiveEvent.postValue(LiveEvent(e))
+
                         setState {
                             copy(
                                     emailList = Success(knownEmails.map { PidInfo(it, Fail(e)) }),
@@ -453,14 +474,17 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                     }
 
                     override fun onNetworkError(e: Exception) {
+                        _errorLiveEvent.postValue(LiveEvent(e))
                         changeMsisdnState(msisdn, Fail(e))
                     }
 
                     override fun onMatrixError(e: MatrixError) {
+                        _errorLiveEvent.postValue(LiveEvent(Exception(e.message)))
                         changeMsisdnState(msisdn, Fail(Throwable(e.message)))
                     }
 
                     override fun onUnexpectedError(e: Exception) {
+                        _errorLiveEvent.postValue(LiveEvent(e))
                         changeMsisdnState(msisdn, Fail(e))
                     }
 
@@ -498,6 +522,9 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
             }
 
             private fun reportError(e: Exception) {
+                _errorLiveEvent.postValue(LiveEvent(e))
+
+                // Restore previous state after an error
                 val sharedState = Success(if (bind) PidInfo.SharedState.NOT_VERIFIED_FOR_BIND else PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND)
                 if (medium == ThreePid.MEDIUM_EMAIL) {
                     changeMailState(address, sharedState)

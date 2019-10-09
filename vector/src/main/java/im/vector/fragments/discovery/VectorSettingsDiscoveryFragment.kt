@@ -21,18 +21,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import butterknife.BindView
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.ReviewTermsActivity
 import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.extensions.withArgs
 import im.vector.fragments.VectorBaseMvRxFragment
+import kotlinx.android.synthetic.main.fragment_simple_epoxy.*
 import org.matrix.androidsdk.features.terms.TermsManager
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
@@ -48,9 +48,6 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
     lateinit var sharedViewModel: DiscoverySharedViewModel
 
-    @BindView(R.id.epoxyRecyclerView)
-    lateinit var epoxyRecyclerView: EpoxyRecyclerView
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -63,6 +60,12 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         sharedViewModel.navigateEvent.observe(this, Observer {
             if (it.peekContent().first == DiscoverySharedViewModel.NEW_IDENTITY_SERVER_SET_REQUEST) {
                 viewModel.changeIdentityServer(it.peekContent().second)
+            }
+        })
+
+        viewModel.errorLiveEvent.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { throwable ->
+                Snackbar.make(coordinatorLayout, throwable.toString(), Snackbar.LENGTH_LONG).show()
             }
         })
     }
