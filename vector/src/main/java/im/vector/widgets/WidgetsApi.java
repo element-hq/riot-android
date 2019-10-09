@@ -15,7 +15,7 @@
  */
 package im.vector.widgets;
 
-import java.util.Map;
+import org.matrix.androidsdk.rest.model.openid.RequestOpenIdTokenResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,12 +27,12 @@ interface WidgetsApi {
     /**
      * register to the server
      *
-     * @param body the body content
+     * @param requestOpenIdTokenResponse the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
      */
     @POST("register")
-    Call<Map<String, String>> register(@Body Map<Object, Object> body, @Query("v") String version);
+    Call<RegisterResponse> register(@Body RequestOpenIdTokenResponse requestOpenIdTokenResponse, @Query("v") String version);
 
     @GET("account")
-    Call<Map<String, String>> validateToken( @Query("scalar_token") String scalarToken, @Query("v") String version);
+    Call<Void> validateToken(@Query("scalar_token") String scalarToken, @Query("v") String version);
 
 }

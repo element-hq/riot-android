@@ -9,10 +9,10 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean lintAppRelease assembleAppDebug --stacktrace"
+      - "./gradlew --no-daemon clean lintAppRelease assembleAppDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/debug/*.apk"
     branches: "develop feature/*"
@@ -24,10 +24,10 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
       - "./set_debug_env.sh"
-      - "./gradlew clean lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
+      - "./gradlew --no-daemon clean lintAppfdroidRelease assembleAppfdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/appfdroid/debug/*.apk"
     branches: "develop feature/*"
@@ -39,9 +39,9 @@ steps:
     agents:
         # We use a medium sized instance instead of the normal small ones because
         # gradle build is long
-        queue: "medium"
+        queue: "xlarge"
     commands:
-      - "./gradlew clean assembleAppRelease --stacktrace"
+      - "./gradlew --no-daemon clean assembleAppRelease --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/app/release/*.apk"
     branches: "master"
@@ -52,4 +52,5 @@ steps:
 # Code quality
 
   - label: "Code quality"
-    command: "./tools/check/check_code_quality.sh"
+    commands:
+      - "./tools/check/check_code_quality.sh"

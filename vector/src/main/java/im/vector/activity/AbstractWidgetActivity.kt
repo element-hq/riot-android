@@ -148,7 +148,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
         }
     }
 
-    private fun presentTermsForServices(token: String?) {
+    private fun presentTermsForServices(token: String) {
         val wm = WidgetManagerProvider.getWidgetManager(this)
         if (wm == null) {  // should not happen
             finish()

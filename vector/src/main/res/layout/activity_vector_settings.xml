@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,6 +29,7 @@
         android:layout_height="match_parent"
         android:background="?attr/vctr_waiting_background_color"
         android:clickable="true"
+        tools:visibility="visible"
         android:visibility="gone">
 
         <ProgressBar

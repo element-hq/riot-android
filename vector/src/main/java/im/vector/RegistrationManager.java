@@ -18,6 +18,7 @@
 package im.vector;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -29,11 +30,15 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.features.identityserver.IdentityServerManager;
 import org.matrix.androidsdk.login.RegistrationToolsKt;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
+import org.matrix.androidsdk.rest.model.RequestEmailValidationResponse;
+import org.matrix.androidsdk.rest.model.RequestPhoneNumberValidationResponse;
 import org.matrix.androidsdk.rest.model.login.AuthParams;
 import org.matrix.androidsdk.rest.model.login.AuthParamsCaptcha;
 import org.matrix.androidsdk.rest.model.login.AuthParamsLoginPassword;
@@ -102,6 +107,8 @@ public class RegistrationManager {
     // True when the user entered both email and phone but only phone will be used for account registration
     private boolean mShowThreePidWarning;
 
+    private boolean mDoesRequireIdentityServer = false;
+
     /*
      * *********************************************************************************************
      * Constructor
@@ -145,6 +152,7 @@ public class RegistrationManager {
         mTermsApproved = false;
 
         mShowThreePidWarning = false;
+        mDoesRequireIdentityServer = false;
     }
 
     /**
@@ -157,6 +165,16 @@ public class RegistrationManager {
         mLoginRestClient = null;
         mThirdPidRestClient = null;
         mProfileRestClient = null;
+        //XXX do that as early as possible, this is need deeper refactoring to be handled correctly
+        LoginRestClient loginRestClient = getLoginRestClient();
+        if (loginRestClient != null) {
+            loginRestClient.doesServerRequireIdentityServerParam(new SimpleApiCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean info) {
+                    mDoesRequireIdentityServer = info;
+                }
+            });
+        }
     }
 
     /**
@@ -260,18 +278,29 @@ public class RegistrationManager {
         final String registrationType;
         if (mRegistrationResponse != null && !TextUtils.isEmpty(mRegistrationResponse.session)) {
             AuthParams authParams = null;
-            if (mPhoneNumber != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !TextUtils.isEmpty(mPhoneNumber.sid)) {
-                registrationType = LoginRestClient.LOGIN_FLOW_TYPE_MSISDN;
-                authParams = getThreePidAuthParams(mPhoneNumber.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
-                        mPhoneNumber.sid, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+            if (mPhoneNumber != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && !TextUtils.isEmpty(mPhoneNumber.getSid())) {
+                Uri identityServerUri = mHsConfig.getIdentityServerUri();
+                if (identityServerUri == null) {
+                    listener.onIdentityServerMissing();
+                    return;
+                } else {
+                    registrationType = LoginRestClient.LOGIN_FLOW_TYPE_MSISDN;
+                    authParams = getThreePidAuthParams(mPhoneNumber.getClientSecret(), identityServerUri.getHost(),
+                            mPhoneNumber.getSid(), LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
+                }
             } else if (mEmail != null && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
-                if (TextUtils.isEmpty(mEmail.sid)) {
+                if (TextUtils.isEmpty(mEmail.getSid())) {
                     // Email token needs to be requested before doing validation
                     Log.d(LOG_TAG, "attemptRegistration: request email validation");
                     requestValidationToken(context, mEmail, new ThreePidRequestListener() {
                         @Override
+                        public void onIdentityServerMissing() {
+                            listener.onIdentityServerMissing();
+                        }
+
+                        @Override
                         public void onThreePidRequested(ThreePid pid) {
-                            if (!TextUtils.isEmpty(pid.sid)) {
+                            if (!TextUtils.isEmpty(pid.getSid())) {
                                 // The session id for the email validation has just been received.
                                 // We trigger here a new registration request without delay to attach the current username
                                 // and the pwd to the registration session.
@@ -289,9 +318,15 @@ public class RegistrationManager {
                     });
                     return;
                 } else {
-                    registrationType = LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY;
-                    authParams = getThreePidAuthParams(mEmail.clientSecret, mHsConfig.getIdentityServerUri().getHost(),
-                            mEmail.sid, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+                    Uri identityServerUri = mHsConfig.getIdentityServerUri();
+                    if (identityServerUri == null) {
+                        listener.onIdentityServerMissing();
+                        return;
+                    } else {
+                        registrationType = LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY;
+                        authParams = getThreePidAuthParams(mEmail.getClientSecret(), identityServerUri.getHost(),
+                                mEmail.getSid(), LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+                    }
                 }
             } else if (!TextUtils.isEmpty(mCaptchaResponse) && !isCompleted(LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA)) {
                 registrationType = LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA;
@@ -335,8 +370,6 @@ public class RegistrationManager {
                 if (mPassword != null) {
                     params.password = mPassword;
                 }
-                params.bind_email = mEmail != null;
-                params.bind_msisdn = mPhoneNumber != null;
             }
 
             if (authParams != null) {
@@ -412,7 +445,7 @@ public class RegistrationManager {
 
         registrationParams.auth.session = aSessionId;
 
-        // Note: username, password and bind_email must not be set in registrationParams
+        // Note: username, password must not be set in registrationParams
         mUsername = null;
         mPassword = null;
         clearThreePid();
@@ -574,27 +607,31 @@ public class RegistrationManager {
      */
     public void submitValidationToken(final String token, final ThreePid pid, final ThreePidValidationListener listener) {
         if (getThirdPidRestClient() != null) {
-            pid.submitValidationToken(getThirdPidRestClient(), token, pid.clientSecret, pid.sid, new ApiCallback<Boolean>() {
-                @Override
-                public void onSuccess(Boolean isSuccess) {
-                    listener.onThreePidValidated(isSuccess);
-                }
+            getThirdPidRestClient().submitValidationToken(
+                    pid.getMedium(),
+                    token,
+                    pid.getClientSecret(),
+                    pid.getSid(), new ApiCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean isSuccess) {
+                            listener.onThreePidValidated(isSuccess);
+                        }
 
-                @Override
-                public void onNetworkError(Exception e) {
-                    listener.onThreePidValidated(false);
-                }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            listener.onThreePidValidated(false);
+                        }
 
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    listener.onThreePidValidated(false);
-                }
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            listener.onThreePidValidated(false);
+                        }
 
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    listener.onThreePidValidated(false);
-                }
-            });
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            listener.onThreePidValidated(false);
+                        }
+                    });
         }
     }
 
@@ -626,7 +663,7 @@ public class RegistrationManager {
      * @param listener
      */
     public void addPhoneNumberThreePid(final Context context, final String phoneNumber, final String countryCode, final ThreePidRequestListener listener) {
-        final ThreePid pid = new ThreePid(phoneNumber, countryCode, ThreePid.MEDIUM_MSISDN);
+        final ThreePid pid = ThreePid.Companion.fromPhoneNumber(phoneNumber, countryCode);
         requestValidationToken(context, pid, listener);
     }
 
@@ -650,18 +687,18 @@ public class RegistrationManager {
             if (isRequired(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
                     && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 // Both required
-                instructionRes = R.string.auth_add_email_and_phone_message;
+                instructionRes = R.string.auth_add_email_and_phone_message_2;
             } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                     // Both supported but not both required
-                    instructionRes = R.string.auth_add_email_phone_message;
+                    instructionRes = R.string.auth_add_email_phone_message_2;
                 } else {
                     // Only email
-                    instructionRes = R.string.auth_add_email_message;
+                    instructionRes = R.string.auth_add_email_message_2;
                 }
             } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 // Only phone number
-                instructionRes = R.string.auth_add_phone_message;
+                instructionRes = R.string.auth_add_phone_message_2;
             }
         }
         return instructionRes != -1 ? context.getString(instructionRes) : "";
@@ -712,7 +749,7 @@ public class RegistrationManager {
      * @return third pid rest client
      */
     private ThirdPidRestClient getThirdPidRestClient() {
-        if (mThirdPidRestClient == null && mHsConfig != null) {
+        if (mThirdPidRestClient == null && mHsConfig != null && mHsConfig.getIdentityServerUri() != null) {
             mThirdPidRestClient = new ThirdPidRestClient(mHsConfig);
         }
         return mThirdPidRestClient;
@@ -826,7 +863,9 @@ public class RegistrationManager {
         AuthParamsThreePid authParams = new AuthParamsThreePid(medium);
 
         authParams.threePidCredentials.clientSecret = clientSecret;
-        authParams.threePidCredentials.idServer = host;
+        if (mDoesRequireIdentityServer) {
+            authParams.threePidCredentials.idServer = host;
+        }
         authParams.threePidCredentials.sid = sid;
 
         return authParams;
@@ -852,74 +891,132 @@ public class RegistrationManager {
      * @param listener
      */
     private void requestValidationToken(final Context context, final ThreePid pid, final ThreePidRequestListener listener) {
-        if (getThirdPidRestClient() != null) {
-            switch (pid.medium) {
-                case ThreePid.MEDIUM_EMAIL:
-                    String nextLink = NEXTLINK_BASE_URL + "/#/register?client_secret=" + pid.clientSecret;
-                    nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
-                    nextLink += "&is_url=" + mHsConfig.getIdentityServerUri().toString();
-                    nextLink += "&session_id=" + mRegistrationResponse.session;
-                    pid.requestEmailValidationToken(getProfileRestClient(), nextLink, true, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            listener.onThreePidRequested(pid);
-                        }
+        Uri identityServerUri = mHsConfig.getIdentityServerUri();
+        new LoginRestClient(mHsConfig)
+                .doesServerRequireIdentityServerParam(new ApiCallback<Boolean>() {
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onNetworkError(final Exception e) {
-                            warnAfterCertificateError(context, e, pid, listener);
-                        }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            String errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
-                            listener.onThreePidRequestFailed(errorMessage);
-                        }
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        listener.onThreePidRequestFailed(e.getLocalizedMessage());
+                    }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            String errorMessage = null;
-                            if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_email_already_used_error, null);
+                    @Override
+                    public void onSuccess(Boolean info) {
+                        if (info) {
+                            if (identityServerUri == null) {
+                                listener.onIdentityServerMissing();
                             } else {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                                doRequestValidationToken(context, pid, identityServerUri.toString(), listener);
                             }
 
-                            listener.onThreePidRequestFailed(errorMessage);
+                        } else {
+                            // Ok, not mandatory
+                            doRequestValidationToken(context, pid, null, listener);
                         }
-                    });
+                    }
+                });
+
+    }
+
+    private void doRequestValidationToken(final Context context,
+                                          final ThreePid pid,
+                                          final @Nullable String isUrl,
+                                          final ThreePidRequestListener listener) {
+        if (getThirdPidRestClient() != null) {
+            switch (pid.getMedium()) {
+                case ThreePid.MEDIUM_EMAIL:
+//                    String nextLink = NEXTLINK_BASE_URL + "/#/register?client_secret=" + pid.getClientSecret();
+//                    nextLink += "&hs_url=" + mHsConfig.getHomeserverUri().toString();
+//                    if (isUrl != null) {
+//                        nextLink += "&is_url=" + isUrl;
+//                    }
+//                    nextLink += "&session_id=" + mRegistrationResponse.session;
+
+                    getProfileRestClient().requestEmailValidationToken(IdentityServerManager.Companion.removeProtocol(isUrl),
+                            pid.getEmailAddress(),
+                            pid.getClientSecret(),
+                            pid.getSendAttempt(),
+                            /*nextLink*/null,
+                            true,
+                            new ApiCallback<RequestEmailValidationResponse>() {
+                                @Override
+                                public void onSuccess(RequestEmailValidationResponse info) {
+                                    pid.setSid(info.sid);
+                                    listener.onThreePidRequested(pid);
+                                }
+
+                                @Override
+                                public void onNetworkError(final Exception e) {
+                                    warnAfterCertificateError(context, e, pid, listener);
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    String errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    String errorMessage = null;
+                                    if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_email_already_used_error, null);
+                                    } else {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_email_error, e.getLocalizedMessage());
+                                    }
+
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
+                            });
                     break;
                 case ThreePid.MEDIUM_MSISDN:
-                    pid.requestPhoneNumberValidationToken(getProfileRestClient(), true, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            mPhoneNumber = pid;
-                            listener.onThreePidRequested(pid);
-                        }
+                    getProfileRestClient().requestPhoneNumberValidationToken(
+                            IdentityServerManager.Companion.removeProtocol(isUrl),
+                            pid.getPhoneNumber(),
+                            pid.getCountry(),
+                            pid.getClientSecret(),
+                            pid.getSendAttempt(),
+                            true,
+                            new ApiCallback<RequestPhoneNumberValidationResponse>() {
+                                @Override
+                                public void onSuccess(RequestPhoneNumberValidationResponse info) {
+                                    pid.setSid(info.sid);
+                                    mPhoneNumber = pid;
+                                    listener.onThreePidRequested(pid);
+                                }
 
-                        @Override
-                        public void onNetworkError(final Exception e) {
-                            warnAfterCertificateError(context, e, pid, listener);
-                        }
+                                @Override
+                                public void onNetworkError(final Exception e) {
+                                    warnAfterCertificateError(context, e, pid, listener);
+                                }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            String errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.getLocalizedMessage());
-                            listener.onThreePidRequestFailed(errorMessage);
-                        }
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    String errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.getLocalizedMessage());
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            String errorMessage = null;
-                            if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_already_used_error, null);
-                            } else {
-                                errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.mReason);
-                            }
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    String errorMessage = null;
+                                    if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_already_used_error, null);
+                                    } else {
+                                        errorMessage = build3PidErrorMessage(context, R.string.account_phone_number_error, e.mReason);
+                                    }
 
-                            listener.onThreePidRequestFailed(errorMessage);
-                        }
-                    });
+                                    listener.onThreePidRequestFailed(errorMessage);
+                                }
+                            });
                     break;
             }
         }
@@ -1094,6 +1191,8 @@ public class RegistrationManager {
      */
 
     public interface ThreePidRequestListener {
+        void onIdentityServerMissing();
+
         void onThreePidRequested(ThreePid pid);
 
         void onThreePidRequestFailed(String errorMessage);
@@ -1113,6 +1212,8 @@ public class RegistrationManager {
         void onRegistrationFailed(String message);
 
         void onWaitingEmailValidation();
+
+        void onIdentityServerMissing();
 
         /**
          * @param publicKey the Captcha public key
