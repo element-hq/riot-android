@@ -1,26 +1,11 @@
-Changes in Riot 0.9.XX (2019-XX-XX)
+Changes in Riot 0.9.8 (2019-10-09)
 ===================================================
 
 MatrixSdk 🚀:
- - Upgrade to version 0.X.Y.
-
-Features ✨:
- -
-
-Improvementss 🙌:
- -
-
-Other changes:
- -
+ - Upgrade to version 0.9.30.
 
 Bugfix 🐛:
  - App crashes for some users (#3348, #3349)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 
 Changes in Riot 0.9.7 (2019-10-07)
