@@ -94,16 +94,13 @@ class SettingsDiscoveryController(private val context: Context,
                             when {
                                 piState.isShared is Loading -> buttonIndeterminate(true)
                                 piState.isShared is Fail    -> {
-                                    checked(false) //TODO previous state?
-                                    buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
-                                    switchChangeListener { b, checked ->
-                                        if (checked) {
-                                            interactionListener.onTapShareMsisdn(piState.value)
-                                        } else {
-                                            interactionListener.onTapRevokeMsisdn(piState.value)
-                                        }
-                                    }
+                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
+                                    buttonTitle(context.getString(R.string.global_retry))
                                     infoMessage(piState.isShared.error.message)
+                                    buttonClickListener(View.OnClickListener {
+                                        interactionListener.onTapRetryToRetrieveBindings()
+                                    })
                                 }
                                 piState.isShared is Success -> when (piState.isShared()) {
                                     PidInfo.SharedState.SHARED,
@@ -181,10 +178,13 @@ class SettingsDiscoveryController(private val context: Context,
                             when (piState.isShared) {
                                 is Loading -> buttonIndeterminate(true)
                                 is Fail    -> {
-                                    checked(false) //TODO previous state?
                                     buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonTitle("")
+                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
+                                    buttonTitle(context.getString(R.string.global_retry))
                                     infoMessage(piState.isShared.error.message)
+                                    buttonClickListener(View.OnClickListener {
+                                        interactionListener.onTapRetryToRetrieveBindings()
+                                    })
                                 }
                                 is Success -> when (piState.isShared()) {
                                     PidInfo.SharedState.SHARED,
@@ -269,7 +269,7 @@ class SettingsDiscoveryController(private val context: Context,
             settingsButtonItem {
                 id("remove")
                 buttonTitleId(R.string.disconnect_identity_server)
-                buttonStyle(SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE)
+                buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
                     interactionListener.onTapDisconnectIdentityServer()
                 })
@@ -288,6 +288,7 @@ class SettingsDiscoveryController(private val context: Context,
         fun onTapShareMsisdn(msisdn: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()
+        fun onTapRetryToRetrieveBindings()
     }
 }
 

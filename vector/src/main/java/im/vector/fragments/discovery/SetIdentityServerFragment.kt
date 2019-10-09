@@ -121,7 +121,7 @@ class SetIdentityServerFragment : VectorBaseMvRxFragment() {
 
                 when (event) {
                     is NavigateEvent.NoTerms       -> {
-                        AlertDialog.Builder(requireContext())
+                        AlertDialog.Builder(requireActivity())
                                 .setTitle(R.string.settings_discovery_no_terms_title)
                                 .setMessage(R.string.settings_discovery_no_terms)
                                 .setPositiveButton(R.string._continue) { dialog, which ->
