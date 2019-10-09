@@ -136,7 +136,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
         if (hasBoundIds) {
             //we should prompt
-            AlertDialog.Builder(requireContext())
+            AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                     .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIsFragment(state) }
@@ -161,7 +161,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
             if (hasBoundIds) {
                 //we should prompt
-                AlertDialog.Builder(requireContext())
+                AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.disconnect_identity_server)
                         .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                         .setPositiveButton(R.string._continue) { _, _ -> viewModel.changeIdentityServer(null) }
