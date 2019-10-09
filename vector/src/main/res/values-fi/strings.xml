@@ -1526,7 +1526,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_preferences">Asetukset</string>
     <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
     <string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
-    <string name="last_edited_info_message">Viimeksi muokannut %s %s</string>
+    <string name="last_edited_info_message">Viimeksi muokannut %1$s %2$s</string>
 
 
     <string name="change_room_directory_network">Vaihda verkkoa</string>

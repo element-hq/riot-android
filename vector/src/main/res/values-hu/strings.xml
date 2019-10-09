@@ -1490,7 +1490,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="event_redacted_by_user_reason">Az eseményt a felhasználó törölte</string>
     <string name="event_redacted_by_admin_reason">Az eseményt a szoba adminisztrátora moderálta</string>
-    <string name="last_edited_info_message">Utoljára szerkesztette: %s ekkor: %s</string>
+    <string name="last_edited_info_message">Utoljára szerkesztette: %1$s ekkor: %2$s</string>
 
 
     <string name="malformed_message">Hibás esemény, nem lehet megjeleníteni</string>

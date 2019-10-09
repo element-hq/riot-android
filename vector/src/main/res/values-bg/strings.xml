@@ -1479,7 +1479,7 @@
 
     <string name="event_redacted_by_user_reason">Събитие изтрито от потребителя</string>
     <string name="event_redacted_by_admin_reason">Събитие модерирано от администратор на стаята</string>
-    <string name="last_edited_info_message">Последно редактирано от %s на %s</string>
+    <string name="last_edited_info_message">Последно редактирано от %1$s на %2$s</string>
 
 
     <string name="malformed_message">Повредено събитие, не може да се покаже</string>

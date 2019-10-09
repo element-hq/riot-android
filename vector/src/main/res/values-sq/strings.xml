@@ -1448,7 +1448,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="event_redacted_by_user_reason">Veprimtari e fshirë nga përdorues</string>
     <string name="event_redacted_by_admin_reason">Veprimtari e moderuar nga përgjegjës dhome</string>
-    <string name="last_edited_info_message">Përpunuar së fundi nga %s më %s</string>
+    <string name="last_edited_info_message">Përpunuar së fundi nga %1$s më %2$s</string>
 
 
     <string name="malformed_message">Veprimtari e keqformuar, s’mund të shfaqet</string>
