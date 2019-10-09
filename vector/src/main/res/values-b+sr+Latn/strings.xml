@@ -1,2 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resources_language">en</string>
+    <string name="resources_country_code">US</string>
+
+    <string name="light_theme">Svetla Tema</string>
+    <string name="dark_theme">Tamna Tema</string>
+    <string name="black_them">Crna Tema</string>
+    <string name="status_theme">Status.im Tema</string>
+
+    <string name="notification_sync_init">Inicijalizacija servisa</string>
+    <string name="notification_sync_in_progress">Sinhronizacija u toku…</string>
+    <string name="notification_noisy_notifications">Bučna obaveštenja</string>
+    <string name="notification_silent_notifications">Tiha obaveštenja</string>
+
+    <string name="title_activity_home">Poruke</string>
+    <string name="title_activity_room">Soba</string>
+    <string name="title_activity_settings">Podešavanja</string>
+    <string name="title_activity_member_details">Podaci o članu</string>
+    <string name="title_activity_historical">Istorijski</string>
+    <string name="title_activity_bug_report">Prijava bug-a</string>
+    <string name="title_activity_choose_sticker">Pošalji nalepnicu</string>
+    <string name="title_activity_keys_backup_setup">Rezervna kopija ključeva</string>
+    <string name="title_activity_keys_backup_restore">Koristi rezervnu kopiju ključeva</string>
+    <string name="title_activity_verify_device">Verifikuj uređaj</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Kreiranje rezervne kopije ključeva se nije završilo, molim sačekajte…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Izgubićete vaše šifrovane poruke ukoliko se sada odjavite</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Kreiranje rezervne kopije ključeva je u toku. Ako se odjavite sada, izgubićete pristup vašim šifrovanim porukama.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Sigurnosna kopija ključeva bi trebalo da bude aktivna na svim vašim uređajima kako bi izbegli gubitak pristupa vašim šifrovanim porukama.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ne želim moje šifrovane poruke</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Pravljenje rezervne kopije ključeva u toku…</string>
+    <string name="keys_backup_activate">Koristi rezervnu kopiju ključeva</string>
+    <string name="are_you_sure">Da li ste sigurni\?</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Izgubićete pristup vašim šifrovanim porukama ukoliko ne napravite rezervu kopiju ključeva pre nego što se odjavite.</string>
+
+    <string name="loading">Učitavanje…</string>
+
+    <string name="ok">U redu</string>
+    <string name="cancel">Otkaži</string>
+    <string name="save">Sačuvaj</string>
+    <string name="leave">Napusti</string>
+    <string name="stay">Ostani</string>
+    <string name="send">Pošalji</string>
+    <string name="copy">Kopiraj</string>
+    <string name="resend">Pošalji ponovo</string>
+    <string name="redact">Ukloni</string>
+    <string name="share">Podeli</string>
+    <string name="later">Kasnije</string>
+    <string name="forward">Prosledi</string>
+    <string name="delete">Obriši</string>
+    <string name="rename">Preimenuj</string>
+    <string name="ongoing_conference_call">Konferencijski poziv u toku.
+\nPriključi se kao %1$s ili %2$s</string>
+    <string name="ongoing_conference_call_voice">Glas</string>
+    <string name="ongoing_conference_call_video">Video</string>
+    <string name="cannot_start_call">Nemoguća uspostava poziva, molim probajte kasnije</string>
+    <string name="missing_permissions_warning">Neke opcije mogu nedostajati usled manjka dozvola…</string>
+    <string name="missing_permissions_error">Ova akcija nije moguća zbog nedosatka dozvola.</string>
+    <string name="missing_permissions_to_start_conf_call">Treba vam dozvola da pozovete kako bi započeli konferencijski poziv u ovoj sobi</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nemoguća uspostava poziva</string>
+    <string name="device_information">Informacije o uređaju</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferencijski pozivi nisu podržani u šifrovanim sobama</string>
+    <string name="call_anyway">Ipak zovi</string>
+    <string name="send_anyway">Ipak pošalji</string>
+    <string name="or">ili</string>
+    <string name="invite">Pošalji pozivnicu</string>
+    <string name="accept">Prihvati</string>
+    <string name="skip">Preskoči</string>
+    <string name="done">Gotovo</string>
+    <string name="abort">Obustavi</string>
+    <string name="ignore">Ignoriši</string>
+    <string name="review">Pregledaj</string>
+    <string name="decline">Odbaci</string>
+
+    <string name="action_exit">Izađi</string>
+    <string name="actions">Akcije</string>
+    <string name="action_sign_out">Odjavi se</string>
+    <string name="action_sign_out_confirmation_simple">Da li ste sigurni da želite da se odjavite\?</string>
+    <string name="action_voice_call">Glasovni poziv</string>
+    <string name="action_video_call">Video poziv</string>
+    <string name="action_global_search">Globalna pretraga</string>
+    <string name="action_mark_all_as_read">Označi sve kao pročitano</string>
+    <string name="action_quick_reply">Brzi odgovor</string>
+    <string name="action_mark_room_read">Označi kao pročitano</string>
+    <string name="action_open">Otvori</string>
+    <string name="action_close">Zatvori</string>
+    <string name="disable">Onemogući</string>
+
+    <string name="dialog_title_confirmation">Potvrda</string>
+    <string name="dialog_title_warning">Upozorenje</string>
+    <string name="dialog_title_error">Greška</string>
+
+    <string name="bottom_action_people">Ljudi</string>
+    <string name="bottom_action_rooms">Sobe</string>
+    <string name="invitations_header">Pozivnice</string>
+    <string name="low_priority_header">Nizak prioritet</string>
+    <string name="local_address_book_header">Lokalni adresar</string>
+    <string name="user_directory_header">Lista korisnika</string>
+    <string name="matrix_only_filter">Samo Matrix kontakti</string>
+    <string name="rooms_header">Sobe</string>
+    <string name="rooms_directory_header">Lista soba</string>
+    <string name="no_room_placeholder">Nema soba</string>
+    <string name="no_public_room_placeholder">Nema javnih soba</string>
+    <string name="no_group_placeholder">Nema grupa</string>
+
+    <string name="send_bug_report_description_in_english">Ako je moguće, molim opišite na engleskom.</string>
+    <string name="send_bug_report_placeholder">Opišite vaš problem ovde</string>
+    <string name="username">Korisničko ime</string>
+    <string name="create_account">Napravi nalog</string>
+    <string name="login">Prijavi se</string>
+    <string name="logout">Odjavi se</string>
+    <string name="start_new_chat">Započni novo ćaskanje</string>
+    <string name="start_voice_call">Započni glasovni poziv</string>
+    <string name="start_video_call">Započni video poziv</string>
+
+    <string name="call_failed_dont_ask_again">Ne pitaj ponovo</string>
+
+    <string name="option_send_sticker">Pošalji nalepnicu</string>
+    <string name="option_take_photo_video">Napravi fotografiju ili video snimak</string>
+    <string name="option_take_photo">Napravi fotografiju</string>
+    <string name="option_take_video">Napravi video snimak</string>
+
+    <string name="auth_login">Prijavi se</string>
+    <string name="auth_register">Napravi nalog</string>
+    <string name="auth_skip">Preskoči</string>
+    <string name="auth_password_placeholder">Lozinka</string>
+    <string name="auth_new_password_placeholder">Nova lozinka</string>
+    <string name="auth_user_name_placeholder">Korisničko ime</string>
+    <string name="auth_phone_number_placeholder">Broj telefona</string>
+    <string name="auth_opt_phone_number_placeholder">Broj telefona (opciono)</string>
+    <string name="auth_repeat_password_placeholder">Ponovi lozinku</string>
+    <string name="auth_repeat_new_password_placeholder">Potvrdite vašu novu lozinku</string>
+    <string name="auth_invalid_login_param">Pogrešno korisničko ime i/ili lozinka</string>
+    </resources>
