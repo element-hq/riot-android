@@ -373,7 +373,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         })
     }
 
-    private fun retrieveBinding() {
+    fun retrieveBinding() {
         val linkedMailsInfo = mxSession.myUser.getlinkedEmails()
         val knownEmails = linkedMailsInfo.map { it.address }
         // Note: it will be a list of "email"

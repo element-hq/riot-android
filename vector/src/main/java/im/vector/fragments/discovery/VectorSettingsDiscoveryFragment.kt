@@ -173,6 +173,10 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         }
     }
 
+    override fun onTapRetryToRetrieveBindings() {
+        viewModel.retrieveBinding()
+    }
+
     private fun navigateToChangeIsFragment(state: DiscoverySettingsState) {
         SetIdentityServerFragment.newInstance(args<String>().toString(), state.identityServer()).also {
             requireFragmentManager().beginTransaction()
