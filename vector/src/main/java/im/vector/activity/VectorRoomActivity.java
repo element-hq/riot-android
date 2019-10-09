@@ -2611,7 +2611,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private void refreshNotificationsArea() {
         // sanity check
         // might happen when the application is logged out (NPE reported on store)
-        if (null == mSession || (null == mSession.getDataHandler()) || (null == mRoom) || (null != sRoomPreviewData)) {
+        if (null == mSession
+                || (null == mSession.getDataHandler())
+                || (null == mSession.getDataHandler().getStore())
+                || (null == mRoom)
+                || (null != sRoomPreviewData)) {
             return;
         }
         final LimitResourceState limitResourceState = mResourceLimitEventListener.getLimitResourceState();
