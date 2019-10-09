@@ -1519,7 +1519,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="event_redacted_by_user_reason">Ereignis von Benutzer gelöscht</string>
     <string name="event_redacted_by_admin_reason">Ereignis moderiert durch Raum-Administrator</string>
-    <string name="last_edited_info_message">Zuletzt bearbeitet von %s am %s</string>
+    <string name="last_edited_info_message">Zuletzt bearbeitet von %1$s am %2$s</string>
 
 
     <string name="create_new_room">Neuen Raum erstellen</string>

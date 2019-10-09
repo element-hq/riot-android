@@ -55,10 +55,10 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
         }
 
         when (buttonStyle) {
-            SettingsTextButtonItem.ButtonStyle.POSITIVE     -> {
+            SettingsTextButtonItem.ButtonStyle.POSITIVE    -> {
                 holder.button.setTextColor(ThemeUtils.getColor(holder.main.context, R.attr.colorAccent))
             }
-            SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE -> {
+            SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE -> {
                 holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_error_color))
             }
         }

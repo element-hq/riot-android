@@ -37,7 +37,7 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
 
     enum class ButtonStyle {
         POSITIVE,
-        DESCTRUCTIVE
+        DESTRUCTIVE
     }
 
     enum class ButtonType {
@@ -118,10 +118,10 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
                     holder.button.isVisible = true
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
-                        ButtonStyle.POSITIVE     -> {
+                        ButtonStyle.POSITIVE    -> {
                             holder.button.setTextColor(ThemeUtils.getColor(holder.main.context, R.attr.colorAccent))
                         }
-                        ButtonStyle.DESCTRUCTIVE -> {
+                        ButtonStyle.DESTRUCTIVE -> {
                             holder.button.setTextColor(ContextCompat.getColor(holder.main.context, R.color.vector_error_color))
                         }
                     }

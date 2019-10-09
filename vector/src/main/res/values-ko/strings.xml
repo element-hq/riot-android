@@ -1180,21 +1180,21 @@
     <string name="store_title">Riot.im - 대화하세요, 나만의 방식</string>
     <string name="store_whats_new">우리는 항상 Riot.im을 변경하고 개선하고 있습니다. 전체 변경 내역은 여기서 찾을 수 있습니다: %1$s. 놓치지 않도록 업데이트를 켜 놓아주세요.</string>
     <string name="store_short_description">전적으로 여러분의 통제 하에 있는 범용 보안 대화 앱.</string>
-    <string name="store_full_description">여러분의 통제 하에 완전히 유연한 대화 앱. Riot은 여러분이 원하는 방식으로 대화할 수 있도록 합니다. 개방형 분산 커뮤니티의 표준 - [matrix]를 위해 제작됨.
-\n
-\n무료 matrix.org 계정을 만들고, https://modular.im에서 자신만의 서버, 혹은 다른 Matrix 서버를 얻으세요.
-\n
-\n왜 Riot.im을 선택해야 하나요\?
-\n
-\n• 완전한 대화: 원하는 대로 팀이나 친구, 커뮤니티를 중심으로 방을 만드세요! 대화, 파일 공유, 위젯 추가와 음성 및 영상 통화 - 모두 무료입니다.
-\n
-\n• 강력한 통합: 여러분이 알고 사랑하는 도구와 함께 Riot.im을 사용하세요. Riot.im이라면 다른 대화 앱의 사용자와 그룹까지도 대화할 수 있습니다.
-\n
-\n• 개인 및 보안: 대화를 비밀로 유지하세요. 최첨단 종단간 암호화로 비밀 대화를 은밀하게 유지해줍니다.
-\n
-\n• 오픈 소스: Matrix로 만들어진 오픈 소스입니다. 자신의 데이터를 자신의 서버에 소유하거나, 신뢰하는 서버에 맡기세요.
-\n
-\n• 어디에 있든: 모든 기기나 https://riot.im에서 완전히 동기화된 메시지 기록으로 연락을 유지합니다.</string>
+    <string name="store_full_description">여러분의 통제 하에 완전히 유연한 대화 앱. Riot은 여러분이 원하는 방식으로 대화할 수 있도록 합니다. 개방형 분산 커뮤니티의 표준 - [matrix]를 위해 제작됨. 
+\n 
+\n무료 matrix.org 계정을 만들고, https://modular.im 에서 자신만의 서버, 혹은 다른 Matrix 서버를 얻으세요. 
+\n 
+\n왜 Riot.im을 선택해야 하나요\? 
+\n 
+\n• 완전한 대화: 원하는 대로 팀이나 친구, 커뮤니티를 중심으로 방을 만드세요! 대화, 파일 공유, 위젯 추가와 음성 및 영상 통화 - 모두 무료입니다. 
+\n 
+\n• 강력한 통합: 여러분이 알고 사랑하는 도구와 함께 Riot.im을 사용하세요. Riot.im이라면 다른 대화 앱의 사용자와 그룹까지도 대화할 수 있습니다. 
+\n 
+\n• 개인 및 보안: 대화를 비밀로 유지하세요. 최첨단 종단간 암호화로 비밀 대화를 은밀하게 유지해줍니다. 
+\n 
+\n• 오픈 소스: Matrix로 만들어진 오픈 소스입니다. 자신의 데이터를 자신의 서버에 소유하거나, 신뢰하는 서버에 맡기세요. 
+\n 
+\n• 어디에 있든: 모든 기기나 https://riot.im 에서 완전히 동기화된 메시지 기록으로 연락을 유지합니다.</string>
 
     <string name="passphrase_create_passphrase">암호 만들기</string>
     <string name="passphrase_confirm_passphrase">암호 확인</string>
@@ -1416,7 +1416,7 @@
 
     <string name="event_redacted_by_user_reason">사용자가 감춘 이벤트</string>
     <string name="event_redacted_by_admin_reason">방 관리자가 감춘 이벤트</string>
-    <string name="last_edited_info_message">%s님이 %s에 마지막으로 편집함</string>
+    <string name="last_edited_info_message">%1$s님이 %2$s에 마지막으로 편집함</string>
 
 
     <string name="malformed_message">잘못된 이벤트, 표시할 수 없음</string>
@@ -1609,7 +1609,7 @@
     <string name="settings_discovery_emails_title">이메일 주소로 찾을 수 있음</string>
     <string name="settings_discovery_no_mails">이메일을 추가하면 탐색 설정이 나타납니다.</string>
     <string name="settings_discovery_no_msisdn">전화번호를 추가하면 탐색 설정이 나타납니다.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">ID 서버에서 연결을 해제하면 이메일이나 전화로 다른 사용자가 당신을 찾을 수 없게 되고 다른 사람들 초대할 수 없게 됩니다.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">ID 서버에서 연결을 해제하면 이메일이나 전화로 다른 사용자가 당신을 찾을 수 없게 되고 다른 사람들을 초대할 수 없게 됩니다.</string>
     <string name="settings_discovery_msisdn_title">전화번호로 찾을 수 있음</string>
     <string name="settings_discovery_confirm_mail">%s(으)로 확인 이메일을 보냈습니다, 이메일을 확인하고 확인 링크를 클릭하세요</string>
     <string name="settings_discovery_mail_pending">보류 중</string>

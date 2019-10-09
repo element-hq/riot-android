@@ -277,18 +277,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
     }
 
-    private val manageBackupPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
-    }
-
-    private val exportPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
-    }
-
-    private val importPref by lazy {
-        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
-    }
-
     private val cryptoInfoTextPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
     }
@@ -2500,22 +2488,29 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun refreshKeysManagementSection() {
         //If crypto is not enabled parent section will be removed
         //TODO notice that this will not work when no network
-        manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            context?.let {
-                startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+        findPreference(PreferencesManager.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                context?.let {
+                    startActivity(KeysBackupManageActivity.intent(it, mSession.myUserId))
+                }
+                false
             }
-            false
         }
 
-        exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            exportKeys()
-            true
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                exportKeys()
+                true
+            }
         }
 
-        importPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            importKeys()
-            true
+        findPreference(PreferencesManager.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                importKeys()
+                true
+            }
         }
+
     }
 
     //==============================================================================================================

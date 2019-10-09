@@ -1534,7 +1534,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="event_redacted_by_user_reason">Evento eliminato dall\'utente</string>
     <string name="event_redacted_by_admin_reason">Evento moderato da un admin della stanza</string>
-    <string name="last_edited_info_message">Ultima modifica di %s il %s</string>
+    <string name="last_edited_info_message">Ultima modifica di %1$s il %2$s</string>
 
 
     <string name="malformed_message">Evento malformato, impossibile visualizzarlo</string>

@@ -23,6 +23,7 @@ import me.leolin.shortcutbadger.ShortcutBadger
 import org.matrix.androidsdk.MXDataHandler
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.data.Room
 import java.util.*
 
 /**
@@ -116,7 +117,7 @@ object BadgeProxy {
         } else if (null == aDataHandler.store) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance")
         } else {
-            val roomCompleteList = ArrayList(aDataHandler.store.rooms)
+            val roomCompleteList = aDataHandler.store?.rooms?.toList().orEmpty()
             var unreadRoomsCount = 0
 
             for (room in roomCompleteList) {

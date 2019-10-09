@@ -1443,7 +1443,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="event_redacted_by_user_reason">由使用者刪除的活動</string>
     <string name="event_redacted_by_admin_reason">由聊天室管理員審核的活動</string>
-    <string name="last_edited_info_message">最後編輯由 %s 於 %s</string>
+    <string name="last_edited_info_message">最後編輯由 %1$s 於 %2$s</string>
 
 
     <string name="malformed_message">活動格式錯誤，無法顯示</string>
