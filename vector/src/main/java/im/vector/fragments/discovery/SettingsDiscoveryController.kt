@@ -269,7 +269,7 @@ class SettingsDiscoveryController(private val context: Context,
             settingsButtonItem {
                 id("remove")
                 buttonTitleId(R.string.disconnect_identity_server)
-                buttonStyle(SettingsTextButtonItem.ButtonStyle.DESCTRUCTIVE)
+                buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
                     interactionListener.onTapDisconnectIdentityServer()
                 })
