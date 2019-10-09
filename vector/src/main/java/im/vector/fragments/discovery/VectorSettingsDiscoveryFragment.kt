@@ -113,7 +113,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun checkEmailVerification(email: String, bind: Boolean) {
-        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, email, bind)
+        viewModel.finalizeBind3pid(ThreePid.MEDIUM_EMAIL, email, bind)
     }
 
     override fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean) {

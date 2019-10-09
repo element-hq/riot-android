@@ -210,7 +210,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
         mxSession.identityServerManager.startUnBindSession(ThreePid.MEDIUM_EMAIL, email, null, object : ApiCallback<Pair<Boolean, ThreePid?>> {
             override fun onSuccess(info: Pair<Boolean, ThreePid?>) {
-                if (info.first /*requires mail validation */) {
+                if (info.first) {
+                    // requires mail validation
                     changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), info.second)
                 } else {
                     changeMailState(email, Success(PidInfo.SharedState.NOT_SHARED))
@@ -470,7 +471,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
                 code,
                 object : ApiCallback<SuccessResult> {
                     override fun onSuccess(info: SuccessResult) {
-                        add3pid(ThreePid.MEDIUM_MSISDN, msisdn, bind)
+                        finalizeBind3pid(ThreePid.MEDIUM_MSISDN, msisdn, bind)
                     }
 
                     override fun onNetworkError(e: Exception) {
@@ -492,7 +493,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
         )
     }
 
-    fun add3pid(medium: String, address: String, bind: Boolean) = withState { state ->
+    fun finalizeBind3pid(medium: String, address: String, bind: Boolean) = withState { state ->
         val _3pid: ThreePid
         if (medium == ThreePid.MEDIUM_EMAIL) {
             changeMailState(address, Loading())
@@ -545,8 +546,8 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     fun refreshPendingEmailBindings() = withState { state ->
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
-                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND   -> add3pid(ThreePid.MEDIUM_EMAIL, info.value, true)
-                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> add3pid(ThreePid.MEDIUM_EMAIL, info.value, false)
+                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND   -> finalizeBind3pid(ThreePid.MEDIUM_EMAIL, info.value, true)
+                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> finalizeBind3pid(ThreePid.MEDIUM_EMAIL, info.value, false)
                 else                                        -> Unit
             }
         }
