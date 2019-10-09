@@ -106,7 +106,7 @@ class HomeRoomsViewModel(private val session: MXSession) {
                     val isVersioned = redirectRoom?.isJoined
                             ?: false
                     isJoined && !isVersioned && !it.isConferenceUserRoom
-                } ?: emptyList()
+                } .orEmpty()
     }
 
     //endregion
