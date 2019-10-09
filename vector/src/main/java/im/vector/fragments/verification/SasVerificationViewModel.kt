@@ -72,7 +72,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
         this.otherUserId = otherUserId
         this.transactionID = transactionID
         session.crypto?.shortCodeVerificationManager?.addListener(this)
-        this.otherUser = session.dataHandler.store.getUser(otherUserId)
+        this.otherUser = session.dataHandler.store?.getUser(otherUserId)
         if (transactionID == null || transaction == null) {
             //sanity, this transaction is not known anymore
             _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
@@ -84,7 +84,7 @@ class SasVerificationViewModel : ViewModel(), VerificationManager.VerificationMa
         this.otherUserId = otherUserId
         this.otherDeviceId = otherDeviceId
         session.crypto?.shortCodeVerificationManager?.addListener(this)
-        this.otherUser = session.dataHandler.store.getUser(otherUserId)
+        this.otherUser = session.dataHandler.store?.getUser(otherUserId)
     }
 
     fun beginSasKeyVerification() {

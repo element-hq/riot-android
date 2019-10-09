@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - App crashes for some users (#3348, #3349)
 
 Translations 🗣:
  -

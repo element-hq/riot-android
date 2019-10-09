@@ -90,10 +90,10 @@ class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private
      */
     private fun loadServerNoticeRooms(): List<Room> {
         Log.v("ResourceLimitEventListener", "Load server notice rooms")
-        return dataHandler.store.rooms.filter {
+        return dataHandler.store?.rooms?.filter {
             val tags = it.accountData?.keys ?: emptySet()
             tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE)
-        }
+        } ?: emptyList()
     }
 
     private fun processPinnedEvents(room: Room) {
