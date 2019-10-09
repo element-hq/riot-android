@@ -1493,7 +1493,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="event_redacted_by_user_reason">Évènement supprimé par l’utilisateur</string>
     <string name="event_redacted_by_admin_reason">Évènement modéré par l’administrateur du salon</string>
-    <string name="last_edited_info_message">Dernière édition par %s le %s</string>
+    <string name="last_edited_info_message">Dernière édition par %1$s le %2$s</string>
 
 
     <string name="malformed_message">Évènement malformé, affichage impossible</string>

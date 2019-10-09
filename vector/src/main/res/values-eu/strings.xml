@@ -1486,7 +1486,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="event_redacted_by_user_reason">Gertaera ezabatu du erabiltzaileak</string>
     <string name="event_redacted_by_admin_reason">Gertaera moderatu du gelako administratzaileak</string>
-    <string name="last_edited_info_message">%s erabiltzaileak editatuta, azkenekoz: %s</string>
+    <string name="last_edited_info_message">%1$s erabiltzaileak editatuta, azkenekoz: %2$s</string>
 
 
     <string name="malformed_message">Gaizki formatutako gertaera, ezin da bistaratu</string>

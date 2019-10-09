@@ -1585,7 +1585,7 @@
 
     <string name="event_redacted_by_user_reason">Удаленное пользователем событие</string>
     <string name="event_redacted_by_admin_reason">Мероприятие, модерируемое администратором помещения</string>
-    <string name="last_edited_info_message">Последний раз редактировался %s на %s</string>
+    <string name="last_edited_info_message">Последний раз редактировался %1$s на %2$s</string>
 
 
     <string name="malformed_message">Некорректное событие, не может быть отображено</string>

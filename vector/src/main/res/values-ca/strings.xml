@@ -1527,7 +1527,7 @@ Per què triar Riot.im?
 
     <string name="event_redacted_by_user_reason">Esdeveniment eliminat per l\'usuari</string>
     <string name="event_redacted_by_admin_reason">Esdeveniment moderat per l\'administrador de la sala</string>
-    <string name="last_edited_info_message">Última edició per %s el %s</string>
+    <string name="last_edited_info_message">Última edició per %1$s el %2$s</string>
 
 
     <string name="malformed_message">Esdeveniment mal format, no es pot mostrar</string>

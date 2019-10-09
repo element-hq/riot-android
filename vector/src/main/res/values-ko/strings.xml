@@ -1416,7 +1416,7 @@
 
     <string name="event_redacted_by_user_reason">사용자가 감춘 이벤트</string>
     <string name="event_redacted_by_admin_reason">방 관리자가 감춘 이벤트</string>
-    <string name="last_edited_info_message">%s님이 %s에 마지막으로 편집함</string>
+    <string name="last_edited_info_message">%1$s님이 %2$s에 마지막으로 편집함</string>
 
 
     <string name="malformed_message">잘못된 이벤트, 표시할 수 없음</string>

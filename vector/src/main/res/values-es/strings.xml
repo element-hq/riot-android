@@ -1532,7 +1532,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="event_redacted_by_user_reason">Evento borrado por el usuario</string>
     <string name="event_redacted_by_admin_reason">Evento moderado por el administrador de la sala</string>
-    <string name="last_edited_info_message">Última edición por %s on %s</string>
+    <string name="last_edited_info_message">Última edición por %1$s on %2$s</string>
 
 
     <string name="malformed_message">Evento con error, no se puede mostrar</string>
