@@ -515,6 +515,19 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     }
 
+    fun refreshPendingEmailBindings() = withState { state ->
+        state.emailList()?.forEach { info ->
+            when (info.isShared()) {
+                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                    val bind = info.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                    add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
+                }
+            }
+        }
+    }
+
+
     companion object : MvRxViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> {
 
         override fun create(viewModelContext: ViewModelContext, state: DiscoverySettingsState): DiscoverySettingsViewModel? {

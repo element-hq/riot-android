@@ -76,17 +76,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
 
         //If some 3pids are pending, we can try to check if they have been verified here
-        withState(viewModel) { state ->
-            state.emailList()?.forEach { info ->
-                when (info.isShared()) {
-                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                        val bind = info.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
-                    }
-                }
-            }
-        }
+        viewModel.refreshPendingEmailBindings()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
