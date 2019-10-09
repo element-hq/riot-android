@@ -518,11 +518,9 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
     fun refreshPendingEmailBindings() = withState { state ->
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
-                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                    val bind = info.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                    add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
-                }
+                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND   -> add3pid(ThreePid.MEDIUM_EMAIL, info.value, true)
+                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> add3pid(ThreePid.MEDIUM_EMAIL, info.value, false)
+                else                                        -> Unit
             }
         }
     }
