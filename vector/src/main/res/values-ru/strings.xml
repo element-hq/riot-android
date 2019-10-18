@@ -1751,4 +1751,36 @@
 
     <string name="settings_set_workmanager_delay">Предпочтительный интервал синхронизации</string>
     <string name="settings_discovery_category">Обнаружение</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать%s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
+    <string name="invite_no_identity_server_error">Добавьте идентификационный сервер в свои настройки, чтобы выполнить это действие.</string>
+    <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации (Экспериментальный)</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
+\nВ зависимости от состояния ресурса вашего устройства, синхронизация может быть отложена операционной системой.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
+\nЭто повлияет на использование радио и батареи, появится постоянное уведомление о том, что Riot прислушивается к событиям.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nСинхронизация может быть отложена в зависимости от ресурсов (батареи) или состояния устройства (спящий режим).</string>
+    <string name="settings_discovery_manage">Управляйте настройками обнаружения.</string>
+    <string name="encryption_information_device_name_with_warning">Публичное имя (видимое для людей, с которыми вы общаетесь)</string>
+    <string name="device_name_warning">Публичное имя устройства видны людям, с которыми вы общаетесь</string>
+    <string name="identity_server_not_defined">Вы не используете какой-либо сервер идентификации</string>
+    <string name="identity_server_not_defined_for_password_reset">Идентификационный сервер не настроен, требуется сброс пароля.</string>
+
+    <string name="error_user_already_logged_in">Похоже, вы пытаетесь подключиться к другому домашнему серверу. Вы хотите выйти\?</string>
+
+    <string name="identity_server">Сервер идентификации</string>
+    <string name="disconnect_identity_server">Отключить идентификационный сервер</string>
+    <string name="add_identity_server">Настроить идентификационный сервер</string>
+    <string name="change_identity_server">Изменить идентификационный сервер</string>
+    <string name="settings_discovery_identity_server_info">В настоящее время вы используете %1$s для обнаружения и быть найденным вашими контактами.</string>
+    <string name="settings_discovery_identity_server_info_none">"Вы в настоящее время не используете идентификационный сервер. Чтобы обнаружить и быть найденным  вашими существующими контактами, настройте один из них ниже."</string>
+    <string name="settings_discovery_emails_title">Видимые адреса электронной почты</string>
+    <string name="settings_discovery_msisdn_title">Доступные номера телефонов</string>
+    <string name="settings_discovery_mail_pending">В ожидании</string>
+
+    <string name="settings_discovery_enter_identity_server">Введите новый сервер идентификации</string>
+    <string name="settings_discovery_bad_identity_server">Не удалось подключиться к серверу идентификации</string>
+    <string name="settings_discovery_please_enter_server">Пожалуйста, введите URL сервера идентификации</string>
+    <string name="settings_discovery_no_terms_title">Сервер идентификации не имеет условий предоставления услуг</string>
     </resources>
