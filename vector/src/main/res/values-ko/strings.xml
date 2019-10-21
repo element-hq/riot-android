@@ -31,8 +31,8 @@
     <string name="download">다운로드</string>
     <string name="share">공유</string>
     <string name="permalink">고유 주소</string>
-    <string name="view_source">출처 보기</string>
-    <string name="view_decrypted_source">해독된 출처 보기</string>
+    <string name="view_source">소스 보기</string>
+    <string name="view_decrypted_source">해독된 소스 보기</string>
     <string name="delete">삭제</string>
     <string name="rename">다시 이름 짓기</string>
     <string name="report_content">내용 신고하기</string>
