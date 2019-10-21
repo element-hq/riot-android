@@ -1,8 +1,9 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v7.preference.Preference
+//import android.support.v7.preference.Preference
 import android.util.AttributeSet
+import androidx.preference.Preference
 import im.vector.R
 
 class SabaPreferenceDivider @JvmOverloads constructor(context: Context,

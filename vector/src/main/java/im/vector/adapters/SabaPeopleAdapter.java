@@ -19,7 +19,7 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -28,11 +28,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.matrix.androidsdk.MXPatterns;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import org.matrix.androidsdk.MXPatterns;
+import org.matrix.androidsdk.core.Log;
+import org.matrix.androidsdk.core.MXPatterns;
+import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+//import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.Log;
+//import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;

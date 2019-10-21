@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
+
 package im.vector.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-import org.matrix.androidsdk.util.Log;
+//import org.matrix.androidsdk.util.Log;
 
 import im.vector.services.EventStreamServiceX;
 

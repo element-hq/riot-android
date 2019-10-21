@@ -1,8 +1,9 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v7.preference.ListPreference
+//import android.support.v7.preference.ListPreference
 import android.util.AttributeSet
+import androidx.preference.ListPreference
 
 
 class SabaListPreference : ListPreference {

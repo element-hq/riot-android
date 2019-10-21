@@ -1330,17 +1330,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     public void onUnknownDevices(Event event, MXCryptoError error) {
         refreshNotificationsArea();
-        CommonActivityUtils.displayUnknownDevicesDialog(mSession,
-                this,
-                (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData,
-                false,
-                new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
-                    @Override
-                    public void onSendAnyway() {
+//        CommonActivityUtils.displayUnknownDevicesDialog(mSession,
+//                this,
+//                (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData,
+//                false,
+//                new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+//                    @Override
+//                    public void onSendAnyway() {
                         mVectorMessageListFragment.resendUnsentMessages();
                         refreshNotificationsArea();
-                    }
-                });
+//                    }
+//                });
     }
 
     @Override

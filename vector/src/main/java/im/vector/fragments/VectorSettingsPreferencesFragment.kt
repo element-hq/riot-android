@@ -1709,6 +1709,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     /**
      * Refresh the ignored users list
      */
+    @SuppressLint("StringFormatInvalid")
     private fun refreshIgnoredUsersList() {
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 

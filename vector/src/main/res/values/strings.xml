@@ -1707,4 +1707,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %s. You will need to reconnect to %s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
+    <string name="saba_menu_conversations">Conversations</string>
+    <string name="saba_menu_groups">Groups</string>
+    <string name="saba_about_about_saba">About Saba</string>
 </resources>

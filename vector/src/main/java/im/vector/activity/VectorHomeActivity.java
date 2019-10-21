@@ -736,7 +736,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         setAnalyticsAuthorization(false);
                     }
                 })
-                .show();
+                .show().dismiss();
     }
 
     private void setAnalyticsAuthorization(boolean useAnalytics) {

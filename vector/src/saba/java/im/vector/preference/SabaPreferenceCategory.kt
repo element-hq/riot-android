@@ -1,8 +1,9 @@
 package im.vector.preference
 
 import android.content.Context
-import android.support.v7.preference.PreferenceCategory
+//import android.support.v7.preference.PreferenceCategory
 import android.util.AttributeSet
+import androidx.preference.PreferenceCategory
 
 class SabaPreferenceCategory : PreferenceCategory {
 
