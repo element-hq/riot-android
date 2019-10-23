@@ -48,7 +48,7 @@
             android:persistent="false"
             android:title="@string/settings_discovery_category"
             android:summary="@string/settings_discovery_manage"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -444,7 +444,7 @@
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
             tools:summary="@string/default_identity_server_url"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment" />
 
 
         <im.vector.preference.VectorPreference

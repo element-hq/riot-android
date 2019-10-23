@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="light_theme">Светла тема</string>
+<resources>
+    <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тамна тема</string>
     <string name="black_them">Црна тема</string>
     <string name="status_theme">Status.im тема</string>
@@ -105,4 +106,4 @@
     <string name="auth_password_placeholder">Лозинка</string>
     <string name="auth_new_password_placeholder">Нова лозинка</string>
     <string name="auth_user_name_placeholder">Корисничко име</string>
-    </resources>
+</resources>

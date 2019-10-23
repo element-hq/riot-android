@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">en</string>
+<resources>
+    <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
 
     <string name="light_theme">Svetla Tema</string>
@@ -400,4 +401,4 @@
     <string name="widget_integration_missing_parameter">Nedostaje parametar koji je obavezan.</string>
     <string name="widget_integration_invalid_parameter">Parametar nije ispravan.</string>
     <string name="settings_labs_enable_send_voice">Šalji glasovne poruke</string>
-    </resources>
+</resources>

@@ -1634,7 +1634,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="read_at">Lu à</string>
 
-<string name="none">Aucun</string>
+    <string name="none">Aucun</string>
     <string name="revoke">Révoquer</string>
     <string name="disconnect">Déconnecter</string>
     <string name="people_no_identity_server">Aucun serveur d’identité configuré.</string>

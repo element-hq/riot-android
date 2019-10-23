@@ -1612,7 +1612,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
-<string name="none">Bat ere ez</string>
+    <string name="none">Bat ere ez</string>
     <string name="revoke">Indargabetu</string>
     <string name="disconnect">Deskonektatu</string>
     <string name="review">Berrikusi</string>

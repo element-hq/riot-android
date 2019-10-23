@@ -1678,7 +1678,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="read_at">Leggi su</string>
 
-<string name="none">Nessuno</string>
+    <string name="none">Nessuno</string>
     <string name="revoke">Revoca</string>
     <string name="disconnect">Disconnetti</string>
     <string name="people_no_identity_server">Nessun server di identità configurato.</string>
