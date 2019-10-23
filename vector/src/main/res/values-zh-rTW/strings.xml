@@ -1522,7 +1522,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \nRiotX 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
 \n
-\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 直接聊天室建立 • 通話 • 小工具 • …</string>
+\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
 
     <string name="bottom_action_people_x">直接訊息</string>
 
@@ -1586,7 +1586,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="read_at">閱讀於</string>
 
-<string name="none">無</string>
+    <string name="none">無</string>
     <string name="revoke">撤銷</string>
     <string name="disconnect">斷線</string>
     <string name="people_no_identity_server">未設定身份識別伺服器。</string>
@@ -1651,6 +1651,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_discovery_no_terms">您選擇的身份識別伺服器沒有任何服務條款。僅在您信任服務擁有者時才繼續</string>
     <string name="settings_text_message_sent">文字訊息已傳送給 %s。請輸入其中包含的驗證碼。</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">您目前正在身份識別伺服器 %s 上分享電子郵件地址或電話號碼。您將必須重新連線到 %s 以停止分享它們。</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">您目前正在身份識別伺服器 %1$s 上分享電子郵件地址或電話號碼。您將必須重新連線到 %2$s 以停止分享它們。</string>
     <string name="settings_agree_to_terms">同意身份識別伺服器 (%s) 的服務條款以允許您被透過電子郵件地址或電話號碼探索。</string>
 </resources>

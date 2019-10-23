@@ -1521,7 +1521,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \n
 \nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
 \n
-\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
+\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Thirrje • Widget-es • …</string>
 
     <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
 
@@ -1587,7 +1587,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="read_at">Lexoni te</string>
 
-<string name="none">Asnjë</string>
+    <string name="none">Asnjë</string>
     <string name="revoke">Shfuqizoje</string>
     <string name="disconnect">Shkëputu</string>
     <string name="people_no_identity_server">S’ka shërbyes identitetesh të formësuar.</string>
@@ -1652,6 +1652,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_discovery_no_terms">Shërbyesi i identiteteve që keni zgjedhur nuk ka ndonjë kusht shërbimi. Vazhdoni vetëm nëse i zini besë të zotit të shërbimit</string>
     <string name="settings_text_message_sent">Te %s u dërgua një mesazh tekst. Ju lutemi, jepni kodin e verifikimit që përmban ai.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %s. Do të duhet të rilidheni me %s që të ndalni ndarjen e tyre.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
 </resources>

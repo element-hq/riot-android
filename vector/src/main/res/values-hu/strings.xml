@@ -1021,7 +1021,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1249,11 +1249,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1332,7 +1332,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1569,7 +1569,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nRiotX ezeket támogatja: • Bejelentkezés létező fiókba • Szoba készítés és nyilvános szobába való belépés • Meghívók fogadása és elutasítás • Felhasználók szobáinak listázása • Szoba adatainak megtekintése • Szöveges üzenet küldése • Csatolmány küldése • Titkosított szobákban üzenetek olvasása és írása • Titkosítás: Végponttól végpontig titkosító kulcsok mentése, fejlett eszköz ellenőrzés, kulcs megosztás kérése és válasz • „Push” értesítések • Világos, sötét és fekete téma
 \n
-\nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Közvetlen beszélgetések indítása • Hívások • Kisalkalmazások • …</string>
+\nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Hívások • Kisalkalmazások • …</string>
 
     <string name="bottom_action_people_x">Közvetlen beszélgetés</string>
 
@@ -1633,7 +1633,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="read_at">Olvasd itt</string>
 
-<string name="none">Nincs</string>
+    <string name="none">Nincs</string>
     <string name="revoke">Visszavon</string>
     <string name="disconnect">Lecsatlakozik</string>
     <string name="people_no_identity_server">Azonosítási szerver nincs beállítva.</string>
@@ -1698,6 +1698,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_discovery_no_terms">Az általad választott azonosítási szervernek nincs felhasználási feltétele. Csak akkor lépj tovább ha megbízol a szolgáltatás tulajdonosában</string>
     <string name="settings_text_message_sent">Szöveges üzenetet küldtünk ide: %s. Kérlek add meg az ellenőrző kódot amit az üzenet tartalmaz.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %s, hogy megállítsd a megosztást.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%1$s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %2$s, hogy megállítsd a megosztást.</string>
     <string name="settings_agree_to_terms">Egyetértek az azonosítási szerver (%s) Felhasználási feltételeivel ahhoz, hogy megtalálható legyek e-mail címmel vagy telefonszámmal.</string>
 </resources>

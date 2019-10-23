@@ -1495,7 +1495,7 @@
 \n 
 \nRiotX 지원: • 존재하는 계정으로 로그인 • 방을 만들고 공공 방에 참가 • 초대를 수락하거나 거절 • 사용자 방 목록 • 방 세부 정보 보기 • 문자 메시지 보내기 • 첨부 파일 보내기 • 암호화된 방에서 메시지 읽고 쓰기 • 암호화: 종단간 암호화 키 백업, 고급 기기 확인, 키 공유 요청과 답장 • 푸시 알림 • 밝은 테마, 어두운 테마 그리고 검정 테마 
 \n 
-\n아직 Riot의 모든 기능이 RiotX에 구현되지 않았습니다. 주요 없는 (그리고 곧 나올!) 기능: • 계정 만들기 • 방 설정 (방 구성원 목록 등) • 다이렉트 대화 방 만들기 • 전화 • 위젯 • …</string>
+\n아직 Riot의 모든 기능이 RiotX에 구현되지 않았습니다. 주요 없는 (그리고 곧 나올!) 기능: • 계정 만들기 • 방 설정 (방 구성원 목록 등) • 전화 • 위젯 • …</string>
 
     <string name="bottom_action_people_x">다이렉트 메시지</string>
 
@@ -1556,7 +1556,7 @@
 
     <string name="read_at">읽은 시간</string>
 
-<string name="none">없음</string>
+    <string name="none">없음</string>
     <string name="revoke">취소</string>
     <string name="disconnect">연결 해제</string>
     <string name="people_no_identity_server">설정된 ID 서버가 없습니다.</string>
@@ -1621,6 +1621,6 @@
     <string name="settings_discovery_no_terms">선택한 ID 서버가 서비스 약관이 없습니다. 서비스의 소유자를 신뢰하는 경우에만 계속하세요</string>
     <string name="settings_text_message_sent">%s(으)로 문자 메시지를 보냈습니다. 문자에 있는 확인 코드를 입력해주세요.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">현재 이메일 주소나 전화번호를 ID 서버 %s와 공유하고 있습니다. 공유하기를 중지하려면 %s(으)로 다시 연결해야 합니다.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">현재 이메일 주소나 전화번호를 ID 서버 %1$s와 공유하고 있습니다. 공유하기를 중지하려면 %2$s(으)로 다시 연결해야 합니다.</string>
     <string name="settings_agree_to_terms">ID 서버 (%s)의 서비스 약관에 동의하면 다른 사용자가 당신을 이메일 주소나 전화번호로 찾을 수 있게 됩니다.</string>
 </resources>

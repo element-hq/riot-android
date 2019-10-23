@@ -1564,7 +1564,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
 \n
-\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
+\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="bottom_action_people_x">Mezu zuzenak</string>
@@ -1612,7 +1612,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
-<string name="none">Bat ere ez</string>
+    <string name="none">Bat ere ez</string>
     <string name="revoke">Indargabetu</string>
     <string name="disconnect">Deskonektatu</string>
     <string name="review">Berrikusi</string>
@@ -1695,6 +1695,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_discovery_no_terms">Hautatu duzun identitate-zerbitzariak ez du erabilera baldintzarik. Jarraitu soilik zerbitzuaren jabea fidagarritzat jotzen baduzu</string>
     <string name="settings_text_message_sent">SMS mezu bat bidali zaizu %s zenbakira. Sartu hemen mezu horrek daukan egiaztatze-kodea.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %s zerbitzarian. %s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
     <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
 </resources>

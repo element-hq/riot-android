@@ -1613,7 +1613,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 \n
 \nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
 \n
-\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Creazione di stanze di chat diretta • Chiamate • Widget • …</string>
+\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
 
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
@@ -1678,7 +1678,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="read_at">Leggi su</string>
 
-<string name="none">Nessuno</string>
+    <string name="none">Nessuno</string>
     <string name="revoke">Revoca</string>
     <string name="disconnect">Disconnetti</string>
     <string name="people_no_identity_server">Nessun server di identità configurato.</string>
@@ -1743,6 +1743,6 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="settings_discovery_no_terms">Il server di identità che hai scelto non ha alcuna condizione di servizio. Continua solo se ti fidi del proprietario del servizio</string>
     <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica contenuto.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %s. Dovrai riconnetterti a %s per fermarne la condivisione.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per fermarne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per consentire di essere trovabile per email o numero di telefono.</string>
 </resources>
