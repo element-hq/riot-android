@@ -19,7 +19,7 @@
 
     <string name="loading">불러오는 중…</string>
 
-    <string name="ok">예</string>
+    <string name="ok">네</string>
     <string name="cancel">취소</string>
     <string name="save">저장</string>
     <string name="leave">떠나기</string>
@@ -31,8 +31,8 @@
     <string name="download">다운로드</string>
     <string name="share">공유</string>
     <string name="permalink">고유 주소</string>
-    <string name="view_source">출처 보기</string>
-    <string name="view_decrypted_source">해독된 출처 보기</string>
+    <string name="view_source">소스 보기</string>
+    <string name="view_decrypted_source">해독된 소스 보기</string>
     <string name="delete">삭제</string>
     <string name="rename">다시 이름 짓기</string>
     <string name="report_content">내용 신고하기</string>
@@ -235,7 +235,7 @@
     <string name="auth_missing_phone">전화번호가 누락되었습니다</string>
     <string name="auth_missing_email_or_phone">이메일 주소나 전화번호가 누락되었습니다</string>
     <string name="auth_invalid_token">옳지 않은 토큰</string>
-    <string name="auth_use_server_options">맞춤 서버 옵션을 사용하기 (고급)</string>
+    <string name="auth_use_server_options">맞춤 서버 설정을 사용하기 (고급)</string>
     <string name="auth_email_validation_message">등록을 계속하려면 이메일을 확인하세요</string>
     <string name="auth_threepid_warning_message">API가 존재하기 전까지는 이메일과 전화번호로 한 번에 등록할 수 없습니다. 오직 전화번호만 고려됩니다.
 \n
@@ -336,7 +336,7 @@
     <string name="permissions_rationale_msg_record_audio">음성 통화를 하려면 Riot은 마이크에 접근하는 권한이 필요합니다.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\n전화를 하려면 다은 팝업에서 접근을 허용해주세요."</string>
+\n전화를 하려면 다음 팝업에서 접근을 허용해주세요."</string>
     <string name="permissions_rationale_msg_camera_and_audio">영상 통화를 하려면 Riot은 카메라와 마이크에 접근하는 권한이 필요합니다.
 \n
 \n전화를 하려면 다음 팝업에서 접근을 허용해주세요.</string>
@@ -545,7 +545,7 @@
     <string name="room_sliding_menu_version">버전</string>
     <string name="room_sliding_menu_version_x">버전 %s</string>
     <string name="room_sliding_menu_term_and_conditions">이용 약관</string>
-    <string name="room_sliding_menu_third_party_notices">제 3자 공지</string>
+    <string name="room_sliding_menu_third_party_notices">제 3자 고지</string>
     <string name="room_sliding_menu_copyright">저작권</string>
     <string name="room_sliding_menu_privacy_policy">개인 정보 정책</string>
 
@@ -661,7 +661,7 @@
     <string name="settings_notification_ringtone">알림 소리</string>
     <string name="settings_enable_all_notif">이 계정에서 알림 켜기</string>
     <string name="settings_enable_this_device">이 기기에서 알림 켜기</string>
-    <string name="settings_turn_screen_on">3초 동안 화면을 켬</string>
+    <string name="settings_turn_screen_on">3초 동안 화면을 켜기</string>
     <string name="settings_noisy_notifications_preferences">소리 알림 설정</string>
     <string name="settings_call_notifications_preferences">전화 알림 설정</string>
     <string name="settings_silent_notifications_preferences">조용한 알림 설정</string>
@@ -687,7 +687,7 @@
     <string name="settings_version">버전</string>
     <string name="settings_olm_version">olm 버전</string>
     <string name="settings_app_term_conditions">이용 약관</string>
-    <string name="settings_third_party_notices">제 3자 공지</string>
+    <string name="settings_third_party_notices">제 3자 고지</string>
     <string name="settings_copyright">저작권</string>
     <string name="settings_privacy_policy">개인 정보 정책</string>
     <string name="settings_keep_media">미디어 유지</string>
@@ -734,7 +734,7 @@
     <string name="startup_notification_privacy_title">알림 개인 정보</string>
     <string name="startup_notification_privacy_message">Riot은 백그라운드에서 실행되어 알림을 안전하고 은밀하게 관리할 수 있습니다. 이것은 배터리 사용량에 영향을 줄 수 있습니다.</string>
     <string name="startup_notification_privacy_button_grant">권한 부여</string>
-    <string name="startup_notification_privacy_button_other">다른 옵션을 선택하세요</string>
+    <string name="startup_notification_privacy_button_other">다른 설정을 선택하세요</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">백그라운드 연결</string>
     <string name="startup_notification_fdroid_battery_optim_message">Riot은 신뢰가 있는 알림을 위해 낮은 영향의 백그라운드 연결을 유지해야 합니다.
@@ -845,7 +845,7 @@
     <string name="room_settings_room_access_rules_pref_dialog_title">누가 이 방에 접근할 수 있나요\?</string>
 
     <string name="room_settings_read_history_entry_anyone">누구나</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">(이 옵션을 선택한 시점부터) 구성원만</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">(이 설정을 선택한 시점부터) 구성원만</string>
     <string name="room_settings_read_history_entry_members_only_invited">(초대받은 시점부터) 구성원만</string>
     <string name="room_settings_read_history_entry_members_only_joined">(참가한 시점부터) 구성원만</string>
 
@@ -931,7 +931,7 @@
     <string name="encryption_import_room_keys_summary">로컬 파일에서 키 가져오기</string>
     <string name="encryption_import_import">가져오기</string>
     <string name="encryption_never_send_to_unverified_devices_title">확인된 기기로만 암호화</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않기.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않습니다.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d 키를 성공적으로 가져왔습니다.</string>
 
     <string name="encryption_information_not_verified">확인되지 않음</string>
@@ -1036,7 +1036,7 @@
     <string name="settings_labs_native_camera_summary">맞춤 카메라 화면 대신 시스템 카메라를 실행합니다.</string>
     <string name="settings_labs_keyboard_options_to_send_message">키보드 엔터 키로 메시지 보내기</string>
     <string name="settings_labs_enable_send_voice">음성 메시지 보내기</string>
-    <string name="settings_labs_enable_send_voice_summary">이 옵션은 메시지를 기록하기 위한 제 3자 애플리케이션이 필요합니다.</string>
+    <string name="settings_labs_enable_send_voice_summary">이 설정은 메시지를 기록하기 위한 제 3자 애플리케이션이 필요합니다.</string>
 
     <string name="you_added_a_new_device">새 기기 \'%s\'을(를) 추가했습니다, 여기에는 암호화 키가 필요합니다.</string>
     <string name="you_added_a_new_device_with_info">새 기기에는 암호화 키가 필요합니다.
@@ -1453,7 +1453,7 @@
     <string name="import_e2e_keys_from_file">파일 \"%1$s\"에서 종단간 암호화 키 가져옴.</string>
 
     <string name="settings_sdk_version">Matrix SDK 버전</string>
-    <string name="settings_other_third_party_notices">다른 제 3자 공지</string>
+    <string name="settings_other_third_party_notices">다른 제 3자 고지</string>
     <string name="navigate_to_room_when_already_in_the_room">이 방을 이미 봤습니다!</string>
 
     <string name="quick_reactions">빠른 리액션</string>
@@ -1574,7 +1574,7 @@
     <string name="auth_add_email_and_phone_message_2">계정 복구 용 이메일을 설정합니다. 이메일이나 전화로 이후 알고 있는 사람들이 당신을 찾을 수 있는지 여부를 선택하는데 사용됩니다.</string>
     <string name="login_error_homeserver_not_found">이 URL로는 홈서버에 접근할 수 없습니다, 확인해주세요</string>
     <string name="settings_call_ringtone_use_default_stun">대체 전화 지원 서버 허용</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">홈서버가 전화를 지원하지 않는다면 %s을(를) 지원 서버롤 사용합니다 (전화하는 동안 IP 주소가 공유될 것입니다)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">홈서버가 전화를 지원하지 않는다면 %s을(를) 지원 서버로 사용합니다 (전화하는 동안 IP 주소가 공유됩니다)</string>
     <string name="invite_no_identity_server_error">이 작업을 하려면 설정에서 ID 서버를 추가하세요.</string>
     <string name="settings_background_fdroid_sync_mode">백그라운드 동기화 모드 (실험적)</string>
     <string name="settings_background_fdroid_sync_mode_battery">배터리에 최적화됨</string>
@@ -1592,7 +1592,7 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \n동기화는 자원 (배터리)이나 기기의 상태 (수면)에 따라 지연됩니다.</string>
     <string name="settings_discovery_category">탐색</string>
-    <string name="settings_discovery_manage">탐색 설정 관리하기.</string>
+    <string name="settings_discovery_manage">탐색 설정을 관리합니다.</string>
     <string name="encryption_information_device_name_with_warning">공개 이름 (대화하는 사람들에게 보여집니다)</string>
     <string name="device_name_warning">기기의 공개 이름은 대화하는 사람들에게 보여집니다</string>
     <string name="identity_server_not_defined">ID 서버를 사용하고 있지 않습니다</string>
