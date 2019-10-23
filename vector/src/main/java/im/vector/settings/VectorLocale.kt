@@ -21,7 +21,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.preference.PreferenceManager
 import android.text.TextUtils
-import android.util.Pair
 import androidx.core.content.edit
 import im.vector.R
 import kotlinx.coroutines.GlobalScope
@@ -38,6 +37,7 @@ object VectorLocale {
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
     private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
     private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
+    private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
 
     private val defaultLocale = Locale("en", "US")
 
@@ -109,6 +109,15 @@ object VectorLocale {
             } else {
                 putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val script = locale.script
+                if (TextUtils.isEmpty(script)) {
+                    remove(APPLICATION_LOCALE_SCRIPT_KEY)
+                } else {
+                    putString(APPLICATION_LOCALE_SCRIPT_KEY, script)
+                }
+            }
         }
     }
 
@@ -157,24 +166,43 @@ object VectorLocale {
      * @param context the context
      */
     private fun initApplicationLocales(context: Context) {
-        val knownLocalesSet = HashSet<Pair<String, String>>()
+        val knownLocalesSet = HashSet<Triple<String, String, String>>()
 
         try {
             val availableLocales = Locale.getAvailableLocales()
 
             for (locale in availableLocales) {
-                knownLocalesSet.add(Pair(getString(context, locale, R.string.resources_language),
-                        getString(context, locale, R.string.resources_country_code)))
+                knownLocalesSet.add(
+                        Triple(
+                                getString(context, locale, R.string.resources_language),
+                                getString(context, locale, R.string.resources_country_code),
+                                getString(context, locale, R.string.resources_script)
+                        ))
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.message, e)
-            knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
+            knownLocalesSet.add(
+                    Triple(
+                            context.getString(R.string.resources_language),
+                            context.getString(R.string.resources_country_code),
+                            context.getString(R.string.resources_script)
+                    ))
         }
 
         supportedLocales.clear()
 
         for (knownLocale in knownLocalesSet) {
-            supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                supportedLocales.add(
+                        Locale.Builder()
+                                .setLanguage(knownLocale.first)
+                                .setRegion(knownLocale.second)
+                                .setScript(knownLocale.third)
+                                .build()
+                )
+            } else {
+                supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+            }
         }
 
         // sort by human display names
@@ -189,6 +217,12 @@ object VectorLocale {
      */
     fun localeToLocalisedString(locale: Locale): String {
         var res = locale.getDisplayLanguage(locale)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (locale.script != "Latn" && !TextUtils.isEmpty(locale.getDisplayScript(locale))) {
+                res += " - " + locale.getDisplayScript(locale)
+            }
+        }
 
         if (!TextUtils.isEmpty(locale.getDisplayCountry(locale))) {
             res += " (" + locale.getDisplayCountry(locale) + ")"

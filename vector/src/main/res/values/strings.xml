@@ -5,6 +5,8 @@
 
     <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
+    <!-- Note to translators: Possible values: Latn or Cyrl -->
+    <string name="resources_script">Latn</string>
 
     <!-- theme -->
     <string name="light_theme">Light Theme</string>
