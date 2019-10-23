@@ -447,7 +447,13 @@
             app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
 
 
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_INTEGRATION_ALLOW"
+            android:defaultValue="true"
+            android:title="@string/settings_integration_allow" />
+
         <im.vector.preference.VectorPreference
+            android:dependency="SETTINGS_INTEGRATION_ALLOW"
             android:defaultValue="@string/integrations_ui_url"
             android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
             android:title="@string/settings_integration_manager" />

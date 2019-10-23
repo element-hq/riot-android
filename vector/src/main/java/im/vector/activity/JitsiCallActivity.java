@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import com.facebook.react.modules.core.PermissionListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
@@ -109,10 +110,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     @Override
     @SuppressLint("NewApi")
     public void initUiAndData() {
-        if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) == null) {
-            finish();
-            return;
-        }
+
         // Waiting View
         setWaitingView(findViewById(R.id.jitsi_progress_layout));
 
@@ -136,6 +134,10 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
             return;
         }
 
+        if (getWidgetManager() == null) {
+            finish();
+            return;
+        }
 
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
         if (null == mRoom) {
@@ -237,7 +239,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     protected void onStop() {
         super.onStop();
         JitsiMeetActivityDelegate.onHostPause(this);
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        WidgetsManager wm = getWidgetManager();
         if (wm != null) {
             wm.removeListener(mWidgetListener);
         }
@@ -253,10 +255,18 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         super.onResume();
 
         JitsiMeetActivityDelegate.onHostResume(this);
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        WidgetsManager wm = getWidgetManager();
         if (wm != null) {
             wm.addListener(mWidgetListener);
         }
+    }
+
+    @Nullable
+    private WidgetsManager getWidgetManager() {
+        if (mSession == null) return null;
+        WidgetManagerProvider widgetManagerProvider = Matrix.getInstance(this).getWidgetManagerProvider(mSession);
+        if (widgetManagerProvider == null) return null;
+        return widgetManagerProvider.getWidgetManager(this);
     }
 
     @Override

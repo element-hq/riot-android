@@ -170,6 +170,7 @@ public class PreferencesManager {
     public static final String SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY";
 
     //Integrations
+    public static final String SETTINGS_INTEGRATION_ALLOW = "SETTINGS_INTEGRATION_ALLOW";
     public static final String SETTINGS_INTEGRATION_MANAGER_UI_URL = "SETTINGS_INTEGRATION_MANAGER_UI_URL";
     public static final String SETTINGS_INTEGRATION_MANAGER_API_URL = "SETTINGS_INTEGRATION_MANAGER_API_URL";
     public static final String SETTINGS_INTEGRATION_MANAGER_JITSI_URL = "SETTINGS_INTEGRATION_MANAGER_JITSI_URL";
@@ -287,6 +288,11 @@ public class PreferencesManager {
                 .edit()
                 .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
                 .apply();
+    }
+
+    public static Boolean areIntegrationAllowed(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_INTEGRATION_ALLOW,
+                true);
     }
 
     public static String getIntegrationManagerUiUrl(Context context) {

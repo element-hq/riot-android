@@ -16,36 +16,79 @@
 package im.vector.widgets
 
 import android.content.Context
+import im.vector.R
 import im.vector.util.PreferencesManager
+import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
+import org.matrix.androidsdk.features.integrationmanager.isEmptyConfig
 import java.net.MalformedURLException
 import java.net.URL
 
-object WidgetManagerProvider {
+class WidgetManagerProvider(val session: MXSession) : IntegrationManager.IntegrationManagerManagerListener {
+
+
+    override fun onIntegrationManagerChange(managerConfig: IntegrationManager) {
+        //Clear caches
+        currentConfig = null
+        widgetsManager = null
+    }
+
+    init {
+        session.integrationManager.addListener(this)
+    }
 
     private var widgetsManager: WidgetsManager? = null
+    private var currentConfig: IntegrationManagerConfig? = null
 
     fun getWidgetManager(context: Context): WidgetsManager? {
-        if (widgetsManager != null) {
+        val userDefinedConfig = session.integrationManager.integrationServerConfig
+        var sdkConfig: IntegrationManagerConfig? = null
+
+        if (userDefinedConfig != null) {
+            if (userDefinedConfig.isEmptyConfig()) {
+                //The user forced a null config so we don't use the default one
+                currentConfig = null
+                widgetsManager = null
+                return null
+            }
+            val defaultWhitelist = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context))
+            defaultWhitelist.add(0, userDefinedConfig.apiUrl)
+            sdkConfig = IntegrationManagerConfig(
+                    uiUrl = userDefinedConfig.uiUrl,
+                    apiUrl = userDefinedConfig.apiUrl,
+                    jitsiUrl = "${userDefinedConfig.apiUrl}/widgets/jitsi.html",
+                    whiteListedUrls = defaultWhitelist)
+        } else {
+            //Use the default IM
+            // TODO we should try to get the one suggested by the HS well-known
+            sdkConfig = IntegrationManagerConfig(
+                    uiUrl = context.getString(R.string.integrations_ui_url),
+                    apiUrl = context.getString(R.string.integrations_rest_url),
+                    jitsiUrl = context.getString(R.string.integrations_jitsi_widget_url),
+                    whiteListedUrls = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context)))
+        }
+
+
+
+        if (currentConfig == sdkConfig && widgetsManager != null) {
             return widgetsManager
         }
-        val uiURl = PreferencesManager.getIntegrationManagerUiUrl(context)
-        val apiURL = PreferencesManager.getIntegrationManagerApiUrl(context)
-        val jitsiUrl = PreferencesManager.getIntegrationManagerJitsiUrl(context)
-        if (uiURl.isNullOrBlank() || apiURL.isNullOrBlank() || jitsiUrl.isNullOrBlank()) return null
+
+        if (sdkConfig.uiUrl.isBlank() || sdkConfig.apiUrl.isBlank() || sdkConfig.jitsiUrl.isBlank()) {
+            currentConfig = null
+            widgetsManager = null
+            return null
+        }
+
         return try {
             //Very basic validity check (well formed url)
-            URL(uiURl)
-            URL(apiURL)
-            URL(jitsiUrl)
-            val defaultWhitelist = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context))
-            defaultWhitelist.add(0, apiURL)
+            URL(sdkConfig.uiUrl)
+            URL(sdkConfig.apiUrl)
+            URL(sdkConfig.jitsiUrl)
 
-            val config = IntegrationManagerConfig(
-                    uiUrl = uiURl,
-                    apiUrl = apiURL,
-                    jitsiUrl = jitsiUrl,
-                    whiteListedUrls = defaultWhitelist)
-            WidgetsManager(config).also {
+            currentConfig = sdkConfig
+
+            WidgetsManager(sdkConfig).also {
                 this.widgetsManager = it
             }
         } catch (e: MalformedURLException) {
