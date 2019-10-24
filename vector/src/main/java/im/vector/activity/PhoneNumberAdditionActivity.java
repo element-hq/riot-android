@@ -267,7 +267,7 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
                 @Override
                 public void onSuccess(ThreePid pid) {
                     hideWaitingView();
-                    Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
+                    Intent intent = PhoneNumberVerificationActivity.Companion.getIntent(PhoneNumberAdditionActivity.this,
                             mSession.getCredentials().userId, pid);
                     startActivityForResult(intent, REQUEST_VERIFICATION);
                 }

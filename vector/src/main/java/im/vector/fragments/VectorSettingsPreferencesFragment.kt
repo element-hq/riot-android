@@ -44,6 +44,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.*
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
@@ -60,7 +61,10 @@ import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
-import im.vector.preference.*
+import im.vector.preference.ProgressBarPreference
+import im.vector.preference.UserAvatarPreference
+import im.vector.preference.VectorGroupPreference
+import im.vector.preference.VectorPreference
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -70,6 +74,7 @@ import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.call.MXCallsManager
 import org.matrix.androidsdk.core.BingRulesManager
+import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.ResourceUtils
 import org.matrix.androidsdk.core.callback.ApiCallback
@@ -87,8 +92,10 @@ import org.matrix.androidsdk.db.MXMediaCache
 import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.listeners.MXMediaUploadListener
+import org.matrix.androidsdk.rest.client.LoginRestClient
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
 import org.matrix.androidsdk.rest.model.group.Group
+import org.matrix.androidsdk.rest.model.login.AuthParamsLoginPassword
 import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 import org.matrix.androidsdk.rest.model.sync.AccountDataElement
@@ -2028,6 +2035,30 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             addEmailBtn.order = order
             addEmailBtn.isVisible = true
+            addEmailBtn.isEnabled = false
+            //We need to check if the password flow is available
+            mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
+                    object : ApiCallback<Boolean?> {
+                        override fun onSuccess(info: Boolean?) {
+                            addEmailBtn.isEnabled = info == null || info == true
+                        }
+
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            //In doubt enable
+                            addEmailBtn.isEnabled = true
+                        }
+
+                        override fun onNetworkError(e: java.lang.Exception?) {
+                            //In doubt enable
+                            addEmailBtn.isEnabled = true
+                        }
+
+                        override fun onMatrixError(e: MatrixError?) {
+                            //In doubt enable
+                            addEmailBtn.isEnabled = true
+                        }
+
+                    })
         }
     }
 
@@ -2072,7 +2103,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mSession.identityServerManager.startAddSessionForEmail(pid, null,
                 object : ApiCallback<ThreePid> {
                     override fun onSuccess(info: ThreePid) {
-                        activity?.runOnUiThread { showEmailValidationDialog(pid) }
+                        activity?.runOnUiThread { showEmailValidationDialog(pid, null) }
                     }
 
                     override fun onNetworkError(e: Exception) {
@@ -2098,50 +2129,104 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
      *
      * @param pid the used pid.
      */
-    private fun showEmailValidationDialog(pid: ThreePid) {
-        activity?.let {
-            AlertDialog.Builder(it)
+    private fun showEmailValidationDialog(pid: ThreePid, password: String?) {
+        activity?.let { fragmentActivity ->
+            val auth = password?.let {
+                AuthParamsLoginPassword().apply {
+                    this.user = mSession.myUserId
+                    this.password = password
+                }
+            }
+            AlertDialog.Builder(fragmentActivity)
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        mSession.identityServerManager.finalize3pidAddSession(pid, null, object : ApiCallback<Void?> {
-                            override fun onSuccess(info: Void?) {
-                                it.runOnUiThread {
-                                    hideLoadingView()
-                                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>() {
-                                        override fun onSuccess(info: Void?) {
-                                            refreshEmailsList()
-                                        }
-                                    })
-                                }
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                                    it.runOnUiThread {
-                                        hideLoadingView()
-                                        it.toast(R.string.account_email_validation_error)
-                                    }
-                                } else {
-                                    onCommonDone(e.localizedMessage)
-                                }
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-                        })
-
+                        finalizeAdd(pid, auth, fragmentActivity)
                     }
                     .setNegativeButton(R.string.cancel) { _, _ ->
                         hideLoadingView()
                     }
                     .show()
         }
+    }
+
+    private fun finalizeAdd(pid: ThreePid, auth: AuthParamsLoginPassword?, fragmentActivity: FragmentActivity) {
+        mSession.identityServerManager.finalize3pidAddSession(pid, auth, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                fragmentActivity.runOnUiThread {
+                    hideLoadingView()
+                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>() {
+                        override fun onSuccess(info: Void?) {
+                            refreshEmailsList()
+                        }
+                    })
+                }
+            }
+
+            override fun onNetworkError(e: Exception) {
+                onCommonDone(e.localizedMessage)
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                if (e.mStatus == 401 && e.mErrorBodyAsString.isNullOrBlank().not()) {
+                    val flow = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString)
+                    if (flow != null) {
+                        val supportsLoginPassword = flow.flows.any { it.stages == listOf("m.login.password") }
+                        if (supportsLoginPassword) {
+                            //we prompt for it
+                            val invalidPassError = requireContext().getString(R.string.login_error_forbidden)
+                                    .takeIf { e.errcode == MatrixError.FORBIDDEN }
+                            DialogUtils.promptPassword(requireContext(),
+                                    invalidPassError,
+                                    auth?.let { auth.password }) { password ->
+                                val authParams = AuthParamsLoginPassword().apply {
+                                    this.user = mSession.myUserId
+                                    this.password = password
+                                }
+                                finalizeAdd(pid, authParams, fragmentActivity)
+                            }
+                        } else {
+                            //you can only do that on mobile
+                            AlertDialog.Builder(fragmentActivity)
+                                    .setMessage(R.string.settings_add_3pid_flow_not_supported)
+                                    .setPositiveButton(R.string._continue) { _, _ ->
+                                        finalizeAdd(pid, auth, fragmentActivity)
+                                    }
+                                    .setNegativeButton(R.string.cancel) { _, _ ->
+                                        onCommonDone(null)
+                                    }
+                                    .show()
+
+                        }
+
+                    } else {
+                        onCommonDone(e.localizedMessage)
+                    }
+                } else if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                    fragmentActivity.runOnUiThread {
+                        fragmentActivity.toast(R.string.account_email_validation_error)
+                        //Re-display the popup so that not everything is lost
+                        AlertDialog.Builder(fragmentActivity)
+                                .setTitle(R.string.account_email_validation_title)
+                                .setMessage(R.string.account_email_validation_message)
+                                .setPositiveButton(R.string._continue) { _, _ ->
+                                    finalizeAdd(pid, auth, fragmentActivity)
+                                }
+                                .setNegativeButton(R.string.cancel) { _, _ ->
+                                    hideLoadingView()
+                                }
+                                .show()
+
+                    }
+                } else {
+                    onCommonDone(e.localizedMessage)
+                }
+            }
+
+            override fun onUnexpectedError(e: Exception) {
+                onCommonDone(e.localizedMessage)
+            }
+        })
     }
 
     //==============================================================================================================
@@ -2274,6 +2359,30 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             addPhoneBtn.order = order
             addPhoneBtn.isVisible = true
+            addPhoneBtn.isEnabled = false
+            //We need to check if the password flow is available
+            mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
+                    object : ApiCallback<Boolean?> {
+                        override fun onSuccess(info: Boolean?) {
+                            addPhoneBtn.isEnabled = info == null || info == true
+                        }
+
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            //In doubt enable
+                            addPhoneBtn.isEnabled = true
+                        }
+
+                        override fun onNetworkError(e: java.lang.Exception?) {
+                            //In doubt enable
+                            addPhoneBtn.isEnabled = true
+                        }
+
+                        override fun onMatrixError(e: MatrixError?) {
+                            //In doubt enable
+                            addPhoneBtn.isEnabled = true
+                        }
+
+                    })
         }
 
     }
