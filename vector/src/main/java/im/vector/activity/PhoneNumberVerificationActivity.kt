@@ -18,7 +18,6 @@
 package im.vector.activity
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
@@ -27,9 +26,9 @@ import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.Matrix
@@ -42,7 +41,6 @@ import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.SuccessResult
 import org.matrix.androidsdk.rest.model.login.AuthParams
 import org.matrix.androidsdk.rest.model.login.AuthParamsLoginPassword
-import org.matrix.androidsdk.rest.model.login.LoginParams
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
 class PhoneNumberVerificationActivity : VectorAppCompatActivity(), TextView.OnEditorActionListener, TextWatcher {
