@@ -14,7 +14,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Crash / potential NPE after logout (#3367)
 
 Translations 🗣:
  -
