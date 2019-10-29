@@ -302,8 +302,8 @@
     <string name="room_info_room_topic">방 주제</string>
 
     <string name="settings_call_category">전화</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">오는 전화에 Riot 기본 벨소리를 사용합니다</string>
-    <string name="settings_call_ringtone_title">오는 전화 벨소리</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">수신 전화에 Riot 기본 벨소리를 사용합니다</string>
+    <string name="settings_call_ringtone_title">수신 전화 벨소리</string>
     <string name="settings_call_ringtone_dialog_title">전화에 사용할 벨소리를 선택하세요:</string>
 
     <string name="call">전화</string>
@@ -311,9 +311,9 @@
     <string name="call_connecting">전화 연결 중…</string>
     <string name="call_ended">전화 종료됨</string>
     <string name="call_ring">전화 중…</string>
-    <string name="incoming_call">오는 전화</string>
-    <string name="incoming_video_call">오는 영상 통화</string>
-    <string name="incoming_voice_call">오는 음성 통화</string>
+    <string name="incoming_call">수신 전화</string>
+    <string name="incoming_video_call">수신 영상 통화</string>
+    <string name="incoming_voice_call">수신 음성 통화</string>
     <string name="call_in_progress">전화 진행 중…</string>
     <string name="video_call_in_progress">영상 통화 진행 중…</string>
 
@@ -1584,7 +1584,7 @@
     <string name="settings_background_fdroid_sync_mode_real_time_description">Riot은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
 \n이는 라디오와 배터리 사용에 영향을 주며 Riot이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">백그라운드 동기화 없음</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 오는 메시지의 알림을 받지 않습니다.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.</string>
     <string name="settings_background_sync_update_error">설정을 업데이트하는데 실패했습니다.</string>
 
 
