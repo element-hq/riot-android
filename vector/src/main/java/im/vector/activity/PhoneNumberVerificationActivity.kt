@@ -38,6 +38,7 @@ import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
+import org.matrix.androidsdk.rest.client.LoginRestClient
 import org.matrix.androidsdk.rest.model.SuccessResult
 import org.matrix.androidsdk.rest.model.login.AuthParams
 import org.matrix.androidsdk.rest.model.login.AuthParamsLoginPassword
@@ -173,7 +174,7 @@ class PhoneNumberVerificationActivity : VectorAppCompatActivity(), TextView.OnEd
                 if (e.mStatus == 401 && e.mErrorBodyAsString.isNullOrBlank().not()) {
                     val flow = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString)
                     if (flow != null) {
-                        val supportsLoginPassword = flow.flows.any { it.stages == listOf("m.login.password") }
+                        val supportsLoginPassword = flow.flows.any { it.stages == listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD) }
                         if (supportsLoginPassword) {
                             //we prompt for it
 
@@ -196,7 +197,7 @@ class PhoneNumberVerificationActivity : VectorAppCompatActivity(), TextView.OnEd
                                     .setTitle(R.string.dialog_title_error)
                                     .setMessage(R.string.settings_add_3pid_flow_not_supported)
                                     .setPositiveButton(R.string._continue) { _, _ ->
-                                        registerAfterPhoneNumberValidation(pid, auth)
+                                        hideWaitingView()
                                     }
                                     .show()
 

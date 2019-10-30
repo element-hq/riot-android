@@ -18,7 +18,6 @@ package im.vector.activity
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -39,13 +38,11 @@ object DialogUtils {
 
         var passwordShown = false
 
-        showPassword.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                passwordShown = !passwordShown
-                passwordText.showPassword(passwordShown)
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
-            }
-        })
+        showPassword.setOnClickListener {
+            passwordShown = !passwordShown
+            passwordText.showPassword(passwordShown)
+            showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+        }
 
         passwordTil.error = errorText
 
