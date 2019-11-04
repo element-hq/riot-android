@@ -183,14 +183,17 @@ class PhoneNumberVerificationActivity : VectorAppCompatActivity(), TextView.OnEd
 
                             DialogUtils.promptPassword(this@PhoneNumberVerificationActivity,
                                     invalidPassError,
-                                    (auth as? AuthParamsLoginPassword)?.let { auth.password }
-                            ) { password ->
-                                val authParams = AuthParamsLoginPassword().apply {
-                                    this.user = mSession?.myUserId
-                                    this.password = password
-                                }
-                                registerAfterPhoneNumberValidation(pid, authParams)
-                            }
+                                    (auth as? AuthParamsLoginPassword)?.let { auth.password },
+                                    { password ->
+                                        val authParams = AuthParamsLoginPassword().apply {
+                                            this.user = mSession?.myUserId
+                                            this.password = password
+                                        }
+                                        registerAfterPhoneNumberValidation(pid, authParams)
+                                    },
+                                    {
+                                        onSubmitCodeError(getString(R.string.settings_add_3pid_authentication_needed))
+                                    })
                         } else {
                             //you can only do that on mobile
                             AlertDialog.Builder(this@PhoneNumberVerificationActivity)

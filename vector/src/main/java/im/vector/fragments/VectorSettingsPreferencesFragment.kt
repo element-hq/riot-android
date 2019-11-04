@@ -61,10 +61,7 @@ import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
-import im.vector.preference.ProgressBarPreference
-import im.vector.preference.UserAvatarPreference
-import im.vector.preference.VectorGroupPreference
-import im.vector.preference.VectorPreference
+import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -2041,7 +2038,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
                     object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
                         override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
-                            addEmailBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                            addEmailBtn.isEnabled =  info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                                    || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
                         }
 
                         override fun onUnexpectedError(e: java.lang.Exception?) {
@@ -2186,13 +2184,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                     .takeIf { e.errcode == MatrixError.FORBIDDEN }
                             DialogUtils.promptPassword(requireContext(),
                                     invalidPassError,
-                                    auth?.let { auth.password }) { password ->
-                                val authParams = AuthParamsLoginPassword().apply {
-                                    this.user = mSession.myUserId
-                                    this.password = password
-                                }
-                                finalizeAdd(pid, authParams, fragmentActivity)
-                            }
+                                    auth?.let { auth.password },
+                                    { password ->
+                                        val authParams = AuthParamsLoginPassword().apply {
+                                            this.user = mSession.myUserId
+                                            this.password = password
+                                        }
+                                        finalizeAdd(pid, authParams, fragmentActivity)
+                                    },
+                                    {
+                                        onCommonDone(getString(R.string.settings_add_3pid_authentication_needed))
+                                    }
+                            )
                         } else {
                             //you can only do that on mobile
                             AlertDialog.Builder(fragmentActivity)
@@ -2360,6 +2363,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
                         override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
                             addPhoneBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                                    || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
                         }
 
                         override fun onUnexpectedError(e: java.lang.Exception?) {
