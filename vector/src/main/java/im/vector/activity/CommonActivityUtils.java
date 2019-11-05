@@ -436,15 +436,12 @@ public class CommonActivityUtils {
                 if (goToLoginPage) {
                     Activity activeActivity = VectorApp.getCurrentActivity();
 
-                    // go to login page
-                    Intent intent = new Intent(activeActivity, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    final Context activeContext = (null == activeActivity) ? VectorApp.getInstance().getApplicationContext() : activeActivity;
 
-                    if (null != activeActivity) {
-                        activeActivity.startActivity(intent);
-                    } else {
-                        context.startActivity(intent);
-                    }
+                    // go to login page
+                    Intent intent = new Intent(activeContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activeContext.startActivity(intent);
                 }
             }
         });
