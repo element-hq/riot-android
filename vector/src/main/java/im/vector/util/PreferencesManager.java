@@ -172,9 +172,6 @@ public class PreferencesManager {
     //Integrations
     public static final String SETTINGS_INTEGRATION_ALLOW = "SETTINGS_INTEGRATION_ALLOW";
     public static final String SETTINGS_INTEGRATION_MANAGER_UI_URL = "SETTINGS_INTEGRATION_MANAGER_UI_URL";
-    public static final String SETTINGS_INTEGRATION_MANAGER_API_URL = "SETTINGS_INTEGRATION_MANAGER_API_URL";
-    public static final String SETTINGS_INTEGRATION_MANAGER_JITSI_URL = "SETTINGS_INTEGRATION_MANAGER_JITSI_URL";
-    public static final String SETTINGS_INTEGRATION_WHITELIST_URL = "SETTINGS_INTEGRATION_WHITELIST_URL";
 
     // other
     public static final String SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY";
@@ -289,56 +286,6 @@ public class PreferencesManager {
                 .putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
                 .apply();
     }
-
-    public static Boolean areIntegrationAllowed(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_INTEGRATION_ALLOW,
-                true);
-    }
-
-    public static String getIntegrationManagerUiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_UI_URL,
-                context.getString(R.string.integrations_ui_url));
-    }
-
-    public static String getIntegrationManagerApiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_API_URL,
-                context.getString(R.string.integrations_rest_url));
-    }
-
-    public static String getIntegrationManagerJitsiUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL,
-                context.getString(R.string.integrations_jitsi_widget_url));
-    }
-
-
-    public static void setIntegrationManagerUrls(Context context, String uiURl, String apiURl, String jitsiUrl) {
-        if (uiURl != null) {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putString(SETTINGS_INTEGRATION_MANAGER_UI_URL, uiURl)
-                    .apply();
-        }
-        if (apiURl != null) {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putString(SETTINGS_INTEGRATION_MANAGER_API_URL, apiURl)
-                    .apply();
-        }
-
-        if (jitsiUrl != null) {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putString(SETTINGS_INTEGRATION_MANAGER_JITSI_URL, jitsiUrl)
-                    .apply();
-        }
-    }
-
-    public static List<String> getIntegrationWhiteListedUrl(Context context) {
-        Set<String> defaultSet = new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.integrations_widgets_urls)));
-        Set<String> set = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(SETTINGS_INTEGRATION_WHITELIST_URL, defaultSet);
-        return new ArrayList<>(set);
-    }
-
 
     public static boolean didMigrateToNotificationRework(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, false);

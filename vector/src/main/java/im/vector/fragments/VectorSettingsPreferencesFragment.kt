@@ -60,11 +60,7 @@ import im.vector.dialogs.ExportKeysDialog
 import im.vector.extensions.getFingerprintHumanReadable
 import im.vector.extensions.showPassword
 import im.vector.extensions.withArgs
-import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
-import im.vector.preference.ProgressBarPreference
-import im.vector.preference.UserAvatarPreference
-import im.vector.preference.VectorGroupPreference
-import im.vector.preference.VectorPreference
+import im.vector.preference.*
 import im.vector.settings.FontScale
 import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
@@ -88,6 +84,7 @@ import org.matrix.androidsdk.data.MyUser
 import org.matrix.androidsdk.data.Pusher
 import org.matrix.androidsdk.data.RoomMediaMessage
 import org.matrix.androidsdk.db.MXMediaCache
+import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 import org.matrix.androidsdk.listeners.MXEventListener
 import org.matrix.androidsdk.listeners.MXMediaUploadListener
 import org.matrix.androidsdk.rest.model.bingrules.BingRule
@@ -126,7 +123,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         override fun onAccountDataUpdated(accountDataElement: AccountDataElement) {
             if (accountDataElement.type == AccountDataElement.ACCOUNT_DATA_TYPE_IDENTITY_SERVER) {
-                (findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as EditTextPreference).let {
+                (findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference).let {
                     updateIdentityServerPref()
                 }
             }
@@ -151,6 +148,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     // current publicised group list
     private var mPublicisedGroups: MutableSet<String>? = null
+
+    private var integrationManagerManagerListener = object : IntegrationManager.IntegrationManagerManagerListener {
+        override fun onIntegrationManagerChange(managerConfig: IntegrationManager) {
+            refreshIntegrationManagerSettings()
+        }
+    }
 
     /* ==========================================================================================
      * Preferences
@@ -621,8 +624,33 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // identity server
         updateIdentityServerPref()
 
-        findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL)
-                .summary = PreferencesManager.getIntegrationManagerUiUrl(context)
+
+        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? VectorSwitchPreference)?.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+
+                //Disable it while updating the state, will be re-enabled by the account data listener.
+                it.isEnabled = false
+                mSession.enableIntegrationManagerUsage(newValue as Boolean, object : ApiCallback<Void> {
+                    override fun onSuccess(info: Void?) {
+                        //nop
+                    }
+
+                    override fun onUnexpectedError(e: java.lang.Exception?) {
+                        refreshIntegrationManagerSettings()
+                    }
+
+                    override fun onNetworkError(e: java.lang.Exception?) {
+                        refreshIntegrationManagerSettings()
+                    }
+
+                    override fun onMatrixError(e: MatrixError?) {
+                        refreshIntegrationManagerSettings()
+                    }
+
+                })
+                true
+            }
+        }
 
         // Analytics
 
@@ -789,7 +817,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     } else {
                         MXCallsManager.defaultStunServerUri = null
                     }
-                    PreferencesManager.setUseDefaultTurnServer(activity,mUseDefaultStunPreference.isChecked)
+                    PreferencesManager.setUseDefaultTurnServer(activity, mUseDefaultStunPreference.isChecked)
                     false
                 }
             }
@@ -829,6 +857,29 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             false
         }
+    }
+
+
+    private fun refreshIntegrationManagerSettings() {
+        val integrationAllowed = mSession.integrationManager.integrationAllowed
+        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as SwitchPreference).let {
+            val savedListener = it.onPreferenceChangeListener
+            it.onPreferenceChangeListener = null
+            it.isChecked = integrationAllowed
+            it.isEnabled = true
+            it.onPreferenceChangeListener = savedListener
+        }
+
+        findPreference(PreferencesManager.SETTINGS_INTEGRATION_MANAGER_UI_URL).let {
+            if (integrationAllowed) {
+                it.summary = Matrix.getWidgetManager(context)?.uiUrl ?: getString(R.string.none)
+                it.isVisible = true
+            } else {
+                it.isVisible = false
+            }
+        }
+
+
     }
 
     private fun refreshBackgroundSyncSection(appContext: Context?) {
@@ -896,7 +947,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                                             // Even if using foreground service with foreground notif, it stops to work
                                             // in doze mode for certain devices :/
 
-                                            if ( !isIgnoringBatteryOptimizations(requireContext())) {
+                                            if (!isIgnoringBatteryOptimizations(requireContext())) {
                                                 requestDisablingBatteryOptimization(requireActivity(),
                                                         this@VectorSettingsPreferencesFragment,
                                                         REQUEST_BATTERY_OPTIMIZATION)
@@ -905,11 +956,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                                             pushManager.setFdroidSyncModeOptimizedForRealTime();
                                         }
-                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> {
+                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
 
                                             pushManager.setFdroidSyncModeOptimizedForBattery();
                                         }
-                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> {
+                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {
                                             pushManager.setFdroidSyncModeDisabled()
                                         }
                                     }
@@ -1031,6 +1082,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this)
 
+            mSession.integrationManager.addListener(integrationManagerManagerListener)
+            refreshIntegrationManagerSettings()
+
             // refresh anything else
             refreshPreferences()
             refreshNotificationPrivacy()
@@ -1055,6 +1109,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         if (mSession.isAlive) {
             mSession.dataHandler.removeListener(mEventsListener)
             Matrix.getInstance(context)?.removeNetworkEventListener(mNetworkListener)
+            mSession.integrationManager.removeListener(integrationManagerManagerListener)
         }
 
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this)
@@ -2049,11 +2104,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     .setTitle(R.string.account_email_validation_title)
                     .setMessage(R.string.account_email_validation_message)
                     .setPositiveButton(R.string._continue) { _, _ ->
-                        mSession.identityServerManager.finalizeAddSessionForEmail(pid, object : ApiCallback<Void?> {
+                        mSession.identityServerManager.finalize3pidAddSession(pid, null, object : ApiCallback<Void?> {
                             override fun onSuccess(info: Void?) {
                                 it.runOnUiThread {
                                     hideLoadingView()
-                                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>(){
+                                    mSession.myUser.refreshThirdPartyIdentifiers(object : SimpleApiCallback<Void?>() {
                                         override fun onSuccess(info: Void?) {
                                             refreshEmailsList()
                                         }
