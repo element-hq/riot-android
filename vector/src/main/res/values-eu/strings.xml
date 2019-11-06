@@ -1697,7 +1697,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
     <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="labs_allow_extended_logging">Gaitu egunkari xehetsuak.</string>
     <string name="labs_allow_extended_logging_summary">Amorruz astintzean egunkari xehetsuak bidaltzeak garatzaileei laguntzen diete. Gaituta badago ere, aplikazioak ez ditu mezuen edukiak edo beste datu probaturik gordetzen egunkarian.</string>
@@ -1724,9 +1724,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="two_users_read">%1$s eta %2$s erabiltzaileek irakurria</string>
     <string name="one_user_read">%s erabiltzaileak irakurria</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">Erabiltzaile batek irakurria</item>
-	<item quantity="other">%d erabiltzailek irakurria</item>
-</plurals>
+        <item quantity="one">Erabiltzaile batek irakurria</item>
+        <item quantity="other">%d erabiltzailek irakurria</item>
+    </plurals>
 
     <string name="error_file_too_big">\'%1$s\' fitxategia (%2$s) handiegia da igotzeko. Muga %3$s da.</string>
 

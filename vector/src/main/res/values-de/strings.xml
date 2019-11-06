@@ -1656,7 +1656,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="review">Überprüfung</string>
-<string name="none">Keine</string>
+    <string name="none">Keine</string>
     <string name="revoke">Widerrufen</string>
     <string name="disconnect">Trennen</string>
     <string name="people_no_identity_server">Kein Integrationsserver konfiguriert.</string>
@@ -1708,4 +1708,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen.</string>
-    </resources>
+</resources>

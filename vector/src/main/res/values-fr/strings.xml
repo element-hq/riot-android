@@ -1701,7 +1701,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresse e-mails et des numéros de téléphone sur le serveur d’identité %1$s. Vous devrez vous reconnecter à %2$s pour arrêter de les partager.</string>
     <string name="settings_agree_to_terms">Acceptez les conditions de service du serveur d’identité (%s) pour vous permettre d’être découvrable avec une adresse e-mail ou un numéro de téléphone.</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="labs_allow_extended_logging">Activer les journaux verbeux.</string>
     <string name="labs_allow_extended_logging_summary">Les journaux verbeux aideront les développeurs en fournissant plus de journaux quand vous envoyez un rapport d’anomalie. Même si cette option est activée, l’application n’envoie pas le contenu des messages ou toute autre donnée personnelle.</string>
@@ -1728,9 +1728,9 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="two_users_read">%1$s et %2$s ont lu</string>
     <string name="one_user_read">%s a lu</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 utilisateur a lu</item>
-	<item quantity="other">%d utilisateurs ont lu</item>
-</plurals>
+        <item quantity="one">1 utilisateur a lu</item>
+        <item quantity="other">%d utilisateurs ont lu</item>
+    </plurals>
 
     <string name="error_file_too_big">Le fichier « %1$s » (%2$s) est trop gros pour être envoyé. La limite est %3$s.</string>
 

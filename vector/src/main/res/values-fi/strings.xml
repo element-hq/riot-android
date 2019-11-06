@@ -933,13 +933,13 @@ Haluatko lisätä paketteja?</string>
     <string name="open_chat_header">Avaa otsikko</string>
     <string name="room_sync_in_progress">Synkronoidaan…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">yksi aktiivinen jäsen</item>
-	<item quantity="other">%d aktiivista jäsentä</item>
-</plurals>
+        <item quantity="one">yksi aktiivinen jäsen</item>
+        <item quantity="other">%d aktiivista jäsentä</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">yksi jäsen</item>
-	<item quantity="other">%d jäsentä</item>
-</plurals>
+        <item quantity="one">yksi jäsen</item>
+        <item quantity="other">%d jäsentä</item>
+    </plurals>
     <plurals name="format_time_s">
         <item quantity="one">1 s</item>
         <item quantity="other">%d s</item>
@@ -1136,13 +1136,13 @@ Haluatko lisätä paketteja?</string>
     <string name="lock_screen_hint">Kirjoita tähän…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">yksi lukematon ilmoitettu viesti</item>
-	<item quantity="other">%d lukematonta ilmoitettua viestiä</item>
-</plurals>
+        <item quantity="one">yksi lukematon ilmoitettu viesti</item>
+        <item quantity="other">%d lukematonta ilmoitettua viestiä</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">yksi lukematon ilmoitettu viesti</item>
-	<item quantity="other">%d lukematonta ilmoitettua viestiä</item>
-</plurals>
+        <item quantity="one">yksi lukematon ilmoitettu viesti</item>
+        <item quantity="other">%d lukematonta ilmoitettua viestiä</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">yksi huone</item>
         <item quantity="other">%d huonetta</item>
@@ -1657,7 +1657,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_discovery_no_terms">Valitsemallasi identiteettipalvelimella ei ole käyttöehtoja. Jatka vain, jos luotat palvelun omistajaan</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Jaat sähköpostiosoitteita tai puhelinnumeroita identiteettipalvelimella %1$s. Sinun täytyy yhdistää uudelleen palvelimeen %2$s, jotta voit lopettaa niiden jakamisen.</string>
     <string name="settings_agree_to_terms">Hyväksy identiteettipalvelimen (%s) käyttöehdot salliaksesi, että sinut voi löytää sähköpostiosoitteen tai puhelinnumeron perusteella.</string>
-<string name="auth_add_email_message_2">Aseta sähköposti tilin palauttamista varten. Myöhemmin voit halutessasi antaa ihmisten etsiä sinua sen perusteella.</string>
+    <string name="auth_add_email_message_2">Aseta sähköposti tilin palauttamista varten. Myöhemmin voit halutessasi antaa ihmisten etsiä sinua sen perusteella.</string>
     <string name="settings_call_ringtone_use_default_stun">Salli varalla oleva puhelun apupalvelin</string>
     <string name="settings_discovery_disconnect_identity_server_info">Yhteyden katkaiseminen identiteettipalvelimeesi tarkoittaa, että muut käyttäjät eivät voi etsiä sinua etkä voi kutsua muita sähköpostin tai puhelinnumeron perusteella.</string>
     <string name="settings_discovery_confirm_mail">Lähetimme sinulle vahvistussähköpostin osoitteeseen %s, tarkista sähköpostisi ja klikkaa vahvistuslinkkiä</string>
@@ -1678,9 +1678,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="two_users_read">%1$s ja %2$s lukivat</string>
     <string name="one_user_read">%s luki</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 käyttäjä luki</item>
-	<item quantity="other">%d käyttäjää luki</item>
-</plurals>
+        <item quantity="one">1 käyttäjä luki</item>
+        <item quantity="other">%d käyttäjää luki</item>
+    </plurals>
 
     <string name="error_attachment">Liitettä noudettaessa tapahtui virhe.</string>
     <string name="attachment_type_file">Tiedosto</string>
@@ -1691,7 +1691,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="report_content_inappropriate">Se on sopimaton</string>
     <string name="no_network_indicator">Verkkoyhteyttä ei ole juuri nyt</string>
 
-<string name="none">Ei mitään</string>
+    <string name="none">Ei mitään</string>
     <string name="call_failed_no_ice_description">Pyydä kotipalvelimesi (%1$s) ylläpitäjää määrittämään TURN-palvelin, jotta puhelut toimivat luotettavasti.
 \n
 \nVaihtoehtoisesti voit yrittää käyttää julkista palvelinta osoitteessa %2$s, mutta tämä ei ole yhtä luotettava vaihtoehto ja antaa IP-osoitteesi kyseisen palvelimen tietoon. Voit myös hallita tätä asetuksista.</string>
@@ -1707,4 +1707,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
 
-    </resources>
+</resources>

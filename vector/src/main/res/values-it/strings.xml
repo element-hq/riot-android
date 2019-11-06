@@ -1745,7 +1745,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per fermarne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per consentire di essere trovabile per email o numero di telefono.</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="labs_allow_extended_logging">Attiva log dettagliati.</string>
     <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro più informazioni quando invii una segnalazione. Anche quando attivi, l\'applicazione non registra i contenuti dei messaggi o altri dati personali.</string>
@@ -1772,9 +1772,9 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="two_users_read">%1$s e %2$s hanno letto</string>
     <string name="one_user_read">%s ha letto</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 utente ha letto</item>
-	<item quantity="other">%d utenti hanno letto</item>
-</plurals>
+        <item quantity="one">1 utente ha letto</item>
+        <item quantity="other">%d utenti hanno letto</item>
+    </plurals>
 
     <string name="error_file_too_big">Il file \'%1$s\' (%2$s) è troppo grande da inviare. Il limite è %3$s.</string>
 
