@@ -243,7 +243,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * Refresh the view visibility
      */
     public void refresh() {
-        WidgetsManager wm = getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm == null) {
             return;
         }
@@ -280,7 +280,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
-        WidgetsManager wm = getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.addListener(mWidgetListener);
         }
@@ -293,7 +293,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
-        WidgetsManager wm = getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.removeListener(mWidgetListener);
         }
@@ -306,13 +306,4 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         return mActiveWidget;
     }
 
-    @Nullable
-    private WidgetsManager getWidgetManager(Context activity) {
-        if (Matrix.getInstance(activity) == null) return null;
-        MXSession session = Matrix.getInstance(activity).getDefaultSession();
-        if (session == null) return null;
-        WidgetManagerProvider widgetManagerProvider = Matrix.getInstance(activity).getWidgetManagerProvider(session);
-        if (widgetManagerProvider == null) return null;
-        return widgetManagerProvider.getWidgetManager(activity);
-    }
 }

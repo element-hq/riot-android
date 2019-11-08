@@ -117,7 +117,7 @@ public class Matrix {
     @Nullable
     private KeyRequestHandler mKeyRequestHandler;
 
-    private HashMap<String, WidgetManagerProvider> mWidgetManagerProviders = new HashMap<>();
+    private Map<String, WidgetManagerProvider> mWidgetManagerProviders = new HashMap<>();
 
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {

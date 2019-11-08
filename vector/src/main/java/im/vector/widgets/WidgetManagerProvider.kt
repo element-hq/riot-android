@@ -17,15 +17,12 @@ package im.vector.widgets
 
 import android.content.Context
 import im.vector.R
-import im.vector.util.PreferencesManager
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.*
-import kotlin.collections.ArrayList
 
-class WidgetManagerProvider(val session: MXSession) : IntegrationManager.IntegrationManagerManagerListener {
+class WidgetManagerProvider(private val session: MXSession) : IntegrationManager.IntegrationManagerManagerListener {
 
 
     override fun onIntegrationManagerChange(managerConfig: IntegrationManager) {
@@ -45,7 +42,7 @@ class WidgetManagerProvider(val session: MXSession) : IntegrationManager.Integra
         if (!session.integrationManager.integrationAllowed) return null
 
         val userDefinedConfig = session.integrationManager.integrationServerConfig
-        var sdkConfig: IntegrationManagerConfig? = null
+        val sdkConfig: IntegrationManagerConfig?
         val defaultWhitelist = context.resources.getStringArray(R.array.integrations_widgets_urls).asList()
 
         if (userDefinedConfig != null) {
