@@ -35,7 +35,6 @@ import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
 import im.vector.util.toJsonMap
-import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
 import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
@@ -88,7 +87,8 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
     @CallSuper
     override fun initUiAndData() {
-        mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID))
+        val matrix = Matrix.getInstance(this)
+        mSession = matrix.getSession(intent.getStringExtra(EXTRA_MATRIX_ID))
 
         if (null == mSession || !mSession!!.isAlive) {
             Log.e(LOG_TAG, "## onCreate() : invalid session")
@@ -100,7 +100,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
 
         mRoom = mSession!!.dataHandler.getRoom(intent.getStringExtra(EXTRA_ROOM_ID))
 
-        widgetManager = WidgetManagerProvider.getWidgetManager(this) ?: run {
+        widgetManager = matrix.getWidgetManagerProvider(mSession)?.getWidgetManager(this) ?: run {
             finish()
             return
         }
@@ -149,7 +149,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
     }
 
     private fun presentTermsForServices(token: String) {
-        val wm = WidgetManagerProvider.getWidgetManager(this)
+        val wm = Matrix.getInstance(this).getWidgetManagerProvider(mSession)?.getWidgetManager(this)//WidgetManagerProvider.getWidgetManagerProvider(this)
         if (wm == null) {  // should not happen
             finish()
             return

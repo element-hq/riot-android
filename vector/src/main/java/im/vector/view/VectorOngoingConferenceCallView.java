@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallsManagerListener;
@@ -44,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
@@ -241,7 +243,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * Refresh the view visibility
      */
     public void refresh() {
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm == null) {
             return;
         }
@@ -278,7 +280,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.addListener(mWidgetListener);
         }
@@ -291,7 +293,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.removeListener(mWidgetListener);
         }
@@ -303,4 +305,5 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public Widget getActiveWidget() {
         return mActiveWidget;
     }
+
 }

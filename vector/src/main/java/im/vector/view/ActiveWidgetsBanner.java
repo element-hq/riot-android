@@ -18,12 +18,14 @@
 
 package im.vector.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
@@ -31,6 +33,7 @@ import org.matrix.androidsdk.data.Room;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
@@ -168,7 +171,7 @@ public class ActiveWidgetsBanner extends FrameLayout {
      * Refresh the view visibility
      */
     private void refresh() {
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = getWidgetManager(getContext());
         if (wm == null) {
             return;
         }
@@ -209,7 +212,7 @@ public class ActiveWidgetsBanner extends FrameLayout {
      */
     public void onActivityResume() {
         refresh();
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = getWidgetManager(getContext());
         if (wm != null) {
             wm.addListener(mWidgetListener);
         }
@@ -219,9 +222,19 @@ public class ActiveWidgetsBanner extends FrameLayout {
      * The parent activity is suspended
      */
     public void onActivityPause() {
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = getWidgetManager(getContext());
         if (wm != null) {
             wm.removeListener(mWidgetListener);
         }
+    }
+
+    @Nullable
+    private WidgetsManager getWidgetManager(Context activity) {
+        if (Matrix.getInstance(activity) == null) return null;
+        MXSession session = Matrix.getInstance(activity).getDefaultSession();
+        if (session == null) return null;
+        WidgetManagerProvider widgetManagerProvider = Matrix.getInstance(activity).getWidgetManagerProvider(session);
+        if (widgetManagerProvider == null) return null;
+        return widgetManagerProvider.getWidgetManager(activity);
     }
 }

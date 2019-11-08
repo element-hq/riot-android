@@ -117,6 +117,8 @@ public class Matrix {
     @Nullable
     private KeyRequestHandler mKeyRequestHandler;
 
+    private Map<String, WidgetManagerProvider> mWidgetManagerProviders = new HashMap<>();
+
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
         boolean mClearCacheRequired = false;
@@ -133,10 +135,12 @@ public class Matrix {
         public void onLiveEvent(Event event, RoomState roomState) {
             mRefreshUnreadCounter |= Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
 
-            // TODO update to manage multisessions
-            WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(VectorApp.getInstance().getApplicationContext());
-            if (wm != null) {
-                wm.onLiveEvent(instance.getDefaultSession(), event);
+            WidgetManagerProvider wp = instance.mWidgetManagerProviders.get(instance.getDefaultSession().getMyUserId());
+            if (wp != null) {
+                WidgetsManager wm = wp.getWidgetManager(VectorApp.getInstance().getApplicationContext());
+                if (wm != null) {
+                    wm.onLiveEvent(instance.getDefaultSession(), event);
+                }
             }
         }
 
@@ -306,6 +310,23 @@ public class Matrix {
         return sessions;
     }
 
+    @Nullable
+    public WidgetManagerProvider getWidgetManagerProvider(MXSession session) {
+        if (session == null) {
+            return null;
+        }
+        return mWidgetManagerProviders.get(session.getMyUserId());
+    }
+
+    @Nullable
+    public static WidgetsManager getWidgetManager(Context activity) {
+        if (Matrix.getInstance(activity) == null) return null;
+        MXSession session = Matrix.getInstance(activity).getDefaultSession();
+        if (session == null) return null;
+        WidgetManagerProvider widgetManagerProvider = Matrix.getInstance(activity).getWidgetManagerProvider(session);
+        if (widgetManagerProvider == null) return null;
+        return widgetManagerProvider.getWidgetManager(activity);
+    }
     /**
      * Retrieve the default session if one exists.
      * <p>
@@ -648,7 +669,9 @@ public class Matrix {
      * @return The session.
      */
     public MXSession createSession(HomeServerConnectionConfig hsConfig) {
-        return createSession(mAppContext, hsConfig);
+        MXSession session = createSession(mAppContext, hsConfig);
+        mWidgetManagerProviders.put(session.getMyUserId(), new WidgetManagerProvider(session));
+        return session;
     }
 
     /**

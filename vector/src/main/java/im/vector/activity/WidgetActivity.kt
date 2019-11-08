@@ -37,7 +37,6 @@ import butterknife.OnClick
 import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
-import im.vector.widgets.WidgetManagerProvider
 import im.vector.widgets.WidgetsManager
 import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
@@ -104,13 +103,16 @@ class WidgetActivity : VectorAppCompatActivity() {
             return
         }
 
-        widgetsManager = WidgetManagerProvider.getWidgetManager(this) ?: run {
-            Log.e(LOG_TAG, "## onCreate() : No widget manager ")
-            finish()
-            return
-        }
-
         mSession = Matrix.getMXSession(this, mWidget!!.sessionId)
+
+
+        widgetsManager = Matrix.getInstance(this).getWidgetManagerProvider(mSession)?.getWidgetManager(this)
+                ?: run {
+                    Log.e(LOG_TAG, "## onCreate() : No widget manager ")
+                    finish()
+                    return
+                }
+
 
         if (null == mSession) {
             Log.e(LOG_TAG, "## onCreate() : invalid session")
