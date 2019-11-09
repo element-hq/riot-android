@@ -116,7 +116,7 @@ object BadgeProxy {
         } else if (null == aDataHandler.store) {
             Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance")
         } else {
-            val roomCompleteList = ArrayList(aDataHandler.store.rooms)
+            val roomCompleteList = ArrayList(aDataHandler.store!!.rooms)
             var unreadRoomsCount = 0
 
             for (room in roomCompleteList) {

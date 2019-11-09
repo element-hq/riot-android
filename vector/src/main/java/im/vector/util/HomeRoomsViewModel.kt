@@ -95,7 +95,7 @@ class HomeRoomsViewModel(private val session: MXSession) {
     //region private methods
 
     private fun getJoinedRooms(): List<Room> {
-        return session.dataHandler.store.rooms
+        return session.dataHandler.store!!.rooms
                 .filter {
                     val isJoined = it.isJoined
                     val tombstoneContent = it.state.roomTombstoneContent

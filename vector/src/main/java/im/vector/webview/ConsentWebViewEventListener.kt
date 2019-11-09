@@ -50,7 +50,7 @@ class ConsentWebViewEventListener(activity: VectorAppCompatActivity, private val
     private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
             val session = Matrix.getInstance(it).defaultSession
-            val joinedRooms = session.dataHandler.store.rooms.filter {
+            val joinedRooms = session.dataHandler.store!!.rooms.filter {
                 it.isJoined
             }
             if (joinedRooms.isEmpty()) {
