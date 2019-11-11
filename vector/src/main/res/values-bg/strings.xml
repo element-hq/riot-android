@@ -1696,4 +1696,67 @@
     <string name="labs_allow_extended_logging_summary">Подробните логове помагат на разработчиците, понеже предоставят повече логове когато изпращате RageShake. Дори включени, приложението не записва съдържанието на съобщенията или други лични данни.</string>
 
 
-    </resources>
+    <string name="error_terms_not_accepted">Опитайте пак след като приемете условията за ползване на сървъра.</string>
+
+    <string name="error_network_timeout">Изглежда сървъра отнема прекалено дълго за да отговори, поради лоша връзка или проблем със сървърите. Опитайте пак по-късно.</string>
+
+    <string name="send_attachment">Изпрати прикачен файл</string>
+
+    <string name="a11y_open_drawer">Отвори навигационния панел</string>
+    <string name="a11y_create_menu_open">Отвори менюто за създаване на стая</string>
+    <string name="a11y_create_menu_close">Затвори менюто за създаване на стая…</string>
+    <string name="a11y_create_direct_message">Създай нова директна кореспонденция</string>
+    <string name="a11y_create_room">Създай нова стая</string>
+    <string name="a11y_close_keys_backup_banner">Затвори съобщението за резервно копие на ключовете</string>
+    <string name="a11y_show_password">Покажи паролата</string>
+    <string name="a11y_hide_password">Скрий паролата</string>
+    <string name="a11y_jump_to_bottom">Отиди най-отдолу</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s и %3$d други прочетоха</string>
+    <string name="three_users_read">%1$s, %2$s и %3$s прочетоха</string>
+    <string name="two_users_read">%1$s и %2$s прочетоха</string>
+    <string name="one_user_read">%s прочете</string>
+    <plurals name="fallback_users_read">
+	<item quantity="one">1 потребител прочете</item>
+	<item quantity="other">%d потребителя прочетоха</item>
+</plurals>
+
+    <string name="error_file_too_big">Файлът \'%1$s\' (%2$s) е прекалено голям за да се качи. Ограничението е %3$s.</string>
+
+    <string name="error_attachment">Възникна грешка при извличане на прикачения файл.</string>
+    <string name="attachment_type_file">Файл</string>
+    <string name="attachment_type_contact">Контакт</string>
+    <string name="attachment_type_camera">Камера</string>
+    <string name="attachment_type_audio">Аудио</string>
+    <string name="attachment_type_gallery">Галерия</string>
+    <string name="attachment_type_sticker">Стикер</string>
+    <string name="error_handling_incoming_share">Неуспешна обработка на споделени данни</string>
+
+    <string name="report_content_spam">Това е спам</string>
+    <string name="report_content_inappropriate">Това е неподходящо</string>
+    <string name="report_content_custom">Собствен доклад</string>
+    <string name="report_content_custom_title">Докладване на това съдържание</string>
+    <string name="report_content_custom_hint">Причина за докладване на това съдържание</string>
+    <string name="report_content_custom_submit">ДОКЛАДВАЙ</string>
+    <string name="block_user">БЛОКИРАЙ ПОТРЕБИТЕЛЯ</string>
+
+    <string name="content_reported_title">Съдържанието беше докладвано</string>
+    <string name="content_reported_content">Съдържанието беше докладвано.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_spam_title">Докладвано като спам</string>
+    <string name="content_reported_as_spam_content">Съдържанието беше докладвано като спам.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_inappropriate_title">Докладвано като неподходящо</string>
+    <string name="content_reported_as_inappropriate_content">Съдържанието беше докладвано като неподходящо.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot се нуждае от привилегии за да запази E2E ключовете върху диска.
+\n
+\nПозволете достъп на следващия екран, за да може в бъдеще да експортирате ключовете си ръчно.</string>
+
+    <string name="no_network_indicator">В момента няма връзка с мрежата</string>
+
+</resources>
