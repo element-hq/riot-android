@@ -924,7 +924,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     new AlertDialog.Builder(VectorRoomActivity.this)
-                            .setSingleChoiceItems(widgetNames.toArray(CharSequences), 0, new DialogInterface.OnClickListener() {
+                            .setItems(widgetNames.toArray(CharSequences),  new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface d, int n) {
                                     d.cancel();
