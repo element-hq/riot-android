@@ -15,6 +15,7 @@
  */
 package im.vector.fragments.roomwidgets
 
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Parcelable
 import android.text.Spannable
@@ -96,6 +97,11 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         viewModel.allowWidget()
         //optimistic dismiss
         dismiss()
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        sharedActivityViewModel.doFinish()
     }
 
     @Parcelize
