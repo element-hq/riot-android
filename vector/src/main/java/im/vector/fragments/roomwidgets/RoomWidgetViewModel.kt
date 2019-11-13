@@ -36,8 +36,7 @@ import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 enum class WidgetState {
     UNKWNOWN,
     WIDGET_NOT_ALLOWED,
-    WIDGET_ALLOWED,
-    CLOSING_WIDGET
+    WIDGET_ALLOWED
 }
 
 data class RoomWidgetViewModelState(
@@ -55,8 +54,6 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
 
     companion object : MvRxViewModelFactory<RoomWidgetViewModel, RoomWidgetViewModelState> {
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
-        //private val LOG_TAG = KeysBackupSetupSharedViewModel::class.java.name
-
 
         override fun create(viewModelContext: ViewModelContext, state: RoomWidgetViewModelState): RoomWidgetViewModel? {
             return (viewModelContext.activity.intent?.extras?.getSerializable(WidgetActivity.EXTRA_WIDGET_ID) as? Widget)?.let {
@@ -184,11 +181,6 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
         AlertDialog.Builder(context)
                 .setMessage(R.string.widget_delete_message_confirmation)
                 .setPositiveButton(R.string.remove) { _, _ ->
-                    //                    showWaitingView()
-
-                    setState {
-                        copy(status = WidgetState.CLOSING_WIDGET)
-                    }
 
                     widgetsManager?.closeWidget(session, room, widget.widgetId, object : ApiCallback<Void> {
                         override fun onSuccess(info: Void?) {
@@ -197,10 +189,6 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
 
                         private fun onError(errorMessage: String) {
                             toastMessageEvent.postValue(LiveEvent(errorMessage))
-                            //TODO should not be handled with this state
-                            setState {
-                                copy(status = WidgetState.WIDGET_ALLOWED)
-                            }
                         }
 
                         override fun onNetworkError(e: Exception) {

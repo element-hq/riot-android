@@ -23,6 +23,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.widgets.Widget
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import java.net.URL
@@ -70,51 +71,54 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
         }
     }
 
-    fun allowWidget(onFinished: (() -> Unit)) {
+    fun allowWidget(onFinished: (() -> Unit)? = null) {
         session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
                 ?: "", true, object : ApiCallback<Void?> {
+
             override fun onSuccess(info: Void?) {
-                onFinished()
+                onFinished?.invoke()
             }
 
-            override fun onUnexpectedError(e: Exception?) {
-                //TODO.. make the button with a loading state?
+            override fun onUnexpectedError(e: Exception) {
+                Log.e(LOG_TAG, e.message)
             }
 
-            override fun onNetworkError(e: Exception?) {
-                //TODO.. make the button with a loading state?
+            override fun onNetworkError(e: Exception) {
+                Log.e(LOG_TAG, e.message)
             }
 
-            override fun onMatrixError(e: MatrixError?) {
-                //TODO.. make the button with a loading state?
+            override fun onMatrixError(e: MatrixError) {
+                Log.e(LOG_TAG, e.message)
             }
 
         })
     }
 
-    fun blockWidget(onFinished: (() -> Unit)) {
+    fun blockWidget(onFinished: (() -> Unit)? = null) {
         session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
                 ?: "", false, object : ApiCallback<Void?> {
             override fun onSuccess(info: Void?) {
-                onFinished()
+                onFinished?.invoke()
             }
 
-            override fun onUnexpectedError(e: Exception?) {
-                //TODO.. make the button with a loading state?
+            override fun onUnexpectedError(e: Exception) {
+                Log.e(LOG_TAG, e.message)
             }
 
-            override fun onNetworkError(e: Exception?) {
-                //TODO.. make the button with a loading state?
+            override fun onNetworkError(e: Exception) {
+                Log.e(LOG_TAG, e.message)
             }
 
-            override fun onMatrixError(e: MatrixError?) {
-                //TODO.. make the button with a loading state?
+            override fun onMatrixError(e: MatrixError) {
+                Log.e(LOG_TAG, e.message)
             }
 
         })
     }
 
     companion object : MvRxViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
+
+        val LOG_TAG = RoomWidgetPermissionViewModel::class.simpleName
 
         override fun create(viewModelContext: ViewModelContext, state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel? {
             val args = viewModelContext.args<RoomWidgetPermissionBottomSheet.FragArgs>()

@@ -85,17 +85,17 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @OnClick(R.id.bottom_sheet_widget_permission_decline_button)
     fun doDecline() {
-        viewModel.blockWidget {
-            dismiss()
-            sharedActivityViewModel.doFinish()
-        }
+        viewModel.blockWidget()
+        //optimistic dismiss
+        dismiss()
+        sharedActivityViewModel.doFinish()
     }
 
     @OnClick(R.id.bottom_sheet_widget_permission_continue_button)
     fun doAccept() {
-        viewModel.allowWidget {
-            dismiss()
-        }
+        viewModel.allowWidget()
+        //optimistic dismiss
+        dismiss()
     }
 
     @Parcelize

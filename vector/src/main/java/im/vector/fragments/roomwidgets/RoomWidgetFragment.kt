@@ -49,7 +49,6 @@ class RoomWidgetFragment : VectorBaseMvRxFragment() {
     @BindView(R.id.webview_error_text)
     lateinit var errorText: TextView
 
-
     @BindView(R.id.widget_progress_bar)
     lateinit var webProgressBar: ProgressBar
 
@@ -202,9 +201,6 @@ class RoomWidgetFragment : VectorBaseMvRxFragment() {
                         setError(state.formattedURL.error.message)
                     }
                 }
-            }
-            WidgetState.CLOSING_WIDGET     -> {
-//                    showWaitingView()
             }
         }
     }

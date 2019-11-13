@@ -75,9 +75,6 @@ class WidgetActivity : VectorAppCompatActivity() {
                                 .commit()
                     }
                 }
-                WidgetState.CLOSING_WIDGET     -> {
-
-                }
             }
         }
 
