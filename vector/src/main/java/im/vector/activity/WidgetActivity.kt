@@ -64,7 +64,9 @@ class WidgetActivity : VectorAppCompatActivity() {
                     if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
                         //already there
                     } else {
-                        RoomWidgetPermissionBottomSheet.newInstance(viewModel.session!!.myUserId, viewModel.widget).show(supportFragmentManager, FRAGMENT_TAG_PERMISSION)
+                        RoomWidgetPermissionBottomSheet
+                                .newInstance(viewModel.session!!.myUserId, viewModel.widget)
+                                .show(supportFragmentManager, FRAGMENT_TAG_PERMISSION)
                     }
                 }
                 WidgetState.WIDGET_ALLOWED     -> {

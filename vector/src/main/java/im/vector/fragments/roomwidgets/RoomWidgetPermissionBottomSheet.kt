@@ -76,7 +76,12 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
             } else {
                 val start = infoBuilder.length
                 infoBuilder.append(bulletPoint)
-                infoBuilder.setSpan(BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), start, bulletPoint.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                infoBuilder.setSpan(
+                        BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()),
+                        start,
+                        bulletPoint.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
         }
         infoBuilder.append("\n")
