@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import com.airbnb.mvrx.BaseMvRxActivity
 import im.vector.BuildConfig
 import im.vector.R
 import im.vector.VectorApp
@@ -45,7 +46,7 @@ import org.matrix.androidsdk.core.Log
 /**
  * Parent class for all Activities in Vector application
  */
-abstract class VectorAppCompatActivity : AppCompatActivity() {
+abstract class VectorAppCompatActivity : BaseMvRxActivity() {
 
     private var LOG_TAG = VectorAppCompatActivity::class.java.simpleName
 
