@@ -18,6 +18,7 @@
 package im.vector.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -26,9 +27,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.viewModel
 import im.vector.R
+import im.vector.activity.util.TERMS_REQUEST_CODE
+import im.vector.contacts.ContactsManager
 import im.vector.fragments.roomwidgets.*
 import im.vector.ui.themes.ThemeUtils
 import im.vector.widgets.Widget
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.features.terms.TermsManager
 
 /*
  * This class displays a widget

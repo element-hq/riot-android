@@ -32,6 +32,7 @@ import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
+import org.matrix.androidsdk.features.terms.TermsNotSignedException
 
 enum class WidgetState {
     UNKWNOWN,
@@ -64,6 +65,7 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
     }
 
     var navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
+    var termsNotSignedEvent: MutableLiveData<LiveEvent<TermsNotSignedException>> = MutableLiveData()
     var loadWebURLEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     var toastMessageEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
 
@@ -212,6 +214,10 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
         navigateEvent.postValue(LiveEvent(NAVIGATE_FINISH))
     }
 
+    fun refreshAfterTermsAccepted() {
+        onWidgetAllowed()
+    }
+
     private fun onWidgetAllowed(applicationContext: Context = VectorApp.getInstance().applicationContext) {
 
         setState {
@@ -251,7 +257,11 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
                 }
 
                 override fun onUnexpectedError(e: Exception) {
-                    onError(e.localizedMessage)
+                    if (e is TermsNotSignedException) {
+                        termsNotSignedEvent.postValue(LiveEvent(e))
+                    } else {
+                        onError(e.localizedMessage)
+                    }
                 }
             })
         } else {

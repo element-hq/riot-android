@@ -16,6 +16,8 @@
 package im.vector.fragments.roomwidgets
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -35,9 +37,12 @@ import androidx.lifecycle.Observer
 import butterknife.BindView
 import com.airbnb.mvrx.*
 import im.vector.R
+import im.vector.activity.ReviewTermsActivity
+import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.fragments.VectorBaseMvRxFragment
 import im.vector.ui.themes.ThemeUtils
 import im.vector.util.openUrlInExternalBrowser
+import org.matrix.androidsdk.features.terms.TermsManager
 
 class RoomWidgetFragment : VectorBaseMvRxFragment() {
 
@@ -67,6 +72,26 @@ class RoomWidgetFragment : VectorBaseMvRxFragment() {
                 mWidgetWebView?.isVisible = true
             }
         })
+
+        viewModel.termsNotSignedEvent.observe(this, Observer { termsEvent ->
+            termsEvent?.getContentIfNotHandled()?.let {
+                viewModel.widgetsManager?.uiUrl?.let { uiUrl ->
+                    startActivityForResult(ReviewTermsActivity.intent(requireContext(),
+                            TermsManager.ServiceType.IntegrationManager, uiUrl, it.token),
+                            TERMS_REQUEST_CODE)
+                }
+            }
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == TERMS_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                viewModel.refreshAfterTermsAccepted()
+            } else {
+                viewModel.doFinish()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
