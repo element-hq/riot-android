@@ -630,6 +630,9 @@
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
+    <string name="settings_add_3pid_confirm_password_title">Confirm your password</string>
+    <string name="settings_add_3pid_flow_not_supported">You can\'t do this from Riot mobile</string>
+    <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>

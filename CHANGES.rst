@@ -11,7 +11,7 @@ Improvementss 🙌:
  -
 
 Other changes:
- -
+ - Add User-Interactive Auth to /account/3pid/add (#3333)
 
 Bugfix 🐛:
  - Crash / potential NPE after logout (#3367)
