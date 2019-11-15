@@ -54,11 +54,12 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
         //TODO check from widget urls the perms that should be shown?
         //For now put all
         val infoShared = listOf<Int>(
-                R.string.room_widget_permission_ip_address,
-                R.string.room_widget_permission_useragent,
+                R.string.room_widget_permission_display_name,
+                R.string.room_widget_permission_avatar_url,
+                R.string.room_widget_permission_user_id,
+                R.string.room_widget_permission_theme,
                 R.string.room_widget_permission_widget_id,
-                R.string.room_widget_permission_room_id,
-                R.string.room_widget_permission_matrix_profile
+                R.string.room_widget_permission_room_id
         )
         setState {
             copy(

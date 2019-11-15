@@ -1114,18 +1114,19 @@
 
 
     <string name="room_widget_activity_title">Widget</string>
-    <string name="room_widget_permission_title">Widget Permission Request</string>
+    <string name="room_widget_permission_title">Load Widget</string>
     <string name="room_widget_permission_added_by">This widget was added by:</string>
-    <string name="room_widget_permission_shared_info_title">Using it will share data with %s:</string>
+    <string name="room_widget_permission_shared_info_title">Using it may set cookies and share data with %s:</string>
     <string name="room_widget_failed_to_load">Failed to load widget.\n%s</string>
     <string name="room_widget_reload">Reload widget</string>
     <string name="room_widget_open_in_browser">Open in browser</string>
 
-    <string name="room_widget_permission_ip_address">Your IP address</string>
-    <string name="room_widget_permission_useragent">Your User Agent</string>
+    <string name="room_widget_permission_display_name">Your display name</string>
+    <string name="room_widget_permission_avatar_url">Your avatar URL</string>
+    <string name="room_widget_permission_user_id">Your user ID</string>
+    <string name="room_widget_permission_theme">Your theme</string>
     <string name="room_widget_permission_widget_id">Widget ID</string>
     <string name="room_widget_permission_room_id">Room ID</string>
-    <string name="room_widget_permission_matrix_profile">Your Profile (ID, Name and/or Avatar)</string>
 
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
