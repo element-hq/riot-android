@@ -109,19 +109,6 @@ class WidgetActivity : VectorAppCompatActivity() {
     }
 
     /* ==========================================================================================
-     * UI EVENTS
-     * ========================================================================================== */
-
-    override fun onBackPressed() {
-        //Hugly i know
-        (supportFragmentManager.findFragmentByTag(FRAGMENT_TAG_WEBVIEW) as? RoomWidgetFragment)?.let { widgetFragment ->
-            if (widgetFragment.onBackPressed()) return
-        }
-        super.onBackPressed()
-    }
-
-
-    /* ==========================================================================================
      * companion
      * ========================================================================================== */
 

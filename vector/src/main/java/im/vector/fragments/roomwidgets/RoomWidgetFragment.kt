@@ -37,6 +37,7 @@ import androidx.lifecycle.Observer
 import butterknife.BindView
 import com.airbnb.mvrx.*
 import im.vector.R
+import im.vector.activity.HandleBackParticipant
 import im.vector.activity.ReviewTermsActivity
 import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.fragments.VectorBaseMvRxFragment
@@ -44,7 +45,7 @@ import im.vector.ui.themes.ThemeUtils
 import im.vector.util.openUrlInExternalBrowser
 import org.matrix.androidsdk.features.terms.TermsManager
 
-class RoomWidgetFragment : VectorBaseMvRxFragment() {
+class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
 
     var mWidgetWebView: WebView? = null
 
@@ -255,7 +256,7 @@ class RoomWidgetFragment : VectorBaseMvRxFragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    fun onBackPressed(): Boolean = withState(viewModel) { state ->
+    override fun onBackPressed(): Boolean = withState(viewModel) { state ->
         if (state.formattedURL.complete) {
             if (mWidgetWebView?.canGoBack() == true) {
                 mWidgetWebView?.goBack()
