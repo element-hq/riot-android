@@ -40,38 +40,6 @@ data class RoomWidgetPermissionViewState(
 class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, initialState: RoomWidgetPermissionViewState)
     : BaseMvRxViewModel<RoomWidgetPermissionViewState>(initialState, false) {
 
-    init {
-        val room = session.dataHandler.getRoom(widget.roomId)
-        val creator = room.getMember(widget.widgetEvent.sender)
-
-        var domain: String?
-        try {
-            domain = URL(widget.url).host
-        } catch (e: Throwable) {
-            domain = null
-        }
-
-        //TODO check from widget urls the perms that should be shown?
-        //For now put all
-        val infoShared = listOf<Int>(
-                R.string.room_widget_permission_display_name,
-                R.string.room_widget_permission_avatar_url,
-                R.string.room_widget_permission_user_id,
-                R.string.room_widget_permission_theme,
-                R.string.room_widget_permission_widget_id,
-                R.string.room_widget_permission_room_id
-        )
-        setState {
-            copy(
-                    authorName = creator?.displayname,
-                    authorId = widget.widgetEvent.sender,
-                    authorAvatarUrl = creator?.getAvatarUrl(),
-                    widgetDomain = domain,
-                    permissionsList = infoShared
-            )
-        }
-    }
-
     fun allowWidget(onFinished: (() -> Unit)? = null) {
         session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
                 ?: "", true, object : ApiCallback<Void?> {
@@ -127,5 +95,38 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
             return RoomWidgetPermissionViewModel(session, args.widget, state)
         }
 
+        override fun initialState(viewModelContext: ViewModelContext): RoomWidgetPermissionViewState? {
+            val args = viewModelContext.args<RoomWidgetPermissionBottomSheet.FragArgs>()
+            val session = Matrix.getMXSession(viewModelContext.activity, args.mxId)
+            val widget = args.widget
+
+            val room = session.dataHandler.getRoom(widget.roomId)
+            val creator = room.getMember(widget.widgetEvent.sender)
+
+            var domain: String?
+            try {
+                domain = URL(widget.url).host
+            } catch (e: Throwable) {
+                domain = null
+            }
+
+            //TODO check from widget urls the perms that should be shown?
+            //For now put all
+            val infoShared = listOf<Int>(
+                    R.string.room_widget_permission_display_name,
+                    R.string.room_widget_permission_avatar_url,
+                    R.string.room_widget_permission_user_id,
+                    R.string.room_widget_permission_theme,
+                    R.string.room_widget_permission_widget_id,
+                    R.string.room_widget_permission_room_id
+            )
+            return RoomWidgetPermissionViewState(
+                    authorName = creator?.displayname,
+                    authorId = widget.widgetEvent.sender,
+                    authorAvatarUrl = creator?.getAvatarUrl(),
+                    widgetDomain = domain,
+                    permissionsList = infoShared
+            )
+        }
     }
 }
