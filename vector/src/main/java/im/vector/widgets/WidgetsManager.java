@@ -82,25 +82,6 @@ public class WidgetsManager {
         return config.getUiUrl();
     }
 
-    /**
-     * Widget error code
-     */
-    public static class WidgetError extends MatrixError {
-        public static final String WIDGET_NOT_ENOUGH_POWER_ERROR_CODE = "WIDGET_NOT_ENOUGH_POWER_ERROR_CODE";
-        public static final String WIDGET_CREATION_FAILED_ERROR_CODE = "WIDGET_CREATION_FAILED_ERROR_CODE";
-
-        /**
-         * Create a widget error
-         *
-         * @param code                     the error code (see XX_ERROR_CODE)
-         * @param detailedErrorDescription the detailed error description
-         */
-        public WidgetError(String code, String detailedErrorDescription) {
-            errcode = code;
-            error = detailedErrorDescription;
-        }
-    }
-
 
     /**
      * Pending widget creation callback

@@ -45,8 +45,6 @@ data class RoomWidgetViewModelState(
         val formattedURL: Async<String> = Uninitialized,
         val webviewLoadedUrl: Async<String> = Uninitialized,
         val widgetName: String = "",
-        val authorName: String? = null,
-        val authorId: String? = null,
         val canManageWidgets: Boolean = false
 ) : MvRxState
 
@@ -60,6 +58,12 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
             return (viewModelContext.activity.intent?.extras?.getSerializable(WidgetActivity.EXTRA_WIDGET_ID) as? Widget)?.let {
                 RoomWidgetViewModel(state, it)
             } ?: super.create(viewModelContext, state)
+        }
+
+        override fun initialState(viewModelContext: ViewModelContext): RoomWidgetViewModelState? {
+            return (viewModelContext.activity.intent?.extras?.getSerializable(WidgetActivity.EXTRA_WIDGET_ID) as? Widget)?.let {
+                RoomWidgetViewModelState(widgetName = it.humanName)
+            }
         }
 
     }
@@ -87,9 +91,6 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
     }
 
     init {
-        setState {
-            copy(widgetName = widget.humanName)
-        }
         configure()
 
         session?.integrationManager?.addListener(object : IntegrationManager.IntegrationManagerManagerListener {
@@ -164,7 +165,7 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
         val isAllowed = session
                 ?.integrationManager
                 ?.getKnownWidgetPermissions()
-                ?.findLast { it.stateEventId == widget.widgetEvent.eventId }
+                ?.find { it.stateEventId == widget.widgetEvent.eventId  }
                 ?.allowed
                 ?: false
 
