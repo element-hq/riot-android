@@ -243,12 +243,18 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
                 openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
                 return@withState true
             }
+            R.id.action_revoke -> if (state.status == WidgetState.WIDGET_ALLOWED) {
+                viewModel.revokeWidget()
+                viewModel.doFinish()
+                return@withState true
+            }
         }
         return@withState super.onOptionsItemSelected(item)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) = withState(viewModel) { state ->
         menu?.findItem(R.id.action_close)?.isVisible = state.canManageWidgets
+        menu?.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetState.WIDGET_ALLOWED
         super.onPrepareOptionsMenu(menu)
     }
 

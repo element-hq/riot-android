@@ -23,4 +23,9 @@
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_revoke"
+        android:title="@string/room_widget_revoke_access"
+        app:showAsAction="never" />
+
 </menu>

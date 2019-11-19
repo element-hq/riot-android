@@ -28,6 +28,7 @@ import im.vector.ui.arch.LiveEvent
 import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.data.Room
@@ -165,7 +166,7 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
         val isAllowed = session
                 ?.integrationManager
                 ?.getKnownWidgetPermissions()
-                ?.find { it.stateEventId == widget.widgetEvent.eventId  }
+                ?.find { it.stateEventId == widget.widgetEvent.eventId }
                 ?.allowed
                 ?: false
 
@@ -274,6 +275,33 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
             }
             loadWebURLEvent.postValue(LiveEvent(widget.url))
         }
+    }
+
+    fun revokeWidget(onFinished: (() -> Unit)? = null) {
+        setState {
+            copy(
+                    status = WidgetState.UNKNOWN
+            )
+        }
+        session?.integrationManager?.setWidgetAllowed(widget.widgetEvent?.eventId
+                ?: "", false, object : ApiCallback<Void?> {
+            override fun onSuccess(info: Void?) {
+                onFinished?.invoke()
+            }
+
+            override fun onUnexpectedError(e: Exception) {
+                Log.e(this::class.java.name, e.message)
+            }
+
+            override fun onNetworkError(e: Exception) {
+                Log.e(this::class.java.name, e.message)
+            }
+
+            override fun onMatrixError(e: MatrixError) {
+                Log.e(this::class.java.name, e.message)
+            }
+
+        })
     }
 
     override fun onCleared() {

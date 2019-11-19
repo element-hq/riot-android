@@ -1122,6 +1122,7 @@
     <string name="room_widget_failed_to_load">Failed to load widget.\n%s</string>
     <string name="room_widget_reload">Reload widget</string>
     <string name="room_widget_open_in_browser">Open in browser</string>
+    <string name="room_widget_revoke_access">Revoke access for me</string>
 
     <string name="room_widget_permission_display_name">Your display name</string>
     <string name="room_widget_permission_avatar_url">Your avatar URL</string>
