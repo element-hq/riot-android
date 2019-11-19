@@ -1132,6 +1132,12 @@
 
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+    <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
+    <string name="room_widget_resource_grant_permission">Allow</string>
+    <string name="room_widget_resource_decline_permission">Block All</string>
+    <string name="room_widget_webview_access_camera">Use the camera</string>
+    <string name="room_widget_webview_access_microphone">Use the microphone</string>
+    <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>

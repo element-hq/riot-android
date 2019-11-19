@@ -21,8 +21,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -250,9 +248,7 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) = withState(viewModel) { state ->
-        menu?.findItem(R.id.action_close)?.let {
-            it.isVisible = state.canManageWidgets
-        }
+        menu?.findItem(R.id.action_close)?.isVisible = state.canManageWidgets
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -283,16 +279,16 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
      */
     @SuppressLint("NewApi")
     private fun configureWebView() {
-        mWidgetWebView?.let {
+        mWidgetWebView?.let { webview ->
             // xml value seems ignored
-            it.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_bottom_nav_background_color))
+            webview.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_bottom_nav_background_color))
 
             // clear caches
-            it.clearHistory()
-            it.clearFormData()
-            it.clearCache(true)
+            webview.clearHistory()
+            webview.clearFormData()
+            webview.clearCache(true)
 
-            it.settings.let { settings ->
+            webview.settings.let { settings ->
                 // does not cache the data
                 settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
@@ -316,17 +312,19 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
             }
 
             // Permission requests
-            it.webChromeClient = object : WebChromeClient() {
+            webview.webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest) {
-                    Handler(Looper.getMainLooper()).post { request.grant(request.resources) }
+                    activity?.let {
+                        WebviewPermissionUtils.promptForPermissions(R.string.room_widget_resource_permission_title, request, it)
+                    }
                 }
             }
 
-            it.webViewClient = webViewClient
+            webview.webViewClient = webViewClient
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val cookieManager = CookieManager.getInstance()
-                cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, true)
+                cookieManager.setAcceptThirdPartyCookies(mWidgetWebView, false)
             }
         }
     }
@@ -346,5 +344,4 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
             it.onPause()
         }
     }
-
 }

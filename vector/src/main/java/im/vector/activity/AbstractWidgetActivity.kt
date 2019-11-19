@@ -31,6 +31,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.util.INTEGRATION_MANAGER_ACTIVITY_REQUEST_CODE
 import im.vector.activity.util.TERMS_REQUEST_CODE
+import im.vector.fragments.roomwidgets.WebviewPermissionUtils
 import im.vector.types.JsonDict
 import im.vector.types.WidgetEventData
 import im.vector.util.AssetReader
@@ -194,7 +195,7 @@ abstract class AbstractWidgetActivity : VectorAppCompatActivity() {
             // Permission requests
             it.webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest) {
-                    runOnUiThread { request.grant(request.resources) }
+                    WebviewPermissionUtils.promptForPermissions(R.string.room_widget_resource_permission_title, request, this@AbstractWidgetActivity)
                 }
 
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
