@@ -40,14 +40,12 @@ object WebviewPermissionUtils {
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
                 .setPositiveButton(R.string.room_widget_resource_grant_permission) { dialog, wich ->
-                    activity.runOnUiThread {
-                        request.grant(allowedPermissions.mapNotNull { perm ->
-                            perm.first.takeIf { perm.second }
-                        }.toTypedArray())
-                    }
+                    request.grant(allowedPermissions.mapNotNull { perm ->
+                        perm.first.takeIf { perm.second }
+                    }.toTypedArray())
                 }
                 .setNegativeButton(R.string.room_widget_resource_decline_permission) { dialog, wich ->
-                    activity.runOnUiThread { request.deny() }
+                    request.deny()
                 }
                 .show()
     }
