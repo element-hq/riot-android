@@ -180,7 +180,7 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
     override fun invalidate() = withState(viewModel) { state ->
         //            mWidgetTypeTextView.text = it.widgetName
         when (state.status) {
-            WidgetState.UNKWNOWN           -> {
+            WidgetState.UNKNOWN            -> {
                 //Hide all?
                 mWidgetWebView?.isVisible = false
             }

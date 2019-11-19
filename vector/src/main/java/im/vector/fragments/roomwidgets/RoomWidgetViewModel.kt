@@ -35,13 +35,13 @@ import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 import org.matrix.androidsdk.features.terms.TermsNotSignedException
 
 enum class WidgetState {
-    UNKWNOWN,
+    UNKNOWN,
     WIDGET_NOT_ALLOWED,
     WIDGET_ALLOWED
 }
 
 data class RoomWidgetViewModelState(
-        val status: WidgetState = WidgetState.UNKWNOWN,
+        val status: WidgetState = WidgetState.UNKNOWN,
         val formattedURL: Async<String> = Uninitialized,
         val webviewLoadedUrl: Async<String> = Uninitialized,
         val widgetName: String = "",
