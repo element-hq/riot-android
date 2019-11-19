@@ -19,7 +19,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -48,8 +47,8 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
     @BindView(R.id.terms_bottom_accept)
     lateinit var acceptButton: Button
 
-    @BindView(R.id.termsLoadingIndicator)
-    lateinit var progressBar: ProgressBar
+    @BindView(R.id.waitOverlay)
+    lateinit var waitingModalOverlay: ViewGroup
 
     @BindView(R.id.termsBottomBar)
     lateinit var bottomBar: ViewGroup
@@ -73,10 +72,10 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
             when (terms) {
                 is MxAsync.Loading -> {
                     bottomBar.isVisible = false
-                    progressBar.isVisible = true
+                    waitingModalOverlay.isVisible = true
                 }
                 is MxAsync.Error   -> {
-                    progressBar.isVisible = false
+                    waitingModalOverlay.isVisible = false
                     terms.stringResId.let { stringRes ->
                         AlertDialog.Builder(requireActivity())
                                 .setMessage(stringRes)
@@ -88,9 +87,12 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
                 }
                 is MxAsync.Success -> {
                     updateState(terms.value)
-                    progressBar.isVisible = false
+                    waitingModalOverlay.isVisible = false
                     bottomBar.isVisible = true
                     acceptButton.isEnabled = terms.value.all { it.accepted }
+                }
+                else               -> {
+                    waitingModalOverlay.isVisible = false
                 }
             }
         })
@@ -98,10 +100,10 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
         viewModel.acceptTerms.observe(this, Observer { request ->
             when (request) {
                 is MxAsync.Loading -> {
-                    progressBar.isVisible = true
+                    waitingModalOverlay.isVisible = true
                 }
                 is MxAsync.Error   -> {
-                    progressBar.isVisible = false
+                    waitingModalOverlay.isVisible = false
                     request.stringResId.let { stringRes ->
                         AlertDialog.Builder(requireActivity())
                                 .setMessage(stringRes)
@@ -110,9 +112,14 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
                     }
                 }
                 is MxAsync.Success -> {
+                    waitingModalOverlay.isVisible = false
                     activity?.setResult(Activity.RESULT_OK)
                     activity?.finish()
                 }
+                else               -> {
+                    waitingModalOverlay.isVisible = false
+                }
+
             }
         })
     }

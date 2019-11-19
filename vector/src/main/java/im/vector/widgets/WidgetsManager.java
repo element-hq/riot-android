@@ -82,25 +82,6 @@ public class WidgetsManager {
         return config.getUiUrl();
     }
 
-    /**
-     * Widget error code
-     */
-    public class WidgetError extends MatrixError {
-        public static final String WIDGET_NOT_ENOUGH_POWER_ERROR_CODE = "WIDGET_NOT_ENOUGH_POWER_ERROR_CODE";
-        public static final String WIDGET_CREATION_FAILED_ERROR_CODE = "WIDGET_CREATION_FAILED_ERROR_CODE";
-
-        /**
-         * Create a widget error
-         *
-         * @param code                     the error code (see XX_ERROR_CODE)
-         * @param detailedErrorDescription the detailed error description
-         */
-        public WidgetError(String code, String detailedErrorDescription) {
-            errcode = code;
-            error = detailedErrorDescription;
-        }
-    }
-
 
     /**
      * Pending widget creation callback
@@ -236,7 +217,7 @@ public class WidgetsManager {
      * @return an error if the user cannot act on widgets in this room. Else, null.
      */
 
-    public WidgetError checkWidgetPermission(MXSession session, Room room) {
+    public static WidgetError checkWidgetPermission(MXSession session, Room room) {
         WidgetError error = null;
 
         if ((null != room) && (null != room.getState()) && (null != room.getState().getPowerLevels())) {
@@ -489,7 +470,7 @@ public class WidgetsManager {
      * @param callback the callback
      */
     public void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
-        if (isScalarUrl(context, widget.getUrl())) {
+        if (isScalarUrl(widget.getUrl())) {
             getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
                 @Override
                 public void onSuccess(String token) {
@@ -509,11 +490,10 @@ public class WidgetsManager {
     /**
      * Return true if the url is allowed to receive the scalar token in parameter
      *
-     * @param context
      * @param url
      * @return true if the url is allowed to receive the scalar token in parameter
      */
-    public boolean isScalarUrl(Context context, String url) {
+    public boolean isScalarUrl(String url) {
         List<String> allowed = config.getWhiteListedUrls();
         for (String allowedUrl : allowed) {
             if (url.startsWith(allowedUrl)) {

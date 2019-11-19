@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.widgets
+package im.vector.activity
 
 /**
- * Configuration for an integration manager.
- * By default, it uses URLs defined in the app settings but they can be overridden.
+ * A fragment should implement this interface if it wants to intercept backPressed events.
+ * Any activity extending VectorAppCompatActivity will propagate back pressed event to child
+ * fragment that implements it.
  */
-data class IntegrationManagerConfig(
-        val uiUrl: String,
-        val apiUrl: String,
-        val jitsiUrl : String,
-        val whiteListedUrls : List<String> = emptyList()
-)
+interface HandleBackParticipant {
 
+    /**
+     * Returns true, if the on back pressed event has been handled by this Fragment.
+     * Otherwise return false
+     */
+    fun onBackPressed(): Boolean
+
+}

@@ -5,7 +5,7 @@ MatrixSdk 🚀:
  - Upgrade to version 0.X.Y.
 
 Features ✨:
- -
+ - Privacy / Room Widget permissions (#3378)
 
 Improvementss 🙌:
  -

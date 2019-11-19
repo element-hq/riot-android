@@ -137,7 +137,6 @@ import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
-import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 
 /**
@@ -925,7 +924,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     new AlertDialog.Builder(VectorRoomActivity.this)
-                            .setSingleChoiceItems(widgetNames.toArray(CharSequences), 0, new DialogInterface.OnClickListener() {
+                            .setItems(widgetNames.toArray(CharSequences),  new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface d, int n) {
                                     d.cancel();
