@@ -31,12 +31,14 @@ import org.jetbrains.annotations.Nullable;
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+import org.jitsi.meet.sdk.JitsiMeetUserInfo;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.data.Room;
 
+import java.net.URL;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -65,7 +67,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     /**
      * Base server URL
      */
-    private static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
+    public static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
 
     // the jitsi view
     private JitsiMeetView mJitsiView;
@@ -156,8 +158,22 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
      */
     private void loadURL() {
         try {
+            JitsiMeetUserInfo userInfo = new JitsiMeetUserInfo();
+            userInfo.setDisplayName(mSession.getMyUser().displayname);
+            try {
+                String avatarUrl = mSession.getMyUser().avatar_url;
+                if (avatarUrl != null) {
+                    String downloadableUrl = mSession.getContentManager().getDownloadableUrl(avatarUrl, false);
+                    if (downloadableUrl != null) {
+                        userInfo.setAvatar(new URL(downloadableUrl));
+                    }
+                }
+            } catch (Exception e) {
+                //nop
+            }
             JitsiMeetConferenceOptions jitsiMeetConferenceOptions = new JitsiMeetConferenceOptions.Builder()
                     .setVideoMuted(!mIsVideoCall)
+                    .setUserInfo(userInfo)
                     // Configure the title of the screen
                     // TODO config.putString("callDisplayName", mRoom.getRoomDisplayName(this));
                     .setRoom(mCallUrl)

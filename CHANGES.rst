@@ -6,9 +6,10 @@ MatrixSdk 🚀:
 
 Features ✨:
  - Privacy / Room Widget permissions (#3378)
+ - Privacy / Widget Permission for jitsi widgets (#3391)
 
 Improvementss 🙌:
- -
+ - Jitsi / Use mx display name in Jitsi conf
 
 Other changes:
  - Add User-Interactive Auth to /account/3pid/add (#3333)

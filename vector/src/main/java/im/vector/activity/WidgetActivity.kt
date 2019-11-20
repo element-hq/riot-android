@@ -65,7 +65,11 @@ class WidgetActivity : VectorAppCompatActivity() {
                         //already there
                     } else {
                         RoomWidgetPermissionBottomSheet
-                                .newInstance(viewModel.session!!.myUserId, viewModel.widget)
+                                .newInstance(viewModel.session!!.myUserId, viewModel.widget).apply {
+                                    onFinish = { accepted ->
+                                        if (!accepted) finish()
+                                    }
+                                }
                                 .show(supportFragmentManager, FRAGMENT_TAG_PERMISSION)
                     }
                 }

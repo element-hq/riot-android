@@ -118,6 +118,7 @@ import im.vector.features.hhs.ResourceLimitEventListener;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
@@ -128,6 +129,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SlashCommandsParser;
+import im.vector.util.UrlUtilKt;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
@@ -138,6 +140,7 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Unit;
 
 /**
  * Displays a single room with messages.
@@ -924,7 +927,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     new AlertDialog.Builder(VectorRoomActivity.this)
-                            .setItems(widgetNames.toArray(CharSequences),  new DialogInterface.OnClickListener() {
+                            .setItems(widgetNames.toArray(CharSequences), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface d, int n) {
                                     d.cancel();
@@ -1765,10 +1768,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     .setPositiveButton(R.string.ok, null)
                     .show();
         } else {
-            final Intent intent = new Intent(this, JitsiCallActivity.class);
-            intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-            intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-            startActivity(intent);
+            //Here check native widget perm
+
+            String domain = UrlUtilKt.extractDomain(JitsiCallActivity.JITSI_SERVER_URL);
+            if (domain == null) return; //display a toast?
+            boolean isAllowed = mSession.getIntegrationManager().isVideoConfDomainAllowed(domain);
+            if (isAllowed) {
+                final Intent intent = new Intent(this, JitsiCallActivity.class);
+                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+                intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+                startActivity(intent);
+            } else {
+                //we need to prompt for permissions
+                RoomWidgetPermissionBottomSheet bs = RoomWidgetPermissionBottomSheet.Companion
+                        .newInstance(mSession.getMyUserId(), widget);
+                bs.setOnFinish((accepted) -> {
+                    if (accepted) {
+                        final Intent intent = new Intent(this, JitsiCallActivity.class);
+                        intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+                        intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+                        startActivity(intent);
+                    }
+                    return Unit.INSTANCE;
+                });
+                bs.show(getSupportFragmentManager(), "JitsyPerm");
+            }
         }
     }
 

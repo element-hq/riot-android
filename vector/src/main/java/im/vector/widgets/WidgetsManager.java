@@ -99,6 +99,22 @@ public class WidgetsManager {
         return getActiveWidgets(session, room, null, null);
     }
 
+
+    public static Boolean isJitsiWidget(Widget widget) {
+        Event widgetEvent = widget.getWidgetEvent();
+        if (widgetEvent == null) return false;
+        try {
+            JsonObject jsonObject = widgetEvent.getContentAsJsonObject();
+            if (jsonObject != null && jsonObject.has("type")) {
+                String widgetType = jsonObject.get("type").getAsString();
+                return WIDGET_TYPE_JITSI.equals(widgetType);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage(), e);
+        }
+        return false;
+    }
+
     /**
      * List all active widgets in a room.
      *
