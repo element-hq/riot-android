@@ -1791,7 +1791,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                     return Unit.INSTANCE;
                 });
-                bs.show(getSupportFragmentManager(), "JitsyPerm");
+                bs.show(getSupportFragmentManager(), "JitsiPerm");
             }
         }
     }
