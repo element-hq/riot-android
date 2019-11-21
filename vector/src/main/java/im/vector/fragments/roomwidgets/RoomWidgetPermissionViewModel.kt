@@ -54,7 +54,7 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
 
             })
         } else {
-            session.integrationManager.seVideoConfDomainAllowed(state.widgetDomain
+            session.integrationManager.setNativeWidgetDomainAllowed("jitsi", state.widgetDomain
                     ?: "", true, object : SimpleApiCallback<Void?>() {
 
                 override fun onSuccess(info: Void?) {
@@ -75,7 +75,7 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
 
             })
         } else {
-            session.integrationManager.seVideoConfDomainAllowed(state.widgetDomain
+            session.integrationManager.setNativeWidgetDomainAllowed("jitsi", state.widgetDomain
                     ?: "", false, object : SimpleApiCallback<Void?>() {
 
                 override fun onSuccess(info: Void?) {

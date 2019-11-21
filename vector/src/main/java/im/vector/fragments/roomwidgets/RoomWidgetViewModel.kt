@@ -165,9 +165,7 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
 
         val isAllowed = session
                 ?.integrationManager
-                ?.getKnownWidgetPermissions()
-                ?.find { it.stateEventId == widget.widgetEvent.eventId }
-                ?.allowed
+                ?.isWidgetAllowed( widget.widgetEvent.eventId)
                 ?: false
 
         if (!isAllowed) {

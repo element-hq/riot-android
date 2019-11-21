@@ -1772,7 +1772,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             String domain = UrlUtilKt.extractDomain(JitsiCallActivity.JITSI_SERVER_URL);
             if (domain == null) return; //display a toast?
-            boolean isAllowed = mSession.getIntegrationManager().isVideoConfDomainAllowed(domain);
+            boolean isAllowed = mSession.getIntegrationManager().isNativeWidgetAllowed("jitsi", domain);
             if (isAllowed) {
                 final Intent intent = new Intent(this, JitsiCallActivity.class);
                 intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
