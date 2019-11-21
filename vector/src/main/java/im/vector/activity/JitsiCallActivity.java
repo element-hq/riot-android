@@ -136,11 +136,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
             return;
         }
 
-        if (getWidgetManager() == null) {
-            finish();
-            return;
-        }
-
         mRoom = mSession.getDataHandler().getRoom(mWidget.getRoomId());
         if (null == mRoom) {
             Log.e(LOG_TAG, "## onCreate() : undefined room " + mWidget.getRoomId());

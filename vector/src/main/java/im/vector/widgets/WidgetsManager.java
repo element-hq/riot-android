@@ -95,7 +95,7 @@ public class WidgetsManager {
      * @param room    the room to check.
      * @return the active widgets list
      */
-    public List<Widget> getActiveWidgets(MXSession session, Room room) {
+    public static List<Widget> getActiveWidgets(MXSession session, Room room) {
         return getActiveWidgets(session, room, null, null);
     }
 
@@ -124,7 +124,7 @@ public class WidgetsManager {
      * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
-    private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
+    private static List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
         List<Event> widgetEvents = room.getState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
@@ -210,7 +210,7 @@ public class WidgetsManager {
      * @param room    the room
      * @return the list of active widgets
      */
-    public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
+    public static List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)), null);
     }
 
@@ -221,7 +221,7 @@ public class WidgetsManager {
      * @param room    the room
      * @return the list of active widgets
      */
-    public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
+    public static List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
 
