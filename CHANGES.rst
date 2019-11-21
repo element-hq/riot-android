@@ -15,6 +15,7 @@ Other changes:
 
 Bugfix 🐛:
  - Crash / potential NPE after logout (#3367)
+ - Fix infinite restart loop after token expiration (#3249)
 
 Translations 🗣:
  -
