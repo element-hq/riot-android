@@ -10,7 +10,7 @@ Riot-Android [![Buildkite](https://badge.buildkite.com/5ae4f24dd485562a5b59a9f84
 Important Announcement
 ======================
 
-The core team is now working mainly on [RiotX](https://github.com/vector-im/riotX-android). New contributions (PR, issues) are still welcome, but be aware that this codebase will be replaced in the future by the RiotX implementation.
+The core team is now working mainly on [RiotX](https://github.com/vector-im/riotX-android). New contributions about security concerns (PR, issues) are still welcome. Other subjects may rarely be addressed, as we do not have time to spend on maintenance on new features. Please contribute to RiotX now!
 
 Contributing
 ============
