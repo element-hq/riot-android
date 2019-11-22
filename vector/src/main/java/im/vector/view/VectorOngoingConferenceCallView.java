@@ -243,12 +243,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * Refresh the view visibility
      */
     public void refresh() {
-        WidgetsManager wm = Matrix.getWidgetManager(getContext());
-        if (wm == null) {
-            return;
-        }
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> mActiveWidgets = wm.getActiveJitsiWidgets(mSession, mRoom);
+            List<Widget> mActiveWidgets = WidgetsManager.getActiveJitsiWidgets(mSession, mRoom);
             Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
 
             if (mActiveWidget != widget) {
@@ -266,7 +262,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == wm.checkWidgetPermission(mSession, mRoom))) ?
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.checkWidgetPermission(mSession, mRoom))) ?
                     View.VISIBLE : View.GONE);
         }
     }

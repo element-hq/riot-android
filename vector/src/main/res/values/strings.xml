@@ -1118,7 +1118,8 @@
     <string name="room_widget_activity_title">Widget</string>
     <string name="room_widget_permission_title">Load Widget</string>
     <string name="room_widget_permission_added_by">This widget was added by:</string>
-    <string name="room_widget_permission_shared_info_title">Using it may set cookies and share data with %s:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Using it may set cookies and share data with %s:</string>
+    <string name="room_widget_permission_shared_info_title">Using it may share data with %s:</string>
     <string name="room_widget_failed_to_load">Failed to load widget.\n%s</string>
     <string name="room_widget_reload">Reload widget</string>
     <string name="room_widget_open_in_browser">Open in browser</string>

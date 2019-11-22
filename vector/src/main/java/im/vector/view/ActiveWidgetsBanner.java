@@ -171,12 +171,8 @@ public class ActiveWidgetsBanner extends FrameLayout {
      * Refresh the view visibility
      */
     private void refresh() {
-        WidgetsManager wm = getWidgetManager(getContext());
-        if (wm == null) {
-            return;
-        }
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> activeWidgets = wm.getActiveWebviewWidgets(mSession, mRoom);
+            List<Widget> activeWidgets = WidgetsManager.getActiveWebviewWidgets(mSession, mRoom);
             Widget firstWidget = null;
 
             if ((activeWidgets.size() != mActiveWidgets.size()) || !mActiveWidgets.containsAll(activeWidgets)) {
@@ -202,7 +198,7 @@ public class ActiveWidgetsBanner extends FrameLayout {
             setVisibility((mActiveWidgets.size() > 0) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == wm.checkWidgetPermission(mSession, mRoom))) ?
+            mCloseWidgetIcon.setVisibility(((null != firstWidget) && (null == WidgetsManager.checkWidgetPermission(mSession, mRoom))) ?
                     View.VISIBLE : View.GONE);
         }
     }

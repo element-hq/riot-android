@@ -635,9 +635,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 //Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
-                mSession.enableIntegrationManagerUsage(newValue as Boolean, object : ApiCallback<Void> {
+                mSession.integrationManager.enableIntegrationManagerUsage(newValue as Boolean, object : ApiCallback<Void> {
                     override fun onSuccess(info: Void?) {
-                        //nop
+                        refreshIntegrationManagerSettings()
                     }
 
                     override fun onUnexpectedError(e: java.lang.Exception?) {
@@ -2038,7 +2038,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
                     object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
                         override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
-                            addEmailBtn.isEnabled =  info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                            addEmailBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
                                     || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
                         }
 

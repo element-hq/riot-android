@@ -21,17 +21,19 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.JitsiCallActivity
+import im.vector.util.extractDomain
 import im.vector.widgets.Widget
+import im.vector.widgets.WidgetsManager
 import org.matrix.androidsdk.MXSession
-import org.matrix.androidsdk.core.Log
-import org.matrix.androidsdk.core.callback.ApiCallback
-import org.matrix.androidsdk.core.model.MatrixError
+import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import java.net.URL
 
 data class RoomWidgetPermissionViewState(
         val authorId: String = "",
         val authorAvatarUrl: String? = null,
         val authorName: String? = null,
+        val isWebviewWidget: Boolean = true,
         val widgetDomain: String? = null,
         //List of @StringRes
         val permissionsList: List<Int>? = null
@@ -40,49 +42,48 @@ data class RoomWidgetPermissionViewState(
 class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, initialState: RoomWidgetPermissionViewState)
     : BaseMvRxViewModel<RoomWidgetPermissionViewState>(initialState, false) {
 
-    fun allowWidget(onFinished: (() -> Unit)? = null) {
-        session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
-                ?: "", true, object : ApiCallback<Void?> {
+    fun allowWidget(onFinished: (() -> Unit)? = null) = withState { state ->
 
-            override fun onSuccess(info: Void?) {
-                onFinished?.invoke()
-            }
+        if (state.isWebviewWidget) {
+            session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
+                    ?: "", true, object : SimpleApiCallback<Void?>() {
 
-            override fun onUnexpectedError(e: Exception) {
-                Log.e(LOG_TAG, e.message)
-            }
+                override fun onSuccess(info: Void?) {
+                    onFinished?.invoke()
+                }
 
-            override fun onNetworkError(e: Exception) {
-                Log.e(LOG_TAG, e.message)
-            }
+            })
+        } else {
+            session.integrationManager.setNativeWidgetDomainAllowed("jitsi", state.widgetDomain
+                    ?: "", true, object : SimpleApiCallback<Void?>() {
 
-            override fun onMatrixError(e: MatrixError) {
-                Log.e(LOG_TAG, e.message)
-            }
+                override fun onSuccess(info: Void?) {
+                    onFinished?.invoke()
+                }
 
-        })
+            })
+        }
     }
 
-    fun blockWidget(onFinished: (() -> Unit)? = null) {
-        session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
-                ?: "", false, object : ApiCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                onFinished?.invoke()
-            }
+    fun blockWidget(onFinished: (() -> Unit)? = null) = withState { state ->
+        if (state.isWebviewWidget) {
+            session.integrationManager.setWidgetAllowed(widget.widgetEvent?.eventId
+                    ?: "", false, object : SimpleApiCallback<Void?>() {
+                override fun onSuccess(info: Void?) {
+                    onFinished?.invoke()
+                }
 
-            override fun onUnexpectedError(e: Exception) {
-                Log.e(LOG_TAG, e.message)
-            }
+            })
+        } else {
+            session.integrationManager.setNativeWidgetDomainAllowed("jitsi", state.widgetDomain
+                    ?: "", false, object : SimpleApiCallback<Void?>() {
 
-            override fun onNetworkError(e: Exception) {
-                Log.e(LOG_TAG, e.message)
-            }
+                override fun onSuccess(info: Void?) {
+                    onFinished?.invoke()
+                }
 
-            override fun onMatrixError(e: MatrixError) {
-                Log.e(LOG_TAG, e.message)
-            }
-
-        })
+            })
+        }
     }
 
     companion object : MvRxViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
@@ -110,23 +111,41 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
                 domain = null
             }
 
-            //TODO check from widget urls the perms that should be shown?
-            //For now put all
-            val infoShared = listOf<Int>(
-                    R.string.room_widget_permission_display_name,
-                    R.string.room_widget_permission_avatar_url,
-                    R.string.room_widget_permission_user_id,
-                    R.string.room_widget_permission_theme,
-                    R.string.room_widget_permission_widget_id,
-                    R.string.room_widget_permission_room_id
-            )
-            return RoomWidgetPermissionViewState(
-                    authorName = creator?.displayname,
-                    authorId = widget.widgetEvent.sender,
-                    authorAvatarUrl = creator?.getAvatarUrl(),
-                    widgetDomain = domain,
-                    permissionsList = infoShared
-            )
+            if (WidgetsManager.isJitsiWidget(widget)) {
+                val infoShared = listOf<Int>(
+                        R.string.room_widget_permission_display_name,
+                        R.string.room_widget_permission_avatar_url
+                )
+                return RoomWidgetPermissionViewState(
+                        isWebviewWidget = false,
+                        authorName = creator?.displayname,
+                        authorId = widget.widgetEvent.sender,
+                        authorAvatarUrl = creator?.getAvatarUrl(),
+                        widgetDomain = extractDomain(JitsiCallActivity.JITSI_SERVER_URL),
+                        permissionsList = infoShared
+                )
+
+            } else {
+
+                //TODO check from widget urls the perms that should be shown?
+                //For now put all
+                val infoShared = listOf<Int>(
+                        R.string.room_widget_permission_display_name,
+                        R.string.room_widget_permission_avatar_url,
+                        R.string.room_widget_permission_user_id,
+                        R.string.room_widget_permission_theme,
+                        R.string.room_widget_permission_widget_id,
+                        R.string.room_widget_permission_room_id
+                )
+                return RoomWidgetPermissionViewState(
+                        authorName = creator?.displayname,
+                        authorId = widget.widgetEvent.sender,
+                        authorAvatarUrl = creator?.getAvatarUrl(),
+                        widgetDomain = domain,
+                        permissionsList = infoShared
+                )
+            }
+
         }
     }
 }

@@ -26,7 +26,6 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.R
@@ -53,8 +52,8 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @BindView(R.id.bottom_sheet_widget_permission_owner_avatar)
     lateinit var authorAvatarView: ImageView
-
-    private val sharedActivityViewModel: RoomWidgetViewModel by activityViewModel()
+    
+    var onFinish: ((Boolean) -> Unit)? = null
 
     override fun invalidate() = withState(viewModel) { state ->
 
@@ -63,9 +62,13 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         VectorUtils.loadUserAvatar(requireContext(), viewModel.session, authorAvatarView,
                 state.authorAvatarUrl, state.authorId, state.authorName)
 
+        val domain = state.widgetDomain ?: ""
         val infoBuilder = SpannableStringBuilder()
-                .append(getString(R.string.room_widget_permission_shared_info_title, "'${state.widgetDomain
-                        ?: ""}'"))
+                .append(getString(
+                        R.string.room_widget_permission_webview_shared_info_title
+                                .takeIf { state.isWebviewWidget }
+                                ?: R.string.room_widget_permission_shared_info_title,
+                        "'$domain'"))
         infoBuilder.append("\n")
 
         state.permissionsList?.forEach {
@@ -94,19 +97,21 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         viewModel.blockWidget()
         //optimistic dismiss
         dismiss()
-        sharedActivityViewModel.doFinish()
+        onFinish?.invoke(false)
     }
 
     @OnClick(R.id.bottom_sheet_widget_permission_continue_button)
     fun doAccept() {
         viewModel.allowWidget()
+        onFinish?.invoke(true)
         //optimistic dismiss
         dismiss()
+
     }
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
-        sharedActivityViewModel.doFinish()
+        onFinish?.invoke(false)
     }
 
     @Parcelize
