@@ -46,7 +46,8 @@ data class RoomWidgetViewModelState(
         val formattedURL: Async<String> = Uninitialized,
         val webviewLoadedUrl: Async<String> = Uninitialized,
         val widgetName: String = "",
-        val canManageWidgets: Boolean = false
+        val canManageWidgets: Boolean = false,
+        val createdByMe: Boolean = false
 ) : MvRxState
 
 class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Widget)
@@ -62,9 +63,13 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
         }
 
         override fun initialState(viewModelContext: ViewModelContext): RoomWidgetViewModelState? {
-            return (viewModelContext.activity.intent?.extras?.getSerializable(WidgetActivity.EXTRA_WIDGET_ID) as? Widget)?.let {
-                RoomWidgetViewModelState(widgetName = it.humanName)
-            }
+            val widget = viewModelContext.activity.intent?.extras?.getSerializable(WidgetActivity.EXTRA_WIDGET_ID) as? Widget
+                    ?: return null
+            val session = Matrix.getInstance(viewModelContext.activity).getSession(widget.sessionId)
+            return RoomWidgetViewModelState(
+                    widgetName = widget.humanName,
+                    createdByMe = widget.widgetEvent.getSender() == session?.myUserId
+            )
         }
 
     }
@@ -165,7 +170,7 @@ class RoomWidgetViewModel(initialState: RoomWidgetViewModelState, val widget: Wi
 
         val isAllowed = session
                 ?.integrationManager
-                ?.isWidgetAllowed( widget.widgetEvent.eventId)
+                ?.isWidgetAllowed(widget.widgetEvent.eventId)
                 ?: false
 
         if (!isAllowed) {

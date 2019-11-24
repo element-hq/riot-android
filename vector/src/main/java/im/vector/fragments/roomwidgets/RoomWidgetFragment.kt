@@ -254,7 +254,7 @@ class RoomWidgetFragment : VectorBaseMvRxFragment(), HandleBackParticipant {
 
     override fun onPrepareOptionsMenu(menu: Menu?) = withState(viewModel) { state ->
         menu?.findItem(R.id.action_close)?.isVisible = state.canManageWidgets
-        menu?.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetState.WIDGET_ALLOWED
+        menu?.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetState.WIDGET_ALLOWED && !state.createdByMe
         super.onPrepareOptionsMenu(menu)
     }
 
