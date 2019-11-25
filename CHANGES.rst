@@ -1,3 +1,25 @@
+Changes in Riot 0.9.9 (2019-11-25)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade to version 0.9.32
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.32
+
+Features ✨:
+ - Privacy / Room Widget permissions (#3378)
+ - Privacy / Widget Permission for jitsi widgets (#3391)
+
+Improvements 🙌:
+ - Jitsi / Use mx display name in Jitsi conf
+
+Other changes:
+ - Add User-Interactive Auth to /account/3pid/add (#3333)
+
+Bugfix 🐛:
+ - Crash / potential NPE after logout (#3367)
+ - Fix infinite restart loop after token expiration (#3249)
+
+
 Changes in Riot 0.9.8 (2019-10-09)
 ===================================================
 

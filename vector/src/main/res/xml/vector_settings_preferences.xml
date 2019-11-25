@@ -48,7 +48,7 @@
             android:persistent="false"
             android:title="@string/settings_discovery_category"
             android:summary="@string/settings_discovery_manage"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -444,14 +444,30 @@
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
             tools:summary="@string/default_identity_server_url"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment" />
 
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider />
+
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
 
         <im.vector.preference.VectorPreference
-            android:defaultValue="@string/integrations_ui_url"
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_integrations_summary" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:key="SETTINGS_INTEGRATION_ALLOW"
+            android:enabled="true"
+            android:persistent="false"
+            android:title="@string/settings_integration_allow"/>
+
+        <im.vector.preference.VectorPreference
+            android:dependency="SETTINGS_INTEGRATION_ALLOW"
+            android:persistent="false"
             android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
             android:title="@string/settings_integration_manager" />
-
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceDivider />

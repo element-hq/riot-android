@@ -316,38 +316,33 @@ public class CommonActivityUtils {
     private static boolean isRecoveringFromInvalidatedToken = false;
 
     public static void recoverInvalidatedToken() {
+        Log.e(LOG_TAG, "## recoverInvalidatedToken: Start Recover ");
 
         if (isRecoveringFromInvalidatedToken) {
             //ignore, we are doing it
+            Log.e(LOG_TAG, "## recoverInvalidatedToken: ignore, we are doing it");
             return;
         }
         isRecoveringFromInvalidatedToken = true;
         Context context = VectorApp.getCurrentActivity() != null ? VectorApp.getCurrentActivity() : VectorApp.getInstance();
 
         try {
+
+            // Clear the credentials
+            Matrix.getInstance(context).getLoginStorage().clear() ;
+
+
             VectorApp.getInstance().getNotificationDrawerManager().clearAllEvents();
-            EventStreamServiceX.Companion.onLogout(context);
-            // stopEventStream(context);
+            EventStreamServiceX.Companion.onApplicationStopped(context);
 
             BadgeProxy.INSTANCE.updateBadgeCount(context, 0);
 
             MXSession session = Matrix.getInstance(context).getDefaultSession();
-
-            // Publish to the server that we're now offline
-            MyPresenceManager.getInstance(context, session).advertiseOffline();
-            MyPresenceManager.remove(session);
-
             // clear the preferences
             PreferencesManager.clearPreferences(context);
 
-            // reset the FCM
-            Matrix.getInstance(context).getPushManager().resetFCMRegistration();
-
             // clear the preferences
             Matrix.getInstance(context).getPushManager().clearPreferences();
-
-            // Clear the credentials
-            Matrix.getInstance(context).getLoginStorage().clear();
 
             // clear the tmp store list
             Matrix.getInstance(context).clearTmpStoresList();
@@ -358,20 +353,11 @@ public class CommonActivityUtils {
 
             MXMediaCache.clearThumbnailsCache(context);
 
-            Matrix.getInstance(context).clearSessions(context, true, new SimpleApiCallback<Void>() {
-
-                @Override
-                public void onSuccess(Void info) {
-
-                }
-            });
-            session.clear(context);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## recoverInvalidatedToken: Error while cleaning: ", e);
         } finally {
-            // go to login page
-            CommonActivityUtils.restartApp(context, true);
             isRecoveringFromInvalidatedToken = false;
+            CommonActivityUtils.restartApp(context, true);
         }
     }
 
@@ -436,15 +422,12 @@ public class CommonActivityUtils {
                 if (goToLoginPage) {
                     Activity activeActivity = VectorApp.getCurrentActivity();
 
-                    // go to login page
-                    Intent intent = new Intent(activeActivity, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    final Context activeContext = (null == activeActivity) ? VectorApp.getInstance().getApplicationContext() : activeActivity;
 
-                    if (null != activeActivity) {
-                        activeActivity.startActivity(intent);
-                    } else {
-                        context.startActivity(intent);
-                    }
+                    // go to login page
+                    Intent intent = new Intent(activeContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activeContext.startActivity(intent);
                 }
             }
         });

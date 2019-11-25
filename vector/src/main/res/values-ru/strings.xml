@@ -446,7 +446,7 @@
     <string name="settings_background_sync">Синхронизация</string>
     <string name="settings_enable_background_sync">Включить фоновую синхронизацию</string>
     <string name="settings_set_sync_timeout">Таймаут синхронизации</string>
-    <string name="settings_set_sync_delay">Задержка между запросами</string>
+    <string name="settings_set_sync_delay">Задержка между каждой синхронизацией</string>
     <string name="settings_second">секунда</string>
     <string name="settings_seconds">секунд</string>
 
@@ -474,10 +474,10 @@
     <string name="settings_pin_missed_notifications">Прикрепить комнаты с отключенными уведомлениями</string>
     <string name="settings_pin_unread_messages">Прикрепить комнаты с непрочитанными сообщениями</string>
     <string name="settings_devices_list">Устройства</string>
-    <string name="devices_details_dialog_title">Подробности о устройстве</string>
+    <string name="devices_details_dialog_title">Информация об устройстве</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Имя</string>
-    <string name="devices_details_device_name">Имя устройства</string>
+    <string name="devices_details_name_title">Общеизвестное имя</string>
+    <string name="devices_details_device_name">Обновить публичное имя</string>
     <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Для этой операции требуется дополнительная проверка подлинности.
@@ -611,9 +611,9 @@
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
 
     <string name="encryption_information_sender_device_information">Информация об устройстве отправителя</string>
-    <string name="encryption_information_device_name">Имя устройства</string>
-    <string name="encryption_information_name">Имя</string>
-    <string name="encryption_information_device_id">ID устройства</string>
+    <string name="encryption_information_device_name">Публичное имя</string>
+    <string name="encryption_information_name">Публичное имя</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Ключ устройства</string>
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
@@ -1653,15 +1653,15 @@
 
     <string name="store_riotx_title">RiotX - Matrix клиент следующего поколения</string>
     <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
-    <string name="store_riotx_full_description">RiotX - это новый клиент для матричного протокола (Matrix.org): открытой сети для безопасной децентрализованной связи. RiotX - это полная перезапись Riot Android клиента, основанная на полной перезаписи Matrix Android SDK.
-\n
-\nОговорка: Это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и (надеемся, не слишком много) ошибки. Мы будем рады любым отзывам!
-\n
-\nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общей комнате - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптографически: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые, темные и черные темы
-\n
-\nНе все функции RiotX пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) особенности: - Создание учетной записи - Настройки комнат (список членов комнат и т.д.) - Создание прямых чатов - Вызовы - Виджеты - .…</string>
+    <string name="store_riotx_full_description">RiotX - это новый клиент для матричного протокола (Matrix.org): открытой сети для безопасной децентрализованной связи. RiotX - это полная перезапись Riot Android клиента, основанная на полной перезаписи Matrix Android SDK. 
+\n 
+\nОговорка: Это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и (надеемся, не слишком много) ошибки. Мы будем рады любым отзывам! 
+\n 
+\nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общедоступным комнатам - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптография: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые и черные темы 
+\n 
+\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) свойства: - Создание учетной записи - Настройки комнат (список членов комнат и т.д.) - Вызовы - Виджеты - .…</string>
 
-    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается.</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается</string>
 
     <string name="bottom_action_people_x">Прямые сообщения</string>
 
@@ -1695,7 +1695,7 @@
 
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
 
-    <string name="add_by_matrix_id">Добавить по matrix ID</string>
+    <string name="add_by_matrix_id">Добавить по Matrix ID</string>
     <string name="creating_direct_room">Создание комнаты…</string>
     <string name="direct_room_no_known_users">"Результат не найден, используйте добавить matrix ID  для поиска на сервере."</string>
     <string name="direct_room_start_search">Начните печатать, чтобы получить результат</string>
@@ -1715,7 +1715,7 @@
 \nПодробнее об этом читайте здесь:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
-    <string name="settings_push_rules_no_rules">Правила пуш не определены</string>
+    <string name="settings_push_rules_no_rules">Пуш-правила не определены</string>
     <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>
 
     <string name="terms_of_service">Условия предоставления услуг</string>
@@ -1725,4 +1725,76 @@
 
     <string name="read_at">Читать в</string>
 
+    <string name="none">Никто</string>
+    <string name="revoke">Отмена</string>
+    <string name="disconnect">Отключить</string>
+    <string name="people_no_identity_server">Сервер идентификации не настроен.</string>
+
+    <string name="call_failed_no_ice_title">Звонок не состоялся из-за неправильно настроенного сервера</string>
+    <string name="call_failed_no_ice_description">Попросите администратора вашего домашнего сервера (%1$s) настроить TURN сервер, чтобы звонки работали надежно.
+\n
+\nКроме того, вы можете попробовать использовать публичный сервер по %2$s, но это будет не так надежно, и он предоставит ваш IP-адрес этому серверу. Вы также можете управлять этим в настройках.</string>
+    <string name="call_failed_no_ice_use_alt">Попробуйте использовать %s</string>
+    <string name="call_failed_dont_ask_again">Не спрашивай меня больше</string>
+
+    <string name="auth_add_email_message_2">Установите адрес электронной почты для восстановления учетной записи, и позже она может будет найдена участниками, которые вас знают.</string>
+    <string name="auth_add_phone_message_2">Установите телефон, и позже его могут опционально обнаруживать люди, которые вас знают.</string>
+    <string name="auth_add_email_phone_message_2">Установите адрес электронной почты для восстановления аккаунта. Позже используйте электронную почту или телефон, чтобы их могли найти люди, которые вас знают.</string>
+    <string name="auth_add_email_and_phone_message_2">Установите адрес электронной почты для восстановления аккаунта. Позже используйте электронную почту или телефон, чтобы их могли найти люди, которые вас знают.</string>
+    <string name="login_error_homeserver_not_found">Не удается связаться с домашним сервером по этому URL, пожалуйста, проверьте его</string>
+    <string name="settings_call_ringtone_use_default_stun">Разрешить резервный сервер помощи при вызове</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Оптимизирован для батареи</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Оптимизирован для работы в реальном времени</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Без фоновой синхронизации</string>
+    <string name="settings_background_sync_update_error">Не удалось обновить настройки.</string>
+
+
+    <string name="settings_set_workmanager_delay">Предпочтительный интервал синхронизации</string>
+    <string name="settings_discovery_category">Обнаружение</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать%s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
+    <string name="invite_no_identity_server_error">Добавьте идентификационный сервер в свои настройки, чтобы выполнить это действие.</string>
+    <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации (Экспериментальный)</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
+\nВ зависимости от состояния ресурса вашего устройства, синхронизация может быть отложена операционной системой.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
+\nЭто повлияет на использование радио и батареи, появится постоянное уведомление о том, что Riot прислушивается к событиям.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nСинхронизация может быть отложена в зависимости от ресурсов (батареи) или состояния устройства (спящий режим).</string>
+    <string name="settings_discovery_manage">Управляйте настройками обнаружения.</string>
+    <string name="encryption_information_device_name_with_warning">Публичное имя (видимое для людей, с которыми вы общаетесь)</string>
+    <string name="device_name_warning">Публичное имя устройства видны людям, с которыми вы общаетесь</string>
+    <string name="identity_server_not_defined">Вы не используете какой-либо сервер идентификации</string>
+    <string name="identity_server_not_defined_for_password_reset">Идентификационный сервер не настроен, требуется сброс пароля.</string>
+
+    <string name="error_user_already_logged_in">Похоже, вы пытаетесь подключиться к другому домашнему серверу. Вы хотите выйти\?</string>
+
+    <string name="identity_server">Сервер идентификации</string>
+    <string name="disconnect_identity_server">Отключить идентификационный сервер</string>
+    <string name="add_identity_server">Настроить идентификационный сервер</string>
+    <string name="change_identity_server">Изменить идентификационный сервер</string>
+    <string name="settings_discovery_identity_server_info">В настоящее время вы используете %1$s для обнаружения и быть найденным вашими контактами.</string>
+    <string name="settings_discovery_identity_server_info_none">"Вы в настоящее время не используете идентификационный сервер. Чтобы обнаружить и быть найденным  вашими существующими контактами, настройте один из них ниже."</string>
+    <string name="settings_discovery_emails_title">Видимые адреса электронной почты</string>
+    <string name="settings_discovery_msisdn_title">Доступные номера телефонов</string>
+    <string name="settings_discovery_mail_pending">В ожидании</string>
+
+    <string name="settings_discovery_enter_identity_server">Введите новый сервер идентификации</string>
+    <string name="settings_discovery_bad_identity_server">Не удалось подключиться к серверу идентификации</string>
+    <string name="settings_discovery_please_enter_server">Пожалуйста, введите URL сервера идентификации</string>
+    <string name="settings_discovery_no_terms_title">Сервер идентификации не имеет условий предоставления услуг</string>
+    <string name="settings_discovery_no_mails">Параметры обнаружения появятся после добавления электронной почты.</string>
+    <string name="settings_discovery_no_msisdn">Параметры поиска появятся после добавления номера телефона.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Отключение от сервера идентификации будет означать, что другие пользователи не смогут обнаружить вас, и вы не сможете приглашать других по электронной почте или по телефону.</string>
+    <string name="settings_discovery_confirm_mail">Мы отправили вам электронное письмо с подтверждением на %s, проверьте вашу электронную почту и нажмите на ссылку для подтверждения</string>
+    <string name="settings_discovery_no_terms">Выбранный сервер идентификации не имеет условий обслуживания. Продолжить, только если вы доверяете владельцу службы</string>
+    <string name="settings_text_message_sent">Текстовое сообщение отправлено %s. Введите код проверки, который он содержит.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
+    <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
+    <string name="labs_allow_extended_logging">Включить подробное журнал.</string>
+    <string name="send_attachment">Отправить вложенное</string>
+
+    <string name="a11y_open_drawer">Откройте навигационный ящик</string>
+    <string name="a11y_create_menu_open">Откройте меню «Создать комнату»</string>
 </resources>
