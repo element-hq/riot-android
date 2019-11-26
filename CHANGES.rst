@@ -1,3 +1,24 @@
+Changes in RiotX 0.9.x (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
 Changes in Riot 0.9.9 (2019-11-25)
 ===================================================
 
