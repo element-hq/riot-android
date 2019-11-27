@@ -42,11 +42,18 @@
             android:title="@string/settings_add_phone_number"
             app:iconTint="?attr/vctr_settings_icon_tint_color" />
 
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
+            android:order="1000"
+            android:persistent="false"
+            android:title="@string/settings_discovery_category"
+            android:summary="@string/settings_discovery_manage"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
         android:title="@string/settings_contact">
 
@@ -59,13 +66,14 @@
             android:key="SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
             android:title="@string/settings_contacts_phonebook_country" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_INTERFACE_KEY"
-        android:title="@string/settings_user_interface">
+        android:title="@string/settings_user_interface"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorPreference
             android:dialogTitle="@string/settings_select_language"
@@ -138,7 +146,7 @@
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
 
-        <im.vector.preference.SabaListPreference
+        <im.vector.preference.VectorListPreference
             android:defaultValue="always"
             android:entries="@array/show_info_area_entries"
             android:entryValues="@array/show_info_area_values"
@@ -148,7 +156,8 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider
+        app:isPreferenceVisible="false"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_HOME_DISPLAY_KEY"
@@ -168,13 +177,15 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair" />
+        android:title="@string/settings_flair"
+        app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider
+        app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_KEY"
         android:title="@string/settings_notifications">
 
@@ -210,46 +221,59 @@
             android:title="@string/settings_notification_troubleshoot"
             app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <!--<im.vector.preference.VectorPreferenceDivider />-->
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
-        android:title="@string/settings_background_sync">
+        android:title="@string/settings_background_sync"
+        app:isPreferenceVisible="false">
+
+
+        <im.vector.preference.VectorPreference
+            android:key="SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
+            android:title="@string/settings_background_fdroid_sync_mode" />
+
+
+        <!-- Move to Advanced? -->
+
+        <!-- Preference for work manager-->
+        <im.vector.preference.VectorEditTextPreference
+            android:key="SETTINGS_WORK_MANAGER_DELAY_PREFERENCE_KEY"
+            android:inputType="numberDecimal"
+            android:digits="0123456789"
+            android:title="@string/settings_set_workmanager_delay" />
+
+        <im.vector.preference.VectorEditTextPreference
+            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay" />
+
+        <im.vector.preference.VectorEditTextPreference
+            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout" />
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
             android:title="@string/settings_start_on_boot" />
 
-        <im.vector.preference.VectorSwitchPreference
-            android:key="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:title="@string/settings_enable_background_sync" />
+    </im.vector.preference.VectorPreferenceCategory>
 
-        <im.vector.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_timeout" />
-
-        <im.vector.preference.VectorEditTextPreference
-            android:dependency="SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-            android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
-            android:numeric="integer"
-            android:title="@string/settings_set_sync_delay" />
-
-    </im.vector.preference.SabaPreferenceCategory>
-
-    <im.vector.preference.SabaPreferenceDivider android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider
+        android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
+        app:isPreferenceVisible="false"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
-        android:title="@string/settings_notifications_targets" />
+        android:title="@string/settings_notifications_targets"
+        app:isPreferenceVisible="false"/>
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
-    <im.vector.preference.SabaPreferenceCategory android:title="@string/settings_media">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_media">
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
@@ -282,11 +306,11 @@
             android:summary="%s"
             android:title="@string/settings_default_media_source" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.SabaPreferenceCategory android:title="@string/settings_call_category">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -299,9 +323,15 @@
             android:key="SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
             android:title="@string/settings_call_ringtone_title" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+        <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_CALL_USE_DEFAULT_STUN_PREFERENCE_KEY"
+            android:title="@string/settings_call_ringtone_use_default_stun"
+            app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
@@ -309,9 +339,10 @@
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY" />
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_LABS_PREFERENCE_KEY"
-        android:title="@string/room_settings_labs_pref_title">
+        android:title="@string/room_settings_labs_pref_title"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorPreference
             android:focusable="false"
@@ -347,18 +378,20 @@
             android:summary="@string/settings_labs_enable_send_voice_summary"
             android:title="@string/settings_labs_enable_send_voice" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider
+        app:isPreferenceVisible="false"/>
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
-        android:title="@string/settings_cryptography">
+        android:title="@string/settings_cryptography"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_name" />
+            android:title="@string/encryption_information_device_name_with_warning" />
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
@@ -375,11 +408,14 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider
+        android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
+        app:isPreferenceVisible="false"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
-        android:title="@string/settings_cryptography_manage_keys">
+        android:title="@string/settings_cryptography_manage_keys"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
@@ -398,16 +434,23 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider
+        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY"
+        app:isPreferenceVisible="false"/>
 
     <!-- devices list: device ids + device names -->
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-        android:title="@string/settings_devices_list" />
+        android:title="@string/settings_devices_list"
+        app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
+    <im.vector.preference.VectorPreferenceDivider
+        android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY"
+        app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.SabaPreferenceCategory android:title="@string/settings_advanced">
+    <im.vector.preference.VectorPreferenceCategory
+        android:title="@string/settings_advanced"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
@@ -422,15 +465,24 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url" />
+            tools:summary="@string/default_identity_server_url"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
 
-    </im.vector.preference.SabaPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+        <im.vector.preference.VectorPreference
+            android:defaultValue="@string/integrations_ui_url"
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
+            android:title="@string/settings_integration_manager" />
 
-    <im.vector.preference.SabaPreferenceCategory
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider
+        app:isPreferenceVisible="false"/>
+
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
-        android:title="@string/settings_analytics">
+        android:title="@string/settings_analytics"
+        app:isPreferenceVisible="false">
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="false"
@@ -441,44 +493,52 @@
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:title="@string/send_bug_report_rage_shake" />
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider
+        app:isPreferenceVisible="false"/>
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY"
         android:title="@string/settings_other">
 
         <im.vector.preference.VectorPreference
             android:key="APP_INFO_LINK_PREFERENCE_KEY"
             android:summary="@string/settings_app_info_link_summary"
-            android:title="@string/settings_app_info_link_title" />
+            android:title="@string/settings_app_info_link_title"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_VERSION_PREFERENCE_KEY"
             android:title="@string/settings_version"
-            tools:summary="1.2.3" />
+            tools:summary="1.2.3"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
             android:title="@string/settings_olm_version"
-            tools:summary="1.2.3" />
+            tools:summary="1.2.3"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"
-            android:title="@string/settings_copyright" />
+            android:title="@string/settings_copyright"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
-            android:title="@string/settings_app_term_conditions" />
+            android:title="@string/settings_app_term_conditions"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
-            android:title="@string/settings_privacy_policy" />
+            android:title="@string/settings_privacy_policy"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-            android:title="@string/settings_third_party_notices" />
+            android:title="@string/settings_third_party_notices"
+            app:isPreferenceVisible="false"/>
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -492,11 +552,11 @@
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
             android:title="@string/settings_clear_cache" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.SabaPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.SabaPreferenceCategory
+    <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
         android:title="@string/settings_deactivate_account_section">
 
@@ -504,6 +564,6 @@
             android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
             android:title="@string/settings_deactivate_my_account" />
 
-    </im.vector.preference.SabaPreferenceCategory>
+    </im.vector.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

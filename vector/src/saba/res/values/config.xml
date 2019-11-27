@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="riot_app_name" translatable="false">پیام‌رسان سبا</string>
-    <!-- server urls -->
-<!--    <string name="default_hs_server_url" translatable="false">https://matrix.sabaos.com</string>-->
 </resources>
