@@ -1862,38 +1862,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                         return true;
                     }
                 });
-
-                // Manually enable encryption for all chats in Saba build
-                if (BuildConfig.IS_SABA) {
-                    mRoom.enableEncryptionWithAlgorithm(CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
-
-                        private void onDone() {
-                            hideLoadingView(false);
-                            refreshEndToEnd();
-                        }
-
-                        @Override
-                        public void onSuccess(Void info) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onDone();
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onDone();
-                        }
-                    });
-                }
-
             }
         }
     }

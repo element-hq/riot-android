@@ -42,6 +42,7 @@ import org.matrix.androidsdk.core.MXPatterns;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
@@ -436,7 +437,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                                 Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
 
                                 enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                                mSession.createDirectMessageRoom(mMemberId, CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, mCreateDirectMessageCallBack);
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)
