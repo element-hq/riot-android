@@ -118,6 +118,7 @@ import im.vector.features.hhs.ResourceLimitEventListener;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
+import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
@@ -128,6 +129,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ReadMarkerManager;
 import im.vector.util.RoomUtils;
 import im.vector.util.SlashCommandsParser;
+import im.vector.util.UrlUtilKt;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
@@ -137,8 +139,8 @@ import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
-import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
+import kotlin.Unit;
 
 /**
  * Displays a single room with messages.
@@ -864,7 +866,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(VectorRoomActivity.this);
+                                WidgetsManager wm = Matrix.getWidgetManager(VectorRoomActivity.this);
                                 if (wm != null) {
                                     showWaitingView();
 
@@ -925,7 +927,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
 
                     new AlertDialog.Builder(VectorRoomActivity.this)
-                            .setSingleChoiceItems(widgetNames.toArray(CharSequences), 0, new DialogInterface.OnClickListener() {
+                            .setItems(widgetNames.toArray(CharSequences), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface d, int n) {
                                     d.cancel();
@@ -969,7 +971,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             @Override
             public void onCloseWidgetClick(Widget widget) {
-                WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(VectorRoomActivity.this);
+                WidgetsManager wm = Matrix.getWidgetManager(VectorRoomActivity.this);
                 if (wm != null) {
                     showWaitingView();
 
@@ -1493,7 +1495,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return true;
         }
 
-        boolean hasIntegrationManager = WidgetManagerProvider.INSTANCE.getWidgetManager(this) != null;
+        boolean hasIntegrationManager = Matrix.getWidgetManager(this) != null;
 
         // the menu is only displayed when the current activity does not display a timeline search
         if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
@@ -1637,7 +1639,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             return;
         }
 
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        WidgetsManager wm = Matrix.getWidgetManager(this);
         if (wm == null) {
             //Should not happen this action is not activated if no wm
             return;
@@ -1766,10 +1768,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     .setPositiveButton(R.string.ok, null)
                     .show();
         } else {
-            final Intent intent = new Intent(this, JitsiCallActivity.class);
-            intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
-            intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
-            startActivity(intent);
+            //Here check native widget perm
+
+            String domain = UrlUtilKt.extractDomain(JitsiCallActivity.JITSI_SERVER_URL);
+            if (domain == null) return; //display a toast?
+            boolean isAllowed = mSession.getIntegrationManager().isNativeWidgetAllowed("jitsi", domain);
+            if (isAllowed) {
+                final Intent intent = new Intent(this, JitsiCallActivity.class);
+                intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+                intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+                startActivity(intent);
+            } else {
+                //we need to prompt for permissions
+                RoomWidgetPermissionBottomSheet bs = RoomWidgetPermissionBottomSheet.Companion
+                        .newInstance(mSession.getMyUserId(), widget);
+                bs.setOnFinish((accepted) -> {
+                    if (accepted) {
+                        final Intent intent = new Intent(this, JitsiCallActivity.class);
+                        intent.putExtra(JitsiCallActivity.EXTRA_WIDGET_ID, widget);
+                        intent.putExtra(JitsiCallActivity.EXTRA_ENABLE_VIDEO, aIsVideoCall);
+                        startActivity(intent);
+                    }
+                    return Unit.INSTANCE;
+                });
+                bs.show(getSupportFragmentManager(), "JitsiPerm");
+            }
         }
     }
 
@@ -1779,7 +1802,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * @param aIsVideoCall true if the call is a video one
      */
     private void startJitsiCall(final boolean aIsVideoCall) {
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(this);
+        WidgetsManager wm = Matrix.getWidgetManager(this);
         if (wm != null) {
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
             showWaitingView();
@@ -3871,7 +3894,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         // Send sticker
-        if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) != null) {
+        if (Matrix.getWidgetManager(this) != null) {
             items.add(DialogListItem.SendSticker.INSTANCE);
         }
 
@@ -4009,13 +4032,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(R.string.ok, null)
                     .show();
-        } else if (WidgetManagerProvider.INSTANCE.getWidgetManager(this) == null) {
-            // display the dialog with the info text
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.integration_manager_not_configured)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(R.string.ok, null)
-                    .show();
+//        } else if (Matrix.getWidgetManager(this) == null) {
+//            // display the dialog with the info text
+//            new AlertDialog.Builder(this)
+//                    .setMessage(R.string.integration_manager_not_configured)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setPositiveButton(R.string.ok, null)
+//                    .show();
         } else if (isUserAllowedToStartConfCall()) {
             if (mRoom.getNumberOfMembers() > 2) {
                 new AlertDialog.Builder(this)
@@ -4026,7 +4049,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (PreferencesManager.useJitsiConfCall(VectorRoomActivity.this)) {
-                                    startJitsiCall(true);
+                                    if (Matrix.getWidgetManager(VectorRoomActivity.this) == null) {
+                                        // display the dialog with the info text
+                                        new AlertDialog.Builder(VectorRoomActivity.this)
+                                                .setMessage(R.string.integration_manager_not_configured)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .setPositiveButton(R.string.ok, null)
+                                                .show();
+                                    } else {
+                                        startJitsiCall(true);
+                                    }
                                 } else {
                                     displayVideoCallIpDialog();
                                 }

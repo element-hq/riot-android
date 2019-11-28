@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -196,11 +195,6 @@ public class VectorApp extends MultiDexApplication {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
-
-        PreferencesManager.setIntegrationManagerUrls(this,
-                getString(R.string.integrations_ui_url),
-                getString(R.string.integrations_rest_url),
-                getString(R.string.integrations_jitsi_widget_url));
 
         mLifeCycleListener = new VectorLifeCycleObserver();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);
