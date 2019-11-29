@@ -1642,7 +1642,7 @@
     <string name="auth_add_email_and_phone_message_2">Настройте имейл за възстановяване на профила. По-късно използвайте имейл или телефонен номер за да бъдете откривани от хора, които ви познават.</string>
     <string name="login_error_homeserver_not_found">Неуспешна връзка със сървъра на този адрес, моля проверете</string>
     <string name="settings_call_ringtone_use_default_stun">Позволи използването на резервен сървър за свързване на обаждания</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Ще използва %@ за асистиращ сървър, когато вашия сървър не предлага такъв (IP адресът ви ще бъде споделен по време на обаждане)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Ще използва %s за асистиращ сървър, когато вашия сървър не предлага такъв (IP адресът ви ще бъде споделен по време на обаждане)</string>
     <string name="invite_no_identity_server_error">Добавете сървър за самоличност в настройки за да извършите това действие.</string>
     <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация (експериментално)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
