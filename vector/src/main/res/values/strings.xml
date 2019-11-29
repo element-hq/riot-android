@@ -1549,7 +1549,7 @@ Why choose Riot.im?
     <string name="room_list_catchup_welcome_title">Welcome home!</string>
     <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
     <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversation will be displayed here</string>
+    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
 
@@ -1746,7 +1746,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="error_terms_not_accepted">Please retry once you have accepted the terms and conditions of your homeserver.</string>
 
-    <string name="error_network_timeout">Looks like the server is taking to long to respond, this can be caused by either poor connectivity or an error with our servers. Please try again in a while.</string>
+    <string name="error_network_timeout">Looks like the server is taking too long to respond, this can be caused by either poor connectivity or an error with the server. Please try again in a while.</string>
 
     <string name="send_attachment">Send attachment</string>
 
