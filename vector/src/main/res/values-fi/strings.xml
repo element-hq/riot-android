@@ -1707,6 +1707,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
 
-<string name="settings_push_rules_no_rules">Push-sääntöjä ei ole määritetty</string>
+    <string name="settings_push_rules_no_rules">Push-sääntöjä ei ole määritetty</string>
     <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
-    </resources>
+</resources>

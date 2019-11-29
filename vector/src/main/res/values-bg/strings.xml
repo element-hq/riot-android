@@ -1622,7 +1622,7 @@
 
     <string name="read_at">Прочетете на</string>
 
-<string name="resources_script">Cyrl</string>
+    <string name="resources_script">Cyrl</string>
 
     <string name="none">Нищо</string>
     <string name="revoke">Оттегли</string>
@@ -1717,9 +1717,9 @@
     <string name="two_users_read">%1$s и %2$s прочетоха</string>
     <string name="one_user_read">%s прочете</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 потребител прочете</item>
-	<item quantity="other">%d потребителя прочетоха</item>
-</plurals>
+        <item quantity="one">1 потребител прочете</item>
+        <item quantity="other">%d потребителя прочетоха</item>
+    </plurals>
 
     <string name="error_file_too_big">Файлът \'%1$s\' (%2$s) е прекалено голям за да се качи. Ограничението е %3$s.</string>
 

@@ -1654,7 +1654,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="settings_discovery_category">Zbulim</string>
     <string name="labs_allow_extended_logging">Aktivizo regjistra fjalamanë.</string>
@@ -1681,9 +1681,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
     <string name="one_user_read">%s i lexuar</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 përdorues lexoi</item>
-	<item quantity="other">%d përdorues lexuan</item>
-</plurals>
+        <item quantity="one">1 përdorues lexoi</item>
+        <item quantity="other">%d përdorues lexuan</item>
+    </plurals>
 
     <string name="error_file_too_big">"Kartela \'%1$s\' (%2$s) është  shumë e madhe për ngarkim. Caku është %3$s."</string>
 

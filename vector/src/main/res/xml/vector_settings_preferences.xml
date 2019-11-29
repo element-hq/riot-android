@@ -461,7 +461,7 @@
             android:key="SETTINGS_INTEGRATION_ALLOW"
             android:enabled="true"
             android:persistent="false"
-            android:title="@string/settings_integration_allow"/>
+            android:title="@string/settings_integration_allow" />
 
         <im.vector.preference.VectorPreference
             android:dependency="SETTINGS_INTEGRATION_ALLOW"
