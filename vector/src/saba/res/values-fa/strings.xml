@@ -268,4 +268,17 @@
 
     <!-- Other -->
     <string name="status_theme">قالب Status.im</string>
+    <string name="keys_backup_setup_step1_title">هیچ‌گاه پیام‌های رمز شده را از دست ندهید.</string>
+    <string name="keys_backup_banner_setup_line1">هیچ‌گاه پیام‌های رمز شده را از دست ندهید</string>
+    <string name="keys_backup_banner_recover_line1">هیچ‌گاه پیام‌های رمز شده را از دست ندهید</string>
+    <string name="keys_backup_setup">شروع به استفاده از کلید پشتیبان کنید</string>
+    <string name="keys_backup_banner_setup_line2">شروع به استفاده از کلید پشتیبان کنید</string>
+    <string name="people_search_local_contacts">مخاطبین محلی (%d)</string>
+    <string name="people_search_filter_text">فقط کاربران ماتریکس</string>
+    <string name="room_participants_invite_search_another_user">شناسه‌ی کاربر، نام یا ایمیل</string>
+    <string name="room_settings_addresses_e2e_enabled">رمزنگاری در این اتاق فعال است.</string>
+
+
+
+
 </resources>
