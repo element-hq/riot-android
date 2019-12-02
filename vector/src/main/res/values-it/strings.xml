@@ -1521,7 +1521,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="room_list_catchup_welcome_title">Benvenuti a casa!</string>
     <string name="room_list_catchup_welcome_body">Recupera i messaggi non letti qui</string>
     <string name="room_list_people_empty_title">Conversazioni</string>
-    <string name="room_list_people_empty_body">La tua conversazione diretta verrà mostrata qui</string>
+    <string name="room_list_people_empty_body">Le tue conversazioni dirette verranno mostrate qui</string>
     <string name="room_list_rooms_empty_title">Stanze</string>
     <string name="room_list_rooms_empty_body">Le tue stanze verranno mostrate qui</string>
 
@@ -1753,7 +1753,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini e condizioni del tuo homeserver.</string>
 
-    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere, ciò può essere causato da scarsa connettività o un errore con i nostri server. Riprova fra qualche minuto.</string>
+    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere, ciò può essere causato da scarsa connettività o un errore con il server. Riprova fra qualche minuto.</string>
 
     <string name="send_attachment">Invia allegato</string>
 
@@ -1814,4 +1814,39 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="no_network_indicator">Non c\'è nessuna connessione di rete al momento</string>
 
-</resources>
+<string name="settings_add_3pid_confirm_password_title">Conferma la tua password</string>
+    <string name="settings_add_3pid_flow_not_supported">Non puoi farlo da Riot mobile</string>
+    <string name="settings_add_3pid_authentication_needed">Autenticazione necessaria</string>
+
+
+    <string name="settings_integrations">Integrazioni</string>
+    <string name="settings_integrations_summary">Usa un gestore di integrazioni per gestire bot, bridge, widget e pacchetti di adesivi.
+\nI gestori di integrazione ricevono dati di configurazione e possono modificare widget, inviare inviti alla stanza, assegnare permessi a tuo nome.</string>
+    <string name="settings_integration_allow">Permetti integrazioni</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Carica widget</string>
+    <string name="room_widget_permission_added_by">Questo widget è stato aggiunto da:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Usarlo potrebbe impostare cookie e condividere dati con %s:</string>
+    <string name="room_widget_permission_shared_info_title">Usarlo potrebbe condividere dati con %s:</string>
+    <string name="room_widget_failed_to_load">Caricamento widget fallito.
+\n%s</string>
+    <string name="room_widget_reload">Ricarica widget</string>
+    <string name="room_widget_open_in_browser">Apri nel browser</string>
+    <string name="room_widget_revoke_access">Revoca l\'accesso per me</string>
+
+    <string name="room_widget_permission_display_name">Il tuo nome visualizzato</string>
+    <string name="room_widget_permission_avatar_url">Il tuo URL dell\'avatar</string>
+    <string name="room_widget_permission_user_id">Il tuo ID utente</string>
+    <string name="room_widget_permission_theme">Il tuo tema</string>
+    <string name="room_widget_permission_widget_id">ID widget</string>
+    <string name="room_widget_permission_room_id">ID stanza</string>
+
+
+    <string name="room_widget_resource_permission_title">Questo widget vuole usare le seguenti risorse:</string>
+    <string name="room_widget_resource_grant_permission">Permetti</string>
+    <string name="room_widget_resource_decline_permission">Blocca tutto</string>
+    <string name="room_widget_webview_access_camera">Usare la fotocamera</string>
+    <string name="room_widget_webview_access_microphone">Usare il microfono</string>
+    <string name="room_widget_webview_read_protected_media">Leggere media protetti da DRM</string>
+
+    </resources>
