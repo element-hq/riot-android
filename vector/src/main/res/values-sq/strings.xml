@@ -1663,7 +1663,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="error_terms_not_accepted">Ju lutemi, riprovoni sapo të keni pranuar termat dhe kushtet e shërbyesit tuaj Home.</string>
 
-    <string name="error_network_timeout">Duket sikur shërbyesit po i duhet shumë kohë për t’u përgjigjur,kjo mund të shkaktohet ose nga lidhje e dobët, ose nga një gabim me shërbyesit tanë. Ju lutemi, riprovoni pas pak.</string>
+    <string name="error_network_timeout">Duket sikur shërbyesit po i duhet shumë kohë për t’u përgjigjur,kjo mund të shkaktohet ose nga lidhje e dobët, ose nga një gabim me shërbyesin tonë. Ju lutemi, riprovoni pas pak.</string>
 
     <string name="send_attachment">Dërgo bashkëngjitje</string>
 
@@ -1721,4 +1721,40 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
 
-</resources>
+<string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
+    <string name="settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga Riot-i për celular</string>
+    <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
+
+
+    <string name="settings_integrations">Integrime</string>
+    <string name="settings_integrations_summary">Përdorni një Përgjegjës Integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
+\nPërgjegjësit e Integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.</string>
+    <string name="settings_integration_allow">Lejo integrim</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Ngarko Widget</string>
+    <string name="room_widget_permission_added_by">Ky <em>widget</em> qe shtuar nga:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Përdorimi i tij mund të sjellë depozitim <em>cookies</em> dhe ndarje të dhënash me %s:</string>
+    <string name="room_widget_permission_shared_info_title">Përdorimi i tij mund të sjellë ndarje të dhënash me %s:</string>
+    <string name="room_widget_failed_to_load">S’u arrit të ngarkohej widget.
+\n%s</string>
+    <string name="room_widget_reload">Ringarkoje widget-in</string>
+    <string name="room_widget_open_in_browser">Hape në shfletues</string>
+    <string name="room_widget_revoke_access">Shfuqizo hyrje për mua</string>
+
+    <string name="room_widget_permission_display_name">Emri juaj në ekran</string>
+    <string name="room_widget_permission_avatar_url">URL-ja e avatarit tuaj</string>
+    <string name="room_widget_permission_user_id">ID-ja juaj si përdorues</string>
+    <string name="room_widget_permission_theme">Tema juaj</string>
+    <string name="room_widget_permission_widget_id">ID Widget-i</string>
+    <string name="room_widget_permission_room_id">ID Dhome</string>
+
+
+    <string name="room_widget_resource_permission_title">Ky widget dëshiron të përdorë burimet vijuese:</string>
+    <string name="room_widget_resource_grant_permission">Lejoje</string>
+    <string name="room_widget_resource_decline_permission">Bllokoji Krejt</string>
+    <string name="room_widget_webview_access_camera">Të përdorë kamerën</string>
+    <string name="room_widget_webview_access_microphone">Të përdorë mikrofonin</string>
+    <string name="room_widget_webview_read_protected_media">Të lexojë Media të mbrojtur me DRM</string>
+
+    <string name="a11y_close_keys_backup_banner">Mbyll banderolë kopjeruajtjeje kyçesh</string>
+    </resources>
