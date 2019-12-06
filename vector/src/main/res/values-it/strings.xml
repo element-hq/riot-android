@@ -1727,33 +1727,33 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="add_identity_server">Configura server di identità</string>
     <string name="change_identity_server">Cambia server di identità</string>
     <string name="settings_discovery_identity_server_info">Attualmente stai usando %1$s per scoprire ed essere trovabile dai contatti esistenti che conosci.</string>
-    <string name="settings_discovery_identity_server_info_none">Attualmente non stai usando alcun server di identità. Per scoprire ed essere trovabile dai contatti esistenti che conosci, configurane uno qua sotto.</string>
-    <string name="settings_discovery_emails_title">Indirizzi email trovabili</string>
+    <string name="settings_discovery_identity_server_info_none">Attualmente non stai usando alcun server di identità. Per poter esser trovato dai contatti esistenti che conosci, configurane uno qua sotto.</string>
+    <string name="settings_discovery_emails_title">Indirizzi email visibili pubblicamente</string>
     <string name="settings_discovery_no_mails">Le opzioni di scoperta appariranno dopo avere aggiunto un\'email.</string>
     <string name="settings_discovery_no_msisdn">Le opzioni di scoperta appariranno dopo avere aggiunto un numero di telefono.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Se ti disconnetti dal server di identità non potrai più essere trovato da altri utenti e non potrai invitarne altri per email o telefono.</string>
-    <string name="settings_discovery_msisdn_title">Numeri di telefono trovabili</string>
-    <string name="settings_discovery_confirm_mail">Ti abbiamo inviato un\'email di conferma a %s, controlla l\'email e clicca sul link di conferma</string>
+    <string name="settings_discovery_msisdn_title">Numeri di telefono visibili pubblicamente</string>
+    <string name="settings_discovery_confirm_mail">Abbiamo inviato un\'email di conferma a %s, controlla l\'email e clicca sul link di conferma</string>
     <string name="settings_discovery_mail_pending">In attesa</string>
 
     <string name="settings_discovery_enter_identity_server">Inserisci un nuovo server di identità</string>
     <string name="settings_discovery_bad_identity_server">Impossibile connettersi al server di identità</string>
     <string name="settings_discovery_please_enter_server">Inserisci l\'URL del server di identità</string>
-    <string name="settings_discovery_no_terms_title">Il server di identità non ha condizioni di servizio</string>
-    <string name="settings_discovery_no_terms">Il server di identità che hai scelto non ha alcuna condizione di servizio. Continua solo se ti fidi del proprietario del servizio</string>
-    <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica contenuto.</string>
+    <string name="settings_discovery_no_terms_title">Il server di identità non ha specificato termini e condizioni del servizio</string>
+    <string name="settings_discovery_no_terms">Il server di identità che hai scelto non ha specificato termini e condizioni del servizio. Continua solo se ti fidi</string>
+    <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica che contiene.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per fermarne la condivisione.</string>
-    <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per consentire di essere trovabile per email o numero di telefono.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo i tuoi indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
+    <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
     <string name="resources_script">Latn</string>
 
-    <string name="labs_allow_extended_logging">Attiva log dettagliati.</string>
-    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro più informazioni quando invii una segnalazione. Anche quando attivi, l\'applicazione non registra i contenuti dei messaggi o altri dati personali.</string>
+    <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
+    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii. Anche quando attivi, l\'applicazione non registra i contenuti dei messaggi o altri dati personali.</string>
 
 
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini e condizioni del tuo homeserver.</string>
 
-    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere, ciò può essere causato da scarsa connettività o un errore con il server. Riprova fra qualche minuto.</string>
+    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere. Ciò può essere causato da una cattiva connessione o da un errore del server. Riprova fra qualche minuto.</string>
 
     <string name="send_attachment">Invia allegato</string>
 
