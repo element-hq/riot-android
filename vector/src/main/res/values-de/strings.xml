@@ -1654,7 +1654,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="decline">Ablehnen</string>
 
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_app_id">App-ID:</string>
     <string name="review">Überprüfung</string>
     <string name="none">Keine</string>
     <string name="revoke">Widerrufen</string>
@@ -1687,8 +1687,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_user_already_logged_in">Sie versuchen anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchten Sie sich abmelden\?</string>
 
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_push_key">Push-Key:</string>
+    <string name="push_gateway_item_app_display_name">App-Anzeigename:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="review_terms">Nutzungsbedingungen überprüfen</string>
@@ -1755,9 +1755,39 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
 
-    <string name="security_warning_identity_server">Vorige Versionen von Riot hatten einen Security Bug, der dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
+    <string name="security_warning_identity_server">Frühere Versionen von Riot hatten einen Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
 \n
-\nWeitere Details gibt es hier:
+\nWeitere Details gibt es hier (Englisch):
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
+    <string name="settings_discovery_manage">Verwalte deine Erkennungseinstellungen.</string>
+    <string name="room_widget_revoke_access">Zugriff für mich zurückziehen</string>
+
+    <string name="push_gateway_item_device_name">Gerätename:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="store_riotx_full_description">RiotX ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
+\nRiotX ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
+\n
+\nHinweis: Dies ist eine Beta-Version. RiotX wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
+\n
+\nRiotX unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
+\n
+\nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Kontoerstellung • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
+
+    <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um zu entdecken und von dir bekannten Kontakten entdeckt zu werden.</string>
+    <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
+    <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
+    <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
+    <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
+    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
+
+    <string name="labs_allow_extended_logging">Aktiviere gesprächige Logs.</string>
+    <string name="labs_allow_extended_logging_summary">Gesprächige Logs wird den Entwicklern helfen indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
+
+
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
 
     </resources>
