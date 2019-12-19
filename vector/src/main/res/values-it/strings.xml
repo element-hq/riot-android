@@ -768,13 +768,13 @@
     <string name="open_chat_header">Apri descrizione</string>
     <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 utente attivo</item>
-	<item quantity="other">%d utenti attivi</item>
-</plurals>
+        <item quantity="one">1 utente attivo</item>
+        <item quantity="other">%d utenti attivi</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 utente</item>
-	<item quantity="other">%d utenti</item>
-</plurals>
+        <item quantity="one">1 utente</item>
+        <item quantity="other">%d utenti</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bannare questo utente\?</string>
 
     <plurals name="room_new_messages_notification">
@@ -1072,9 +1072,9 @@
     <string name="call_anyway">Chiama comunque</string>
     <string name="room_participants_action_kick">Butta fuori</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Sei sicuro di voler buttare fuori questo utente\?</item>
-	<item quantity="other">Sei sicuro di voler buttare fuori questi utenti\?</item>
-</plurals>
+        <item quantity="one">Sei sicuro di voler buttare fuori questo utente\?</item>
+        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti\?</item>
+    </plurals>
     <string name="reason_hint">Motivo</string>
 
     <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>
@@ -1347,9 +1347,9 @@
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
     <string name="keys_backup_restore_success_description">Ripristinate %1$d Session-Keys e aggiunte %2$d nuove Key(s) finora sconosciute a questo dispositivo</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Ripristinato un Backup con %d chiave.</item>
-	<item quantity="other">Ripristinato un Backup con %d chiavi.</item>
-</plurals>
+        <item quantity="one">Ripristinato un Backup con %d chiave.</item>
+        <item quantity="other">Ripristinato un Backup con %d chiavi.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d nuova chiave è stata aggiunta a questo dispositivo.</item>
         <item quantity="other">%d nuove chiavi sono state aggiunte a questo dispositivo.</item>
@@ -1816,7 +1816,7 @@
 
     <string name="no_network_indicator">In questo momento non c\'è nessuna connessione di rete</string>
 
-<string name="settings_add_3pid_confirm_password_title">Conferma la tua password</string>
+    <string name="settings_add_3pid_confirm_password_title">Conferma la tua password</string>
     <string name="settings_add_3pid_flow_not_supported">Non puoi farlo da Riot mobile</string>
     <string name="settings_add_3pid_authentication_needed">E\'necessaria l\'autenticazione</string>
 
@@ -1851,4 +1851,4 @@
     <string name="room_widget_webview_access_microphone">Usa il microfono</string>
     <string name="room_widget_webview_read_protected_media">Leggi media protetti da DRM</string>
 
-    </resources>
+</resources>

@@ -1720,7 +1720,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_network_indicator">目前沒有網路連線</string>
 
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
     <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Riot 做這件事</string>
@@ -1757,4 +1757,4 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_widget_webview_access_microphone">使用麥克風</string>
     <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
 
-    </resources>
+</resources>

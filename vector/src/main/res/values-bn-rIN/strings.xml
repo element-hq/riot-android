@@ -492,7 +492,7 @@
     <string name="room_details_settings">সেটিংস</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -1096,7 +1096,7 @@
     <string name="command_problem_with_parameters">কমান্ড \"%s\" আরও পেরামিটার প্রয়োজন, অথবা কিছু পেরামিটার ভুল।</string>
     <string name="command_description_emote">কর্ম প্রদর্শন করে</string>
     <string name="command_description_ban_user">দেওয়া আইডি সঙ্গে ব্যবহারকারী কে নিষিদ্ধ করে</string>
-<string name="none">কোনটা না</string>
+    <string name="none">কোনটা না</string>
     <string name="revoke">রদ কর</string>
     <string name="disconnect">বিযুক্ত</string>
     <string name="review">পর্যালোচনা</string>
@@ -1192,4 +1192,4 @@
     <string name="markdown_has_been_disabled">মার্কডাউন অক্ষম করা হয়েছে।</string>
 
     <string name="notification_off">অফ</string>
-    </resources>
+</resources>

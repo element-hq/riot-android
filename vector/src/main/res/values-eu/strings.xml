@@ -1766,7 +1766,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="no_network_indicator">Ez dago sare konexiorik orain</string>
 
-<string name="settings_add_3pid_confirm_password_title">Berretsi zure pasahitza</string>
+    <string name="settings_add_3pid_confirm_password_title">Berretsi zure pasahitza</string>
     <string name="settings_add_3pid_flow_not_supported">Ezin duzu hau egin mugikorrerako Riot erabiliz</string>
     <string name="settings_add_3pid_authentication_needed">Autentifikazioa behar da</string>
 
@@ -1801,4 +1801,4 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="room_widget_webview_access_microphone">Mikrofonoa erabili</string>
     <string name="room_widget_webview_read_protected_media">DRM bidez babestutako multimedia irakurri</string>
 
-    </resources>
+</resources>

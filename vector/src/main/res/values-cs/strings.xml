@@ -105,7 +105,7 @@
         <item quantity="one">1 uživatel</item>
         <item quantity="few">%d uživatelé</item>
         <item quantity="many">%d uživatelé</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
@@ -260,7 +260,7 @@ Omlouváme se za způsobené nepříjemnosti.</string>
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
         <item quantity="many">%d změn členství</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="compression_options">"Odeslat jako "</string>
@@ -348,38 +348,38 @@ Omlouváme se za způsobené nepříjemnosti.</string>
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
         <item quantity="many">%d aktivních členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
         <item quantity="many">%d členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
         <item quantity="few">%ds</item>
         <item quantity="many">%ds</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1min</item>
         <item quantity="few">%dmin</item>
         <item quantity="many">%dmin</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1h</item>
         <item quantity="few">%dh</item>
         <item quantity="many">%dh</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1d</item>
         <item quantity="few">%dd</item>
         <item quantity="many">%dd</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
@@ -418,7 +418,7 @@ Omlouváme se za způsobené nepříjemnosti.</string>
         <item quantity="one">Jste si jisti, že chcete vyhodit tohoto uživatele z této konverzace?</item>
         <item quantity="few">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
         <item quantity="many">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_participants_ban_prompt_msg">Jste si jisti, že chcete zakázat vstup tohoto uživatele do této konverzace?</string>
     <string name="reason_hint">Důvod</string>
@@ -456,7 +456,7 @@ Omlouváme se za způsobené nepříjemnosti.</string>
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
         <item quantity="many">%d nových zpráv</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -473,7 +473,7 @@ Omlouváme se za způsobené nepříjemnosti.</string>
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
         <item quantity="many">%d vybráno</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -602,7 +602,7 @@ Omlouváme se za způsobené nepříjemnosti.</string>
     <string name="settings_notification_advanced_summary">Nastavit důležitost upozornění na základě události, nastavení zvuku, LED, vibrací</string>
     <string name="settings_notification_by_event">Důležitost upozornění na základě události</string>
 
-<string name="notification_sync_init">Inicializuji službu</string>
+    <string name="notification_sync_init">Inicializuji službu</string>
     <string name="title_activity_verify_device">Ověřte zařízení</string>
 
     <string name="disconnect">Odpojit</string>
@@ -610,4 +610,4 @@ Omlouváme se za způsobené nepříjemnosti.</string>
     <string name="decline">Odmítnout</string>
 
     <string name="action_mark_room_read">Označit za přečtené</string>
-    </resources>
+</resources>

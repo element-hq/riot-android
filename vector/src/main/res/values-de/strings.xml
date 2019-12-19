@@ -1708,6 +1708,6 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
-<string name="resources_script">Lateinisch</string>
+    <string name="resources_script">Lateinisch</string>
 
-    </resources>
+</resources>

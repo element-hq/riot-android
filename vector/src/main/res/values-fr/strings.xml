@@ -1770,7 +1770,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
 
-<string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
+    <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
     <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Riot mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
 
@@ -1805,4 +1805,4 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="room_widget_webview_access_microphone">Utiliser le micro</string>
     <string name="room_widget_webview_read_protected_media">Lire des médias protégés par des DRM</string>
 
-    </resources>
+</resources>

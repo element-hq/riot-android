@@ -1709,7 +1709,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_push_rules_no_rules">Viesti-ilmoitusten sääntöjä ei ole määritetty</string>
     <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="revoke">Kumoa</string>
     <string name="review">Tarkasta</string>
@@ -1851,4 +1851,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n
 \nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
 
-    </resources>
+</resources>

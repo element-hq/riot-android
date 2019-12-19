@@ -1721,7 +1721,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
 
-<string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
+    <string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
     <string name="settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga Riot-i për celular</string>
     <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
 
@@ -1757,4 +1757,4 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="room_widget_webview_read_protected_media">Të lexojë Media të mbrojtur me DRM</string>
 
     <string name="a11y_close_keys_backup_banner">Mbyll banderolë kopjeruajtjeje kyçesh</string>
-    </resources>
+</resources>

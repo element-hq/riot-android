@@ -1568,7 +1568,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="send_suggestion">Haz una sugerencia</string>
     <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
     <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="none">Ninguno</string>
     <string name="revoke">Revocar</string>
@@ -1598,4 +1598,4 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_discovery_category">Descubrimiento</string>
     <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
     <string name="room_list_catchup_welcome_body">Entérese aquí de los mensajes sin leer</string>
-    </resources>
+</resources>
