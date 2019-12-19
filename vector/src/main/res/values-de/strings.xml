@@ -1755,4 +1755,9 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
 
+    <string name="security_warning_identity_server">Vorige Versionen von Riot hatten einen Security Bug, der dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
+\n
+\nWeitere Details gibt es hier:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
     </resources>
