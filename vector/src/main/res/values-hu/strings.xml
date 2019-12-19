@@ -1021,7 +1021,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1249,11 +1249,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1332,7 +1332,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1769,4 +1769,40 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="no_network_indicator">Jelenleg nincs hálózati kapcsolat</string>
 
-</resources>
+<string name="settings_add_3pid_confirm_password_title">Jelszó megerősítés</string>
+    <string name="settings_add_3pid_flow_not_supported">Riot mobilról ezt nem teheted meg</string>
+    <string name="settings_add_3pid_authentication_needed">Azonosítás szükséges</string>
+
+
+    <string name="settings_integrations">Integrációk</string>
+    <string name="settings_integrations_summary">Botok, hidak, kisalkalmazások és matrica csomagok kezeléséhez használj Integrációs Menedzsert.
+\n
+\nIntegrációs Menedzser megkapja a konfigurációt, módosíthat kisalkalmazásokat, szobához meghívót küldhet és a hozzáférési szintet beállíthatja helyetted.</string>
+    <string name="settings_integration_allow">Integrációk engedélyezése</string>
+    <string name="room_widget_activity_title">Kisalkalmazás</string>
+    <string name="room_widget_permission_title">Kisalkalmazás betöltése</string>
+    <string name="room_widget_permission_added_by">Ezt a kisalkalmazást hozzáadta:</string>
+    <string name="room_widget_permission_webview_shared_info_title">A használatához lehet, hogy sütiket kell használni és adat lesz megosztva ezzel: %s:</string>
+    <string name="room_widget_permission_shared_info_title">A használatához lehet, hogy adat lesz megosztva ezzel: %s:</string>
+    <string name="room_widget_failed_to_load">Kisalkalmazás betöltése sikertelen:
+\n%s</string>
+    <string name="room_widget_reload">Kisalkalmazás újratöltése</string>
+    <string name="room_widget_open_in_browser">Megnyitás böngészőben</string>
+    <string name="room_widget_revoke_access">Hozzáférés megvonása magamtól</string>
+
+    <string name="room_widget_permission_display_name">Megjelenítési neved</string>
+    <string name="room_widget_permission_avatar_url">Profilképed URL-je</string>
+    <string name="room_widget_permission_user_id">Felhasználói azonosítód</string>
+    <string name="room_widget_permission_theme">Témád</string>
+    <string name="room_widget_permission_widget_id">Kisalkalmazás azon.</string>
+    <string name="room_widget_permission_room_id">Szoba azonosító</string>
+
+
+    <string name="room_widget_resource_permission_title">Ez a kisalkalmazás az alábbi erőforrásokat szeretné használni:</string>
+    <string name="room_widget_resource_grant_permission">Engedélyez</string>
+    <string name="room_widget_resource_decline_permission">Mind tiltása</string>
+    <string name="room_widget_webview_access_camera">Kamera használata</string>
+    <string name="room_widget_webview_access_microphone">Mikrofon használata</string>
+    <string name="room_widget_webview_read_protected_media">DRM-mel védett média olvasása</string>
+
+    </resources>
