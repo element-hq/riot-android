@@ -1905,4 +1905,79 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_msisdn_confirm_send_again">Küld újra</string>
     <string name="login_msisdn_confirm_submit">Következő</string>
 
-    </resources>
+    <string name="login_mode_not_supported">Az alkalmazás nem tud bejelentkezni a Matrix szerverbe. A Matrix szerver ezeket a bejelentkezési módokat támogatja: %1$s.
+\n
+\nWeb klienssel szeretnél bejelentkezni\?</string>
+    <string name="login_registration_not_supported">Az alkalmazás nem tud fiókot készíteni ezen a Matrix szerveren.
+\n
+\nWeb klienssel szeretnél bejelentkezni\?</string>
+
+    <string name="login_reset_password_mail_confirmation_notice_2">Koppints a linkre az új jelszó megerősítéséhez. Miután követted a linket, kattints alább.</string>
+    <string name="login_set_email_notice">Állíts be egy e-mail címet a fiókod visszaállításához. Később esetleg engedélyezheted, hogy ismerősök e-mail címmel megtalálhassanak.</string>
+    <string name="login_msisdn_error_not_international">Nemzetközi telefonszámnak „+” jellel kell kezdődnie</string>
+    <string name="login_msisdn_error_other">A telefonszám érvénytelennek látszik. Kérlek ellenőrizd</string>
+
+    <string name="login_signup_to">Bejelentkezés ide: %1$s</string>
+    <string name="login_signup_username_hint">Felhasználónév vagy e-mail</string>
+    <string name="login_signup_password_hint">Jelszó</string>
+    <string name="login_signup_submit">Következő</string>
+    <string name="login_signup_error_user_in_use">A felhasználónév már használatban van</string>
+    <string name="login_signup_cancel_confirmation_title">Figyelmeztetés</string>
+    <string name="login_signup_cancel_confirmation_content">A felhasználói fiókod még nincs kész.
+\n
+\nMegállítód a regisztrációt\?</string>
+
+    <string name="login_a11y_choose_matrix_org">matrix.org kiválasztása</string>
+    <string name="login_a11y_choose_modular">Modular kiválasztása</string>
+    <string name="login_a11y_choose_other">Egyedi matrix szerver kiválasztása</string>
+    <string name="login_a11y_captcha_container">Kérlek old meg a captcha-t</string>
+    <string name="login_terms_title">Folytatáshoz fogadd el a feltételeket</string>
+
+    <string name="login_wait_for_email_title">Kérlek ellenőrizd az e-mailed</string>
+    <string name="login_wait_for_email_notice">E-mailt küldtünk ide: %1$s.
+\nKérlek kattints a benne lévő linkre a fiók készítés folytatásához.</string>
+    <string name="login_validation_code_is_not_correct">A beírt kód helytelen. Kérlek ellenőrizd.</string>
+    <string name="login_error_outdated_homeserver_title">Elavult matrix szerver</string>
+    <string name="login_error_outdated_homeserver_content">Ez a matrix szerver túl elavult a csatlakozáshoz. Kérd meg a matrix szerver adminisztrátorát a frissítésre.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+	<item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
+	<item quantity="other">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
+</plurals>
+
+    <string name="seen_by">Látták:</string>
+
+    <string name="signed_out_title">Kijelentkeztél</string>
+    <string name="signed_out_notice">A következő okok miatt lehet:
+\n
+\n• Másik eszközön megváltoztattad a jelszavadat.
+\n
+\n• Törölted ezt az eszközt egy másik eszközről.
+\n
+\n• A matrix szerver adminisztrátora biztonsági okokból érvénytelenítette a hozzáférésed.</string>
+    <string name="signed_out_submit">Lépj be újra</string>
+
+    <string name="soft_logout_title">Kijelentkeztél</string>
+    <string name="soft_logout_signin_title">Bejelentkezés</string>
+    <string name="soft_logout_signin_notice">A matrix szerver (%1$s) adminisztrátora kiléptetett a felhasználói fiókodból %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">A csak ezen az eszközön meglévő titkosítási kulcsokhoz való hozzáféréshez be kell jelentkezned. Ahhoz hogy bármelyik eszközön elolvashasd a titkosított üzeneteidet szükséged lesz rájuk.</string>
+    <string name="soft_logout_signin_submit">Bejelentkezés</string>
+    <string name="soft_logout_signin_password_hint">Jelszó</string>
+    <string name="soft_logout_clear_data_title">Személyes adatok törlése</string>
+    <string name="soft_logout_clear_data_notice">Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva.
+\n
+\nHa az eszközt nem használod tovább vagy másik fiókba szeretnél bejelentkezni, töröld őket.</string>
+    <string name="soft_logout_clear_data_submit">Minden adat törlése</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Adat törlése</string>
+    <string name="soft_logout_clear_data_dialog_content">Biztos vagy benne, hogy minden az eszközön tárolt adatot törölni szeretnél\?
+\nA fiók és az üzeneteid eléréséhez jelentkezz be.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem jelentkezel be a titkosítási kulcsok visszaállításához.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Adat törlése</string>
+    <string name="soft_logout_sso_not_same_user_error">A jelenlegi munkamenet %1$s felhasználóhoz tartozik és %2$s azonosítási adatait adtad meg. Ez RiotX-ben nem támogatott.
+\nElőször töröld az adatokat, majd a másik felhasználói fiókba lépj be.</string>
+
+    <string name="permalink_malformed">A matrix.to linked hibás</string>
+    <string name="bug_report_error_too_short">A leírás túl rövid</string>
+
+</resources>
