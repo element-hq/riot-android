@@ -1759,4 +1759,11 @@
 
     <string name="no_network_indicator">В момента няма връзка с мрежата</string>
 
-</resources>
+<string name="login_error_no_homeserver_found">Това не е валиден адрес на Matrix сървър</string>
+    <string name="settings_add_3pid_confirm_password_title">Потвърдете паролата</string>
+    <string name="settings_add_3pid_flow_not_supported">Не може да направите това от мобилно приложение на Riot</string>
+    <string name="settings_add_3pid_authentication_needed">Нужна е автентикация</string>
+
+
+    <string name="settings_integrations">Интеграции</string>
+    </resources>
