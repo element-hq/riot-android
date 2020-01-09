@@ -1757,7 +1757,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_widget_webview_access_microphone">使用麥克風</string>
     <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
 
-<string name="login_error_no_homeserver_found">這不是有效的 Matrix 伺服器位置</string>
+    <string name="login_error_no_homeserver_found">這不是有效的 Matrix 伺服器位置</string>
     <string name="message_ignore_user">封鎖使用者</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">所有訊息（吵雜）</string>
@@ -1893,8 +1893,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="login_error_outdated_homeserver_content">此家伺服器所執行的版本太舊，所以無法連線。請要求您的家伺服器管理員升級。</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="other">傳送了太多請求。您可以在 %1$d 秒後重試……</item>
-</plurals>
+        <item quantity="other">傳送了太多請求。您可以在 %1$d 秒後重試……</item>
+    </plurals>
 
     <string name="seen_by">檢視由</string>
 

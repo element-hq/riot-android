@@ -998,9 +998,9 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
         <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1T</item>
-	<item quantity="other">%dT</item>
-</plurals>
+        <item quantity="one">1T</item>
+        <item quantity="other">%dT</item>
+    </plurals>
 
     <string name="room_participants_now">Jetzt %1$s</string>
     <string name="room_participants_ago">%1$s seit %2$s</string>
@@ -1710,7 +1710,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
 
-<string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) um einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren.
+    <string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) um einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren.
 \n
 \nAlternativ kannst du einen öffentlichen Server auf %2$s nutzen doch wird das nicht zu zuverlässig sein und es wird deine IP-Adresse mit dem Server teilen. Du kannst dies auch in den Einstellungen konfigurieren.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
@@ -1790,4 +1790,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
 
-    </resources>
+</resources>

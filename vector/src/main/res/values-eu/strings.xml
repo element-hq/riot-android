@@ -1801,7 +1801,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="room_widget_webview_access_microphone">Mikrofonoa erabili</string>
     <string name="room_widget_webview_read_protected_media">DRM bidez babestutako multimedia irakurri</string>
 
-<string name="login_error_no_homeserver_found">Hau ez da baliozko Matrix zerbitzari helbide bat</string>
+    <string name="login_error_no_homeserver_found">Hau ez da baliozko Matrix zerbitzari helbide bat</string>
     <string name="message_ignore_user">Blokeatu erabiltzailea</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Mezu guztiak (ozen)</string>
@@ -1937,9 +1937,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="login_error_outdated_homeserver_content">Hasiera-zerbitzari honek konektatzeko zaharregia den bertsio bat darabil. Eskatu administratzaileari eguneratu dezala.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Eskaera gehiegi bidali dira. Segundo 1$d barru saiatu zaitezke berriro…</item>
-	<item quantity="other">Eskaera gehiegi bidali dira. 1$d segundo barru saiatu zaitezke berriro…</item>
-</plurals>
+        <item quantity="one">Eskaera gehiegi bidali dira. Segundo 1$d barru saiatu zaitezke berriro…</item>
+        <item quantity="other">Eskaera gehiegi bidali dira. 1$d segundo barru saiatu zaitezke berriro…</item>
+    </plurals>
 
     <string name="seen_by">Hauek ikusia</string>
 

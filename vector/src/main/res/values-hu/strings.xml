@@ -1021,7 +1021,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1249,11 +1249,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1332,7 +1332,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1805,7 +1805,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_widget_webview_access_microphone">Mikrofon használata</string>
     <string name="room_widget_webview_read_protected_media">DRM-mel védett média olvasása</string>
 
-<string name="login_error_no_homeserver_found">Ez nem egy érvényes Matrix szerver cím</string>
+    <string name="login_error_no_homeserver_found">Ez nem egy érvényes Matrix szerver cím</string>
     <string name="message_ignore_user">Felhasználó tiltása</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Minden üzenet (hangos)</string>
@@ -1941,9 +1941,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_error_outdated_homeserver_content">Ez a matrix szerver túl elavult a csatlakozáshoz. Kérd meg a matrix szerver adminisztrátorát a frissítésre.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
-	<item quantity="other">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
-</plurals>
+        <item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
+        <item quantity="other">Túl sok kérés lett elküldve. %1$d másodperc múlva újra próbálhatod…</item>
+    </plurals>
 
     <string name="seen_by">Látták:</string>
 

@@ -1016,7 +1016,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 \n%1$s または %2$s として参加</string>
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">ビデオ</string>
-<string name="settings_notification_advanced">詳細な通知設定</string>
+    <string name="settings_notification_advanced">詳細な通知設定</string>
     <string name="settings_background_fdroid_sync_mode">バックグラウンド同期モード (実験)</string>
     <string name="settings_background_fdroid_sync_mode_battery">バッテリーを考慮して最適化</string>
     <string name="settings_background_fdroid_sync_mode_real_time">リアルタイム性を重視して最適化</string>
@@ -1055,4 +1055,4 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="backup">バックアップ</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">サインアウトする前に鍵をバックアップしないと、暗号化されたメッセージにアクセスできなくなります。</string>
 
-    </resources>
+</resources>

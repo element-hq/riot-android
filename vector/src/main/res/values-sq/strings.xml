@@ -1757,7 +1757,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="room_widget_webview_read_protected_media">Të lexojë Media të mbrojtur me DRM</string>
 
     <string name="a11y_close_keys_backup_banner">Mbyll banderolë kopjeruajtjeje kyçesh</string>
-<string name="login_error_no_homeserver_found">Kjo s’është adresë e vlefshme shërbyesi Matrix</string>
+    <string name="login_error_no_homeserver_found">Kjo s’është adresë e vlefshme shërbyesi Matrix</string>
     <string name="sas_error_m_mismatched_commitment">Hashi i lëndës s’u përputh me atë që pritej</string>
     <string name="error_handling_incoming_share">S’trajtoi dot të dhëna ndarjeje</string>
 
@@ -1894,9 +1894,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="login_error_outdated_homeserver_content">Ky shërbyes Home xhiron një version shumë të vjetër për t’u lidhur me të. Kërkojini përgjegjësit të shërbyesit tuaj Home ta përmirësojë.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekonde…</item>
-	<item quantity="other">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekondash…</item>
-</plurals>
+        <item quantity="one">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekonde…</item>
+        <item quantity="other">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekondash…</item>
+    </plurals>
 
     <string name="seen_by">Parë nga</string>
 

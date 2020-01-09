@@ -1805,7 +1805,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="room_widget_webview_access_microphone">Utiliser le micro</string>
     <string name="room_widget_webview_read_protected_media">Lire des médias protégés par des DRM</string>
 
-<string name="login_error_no_homeserver_found">Ce n’est pas une adresse de serveur Matrix valide</string>
+    <string name="login_error_no_homeserver_found">Ce n’est pas une adresse de serveur Matrix valide</string>
     <string name="message_ignore_user">Bloquer l’utilisateur</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Tous les messages (sonore)</string>
@@ -1941,9 +1941,9 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="login_error_outdated_homeserver_content">Ce serveur d’accueil utilise une version trop ancienne pour s’y connecter. Demandez à l’administrateur de votre serveur d’accueil de le mettre à niveau.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Trop de requêtes ont été envoyées. Vous pouvez réessayer dans %1$d seconde…</item>
-	<item quantity="other">Trop de requêtes ont été envoyées. Vous pouvez réessayer dans %1$d secondes…</item>
-</plurals>
+        <item quantity="one">Trop de requêtes ont été envoyées. Vous pouvez réessayer dans %1$d seconde…</item>
+        <item quantity="other">Trop de requêtes ont été envoyées. Vous pouvez réessayer dans %1$d secondes…</item>
+    </plurals>
 
     <string name="seen_by">Vu par</string>
 

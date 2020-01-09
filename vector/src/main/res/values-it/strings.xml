@@ -1851,7 +1851,7 @@
     <string name="room_widget_webview_access_microphone">Usa il microfono</string>
     <string name="room_widget_webview_read_protected_media">Leggi media protetti da DRM</string>
 
-<string name="login_error_no_homeserver_found">Questo non è un indirizzo di server Matrix valido</string>
+    <string name="login_error_no_homeserver_found">Questo non è un indirizzo di server Matrix valido</string>
     <string name="message_ignore_user">Blocca utente</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">Tutti i messaggi (rumoroso)</string>
@@ -1987,9 +1987,9 @@
     <string name="login_error_outdated_homeserver_content">Questo homerserver è di una versione troppo vecchia per connettersi. Chiedi all\'amministratore dell\'homeserver di aggiornarlo.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondo…</item>
-	<item quantity="other">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondi…</item>
-</plurals>
+        <item quantity="one">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondo…</item>
+        <item quantity="other">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondi…</item>
+    </plurals>
 
     <string name="seen_by">Visto da</string>
 
