@@ -1977,4 +1977,22 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="permalink_malformed">Zure matrix.to esteka gaizki osatua dago</string>
     <string name="bug_report_error_too_short">Deskripzio hau laburregia da</string>
 
+<string name="notification_initial_sync">Lehen sinkronizazioa…</string>
+
+    <string name="settings_show_devices_list">Ikusi nire gailu guztiak</string>
+    <string name="settings_advanced_settings">Ezarpen aurreratuak</string>
+    <string name="settings_developer_mode">Garatzaile modua</string>
+    <string name="settings_developer_mode_summary">Garatzaile moduak aplikazioa ezegonkor bihurtu dezaketen ezaugarri ezkutuak aktibatzen ditu. Garatzaileentzat besterik ez!</string>
+    <string name="settings_rageshake">Amorruz astintzea</string>
+    <string name="settings_rageshake_detection_threshold">Antzemate atalasea</string>
+    <string name="settings_rageshake_detection_threshold_summary">Astindu zure telefonoa antzemate atalasea probatzeko</string>
+    <string name="rageshake_detected">Astindua antzeman da!</string>
+    <string name="settings">Ezarpenak</string>
+    <string name="devices_current_device">Uneko gailua</string>
+    <string name="devices_other_devices">Beste gailuak</string>
+
+    <string name="autocomplete_limited_results">Soilik lehen emaitzak erakusten, idatzi letra gehiago…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
 </resources>
