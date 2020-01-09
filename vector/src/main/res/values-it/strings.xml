@@ -1615,7 +1615,7 @@
 \n 
 \nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero 
 \n 
-\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
+\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
 
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>

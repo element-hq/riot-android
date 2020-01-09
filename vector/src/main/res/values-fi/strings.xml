@@ -1801,7 +1801,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n
 \nRiotX tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
 \n
-\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Tunnusten luonti • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
+\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
 
     <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
     <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>

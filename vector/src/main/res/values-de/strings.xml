@@ -1774,7 +1774,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 \n
 \nRiotX unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
 \n
-\nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Kontoerstellung • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
+\nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
 
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um zu entdecken und von dir bekannten Kontakten entdeckt zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>

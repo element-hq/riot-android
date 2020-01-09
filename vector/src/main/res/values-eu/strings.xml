@@ -1564,7 +1564,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
 \n
-\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
+\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="bottom_action_people_x">Mezu zuzenak</string>

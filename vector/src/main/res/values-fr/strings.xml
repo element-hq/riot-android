@@ -1570,7 +1570,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \n
 \nRiotX prend en charge : • Se connecter à un compte existant • Créer de salons et rejoindre des salons publics • Accepter et refuser des invitations • Lister les salons des utilisateurs • Voir les informations des salons • Envoyer des messages texte • Envoyer des pièces jointes • Lire et écrire des messages dans les salons chiffrés • Chiffrement : sauvegarde des clés de chiffrement, vérification avancée des appareils, demande et réponse de partage de clé • Notifications • Thèmes clair, sombre et noir
 \n
-\nToutes les fonctionnalités de Riot ne sont pas encore implémentées dans RiotX. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Création de compte • Réglages des salons (lister les membres du salon etc.) • Appels • Widgets • …</string>
+\nToutes les fonctionnalités de Riot ne sont pas encore implémentées dans RiotX. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Réglages des salons (lister les membres du salon etc.) • Appels • Widgets • …</string>
 
     <string name="bottom_action_people_x">Messages directs</string>
 
