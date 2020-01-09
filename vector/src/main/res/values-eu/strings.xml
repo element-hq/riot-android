@@ -1971,7 +1971,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \nHasi saioa berriro zure kontuaren datuak eta mezuak atzitzeko.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Zure mezu zifratuetara sarbidea galduko duzu ez baduzu saioa hasten zifratze gakoak berreskuratzeko.</string>
     <string name="soft_logout_clear_data_dialog_submit">Garbitu datuak</string>
-    <string name="soft_logout_sso_not_same_user_error">Oraingo saioa 1$s erabiltzailearena da eta %2$s erabiltzailearen kredentzialak eman dituzu. RiotX-k ez du hau onartzen.
+    <string name="soft_logout_sso_not_same_user_error">Oraingo saioa %1$s erabiltzailearena da eta %2$s erabiltzailearen kredentzialak eman dituzu. RiotX-k ez du hau onartzen.
 \nAurretik garbitu datuak, gero hasi saioa berriro beste kontu batekin.</string>
 
     <string name="permalink_malformed">Zure matrix.to esteka gaizki osatua dago</string>
