@@ -1021,7 +1021,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Ezeket az embereket biztosan kirúgod?</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="reason_hint">Ok</string>
 
@@ -1249,11 +1249,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Visszaállított mentés %d kulccsal.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
@@ -1332,7 +1332,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">%d kulcs mentése…</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
@@ -1980,4 +1980,22 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="permalink_malformed">A matrix.to linked hibás</string>
     <string name="bug_report_error_too_short">A leírás túl rövid</string>
 
+<string name="notification_initial_sync">Első szinkronizáció…</string>
+
+    <string name="settings_show_devices_list">Minden eszközöm megtekintése</string>
+    <string name="settings_advanced_settings">Haladó beállítások</string>
+    <string name="settings_developer_mode">Fejlesztői mód</string>
+    <string name="settings_developer_mode_summary">A fejlesztői móddal rejtett lehetőségeket kapcsolsz be amitől az alkalmazás instabilabb lehet. Csak fejlesztőknek!</string>
+    <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake_detection_threshold">Észlelési határ</string>
+    <string name="settings_rageshake_detection_threshold_summary">Az észlelési határ kipróbálásához rázd meg a telefonodat</string>
+    <string name="rageshake_detected">Rázás észlelése sikeres!</string>
+    <string name="settings">Beállítások</string>
+    <string name="devices_current_device">Jelenlegi eszköz</string>
+    <string name="devices_other_devices">Más eszközök</string>
+
+    <string name="autocomplete_limited_results">Csak az első találat megmutatása, gépelj több betűt…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Összeomlás-hamar</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX a nem várt hibák esetén többször fog összeomlani</string>
 </resources>
