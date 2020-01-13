@@ -98,6 +98,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -230,6 +231,12 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
     private VideoRecordView mRecordAnimationView;
 
     @NotNull
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     public ActivityOtherThemes getOtherThemes() {
         return ActivityOtherThemes.NoActionBarFullscreen.INSTANCE;

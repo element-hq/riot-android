@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
 import im.vector.util.PermissionsToolsKt;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -102,6 +104,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             });
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

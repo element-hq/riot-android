@@ -17,6 +17,7 @@
  */
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,6 +50,7 @@ import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * SplashActivity displays a splash while loading and initializing the client.
@@ -133,6 +135,11 @@ public class SplashActivity extends MXCActionBarActivity {
         } else {
             CommonActivityUtils.logout(this);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

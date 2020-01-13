@@ -105,6 +105,7 @@ import im.vector.repositories.ServerUrlsRepository;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ViewUtilKt;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays the login screen.
@@ -407,6 +408,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private PhoneNumberHandler mRegistrationPhoneNumberHandler;
 
     private Dialog mCurrentDialog;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onDestroy() {

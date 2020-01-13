@@ -139,6 +139,7 @@ import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays a single room with messages.
@@ -617,6 +618,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     //================================================================================
     // Activity classes
     //================================================================================
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

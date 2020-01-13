@@ -47,6 +47,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.RoomDirectoryAdapter;
 import im.vector.util.RoomDirectoryData;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RoomDirectoryPickerActivity extends VectorAppCompatActivity implements RoomDirectoryAdapter.OnSelectRoomDirectoryListener {
     // LOG TAG
@@ -75,6 +76,11 @@ public class RoomDirectoryPickerActivity extends VectorAppCompatActivity impleme
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

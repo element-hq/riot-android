@@ -44,6 +44,7 @@ import im.vector.R;
 import im.vector.receiver.LoginConfig;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Dummy activity used to dispatch the vector URL links.
@@ -53,6 +54,11 @@ public class VectorUniversalLinkActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = VectorUniversalLinkActivity.class.getSimpleName();
 
     private static final String SUPPORTED_PATH_CONFIG = "/config/config";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

@@ -18,12 +18,14 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import butterknife.BindView;
 import im.vector.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * LoggingOutActivity displays an animation while a session log out is in progress.
@@ -32,6 +34,11 @@ public class LoggingOutActivity extends MXCActionBarActivity {
 
     @BindView(R.id.animated_logo_image_view)
     ImageView animatedLogo;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

@@ -17,6 +17,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +27,7 @@ import org.matrix.androidsdk.core.Log;
 
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays a list of public rooms
@@ -35,6 +37,12 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_SEARCHED_PATTERN = "VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN";
     private static final String TAG_FRAGMENT_PUBLIC_ROOMS_LIST = "VectorPublicRoomsActivity.TAG_FRAGMENT_PUBLIC_ROOMS_LIST";
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

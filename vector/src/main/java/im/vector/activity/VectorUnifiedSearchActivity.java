@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -40,6 +41,7 @@ import im.vector.R;
 import im.vector.adapters.VectorUnifiedSearchFragmentPagerAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.PermissionsToolsKt;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays a generic activity search method
@@ -72,6 +74,11 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private ViewPager mViewPager;
 
     private int mPosition;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

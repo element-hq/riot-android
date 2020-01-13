@@ -18,6 +18,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import im.vector.R;
 import im.vector.notifications.NotificationUtils;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.util.ViewUtilKt;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
@@ -74,6 +76,12 @@ public class LockScreenActivity extends VectorAppCompatActivity { // do NOT exte
     private EditText mEditText;
 
     @NotNull
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     public ActivityOtherThemes getOtherThemes() {
         return ActivityOtherThemes.Lock.INSTANCE;

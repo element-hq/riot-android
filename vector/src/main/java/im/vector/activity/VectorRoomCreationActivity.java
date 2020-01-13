@@ -19,6 +19,7 @@
 package im.vector.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -51,6 +52,7 @@ import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
 import kotlin.Pair;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // tags
@@ -118,6 +120,11 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     // displayed participants
     private List<ParticipantAdapterItem> mParticipants = new ArrayList<>();
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

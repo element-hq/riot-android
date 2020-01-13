@@ -190,6 +190,8 @@ static def gitBranchName() {
 }
 
 dependencies {
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

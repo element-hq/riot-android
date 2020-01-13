@@ -46,6 +46,7 @@ import org.matrix.androidsdk.rest.model.pid.ThreePid;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class PhoneNumberAdditionActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
@@ -90,6 +91,11 @@ public class PhoneNumberAdditionActivity extends VectorAppCompatActivity impleme
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

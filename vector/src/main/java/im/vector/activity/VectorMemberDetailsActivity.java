@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -75,6 +76,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -244,6 +246,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -44,6 +45,7 @@ import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Inspired from JitsiMeetActivity
@@ -100,6 +102,11 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
             }
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

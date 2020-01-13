@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -60,6 +61,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -166,6 +168,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             });
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

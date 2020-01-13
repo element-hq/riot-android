@@ -40,6 +40,7 @@ import org.matrix.androidsdk.rest.model.pid.ThreePid;
 
 import im.vector.Matrix;
 import im.vector.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class PhoneNumberVerificationActivity extends VectorAppCompatActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -76,6 +77,11 @@ public class PhoneNumberVerificationActivity extends VectorAppCompatActivity imp
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

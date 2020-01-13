@@ -141,6 +141,7 @@ import im.vector.util.VectorUtils;
 import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -287,6 +288,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Activity lifecycle
      * *********************************************************************************************
      */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @NotNull
     @Override

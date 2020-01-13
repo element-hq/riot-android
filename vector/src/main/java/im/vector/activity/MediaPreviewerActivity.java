@@ -2,6 +2,7 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import im.vector.R;
 import im.vector.adapters.MediaPreviewAdapter;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Previews media selected to be send.
@@ -52,6 +54,11 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
     TextView mFileNameView;
     @BindView(R.id.media_previewer_video_play)
     ImageView mPlayCircleView;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     @Override
