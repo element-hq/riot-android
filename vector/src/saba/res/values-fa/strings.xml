@@ -212,7 +212,7 @@
     <string name="encryption_information_name">نام</string>
     <string name="encryption_information_device_id">شناسه دستگاه</string>
     <string name="encryption_information_device_key">کلید دستگاه</string>
-    <string name="encryption_information_verification">تایید</string>
+    <string name="encryption_information_verification">تایید دستگاه</string>
     <string name="encryption_information_ed25519_fingerprint">اثرانگشت Ed25519</string>
 
     <string name="encryption_export_e2e_room_keys">صدور کلیدهای رمزنگاری</string>
@@ -240,7 +240,7 @@
     <string name="encryption_information_unknown_device">دستگاه ناشناس</string>
     <string name="encryption_information_none">هیچ</string>
 
-    <string name="encryption_information_verify">تایید</string>
+    <string name="encryption_information_verify">تایید دستگاه</string>
     <string name="encryption_information_unverify">رد</string>
     <string name="encryption_information_block">لیست سیاه</string>
     <string name="encryption_information_unblock">لیست سفید</string>
@@ -277,6 +277,27 @@
     <string name="people_search_filter_text">فقط کاربران ماتریکس</string>
     <string name="room_participants_invite_search_another_user">شناسه‌ی کاربر، نام یا ایمیل</string>
     <string name="room_settings_addresses_e2e_enabled">رمزنگاری در این اتاق فعال است.</string>
+
+    <string name="sas_verify_title">با مقایسه کردن یه رشته‌ی متنی کوتاه تایید کنید.</string>
+    <string name="sas_security_advise">برای امنیت بیشتر پیشنهاد می‌کنیم که این بخش را یا به صورت شخصی یا با استفاده از یک تجهیز امن ارتباطی دیگر تکمیل کنید.</string>
+    <string name="sas_verify_start_button_title">شروع تایید کردن</string>
+    <string name="sas_legacy_verification_button_title">از تایید ورثه استفاده کنید.</string>
+    <string name="sas_verifying_keys">چیزی نمایش داده نشد؟ هنوز تمام مشتریان از تایید ارتباطی پشتیبانی نمی‌کنند. از تایید ورثه استفاده کنید. </string>
+
+    <string name="sas_emoji_description">این دستگاه را با تصدیق ایموجی‌های ذیل که روی صفحه‌ی شریکتان ظاهر شده‌است تایید کنید"</string>
+    <string name="sas_decimal_description">این دستگاه را با تصدیق اعداد ذیل که روی صفحه‌ی شریکتان ظاهر شده‌است تایید کنید"</string>
+
+    <string name="sas_verified">دستگاه تایید شد!</string>
+    <string name="sas_verified_successful">شما با موفقیت این  دستگاه را تایید کردید.</string>
+    <string name="sas_verified_successful_description">پیام‌های امن این کاربر رمزنگاری پایان به پایان شده‌ان و توسط هیچ فرد سومی خوانده نخواهند شد. </string>
+    <string name="sas_got_it">فهمیدم</string>
+
+
+
+
+
+
+
 
 
 
