@@ -427,7 +427,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_user_settings">Felhasználói beállítások</string>
     <string name="settings_notifications">Értesítések</string>
     <string name="settings_ignored_users">Mellőzött felhasználók</string>
-    <string name="settings_other">Egyéb</string>
+    <string name="settings_other">Más</string>
     <string name="settings_advanced">Haladó</string>
     <string name="settings_cryptography">Titkosítás</string>
     <string name="settings_notifications_targets">Értesítési célok</string>
@@ -1468,7 +1468,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="reply">Válasz</string>
 
     <string name="global_retry">Újra</string>
-    <string name="room_list_empty">Lépj be egy szobába, hogy kezd el használni az alkalmazást.</string>
+    <string name="room_list_empty">Lépj be egy szobába és kezdj neki az alkalmazás használatának.</string>
     <string name="send_you_invite">Meghívód elküldve</string>
     <string name="invited_by">Meghívta: %s</string>
 
@@ -1830,17 +1830,17 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="login_splash_title">Szabadítsd fel a kommunikációdat</string>
     <string name="login_splash_text1">Beszélgess másokkal közvetlenül vagy csoportosan</string>
-    <string name="login_splash_text2">Legyen a beszélgetés bizalmas a titkosítással</string>
+    <string name="login_splash_text2">Beszélgess bizalmasan, titkosítást használva</string>
     <string name="login_splash_text3">Bővítsd és szabd testre a élményt</string>
-    <string name="login_splash_submit">Kezd el</string>
+    <string name="login_splash_submit">Kezdj neki</string>
 
     <string name="login_server_title">Válassz szervert</string>
-    <string name="login_server_text">Mit ha e-mail lenne, egy felhasználód van de bárkivel tudsz beszélgetni</string>
+    <string name="login_server_text">Hasonlóan az e-mailhez, egy fiókod van, de bárkivel tudsz beszélgetni</string>
     <string name="login_server_matrix_org_text">Milliók csatlakoznak ingyen a legnagyobb nyilvános szerveren</string>
     <string name="login_server_modular_text">Prémium üzemeltetés szervezetek részére</string>
     <string name="login_server_modular_learn_more">Tudj meg többet</string>
-    <string name="login_server_other_title">Egyéb</string>
-    <string name="login_server_other_text">Egyedi és haladó beállítások</string>
+    <string name="login_server_other_title">Más</string>
+    <string name="login_server_other_text">Személyre szabott szerver cím beállítása</string>
 
     <string name="login_continue">Folytatás</string>
     <string name="login_connect_to">Csatlakozás ide: %1$s</string>
@@ -1854,7 +1854,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_server_url_form_modular_hint">Modular Cím</string>
     <string name="login_server_url_form_other_hint">Cím</string>
     <string name="login_server_url_form_modular_text">Prémium üzemeltetés szervezetek részére</string>
-    <string name="login_server_url_form_modular_notice">Add meg a Modular Riot vagy a Szerver cím amit használni szeretnél</string>
+    <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó Riot címét</string>
     <string name="login_server_url_form_other_notice">Add meg a szerver vagy Riot címét amihez csatlakozni szeretnél</string>
 
     <string name="login_sso_error_message">Az oldal betöltésekor hiba történt: %1$s (%2$d)</string>
