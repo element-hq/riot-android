@@ -147,7 +147,7 @@
     <string name="auth_missing_email_or_phone">E-mail helbidea edo telefono zenbakia falta da</string>
     <string name="auth_invalid_token">Kate baliogabea</string>
     <string name="auth_password_dont_match">Pasahitzak ez datoz bat</string>
-    <string name="auth_forgot_password">Pasahitza ahaztu duzu?</string>
+    <string name="auth_forgot_password">Pasahitza ahaztuta\?</string>
     <string name="auth_use_server_options">Erabili zerbitzari pertsonalizatuaren ezarpenak (aurreratua)</string>
     <string name="auth_email_validation_message">Egiaztatu zure e-mail helbidea erregistroarekin jarraitzeko</string>
     <string name="auth_threepid_warning_message">Ezin zara e-mail eta telefono zenbakia aldi berean erabiliz erregistratu oringoz, API-a bukatu arte. Soilik telefono zenbakia erabiliko da.
