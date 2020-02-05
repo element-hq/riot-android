@@ -1931,7 +1931,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
     <string name="bug_report_error_too_short">描述太短了</string>
 
-<string name="notification_initial_sync">初始化同步……</string>
+    <string name="notification_initial_sync">初始化同步……</string>
 
     <string name="settings_show_devices_list">檢視我的所有裝置</string>
     <string name="settings_advanced_settings">進階設定</string>

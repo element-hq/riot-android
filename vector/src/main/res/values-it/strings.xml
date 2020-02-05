@@ -2026,7 +2026,7 @@
     <string name="permalink_malformed">Il tuo collegamento matrix.to non è corretto</string>
     <string name="bug_report_error_too_short">La descrizione è troppo breve</string>
 
-<string name="notification_initial_sync">Sync iniziale…</string>
+    <string name="notification_initial_sync">Sync iniziale…</string>
 
     <string name="settings_show_devices_list">Vedi tutti i miei dispositivi</string>
     <string name="settings_advanced_settings">Impostazioni avanzate</string>

@@ -1766,7 +1766,7 @@
 
 
     <string name="settings_integrations">Интеграции</string>
-<string name="settings_integrations_summary">Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.
+    <string name="settings_integrations_summary">Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.
 \nМениджърите на интеграции получават конфигурационни данни, могат да променят приспособления, да изпращат покани за стаи и да настройват нива на достъп от ваше име.</string>
     <string name="settings_integration_allow">Разреши интеграции</string>
     <string name="room_widget_activity_title">Приспособление</string>
@@ -1930,9 +1930,9 @@
     <string name="login_error_outdated_homeserver_content">Този сървър е на прекалено стара версия за да може да се направи връзка с него. Попитайте сървърните администратор да го обнови.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунда…</item>
-	<item quantity="other">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунди…</item>
-</plurals>
+        <item quantity="one">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунда…</item>
+        <item quantity="other">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунди…</item>
+    </plurals>
 
     <string name="seen_by">Видяно от</string>
 

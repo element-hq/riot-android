@@ -1977,7 +1977,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="permalink_malformed">Zure matrix.to esteka gaizki osatua dago</string>
     <string name="bug_report_error_too_short">Deskripzio hau laburregia da</string>
 
-<string name="notification_initial_sync">Lehen sinkronizazioa…</string>
+    <string name="notification_initial_sync">Lehen sinkronizazioa…</string>
 
     <string name="settings_show_devices_list">Ikusi nire gailu guztiak</string>
     <string name="settings_advanced_settings">Ezarpen aurreratuak</string>

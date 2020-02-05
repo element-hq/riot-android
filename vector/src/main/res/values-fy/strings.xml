@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">fy</string>
+<resources>
+    <string name="resources_language">fy</string>
     <string name="resources_country_code">FY</string>
     <string name="resources_script">Latn</string>
 
@@ -77,4 +78,4 @@
     <string name="missing_permissions_to_start_conf_call">Om in gearkomst yn dit groepspetear te starten hasto útnûgingsrjochten nedich</string>
     <string name="missing_permissions_title_to_start_conf_call">Kin de oprop net starte</string>
     <string name="device_information">Apparaatynformaasje</string>
-    </resources>
+</resources>

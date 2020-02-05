@@ -1790,7 +1790,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
 
-<string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
     <string name="settings_discovery_no_msisdn">Optionen zum Finden werden erscheinen, sobald du eine Telefonnummer hinzugefügt hast.</string>
     <string name="settings_discovery_confirm_mail">Wir haben dir eine Bestätigungsmail an %s gesendet. Prüfe dein Postfach und klicke auf den Bestätigungslink</string>
@@ -1812,9 +1812,9 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="two_users_read">gelesen von %1$s und %2$s</string>
     <string name="one_user_read">gelesen von %s</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">gelesen von einem Nutzer</item>
-	<item quantity="other">gelesen von %d Nutzern</item>
-</plurals>
+        <item quantity="one">gelesen von einem Nutzer</item>
+        <item quantity="other">gelesen von %d Nutzern</item>
+    </plurals>
 
     <string name="error_file_too_big">Die Datei \'%1$s\' (%2$s) ist zu groß, um sie hochzuladen. Das Limit ist %3$s.</string>
 
@@ -1957,4 +1957,4 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
 \nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
-    </resources>
+</resources>

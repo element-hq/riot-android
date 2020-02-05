@@ -1980,7 +1980,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="permalink_malformed">Votre lien matrix.to était malformé</string>
     <string name="bug_report_error_too_short">La description est trop courte</string>
 
-<string name="notification_initial_sync">Synchronisation initiale…</string>
+    <string name="notification_initial_sync">Synchronisation initiale…</string>
 
     <string name="settings_show_devices_list">Voir tous mes appareils</string>
     <string name="settings_advanced_settings">Paramètres avancés</string>

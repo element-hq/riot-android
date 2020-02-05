@@ -1020,9 +1020,9 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
     <string name="call_anyway">Hívás mindenképpen</string>
     <string name="room_participants_action_kick">Elküld</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Biztos, hogy kirúgod ezt a felhasználót\?</item>
-	<item quantity="other">Biztos, hogy kirúgod ezeket a felhasználókat\?</item>
-</plurals>
+        <item quantity="one">Biztos, hogy kirúgod ezt a felhasználót\?</item>
+        <item quantity="other">Biztos, hogy kirúgod ezeket a felhasználókat\?</item>
+    </plurals>
     <string name="reason_hint">Ok</string>
 
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
@@ -1248,13 +1248,13 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
     <string name="keys_backup_restore_success_description">Visszaállítva: %1$d kapcsolati kulcs, és %2$d kulcs, ami(k) ismeretlenek voltak az eszköz számára, hozzáadva</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Mentés visszaállítva %d kulccsal.</item>
-	<item quantity="other">Mentés visszaállítva %d kulccsal.</item>
-</plurals>
+        <item quantity="one">Mentés visszaállítva %d kulccsal.</item>
+        <item quantity="other">Mentés visszaállítva %d kulccsal.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-	<item quantity="other">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
-</plurals>
+        <item quantity="one">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
+        <item quantity="other">%d új kulcs lett hozzáadva ehhez az eszközhöz.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
@@ -1331,9 +1331,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 
     <string name="keys_backup_info_keys_all_backup_up">Minden kulcs elmentve</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">%d kulcs mentése…</item>
-	<item quantity="other">%d kulcs mentése…</item>
-</plurals>
+        <item quantity="one">%d kulcs mentése…</item>
+        <item quantity="other">%d kulcs mentése…</item>
+    </plurals>
 
     <string name="keys_backup_info_title_version">Verzió</string>
     <string name="keys_backup_info_title_algorithm">Algoritmus</string>
@@ -1941,9 +1941,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_error_outdated_homeserver_content">Ez a matrix szerver túl elavult a csatlakozáshoz. Kérd meg a matrix szerver adminisztrátorát a frissítésre.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…</item>
-	<item quantity="other">Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…</item>
-</plurals>
+        <item quantity="one">Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…</item>
+        <item quantity="other">Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…</item>
+    </plurals>
 
     <string name="seen_by">Látták:</string>
 
@@ -1980,7 +1980,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="permalink_malformed">A matrix.to linked hibás</string>
     <string name="bug_report_error_too_short">A leírás túl rövid</string>
 
-<string name="notification_initial_sync">Első szinkronizáció…</string>
+    <string name="notification_initial_sync">Első szinkronizáció…</string>
 
     <string name="settings_show_devices_list">Minden eszközöm megtekintése</string>
     <string name="settings_advanced_settings">Haladó beállítások</string>
