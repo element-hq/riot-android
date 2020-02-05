@@ -1887,7 +1887,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_disconnect_with_bound_pid">Derzeitig teilst du deine E-Mail-Adresse oder Telefonnummer über den Identitätsserver %1$s. Du müsstest dich erneut zu %2$s verbinden um dies zu unterbinden.</string>
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden werden zu können.</string>
 
-    <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$s anderen</string>
+    <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
 
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
@@ -1901,7 +1901,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="login_server_url_form_modular_hint">Modular Adresse</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
-    <string name="login_sso_error_message">Ein Fehler beim Laden der Seite %1$s (%2$s) ist aufgetreten</string>
+    <string name="login_sso_error_message">Ein Fehler beim Laden der Seite %1$s (%2$d) ist aufgetreten</string>
     <string name="login_registration_disabled">Es tut uns leid. Dieser Server akzeptiert keine neuen Benutzerkonten.</string>
     <string name="login_registration_not_supported">Die Anwendung kann kein neues Benutzerkonto auf diesem Server erstellen.
 \n
