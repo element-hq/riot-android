@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Support SSO with Firefox accounts (#3337)
 
 Other changes:
  -
