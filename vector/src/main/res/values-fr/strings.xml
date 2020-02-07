@@ -576,8 +576,8 @@ Veuillez noter que cette action redémarrera l’application et pourra prendre u
     <string name="room_settings_read_history_entry_members_only_invited">Uniquement les membres (depuis leur invitation)</string>
     <string name="room_settings_room_access_warning">Pour faire référence à un salon, il doit avoir une adresse.</string>
     <string name="room_settings_room_access_entry_only_invited">Seules les personnes qui ont été invitées</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Tous ceux qui connaissent le lien du salon, à part les invités</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Tous ceux qui connaissent le lien du salon, y compris les invités</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Tous ceux qui connaissent le lien du salon, à part les visiteurs</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Tous ceux qui connaissent le lien du salon, y compris les visiteurs</string>
 
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
     <string name="room_settings_labs_end_to_end_warnings">Vous devez vous déconnecter pour pouvoir activer le chiffrement.</string>
