@@ -35,6 +35,7 @@ import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
@@ -333,7 +334,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 } else {
                     // direct message flow
                     showWaitingView();
-                    mSession.createDirectMessageRoom(otherUserId, mCreateDirectMessageCallBack);
+                    mSession.createDirectMessageRoom(otherUserId, CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, mCreateDirectMessageCallBack);
                 }
             }
 

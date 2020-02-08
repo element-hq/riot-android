@@ -83,6 +83,8 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorUtils;
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
 
 /**
  * The main application injection point
@@ -196,6 +198,10 @@ public class VectorApp extends MultiDexApplication {
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate();
+
+        //Initializing Sentry to report exceptions to the specified URL
+
+        Sentry.init("https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9", new AndroidSentryClientFactory(this));
 
         PreferencesManager.setIntegrationManagerUrls(this,
                 getString(R.string.integrations_ui_url),
