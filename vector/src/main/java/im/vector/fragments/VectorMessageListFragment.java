@@ -1116,7 +1116,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             Event event = row.getEvent();
 
             // toggle selection mode
-            mAdapter.onEventTap(event);
+            mAdapter.onEventTap(null);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage(), e);
         }
@@ -1160,7 +1160,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 }
             } else {
                 // toggle selection mode
-                mAdapter.onEventTap(event);
+                mAdapter.onEventTap(null);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);
