@@ -1,23 +1,12 @@
-Changes in RiotX 0.9.x (2019-XX-XX)
+Changes in RiotX 0.9.10 (2019-02-10)
 ===================================================
 
-Features ✨:
- -
+MatrixSdk 🚀:
+ - Upgrade to version 0.9.33
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.33
 
 Improvements 🙌:
  - Support SSO with Firefox accounts (#3337)
-
-Other changes:
- -
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in Riot 0.9.9 (2019-11-25)
 ===================================================
@@ -1502,7 +1491,7 @@ Changes in Vector 0.2.0 (2016-04-14)
 =======================================================
 
 
-Changes in Riot 0.9.XX (2019-XX-XX)
+Changes in Riot 0.9.XX (2020-XX-XX)
 ===================================================
 
 MatrixSdk 🚀:
