@@ -2019,7 +2019,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="sent_a_file">Fitxategia</string>
 
     <string name="verification_request_waiting">Itxaroten…</string>
-    <string name="verification_request_other_cancelled">%@(e)k ezeztatu du</string>
+    <string name="verification_request_other_cancelled">%s(e)k ezeztatu du</string>
     <string name="verification_request_you_cancelled">Zuk ezeztatu duzu</string>
     <string name="verification_request_other_accepted">%s(e)k onartu du</string>
     <string name="verification_request_you_accepted">Zuk onartu duzu</string>
