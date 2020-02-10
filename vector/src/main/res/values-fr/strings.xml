@@ -1253,9 +1253,9 @@ Attention : ce fichier pourrait être supprimé si l’application est désinsta
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d nouvelle clé a été ajoutée à cette session.</item>
-	<item quantity="other">%d nouvelles clés ont été ajoutées à cette session.</item>
-</plurals>
+        <item quantity="one">%d nouvelle clé a été ajoutée à cette session.</item>
+        <item quantity="other">%d nouvelles clés ont été ajoutées à cette session.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La cryptographie de la session n’est pas activée</string>
@@ -1998,7 +1998,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX peut planter plus souvent quand une erreur inattendue survient</string>
-<string name="command_description_verify">Demande de vérification de l’identifiant utilisateur fourni</string>
+    <string name="command_description_verify">Demande de vérification de l’identifiant utilisateur fourni</string>
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
 
     <string name="create_room_encryption_title">Activer le chiffrement</string>
@@ -2068,9 +2068,9 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="room_profile_section_more_settings">Paramètres du salon</string>
     <string name="room_profile_section_more_notifications">Notifications</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Une personne</item>
-	<item quantity="other">%1$d personnes</item>
-</plurals>
+        <item quantity="one">Une personne</item>
+        <item quantity="other">%1$d personnes</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Envois</string>
     <string name="room_profile_section_more_leave">Quitter le salon</string>
     <string name="room_profile_leaving_room">En train de quitter le salon…</string>
@@ -2144,9 +2144,9 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_active_sessions_unverified_device_desc">Vérifiez cette session pour la marquer comme fiable et lui permettre d’accéder aux messages chiffrés. Si vous ne vous êtes pas connecté à cette session, votre compte est peut-être compromis :</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d session active</item>
-	<item quantity="other">%d sessions actives</item>
-</plurals>
+        <item quantity="one">%d session active</item>
+        <item quantity="other">%d sessions actives</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Vérifier cette session</string>
     <string name="crosssigning_other_user_not_trust">Les autres utilisateurs ne lui font peut-être pas confiance</string>

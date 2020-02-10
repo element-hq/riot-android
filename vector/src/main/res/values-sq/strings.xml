@@ -1953,7 +1953,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="autocomplete_limited_results">Po shfaqen vetëm përfundimet e para, shtypni më shumë shkronja…</string>
 
     <string name="settings_developer_mode_fail_fast_summary">RiotX mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
-<string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
+    <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
     <string name="command_description_verify">Kërko të verifikohet userID-ja i dhënë</string>
     <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
 
@@ -1999,9 +1999,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="room_profile_section_more_settings">Rregullime dhome</string>
     <string name="room_profile_section_more_notifications">Njoftime</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Një person</item>
-	<item quantity="other">%1$d persona</item>
-</plurals>
+        <item quantity="one">Një person</item>
+        <item quantity="other">%1$d persona</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Ngarkime</string>
     <string name="room_profile_section_more_leave">Dilni Nga Dhoma</string>
     <string name="room_profile_leaving_room">Po iket nga dhoma…</string>
@@ -2058,9 +2058,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_active_sessions_verified_device_desc">Ky sesion është besuar për shkëmbim të sigurt mesazhesh, ngaqë e verifikuat:</string>
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d sesion aktiv</item>
-	<item quantity="other">%d sesione aktive</item>
-</plurals>
+        <item quantity="one">%d sesion aktiv</item>
+        <item quantity="other">%d sesione aktive</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Verifikoni këtë sesion</string>
     <string name="crosssigning_other_user_not_trust">Përdorues të tjerë mund të mos e besojnë</string>
@@ -2080,4 +2080,4 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="a11y_qr_code_for_verification">Kod QR</string>
 
     <string name="qr_code_scanned_by_other_yes">Po</string>
-    </resources>
+</resources>

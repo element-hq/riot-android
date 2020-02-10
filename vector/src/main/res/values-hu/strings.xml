@@ -1247,9 +1247,9 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
         <item quantity="other">Mentés visszaállítva %d kulccsal.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d új kulcs lett hozzáadva ehhez a munkamenethez.</item>
-	<item quantity="other">%d új kulcs lett hozzáadva ehhez a munkamenet.</item>
-</plurals>
+        <item quantity="one">%d új kulcs lett hozzáadva ehhez a munkamenethez.</item>
+        <item quantity="other">%d új kulcs lett hozzáadva ehhez a munkamenet.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
@@ -1993,7 +1993,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="settings_developer_mode_fail_fast_title">Összeomlás-hamar</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX a nem várt hibák esetén többször fog összeomlani</string>
-<string name="command_description_verify">Az adott felhasználói azonosító ellenőrzésének kérése</string>
+    <string name="command_description_verify">Az adott felhasználói azonosító ellenőrzésének kérése</string>
     <string name="command_description_shrug">Hozzáteszi a sima szöveges üzenethez ezt: ¯\\_(ツ)_/¯</string>
 
     <string name="create_room_encryption_title">Titkosítás engedélyezése</string>
@@ -2063,9 +2063,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_profile_section_more_settings">Szoba beállítások</string>
     <string name="room_profile_section_more_notifications">Értesítések</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">1 felhasználó</item>
-	<item quantity="other">%1$d felhasználó</item>
-</plurals>
+        <item quantity="one">1 felhasználó</item>
+        <item quantity="other">%1$d felhasználó</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Feltöltések</string>
     <string name="room_profile_section_more_leave">Szoba elhagyása</string>
     <string name="room_profile_leaving_room">Kilépés a szobából…</string>
@@ -2139,9 +2139,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_active_sessions_unverified_device_desc">A munkamenet megbízhatónak való jelöléséhez és a titkosított üzenetekhez való hozzáférés engedélyezéséhez hitelesítsd azt. Ha nem te jelentkeztél be ebbe a munkamenetbe akkor lehetséges, hogy a fiókodat feltörték:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d munkamenet használatban</item>
-	<item quantity="other">%d munkamenet használatban</item>
-</plurals>
+        <item quantity="one">%d munkamenet használatban</item>
+        <item quantity="other">%d munkamenet használatban</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Munkamenet ellenőrzése</string>
     <string name="crosssigning_other_user_not_trust">Más felhasználók lehet, hogy nem bíznak benne</string>
