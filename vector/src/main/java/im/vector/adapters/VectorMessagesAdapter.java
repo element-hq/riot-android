@@ -121,7 +121,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private static final String LOG_TAG = VectorMessagesAdapter.class.getSimpleName();
 
     // an event is selected when the user taps on it
-    private Event mSelectedEvent;
+    public static Event mSelectedEvent;
 
     // events listeners
     IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -2511,7 +2511,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setVisible(false);
         }
-
+        menu.findItem(R.id.ic_action_vector_reply).setVisible(true);
         menu.findItem(R.id.ic_action_view_source).setVisible(true);
         menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
