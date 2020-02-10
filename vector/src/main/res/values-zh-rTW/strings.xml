@@ -50,7 +50,7 @@
     <string name="missing_permissions_warning">由於缺少一些權限，也許會缺少一些功能……</string>
     <string name="missing_permissions_to_start_conf_call">在此聊天室內，你需要權限來邀請並開始一個會議</string>
     <string name="missing_permissions_title_to_start_conf_call">無法啟用通話</string>
-    <string name="device_information">裝置資訊</string>
+    <string name="device_information">工作階段資訊</string>
     <string name="room_no_conference_call_in_encrypted_rooms">不支援在加密聊天室的會議通話</string>
     <string name="send_anyway">無論如何都要傳送</string>
     <string name="or">或</string>
@@ -193,9 +193,7 @@
     <string name="auth_reset_password_missing_password">一個新的密碼必須被輸入。</string>
     <string name="auth_reset_password_email_validation_message">電子郵件已傳送至 %s，點擊下方的連結來前往。</string>
     <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
-    <string name="auth_reset_password_success_message">您的密碼已重設。
-
-您已在所有裝置上登出，並且不會再收到推送通知。要重新啟用通知，再次於每個裝置上登入。</string>
+    <string name="auth_reset_password_success_message">您的密碼已重設。 您已登出所有工作階段，並且不會再收到推送通知。要重新啟用通知，再次於每個裝置上登入。</string>
 
     <string name="login_error_must_start_http">網址必須是 http[s]:// 開頭</string>
     <string name="login_error_network_error">無法登入：網路錯誤</string>
@@ -214,9 +212,7 @@
     <string name="login_error_user_in_use">此使用者名稱已被使用</string>
     <string name="login_error_login_email_not_yet">此電子郵件連結已經被點擊過</string>
 
-    <string name="e2e_need_log_in_again">你需要重新登入來產生此裝置的端對端加密金鑰，及送出公開金鑰到家伺服器。
-這會斷線一次。
-抱歉造成困擾。</string>
+    <string name="e2e_need_log_in_again">你需要重新登入來產生此工作階段的端對端加密金鑰，及送出公開金鑰到家伺服器。 這會斷線一次。 抱歉造成困擾。</string>
 
     <string name="read_receipts_list">讀取接收者清單</string>
 
@@ -323,7 +319,7 @@
     <string name="room_participants_header_admin_tools">管理者工具</string>
     <string name="room_participants_header_call">通話</string>
     <string name="room_participants_header_direct_chats">私人訊息</string>
-    <string name="room_participants_header_devices">裝置</string>
+    <string name="room_participants_header_devices">工作階段</string>
 
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_leave">離開聊天室</string>
@@ -337,7 +333,7 @@
     <string name="room_participants_action_unignore">顯示所有來自此使用者的訊息</string>
     <string name="room_participants_invite_search_another_user">使用者 ID、名稱或電子郵件</string>
     <string name="room_participants_action_mention">提及</string>
-    <string name="room_participants_action_devices_list">顯示裝置清單</string>
+    <string name="room_participants_action_devices_list">顯示工作階段清單</string>
     <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
     <string name="room_participants_ban_prompt_msg">您確定想要封鎖此聊天室的使用者？</string>
 
@@ -361,7 +357,7 @@
     <string name="room_message_placeholder_not_encrypted">傳送訊息（未加密）…</string>
     <string name="room_offline_notification">到伺服器的連接已遺失。</string>
     <string name="room_unsent_messages_notification">訊息沒送出。現在，%1$s 或者 %2$s？</string>
-    <string name="room_unknown_devices_messages_notification">由於未知的設備，訊息沒送出。現在，%1$s 或者 %2$s？</string>
+    <string name="room_unknown_devices_messages_notification">由於有未知的工作階段，訊息並未送出。現在，%1$s 或者 %2$s？</string>
     <string name="room_prompt_resend">全部重送</string>
     <string name="room_prompt_cancel">取消全部</string>
     <string name="room_resend_unsent_messages">重送沒送出的訊息</string>
@@ -402,12 +398,12 @@
     <string name="go_on_with">使用…打開</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
 
-    <string name="e2e_re_request_encryption_key">從其他裝置<u>重新請求金鑰</u>。</string>
+    <string name="e2e_re_request_encryption_key">從其他工作階段<u>重新請求金鑰</u>。</string>
 
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  Riot.im, 以便它將金鑰發送到此裝置。"</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  Riot.im, 以便它將金鑰發送到此工作階段。"</string>
 
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
@@ -497,7 +493,7 @@
 
     <string name="settings_notification_ringtone">通知音效</string>
     <string name="settings_enable_all_notif">啟用這個帳號的通知</string>
-    <string name="settings_enable_this_device">啟用這個裝置的通知</string>
+    <string name="settings_enable_this_device">啟用此工作階段的通知</string>
     <string name="settings_turn_screen_on">將螢幕開啟 3 秒</string>
 
     <string name="settings_containing_my_display_name">包含我顯示名稱的訊息</string>
@@ -539,7 +535,7 @@
     <string name="settings_home_display">主頁顯示</string>
     <string name="settings_pin_missed_notifications">釘選含有錯過的通知的聊天室</string>
     <string name="settings_pin_unread_messages">釘選含有未讀訊息的聊天室</string>
-    <string name="settings_devices_list">裝置列表</string>
+    <string name="settings_devices_list">工作階段</string>
     <string name="settings_inline_url_preview">內嵌 URL 預覽</string>
     <string name="settings_always_show_timestamps">對所有訊息顯示時間戳</string>
     <string name="settings_12_24_timestamps">用12小時制顯示時間戳</string>
@@ -561,7 +557,7 @@
 
     <string name="settings_data_save_mode">節省流量模式</string>
 
-    <string name="devices_details_dialog_title">裝置資訊</string>
+    <string name="devices_details_dialog_title">工作階段資訊</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">公開名稱</string>
     <string name="devices_details_device_name">更新公開名稱</string>
@@ -660,8 +656,8 @@
     <string name="room_settings_labs_end_to_end">端到端加密</string>
     <string name="room_settings_labs_end_to_end_is_active">端到端加密已啓用</string>
     <string name="room_settings_labs_end_to_end_warnings">您需要登出才能啟用加密。</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">只匯出到已驗證的裝置</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">從不在此房間中從此裝置上傳送未加密的訊息到未驗證的裝置。</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">只匯出到已驗證的工作階段</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">從不在此房間中從此工作階段上傳送未加密的訊息到未驗證的工作階段。</string>
 
     <string name="room_settings_addresses_no_local_addresses">此房間沒有本機地址</string>
     <string name="room_settings_addresses_add_new_address">新地址 （如 #foo:matrix.org）</string>
@@ -702,11 +698,11 @@
     <string name="encryption_information_session_id">會話 ID</string>
     <string name="encryption_information_decryption_error">解密錯誤</string>
 
-    <string name="encryption_information_sender_device_information">發送者的裝置訊息</string>
+    <string name="encryption_information_sender_device_information">發送者的工作階段訊息</string>
     <string name="encryption_information_device_name">公開名稱</string>
     <string name="encryption_information_name">公開名稱</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">裝置金鑰</string>
+    <string name="encryption_information_device_key">工作階段金鑰</string>
     <string name="encryption_information_verification">驗證</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指紋</string>
 
@@ -724,14 +720,14 @@
     <string name="encryption_import_room_keys">匯入聊天室金鑰</string>
     <string name="encryption_import_room_keys_summary">從本機檔案匯入金鑰</string>
     <string name="encryption_import_import">匯入</string>
-    <string name="encryption_never_send_to_unverified_devices_title">只匯出到已驗證的裝置</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">從不自此裝置傳送加密的訊息到未驗證的裝置。</string>
+    <string name="encryption_never_send_to_unverified_devices_title">僅加密驗證過的工作階段</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">從不自此工作階段傳送加密的訊息到未驗證的工作階段。</string>
 
     <string name="encryption_information_not_verified">未驗證</string>
     <string name="encryption_information_verified">已驗證</string>
     <string name="encryption_information_blocked">已列入黑名單</string>
 
-    <string name="encryption_information_unknown_device">未知裝置</string>
+    <string name="encryption_information_unknown_device">未知工作階段</string>
     <string name="encryption_information_none">無</string>
 
     <string name="encryption_information_verify">驗證</string>
@@ -739,21 +735,21 @@
     <string name="encryption_information_block">列入黑名單</string>
     <string name="encryption_information_unblock">解除黑名單</string>
 
-    <string name="encryption_information_verify_device">驗證裝置</string>
-    <string name="encryption_information_verify_device_warning">要驗證此裝置是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此裝置的金鑰是否與下列的金鑰相符：</string>
-    <string name="encryption_information_verify_device_warning2">如果符合的話，按下下方的驗證按鈕。若果沒有得話，那麼其他地方的某個人可能正在攔截這個裝置，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
+    <string name="encryption_information_verify_device">驗證工作階段</string>
+    <string name="encryption_information_verify_device_warning">要驗證此工作階段是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此工作階段的金鑰是否與下列的金鑰相符：</string>
+    <string name="encryption_information_verify_device_warning2">如果符合的話，請按下方的驗證按鈕。如果沒有的話，那麼其他地方的某個人可能正在攔截此工作階段，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
     <string name="e2e_enabling_on_app_update">Riot 目前支援端到端加密，但您需要重新登入以啟用。
 \n
 \n您可以現在重新登入或稍後在應用程式設定中進行。</string>
 
-    <string name="unknown_devices_alert_title">聊天室包含未知裝置</string>
-    <string name="unknown_devices_alert_message">此聊天室包含未經驗證的裝置。
-無法保證這些裝置屬於他們聲稱的用戶。
-我們建議在繼續操作前驗證每一個裝置，但是你也可以選擇不驗證而重新傳送該訊息。
-
-未知裝置：</string>
+    <string name="unknown_devices_alert_title">聊天室包含未知工作階段</string>
+    <string name="unknown_devices_alert_message">此聊天室包含未經驗證的工作階段。
+\n無法保證這些工作階段屬於他們聲稱的使用者。
+\n我們建議在繼續操作前驗證每一個工作階段，但是你也可以選擇不驗證而重新傳送該訊息。
+\n
+\n未知工作階段：</string>
 
     <string name="select_room_directory">選擇一個聊天室目錄</string>
     <string name="directory_server_fail_to_retrieve_server">伺服器可能不可用或超載</string>
@@ -810,8 +806,8 @@
     <string name="settings_labs_native_camera">使用原生相機</string>
     <string name="settings_labs_enable_send_voice">傳送語音訊息</string>
 
-    <string name="you_added_a_new_device">您新增的裝置“%s”正在請求加密金鑰。</string>
-    <string name="your_unverified_device_requesting">您未驗證的裝置“%s”正在請求加密金鑰。</string>
+    <string name="you_added_a_new_device">您新增的工作階段「%s」正在請求加密金鑰。</string>
+    <string name="your_unverified_device_requesting">您未驗證的工作階段「%s」正在請求加密金鑰。</string>
     <string name="start_verification">開始驗證</string>
     <string name="share_without_verifying">不驗證就分享</string>
     <string name="ignore_request">忽略請求</string>
@@ -1033,10 +1029,10 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n請檢查帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">啟用</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">裝置設定。</string>
-    <string name="settings_troubleshoot_test_device_settings_success">通知已為此裝置啟用。</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">此裝置不允許通知。
-請檢查 Riot 設定。</string>
+    <string name="settings_troubleshoot_test_device_settings_title">工作階段設定。</string>
+    <string name="settings_troubleshoot_test_device_settings_success">通知已為此工作階段啟用。</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">此工作階段未啟用通知。
+\n請檢查 Riot 設定。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">啟用</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Play 服務檢查</string>
@@ -1204,12 +1200,12 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_recovery_code_error_decrypt">備份可能無法使用此復原金鑰解密：請驗證您是否輸入正確的復原金鑰。</string>
 
     <string name="keys_backup_restore_success_title">備份已復原 %s！</string>
-    <string name="keys_backup_restore_success_description">已復原 %1$d 工作階段金鑰，並已加入未被此裝置知道的 %2$d 新的金鑰</string>
+    <string name="keys_backup_restore_success_description">已復原 %1$d 工作階段金鑰，並已加入未被此工作階段知道的 %2$d 新的金鑰</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">使用 %d 金鑰復原備份。</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="other">%d 新的金鑰已加入到此裝置。</item>
+        <item quantity="other">%d 新的金鑰已加入到此工作階段。</item>
     </plurals>
 
     <string name="keys_backup_get_version_error">取得最新的復原金鑰版本 (%s0。</string>
@@ -1219,17 +1215,17 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_settings_restore_backup_button">自備份復原</string>
     <string name="keys_backup_settings_delete_backup_button">刪除備份</string>
 
-    <string name="keys_backup_settings_status_ok">金鑰備份已為此裝置正確設定。</string>
-    <string name="keys_backup_settings_status_ko">金鑰備份未在此裝置上啟用。</string>
-    <string name="keys_backup_settings_status_not_setup">您的金鑰尚未從此裝置中備份。</string>
+    <string name="keys_backup_settings_status_ok">金鑰備份已為此工作階段正確設定。</string>
+    <string name="keys_backup_settings_status_ko">金鑰備份未在此工作階段上啟用。</string>
+    <string name="keys_backup_settings_status_not_setup">您的金鑰尚未從此工作階段中備份。</string>
 
 
-    <string name="keys_backup_settings_signature_from_unknown_device">備份有從 ID %s 的未知裝置而來的簽章。</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">備份有從此裝置而來的有效簽章。</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">備份有從已驗證的 %s 裝置而來的有效簽章。</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">備份有從未驗證的 %s 裝置而來的有效簽章</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">備份有從已驗證的 %s 裝置而來的無效簽章</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">備份有從未驗證的 %s 裝置而來的無效簽章</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">備份有從 ID %s 的未知工作階段而來的簽章。</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">備份有從此工作階段而來的有效簽章。</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">備份有從已驗證的 %s 工作階段而來的有效簽章。</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">備份有從未驗證的 %s 工作階段而來的有效簽章</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">備份有從已驗證的 %s 工作階段而來的無效簽章</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">備份有從未驗證的 %s 工作階段而來的無效簽章</string>
     <string name="keys_backup_get_trust_error">取得備份的信任資訊失敗 (%s)。</string>
 
     <string name="keys_backup_settings_deleting_backup">請刪除備份……</string>
@@ -1240,7 +1236,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="sign_out_bottom_sheet_warning_no_backup">如果您現在登出的話，您將會失去您的加密訊息</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">金鑰備份進行中。如果您現在登出，您將會失去您的加密訊息。</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">安全金鑰備份應該在您所有的裝置上啟用以避免失去對您的加密訊息的存取權。</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">安全金鑰備份應該在您所有的工作階段中啟用以避免失去對您的加密訊息的存取權。</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">我不想要我的加密訊息</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">正在備份金鑰……</string>
     <string name="keys_backup_activate">使用金鑰備份</string>
@@ -1294,7 +1290,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_info_title_algorithm">演算法</string>
     <string name="keys_backup_info_title_signature">簽章</string>
 
-    <string name="keys_backup_settings_untrusted_backup">要在此裝置上使用金鑰備份，現在就使用您的通關密語或復原金鑰復原。</string>
+    <string name="keys_backup_settings_untrusted_backup">要在此工作階段上使用金鑰備份，現在就使用您的通關密語或復原金鑰復原。</string>
     <string name="new_recovery_method_popup_title">新的金鑰備份</string>
     <string name="new_recovery_method_popup_description">已偵測到新的安全訊息金鑰備份。
 \n
@@ -1347,17 +1343,17 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
 
-    <string name="title_activity_verify_device">驗證裝置</string>
+    <string name="title_activity_verify_device">驗證工作階段</string>
 
     <string name="encryption_information_unknown_ip">未知的 IP</string>
-    <string name="you_added_a_new_device_with_info">有新裝置正在要求加密金鑰。
-\n裝置名稱：%1$s
-\n上次檢視：%2$s
-\n如果您沒有在其他裝置上登入，請忽略本請求。</string>
-    <string name="your_unverified_device_requesting_with_info">有未驗證的裝置正在要求加密金鑰。
-\n裝置名稱：%1$s
-\n上次檢視：%2$s
-\n如果您沒有在其他裝置上登入，請忽略本請求。</string>
+    <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。 
+\n工作階段名稱：%1$s 
+\n上次檢視：%2$s 
+\n如果您沒有登入其他工作階段，請忽略本請求。</string>
+    <string name="your_unverified_device_requesting_with_info">有未驗證的工作階段正在要求加密金鑰。 
+\n工作階段名稱：%1$s 
+\n上次檢視：%2$s 
+\n如果您沒有登入其他工作階段，請忽略本請求。</string>
 
     <string name="start_verification_short_label">驗證</string>
     <string name="share_without_verifying_short_label">分享</string>
@@ -1368,18 +1364,18 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="sas_security_advise">為了最佳的安全性，我們建議您面對面或以其他可信的通訊方式執行此操作。</string>
     <string name="sas_verify_start_button_title">開始驗證</string>
     <string name="sas_incoming_request_title">傳來的驗證請求</string>
-    <string name="sas_incoming_request_description">驗證此裝置以將其標記為可信任。在使用端到端加密訊息時，信任夥伴的裝置可以讓您更安心。</string>
-    <string name="sas_incoming_request_description_2">驗證此裝置會將其標記為可信任，同時也會在對方的裝置上將您的裝置標記為可信任。</string>
+    <string name="sas_incoming_request_description">驗證此工作階段以將其標記為可信任。在使用端到端加密訊息時，信任夥伴的工作階段可以讓您更安心。</string>
+    <string name="sas_incoming_request_description_2">驗證此工作階段會將其標記為可信任，同時也會在對方的裝置上將您的工作階段標記為可信任。</string>
 
-    <string name="sas_emoji_description">透過確認出現在夥伴螢幕下方的顏文字來驗證此裝置</string>
-    <string name="sas_decimal_description">透過確認出現在夥伴螢幕下方的數字來驗證此裝置</string>
+    <string name="sas_emoji_description">透過確認出現在夥伴螢幕下方的顏文字來驗證此工作階段</string>
+    <string name="sas_decimal_description">透過確認出現在夥伴螢幕下方的數字來驗證此工作階段</string>
 
     <string name="sas_incoming_verification_request_dialog">您已收到傳來的驗證請求。</string>
     <string name="sas_view_request_action">檢視請求</string>
     <string name="sas_waiting_for_partner">正在等待夥伴確認……</string>
 
     <string name="sas_verified">已驗證！</string>
-    <string name="sas_verified_successful">您已成功驗證此裝置。</string>
+    <string name="sas_verified_successful">您已成功驗證此工作階段。</string>
     <string name="sas_verified_successful_description">與此使用者的安全訊息是端到端加密，無法被第三方讀取。</string>
     <string name="sas_got_it">知道了</string>
 
@@ -1393,24 +1389,24 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="sas_cancelled_by_me">驗證已取消。
 \n理由：%s</string>
 
-    <string name="sas_verification_request_notification_channel">互動式裝置驗證</string>
+    <string name="sas_verification_request_notification_channel">互動式工作階段驗證</string>
     <string name="sas_incoming_request_notif_title">驗證請求</string>
-    <string name="sas_incoming_request_notif_content">%s 想要驗證您的裝置</string>
+    <string name="sas_incoming_request_notif_content">%s 想要驗證您的工作階段</string>
 
     <string name="sas_error_m_user">使用者已取消驗證</string>
     <string name="sas_error_m_timeout">驗證程序逾時</string>
-    <string name="sas_error_m_unknown_transaction">裝置不知道該處理過程</string>
-    <string name="sas_error_m_unknown_method">裝置無法就金鑰協議、雜湊、MAC 或 SAS 方法達成一致</string>
+    <string name="sas_error_m_unknown_transaction">工作階段不知道該處理過程</string>
+    <string name="sas_error_m_unknown_method">工作階段無法就金鑰協議、雜湊、MAC 或 SAS 方法達成一致</string>
     <string name="sas_error_m_mismatched_commitment">雜湊不符合</string>
     <string name="sas_error_m_mismatched_sas">SAS 不符合</string>
-    <string name="sas_error_m_unexpected_message">裝置收到未預期的訊息</string>
+    <string name="sas_error_m_unexpected_message">工作階段收到未預期的訊息</string>
     <string name="sas_error_m_invalid_message">收到無效的訊息</string>
     <string name="sas_error_m_key_mismatch">金鑰不符合</string>
     <string name="sas_error_m_user_error">使用者不符合</string>
     <string name="sas_error_unknown">未知錯誤</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">您的家伺服器上已有備份</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">看起來您已經從其他裝置設定金鑰備份了。您想要用您正在建立的這個來取代它嗎？</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">看起來您已經從其他工作階段設定金鑰備份了。您想要用您正在建立的這個來取代它嗎？</string>
     <string name="keys_backup_setup_override_replace">取代</string>
     <string name="keys_backup_setup_override_stop">停止</string>
 
@@ -1496,7 +1492,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="push_gateway_item_app_id">app_id：</string>
     <string name="push_gateway_item_push_key">push_key：</string>
     <string name="push_gateway_item_app_display_name">app_display_name：</string>
-    <string name="push_gateway_item_device_name">device_name：</string>
+    <string name="push_gateway_item_device_name">session_name：</string>
     <string name="push_gateway_item_url">Url：</string>
     <string name="push_gateway_item_format">格式：</string>
 
@@ -1522,7 +1518,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \nRiotX 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
 \n
-\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
+\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
 
     <string name="bottom_action_people_x">直接訊息</string>
 
@@ -1624,7 +1620,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_discovery_category">探索</string>
     <string name="settings_discovery_manage">管理您的探索設定。</string>
     <string name="encryption_information_device_name_with_warning">公開名稱（您通訊的對象可見）</string>
-    <string name="device_name_warning">裝置的公開名稱對您通訊的對象可見</string>
+    <string name="device_name_warning">工作階段的公開名稱對您通訊的對象可見</string>
     <string name="identity_server_not_defined">您未使用任何身份識別伺服器</string>
     <string name="identity_server_not_defined_for_password_reset">未設定身份識別伺服器，這在重設您的密碼時是必要的。</string>
 
@@ -1660,7 +1656,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_terms_not_accepted">請在您接受您家伺服器的條款與條件前繼續重試。</string>
 
-    <string name="error_network_timeout">看起來伺服器回應時間似乎太久了，這可能是不良的網路連線或我們的伺服器錯誤所造成。請稍後再試。</string>
+    <string name="error_network_timeout">看起來伺服器回應時間似乎太久了，這可能是不良的網路連線或伺服器錯誤所造成。請稍後再試。</string>
 
     <string name="send_attachment">傳送附件</string>
 
@@ -1695,7 +1691,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="report_content_spam">垃圾訊息</string>
     <string name="report_content_inappropriate">不合適</string>
-    <string name="report_content_custom">自訂回報</string>
+    <string name="report_content_custom">自訂回報……</string>
     <string name="report_content_custom_title">回報此內容</string>
     <string name="report_content_custom_hint">回報此內容的理由</string>
     <string name="report_content_custom_submit">回報</string>
@@ -1720,4 +1716,412 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="no_network_indicator">目前沒有網路連線</string>
 
+    <string name="resources_script">Latn</string>
+
+    <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
+    <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Riot 做這件事</string>
+    <string name="settings_add_3pid_authentication_needed">需要驗證</string>
+
+
+    <string name="settings_integrations">整合</string>
+    <string name="settings_integrations_summary">使用整合管理員以管理機器人、橋接、小工具與貼紙包。
+\n整合管理員可以代表您接收設定資料，調整小工具、傳送聊天室邀請並設定權力等級。</string>
+    <string name="settings_integration_allow">允許整合</string>
+    <string name="room_widget_activity_title">小工具</string>
+    <string name="room_widget_permission_title">載入小工具</string>
+    <string name="room_widget_permission_added_by">此小工具新增由：</string>
+    <string name="room_widget_permission_webview_shared_info_title">使用它可能會設定 cookies 並與 %s 分享資料：</string>
+    <string name="room_widget_permission_shared_info_title">使用它可能會與 %s 分享資料：</string>
+    <string name="room_widget_failed_to_load">載入小工具失敗。
+\n%s</string>
+    <string name="room_widget_reload">重新載入小工具</string>
+    <string name="room_widget_open_in_browser">在瀏覽器中開啟</string>
+    <string name="room_widget_revoke_access">撤銷我的存取權限</string>
+
+    <string name="room_widget_permission_display_name">您的顯示名稱</string>
+    <string name="room_widget_permission_avatar_url">您的大頭貼 URL</string>
+    <string name="room_widget_permission_user_id">您的使用者 ID</string>
+    <string name="room_widget_permission_theme">您的佈景主題</string>
+    <string name="room_widget_permission_widget_id">小工具 ID</string>
+    <string name="room_widget_permission_room_id">聊天室 ID</string>
+
+
+    <string name="room_widget_resource_permission_title">此小工具想要使用下列資源：</string>
+    <string name="room_widget_resource_grant_permission">允許</string>
+    <string name="room_widget_resource_decline_permission">阻擋所有</string>
+    <string name="room_widget_webview_access_camera">使用相機</string>
+    <string name="room_widget_webview_access_microphone">使用麥克風</string>
+    <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
+
+    <string name="login_error_no_homeserver_found">這不是有效的 Matrix 伺服器位置</string>
+    <string name="message_ignore_user">封鎖使用者</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">所有訊息（吵雜）</string>
+    <string name="room_list_quick_actions_notifications_all">所有訊息</string>
+    <string name="room_list_quick_actions_notifications_mentions">僅提及</string>
+    <string name="room_list_quick_actions_notifications_mute">靜音</string>
+    <string name="room_list_quick_actions_settings">設定</string>
+    <string name="room_list_quick_actions_leave">離開聊天室</string>
+    <string name="notice_member_no_changes">%1$s 未做出任何變更</string>
+    <string name="command_description_spoiler">傳送為擾亂者指定的訊息</string>
+    <string name="spoiler">擾亂者</string>
+    <string name="reaction_search_type_hint">輸入關鍵字以尋找反應。</string>
+
+    <string name="no_ignored_users">您未忽略任何使用者</string>
+
+    <string name="help_long_click_on_room_for_more_options">長按聊天室以檢視更多選項</string>
+
+
+    <string name="room_join_rules_public">%1$s 將聊天室設為公開給所有知道連結的人。</string>
+    <string name="room_join_rules_invite">%1$s 將聊天室設為僅邀請可進入。</string>
+    <string name="timeline_unread_messages">未讀訊息</string>
+
+    <string name="login_splash_title">讓您的通訊自由</string>
+    <string name="login_splash_text1">直接或在群組中與夥伴們聊天</string>
+    <string name="login_splash_text2">透過加密讓對話保持隱密</string>
+    <string name="login_splash_text3">擴展並自訂您的體驗</string>
+    <string name="login_splash_submit">開始</string>
+
+    <string name="login_server_title">選取伺服器</string>
+    <string name="login_server_text">就像電子郵件，帳號也有一個家，不過您還是可以跟任何人交談</string>
+    <string name="login_server_matrix_org_text">在最大的公開伺服器上免費加入數百萬人之中</string>
+    <string name="login_server_modular_text">組織另有專業主機可用</string>
+    <string name="login_server_modular_learn_more">了解更多</string>
+    <string name="login_server_other_title">其他</string>
+    <string name="login_server_other_text">自訂與進階設定</string>
+
+    <string name="login_continue">繼續</string>
+    <string name="login_connect_to">連線到 %1$s</string>
+    <string name="login_connect_to_modular">連線到 Modular</string>
+    <string name="login_connect_to_a_custom_server">連線到自訂伺服器</string>
+    <string name="login_signin_to">登入到 %1$s</string>
+    <string name="login_signup">註冊</string>
+    <string name="login_signin">登入</string>
+    <string name="login_signin_sso">以 SSO 繼續</string>
+
+    <string name="login_server_url_form_modular_hint">Modular 位置</string>
+    <string name="login_server_url_form_other_hint">位置</string>
+    <string name="login_server_url_form_modular_text">組織有專業主機</string>
+    <string name="login_server_url_form_modular_notice">輸入 Modular Riot 或您想要使用的伺服器位置</string>
+    <string name="login_server_url_form_other_notice">輸入您想要連線的伺服器或 Riot 的位置</string>
+
+    <string name="login_sso_error_message">載入頁面時發生錯誤：%1$s (%2$d)</string>
+    <string name="login_mode_not_supported">應用程式無法登入此家伺服器。家伺服器支援以下登入類型：%1$s。
+\n
+\n您想要使用網路客戶端登入嗎？</string>
+    <string name="login_registration_disabled">抱歉，此伺服器不接受新帳號。</string>
+    <string name="login_registration_not_supported">應用程式無法在此家伺服器上建立帳號。
+\n
+\n您想要使用網路客戶端註冊嗎？</string>
+
+    <string name="login_login_with_email_error">此電子郵件未關聯到任何帳號。</string>
+
+    <string name="login_reset_password_on">在 %1$s 上重設密碼</string>
+    <string name="login_reset_password_notice">驗證郵件已傳送到您的收件匣以確認您要設定新密碼。</string>
+    <string name="login_reset_password_submit">下一步</string>
+    <string name="login_reset_password_email_hint">電子郵件</string>
+    <string name="login_reset_password_password_hint">新密碼</string>
+
+    <string name="login_reset_password_warning_title">警告！</string>
+    <string name="login_reset_password_warning_content">變更您的密碼將會重設在您所有工作階段中任何的端到端加密金鑰，讓已加密的聊天歷史無法讀取。請在重設您的密碼前從其他工作階段設定金鑰備份或匯出您的聊天室金鑰。</string>
+    <string name="login_reset_password_warning_submit">繼續</string>
+
+    <string name="login_reset_password_error_not_found">此電子郵件未被連結到任何帳號</string>
+
+    <string name="login_reset_password_mail_confirmation_title">檢查您的收件匣</string>
+    <string name="login_reset_password_mail_confirmation_notice">驗證電子郵件已傳送至 %1$s。</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">輕點連結以確認您的新密碼。在您使用了其中包含的連結後，請點擊下方。</string>
+    <string name="login_reset_password_mail_confirmation_submit">我已經驗證了我的電子郵件地址</string>
+
+    <string name="login_reset_password_success_title">成功！</string>
+    <string name="login_reset_password_success_notice">您的密碼已被重設。</string>
+    <string name="login_reset_password_success_notice_2">您已登出所有工作階段，且不會再收到推播通知。要重新啟用通知，請在裝置上再次登入。</string>
+    <string name="login_reset_password_success_submit">返回登入</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">警告</string>
+    <string name="login_reset_password_cancel_confirmation_content">您的密碼未變更。
+\n
+\n停止密碼變更流程？</string>
+
+    <string name="login_set_email_title">設定電子郵件地址</string>
+    <string name="login_set_email_notice">設定電子郵件以復原您的帳號。之後您也可以選擇性地讓您認識的人透過您的電子郵件找到您。</string>
+    <string name="login_set_email_mandatory_hint">電子郵件</string>
+    <string name="login_set_email_optional_hint">電子郵件（選擇性）</string>
+    <string name="login_set_email_submit">下一個</string>
+
+    <string name="login_set_msisdn_title">設定電話號碼</string>
+    <string name="login_set_msisdn_notice">設定電話號碼以讓您認識的人找到您。</string>
+    <string name="login_set_msisdn_notice2">請使用國際格式。</string>
+    <string name="login_set_msisdn_mandatory_hint">電話號碼</string>
+    <string name="login_set_msisdn_optional_hint">電話號碼（選擇性）</string>
+    <string name="login_set_msisdn_submit">下一個</string>
+
+    <string name="login_msisdn_confirm_title">確認電話號碼</string>
+    <string name="login_msisdn_confirm_notice">我們剛傳送了驗證碼給 %1$s。在下方輸入以驗證是您。</string>
+    <string name="login_msisdn_confirm_hint">輸入驗證碼</string>
+    <string name="login_msisdn_confirm_send_again">再次傳送</string>
+    <string name="login_msisdn_confirm_submit">下一個</string>
+
+    <string name="login_msisdn_error_not_international">國際電話號碼必須以加號開頭</string>
+    <string name="login_msisdn_error_other">電話號碼似乎無效。請檢查</string>
+
+    <string name="login_signup_to">註冊至 %1$s</string>
+    <string name="login_signup_username_hint">使用者名稱或電子郵件</string>
+    <string name="login_signup_password_hint">密碼</string>
+    <string name="login_signup_submit">下一個</string>
+    <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
+    <string name="login_signup_cancel_confirmation_title">警告</string>
+    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。
+\n
+\n停止註冊程序？</string>
+
+    <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
+    <string name="login_a11y_choose_modular">選取 modular</string>
+    <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
+    <string name="login_a11y_captcha_container">請執行 captcha 挑戰</string>
+    <string name="login_terms_title">接受條款以繼續</string>
+
+    <string name="login_wait_for_email_title">請檢查您的電子郵件</string>
+    <string name="login_wait_for_email_notice">我們剛傳送電子郵件給 %1$s。
+\n請點擊其中所包含的連結以繼續建立帳號。</string>
+    <string name="login_validation_code_is_not_correct">輸入的驗證碼不正確。請檢查。</string>
+    <string name="login_error_outdated_homeserver_title">未更新的家伺服器</string>
+    <string name="login_error_outdated_homeserver_content">此家伺服器所執行的版本太舊，所以無法連線。請要求您的家伺服器管理員升級。</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="other">傳送了太多請求。您可以在 %1$d 秒後重試……</item>
+    </plurals>
+
+    <string name="seen_by">檢視由</string>
+
+    <string name="signed_out_title">您已登出</string>
+    <string name="signed_out_notice">這可能有多種原因： 
+\n 
+\n• 您已在其他工作階段中變更您的密碼。 
+\n 
+\n• 您已從其他工作階段刪除此工作階段。 
+\n 
+\n• 您伺服器的管理員為了安全性讓您的存取無效。</string>
+    <string name="signed_out_submit">再次登入</string>
+
+    <string name="soft_logout_title">您已登出</string>
+    <string name="soft_logout_signin_title">登入</string>
+    <string name="soft_logout_signin_notice">您的家伺服器 (%1$s) 管理員已將您的帳號 %2$s (%3$s) 登出。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">登入以復原僅儲存在此裝置上的加密金鑰。您在任何裝置上都需要它們來讀取您所有的安全訊息。</string>
+    <string name="soft_logout_signin_submit">登入</string>
+    <string name="soft_logout_signin_password_hint">密碼</string>
+    <string name="soft_logout_clear_data_title">清除個人資料</string>
+    <string name="soft_logout_clear_data_notice">警告：您的個人資料（包含加密金鑰）仍儲存在此裝置上。
+\n
+\n如果您已不想使用此裝置，請將其清除，或是登入到其他帳號。</string>
+    <string name="soft_logout_clear_data_submit">清除所有資料</string>
+
+    <string name="soft_logout_clear_data_dialog_title">清除資料</string>
+    <string name="soft_logout_clear_data_dialog_content">清除目前儲存在此裝置上的所有資料嗎？
+\n再次登入以存取您的帳號資料與訊息。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以復原您的加密金鑰，否則您將會失去對安全訊息的存取權。</string>
+    <string name="soft_logout_clear_data_dialog_submit">清除資料</string>
+    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。RiotX 並不支援。
+\n請先清除您的資料，然後再以其他帳號登入。</string>
+
+    <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
+    <string name="bug_report_error_too_short">描述太短了</string>
+
+    <string name="notification_initial_sync">初始化同步……</string>
+
+    <string name="settings_show_devices_list">檢視我的所有工作階段</string>
+    <string name="settings_advanced_settings">進階設定</string>
+    <string name="settings_developer_mode">開發者模式</string>
+    <string name="settings_developer_mode_summary">開發者模式會啟用隱藏的功能，但可能會造成應用程式較不穩定。僅供開發者使用！</string>
+    <string name="settings_rageshake">憤怒搖晃</string>
+    <string name="settings_rageshake_detection_threshold">偵測閾值</string>
+    <string name="settings_rageshake_detection_threshold_summary">搖晃您的手機以測試偵測閾值</string>
+    <string name="rageshake_detected">偵測到搖晃！</string>
+    <string name="settings">設定</string>
+    <string name="devices_current_device">目前的工作階段</string>
+    <string name="devices_other_devices">其他工作階段</string>
+
+    <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母……</string>
+
+    <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
+    <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，RiotX 可能更常當機</string>
+    <string name="command_description_verify">請求驗證給定的 userID</string>
+    <string name="command_description_shrug">"將  ¯\\_(ツ)_/¯ 附加到純文字訊息中"</string>
+
+    <string name="create_room_encryption_title">啟用加密</string>
+    <string name="create_room_encryption_description">加密一旦啟用就無法停用。</string>
+
+    <string name="login_error_threepid_denied">您的電子郵件網域無法在此伺服器上註冊</string>
+
+    <string name="verification_conclusion_warning">未受信任的登入</string>
+    <string name="verification_sas_match">它們相符</string>
+    <string name="verification_sas_do_not_match">它們不相符</string>
+    <string name="verify_user_sas_emoji_help_text">透過驗證以下出現在他們的畫面上獨一無二的顏文字是否有相同的順序來驗證使用者。</string>
+    <string name="verify_user_sas_emoji_security_tip">為了得到最佳的安全性，使用其他受信任的通訊方式或面對面來進行。</string>
+    <string name="verification_green_shield">尋找綠色盾牌以確保使用者受信任。信任所有聊天室中的使用者來確保聊天室是安全的。</string>
+
+    <string name="verification_conclusion_not_secure">不安全</string>
+    <string name="verification_conclusion_compromised">以下的其中一項可能會受到威脅：
+\n
+\n- 您的家伺服器
+\n- 您正在驗證的使用者連線的家伺服器
+\n- 您的或其他使用者的網際網路連線
+\n- 您的或其他使用者的裝置</string>
+
+    <string name="sent_a_video">影片。</string>
+    <string name="sent_an_image">圖片。</string>
+    <string name="sent_an_audio_file">音訊</string>
+    <string name="sent_a_file">檔案</string>
+
+    <string name="verification_request_waiting">正在等待……</string>
+    <string name="verification_request_other_cancelled">%s 已取消</string>
+    <string name="verification_request_you_cancelled">您已取消</string>
+    <string name="verification_request_other_accepted">%s 已接受</string>
+    <string name="verification_request_you_accepted">您已接受</string>
+    <string name="verification_sent">已傳送驗證</string>
+    <string name="verification_request">驗證請求</string>
+
+
+    <string name="verification_verify_device">驗證此工作階段</string>
+    <string name="verification_verify_device_manually">手動驗證</string>
+
+    <string name="you">您</string>
+
+    <string name="verification_scan_notice">掃描其他使用者裝置的條碼以安全地相互驗證</string>
+    <string name="verification_scan_their_code">掃描他們的條碼</string>
+    <string name="verification_scan_emoji_title">無法掃描</string>
+    <string name="verification_scan_emoji_subtitle">如果您無法面對面進行，請用比較顏文字代替</string>
+
+    <string name="verification_no_scan_emoji_title">透過比較顏文字驗證</string>
+
+    <string name="verify_by_emoji_title">透過顏文字驗證</string>
+    <string name="verify_by_emoji_description">如果您無法掃描上面的條碼，請比較一小段獨一無二的顏文字來驗證。</string>
+
+    <string name="a13n_qr_code_description">QR code 圖片</string>
+
+    <string name="verification_verify_user">驗證 %s</string>
+    <string name="verification_verified_user">已驗證 %s</string>
+    <string name="verification_request_waiting_for">正在等待驗證 %s……</string>
+    <string name="verification_request_alert_description">為了額外的安全性，請透過檢查雙方裝置上的一次性代碼來驗證 %s。
+\n
+\n要取得最強的安全性，請面對面進行。</string>
+    <string name="room_profile_not_encrypted_subtitle">此聊天室中的訊息未端到端加密。</string>
+    <string name="room_profile_encrypted_subtitle">此聊天室中的訊息有端到端加密。
+\n
+\n您的訊息已被鎖保護，只有您與收件者有獨一無二的金鑰可以將其解鎖。</string>
+    <string name="room_profile_section_security">安全性</string>
+    <string name="room_profile_section_security_learn_more">取得更多資訊</string>
+    <string name="room_profile_section_more">更多</string>
+    <string name="room_profile_section_more_settings">聊天室設定</string>
+    <string name="room_profile_section_more_notifications">通知</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="other">%1$d 個夥伴</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">上傳</string>
+    <string name="room_profile_section_more_leave">離開聊天室</string>
+    <string name="room_profile_leaving_room">正在離開聊天室……</string>
+
+    <string name="room_member_power_level_admins">管理員</string>
+    <string name="room_member_power_level_moderators">板主</string>
+    <string name="room_member_power_level_custom">自訂</string>
+    <string name="room_member_power_level_invites">邀請</string>
+    <string name="room_member_power_level_users">使用者</string>
+
+    <string name="room_member_power_level_admin_in">%1$s 中的管理員</string>
+    <string name="room_member_power_level_moderator_in">%1$s 中的板主</string>
+    <string name="room_member_power_level_custom_in">%2$s 中的自訂 (%1$d)</string>
+
+    <string name="room_member_jump_to_read_receipt">跳至讀取回條</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX 尚無法處理類型為「%1$s」的事件</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX 尚無法處理類型為「%1$s」的訊息</string>
+    <string name="rendering_event_error_exception">在彩現 id「%1$s」事件的內容時，RiotX 遇到問題</string>
+
+    <string name="unignore">取消忽略</string>
+
+    <string name="verify_cannot_cross_sign">此工作階段無法與您其他的工作階段分享此驗證。
+\n驗證將會儲存在本機並在未來版本的應用程式中共享。</string>
+
+    <string name="room_list_sharing_header_recent_rooms">最近的聊天室</string>
+    <string name="room_list_sharing_header_other_rooms">其他聊天室</string>
+
+    <string name="command_description_rainbow">將指定的訊息以彩虹的方式上色後傳送</string>
+    <string name="command_description_rainbow_emote">將指定的表情符號以彩虹的方式上色後傳送</string>
+
+    <string name="settings_category_timeline">時間軸</string>
+
+    <string name="settings_category_composer">訊息編輯器</string>
+
+    <string name="room_settings_enable_encryption">啟用端到端加密</string>
+    <string name="room_settings_enable_encryption_warning">一旦啟用加密就無法停用。</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">啟用加密？</string>
+    <string name="room_settings_enable_encryption_dialog_content">一旦啟用對聊天室的加密就無法停用。傳送到已加密聊天室的訊息無法被伺服器看見，僅有聊天室的參與者可見。啟用加密可能會讓許多機器人與橋接無法運作。</string>
+    <string name="room_settings_enable_encryption_dialog_submit">啟用加密</string>
+
+    <string name="verification_request_notice">要確定安全，請透過一次性的代碼驗證 %s。</string>
+    <string name="verification_request_start_notice">要確定安全，請面對面進行或使用其他方式來通訊。</string>
+
+    <string name="verification_emoji_notice">比較獨一無二的顏文字，並確保它們以相同的順序出現。</string>
+    <string name="verification_code_notice">以其中一方的畫面上顯示的代碼與其他使用者的畫面比較。</string>
+    <string name="verification_conclusion_ok_notice">與此使用者的訊息是端到端加密的，無法被第三方讀取。</string>
+    <string name="verification_conclusion_ok_self_notice">您的新工作階段已被驗證。其已存取您已加密的訊息，其他使用者也會看到其已受信任。</string>
+
+
+    <string name="encryption_information_cross_signing_state">交叉簽署</string>
+    <string name="encryption_information_dg_xsigning_complete">交叉簽署已啟用
+\n私鑰在裝置上。</string>
+    <string name="encryption_information_dg_xsigning_trusted">交叉簽署已啟用
+\n金鑰已受信任。
+\n私鑰未顯示</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">交叉簽署已啟用。
+\n金鑰未受信任</string>
+    <string name="encryption_information_dg_xsigning_disabled">交叉簽署未啟用</string>
+
+
+    <string name="settings_active_sessions_list">活躍的工作階段</string>
+    <string name="settings_active_sessions_show_all">顯示所有工作階段</string>
+    <string name="settings_active_sessions_manage">管理工作階段</string>
+    <string name="settings_active_sessions_signout_device">登出此工作階段</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">無可用的密碼學資訊</string>
+
+    <string name="settings_active_sessions_verified_device_desc">因為您已驗證此工作階段，所以其在安全通訊上是可受信任的：</string>
+    <string name="settings_active_sessions_unverified_device_desc">驗證此工作階段以將其標記為受信任並讓其可以存取已加密的訊息。如果您並未登入此工作階段，您的帳號可能已被盜用：</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="other">%d 活躍的工作階段</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">驗證此工作階段</string>
+    <string name="crosssigning_other_user_not_trust">其他使用者可能不會信任它</string>
+    <string name="complete_security">全面的安全性</string>
+
+    <string name="verification_open_other_to_verify">開啟既有的工作階段並使用它來驗證這個，讓它可以存取已加密的訊息。如果您無法存取，請使用您的復原金鑰或通關密語。</string>
+
+
+    <string name="verification_profile_verify">驗證</string>
+    <string name="verification_profile_verified">已驗證</string>
+    <string name="verification_profile_warning">警告</string>
+
+    <string name="room_member_profile_failed_to_get_devices">取得工作階段失敗</string>
+    <string name="room_member_profile_sessions_section_title">工作階段</string>
+    <string name="trusted">受信任</string>
+    <string name="not_trusted">未受信任</string>
+
+    <string name="verification_profile_device_verified_because">因為 %1$s (%2$s) 已驗證此工作階段，所以其在安全通訊上是可受信任的：</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) 使用新的工作階段登入：</string>
+    <string name="verification_profile_device_untrust_info">直到此使用者信任此工作階段為止，傳送到該工作階段與從它傳送的訊息都會以警告標記。或者您可以手動進行驗證。</string>
+
+
+    <string name="initialize_cross_signing">初始化交叉簽署</string>
+    <string name="reset_cross_signing">重設金鑰</string>
+
+    <string name="a11y_qr_code_for_verification">QR code</string>
+
+    <string name="qr_code_scanned_by_other_notice">其他使用者是否掃苗 QR code 成功？</string>
+    <string name="qr_code_scanned_by_other_yes">是</string>
+    <string name="qr_code_scanned_by_other_no">否</string>
+
+    <string name="no_connectivity_to_the_server_indicator">到伺服器的連線已遺失</string>
 </resources>
