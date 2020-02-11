@@ -766,7 +766,7 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’ap
     <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
-    <string name="no_users_placeholder">Pas d’utilisateurs</string>
+    <string name="no_users_placeholder">Pas d’utilisateur</string>
 
     <string name="rooms">Salons</string>
     <string name="joined">Rejoint</string>
