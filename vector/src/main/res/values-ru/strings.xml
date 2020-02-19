@@ -629,14 +629,14 @@
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным устройствам.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
 
     <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В черном списке</string>
 
-    <string name="encryption_information_unknown_device">неизвестное устройство</string>
+    <string name="encryption_information_unknown_device">неизвестная сессия</string>
     <string name="encryption_information_none">ничего</string>
 
     <string name="encryption_information_verify">Подтвердить</string>
@@ -644,11 +644,9 @@
     <string name="encryption_information_block">Блокировать</string>
     <string name="encryption_information_unblock">Разрешить</string>
 
-    <string name="encryption_information_verify_device">Проверить устройство</string>
-    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этому устройству можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этого устройства:</string>
-    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже.
-Если не совпадает, возможно кто-то пытается перехватить устройство и  вы захотите добавить его в черный список.
-В будущем данный процесс будет улучшен."</string>
+    <string name="encryption_information_verify_device">Проверить сессию</string>
+    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
+    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
@@ -656,12 +654,12 @@
 Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.
-Это означает, что эти устройства могут не принадлежать тем пользователям, на которых они претендуют. 
-Перед продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.
-
-Неизвестные устройства:</string>
+    <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
+    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные сессии, которые не были подтверждены. 
+\nЭто означает, что эти сессии могут не принадлежать тем пользователям, на которых они претендуют. 
+\nПеред продолжением рекомендуем вам пройти процесс проверки для каждой сессии, но вы можете отправить сообщение повторно, не проверяя.
+\n
+\nНеизвестные сессии:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Выбор списка комнат</string>
@@ -735,8 +733,8 @@
 
     <string name="call">Вызов</string>
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>
-    <string name="you_added_a_new_device">Вы добавили новое устройство \'%s\', запрашивающее ключи шифрования.</string>
-    <string name="your_unverified_device_requesting">Ваше непроверенное устройство \'%s\' запрашивает ключи шифрования.</string>
+    <string name="you_added_a_new_device">Вы добавили новою сессию \'%s\', запрашивающая ключи шифрования.</string>
+    <string name="your_unverified_device_requesting">Ваше непроверенная сессия \'%s\' запрашивает ключи шифрования.</string>
     <string name="settings_containing_my_display_name">Сообщения, содержащие мое отображаемое имя</string>
     <string name="start_verification">Начать проверку</string>
     <string name="share_without_verifying">Поделиться без проверки</string>
@@ -1482,10 +1480,10 @@
 
     <string name="error_jitsi_not_supported_on_old_device">К сожалению, конференц-звонки с Jitsi не поддерживаются на старых устройствах (ниже Android OS - 5.0)</string>
 
-    <string name="you_added_a_new_device_with_info">Новое устройство запрашивает ключи шифрования.
-\nИмя устройства: %1$s
-\nПоследний раз в сети: %2$s
-\nЕсли вы не вошли с другого устройства, проигнорируйте этот запрос.</string>
+    <string name="you_added_a_new_device_with_info">Новая сессия запрашивает ключи шифрования. 
+\nИмя сессии: %1$s 
+\nПоследний раз в сети: %2$s 
+\nЕсли вы не вошли с другой сессии, проигнорируйте этот запрос.</string>
     <string name="your_unverified_device_requesting_with_info">Непроверенное устройство запрашивает ключи шифрования.
 \nИмя устройства: %1$s
 \nПоследний раз в сети: %2$s
