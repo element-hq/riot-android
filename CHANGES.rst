@@ -12,7 +12,7 @@ Improvements 🙌:
  -
 
 Other changes:
- - Update Matomo app id.
+ - Update Matomo app id (#3429)
 
 Bug fixes 🐛:
  -
