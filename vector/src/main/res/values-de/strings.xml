@@ -435,7 +435,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_app_info_link_title">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
-    <string name="settings_enable_this_device">Benachrichtigungen für dieses Gerät aktivieren</string>
+    <string name="settings_enable_this_device">Benachrichtigungen für diese Sitzung aktivieren</string>
     <string name="settings_turn_screen_on">Bildschirm für 3 Sekunden aktivieren</string>
 
     <string name="settings_messages_in_one_to_one">Nachrichten in direkten Chats</string>
@@ -474,8 +474,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_home_display">Startseite</string>
     <string name="settings_pin_missed_notifications">Räume mit ungelesenen Benachrichtigungen anheften</string>
     <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
-    <string name="settings_devices_list">Geräte</string>
-    <string name="devices_details_dialog_title">Geräteinformationen</string>
+    <string name="settings_devices_list">Sitzungen</string>
+    <string name="devices_details_dialog_title">Sitzungsinformationen</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Öffentlicher Name</string>
     <string name="devices_details_device_name">Öffentlichen Namen aktualisieren</string>
@@ -1124,7 +1124,7 @@ Bitte überprüfe die Kontoeinstellungen.</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Sitzungseinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für diese Sitzung aktiviert.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für dieses Gerät nicht erlaubt.
+    <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für diese Sitzung nicht aktiviert. 
 \nBitte überprüfe die Einstellungen für Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
 
