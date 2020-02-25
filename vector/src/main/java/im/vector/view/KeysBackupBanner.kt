@@ -28,6 +28,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import im.vector.BuildConfig
 import im.vector.R
 import org.jetbrains.anko.defaultSharedPreferences
 import org.matrix.androidsdk.core.Log
@@ -81,6 +82,8 @@ class KeysBackupBanner @JvmOverloads constructor(
      * @param newState the newState representing the view
      */
     fun render(newState: State, force: Boolean = false) {
+        // In Saba flavor, we don't need the backup banner to appear
+        if (BuildConfig.IS_SABA) return
         if (newState == state && !force) {
             Log.d(LOG_TAG, "State unchanged")
             return
