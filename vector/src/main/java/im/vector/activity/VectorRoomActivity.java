@@ -3137,8 +3137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (null != sRoomPreviewData) {
             text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
         } else {
-            text = activeMembersCount + "/" +
-                    getResources().getQuantityString(R.plurals.room_header_active_members_count, joinedMembersCount, joinedMembersCount);
+            text = getString(R.string.room_header_online_members, joinedMembersCount, activeMembersCount);
         }
 
         mActionBarHeaderActiveMembersTextView.setText(text);

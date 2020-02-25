@@ -420,6 +420,7 @@
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
+    <string name="room_header_online_members">%d members, %d online</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
