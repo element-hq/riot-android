@@ -1547,7 +1547,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="key_share_request">Schlüsselfreigabe Anfordern</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hätten Sie bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchten Sie es durch das ersetzen, das Sie gerade erstellen\?</string>
     <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun oder ein anderes vertrauenswürdiges Kommunikationsmittel zu verwenden.</string>
-    <string name="sas_incoming_request_description">Überprüfen Sie dieses Gerät, um es als vertrauenswürdig zu markieren. Das Vertrauen auf Geräte von Partnern gibt Ihnen zusätzliche Sicherheit, wenn Sie verschlüsselte End-to-End-Nachrichten verwenden.</string>
+    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partnern zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Das Verifizieren dieses Benutzers wird seine Geräte als \"vertraut\" markieren und dein Gerät bei ihnen als \"vertraut\" markieren.</string>
 
     <string name="sas_emoji_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass das folgende Emoji auf dem Bildschirm des Partners angezeigt wird</string>
@@ -1680,8 +1680,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="device_name_warning">Der öffentliche Name der Sitzung ist für Personen sichtbar, mit denen Sie kommunizieren</string>
     <string name="widget_integration_review_terms">Um fortzufahren, müssen Sie die Bedingungen dieses Dienstes akzeptieren.</string>
 
-    <string name="identity_server_not_defined">Sie verwenden keinen Identity Server</string>
-    <string name="identity_server_not_defined_for_password_reset">Es ist kein Identitätsserver konfiguriert. Sie müssen Ihr Kennwort zurücksetzen.</string>
+    <string name="identity_server_not_defined">Du verwendest keinen Identitätsserver</string>
+    <string name="identity_server_not_defined_for_password_reset">Es ist kein Identitätsserver konfiguriert. Du musst dein Kennwort zurücksetzen.</string>
 
     <string name="error_user_already_logged_in">Sie versuchen anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchten Sie sich abmelden\?</string>
 
@@ -1753,7 +1753,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
     <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
 
-    <string name="security_warning_identity_server">Frühere Versionen von Riot hatten einen Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
+    <string name="security_warning_identity_server">Frühere Versionen von Riot hatten ein Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
 \n
 \nWeitere Details gibt es hier (Englisch):
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
