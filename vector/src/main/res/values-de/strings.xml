@@ -1611,7 +1611,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="link_copied_to_clipboard">Link in die Zwischenablage kopiert</string>
 
-    <string name="add_by_matrix_id">Nach Matrix-ID hinzufügen</string>
+    <string name="add_by_matrix_id">Mit Matrix-ID hinzufügen</string>
     <string name="creating_direct_room">Raum erstellen…</string>
     <string name="message_view_edit_history">Bearbeitungsverlauf anzeigen</string>
 
