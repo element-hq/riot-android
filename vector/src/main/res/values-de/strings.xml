@@ -1882,7 +1882,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="login_continue">Fortfahren</string>
     <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzern gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">Derzeitig teilst du deine E-Mail-Adresse oder Telefonnummer über den Identitätsserver %1$s. Du müsstest dich erneut zu %2$s verbinden um dies zu unterbinden.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine Email Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden werden zu können.</string>
 
     <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
@@ -1955,7 +1955,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
 \nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
-<string name="reaction_search_type_hint">Gibt Schlüsselwörter ein um eine Reaktion zu finden.</string>
+<string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \'nur-einladen\' gestellt.</string>
     <string name="login_splash_title">Befreie deine Kommunikation</string>
