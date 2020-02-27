@@ -1559,7 +1559,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="sas_error_m_unknown_transaction">Die Sitzung kennt diese Transaktion nicht</string>
     <string name="sas_error_m_mismatched_commitment">Die Hash-Verpflichtung stimmte nicht überein</string>
     <string name="sas_error_m_mismatched_sas">Die SAS stimmte nicht überein</string>
-    <string name="sas_error_m_key_mismatch">Wiederherstellungsschlüssel passt nicht</string>
+    <string name="sas_error_m_key_mismatch">Schlüssel-Ungleichheit</string>
     <string name="sas_error_m_user_error">Der Benutzer Wiederherstellungsschlüssel passt nicht</string>
     <string name="room_list_catchup_welcome_body">Informieren Sie sich hier über ungelesene Nachrichten</string>
     <string name="room_list_people_empty_body">Ihre direkte Konversation wird hier angezeigt</string>
