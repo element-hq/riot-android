@@ -570,8 +570,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="room_settings_labs_end_to_end">Ende-zu-Ende-Verschlüsselung</string>
     <string name="room_settings_labs_end_to_end_is_active">Ende-zu-Ende-Verschlüsselung ist aktiv</string>
     <string name="room_settings_labs_end_to_end_warnings">Du musst dich abmelden, um die Verschlüsselung aktivieren zu können.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Nur für verifizierte Geräte verschlüsseln</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Niemals verschlüsselte Nachrichten an unverifizierte Geräte in diesem Raum von diesem Gerät senden.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Nur für verifizierte Sitzungen verschlüsseln</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Niemals verschlüsselte Nachrichten an unverifizierte Sitzungen in diesem Raum von dieser Sitzung senden.</string>
 
     <!-- Raum settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Dieser Raum hat keine lokalen Adressen</string>
@@ -608,11 +608,11 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_information_session_id">Sitzungs-ID</string>
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
 
-    <string name="encryption_information_sender_device_information">Absendergeräteinformationen</string>
+    <string name="encryption_information_sender_device_information">Informationen der Absendersitzung</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
     <string name="encryption_information_name">Öffentlicher Name</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Geräte-Schlüssel</string>
+    <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_information_verification">Verifizierungsstatus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-Fingerabdruck</string>
 
@@ -630,14 +630,14 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_import_room_keys">Raumschlüssel importieren</string>
     <string name="encryption_import_room_keys_summary">Schlüssel aus lokaler Datei importieren</string>
     <string name="encryption_import_import">Importieren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Nur zu verifizierten Geräten verschlüsseln</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Von diesem Gerät aus keine verschlüsselten Nachrichten an nicht verifizierte Geräte senden.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Nur zu verifizierten Sitzungen verschlüsseln</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Von dieser Sitzung aus keine verschlüsselten Nachrichten an nicht-verifizierte Sitzungen senden.</string>
 
     <string name="encryption_information_not_verified">NICHT verifiziert</string>
     <string name="encryption_information_verified">Verifiziert</string>
     <string name="encryption_information_blocked">Auf der Blockierliste</string>
 
-    <string name="encryption_information_unknown_device">Unbekanntes Gerät</string>
+    <string name="encryption_information_unknown_device">unbekannte Sitzung</string>
     <string name="encryption_information_none">Nichts</string>
 
     <string name="encryption_information_verify">Bestätigen</string>
@@ -645,9 +645,9 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_block">Blockieren</string>
     <string name="encryption_information_unblock">Zulassen</string>
 
-    <string name="encryption_information_verify_device">Gerät verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Besitzer des Gerätes über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er in seinen Benutzereinstellungen für dieses Gerät sieht, mit folgendem übereinstimmt:</string>
-    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes dieses Gerät und du solltest ggf. den Blockieren-Button drücken. In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
+    <string name="encryption_information_verify_device">Sitzung verifizieren</string>
+    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass dieser Sitzung vertraut werden kann, kontaktiere bitte den/die Eigentümer!n der Sitzung über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er/sie in den Benutzereinstellungen für diese Sitzung sieht, mit folgendem übereinstimmt:</string>
+    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes diese Sitzung und du solltest ggf. den Blockieren-Button drücken. In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
     <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
@@ -655,12 +655,8 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Raum enthält unbekannte Geräte</string>
-    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Geräte, die noch nicht verifiziert wurden.
-Es gibt also keine Garantie, dass diese Geräte wirklich dem angegebenen Benutzer gehören.
-Wir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen, bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst.
-
-Unbekannte Geräte:</string>
+    <string name="unknown_devices_alert_title">Raum enthält unbekannte Sitzungen</string>
+    <string name="unknown_devices_alert_message">Dieser Raum enthält unbekannte Sitzungen, die noch nicht verifiziert wurden. Es gibt also keine Garantie, dass diese Sitzung wirklich der angegebenen Person gehören. Wir empfehlen, den Verifizierungsprozess für jedes Gerät zu durchlaufen, bevor du fortfährst. Du kannst die Nachricht aber auch ohne Verifizierung senden, wenn du das vorziehst. Unbekannte Sitzungen:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Raum-Verzeichnis auswählen</string>
@@ -735,8 +731,8 @@ Unbekannte Geräte:</string>
 
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
-    <string name="you_added_a_new_device">Du hast das neue Gerät \'%s\' hinzugefügt, das jetzt Verschlüsselungs-Schlüssel anfordert.</string>
-    <string name="your_unverified_device_requesting">Dein bislang nicht verifiziertes Gerät \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
+    <string name="you_added_a_new_device">Du hast die neue Sitzung \'%s\' hinzugefügt, die jetzt Verschlüsselungs-Schlüssel anfordert.</string>
+    <string name="your_unverified_device_requesting">Deine bislang nicht verifiziertes Sitzung \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
     <string name="start_verification">Verifizierung starten</string>
     <string name="call">Anruf</string>
     <string name="notification_noisy_notifications">Laute Benachrichtigungen</string>
@@ -1449,14 +1445,14 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
 
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
-    <string name="you_added_a_new_device_with_info">Ein neues Gerät fordert Verschlüsselungs-Schlüssel an.
-\nGerätename: %1$s
-\nZuletzt gesehen: %2$s
-\nWenn du dich nicht auf einem anderen Gerät angemeldet hast, ignoriere diese Anfrage.</string>
-    <string name="your_unverified_device_requesting_with_info">Ein unverifiziertes Gerät fordert Verschlüsselungs-Schlüssel an.
-\nGerätename: %1$s
-\nZuletzt gesehen: %2$s
-\nWenn du dich nicht auf einem anderen Gerät angemeldet hast, ignoriere diese Anfrage.</string>
+    <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungs-Schlüssel an. 
+\nSitzungsname: %1$s 
+\nZuletzt gesehen: %2$s 
+\nWenn du dich nicht mit einer anderen Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
+    <string name="your_unverified_device_requesting_with_info">Eine unverifizierte Sitzung fordert Verschlüsselungs-Schlüssel an. 
+\nSitzungsname: %1$s 
+\nZuletzt gesehen: %2$s 
+\nWenn du nicht eine andere Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
 
     <string name="start_verification_short_label">Verifizieren</string>
     <string name="share_without_verifying_short_label">Teilen</string>
@@ -1681,7 +1677,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_set_workmanager_delay">Bevorzugtes Synchronisationsintervall</string>
     <string name="settings_discovery_category">Fund</string>
     <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen Sie kommunizieren)</string>
-    <string name="device_name_warning">Der öffentliche Name eines Geräts ist für Personen sichtbar, mit denen Sie kommunizieren</string>
+    <string name="device_name_warning">Der öffentliche Name der Sitzung ist für Personen sichtbar, mit denen Sie kommunizieren</string>
     <string name="widget_integration_review_terms">Um fortzufahren, müssen Sie die Bedingungen dieses Dienstes akzeptieren.</string>
 
     <string name="identity_server_not_defined">Sie verwenden keinen Identity Server</string>
