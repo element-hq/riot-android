@@ -1547,7 +1547,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="key_share_request">Schlüsselaustausch anfragen</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hätten Sie bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchten Sie es durch das ersetzen, das Sie gerade erstellen\?</string>
     <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun, oder ein anderes vertrautes Kommunikationsmedium zu nutzen.</string>
-    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partnern zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
+    <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partner!nnen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
 
     <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass diese Emoji auf dem Bildschirm deines Gegenübers angezeigt werden</string>
@@ -2129,7 +2129,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="room_member_power_level_admins">Admins</string>
     <string name="room_member_power_level_moderators">Moderierende</string>
-    <string name="room_member_power_level_custom"></string>
+    <string name="room_member_power_level_custom"/>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer!n</string>
 
