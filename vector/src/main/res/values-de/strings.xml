@@ -1482,7 +1482,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_cancelled_by_me">Die Verifizierung wird abgebrochen.
 \nGrund: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Interaktive Sitzungsverifizierung</string>
+    <string name="sas_verification_request_notification_channel">Interaktive Sitzungs-Verifizierung</string>
     <string name="sas_incoming_request_notif_title">Verifikationsanfrage</string>
     <string name="sas_incoming_request_notif_content">%s möchte deine Sitzung verifizieren</string>
 
@@ -1553,7 +1553,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass diese Emoji auf dem Bildschirm deines Gegenübers angezeigt werden</string>
     <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
 
-    <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. <button>Nutze alte Verifikation</button>.</string>
+    <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. Nutze die alte Verifikation.<button>Nutze alte Verifikation</button>.</string>
     <string name="sas_legacy_verification_button_title">Verwende die alte Verifizierung.</string>
 
     <string name="sas_error_m_unknown_transaction">Die Sitzung kennt diese Transaktion nicht</string>
