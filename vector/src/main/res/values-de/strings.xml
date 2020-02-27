@@ -642,13 +642,13 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
 
     <string name="encryption_information_verify">Bestätigen</string>
     <string name="encryption_information_unverify">Verifiz. widerrufen</string>
-    <string name="encryption_information_block">Blockieren</string>
+    <string name="encryption_information_block">Sperren</string>
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Sitzung verifizieren</string>
     <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass dieser Sitzung vertraut werden kann, kontaktiere bitte den/die Eigentümer!n der Sitzung über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er/sie in den Benutzereinstellungen für diese Sitzung sieht, mit folgendem übereinstimmt:</string>
     <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes diese Sitzung und du solltest ggf. den Blockieren-Button drücken. In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
-    <string name="encryption_information_verify_key_match">Ja, die Schlüssel stimmen überein</string>
+    <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
 
@@ -682,7 +682,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="media_saving_period_3_days">3 Tage</string>
     <string name="media_saving_period_1_week">1 Woche</string>
     <string name="media_saving_period_1_month">1 Monat</string>
-    <string name="media_saving_period_forever">Für immer</string>
+    <string name="media_saving_period_forever">Unbegrenzt</string>
 
     <string name="offline">Offline</string>
 
@@ -698,11 +698,11 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="larger">Größer</string>
     <string name="tiny">Sehr klein</string>
     <string name="huge">Riesig</string>
-    <string name="settings_theme">Thema</string>
+    <string name="settings_theme">Design</string>
 
     <string name="settings_12_24_timestamps">Zeige Zeitstempel im 12-Stunden-Format</string>
 
-    <string name="widget_no_power_to_manage">Für das Verwalten von Widgets in diesem Raum ist eine Berechtigung erforderlich</string>
+    <string name="widget_no_power_to_manage">Um Widgets in diesem Raum zu verwalten, ist eine Berechtigung erforderlich</string>
     <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
     <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
     <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
@@ -720,9 +720,9 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
     <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
-    <string name="light_theme">Helles Thema</string>
-    <string name="dark_theme">Dunkles Thema</string>
-    <string name="black_them">Schwarzes Thema</string>
+    <string name="light_theme">Helles Design</string>
+    <string name="dark_theme">Dunkles Design</string>
+    <string name="black_them">Schwarzes Design</string>
 
     <string name="login_mobile_device">Mobilgerät</string>
 
@@ -733,7 +733,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="settings_containing_my_user_name">Nachrichten, die meinen Benutzernamen enthalten</string>
     <string name="you_added_a_new_device">Du hast die neue Sitzung \'%s\' hinzugefügt, die jetzt Verschlüsselungs-Schlüssel anfordert.</string>
     <string name="your_unverified_device_requesting">Deine bislang nicht verifiziertes Sitzung \'%s\' fordert Verschlüsselungs-Schlüssel an.</string>
-    <string name="start_verification">Verifizierung starten</string>
+    <string name="start_verification">Verifizierung beginnen</string>
     <string name="call">Anruf</string>
     <string name="notification_noisy_notifications">Laute Benachrichtigungen</string>
     <string name="notification_silent_notifications">Lautlose Benachrichtigungen</string>
@@ -1049,7 +1049,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
 
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
     <string name="passphrase_create_passphrase">Erzeuge Passphrase</string>
-    <string name="passphrase_passphrase_does_not_match">Passphrasen müssen übereinstimmen</string>
+    <string name="passphrase_passphrase_does_not_match">Passphrasen stimmen nicht überein</string>
     <string name="merged_events_expand">aufklappen</string>
     <string name="merged_events_collapse">Zusammenklappen</string>
 
@@ -1186,21 +1186,21 @@ Versuche die Anwendung neuzustarten.</string>
 
     <string name="store_title">Riot.im - Kommuniziere auf deine Weise</string>
     <string name="store_short_description">Eine universelle, sichere Chat-App - komplett unter deiner Kontrolle.</string>
-    <string name="store_full_description">"Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
-
-Hole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
-
-Warum solltest du Riot.im wählen?
-
-• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
-
-• MÄCHTIGE INTEGRATIONEN: Benutze Riot.im mit den Werkzeugen die du kennst und liebst. Mit Riot.im kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
-
-• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
-
-• OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
-
-• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist wobei deine Nachrichtenhistorie zwischen all deinen Geräten synchronisiert wird. Das andere \"Gerät\" kann auch ein Browser sein. Schau dir dazu auch riot.im an."</string>
+    <string name="store_full_description">Eine Chat-App unter deiner Kontrolle und total flexibel. Riot lässt dich auf die Art kommunizieren, wie du willst. Die App wurde gemacht für [matrix] - dem Standard für offene, dezentrale Komunikation.
+\n
+\nHole dir ein kostenloses Konto auf matrix.org, hol dir einen eigenen Server auf https://modular.im oder nutze einen anderen Matrix-Server.
+\n
+\nWarum solltest du Riot.im wählen\?
+\n
+\n• KOMPLETTE KOMMUNIKATION: Baue Räume um deine Teams, deine Freunde, deine Community - wie auch immer du willst! Chatte, teile Dateien, füge Widgets hinzu und führe Sprach- und Videotelefonate - alles kostenlos.
+\n
+\n• MÄCHTIGE INTEGRATIONEN: Benutze Riot.im mit den Werkzeugen die du kennst und liebst. Mit Riot.im kannst du sogar mit Personen und Gruppen chatten, die andere Chat-Anwendungen benutzen.
+\n
+\n• PRIVAT UND SICHER: Halte deine Konversationen geheim. Aktuellste Ende-zu-Ende-Verschlüsselung sorgt dafür, dass deine private Kommunikation auch privat bleibt.
+\n
+\n• OFFEN - NICHT VERSCHLOSSEN: Quelloffen und basierend auf Matrix. Behalte deine Daten indem du deinen eigenen Server betreibst oder einen auswählst dem du vertraust.
+\n
+\n• WO AUCH IMMER DU BIST: Bleibe im Kontakt wo auch immer du bist, wobei deine Nachrichtenhistorie zwischen all deinen Geräten und auch deinem Messenger im Browser synchronisiert wird. Schau dir dazu auch riot.im an.</string>
 
     <string name="video_call_in_progress">Videogespräch aktiv…</string>
 
@@ -1239,7 +1239,7 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
     <string name="keys_backup_setup_step2_button_title">Setze Passphrase</string>
     <string name="keys_backup_setup_step3_button_title">Erledigt</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Speichere Wiederherstellungsschlüsse</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Speichere Wiederherstellungsschlüssel</string>
     <string name="keys_backup_setup_step3_save_button_title">Sichere als Datei</string>
     <string name="keys_backup_setup_step3_please_make_copy">Bitte mache eine Kopie</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Teile den Wiederherstellungsschlüssel mit…</string>
@@ -1273,18 +1273,18 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
 
-    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
-
-Sichere deine Schlüssel um sie nicht zu verlieren.</string>
-    <string name="recovery_key_export_saved_as_warning">Dieser Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert.
-
-Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</string>
+    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger!nnen haben die Schlüssel um diese Nachrichten zu lesen. 
+\n
+\nSichere deine Schlüssel um sie nicht zu verlieren.</string>
+    <string name="recovery_key_export_saved_as_warning">Der Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert. 
+\n
+\nWarnung: Diese Datei wird gelöscht, wenn die Anwendung deinstalliert wird.</string>
 
     <string name="keys_backup_setup_step3_generating_key_status">Generiere Wiederherstellungsschlüssel aus der Passphrase. Dies kann mehrere Sekunden brauchen.</string>
     <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Heimserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
-    <string name="keys_backup_setup_skip_msg">Du kannst den Zugang zu deinen Nachrichten verlieren wenn du dich abmeldest oder das Gerät verlierst.</string>
+    <string name="keys_backup_setup_skip_msg">Du kannst den Zugang zu deinen Nachrichten verlieren, wenn du dich abmeldest oder das Gerät verlierst.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backupversion ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase um deinen sicheren Chatverlauf zu entschlüsseln</string>
@@ -1300,7 +1300,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
 
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
-    <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurden wiederhergestellt und %2$d vorher unbekannte Schlüssel wurden hinzugefügt</string>
+    <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurde(n) wiederhergestellt und %2$d vorher unbekannte(r) Schlüssel wurde(n) hinzugefügt</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
         <item quantity="other">Backup mit %d Schlüssel wiederhergestellt.</item>
@@ -1327,7 +1327,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Die Sicherung hat eine ungültige Signatur von der nicht verifizierten Sitzung %s</string>
     <string name="keys_backup_get_trust_error">Abfrage der Vertrauensinformationen für die Sicherung fehlgeschlagen (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung auf diesem Gerät zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
+    <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
@@ -1360,17 +1360,17 @@ Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
     <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Oder schütze deine Sicherung mit einem Wiederherstellungsschlüssel den du sicher verwahrst.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Richte Wiederherstellungsschlüssel ein</string>
-    <string name="keys_backup_setup_step3_success_title">Erfolgreich!</string>
+    <string name="keys_backup_setup_step3_success_title">Erfolg!</string>
     <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
     <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
 Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
-    <string name="keys_backup_setup_step3_share_recovery_file">Teile</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Teilen</string>
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
     <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
-
-Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein Angreifer versuchen Zugriff auf dein Konto zu erhalten. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
+\n
+\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein/e Angreifer!n versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
     <string name="new_recovery_method_popup_was_me">Ich war es</string>
     <string name="keys_backup_banner_setup_line1">Verliere nie mehr verschlüsselte Nachrichten</string>
     <string name="keys_backup_banner_setup_line2">Richte die Schlüsselsicherung ein</string>
@@ -1440,7 +1440,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="notification_sender_me">Ich</string>
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
 
-    <string name="error_jitsi_not_supported_on_old_device">Entschuldige, doch Konferenzgespräche mittels Jitsi wird auf alten Geräten nicht unterstützt (älter als Android 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 5.0) nicht unterstützt</string>
 
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
 
@@ -1482,7 +1482,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="sas_cancelled_by_me">Die Verifizierung wird abgebrochen.
 \nGrund: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Interaktive Geräteverifizierung</string>
+    <string name="sas_verification_request_notification_channel">Interaktive Sitzungsverifizierung</string>
     <string name="sas_incoming_request_notif_title">Verifikationsanfrage</string>
     <string name="sas_incoming_request_notif_content">%s möchte deine Sitzung verifizieren</string>
 
@@ -1544,14 +1544,14 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_integration_manager">Integrationsmanager</string>
 
     <string name="integration_manager_not_configured">Kein Integrationsmanager konfiguriert.</string>
-    <string name="key_share_request">Schlüsselfreigabe Anfordern</string>
+    <string name="key_share_request">Schlüsselaustausch anfragen</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hätten Sie bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchten Sie es durch das ersetzen, das Sie gerade erstellen\?</string>
-    <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun oder ein anderes vertrauenswürdiges Kommunikationsmittel zu verwenden.</string>
+    <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun, oder ein anderes vertrautes Kommunikationsmedium zu nutzen.</string>
     <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partnern zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
-    <string name="sas_incoming_request_description_2">Das Verifizieren dieses Benutzers wird seine Geräte als \"vertraut\" markieren und dein Gerät bei ihnen als \"vertraut\" markieren.</string>
+    <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
 
-    <string name="sas_emoji_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass das folgende Emoji auf dem Bildschirm des Partners angezeigt wird</string>
-    <string name="sas_decimal_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass die folgenden Zahlen auf dem Bildschirm des Partners angezeigt werden</string>
+    <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass diese Emoji auf dem Bildschirm deines Gegenübers angezeigt werden</string>
+    <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. <button>Nutze alte Verifikation</button>.</string>
     <string name="sas_legacy_verification_button_title">Verwende die alte Verifizierung.</string>
@@ -1562,7 +1562,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="sas_error_m_key_mismatch">Schlüssel-Ungleichheit</string>
     <string name="sas_error_m_user_error">Benutzer-Ungleichheit</string>
     <string name="room_list_catchup_welcome_body">Informieren Sie sich hier über ungelesene Nachrichten</string>
-    <string name="room_list_people_empty_body">Ihre direkte Konversation wird hier angezeigt</string>
+    <string name="room_list_people_empty_body">Deine direkten Konversationen werden hier angezeigt</string>
     <string name="malformed_message">Fehlerhaftes Ereignis, kann nicht angezeigt werden</string>
     <string name="keys_backup_unable_to_get_trust_info">Beim Abrufen der Vertrauensinformationen ist ein Fehler aufgetreten</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
@@ -1678,7 +1678,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_category">Fund</string>
     <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen Sie kommunizieren)</string>
     <string name="device_name_warning">Der öffentliche Name der Sitzung ist für Personen sichtbar, mit denen Sie kommunizieren</string>
-    <string name="widget_integration_review_terms">Um fortzufahren, müssen Sie die Bedingungen dieses Dienstes akzeptieren.</string>
+    <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
 
     <string name="identity_server_not_defined">Du verwendest keinen Identitätsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Es ist kein Identitätsserver konfiguriert. Du musst dein Kennwort zurücksetzen.</string>
@@ -1762,7 +1762,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_manage">Verwalte deine Erkennungseinstellungen.</string>
     <string name="room_widget_revoke_access">Zugriff für mich zurückziehen</string>
 
-    <string name="push_gateway_item_device_name">Gerätename:</string>
+    <string name="push_gateway_item_device_name">Sitzungsname:</string>
     <string name="push_gateway_item_format">Format:</string>
 
     <string name="store_riotx_full_description">RiotX ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
@@ -1912,7 +1912,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="login_reset_password_password_hint">Neues Passwort</string>
 
     <string name="login_reset_password_warning_title">Achtung!</string>
-    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Verschlüsselungsschlüssel zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte eine Schlüsselsicherung ein oder exportiere deine Raumschlüssel von einem anderen Gerät bevor du dein Passwort zurücksetzt.</string>
+    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Verschlüsselungsschlüssel zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte eine Schlüsselsicherung ein oder exportiere deine Raumschlüssel von einer anderen Sitzung bevor du dein Passwort zurücksetzt.</string>
     <string name="login_reset_password_warning_submit">Fortfahren</string>
 
     <string name="login_reset_password_error_not_found">Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft</string>
@@ -1955,4 +1955,319 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
 \nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
+<string name="reaction_search_type_hint">Gibt Schlüsselwörter ein um eine Reaktion zu finden.</string>
+
+    <string name="room_join_rules_invite">%1$s hat den Raum auf \'nur-einladen\' gestellt.</string>
+    <string name="login_splash_title">Befreie deine Kommunikation</string>
+    <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
+    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Riot oder Servers ein, den du verwenden möchtest</string>
+    <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Riot ein, zu dem du dich verbinden möchtest</string>
+
+    <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Homeserver anmelden. Der Homeserver unterstützt die folgenden Anmeldetypen:%1$s.
+\n
+\nMöchtest du dich mit einem Webclient anmelden\?</string>
+    <string name="login_reset_password_notice">Eine Bestätigungs-E-Mail wird an dich gesendet, um dein neues Passwort zu bestätigen.</string>
+    <string name="login_reset_password_submit">Weiter</string>
+    <string name="login_reset_password_success_notice_2">Du wurdest von allen Sitzungen abgemeldet und erhälst keine Push-Benachrichtigungen mehr. Um Benachrichtigungen wieder zu aktivieren, melde dich auf jedem Gerät erneut an.</string>
+    <string name="login_reset_password_cancel_confirmation_title">Warnung</string>
+    <string name="login_set_email_notice">Lege eine E-Mail-Adresse fest, um dein Konto wiederherzustellen. Später kannst du optional zulassen, dass Personen dich anhand dieser E-Mail-Adresse entdecken.</string>
+    <string name="login_set_email_submit">Weiter</string>
+
+    <string name="login_set_msisdn_title">Lege Telefonnummer fest</string>
+    <string name="login_set_msisdn_notice">Lege eine Telefonnummer fest, damit Personen dich anhand dieser entdecken können.</string>
+    <string name="login_set_msisdn_notice2">Bitte verwende das internationale Format.</string>
+    <string name="login_set_msisdn_submit">Weiter</string>
+
+    <string name="login_msisdn_confirm_submit">Weiter</string>
+
+    <string name="login_msisdn_error_not_international">Internationale Telefonnummern müssen mit \'+\' beginnen</string>
+    <string name="login_msisdn_error_other">Die Telefonnummer scheint ungültig zu sein. Bitte prüfen</string>
+
+    <string name="login_signup_to">Anmelden bei %1$s</string>
+    <string name="login_signup_username_hint">Benutzername</string>
+    <string name="login_signup_submit">Weiter</string>
+    <string name="login_signup_cancel_confirmation_title">Warnung</string>
+    <string name="login_a11y_captcha_container">Bitte löse das Captcha</string>
+    <string name="login_error_outdated_homeserver_title">Veralteter Homeserver</string>
+    <string name="login_error_outdated_homeserver_content">Auf diesem Homeserver läuft eine zu alte Version, um eine Verbindung herzustellen. Bitten die Homeserver-Administration um ein Upgrade.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+	<item quantity="one">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunde…</item>
+	<item quantity="other">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunden…</item>
+</plurals>
+
+    <string name="seen_by">Gesehen von</string>
+
+    <string name="signed_out_title">Du bist abgemeldet</string>
+    <string name="signed_out_notice">Dies kann verschiedene Gründe haben:
+\n
+\n• Du hast dein Passwort in einer anderen Sitzung geändert.
+\n
+\n• Du hast diese Sitzung aus einer anderen Sitzung heraus gelöscht.
+\n
+\n• Die Administration deines Servers hat deinen Zugriff aus Sicherheitsgründen ungültig gemacht.</string>
+    <string name="signed_out_submit">Melde dich erneut an</string>
+
+    <string name="soft_logout_title">Du bist abgemeldet</string>
+    <string name="soft_logout_signin_title">Anmelden</string>
+    <string name="soft_logout_signin_notice">Deine Homeserver-Administration (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Melden dich an, um ausschließlich auf diesem Gerät gespeicherte Verschlüsselungsschlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten auf jedem Gerät zu lesen.</string>
+    <string name="soft_logout_signin_submit">Anmelden</string>
+    <string name="soft_logout_signin_password_hint">Passwort</string>
+    <string name="soft_logout_clear_data_title">Persönliche Daten löschen</string>
+    <string name="soft_logout_clear_data_notice">Warnung: Persönliche Daten (einschließlich Verschlüsselungsschlüssel) werden weiterhin auf diesem Gerät gespeichert.
+\n
+\nDeaktiviere diese Option, wenn dieses Gerät nicht mehr verwenden wird oder sich bei einem anderen Konto angemeldet werden soll.</string>
+    <string name="soft_logout_clear_data_submit">Alle Daten löschen</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Daten löschen</string>
+    <string name="soft_logout_clear_data_dialog_content">Alle aktuell auf diesem Gerät gespeicherten Daten löschen\?
+\nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
+    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzer!n%1$s. Die angegebenen Anmeldeinformationen sind von Benutzer!n %2$s. Dies wird nicht von RiotX unterstützt.
+\nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
+
+    <string name="permalink_malformed">matrix.to-Link fehlerhaft</string>
+    <string name="bug_report_error_too_short">Die Beschreibung ist zu kurz</string>
+
+    <string name="notification_initial_sync">Initiale Synchronisierung…</string>
+
+    <string name="settings_show_devices_list">Alle meine Sitzungen anzeigen</string>
+    <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
+    <string name="settings_developer_mode">Entwicklungsmodus</string>
+    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwickler!nnen!</string>
+    <string name="settings_rageshake">Wutschütteln</string>
+    <string name="settings_rageshake_detection_threshold">Erkennungsschwelle</string>
+    <string name="settings_rageshake_detection_threshold_summary">Schüttel dein Telefon, um die Erkennungsschwelle zu testen</string>
+    <string name="rageshake_detected">Schütteln erkannt!</string>
+    <string name="settings">Einstellungen</string>
+    <string name="devices_current_device">Aktuelle Sitzung</string>
+    <string name="devices_other_devices">Andere Sitzungen</string>
+
+    <string name="autocomplete_limited_results">Zeigt nur die ersten Ergebnisse, gib mehr Buchstaben ein…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Ausfallsicher</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
+
+    <string name="command_description_verify">Überprüfe die angegebenen Benutzer-ID</string>
+    <string name="command_description_shrug">Stellt einer Klartextnachricht ¯\\_(ツ)_/¯ voran</string>
+
+    <string name="create_room_encryption_title">Aktiviere Verschlüsselung</string>
+    <string name="create_room_encryption_description">Nach der Aktivierung kann die Verschlüsselung nicht deaktiviert werden.</string>
+
+    <string name="login_error_threepid_denied">Deine E-Mail-Domain ist nicht berechtigt, sich auf diesem Server zu registrieren</string>
+
+    <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
+    <string name="verification_sas_match">Sie passen</string>
+    <string name="verification_sas_do_not_match">Sie passen nicht</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in der selben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
+    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzer!n vertrauenswürdig ist. Vertrauen Sie allen Benutzer!nnen in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
+
+    <string name="verification_conclusion_not_secure">Nicht sicher</string>
+    <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein:
+\n
+\n - Dein Heimserver
+\n - Der Heimserver mit dem dein Gegenüber verbunden ist
+\n - Deine oder die Internetverbindung des Gegenüber
+\n - Dein Gerät oder das Gerät des Gegenüber</string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Bild.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">Datei</string>
+
+    <string name="verification_request_waiting">Warten…</string>
+    <string name="verification_request_other_cancelled">%s brach ab</string>
+    <string name="verification_request_you_cancelled">Du hast abgebrochen</string>
+    <string name="verification_request_other_accepted">%s hat akzeptiert</string>
+    <string name="verification_request_you_accepted">Du hast akzeptiert</string>
+    <string name="verification_sent">Verifizierung gesendet</string>
+    <string name="verification_request">Verifizierung angefragt</string>
+
+
+    <string name="verification_verify_device">Verifiziere diese Sitzung</string>
+    <string name="verification_verify_device_manually">Manuelle Verifizierung</string>
+
+    <string name="you">Ich</string>
+
+    <string name="verification_scan_notice">Scanne den Code mit dem Gerät des Gegenüber, um sich gegenseitig zu überprüfen</string>
+    <string name="verification_scan_their_code">Scanne ihren/seinen Code</string>
+    <string name="verification_scan_emoji_title">Kann nicht scannen</string>
+    <string name="verification_scan_emoji_subtitle">Wenn ihr nicht am selben Ort seid, vergleicht Emoji stattdessen</string>
+
+    <string name="verification_no_scan_emoji_title">Verifizieren via Emoji-Vergleich</string>
+
+    <string name="verify_by_emoji_title">Mit Emoji verifizieren</string>
+    <string name="verify_by_emoji_description">Wenn du den obigen Code nicht scannen kannst, verifiziert, indem ihr eine kurze, eindeutige Auswahl an Emoji vergleicht.</string>
+
+    <string name="a13n_qr_code_description">QR-Code-Bild</string>
+
+    <string name="verification_verify_user">%s verifizieren</string>
+    <string name="verification_verified_user">%s verifiziert</string>
+    <string name="verification_request_waiting_for">Warte auf %s…</string>
+    <string name="verification_request_alert_description">Für zusätzliche Sicherheit überprüfe %s, indem ihr auf beiden Geräten einen einzigartigen Code überprüft.
+\n
+\nFür maximale Sicherheit macht dies persönlich.</string>
+    <string name="room_profile_not_encrypted_subtitle">Nachrichten in diesem Raum sind nicht Ende-zu-Ende verschlüsselt.</string>
+    <string name="room_profile_encrypted_subtitle">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt.
+\n
+\nDeine Nachrichten sind gesichert und nur du und dein Gegenüber haben die eindeutigen Schlüssel, um sie zu entsperren.</string>
+    <string name="room_profile_section_security">Sicherheit</string>
+    <string name="room_profile_section_security_learn_more">Mehr erfahren</string>
+    <string name="room_profile_section_more">Mehr</string>
+    <string name="room_profile_section_more_settings">Raum Einstellungen</string>
+    <string name="room_profile_section_more_notifications">Benachrichtigungen</string>
+    <plurals name="room_profile_section_more_member_list">
+	<item quantity="one">Eine Person</item>
+	<item quantity="other">%1$d Personen</item>
+</plurals>
+    <string name="room_profile_section_more_uploads">Uploads</string>
+    <string name="room_profile_section_more_leave">Raum verlassen</string>
+    <string name="room_profile_leaving_room">Verlasse den Raum…</string>
+
+    <string name="room_member_power_level_admins">Admins</string>
+    <string name="room_member_power_level_moderators">Moderierende</string>
+    <string name="room_member_power_level_custom"></string>
+    <string name="room_member_power_level_invites">Eingeladen</string>
+    <string name="room_member_power_level_users">Nutzer!n</string>
+
+    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
+    <string name="room_member_jump_to_read_receipt">Springen &amp; als gelesen markieren</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX kann keine Ereignisse vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX beherrscht keine Nachrichten vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_exception">RiotX ist beim verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
+
+    <string name="unignore">Nicht ignorieren</string>
+
+    <string name="verify_cannot_cross_sign">Diese Sitzung kann diese Verifizierung nicht mit deinen anderen Sitzungen teilen.
+\nDie Überprüfung wird lokal gespeichert und in einer zukünftigen Version der App freigegeben.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Neueste Räume</string>
+    <string name="room_list_sharing_header_other_rooms">Andere Räume</string>
+
+    <string name="command_description_rainbow">Sendet die angegebene Nachricht in Regenbogenfarben</string>
+    <string name="command_description_rainbow_emote">Sendet das angegebene Emote in Regenbogenfarben</string>
+
+    <string name="settings_category_timeline">Zeitleiste</string>
+
+    <string name="settings_category_composer">Nachrichteneditor</string>
+
+    <string name="room_settings_enable_encryption">Aktivieren Ende-zu-Ende-Verschlüsselung</string>
+    <string name="room_settings_enable_encryption_warning">Einmal aktiviert kann die Verschlüsselung nicht rückgängig gemacht werden.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Verschlüsselung aktivieren\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Nach der Aktivierung kann die Verschlüsselung für einen Raum nicht deaktiviert werden. In einem verschlüsselten Raum gesendete Nachrichten können vom Server nicht gesehen werden, nur von den Teilnehmenden des Raums. Durch die Verschlüsselung funktionieren viele Bots und Bridges möglicherweise nicht ordnungsgemäß.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Verschlüsselung aktivieren</string>
+
+    <string name="verification_request_notice">Um sicher zu gehen, verifiziere %s, indem ein einmaligen Code überprüft wird.</string>
+    <string name="verification_request_start_notice">Um sicher zu sein, tut dies persönlich oder verwendet einen anderen Kommunikationsweg.</string>
+
+    <string name="verification_emoji_notice">Vergleiche die einzigartigen Emoji und stell sicher, dass sie in derselben Reihenfolge angezeigt werden.</string>
+    <string name="verification_code_notice">Vergleiche den Code mit dem Code auf dem Bildschirm deines Gegenübers.</string>
+    <string name="verification_conclusion_ok_notice">Nachrichten mit diesem Gegenüber sind Ende-zu-Ende verschlüsselt und können nicht von Dritten gelesen werden.</string>
+    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
+
+
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
+\nPrivate Schlüssel auf dem Gerät.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
+\nSchlüssel sind vertrauenswürdig.
+\nPrivate Schlüssel sind nicht bekannt</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing ist aktiviert
+\nSchlüssel sind nicht vertrauenswürdig</string>
+    <string name="encryption_information_dg_xsigning_disabled">Cross-Signing ist nicht aktiviert</string>
+
+
+    <string name="settings_active_sessions_list">Aktive Sitzungen</string>
+    <string name="settings_active_sessions_show_all">Zeige alle Sitzungen</string>
+    <string name="settings_active_sessions_manage">Verwalte Sitzungen</string>
+    <string name="settings_active_sessions_signout_device">Diese Sitzung abmelden</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Keine kryptografischen Informationen verfügbar</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, da du sie überprüft hast:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifiziere diese Sitzung, um sie als vertrauenswürdig zu markieren, und gewähren ihr Zugriff auf verschlüsselte Nachrichten. Wenn du dich nicht bei dieser Sitzung angemeldet hast, ist dein Konto möglicherweise gefährdet:</string>
+
+    <plurals name="settings_active_sessions_count">
+	<item quantity="one">Eine aktive Sitzung</item>
+	<item quantity="other">%d aktive Sitzungen</item>
+</plurals>
+
+    <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
+    <string name="crosssigning_other_user_not_trust">Andere Benutzer!nnen vertrauen ihr möglicherweise nicht</string>
+    <string name="complete_security">Vollständige Sicherheit</string>
+
+    <string name="verification_open_other_to_verify">Öffne eine vorhandene Sitzung und verwende sie, um diese zu überprüfen und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
+
+
+    <string name="verification_profile_verify">Verifizieren</string>
+    <string name="verification_profile_verified">Verifiziert</string>
+    <string name="verification_profile_warning">Warnung</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Sitzungen konnten nicht abgerufen werden</string>
+    <string name="room_member_profile_sessions_section_title">Sitzungen</string>
+    <string name="trusted">Vertraut</string>
+    <string name="not_trusted">Nicht vertraut</string>
+
+    <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) hat sich in einer neuen Sitzung angemeldet:</string>
+    <string name="verification_profile_device_untrust_info">Bis diese/r Benutzer!n dieser Sitzung vertraut, werden an und von ihr/ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
+
+
+    <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
+    <string name="reset_cross_signing">Schlüssel zurücksetzen</string>
+
+    <string name="a11y_qr_code_for_verification">QR-Code</string>
+
+    <string name="qr_code_scanned_by_other_notice">Hat dein Gegenüber den QR-Code erfolgreich gescannt\?</string>
+    <string name="qr_code_scanned_by_other_yes">Ja</string>
+    <string name="qr_code_scanned_by_other_no">Nein</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Verbindung zum Server wurde unterbrochen</string>
+
+    <string name="settings_dev_tools">Entwicklungswerkzeuge</string>
+    <string name="settings_account_data">Kontodaten</string>
+    <plurals name="poll_info">
+	<item quantity="one">%d Stimme</item>
+	<item quantity="other">%d Stimmen</item>
+</plurals>
+    <plurals name="poll_info_final">
+	<item quantity="one">%d Stimme - Endergebnis</item>
+	<item quantity="other">%d Stimmen - Endergebnis</item>
+</plurals>
+    <string name="poll_item_selected_aria">Ausgewählte Option</string>
+    <string name="command_description_poll">Erstellt eine einfache Umfrage</string>
+    <string name="verification_cannot_access_other_session">Kann nicht auf eine vorhandene Sitzung zugegriffen werden\?</string>
+    <string name="verification_use_passphrase">Verwende deinen Wiederherstellungsschlüssel oder deine Passphrase</string>
+
+    <string name="new_signin">Neue Anmeldung</string>
+
+    <string name="enter_secret_storage_invalid">Kann keine Geheimnisse im Speicher finden</string>
+    <string name="enter_secret_storage_passphrase">Gib die geheime Speicherpassphrase ein</string>
+    <string name="enter_secret_storage_passphrase_warning">Warnung:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Du solltest nur von einem vertrauenswürdigen Gerät auf den geheimen Speicher zugreifen</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Greife auf deinen sicheren Nachrichtenverlauf und deine Cross-Signing-Identität zu, um andere Sitzungen zu überprüfen, indem du deine Passphrase eingibst</string>
+
+    <string name="message_action_item_redact">Entfernen…</string>
+    <string name="share_confirm_room">Möchtest du diesen Anhang an %1$s senden\?</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="one">Sende Bild in Originalgröße</item>
+	<item quantity="other">Sende Bilder in Originalgröße</item>
+</plurals>
+
+    <string name="delete_event_dialog_title">Entfernen bestätigen</string>
+    <string name="delete_event_dialog_content">Möchtest du dieses Ereignis wirklich entfernen (löschen)\? Beachte, dass beim Löschen eines Raumnamens oder einer Themenänderung die Änderung rückgängig gemacht werden kann.</string>
+    <string name="delete_event_dialog_reason_checkbox">Grund hinzufügen</string>
+    <string name="delete_event_dialog_reason_hint">Grund für das Editieren</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht von Benutzer!n, Grund: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministration moderiert, Grund: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
+
 </resources>
