@@ -1912,6 +1912,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <!-- Replaced string is the homeserver url -->
     <string name="login_signup_to">Sign up to %1$s</string>
+    <string name="login_signin_username_hint">Username or email</string>
     <string name="login_signup_username_hint">Username</string>
     <string name="login_signup_password_hint">Password</string>
     <string name="login_signup_submit">Next</string>
@@ -2063,8 +2064,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">"RiotX does not handle events of type '%1$s' (yet)"</string>
-    <string name="rendering_event_error_type_of_message_not_handled">"RiotX does not handle message of type '%1$s' (yet)"</string>
+    <string name="rendering_event_error_type_of_event_not_handled">"RiotX does not handle events of type '%1$s'"</string>
+    <string name="rendering_event_error_type_of_message_not_handled">"RiotX does not handle message of type '%1$s'"</string>
     <string name="rendering_event_error_exception">"RiotX encountered an issue when rendering content of event with id '%1$s'"</string>
 
     <string name="unignore">Unignore</string>
@@ -2125,7 +2126,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
-    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages. If you can’t access one, use your recovery key or passphrase.</string>
+    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages.</string>
 
 
     <string name="verification_profile_verify">Verify</string>
