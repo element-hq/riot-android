@@ -239,9 +239,9 @@
     <string name="groups_list">Gruppeliste</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">1 endring i medlemskap</item>
-	<item quantity="other">%d endringar i medlemskap</item>
-</plurals>
+        <item quantity="one">1 endring i medlemskap</item>
+        <item quantity="other">%d endringar i medlemskap</item>
+    </plurals>
 
     <string name="compression_options">Send som</string>
     <string name="compression_opt_list_original">Original</string>
@@ -326,13 +326,13 @@
     <string name="room_creation_title">Ny samtale</string>
     <string name="room_creation_add_member">Legg til medlem</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktiv medlem</item>
-	<item quantity="other">%d aktive medlem</item>
-</plurals>
+        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="other">%d aktive medlem</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlem</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlem</item>
+    </plurals>
     <string name="room_title_one_member">1 medlem</string>
 
     <string name="room_participants_leave_prompt_title">Forlat rom</string>
@@ -975,9 +975,9 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="room_participants_action_kick">Spark</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Er du trygg på at du vil sparka denne brukaren frå samtala\?</item>
-	<item quantity="other">Er du trygg på at du vil sparka desse brukarane frå samtala\?</item>
-</plurals>
+        <item quantity="one">Er du trygg på at du vil sparka denne brukaren frå samtala\?</item>
+        <item quantity="other">Er du trygg på at du vil sparka desse brukarane frå samtala\?</item>
+    </plurals>
     <string name="reason_hint">Grunn</string>
 
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
@@ -1010,7 +1010,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 \nSjekk Riot-innstillingane.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Skru på</string>
 
-<string name="notification_sync_init">setter opp tenesta</string>
+    <string name="notification_sync_init">setter opp tenesta</string>
     <string name="title_activity_keys_backup_setup">Sikkerheitskopi av nøkkel</string>
     <string name="title_activity_keys_backup_restore">Bruk sikkerheitskopiering av nøkkel</string>
     <string name="title_activity_verify_device">Stadfest sesjon</string>
@@ -1070,4 +1070,4 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
     <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
     <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
-    </resources>
+</resources>

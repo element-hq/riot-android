@@ -1199,7 +1199,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprobar restricciones en segundo plano</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Las restricciones de segundo plano están desactivadas para Riot. Este debería funcionar con datos móviles (sin WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano estan activadas para Riot.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Las restricciones de segundo plano están activadas para Riot.
 \nLa app estará completamente restringida mientras esté en segundo plano y esto podría afectar a las notificaciones.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desactivar restricciones</string>
@@ -1229,7 +1229,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar notificaciones de la cuenta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Incluye cambios en el avatar y en el nombre.</string>
     <string name="settings_send_message_with_enter">Enviar mensaje con intro</string>
-    <string name="settings_send_message_with_enter_summary">La tecla Intro enviará el mensaje en vez de añadir un salto de linea</string>
+    <string name="settings_send_message_with_enter_summary">La tecla Intro enviará el mensaje en vez de añadir un salto de línea</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Conexión en segundo plano</string>
     <string name="startup_notification_fdroid_battery_optim_message">Riot necesita mantener una leve conexión en segundo plano para poder ofrecer notificaciones de confianza.
@@ -1284,7 +1284,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="notification_silent">Silencioso</string>
     <string name="error_empty_field_enter_user_name">Por favor introduzca un nombre de usuario.</string>
-    <string name="settings_info_area_show">Mostrar el area de información</string>
+    <string name="settings_info_area_show">Mostrar el área de información</string>
     <string name="show_info_area_always">Siempre</string>
     <string name="show_info_area_messages_and_errors">Para mensajes y errores</string>
     <string name="show_info_area_only_errors">Solo para errores</string>
@@ -1296,7 +1296,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="no_valid_google_play_services_apk">No se ha encontrado ningún APK válido de Servicios de Google Play. Las notificaciones podrían no funcionar correctamente.</string>
 
     <string name="store_title">Riot.im - Comunicate a tu manera</string>
-    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Riot.im. Puedes encontrar el registro de cambios aqui: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
+    <string name="store_whats_new">Siempre estamos haciendo cambios y mejoras para Riot.im. Puedes encontrar el registro de cambios aquí: %1$s. Para asegurarte de que no te pierdes nada, tan solo mantén las actualizaciones activadas.</string>
     <string name="store_short_description">Una app de chat universal completamente bajo tu control.</string>
     <string name="store_full_description">Una app de chat, bajo tu total control y completamente flexible. Riot deja que te comuniques de la manera que prefieras. Hecho para [matrix] - el estándar para la comunicación abierta y descentralizada.
 \nConsigue tu cuenta de matrix.org gratis. Consigue tu servidor en https://modular.im o usa otro servidor de Matrix.
@@ -1387,9 +1387,9 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
         <item quantity="other">Copia de seguridad restaurada con las claves %d.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Se ha añadido %d como clave a esta sesión.</item>
-	<item quantity="other">Se han añadido %d como claves a esta sesión.</item>
-</plurals>
+        <item quantity="one">Se ha añadido %d como clave a esta sesión.</item>
+        <item quantity="other">Se han añadido %d como claves a esta sesión.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Error al recuperar la ultima versión de las claves (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La sesión crypto no esta activada</string>
@@ -1404,7 +1404,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="keys_backup_settings_signature_from_unknown_device">La copia de seguridad tiene una firma de una sesión desconocida con el ID %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">La copia de seguridad tiene una firma valida de esta sesión.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">La copia de seguridad tiene tiene una firma válida para la sesión verificada %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">La copia de seguridad tiene una firma válida para la sesión verificada %s.</string>
     <string name="keys_backup_banner_recover_line2">Usar copia de seguridad de la clave</string>
 
     <string name="keys_backup_info_keys_all_backup_up">Todas las claves guardadas</string>
@@ -1604,7 +1604,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
     <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
-<string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
+    <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Riot se sincronizará en segundo plano de manera que se preserven los recursos del dispositivo (batería).
@@ -1802,14 +1802,14 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="a11y_hide_password">Esconder contraseña</string>
     <string name="a11y_jump_to_bottom">Saltar al final</string>
 
-    <string name="two_and_some_others_read">Leído por %1$s, %2$s, %3$s y otros</string>
+    <string name="two_and_some_others_read">Leído por %1$s, %2$s, %3$d y otros</string>
     <string name="three_users_read">Leído por %1$s, %2$s y %3$s</string>
     <string name="two_users_read">Leído por %1$s y %2$s</string>
     <string name="one_user_read">Leído por %s</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">Leído por 1 usuario</item>
-	<item quantity="other">Leído por %d usuarias</item>
-</plurals>
+        <item quantity="one">Leído por 1 usuario</item>
+        <item quantity="other">Leído por %d usuarias</item>
+    </plurals>
 
     <string name="error_file_too_big">El archivo \'%1$s\' (%2$s) es demasiado grande para ser subido. El límite es %3$s.</string>
 
@@ -1878,4 +1878,4 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="login_splash_submit">Empieza</string>
 
     <string name="login_server_title">Selecciona un servidor</string>
-    </resources>
+</resources>

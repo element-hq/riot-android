@@ -1211,9 +1211,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
         <item quantity="other">U rikthye një kopjeruajtje me %d kyçe.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Te ky sesion u shtua %d kyç i ri.</item>
-	<item quantity="other">Te ky sesion u shtuan %d kyçe të rinj.</item>
-</plurals>
+        <item quantity="one">Te ky sesion u shtua %d kyç i ri.</item>
+        <item quantity="other">Te ky sesion u shtuan %d kyçe të rinj.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">S’u arrit të merrej versioni më i ri i kyçeve të rikthimit (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">S’është aktivizuar kriptografia për sesionin</string>
@@ -2079,7 +2079,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="a11y_qr_code_for_verification">Kod QR</string>
 
     <string name="qr_code_scanned_by_other_yes">Po</string>
-<string name="login_error_threepid_denied">Përkatësia juaj për email-e s’është e autorizuar të regjistrohet në këtë shërbyes</string>
+    <string name="login_error_threepid_denied">Përkatësia juaj për email-e s’është e autorizuar të regjistrohet në këtë shërbyes</string>
 
     <string name="verification_conclusion_warning">Hyrje jo e besuar</string>
     <string name="verify_user_sas_emoji_help_text">Verifikojeni këtë përdorues duke ripohuar se <em>emoji</em> unik vijues shfaqet në ekranin e tij, në të njëjtën radhë.</string>

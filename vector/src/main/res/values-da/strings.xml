@@ -495,7 +495,7 @@ Er du sikker?</string>
     <string name="settings_advanced">Avanceret</string>
     <string name="settings_cryptography">Kryptografi</string>
     <string name="settings_contact">Lokale kontakter</string>
-<string name="notification_sync_init">Klargører service</string>
+    <string name="notification_sync_init">Klargører service</string>
     <string name="title_activity_choose_sticker">Send et klistermærke</string>
     <string name="title_activity_keys_backup_setup">Nøgle-backup</string>
     <string name="title_activity_keys_backup_restore">Brug Nøgle-backup</string>
@@ -511,4 +511,4 @@ Er du sikker?</string>
 
     <string name="dialog_title_third_party_licences">Tredjeparts licenser</string>
 
-    </resources>
+</resources>
