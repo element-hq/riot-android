@@ -1591,7 +1591,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token registrieren</string>
 
     <string name="send_suggestion">Mache einen Vorschlag</string>
-    <string name="send_suggestion_content">Bitte schreibe unten deinen Anmerkungen.</string>
+    <string name="send_suggestion_content">Bitte schreibe unten deine Anmerkungen.</string>
     <string name="send_suggestion_report_placeholder">Beschreibe hier deine Anmerkung</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Versteckte Ereignisse in der Zeitleiste anzeigen</string>
 
