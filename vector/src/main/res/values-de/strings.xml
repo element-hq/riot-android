@@ -338,7 +338,7 @@ Bist du sicher?</string>
     <string name="room_menu_search">Suchen</string>
     <string name="room_one_user_is_typing">%s schreibt…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s schreiben…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; andere schreiben…</string>
+    <string name="room_many_users_are_typing">%1$s, %2$s &amp; andere schreiben…</string>
     <string name="room_message_placeholder_encrypted">Verschlüsselte Nachricht senden…</string>
     <string name="room_message_placeholder_not_encrypted">Nachricht senden (unverschlüsselt)…</string>
     <string name="room_offline_notification">Verbindung zum Server wurde unterbrochen.</string>
@@ -926,7 +926,7 @@ Willst du welche hinzufügen?</string>
 \n 
 \nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzern geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihr Exemplar.</string>
     <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Account deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
-    <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Password eingeben:</string>
+    <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Passwort eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
 
     <string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
@@ -1239,15 +1239,15 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
     <string name="keys_backup_setup_step2_button_title">Setze Passphrase</string>
     <string name="keys_backup_setup_step3_button_title">Erledigt</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Speichere Wiederherstellungsschlüssel</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Wiederherstellungsschlüssel speichern</string>
     <string name="keys_backup_setup_step3_save_button_title">Sichere als Datei</string>
     <string name="keys_backup_setup_step3_please_make_copy">Bitte mache eine Kopie</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Teile den Wiederherstellungsschlüssel mit…</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Wiederherstellungsschlüssel teilen mit…</string>
     <string name="recovery_key">Wiederherstellungsschlüssel</string>
     <string name="unexpected_error">Unerwarteter Fehler</string>
     <string name="keys_backup_setup_backup_started_title">Sicherung gestartet</string>
     <string name="keys_backup_setup_skip_title">Bist du sicher?</string>
-    <string name="keys_backup_restore_key_enter_hint">Gebe Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_restore_key_enter_hint">Wiederherstellungsschlüssel eingeben</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Nachrichtenwiederherstellung</string>
 
@@ -1275,12 +1275,12 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
 
     <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger!nnen haben die Schlüssel um diese Nachrichten zu lesen. 
 \n
-\nSichere deine Schlüssel um sie nicht zu verlieren.</string>
+\nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
     <string name="recovery_key_export_saved_as_warning">Der Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert. 
 \n
 \nWarnung: Diese Datei wird gelöscht, wenn die Anwendung deinstalliert wird.</string>
 
-    <string name="keys_backup_setup_step3_generating_key_status">Generiere Wiederherstellungsschlüssel aus der Passphrase. Dies kann mehrere Sekunden brauchen.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Wiederherstellungsschlüssel aus Passphrase generieren. Dies kann mehrere Sekunden brauchen.</string>
     <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Heimserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
@@ -1291,12 +1291,12 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_restore_use_recovery_key">nutze deinen Wiederherstellungsschlüssel</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Wen du deine Wiederherstellungspassphrase nicht weißt, kannst du %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Nutze deinen Wiederherstellungsschlüssel um deinen sicheren Chatverlauf zu entschlüsseln</string>
-    <string name="keys_backup_restore_with_key_helper">Hast du deinen Wiederherstellungsschlüssel verloren? Du kannst einen neuen in den Einstellungen einrichten.</string>
+    <string name="keys_backup_restore_with_recovery_key">Nutze deinen Wiederherstellungsschlüssel um deinen verschlüsselten Chatverlauf zu entschlüsseln</string>
+    <string name="keys_backup_restore_with_key_helper">Wiederherstellungsschlüssel verloren\? Du kannst einen neuen in den Einstellungen einrichten.</string>
     <string name="keys_backup_passphrase_error_decrypt">Sicherung konnte mit dieser Passphrase nicht entschlüsselt werden. Bitte stelle sicher, dass du die korrekte Wiederherstellungspassphrase eingegeben hast.</string>
     <string name="network_error_please_check_and_retry">Netzwerkfehler: Bitte überprüfe deine Verbindung und versuche es erneut.</string>
 
-    <string name="keys_backup_recovery_code_empty_error_message">Bitte gebe deinen Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Bitte gib deinen Wiederherstellungsschlüssel ein</string>
     <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
 
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
@@ -1327,7 +1327,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Die Sicherung hat eine ungültige Signatur von der nicht verifizierten Sitzung %s</string>
     <string name="keys_backup_get_trust_error">Abfrage der Vertrauensinformationen für die Sicherung fehlgeschlagen (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
+    <string name="keys_backup_settings_untrusted_backup">Um Sichere Nachrichtenwiederherstellung in dieser Sitzung zu nutzen, gebe jetzt deine Wiederherstellungspassphrase oder -schlüssel ein.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
@@ -1359,12 +1359,12 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
 Für maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
     <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Oder schütze deine Sicherung mit einem Wiederherstellungsschlüssel den du sicher verwahrst.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Richte Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Wiederherstellungsschlüssel einrichten</string>
     <string name="keys_backup_setup_step3_success_title">Erfolg!</string>
     <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
     <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
 Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Bewahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe) auf</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Teilen</string>
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
@@ -1465,7 +1465,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_settings_checking_backup_state">Überprüfe Sicherungsstatus</string>
     <string name="invalid_or_expired_credentials">Du wurdest abgemeldet, da deine Anmeldedaten falsch oder abgelaufen sind.</string>
 
-    <string name="sas_verify_title">Verifiziere dich durch das Vergleichen eines kurzen Satzes.</string>
+    <string name="sas_verify_title">Verifizieren durch Vergleichen eines kurzen Textes.</string>
     <string name="sas_verify_start_button_title">Starte Verifizierung</string>
     <string name="sas_incoming_request_title">Eingehende Verifizierungsanfrage</string>
     <string name="sas_incoming_verification_request_dialog">Du hast eine eingehende Verifizierungsanfrage erhalten.</string>
@@ -1554,7 +1554,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. Nutze die alte Verifikation.<button>Nutze alte Verifikation</button>.</string>
-    <string name="sas_legacy_verification_button_title">Verwende die alte Verifizierung.</string>
+    <string name="sas_legacy_verification_button_title">Verwende die alte Verifizierungsmethode.</string>
 
     <string name="sas_error_m_unknown_transaction">Die Sitzung kennt diese Transaktion nicht</string>
     <string name="sas_error_m_mismatched_commitment">Die Hash-Verpflichtung stimmte nicht überein</string>
@@ -1663,8 +1663,8 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="call_failed_no_ice_use_alt">Versuche es mit %s</string>
     <string name="call_failed_dont_ask_again">Nicht erneut fragen</string>
 
-    <string name="auth_add_email_message_2">Richte eine E-Mail für die Kontowiederherstellung ein, die später von Personen, die du kennst, optional gefunden werden kann.</string>
-    <string name="auth_add_phone_message_2">Richte eine Telefonnummer ein und lassen sie später optional von Personen finden, die dich kennen.</string>
+    <string name="auth_add_email_message_2">Richte eine E-Mail für die Kontowiederherstellung ein. Optional, kannst du später einrichten, dass Personen dich über diese Adresse finden.</string>
+    <string name="auth_add_phone_message_2">Richte eine Telefonnummer ein. Später kannst du einrichten, dass Personen dich über diese finden.</string>
     <string name="auth_add_email_phone_message_2">Lege eine E-Mail-Adresse für die Kontowiederherstellung fest. Später kann optional eine E-Mail-Adresse oder eine Telefonnummer dazu verwendet werden, um von anderen Personen gefunden zu werden.</string>
     <string name="auth_add_email_and_phone_message_2">Lege eine E-Mail-Adresse für die Kontowiederherstellung fest. Später kann optional eine E-Mail-Adresse oder eine Telefonnummer dazu verwendet werden, um von anderen Personen gefunden zu werden.</string>
     <string name="settings_call_ringtone_use_default_stun">Fallback-Call-Assist-Server zulassen</string>
@@ -1691,7 +1691,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="review_terms">Nutzungsbedingungen überprüfen</string>
     <string name="terms_description_for_identity_server">Für andere auffindbar sein</string>
-    <string name="terms_description_for_integration_manager">Verwende Bots, Bridges, Widgets und Sticker-Packs</string>
+    <string name="terms_description_for_integration_manager">Verwende Bots, Bridges, Widgets und Sticker-Pakete</string>
 
     <string name="read_at">Gelesen von</string>
 
@@ -1708,9 +1708,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
 
-    <string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) um einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren.
-\n
-\nAlternativ kannst du einen öffentlichen Server auf %2$s nutzen doch wird das nicht zu zuverlässig sein und es wird deine IP-Adresse mit dem Server teilen. Du kannst dies auch in den Einstellungen konfigurieren.</string>
+    <string name="call_failed_no_ice_description">Bitte frage die Administration deines Heimservers (%1$s) um einen TURN-Server einzurichten, damit Anrufe zuverlässig funktionieren. 
+\n 
+\nAlternativ kannst du einen öffentlichen Server auf %2$s nutzen, doch wird das nicht zu zuverlässig sein und es wird deine IP-Adresse mit dem Server geteilt. Du kannst dies auch in den Einstellungen konfigurieren.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
@@ -1774,12 +1774,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
 
-    <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um zu entdecken und von dir bekannten Kontakten entdeckt zu werden.</string>
+    <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
     <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
     <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
     <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzer!n des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
@@ -1883,7 +1883,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_continue">Fortfahren</string>
     <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzern gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine Email Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
-    <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden werden zu können.</string>
+    <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
 
     <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
