@@ -287,7 +287,7 @@
     <string name="settings_enable_this_device">Activer les notifications pour cette session</string>
     <string name="settings_messages_in_one_to_one">Messages dans les discussions directes</string>
     <string name="settings_messages_in_group_chat">Messages dans les discussions de groupe</string>
-    <string name="settings_call_invitations">Demandes d’appel</string>
+    <string name="settings_call_invitations">Appels entrants</string>
     <string name="settings_messages_sent_by_bot">Messages envoyés par un robot</string>
 
     <string name="settings_background_sync">Synchronisation en arrière-plan</string>
