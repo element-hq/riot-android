@@ -305,6 +305,8 @@
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">تمام پیام‌های رمزشده‌تان را از دست می‌دهید مگر اینکه از کلید‌ها پشتیبان‌گیری کنید.</string>
 
     <string name="loading">درحال بارگیری…</string>
+    <string name="reply">پاسخ</string>
+
 
 
 
