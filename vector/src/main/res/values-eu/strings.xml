@@ -2079,8 +2079,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="room_member_jump_to_read_receipt">Saltatu irakurragirira</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX aplikazioak oraindik ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX aplikazioak oraindik ez ditu \'%1$s\' motako mezuak kudeatzen</string>
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX aplikazioak ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX aplikazioak ez ditu \'%1$s\' motako mezuak kudeatzen</string>
     <string name="rendering_event_error_exception">RiotX aplikazioak arazo bat izan du \'%1$s\' id-a duen edukia erakusteko</string>
 
     <string name="unignore">Utzi ezikusteari</string>
@@ -2144,7 +2144,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="crosssigning_other_user_not_trust">Beste erabiltzaile batzuk ez fidagarritzat jo lezakete</string>
     <string name="complete_security">Bete segurtasuna</string>
 
-    <string name="verification_open_other_to_verify">Ireki aurreko saio bat eta erabili hori saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez. Ez baduzu bat erabiltzerik, erabili berreskuratze gakoa edo pasa-esaldia.</string>
+    <string name="verification_open_other_to_verify">Ireki aurreko saio bat eta erabili hori saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez.</string>
 
 
     <string name="verification_profile_verify">Egiaztatu</string>
@@ -2171,4 +2171,45 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="qr_code_scanned_by_other_no">Ez</string>
 
     <string name="no_connectivity_to_the_server_indicator">Zerbitzariarekin konexioa galdu da</string>
+<string name="login_signup_username_hint">Erabiltzaile-izena</string>
+    <string name="settings_dev_tools">Garapen tresnak</string>
+    <string name="settings_account_data">Kontuaren datuak</string>
+    <plurals name="poll_info">
+	<item quantity="one">boto %d</item>
+	<item quantity="other">%d boto</item>
+</plurals>
+    <plurals name="poll_info_final">
+	<item quantity="one">boto %d - Azken emaitza</item>
+	<item quantity="other">%d boto - Azken emaitza</item>
+</plurals>
+    <string name="poll_item_selected_aria">Hautatutako aukera</string>
+    <string name="command_description_poll">Inkesta sinplea sortzen du</string>
+    <string name="verification_cannot_access_other_session">Ezin zara badagoen saio batera sartu\?</string>
+    <string name="verification_use_passphrase">Erabili berreskuratze gakoa edo pasa-esaldia</string>
+
+    <string name="new_signin">Saio berria</string>
+
+    <string name="enter_secret_storage_invalid">Ezin izan da sekreturik aurkitu biltegian</string>
+    <string name="enter_secret_storage_passphrase">Sartu biltegi sekretuko pasa-esaldia</string>
+    <string name="enter_secret_storage_passphrase_warning">Abisua:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Biltegi sekretura gailu fidagarri batetik konektatu beharko zinateke beti</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Atzitu zure mezu seguruen historiala eta zeharkako sinatzerako identitatea beste saioak egiaztatzeko zure pasa-esaldia sartuz</string>
+
+    <string name="message_action_item_redact">Kendu…</string>
+    <string name="share_confirm_room">Eranskin hau %1$s gelara bidali nahi duzu\?</string>
+    <plurals name="send_images_with_original_size">
+	<item quantity="one">Bidali irudia jatorrizko tamainan</item>
+	<item quantity="other">Bidali irudiak jatorrizko tamainan</item>
+</plurals>
+
+    <string name="delete_event_dialog_title">Berretsi kentzea</string>
+    <string name="delete_event_dialog_content">Ziur gertaera hau kendu (ezabatu) nahi duzula\? Jakin gelaren izenaren edo mintzagaiaren aldaketa ezabatzen baduzu, aldaketa desegin daitekeela.</string>
+    <string name="delete_event_dialog_reason_checkbox">Eman arrazoi bat</string>
+    <string name="delete_event_dialog_reason_hint">Kentzeko arrazoia</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Erabiltzaileak kendu du gertaera, arrazoia: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Gelako moderatzaile batek kendu du gertaera, arrazoia: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
+
 </resources>
