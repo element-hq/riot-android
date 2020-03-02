@@ -306,6 +306,13 @@
 
     <string name="loading">درحال بارگیری…</string>
     <string name="reply">پاسخ</string>
+    <string name="permissions_rationale_popup_title">اطلاع\u200cرسانی</string>
+    <string name="permissions_rationale_msg_camera">پیام\u200cرسان برای گرفتن عکس و برقراری تماس تصویری نیازمند دسترسی به دوربین است.</string>
+    <string name="permissions_rationale_msg_record_audio">پیام\u200cرسان برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">پیام\u200cرسان برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.\n\nلطفا در پنجره\u200cهای بعدی دسترسی\u200cهای لازم را بدهید..</string>
+    <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان\u200cپذیر نمی\u200cباشد.</string>
 
 
 

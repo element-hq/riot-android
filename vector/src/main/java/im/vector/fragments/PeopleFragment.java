@@ -31,11 +31,13 @@ import android.widget.Filter;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
@@ -57,8 +59,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import im.vector.BuildConfig;
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.ReviewTermsActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
@@ -70,12 +74,18 @@ import im.vector.adapters.SabaPeopleAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
+import im.vector.fragments.terms.AcceptTermsFragment;
+import im.vector.fragments.terms.AcceptTermsViewModel;
+import im.vector.fragments.terms.ServiceTermsArgs;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.EmptyViewItemDecoration;
 import im.vector.view.SimpleDividerItemDecoration;
+
+import static android.provider.DocumentsContract.EXTRA_INFO;
+import static im.vector.activity.MXCActionBarActivity.EXTRA_MATRIX_ID;
 
 public class PeopleFragment extends AbsHomeFragment implements ContactsManager.ContactsManagerListener, AbsHomeFragment.OnRoomChangedListener {
     private static final String LOG_TAG = PeopleFragment.class.getSimpleName();
@@ -330,7 +340,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
             } else if (null != room && room.isJoined()) {
                 Log.d(LOG_TAG, "onPublicRoomSelected : the user joined the room -> open the room");
                 final Map<String, Object> params = new HashMap<>();
-                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 
                 if (!TextUtils.isEmpty(publicRoom.name)) {
@@ -550,7 +560,7 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_DISPLAY_NAME, item.mDisplayName);
             }
 
-            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startRoomInfoIntent.putExtra(EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             startActivity(startRoomInfoIntent);
         }
     }
@@ -672,10 +682,30 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     public void onIdentityServerTermsNotSigned(String token) {
-        if (isAdded()) {
-            startActivityForResult(ReviewTermsActivity.Companion.intent(getActivity(),
-                    TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
-                    RequestCodesKt.TERMS_REQUEST_CODE);
+        try {
+            // Trying to accept terms on user's behalf without showing the dialog!
+            Log.v("Terms accepted: ", "running my own code");
+            AcceptTermsViewModel viewModel = ViewModelProviders.of(this).get(AcceptTermsViewModel.class);
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_INFO, new ServiceTermsArgs(TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token));
+            viewModel.termsArgs = intent.getParcelableExtra(EXTRA_INFO);
+            MXSession session;
+            String matrixId = null;
+            if (intent.hasExtra(EXTRA_MATRIX_ID)) {
+                matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
+            }
+            session = Matrix.getInstance(getContext()).getSession(matrixId);
+            viewModel.initSession(session);
+            AcceptTermsFragment acceptTermsFragment = new AcceptTermsFragment();
+            acceptTermsFragment.initialize(getActivity());
+            onActivityResult(RequestCodesKt.TERMS_REQUEST_CODE, Activity.RESULT_OK, null);
+        } catch (Exception e) {
+            Log.e("Error in ", "onIdentityServerTermsNotSigned-- " + e.getMessage());
+            if (isAdded()) {
+                startActivityForResult(ReviewTermsActivity.Companion.intent(getActivity(),
+                        TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
+                        RequestCodesKt.TERMS_REQUEST_CODE);
+            }
         }
     }
 

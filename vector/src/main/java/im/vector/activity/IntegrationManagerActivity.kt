@@ -259,7 +259,7 @@ class IntegrationManagerActivity : AbstractWidgetActivity() {
 
         Log.d(LOG_TAG, "Received request to get widget in room " + mRoom!!.roomId)
 
-        val widgets = widgetManager.getActiveWidgets(mSession, mRoom)
+        val widgets = WidgetsManager.getActiveWidgets(mSession, mRoom)
         val responseData = ArrayList<JsonDict<Any>>()
 
         for (widget in widgets) {

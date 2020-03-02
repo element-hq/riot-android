@@ -1,9 +1,51 @@
-Changes in Riot 0.9.7 (2019-XX-XX)
+Changes in RiotX 0.9.10 (2019-02-10)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade to version 0.9.33
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.33
+
+Improvements 🙌:
+ - Support SSO with Firefox accounts (#3337)
+
+Changes in Riot 0.9.9 (2019-11-25)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade to version 0.9.32
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.32
+
+Features ✨:
+ - Privacy / Room Widget permissions (#3378)
+ - Privacy / Widget Permission for jitsi widgets (#3391)
+
+Improvements 🙌:
+ - Jitsi / Use mx display name in Jitsi conf
+
+Other changes:
+ - Add User-Interactive Auth to /account/3pid/add (#3333)
+
+Bugfix 🐛:
+ - Crash / potential NPE after logout (#3367)
+ - Fix infinite restart loop after token expiration (#3249)
+
+
+Changes in Riot 0.9.8 (2019-10-09)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade to version 0.9.30.
+
+Bugfix 🐛:
+ - App crashes for some users (#3348, #3349)
+
+
+Changes in Riot 0.9.7 (2019-10-07)
 ===================================================
 
 MatrixSdk:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+ - Upgrade MatrixSdk to version 0.9.29.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.29
 
 Features:
  - Privacy: Use the hashed v2 lookup API for 3PIDs (#3257)
@@ -21,16 +63,12 @@ Improvements:
  - Notification [Fdroid] Add a new mode for notification (#3122)
 
 Other changes:
+ - Widgets: Whitelist [MSC1961](https://github.com/matrix-org/matrix-doc/pull/1961) widget urls
  - Privacy: Remove the bind true flag from 3PID calls on registration (#3252)
 
 Bugfix:
  - Fix reset password broken UI (#3125)
-
-Translations:
- -
-
-Build:
- -
+ - Execute 1 request instead of 2 for 3Pid lookup (#3344)
 
 Changes in Riot 0.9.6 (2019-09-13)
 ===================================================
@@ -1453,28 +1491,28 @@ Changes in Vector 0.2.0 (2016-04-14)
 =======================================================
 
 
-Changes in Riot 0.9.XX (2019-XX-XX)
+Changes in Riot 0.9.XX (2020-XX-XX)
 ===================================================
 
-MatrixSdk:
+MatrixSdk 🚀:
  - Upgrade MatrixSdk to version 0.X.Y.
  - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
 
-Features:
+Features ✨:
  -
 
-Improvements:
+Improvements 🙌:
  -
 
 Other changes:
  -
 
-Bugfix:
+Bug fixes 🐛:
  -
 
-Translations:
+Translations 🗣:
  -
 
-Build:
+Build 🧱:
  -
 

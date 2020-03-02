@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resources_language">ar</string>
+    <string name="resources_country_code">""</string>
 
     <string name="light_theme">السمة الفاتحة</string>
     <string name="dark_theme">السمة الداكنة</string>
@@ -371,7 +372,6 @@
 
     <!-- share keys -->
     <string name="conference_call_warning_title">تحذير!</string>
-    <string name="resources_country_code">العربية</string>
 
     <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. ماذا أفعل؟ %1$s. ‏%2$s.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>

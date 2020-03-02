@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -202,11 +201,6 @@ public class VectorApp extends MultiDexApplication {
         //Initializing Sentry to report exceptions to the specified URL
 
         Sentry.init("https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9", new AndroidSentryClientFactory(this));
-
-        PreferencesManager.setIntegrationManagerUrls(this,
-                getString(R.string.integrations_ui_url),
-                getString(R.string.integrations_rest_url),
-                getString(R.string.integrations_jitsi_widget_url));
 
         mLifeCycleListener = new VectorLifeCycleObserver();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);

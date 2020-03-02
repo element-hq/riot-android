@@ -1,73 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/widget_tab_bar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/black">
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/widget_back_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="8dp"
-            android:rotationY="@integer/rtl_mirror_flip"
-            android:src="@drawable/ic_material_arrow_back_white"
-            android:tint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/widget_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/widget_close_icon"
-            android:layout_toLeftOf="@+id/widget_close_icon"
-            android:layout_toEndOf="@+id/widget_back_icon"
-            android:layout_toRightOf="@+id/widget_back_icon"
-            android:fontFamily="sans-serif-bold"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="Title" />
-
-        <ImageView
-            android:id="@+id/widget_close_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:padding="8dp"
-            android:src="@drawable/ic_material_delete_white" />
-
-    </RelativeLayout>
-
-    <WebView
-        android:id="@+id/widget_web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/widget_tab_bar"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/black" />
 
     <FrameLayout
-        android:id="@+id/widget_progress_layout"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <ProgressBar
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
-
-    </FrameLayout>
-
-</RelativeLayout>
+</LinearLayout>

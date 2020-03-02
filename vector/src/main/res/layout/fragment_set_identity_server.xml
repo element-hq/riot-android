@@ -41,11 +41,11 @@
             android:id="@+id/discovery_identity_server_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/discovery_identity_server_enter_til"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:visibility="visible"
-            android:visibility="gone" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/discovery_identity_server_enter_til"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

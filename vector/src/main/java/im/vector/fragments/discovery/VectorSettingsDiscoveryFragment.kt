@@ -21,18 +21,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import butterknife.BindView
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.ReviewTermsActivity
 import im.vector.activity.util.TERMS_REQUEST_CODE
 import im.vector.extensions.withArgs
 import im.vector.fragments.VectorBaseMvRxFragment
+import kotlinx.android.synthetic.main.fragment_simple_epoxy.*
 import org.matrix.androidsdk.features.terms.TermsManager
 import org.matrix.androidsdk.rest.model.pid.ThreePid
 
@@ -48,9 +48,6 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
     lateinit var sharedViewModel: DiscoverySharedViewModel
 
-    @BindView(R.id.epoxyRecyclerView)
-    lateinit var epoxyRecyclerView: EpoxyRecyclerView
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -65,6 +62,12 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 viewModel.changeIdentityServer(it.peekContent().second)
             }
         })
+
+        viewModel.errorLiveEvent.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { throwable ->
+                Snackbar.make(coordinatorLayout, throwable.toString(), Snackbar.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -76,17 +79,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
 
         //If some 3pids are pending, we can try to check if they have been verified here
-        withState(viewModel) { state ->
-            state.emailList()?.forEach { info ->
-                when (info.isShared()) {
-                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                        val bind = info.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, info.value, bind)
-                    }
-                }
-            }
-        }
+        viewModel.refreshPendingEmailBindings()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -120,7 +113,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
     }
 
     override fun checkEmailVerification(email: String, bind: Boolean) {
-        viewModel.add3pid(ThreePid.MEDIUM_EMAIL, email, bind)
+        viewModel.finalizeBind3pid(ThreePid.MEDIUM_EMAIL, email, bind)
     }
 
     override fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean) {
@@ -146,7 +139,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
         if (hasBoundIds) {
             //we should prompt
-            AlertDialog.Builder(requireContext())
+            AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                     .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIsFragment(state) }
@@ -171,7 +164,7 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
 
             if (hasBoundIds) {
                 //we should prompt
-                AlertDialog.Builder(requireContext())
+                AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.disconnect_identity_server)
                         .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                         .setPositiveButton(R.string._continue) { _, _ -> viewModel.changeIdentityServer(null) }
@@ -181,6 +174,10 @@ class VectorSettingsDiscoveryFragment : VectorBaseMvRxFragment(), SettingsDiscov
                 viewModel.changeIdentityServer(null)
             }
         }
+    }
+
+    override fun onTapRetryToRetrieveBindings() {
+        viewModel.retrieveBinding()
     }
 
     private fun navigateToChangeIsFragment(state: DiscoverySettingsState) {

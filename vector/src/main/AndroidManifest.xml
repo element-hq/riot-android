@@ -340,22 +340,22 @@
             android:theme="@style/GroupAppTheme.Light"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.VectorUniversalLinkActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="vector.im" />
-                <data android:pathPrefix="/app/" />
-                <data android:pathPrefix="/beta/" />
-                <data android:pathPrefix="/develop/" />
-                <data android:pathPrefix="/staging/" />
-                <!-- mail validation -->
-                <data android:pathPrefix="/_matrix/" />
-            </intent-filter>
+<!--                <data android:scheme="http" />-->
+<!--                <data android:scheme="https" />-->
+<!--                <data android:host="vector.im" />-->
+<!--                <data android:pathPrefix="/app/" />-->
+<!--                <data android:pathPrefix="/beta/" />-->
+<!--                <data android:pathPrefix="/develop/" />-->
+<!--                <data android:pathPrefix="/staging/" />-->
+<!--                &lt;!&ndash; mail validation &ndash;&gt;-->
+<!--                <data android:pathPrefix="/_matrix/" />-->
+<!--            </intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
