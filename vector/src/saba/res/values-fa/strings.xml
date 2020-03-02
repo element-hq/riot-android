@@ -313,6 +313,48 @@
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید.</string>
     <string name="permissions_rationale_msg_camera_and_audio">پیام\u200cرسان برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.\n\nلطفا در پنجره\u200cهای بعدی دسترسی\u200cهای لازم را بدهید..</string>
     <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان\u200cپذیر نمی\u200cباشد.</string>
+    <string name="no_contact_access_placeholder">شما به پیام‌رسان اجازه دسترسی به مخاطبین محلی را ندادید</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">لطفا پیام‌رسان را روی دستگاه دیگری که توانایی رمزگشایی دارد اجرا کنید تا کلیدهای این گفت و گو را بفرستد.</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">استفاده از زنگ پیش‌فرض پیام‌رسان برای تماس‌ها</string>
+    <string name="permissions_rationale_msg_storage">پیام‌رسان به اجازه دسترسی به عکس‌ها و ودیوهای شما نیاز دارد\n\nلطفا در پنجره‌ی بعدی این دسترسی را بدهید تا بتوانید عکس بفرستید.</string>
+    <string name="permissions_rationale_msg_contacts">پیام‌رسان می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">پیام‌رسان می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. \n\n آیا موافق با اشتراک‌گذاری دفترچه تلفنتان به این منظور هستید؟</string>
+    <string name="settings_add_3pid_flow_not_supported">شما اجازه‌ی اینکار را از نسخه‌ی موبایل پیام‌رسان ندارید</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">اعلان‌ها برای این گفت‌وگو فعال نشده‌اند. \n لطفا تنظیمات پیام‌رسان را مشاهده کنید.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">این سرویس با ری‌استارت دستگاه شروع نمیشود. تا وقتی پیام‌رسان را یک بار باز نکنید اعلانی دریافت نخواهید کرد.</string>
+    <!-- medias saving settings -->
+    <string name="media_saving_period_3_days">۳ روز</string>
+    <string name="media_saving_period_1_week">۱ هفته</string>
+    <string name="media_saving_period_1_month">۱ ماه</string>
+    <string name="media_saving_period_forever">برای همیشه</string>
+    <string name="settings_keep_media">نگه داشتن رسانه‌ها</string>
+    <string name="settings_clear_cache">پاک کردن حافظه نهان</string>
+    <string name="settings_clear_media_cache">پاک کردن رسانه‌های حافظه نهان</string>
+    <!-- Call settings screen -->
+    <string name="settings_call_category">تماس‌ها</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offers one (your IP address will be shared during a call)</string>
+    <string name="settings_call_ringtone_title">زنگ تماس ورودی</string>
+    <string name="settings_call_ringtone_dialog_title">انتخاب زنگ برای تماس‌ها:</string>
+
+    <string name="settings_labs_native_camera">استفاده از دوربین گوشی</string>
+    <string name="settings_labs_native_camera_summary">باز کردن دوربین گوشی به جای دوربین داخل برنامه</string>
+    <!-- Media settings -->
+    <string name="settings_media">رسانه</string>
+    <string name="settings_default_compression">فشرده سازی پیش‌فرض</string>
+    <string name="compression_opt_list_choose">انتخاب کنید</string>
+    <string name="settings_default_media_source">منبع رسانه پیش‌فرض</string>
+    <string name="media_source_choose">انتخاب کنید</string>
+    <string name="settings_play_shutter_sound">صدای شاتر دوربین</string>
+
+    <string name="settings_enable_all_notif">فعال کردن اعلان‌ها برای این حساب</string>
+    <string name="settings_enable_this_device">فعال کردن اعلان‌ها برای این نشست</string>
+    <string name="settings_turn_screen_on">روشن کردن صفحه برای ۳ ثانیه</string>
+
+    <string name="settings_notification_advanced">تنظیمات پیشرفته‌ی اعلان‌ها</string>
+    <string name="settings_notification_advanced_summary">قرار دادن اهمیت اعلان‌ها براساس اتفاقات، تنظیم کردن صداها، نور، لرزش</string>
+
+
+
 
 
 

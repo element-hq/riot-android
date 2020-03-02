@@ -872,7 +872,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun refreshIntegrationManagerSettings() {
         val integrationAllowed = mSession.integrationManager.integrationAllowed
-        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as SwitchPreference).let {
+        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? SwitchPreference)?.let {
             val savedListener = it.onPreferenceChangeListener
             it.onPreferenceChangeListener = null
             it.isChecked = integrationAllowed
