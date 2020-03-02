@@ -587,7 +587,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
             cancelSelectionMode();
         }
         else if (action == R.id.ic_action_vector_reply){
-            VectorMessagesAdapter.mSelectedEvent = null;
+//            VectorMessagesAdapter.mSelectedEvent = null;
         }
         else if (action == R.id.ic_action_vector_redact_message) {
             getActivity().runOnUiThread(new Runnable() {
