@@ -379,9 +379,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         final int requestCode;
 
         if (aIsVideoCall) {
-            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
         } else {
-            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
         }
 
         if (PermissionsToolsKt.checkPermissions(requestCode, this, requestCode)) {
@@ -393,11 +393,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
             Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL) {
             if (PermissionsToolsKt.onPermissionResultAudioIpCall(this, grantResults)) {
                 startCall(false);
             }
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL) {
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startCall(true);
             }
