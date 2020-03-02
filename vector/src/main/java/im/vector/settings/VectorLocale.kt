@@ -20,9 +20,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.preference.PreferenceManager
-import android.text.TextUtils
-import android.util.Pair
 import androidx.core.content.edit
+import im.vector.BuildConfig
 import im.vector.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,6 +37,7 @@ object VectorLocale {
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
     private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
     private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
+    private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
 
     private val defaultLocale = Locale("en", "US")
 
@@ -69,7 +69,7 @@ object VectorLocale {
 
             // detect if the default language is used
             val defaultStringValue = getString(context, defaultLocale, R.string.resources_country_code)
-            if (TextUtils.equals(defaultStringValue, getString(context, applicationLocale, R.string.resources_country_code))) {
+            if (defaultStringValue == getString(context, applicationLocale, R.string.resources_country_code)) {
                 applicationLocale = defaultLocale
             }
 
@@ -90,24 +90,33 @@ object VectorLocale {
 
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             val language = locale.language
-            if (TextUtils.isEmpty(language)) {
+            if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)
             } else {
                 putString(APPLICATION_LOCALE_LANGUAGE_KEY, language)
             }
 
             val country = locale.country
-            if (TextUtils.isEmpty(country)) {
+            if (country.isEmpty()) {
                 remove(APPLICATION_LOCALE_COUNTRY_KEY)
             } else {
                 putString(APPLICATION_LOCALE_COUNTRY_KEY, country)
             }
 
             val variant = locale.variant
-            if (TextUtils.isEmpty(variant)) {
+            if (variant.isEmpty()) {
                 remove(APPLICATION_LOCALE_VARIANT_KEY)
             } else {
                 putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val script = locale.script
+                if (script.isEmpty()) {
+                    remove(APPLICATION_LOCALE_SCRIPT_KEY)
+                } else {
+                    putString(APPLICATION_LOCALE_SCRIPT_KEY, script)
+                }
             }
         }
     }
@@ -157,24 +166,43 @@ object VectorLocale {
      * @param context the context
      */
     private fun initApplicationLocales(context: Context) {
-        val knownLocalesSet = HashSet<Pair<String, String>>()
+        val knownLocalesSet = HashSet<Triple<String, String, String>>()
 
         try {
             val availableLocales = Locale.getAvailableLocales()
 
             for (locale in availableLocales) {
-                knownLocalesSet.add(Pair(getString(context, locale, R.string.resources_language),
-                        getString(context, locale, R.string.resources_country_code)))
+                knownLocalesSet.add(
+                        Triple(
+                                getString(context, locale, R.string.resources_language),
+                                getString(context, locale, R.string.resources_country_code),
+                                getString(context, locale, R.string.resources_script)
+                        ))
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, "## getApplicationLocales() : failed " + e.message, e)
-            knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
+            knownLocalesSet.add(
+                    Triple(
+                            context.getString(R.string.resources_language),
+                            context.getString(R.string.resources_country_code),
+                            context.getString(R.string.resources_script)
+                    ))
         }
 
         supportedLocales.clear()
 
         for (knownLocale in knownLocalesSet) {
-            supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                supportedLocales.add(
+                        Locale.Builder()
+                                .setLanguage(knownLocale.first)
+                                .setRegion(knownLocale.second)
+                                .setScript(knownLocale.third)
+                                .build()
+                )
+            } else {
+                supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+            }
         }
 
         // sort by human display names
@@ -188,13 +216,38 @@ object VectorLocale {
      * @return the string
      */
     fun localeToLocalisedString(locale: Locale): String {
-        var res = locale.getDisplayLanguage(locale)
+        return buildString {
+            append(locale.getDisplayLanguage(locale))
 
-        if (!TextUtils.isEmpty(locale.getDisplayCountry(locale))) {
-            res += " (" + locale.getDisplayCountry(locale) + ")"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && locale.script != "Latn"
+                    && locale.getDisplayScript(locale).isNotEmpty()) {
+                append(" - ")
+                append(locale.getDisplayScript(locale))
+            }
+
+            if (locale.getDisplayCountry(locale).isNotEmpty()) {
+                append(" (")
+                append(locale.getDisplayCountry(locale))
+                append(")")
+            }
+
+            // In debug mode, also display information about the locale in the current locale.
+            if (BuildConfig.DEBUG) {
+                append("\n[")
+                append(locale.displayLanguage)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
+                    append(" - ")
+                    append(locale.displayScript)
+                }
+                if (locale.displayCountry.isNotEmpty()) {
+                    append(" (")
+                    append(locale.displayCountry)
+                    append(")")
+                }
+                append("]")
+            }
         }
-
-        return res
     }
 }
 

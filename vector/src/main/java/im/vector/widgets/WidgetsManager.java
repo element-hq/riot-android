@@ -82,25 +82,6 @@ public class WidgetsManager {
         return config.getUiUrl();
     }
 
-    /**
-     * Widget error code
-     */
-    public class WidgetError extends MatrixError {
-        public static final String WIDGET_NOT_ENOUGH_POWER_ERROR_CODE = "WIDGET_NOT_ENOUGH_POWER_ERROR_CODE";
-        public static final String WIDGET_CREATION_FAILED_ERROR_CODE = "WIDGET_CREATION_FAILED_ERROR_CODE";
-
-        /**
-         * Create a widget error
-         *
-         * @param code                     the error code (see XX_ERROR_CODE)
-         * @param detailedErrorDescription the detailed error description
-         */
-        public WidgetError(String code, String detailedErrorDescription) {
-            errcode = code;
-            error = detailedErrorDescription;
-        }
-    }
-
 
     /**
      * Pending widget creation callback
@@ -114,8 +95,24 @@ public class WidgetsManager {
      * @param room    the room to check.
      * @return the active widgets list
      */
-    public List<Widget> getActiveWidgets(MXSession session, Room room) {
+    public static List<Widget> getActiveWidgets(MXSession session, Room room) {
         return getActiveWidgets(session, room, null, null);
+    }
+
+
+    public static Boolean isJitsiWidget(Widget widget) {
+        Event widgetEvent = widget.getWidgetEvent();
+        if (widgetEvent == null) return false;
+        try {
+            JsonObject jsonObject = widgetEvent.getContentAsJsonObject();
+            if (jsonObject != null && jsonObject.has("type")) {
+                String widgetType = jsonObject.get("type").getAsString();
+                return WIDGET_TYPE_JITSI.equals(widgetType);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getWidgets() failed : " + e.getMessage(), e);
+        }
+        return false;
     }
 
     /**
@@ -127,7 +124,7 @@ public class WidgetsManager {
      * @param excludedTypes the excluded widget types
      * @return the active widgets list
      */
-    private List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
+    private static List<Widget> getActiveWidgets(final MXSession session, final Room room, final Set<String> widgetTypes, final Set<String> excludedTypes) {
         // Get all im.vector.modular.widgets state events in the room
         List<Event> widgetEvents = room.getState().getStateEvents(new HashSet<>(Arrays.asList(WIDGET_EVENT_TYPE)));
 
@@ -213,7 +210,7 @@ public class WidgetsManager {
      * @param room    the room
      * @return the list of active widgets
      */
-    public List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
+    public static List<Widget> getActiveJitsiWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)), null);
     }
 
@@ -224,7 +221,7 @@ public class WidgetsManager {
      * @param room    the room
      * @return the list of active widgets
      */
-    public List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
+    public static List<Widget> getActiveWebviewWidgets(final MXSession session, final Room room) {
         return getActiveWidgets(session, room, null, new HashSet<>(Arrays.asList(WidgetsManager.WIDGET_TYPE_JITSI)));
     }
 
@@ -236,7 +233,7 @@ public class WidgetsManager {
      * @return an error if the user cannot act on widgets in this room. Else, null.
      */
 
-    public WidgetError checkWidgetPermission(MXSession session, Room room) {
+    public static WidgetError checkWidgetPermission(MXSession session, Room room) {
         WidgetError error = null;
 
         if ((null != room) && (null != room.getState()) && (null != room.getState().getPowerLevels())) {
@@ -489,7 +486,7 @@ public class WidgetsManager {
      * @param callback the callback
      */
     public void getFormattedWidgetUrl(final Context context, final Widget widget, final ApiCallback<String> callback) {
-        if (isScalarUrl(context, widget.getUrl())) {
+        if (isScalarUrl(widget.getUrl())) {
             getScalarToken(context, Matrix.getInstance(context).getSession(widget.getSessionId()), new SimpleApiCallback<String>(callback) {
                 @Override
                 public void onSuccess(String token) {
@@ -509,11 +506,10 @@ public class WidgetsManager {
     /**
      * Return true if the url is allowed to receive the scalar token in parameter
      *
-     * @param context
      * @param url
      * @return true if the url is allowed to receive the scalar token in parameter
      */
-    public boolean isScalarUrl(Context context, String url) {
+    public boolean isScalarUrl(String url) {
         List<String> allowed = config.getWhiteListedUrls();
         for (String allowedUrl : allowed) {
             if (url.startsWith(allowedUrl)) {

@@ -448,8 +448,8 @@
 
     <string name="devices_details_dialog_title">Информация за устройството</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Име</string>
-    <string name="devices_details_device_name">Име на устройството</string>
+    <string name="devices_details_name_title">Публично име</string>
+    <string name="devices_details_device_name">Обнови публичното име</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
@@ -582,9 +582,9 @@
     <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
 
     <string name="encryption_information_sender_device_information">Информация за устройството на подателя</string>
-    <string name="encryption_information_device_name">Име на устройство</string>
-    <string name="encryption_information_name">Име</string>
-    <string name="encryption_information_device_id">ID на устройство</string>
+    <string name="encryption_information_device_name">Публично име</string>
+    <string name="encryption_information_name">Публично име</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Ключ на устройство</string>
     <string name="encryption_information_verification">Потвърждение</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечатък</string>
@@ -745,7 +745,7 @@
     <string name="settings_background_sync">Фонова синхронизация</string>
     <string name="settings_enable_background_sync">Включване на фонова синхронизация</string>
     <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
-    <string name="settings_set_sync_delay">Време за чакане между всяка заявка</string>
+    <string name="settings_set_sync_delay">Време за чакане между синхронизации</string>
     <string name="settings_contacts_app_permission">Разрешение за достъп до контакти</string>
     <string name="settings_home_display">Начало</string>
     <string name="settings_vibrate_on_mention">Вибрация при споменаване на потребител</string>
@@ -1479,7 +1479,7 @@
 
     <string name="event_redacted_by_user_reason">Събитие изтрито от потребителя</string>
     <string name="event_redacted_by_admin_reason">Събитие модерирано от администратор на стаята</string>
-    <string name="last_edited_info_message">Последно редактирано от %s на %s</string>
+    <string name="last_edited_info_message">Последно редактирано от %1$s на %2$s</string>
 
 
     <string name="malformed_message">Повредено събитие, не може да се покаже</string>
@@ -1558,7 +1558,7 @@
 \n
 \nRiotX поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
 \n
-\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Създаване на директни чатове • Обаждания • Приспособления • …</string>
+\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Настройки на стаи (показване на членове и т.н.) • Обаждания • Приспособления • …</string>
 
     <string name="bottom_action_people_x">Директни съобщения</string>
 
@@ -1622,4 +1622,369 @@
 
     <string name="read_at">Прочетете на</string>
 
+    <string name="resources_script">Cyrl</string>
+
+    <string name="none">Нищо</string>
+    <string name="revoke">Оттегли</string>
+    <string name="disconnect">Прекъсни</string>
+    <string name="people_no_identity_server">Не е настроен сървър за самоличност.</string>
+
+    <string name="call_failed_no_ice_title">Обаждането се провали поради грешно настроен сървър</string>
+    <string name="call_failed_no_ice_description">Попитайте администратора на сървъра (%1$s) да конфигурира TURN сървър за да може разговорите да работят надеждно.
+\n
+\nКато алтернатива, също може да използвате публичния сървър %2$s, но това няма да е толкова надеждно, а и ще сподели IP адреса ви със сървъра. Може да управлявате това в Настройки.</string>
+    <string name="call_failed_no_ice_use_alt">Опитай с %s</string>
+    <string name="call_failed_dont_ask_again">Не питай пак</string>
+
+    <string name="auth_add_email_message_2">Настройте имейл за възстановяване на профила, а после по желание и за да бъдете откриваеми от познати.</string>
+    <string name="auth_add_phone_message_2">Настройте телефон за възстановяване на профила, а после по желание и за да бъдете откриваеми от познати.</string>
+    <string name="auth_add_email_phone_message_2">Настройте имейл за възстановяване на профила. По-късно използвайте имейл или телефонен номер за да бъдете откривани от хора, които ви познават.</string>
+    <string name="auth_add_email_and_phone_message_2">Настройте имейл за възстановяване на профила. По-късно използвайте имейл или телефонен номер за да бъдете откривани от хора, които ви познават.</string>
+    <string name="login_error_homeserver_not_found">Неуспешна връзка със сървъра на този адрес, моля проверете</string>
+    <string name="settings_call_ringtone_use_default_stun">Позволи използването на резервен сървър за свързване на обаждания</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Ще използва %s за асистиращ сървър, когато вашия сървър не предлага такъв (IP адресът ви ще бъде споделен по време на обаждане)</string>
+    <string name="invite_no_identity_server_error">Добавете сървър за самоличност в настройки за да извършите това действие.</string>
+    <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация (експериментално)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
+\nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Целящ висока интерактивност</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot ще синхронизира във фонов режим на определен интервал (конфигурируемо).
+\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че Riot слуша за събития.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Без фонова синхронизация</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
+    <string name="settings_background_sync_update_error">Неуспешно обновяване на настройките.</string>
+
+
+    <string name="settings_set_workmanager_delay">Предпочитан интервал за синхронизация</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nСинхронизацията може да бъде отложена, в зависимост от ресурсите (батерия) или състоянието на устройството (заспиване).</string>
+    <string name="settings_discovery_category">Откриване</string>
+    <string name="settings_discovery_manage">Управлявайте настройките на откриваемостта.</string>
+    <string name="encryption_information_device_name_with_warning">Публично име (видимо за хора, с които общувате)</string>
+    <string name="device_name_warning">Публичното име на устройството е видимо за хората, с които общувате</string>
+    <string name="identity_server_not_defined">Не използвате сървър за самоличност</string>
+    <string name="identity_server_not_defined_for_password_reset">Не е настроен сървър за самоличност. Необходим е за възстановяване на паролата.</string>
+
+    <string name="error_user_already_logged_in">Изглежда се опитвате да се свържете с друг сървър. Искате ли да излезете от профила\?</string>
+
+    <string name="identity_server">Сървър за самоличност</string>
+    <string name="disconnect_identity_server">Прекъсни сървъра за самоличност</string>
+    <string name="add_identity_server">Настрой сървър за самоличност</string>
+    <string name="change_identity_server">Промени сървъра за самоличност</string>
+    <string name="settings_discovery_identity_server_info">В момента използвате %1$s за да откривате и да бъдете открити от съществуващи ваши контакти.</string>
+    <string name="settings_discovery_identity_server_info_none">В момента не използвате сървър за самоличност. Настройте такъв по-долу, за да откривате и да бъдете открити от съществуващи ваши контакти.</string>
+    <string name="settings_discovery_emails_title">Откриваеми имейл адреси</string>
+    <string name="settings_discovery_no_mails">Ще се появят настройки за откриваемост след като добавите имейл.</string>
+    <string name="settings_discovery_no_msisdn">Ще се появят настройки за откриваемост след като добавите телефонен номер.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Прекъсването на връзката със сървъра за самоличност означава, че няма да бъдете откриваеми от други потребители и няма да можете да каните други по имейл или телефон.</string>
+    <string name="settings_discovery_msisdn_title">Откриваеми телефонни номера</string>
+    <string name="settings_discovery_confirm_mail">Изпратихме имейл за потвърждение на %s. Проверете имейла и кликнете връзката за потвърждение</string>
+    <string name="settings_discovery_mail_pending">Изчакване</string>
+
+    <string name="settings_discovery_enter_identity_server">Въведете нов сървър за самоличност</string>
+    <string name="settings_discovery_bad_identity_server">Неуспешна връзка със сървъра за самоличност</string>
+    <string name="settings_discovery_please_enter_server">Въведете адреса на сървъра за самоличност</string>
+    <string name="settings_discovery_no_terms_title">Сървъра за самоличност няма условия за ползване</string>
+    <string name="settings_discovery_no_terms">Избрания сървър за самоличност няма условия за ползване на услугата. Продължете само ако вярвате на собственика на услугата</string>
+    <string name="settings_text_message_sent">Беше изпратено текстово съобщение на %s. Въведете съдържащият се код за потвърждение.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">В момента споделяте имейл адреси или телефонни номера със сървър за самоличност %1$s. Ще трябва да се свържете наново с %2$s за да спрете да ги споделяте.</string>
+    <string name="settings_agree_to_terms">Съгласете се с условията за ползване на услугата на сървъра за самоличност (%s) за да бъдете откриваеми по имейл адрес или телефонен номер.</string>
+
+    <string name="labs_allow_extended_logging">Включи подробни логове.</string>
+    <string name="labs_allow_extended_logging_summary">Подробните логове помагат на разработчиците, понеже предоставят повече логове когато изпращате RageShake. Дори включени, приложението не записва съдържанието на съобщенията или други лични данни.</string>
+
+
+    <string name="error_terms_not_accepted">Опитайте пак след като приемете условията за ползване на сървъра.</string>
+
+    <string name="error_network_timeout">Изглежда сървъра отнема прекалено дълго за да отговори, поради лоша връзка или проблем със сървърите. Опитайте пак по-късно.</string>
+
+    <string name="send_attachment">Изпрати прикачен файл</string>
+
+    <string name="a11y_open_drawer">Отвори навигационния панел</string>
+    <string name="a11y_create_menu_open">Отвори менюто за създаване на стая</string>
+    <string name="a11y_create_menu_close">Затвори менюто за създаване на стая…</string>
+    <string name="a11y_create_direct_message">Създай нова директна кореспонденция</string>
+    <string name="a11y_create_room">Създай нова стая</string>
+    <string name="a11y_close_keys_backup_banner">Затвори съобщението за резервно копие на ключовете</string>
+    <string name="a11y_show_password">Покажи паролата</string>
+    <string name="a11y_hide_password">Скрий паролата</string>
+    <string name="a11y_jump_to_bottom">Отиди най-отдолу</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s и %3$d други прочетоха</string>
+    <string name="three_users_read">%1$s, %2$s и %3$s прочетоха</string>
+    <string name="two_users_read">%1$s и %2$s прочетоха</string>
+    <string name="one_user_read">%s прочете</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 потребител прочете</item>
+        <item quantity="other">%d потребителя прочетоха</item>
+    </plurals>
+
+    <string name="error_file_too_big">Файлът \'%1$s\' (%2$s) е прекалено голям за да се качи. Ограничението е %3$s.</string>
+
+    <string name="error_attachment">Възникна грешка при извличане на прикачения файл.</string>
+    <string name="attachment_type_file">Файл</string>
+    <string name="attachment_type_contact">Контакт</string>
+    <string name="attachment_type_camera">Камера</string>
+    <string name="attachment_type_audio">Аудио</string>
+    <string name="attachment_type_gallery">Галерия</string>
+    <string name="attachment_type_sticker">Стикер</string>
+    <string name="error_handling_incoming_share">Неуспешна обработка на споделени данни</string>
+
+    <string name="report_content_spam">Това е спам</string>
+    <string name="report_content_inappropriate">Това е неподходящо</string>
+    <string name="report_content_custom">Собствен доклад…</string>
+    <string name="report_content_custom_title">Докладване на това съдържание</string>
+    <string name="report_content_custom_hint">Причина за докладване на това съдържание</string>
+    <string name="report_content_custom_submit">ДОКЛАДВАЙ</string>
+    <string name="block_user">БЛОКИРАЙ ПОТРЕБИТЕЛЯ</string>
+
+    <string name="content_reported_title">Съдържанието беше докладвано</string>
+    <string name="content_reported_content">Съдържанието беше докладвано.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_spam_title">Докладвано като спам</string>
+    <string name="content_reported_as_spam_content">Съдържанието беше докладвано като спам.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_inappropriate_title">Докладвано като неподходящо</string>
+    <string name="content_reported_as_inappropriate_content">Съдържанието беше докладвано като неподходящо.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot се нуждае от привилегии за да запази E2E ключовете върху диска.
+\n
+\nПозволете достъп на следващия екран, за да може в бъдеще да експортирате ключовете си ръчно.</string>
+
+    <string name="no_network_indicator">В момента няма връзка с мрежата</string>
+
+    <string name="login_error_no_homeserver_found">Това не е валиден адрес на Matrix сървър</string>
+    <string name="settings_add_3pid_confirm_password_title">Потвърдете паролата</string>
+    <string name="settings_add_3pid_flow_not_supported">Не може да направите това от мобилно приложение на Riot</string>
+    <string name="settings_add_3pid_authentication_needed">Нужна е автентикация</string>
+
+
+    <string name="settings_integrations">Интеграции</string>
+    <string name="settings_integrations_summary">Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.
+\nМениджърите на интеграции получават конфигурационни данни, могат да променят приспособления, да изпращат покани за стаи и да настройват нива на достъп от ваше име.</string>
+    <string name="settings_integration_allow">Разреши интеграции</string>
+    <string name="room_widget_activity_title">Приспособление</string>
+    <string name="room_widget_permission_title">Зареди приспособление</string>
+    <string name="room_widget_permission_added_by">Приспособлението е добавено от:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Използването му може да настрой бисквитки или да сподели данни с %s:</string>
+    <string name="room_widget_permission_shared_info_title">Използването му може да сподели данни с %s:</string>
+    <string name="room_widget_failed_to_load">Неуспешно зареждане на приспособление.
+\n%s</string>
+    <string name="room_widget_reload">Презареди приспособлението</string>
+    <string name="room_widget_open_in_browser">Отвори в браузър</string>
+    <string name="room_widget_revoke_access">Премахни достъпа ми</string>
+
+    <string name="room_widget_permission_display_name">Вашето име</string>
+    <string name="room_widget_permission_avatar_url">Вашият адрес на снимка</string>
+    <string name="room_widget_permission_user_id">Вашият потребителски идентификатор</string>
+    <string name="room_widget_permission_theme">Вашата тема</string>
+    <string name="room_widget_permission_widget_id">Идентификатор на приспособление</string>
+    <string name="room_widget_permission_room_id">Идентификатор на стая</string>
+
+
+    <string name="room_widget_resource_permission_title">Приспособлението иска да използва следните ресурси:</string>
+    <string name="room_widget_resource_grant_permission">Разреши</string>
+    <string name="room_widget_resource_decline_permission">Блокирай всички</string>
+    <string name="room_widget_webview_access_camera">Използване на камерата</string>
+    <string name="room_widget_webview_access_microphone">Използване на микрофона</string>
+    <string name="room_widget_webview_read_protected_media">Четене на DRM-защитена медия</string>
+
+    <string name="message_ignore_user">Блокирай потребителя</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Всички съобщения (шумно)</string>
+    <string name="room_list_quick_actions_notifications_all">Всички съобщения</string>
+    <string name="room_list_quick_actions_notifications_mentions">Само споменаване</string>
+    <string name="room_list_quick_actions_notifications_mute">Заглуши</string>
+    <string name="room_list_quick_actions_settings">Настройки</string>
+    <string name="room_list_quick_actions_leave">Напусни стаята</string>
+    <string name="notice_member_no_changes">%1$s не е направил промени</string>
+    <string name="command_description_spoiler">Изпраща съобщението като spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Въведете ключови думи за да намерите реакция.</string>
+
+    <string name="no_ignored_users">Не игнорирате потребители</string>
+
+    <string name="help_long_click_on_room_for_more_options">Задръжте върху стая за да видите повече опции</string>
+
+
+    <string name="room_join_rules_public">%1$s направи стаята публична за всеки знаещ връзката.</string>
+    <string name="room_join_rules_invite">%1$s направи стаята само за поканени.</string>
+    <string name="timeline_unread_messages">Непрочетени съобщения</string>
+
+    <string name="login_splash_title">Освободете комуникацията си</string>
+    <string name="login_splash_text1">Чатете с хора директно или в групи</string>
+    <string name="login_splash_text2">Дръжте кореспонденцията защитена с шифроване</string>
+    <string name="login_splash_text3">Разширете и настройте изживяването си</string>
+    <string name="login_splash_submit">Започни</string>
+
+    <string name="login_server_title">Изберете сървър</string>
+    <string name="login_server_text">Подобно на имейл, профилите имат един дом, въпреки че позволяват да говорите с кой да е</string>
+    <string name="login_server_matrix_org_text">Присъединете се безплатно към милиони други на най-големия публичен сървър</string>
+    <string name="login_server_modular_text">Премиум хостинг за организации</string>
+    <string name="login_server_modular_learn_more">Научи повече</string>
+    <string name="login_server_other_title">Друго</string>
+    <string name="login_server_other_text">Собствени и разширени настройки</string>
+
+    <string name="login_continue">Продължи</string>
+    <string name="login_connect_to">Свържи се с %1$s</string>
+    <string name="login_connect_to_modular">Свърже се с Modular</string>
+    <string name="login_connect_to_a_custom_server">Свържи се със собствен сървър</string>
+    <string name="login_signin_to">Влез в %1$s</string>
+    <string name="login_signup">Регистрация</string>
+    <string name="login_signin">Вход</string>
+    <string name="login_signin_sso">Продължи със SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Modular адрес</string>
+    <string name="login_server_url_form_other_hint">Адрес</string>
+    <string name="login_server_url_form_modular_text">Премиум хостинг за организации</string>
+    <string name="login_server_url_form_modular_notice">Въведете адреса на Modular Riot или на сървър, който искате да използвате</string>
+    <string name="login_server_url_form_other_notice">Въведете адреса на сървър или Riot към който да се свържете</string>
+
+    <string name="login_sso_error_message">Възникна грешка при зареждане на страницата: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">Приложението не може да влезе в този сървър. Сървъра поддържа следните методи за вход: %1$s.
+\n
+\nИскате ли да влезете използвайки уеб клиент\?</string>
+    <string name="login_registration_disabled">Извинявайте, този сървър не приема нови профили.</string>
+    <string name="login_registration_not_supported">Приложението не може да създаде профил на този сървър.
+\n
+\nИскате ли да се регистрирате използвайки уеб клиент\?</string>
+
+    <string name="login_login_with_email_error">Този имейл адрес не е асоцииран с профил.</string>
+
+    <string name="login_reset_password_on">Възстановяване на парола за %1$s</string>
+    <string name="login_reset_password_notice">За да се потвърди настройката на новата ви парола ще ви бъде изпратен имейл за потвърждение.</string>
+    <string name="login_reset_password_submit">Напред</string>
+    <string name="login_reset_password_email_hint">Имейл</string>
+    <string name="login_reset_password_password_hint">Нова парола</string>
+
+    <string name="login_reset_password_warning_title">Внимание!</string>
+    <string name="login_reset_password_warning_content">Смяната на паролата ви ще нулира всички ключове за шифроване от край-до-край на всички ваши устройства, правейки шифрованата история на съобщенията нечетима. Настройте резервно копие на ключ или експортирайте ключовете за стаите от друго устройство преди да смените паролата си.</string>
+    <string name="login_reset_password_warning_submit">Продължи</string>
+
+    <string name="login_reset_password_error_not_found">Имейл адресът не е свързан с профил</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Проверете пощенската си кутия</string>
+    <string name="login_reset_password_mail_confirmation_notice">Беше изпратен имейл за потвърждение към %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Натиснете на връзката за да потвърдите новата си парола. След като сте последвали връзката, кликнете по-долу.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Потвърдих имейл адреса си</string>
+
+    <string name="login_reset_password_success_title">Успешно!</string>
+    <string name="login_reset_password_success_notice">Паролата ви беше възстановена.</string>
+    <string name="login_reset_password_success_notice_2">Бяхте изхвърлени от профила си от всички устройства и вече няма да получавате push уведомления. За да включите уведомленията отново, влезте наново от всяко едно устройство.</string>
+    <string name="login_reset_password_success_submit">Обратно към Вход</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Внимание</string>
+    <string name="login_reset_password_cancel_confirmation_content">Паролата ви все още не е сменена.
+\n
+\nСпиране на процеса на промяна на паролата\?</string>
+
+    <string name="login_set_email_title">Настройка на имейл адрес</string>
+    <string name="login_set_email_notice">Настройте имейл адрес за да възстановявате профила си. По-късно, може по избор да позволите на познати хора да ви откриват по имейл адрес.</string>
+    <string name="login_set_email_mandatory_hint">Имейл</string>
+    <string name="login_set_email_optional_hint">Имейл (незадължително)</string>
+    <string name="login_set_email_submit">Напред</string>
+
+    <string name="login_set_msisdn_title">Настройка на телефонен номер</string>
+    <string name="login_set_msisdn_notice">Настройте телефонен номер за да може познати хора да ви откриват по него.</string>
+    <string name="login_set_msisdn_notice2">Използвайте международен формат.</string>
+    <string name="login_set_msisdn_mandatory_hint">Телефонен номер</string>
+    <string name="login_set_msisdn_optional_hint">Телефонен номер (незадължително)</string>
+    <string name="login_set_msisdn_submit">Напред</string>
+
+    <string name="login_msisdn_confirm_title">Потвърди телефонния номер</string>
+    <string name="login_msisdn_confirm_notice">Изпратихме код към %1$s. Въведете го долу за да потвърдите, че сте вие.</string>
+    <string name="login_msisdn_confirm_hint">Въведи код</string>
+    <string name="login_msisdn_confirm_send_again">Изпрати пак</string>
+    <string name="login_msisdn_confirm_submit">Напред</string>
+
+    <string name="login_msisdn_error_not_international">Международните телефонни номера трябва да започват с \'+\'</string>
+    <string name="login_msisdn_error_other">Телефонния номер изглежда невалиден. Моля проверете го</string>
+
+    <string name="login_signup_to">Регистрация в %1$s</string>
+    <string name="login_signup_username_hint">Потребителско име или имейл</string>
+    <string name="login_signup_password_hint">Парола</string>
+    <string name="login_signup_submit">Напред</string>
+    <string name="login_signup_error_user_in_use">Това потребителско име е заето</string>
+    <string name="login_signup_cancel_confirmation_title">Внимание</string>
+    <string name="login_signup_cancel_confirmation_content">Профила ви все още не е създаден.
+\n
+\nПрекратяване на процеса на регистрация\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Избери matrix.org</string>
+    <string name="login_a11y_choose_modular">Избери Modular</string>
+    <string name="login_a11y_choose_other">Избери собствен сървър</string>
+    <string name="login_a11y_captcha_container">Моля извършете captcha проверката</string>
+    <string name="login_terms_title">Приемете условията за да продължите</string>
+
+    <string name="login_wait_for_email_title">Проверете имейла си</string>
+    <string name="login_wait_for_email_notice">Изпратихме имейл до %1$s.
+\nНатиснете на връзката в него за да продължите със създаването на профила.</string>
+    <string name="login_validation_code_is_not_correct">Въведения код не е правилен. Моля проверете.</string>
+    <string name="login_error_outdated_homeserver_title">Стар сървър</string>
+    <string name="login_error_outdated_homeserver_content">Този сървър е на прекалено стара версия за да може да се направи връзка с него. Попитайте сървърните администратор да го обнови.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунда…</item>
+        <item quantity="other">Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунди…</item>
+    </plurals>
+
+    <string name="seen_by">Видяно от</string>
+
+    <string name="signed_out_title">Излязохте от профила</string>
+    <string name="signed_out_notice">Може да е поради няколко причини:
+\n
+\n• Променили сте паролата си на друго устройство.
+\n
+\n• Изтрили сте това устройство от някое друго.
+\n
+\n• Администратора на сървъра е премахнал достъпа ви от съображения за сигурност.</string>
+    <string name="signed_out_submit">Влез отново</string>
+
+    <string name="soft_logout_title">Излязохте от профила</string>
+    <string name="soft_logout_signin_title">Вход</string>
+    <string name="soft_logout_signin_notice">Администратора на сървъра ви (%1$s) ви е изкарал от профила ви %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Влезте за да възстановите ключовете за шифроване съдържащите се единствено на това устройство. Ще ви трябват за да прочетете защитената история на съобщенията на кое да е устройство.</string>
+    <string name="soft_logout_signin_submit">Влез</string>
+    <string name="soft_logout_signin_password_hint">Парола</string>
+    <string name="soft_logout_clear_data_title">Изчисти личните данни</string>
+    <string name="soft_logout_clear_data_notice">Внимание: Личните ви данни (включително ключове за шифроване) все още са съхранени на това устройство.
+\n
+\nИзчистете ги, ако сте приключили с това устройство или пък искате да влезете в друг профил.</string>
+    <string name="soft_logout_clear_data_submit">Изчисти всички данни</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Изчистване на данни</string>
+    <string name="soft_logout_clear_data_dialog_content">Изчистване на всички данни съхранени на това устройство\?
+\nВлезте отново за да достъпите профила и съобщенията си.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ще загубите достъпа до защитените съобщения, освен ако не влезете за да възстановите ключовете за шифроване.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Изчисти данните</string>
+    <string name="soft_logout_sso_not_same_user_error">Текущата сесия е за потребител %1$s, а вие сте въвели данни за вход за %2$s. RiotX не поддържа това.
+\nПърво изчистете данните, след това влезте отново с друг профил.</string>
+
+    <string name="permalink_malformed">matrix.to връзката ви беше невалидна</string>
+    <string name="bug_report_error_too_short">Описанието е прекалено кратко</string>
+
+    <string name="notification_initial_sync">Начална синхронизация…</string>
+
+    <string name="settings_show_devices_list">Виж всички мой устройства</string>
+    <string name="settings_advanced_settings">Разширени настройки</string>
+    <string name="settings_developer_mode">Режим за разработчици</string>
+    <string name="settings_developer_mode_summary">Режима за разработчици активира скрити функции, но може да направи приложението по-нестабилно. Предназначено само за разработчици!</string>
+    <string name="settings_rageshake">Разклащане за съобщение за грешка</string>
+    <string name="settings_rageshake_detection_threshold">Праг на задействане</string>
+    <string name="settings_rageshake_detection_threshold_summary">Разклатете телефона си за да проверите прага на задействане</string>
+    <string name="rageshake_detected">Беше открито разклащане!</string>
+    <string name="settings">Настройки</string>
+    <string name="devices_current_device">Текущо устройство</string>
+    <string name="devices_other_devices">Други устройства</string>
+
+    <string name="autocomplete_limited_results">Показване само на първите резултати. Въведете още букви…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Бърз-провал</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX може да забива по-често когато възникне неочаквана грешка</string>
 </resources>

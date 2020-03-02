@@ -199,6 +199,7 @@ public class LoginStorage {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(PREFS_KEY_CONNECTION_CONFIGS);
-        editor.apply();
+        //Need to commit now because called before forcing an app restart
+        editor.commit();
     }
 }

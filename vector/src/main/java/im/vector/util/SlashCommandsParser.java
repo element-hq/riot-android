@@ -18,12 +18,14 @@
 
 package im.vector.util;
 
+import android.app.Activity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
@@ -38,6 +40,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
@@ -353,7 +356,7 @@ public class SlashCommandsParser {
                 isIRCCmd = true;
                 isIRCCmdValid = true;
 
-                WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(activity);
+                WidgetsManager wm = getWidgetManager(activity);
                 if (wm != null) {
                     wm.clearScalarToken(activity, session);
                     Toast.makeText(activity, "Scalar token cleared", Toast.LENGTH_SHORT).show();
@@ -383,5 +386,15 @@ public class SlashCommandsParser {
         }
 
         return isIRCCmd;
+    }
+
+    @Nullable
+    private static WidgetsManager getWidgetManager(Activity activity) {
+        if (Matrix.getInstance(activity) == null) return null;
+        MXSession session = Matrix.getInstance(activity).getDefaultSession();
+        if (session == null) return null;
+        WidgetManagerProvider widgetManagerProvider = Matrix.getInstance(activity).getWidgetManagerProvider(session);
+        if (widgetManagerProvider == null) return null;
+        return widgetManagerProvider.getWidgetManager(activity);
     }
 }
