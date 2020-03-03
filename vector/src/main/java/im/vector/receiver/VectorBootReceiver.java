@@ -19,10 +19,12 @@ package im.vector.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.core.Log;
 
+import im.vector.BuildConfig;
 import im.vector.services.EventStreamServiceX;
 import im.vector.util.PreferencesManager;
 
@@ -34,7 +36,20 @@ public class VectorBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "## onReceive() : " + intent.getAction());
-
+        if (BuildConfig.IS_SABA) {
+            try {
+                Intent serviceIntent = new Intent(context, EventStreamServiceX.class);
+                serviceIntent.setAction(EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    context.startForegroundService(serviceIntent);
+                } else {
+                    context.startService(serviceIntent);
+                }
+            } catch (Exception e) {
+                Log.v("Error in VectorBootReceiver:", e.getMessage());
+            }
+            return;
+        }
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)
                 || TextUtils.equals(intent.getAction(), "android.intent.action.ACTION_BOOT_COMPLETED")) {
             if (PreferencesManager.autoStartOnBoot(context)) {
