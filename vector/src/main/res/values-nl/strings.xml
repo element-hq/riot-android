@@ -1519,4 +1519,36 @@
     <string name="people_no_identity_server">Geen identiteitsserver geconfigureerd.</string>
 
     <string name="call_failed_no_ice_title">Oproep mislukt door verkeerd geconfigureerde server</string>
-</resources>
+<string name="call_failed_no_ice_description">Vraag de administrator van uw thuisserver (%1$s) om een TURN-server te configureren om oproepen betrouwbaarder te maken.
+\n
+\nAls alternatief kunt u de publieke server op %2$s gebruiken. Dit is minder betrouwbaar en zal tevens uw IP-address delen met die server. U kunt dit ook configureren bij Instellingen.</string>
+    <string name="call_failed_no_ice_use_alt">Probeer %s te gebruiken</string>
+    <string name="call_failed_dont_ask_again">Vraag het niet opnieuw</string>
+
+    <string name="auth_add_email_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw mailadres.</string>
+    <string name="auth_add_phone_message_2">Kies een telefoonnummer. Later kunt u ervoor kiezen om mensen u te laten vinden via dit nummer.</string>
+    <string name="auth_add_email_phone_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw mailadres of telefoonnummer.</string>
+    <string name="auth_add_email_and_phone_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw mailadres of telefoonnummer.</string>
+    <string name="login_error_no_homeserver_found">Dit is geen geldig Matrix serveradres</string>
+    <string name="login_error_homeserver_not_found">Kan geen verbinding maken met een thuisserver op deze URL, gelieve de URL te controleren</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Zal %s gebruiken om te assisteren in het geval dat uw thuisserver er niet over beschikt (uw IP-adres zal worden gedeeld tijdens het gesprek)</string>
+    <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe bij de instellingen om dit te doen.</string>
+    <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
+    <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf Riot op mobiel</string>
+    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond (Experimenteel)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot zal op een batterij zuinige manier synchroniseren op de achtergrond.
+\nAfhankelijk van de staat van uw mobiele apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot zal periodiek op de achtergrond synchroniseren (configureerbaar).
+\nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een notificatie worden getoond ter informatie.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondsynchronisatie</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen notificatie van berichten ontvangen als de app zich in de achtergrond bevind.</string>
+    <string name="settings_background_sync_update_error">Kon de instellingen niet updaten.</string>
+
+
+    <string name="settings_set_workmanager_delay">Voorkeur voor synchronisatie interval</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nDe synchronisatie is mogelijk uitgesteld als gevolg van de batterij of staat van uw apparaat (slaapmodus).</string>
+    <string name="settings_integrations">Integraties</string>
+    </resources>
