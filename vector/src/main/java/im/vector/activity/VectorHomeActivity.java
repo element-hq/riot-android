@@ -62,6 +62,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 
@@ -85,6 +86,7 @@ import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
+import org.matrix.androidsdk.crypto.keysbackup.KeysBackupStateManager;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -95,6 +97,9 @@ import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -112,6 +117,7 @@ import butterknife.OnClick;
 import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
+import im.vector.callback.OnRecoveryKeyListener;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -123,12 +129,16 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
 import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
+import im.vector.keymanager.KeyManager;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamServiceX;
+import im.vector.sharedpreferences.BatnaSharedPreferences;
 import im.vector.tools.VectorUncaughtExceptionHandler;
+import im.vector.ui.arch.LiveEvent;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.BugReporter;
@@ -566,6 +576,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onResume() {
         super.onResume();
+        if (BuildConfig.IS_SABA) {
+            KeysBackupStateManager.KeysBackupState keyBackupState = mSession.getCrypto().getKeysBackup().getState();
+            if (keyBackupState == KeysBackupStateManager.KeysBackupState.Disabled) {
+                KeyManager.getKeyBackup(this, mSession);
+            } else {
+                Log.v("KeyBackup error:", "There is already a backup key set for this account");
+                BatnaSharedPreferences batnaSharedPreferences = new BatnaSharedPreferences(this);
+                batnaSharedPreferences.saveBooleanData(KeyManager.RECOVERY_KEY_EXISTS, true);
+            }
+        }
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
@@ -1604,11 +1624,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     /**
-     * Create the room forget / leave callback
+     * Create the room forget / leave im.vector.callback
      *
      * @param roomId            the room id
-     * @param onSuccessCallback the success callback
-     * @return the asynchronous callback
+     * @param onSuccessCallback the success im.vector.callback
+     * @return the asynchronous im.vector.callback
      */
     private ApiCallback<Void> createForgetLeaveCallback(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         return new ApiCallback<Void>() {
@@ -1654,7 +1674,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Trigger the room forget
      *
      * @param roomId            the room id
-     * @param onSuccessCallback the success asynchronous callback
+     * @param onSuccessCallback the success asynchronous im.vector.callback
      */
     public void onForgetRoom(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);
@@ -1669,7 +1689,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Trigger the room leave / invitation reject.
      *
      * @param roomId            the room id
-     * @param onSuccessCallback the success asynchronous callback
+     * @param onSuccessCallback the success asynchronous im.vector.callback
      */
     public void onRejectInvitation(final String roomId, final ApiCallback<Void> onSuccessCallback) {
         Room room = mSession.getDataHandler().getRoom(roomId);

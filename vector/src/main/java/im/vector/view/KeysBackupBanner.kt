@@ -30,6 +30,8 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.BuildConfig
 import im.vector.R
+import im.vector.keymanager.KeyManager
+import im.vector.sharedpreferences.BatnaSharedPreferences
 import org.jetbrains.anko.defaultSharedPreferences
 import org.matrix.androidsdk.core.Log
 
@@ -83,7 +85,12 @@ class KeysBackupBanner @JvmOverloads constructor(
      */
     fun render(newState: State, force: Boolean = false) {
         // In Saba flavor, we don't need the backup banner to appear
-        if (BuildConfig.IS_SABA) return
+        if (BuildConfig.IS_SABA) {
+            var batnaSharedPreferences = BatnaSharedPreferences(context)
+            if (!batnaSharedPreferences.getBooleanData(KeyManager.RECOVERY_KEY_EXISTS)) {
+                return
+            }
+        }
         if (newState == state && !force) {
             Log.d(LOG_TAG, "State unchanged")
             return
@@ -219,6 +226,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderBackingUp() {
+        if (BuildConfig.IS_SABA) return
         isVisible = true
 
         textView1.setText(R.string.keys_backup_banner_in_progress)

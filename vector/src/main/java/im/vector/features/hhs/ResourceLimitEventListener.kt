@@ -137,7 +137,7 @@ class ResourceLimitEventListener(private val dataHandler: MXDataHandler, private
     }
 
     /**
-     * This callback allows to alert when the state change
+     * This im.vector.callback allows to alert when the state change
      */
     interface Callback {
         fun onResourceLimitStateChanged()

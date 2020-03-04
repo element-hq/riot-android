@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nulabinc.zxcvbn.Strength
+import im.vector.callback.OnRecoveryKeyListener
 import im.vector.R
 import im.vector.activity.util.WaitingViewData
 import im.vector.ui.arch.LiveEvent
@@ -150,6 +151,70 @@ class KeysBackupSetupSharedViewModel : ViewModel() {
 
                             isCreatingBackupVersion.value = false
                             prepareRecoverFailError.value = e ?: Exception()
+                        }
+                    })
+        }
+    }
+
+    fun prepareRecoveryKey(context: Context, session: MXSession?, withPassphrase: String?, onRecoveryKeyListener: OnRecoveryKeyListener) {
+        // Update requestId
+        currentRequestId.value = System.currentTimeMillis()
+        isCreatingBackupVersion.value = true
+
+        // Ensure passphrase is hidden during the process
+        showPasswordMode.value = false
+
+        recoveryKey.value = null
+        prepareRecoverFailError.value = null
+        session?.let { mxSession ->
+            val requestedId = currentRequestId.value!!
+
+            mxSession.crypto?.keysBackup?.prepareKeysBackupVersion(withPassphrase,
+                    object : ProgressListener {
+                        override fun onProgress(progress: Int, total: Int) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+
+                            loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_step3_generating_key_status),
+                                    progress,
+                                    total)
+                        }
+                    },
+                    object : SuccessErrorCallback<MegolmBackupCreationInfo> {
+                        override fun onSuccess(info: MegolmBackupCreationInfo) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+                            recoveryKey.value = info.recoveryKey
+                            megolmBackupCreationInfo = info
+                            copyHasBeenMade = false
+
+                            val keyBackup = session.crypto?.keysBackup
+                            if (keyBackup != null) {
+                                createKeysBackup(context, keyBackup)
+                            } else {
+                                loadingStatus.value = null
+
+                                isCreatingBackupVersion.value = false
+                                prepareRecoverFailError.value = Exception()
+                            }
+                            onRecoveryKeyListener.onRecoveryKeyGenerated();
+                        }
+
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            if (requestedId != currentRequestId.value) {
+                                //this is an old request, we can't cancel but we can ignore
+                                return
+                            }
+
+                            loadingStatus.value = null
+
+                            isCreatingBackupVersion.value = false
+                            prepareRecoverFailError.value = e ?: Exception()
+                            onRecoveryKeyListener.onRecoveryKeyFailed(e);
                         }
                     })
         }
