@@ -19,8 +19,7 @@
         <item name="android:actionMenuTextColor">#FFFFFFFF</item>
 
         <!-- default background color -->
-<!--        <item name="android:colorBackground">@color/riot_primary_background_color_light</item>-->
-        <item name="android:colorBackground">#FFFFEA</item>
+        <item name="android:colorBackground">@color/riot_primary_background_color_light</item>
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
 
         <!-- waiting view background -->
