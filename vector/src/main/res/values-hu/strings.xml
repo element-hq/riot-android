@@ -1497,7 +1497,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="group_all_communities">Minden közösség</string>
 
     <string name="room_preview_no_preview">Ennek a szobának nincs előnézete</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">A RiotX-ben a nyilvános szoba előnézete egyenlőre nem támogatott</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">A RiotX-ben a nyilvános szoba előnézete egyelőre nem támogatott</string>
 
     <string name="fab_menu_create_room">Szobák</string>
     <string name="fab_menu_create_chat">Közvetlen üzenetek</string>
@@ -1895,7 +1895,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_set_msisdn_submit">Következő</string>
 
     <string name="login_msisdn_confirm_title">Telefonszám ellenőrzése</string>
-    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Add meg itt alul amivel ellenőrizhetjük, hogy te te vagy.</string>
+    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Add meg itt alul amivel ellenőrizhetjük, hogy te vagy.</string>
     <string name="login_msisdn_confirm_hint">Kód megadása</string>
     <string name="login_msisdn_confirm_send_again">Küld újra</string>
     <string name="login_msisdn_confirm_submit">Következő</string>
