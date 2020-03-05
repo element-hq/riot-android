@@ -1721,10 +1721,10 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
 
     <string name="settings_background_fdroid_sync_mode">Hintergrundsynchronisierungsmodus (experimentell)</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Riot wird sich im Hintergrund auf eine Art synchronisieren die die Ressourcen des Geräts schont (Akku).
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts schont (Akku). 
 \nAbhängig von dem Ressourcen-Statuses deines Geräts kann dein System die Synchronisierung verschieben.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
-\nDies wird Funk- und Akkunutzung beeinflussen. Es wird wird eine permanente Benachrichtigung geben, die sagt, dass Riot auf Ereignisse lauscht.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar). 
+\nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Riot auf Ereignisse lauscht.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nDie Synchronisierung kann aufgrund deiner Ressourcen (Akku) oder Gerätezustands (schlafend) verschoben werden.</string>
     <string name="settings_integrations">Integrationen</string>
@@ -1821,7 +1821,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_audio">Audio</string>
-    <string name="attachment_type_gallery">Gallerie</string>
+    <string name="attachment_type_gallery">Galerie</string>
     <string name="attachment_type_sticker">Sticker</string>
     <string name="report_content_spam">Es ist Spam</string>
     <string name="report_content_inappropriate">Es ist unangebracht</string>
