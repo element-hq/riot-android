@@ -38,7 +38,7 @@
     <string name="ongoing_conference_call_voice">Audio</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Impossibile avviare la chiamata, riprova più tardi</string>
-    <string name="missing_permissions_warning">Poichè i tuoi permessi non sono sufficienti, alcune funzioni potrebbero non esser disponibili…</string>
+    <string name="missing_permissions_warning">Poiché i tuoi permessi non sono sufficienti, alcune funzioni potrebbero non esser disponibili…</string>
     <string name="missing_permissions_to_start_conf_call">Non hai permessi sufficienti per avviare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare la chiamata</string>
     <string name="device_information">Informazioni sulla sessione</string>
@@ -268,7 +268,7 @@
 \n
 \nTi sta bene comunicare i dati di tutti i tuoi contatti per questo scopo\?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Purtroppo l\'azione non è stata eseguita poichè mancano i permessi</string>
+    <string name="permissions_action_not_performed_missing_permissions">Purtroppo l\'azione non è stata eseguita poiché mancano i permessi</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
@@ -2185,7 +2185,7 @@
 
     <string name="settings_failed_to_get_crypto_device_info">Nessuna informazione crittografica disponibile</string>
 
-    <string name="settings_active_sessions_verified_device_desc">Questa sessione è fidata per i messaggi sicuri perchè l\'hai verificata:</string>
+    <string name="settings_active_sessions_verified_device_desc">Questa sessione è fidata per i messaggi sicuri perché l\'hai verificata:</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifica questa sessione per segnarla come fidata e darle l\'accesso ai messaggi cifrati. Se non hai fatto l\'accesso a questa sessione il tuo account potrebbe essere compromesso:</string>
 
     <plurals name="settings_active_sessions_count">
@@ -2209,7 +2209,7 @@
     <string name="trusted">Fidato</string>
     <string name="not_trusted">Non fidato</string>
 
-    <string name="verification_profile_device_verified_because">Questa sessione è fidata per i messaggi sicuri perchè %1$s (%2$s) l\'ha verificata:</string>
+    <string name="verification_profile_device_verified_because">Questa sessione è fidata per i messaggi sicuri perché %1$s (%2$s) l\'ha verificata:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) ha fatto l\'accesso con una nuova sessione:</string>
     <string name="verification_profile_device_untrust_info">Finché questo utente non si fida di questa sessione, i messaggi inviati da e verso di essa sono etichettati con avvisi. In alternativa, puoi verificarlo manualmente.</string>
 
