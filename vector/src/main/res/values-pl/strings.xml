@@ -1359,4 +1359,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="content_reported_title">Treść zgłoszona</string>
     <string name="content_reported_as_spam_title">Zgłoszone jako spam</string>
+    <string name="sas_cancelled_by_me">Weyfikacja zostaje anulowana.
+\nPowód: %s</string>
+
     </resources>
