@@ -1550,7 +1550,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partner!nnen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
 
-    <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass diese Emoji auf dem Bildschirm deines Gegenübers angezeigt werden</string>
+    <string name="sas_emoji_description">Überprüfe diese Sitzung, indem du bestätigst, dass das folgende Emoji auf dem Bildschirm des Partners angezeigt wird</string>
     <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. Nutze die alte Verifikation.<button>Nutze alte Verifikation</button>.</string>
