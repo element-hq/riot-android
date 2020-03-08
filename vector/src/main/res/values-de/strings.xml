@@ -1327,7 +1327,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Die Sicherung hat eine ungültige Signatur von der nicht verifizierten Sitzung %s</string>
     <string name="keys_backup_get_trust_error">Abfrage der Vertrauensinformationen für die Sicherung fehlgeschlagen (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stellen Sie jetzt mit Ihrer Passphrase oder Ihrem Wiederherstellungsschlüssel wieder her.</string>
+    <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Verschlüsselungsschlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Chatverlauf zu lesen.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
