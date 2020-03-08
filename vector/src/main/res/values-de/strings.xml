@@ -1550,7 +1550,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="sas_incoming_request_description">Überprüfe diese Sitzung, um sie als vertrauenswürdig zu markieren. Sitzungen von Partner!nnen zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende verschlüsselten Nachrichten.</string>
     <string name="sas_incoming_request_description_2">Durch Verifizieren dieser Sitzung wird sie bei dir und deinem Gegenüber als vertrauenswürdig markiert.</string>
 
-    <string name="sas_emoji_description">Überprüfe diese Sitzung, indem du bestätigst, dass das folgende Emoji auf dem Bildschirm des Partners angezeigt wird</string>
+    <string name="sas_emoji_description">Verifiziere diese Sitzung, indem du bestätigst, dass das folgende Emoji auf dem Bildschirm deines Gegenübers angezeigt wird</string>
     <string name="sas_decimal_description">Verifiziere diese Sitzung, indem du bestätigst, dass die folgenden Zahlen auf dem Bildschirm deines Gegenübers angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. Nutze die alte Verifikation.<button>Nutze alte Verifikation</button>.</string>
@@ -1957,7 +1957,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
 <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
-    <string name="room_join_rules_invite">%1$s hat den Raum auf \'nur-einladen\' gestellt.</string>
+    <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Befreie deine Kommunikation</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Riot oder Servers ein, den du verwenden möchtest</string>
