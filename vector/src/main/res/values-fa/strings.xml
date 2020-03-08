@@ -237,19 +237,11 @@
     <string name="call_error_camera_init_failed">راه‌اندازی دوربین ممکن نبود</string>
     <string name="call_error_answered_elsewhere">پاسخ تماس از کاربری نامعتبر دریافت شد</string>
 
-    <!-- Chat creation -->
-    <string name="room_creation_title">گفتگوی جدید</string>
-    <string name="room_creation_add_member">افزودن عضو</string>
-    <plurals name="room_header_active_members_count">
-        <item quantity="one">%d عضو آنلاین</item>
-        <item quantity="other">%d عضو آنلاین</item>
-    </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d عضو</item>
         <item quantity="other">%d عضو</item>
     </plurals>
     <string name="room_title_one_member">۱ عضو</string>
-    <string name="room_header_online_members">%d عضو، %d آنلاین</string>
 
     <plurals name="format_time_s">
         <item quantity="one">%d ثانیه</item>

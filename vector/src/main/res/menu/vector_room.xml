@@ -14,6 +14,7 @@
         android:id="@+id/ic_action_matrix_apps"
         android:icon="@drawable/apps_icon"
         android:title="@string/room_add_matrix_apps"
+        android:visible="false"
         app:showAsAction="collapseActionView" />
 
     <item

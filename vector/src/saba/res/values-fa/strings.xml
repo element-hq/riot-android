@@ -17,6 +17,33 @@
     <string name="saba_menu_groups">گروه‌ها</string>
 
     <!-- Riot Translations -->
+    <!-- Overrides -->
+    <string name="no_conversation_placeholder">همین الآن گفتگویی را شروع کنید!</string>
+    <string name="option_send_files">ارسال فایل</string>
+
+    <!--  Chat participants -->
+    <!--
+        The variable can be a single name or a string of names
+        ("Alice, "+"Bob, "+"Charlie and David" > "Alice, Bob, Charlie and David)
+        -->
+    <string name="room_participants_invite_prompt_msg">"آیا از دعوت %s به این گفتگو مطمئن هستید؟"</string>
+    <!-- The building block of the first part of the string of names ("Alice, "/"Bob, ") -->
+    <string name="room_participants_invite_join_names">"%1$s، "</string>
+    <!-- The second part of the string of names ("Charlie and David") -->
+    <string name="room_participants_invite_join_names_and">%1$s و %2$s</string>
+    <!-- First variable is the first part, and second is the second part -->
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+
+    <!-- invitation -->
+    <string name="people_search_invite_by_id"><u>دعوت با شناسه کاربری</u></string>
+    <string name="people_search_local_contacts">مخاطبین محلی (%d)</string>
+    <string name="people_search_user_directory">فهرست کاربران (%s)</string>
+    <string name="people_search_filter_text">فقط کاربران ماتریکس</string>
+
+    <string name="people_search_invite_by_id_dialog_title">دعوت با شناسه کاربری</string>
+    <string name="people_search_invite_by_id_dialog_description">لطفاً شناسه یا رایانامه‌ی کاربران مد نظر را وارد کنید</string>
+    <string name="people_search_invite_by_id_dialog_hint">رایانامه یا شناسه</string>
+
     <!--  Chat -->
     <string name="room_menu_search">جستجو</string>
     <string name="room_one_user_is_typing">%s در حال نوشتن است…</string>
@@ -34,14 +61,14 @@
     <string name="room_resend_unsent_messages">بازارسال پیام‌های ارسال نشده</string>
     <string name="room_delete_unsent_messages">حذف پیام‌های ارسال نشده</string>
     <string name="room_message_file_not_found">پرونده پیدا نشد</string>
-    <string name="room_do_not_have_permission_to_post">شما اجازه‌ی ارسال پیام به این مکالمه را ندارید</string>
+    <string name="room_do_not_have_permission_to_post">شما اجازه‌ی ارسال پیام در این گفتگو را ندارید</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d پیام جدید</item>
         <item quantity="other">%d پیام جدید</item>
     </plurals>
 
     <!-- Room Details -->
-    <string name="room_details_title">اطلاعات مکالمه</string>
+    <string name="room_details_title">اطلاعات گفتگو</string>
     <string name="room_details_people">افراد</string>
     <string name="room_details_files">پرونده‌ها</string>
     <string name="room_details_settings">تنظیمات</string>
@@ -69,8 +96,29 @@
     <string name="tab_title_search_files">پرونده‌ها</string>
 
     <!-- Room recents -->
+    <string name="room_recents_join">عضویت</string>
+    <string name="room_recents_directory">فهرست</string>
+    <string name="room_recents_favourites">علاقه‌مندی‌ها</string>
+    <string name="room_recents_conversations">گفتگوها</string>
+    <string name="room_recents_low_priority">اولویت پایین</string>
+    <string name="room_recents_invites">دعوت‌ها</string>
+    <string name="room_recents_start_chat">شروع گفتگو</string>
+    <string name="room_recents_create_room">ایجاد گفتگو</string>
+    <string name="room_recents_join_room">عضویت در گفتگو</string>
+    <string name="room_recents_join_room_title">عضویت در گفتگو</string>
+    <string name="room_recents_join_room_prompt">شناسه یا نام کوتاه یک گفتگو را وارد نمایید</string>
 
     <!-- Directory -->
+    <string name="directory_search_results_title">جستجوی فهرست</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">%d گفتگو</item>
+        <item quantity="other">%d گفتگو</item>
+    </plurals>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s گفتگو برای %2$s پیدا شد</item>
+        <item quantity="other">%1$s گفتگو برای %2$s پیدا شد</item>
+    </plurals>
+    <string name="directory_searching_title">در حال جستجوی فهرست…</string>
 
     <!-- home room settings -->
     <string name="room_settings_all_messages_noisy">تمام پیام‌ها - باصدا</string>
@@ -80,7 +128,7 @@
     <string name="room_settings_favourite">مورد علاقه</string>
     <string name="room_settings_de_prioritize">پایین آوردن اولویت</string>
     <string name="room_settings_direct_chat">گفتگوی مستقیم</string>
-    <string name="room_settings_leave_conversation">ترک مکالمه</string>
+    <string name="room_settings_leave_conversation">ترک گفتگو</string>
     <string name="room_settings_forget">فراموش کردن</string>
     <string name="room_settings_add_homescreen_shortcut">افزودن میانبر به صفحه اصلی</string>
 
@@ -178,16 +226,76 @@
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">تصویر مکالمه</string>
-    <string name="room_settings_room_name">عنوان مکالمه</string>
-    <string name="room_settings_topic">موضوعات</string>
-    <string name="room_settings_room_tag">برچسب مکالمه</string>
-    <string name="room_settings_tag_pref_dialog_title">انتخاب برچسب مکالمه:</string>
+    <string name="room_settings_room_photo">تصویر گفتگو</string>
+    <string name="room_settings_room_name">عنوان گفتگو</string>
+    <string name="room_settings_topic">موضوع گفتگو</string>
+    <string name="room_settings_room_tag">برچسب گفتگو</string>
+    <string name="room_settings_tag_pref_dialog_title">انتخاب برچسب گفتگو:</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">مورد علاقه</string>
     <string name="room_settings_tag_pref_entry_low_priority">اولویت پایین</string>
     <string name="room_settings_tag_pref_entry_none">بدون برچسب</string>
+
+    <!-- room settings : access and visibility -->
+    <string name="room_settings_category_access_visibility_title">دسترسی عمومی</string>
+    <string name="room_settings_directory_visibility">نمایش در فهرست عمومی اتاق‌ها</string>
+    <string name="room_settings_room_notifications_title">اعلان‌ها</string>
+    <string name="room_settings_room_access_rules_pref_title">دسترسی به گفتگو</string>
+    <string name="room_settings_room_read_history_rules_pref_title">نمایش تاریخچه پیام‌ها</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">چه کسانی به تاریخچه پیام‌ها دسترسی دارند؟</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">چه کسانی به این گفتگو دسترسی دارند؟</string>
+
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
+    <string name="room_settings_read_history_entry_anyone">هر فردی</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">تنها اعضا - از اکنون به بعد</string>
+    <string name="room_settings_read_history_entry_members_only_invited">تنها اعضا - از زمان دعوت</string>
+    <string name="room_settings_read_history_entry_members_only_joined">تنها اعضا - از زمان عضویت</string>
+
+    <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_warning">برای پیوند به گفتگو، آدرس ضروری است.</string>
+    <string name="room_settings_room_access_entry_only_invited">تنها افرادی که دعوت شده‌اند</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">هر فردی که پیوند گفتگو را داشته باشد</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">هر فردی یا مهمانی که پیوند گفتگو را داشته باشد</string>
+
+    <!-- Room settings: banned users -->
+    <string name="room_settings_banned_users_title">کاربران مسدود شده</string>
+
+    <!-- advanced -->
+    <string name="room_settings_category_advanced_title">تنظیمات پیشرفته</string>
+    <string name="room_settings_room_internal_id">شناسه داخلی این گفتگو</string>
+    <string name="room_settings_addresses_pref_title">آدرس‌ها</string>
+    <string name="room_settings_labs_pref_title">امکانات آزمایشی</string>
+    <string name="room_settings_labs_warning_message">این امکانات آزمایشی هستند و ممکن است مشکلاتی داشته باشند.</string>
+    <string name="room_settings_labs_end_to_end">رمزنگاری سر تا سر</string>
+    <string name="room_settings_labs_end_to_end_is_active">رمزنگاری سر تا سر فعال است</string>
+    <string name="room_settings_labs_end_to_end_warnings">لطفاً یک بار دیگر وارد سیستم شوید.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">فعال کردن حالت سخت‌گیرانه رمزنگاری</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">تنها در گفتگوهایی پیام‌ها ارسال شوند که تمامی اعضای آن‌ها را تایید حضوری کرده باشید.</string>
+
+    <!-- Room settings: advanced addresses -->
+    <string name="room_settings_addresses_no_local_addresses">این گفتگو آدرس عمومی ندارد</string>
+    <string name="room_settings_addresses_add_new_address">افزودن آدرس عمومی (مانند #foo:matrix.org")</string>
+
+    <string name="room_settings_no_flair">This room is not showing flair for any communities</string>
+    <string name="room_settings_add_new_group">New community ID (e.g +foo:matrix.org")</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">آدرس کوتاه نامعتبر است</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' آدرس کوتاه معتبری نیست</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">این گفتگو آدرس اصلی ندارد."</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">هشدارهای آدرس اصلی</string>
+
+    <string name="room_settings_set_main_address">تنظیم به عنوان آدرس اصلی</string>
+    <string name="room_settings_unset_main_address">حذف از آدرس اصلی</string>
+    <string name="room_settings_copy_room_id">رونوشت شناسه گفتگو</string>
+    <string name="room_settings_copy_room_address">رونوشت آدرس گفتگو</string>
+
+    <string name="room_settings_addresses_e2e_enabled">این گفتگو علاوه بر رمزنگاری پایه، با رمزنگاری سر تا سر نیز حفاظت می‌شود.</string>
+    <string name="room_settings_addresses_e2e_disabled">این گفتگو با رمزنگاری پایه حفاظت می‌شود.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">غیرفعال‌سازی رمزنگاری سر تا سر (امکان بازگردانی این اقدام وجود ندارد)</string>
 
     <!-- Directory -->
     <string name="directory_title">فهرست</string>
@@ -273,10 +381,7 @@
     <string name="keys_backup_banner_recover_line1">هیچ‌گاه پیام‌های رمز شده را از دست ندهید</string>
     <string name="keys_backup_setup">شروع به استفاده از کلید پشتیبان کنید</string>
     <string name="keys_backup_banner_setup_line2">شروع به استفاده از کلید پشتیبان کنید</string>
-    <string name="people_search_local_contacts">مخاطبین محلی (%d)</string>
-    <string name="people_search_filter_text">فقط کاربران ماتریکس</string>
     <string name="room_participants_invite_search_another_user">شناسه‌ی کاربر، نام یا ایمیل</string>
-    <string name="room_settings_addresses_e2e_enabled">رمزنگاری در این اتاق فعال است.</string>
 
     <string name="sas_verify_title">با مقایسه کردن یه رشته‌ی متنی کوتاه تایید کنید.</string>
     <string name="sas_security_advise">برای امنیت بیشتر پیشنهاد می‌کنیم که این بخش را یا به صورت شخصی یا با استفاده از یک تجهیز امن ارتباطی دیگر تکمیل کنید.</string>
@@ -353,17 +458,12 @@
     <string name="settings_notification_advanced">تنظیمات پیشرفته‌ی اعلان‌ها</string>
     <string name="settings_notification_advanced_summary">قرار دادن اهمیت اعلان‌ها براساس اتفاقات، تنظیم کردن صداها، نور، لرزش</string>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- Chat creation -->
+    <string name="room_creation_title">گفتگوی جدید</string>
+    <string name="room_creation_add_member">افزودن عضو</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d عضو آنلاین</item>
+        <item quantity="other">%d عضو آنلاین</item>
+    </plurals>
+    <string name="room_header_online_members">%d عضو، %d آنلاین</string>
 </resources>

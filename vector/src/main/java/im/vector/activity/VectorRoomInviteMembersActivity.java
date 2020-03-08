@@ -344,11 +344,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         // By default the user will see all Matrix users, but if she enters anything, the program will search for that value
-        if (pattern.isEmpty()) {
-            // saba is part of every username in our server (in the domain part), so searching for
-            //  it shows all users in our home server
-            pattern = "saba";
-        }
+        // if (pattern.isEmpty()) {
+        //    // saba is part of every username in our server (in the domain part), so searching for
+        //    //  it shows all users in our home server
+        //    pattern = "saba";
+        //}
         mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {

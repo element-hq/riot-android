@@ -1512,7 +1512,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
             }
             if (useMatrixAppsMenuItem != null) {
-                useMatrixAppsMenuItem.setVisible(hasIntegrationManager && TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
+                useMatrixAppsMenuItem.setVisible(false);
+                //useMatrixAppsMenuItem.setVisible(hasIntegrationManager && TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
             }
             if (resendUnsentMenuItem != null) {
                 resendUnsentMenuItem.setVisible(mHasUnsentEvents);
