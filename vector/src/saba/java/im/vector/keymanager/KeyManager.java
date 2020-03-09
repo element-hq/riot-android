@@ -9,13 +9,10 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
-import org.matrix.androidsdk.core.callback.SimpleApiCallback;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-import im.vector.activity.CommonActivityUtils;
 import im.vector.callback.OnRecoveryKeyListener;
 import im.vector.fragments.keysbackup.setup.KeysBackupSetupSharedViewModel;
 import im.vector.sharedpreferences.BatnaSharedPreferences;
@@ -46,22 +43,18 @@ public class KeyManager {
                 @Override
                 public void onRecoveryKeyGenerated() {
                     recoveryKey[0] = viewModel.getMegolmBackupCreationInfo().getRecoveryKey();
-                    ByteArrayInputStream stream = new ByteArrayInputStream(recoveryKey[0].getBytes());
-                    String url = viewModel.session.getMediaCache().saveMedia(stream, "recovery-key" + System.currentTimeMillis() + ".txt", "text/plain");
+                    FileOutputStream outputStream = null;
                     try {
-                        stream.close();
+                        outputStream = activity.getApplicationContext().openFileOutput("recovery-key-" + session.getMyUserId(), Context.MODE_PRIVATE);
+                        outputStream.write(recoveryKey[0].getBytes());
+                        outputStream.close();
+                    } catch (FileNotFoundException e) {
+                        Log.e("File not found: ", e.getMessage());
+                        e.printStackTrace();
                     } catch (IOException e) {
+                        Log.e("IO Exception: ", e.getMessage());
                         e.printStackTrace();
                     }
-                    CommonActivityUtils.saveMediaIntoDownloads(activity.getApplicationContext(),
-                            new File(Uri.parse(url).getPath()), "Messenger-recovery-key.txt", "text/plain", new SimpleApiCallback<String>() {
-                                @Override
-                                public void onSuccess(String info) {
-                                    Log.v("keybackup: ", "saved in: " + Uri.parse(url).getPath());
-                                    viewModel.setCopyHasBeenMade(true);
-                                    batnaSharedPreferences.saveBooleanData(HAS_RUN_BEFORE, true);
-                                }
-                            });
                 }
 
                 @Override
