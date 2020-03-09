@@ -83,8 +83,6 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorUtils;
-import io.sentry.Sentry;
-import io.sentry.android.AndroidSentryClientFactory;
 
 /**
  * The main application injection point
@@ -196,12 +194,7 @@ public class VectorApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
-        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
-
-        //Initializing Sentry to report exceptions to the specified URL
-
-        Sentry.init("https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9", new AndroidSentryClientFactory(this));
 
         mLifeCycleListener = new VectorLifeCycleObserver();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);
@@ -367,6 +360,7 @@ public class VectorApp extends MultiDexApplication {
         initApplicationLocale();
         visitSessionVariables();
         if (BuildConfig.IS_SABA) {
+            // Sentry.captureMessage("Startup");
             try {
                 Intent serviceIntent = new Intent(this, EventStreamServiceX.class);
                 serviceIntent.setAction(EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING);

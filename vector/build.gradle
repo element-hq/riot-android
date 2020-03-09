@@ -17,7 +17,6 @@ buildscript {
 
     dependencies {
         classpath "io.realm:realm-gradle-plugin:5.12.0"
-        classpath 'io.sentry:sentry-android-gradle-plugin:1.7.27'
     }
 }
 
@@ -148,8 +147,8 @@ android {
 
         saba {
             applicationId "com.sabaos.messaging"
-            versionCode 9812101
-            versionName "Esfand98-A"
+            versionCode 9812191
+            versionName "Esfand98-B"
             buildConfigField "boolean", "IS_SABA", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
@@ -170,7 +169,6 @@ android {
 }
 
 apply plugin: 'org.jetbrains.kotlin.android.extensions'
-apply plugin: 'io.sentry.android.gradle'
 
 androidExtensions {
     experimental = true
@@ -288,8 +286,7 @@ dependencies {
 
     // appfdroid flavor only
 
-    // Sentry
-    implementation 'io.sentry:sentry-android:1.7.27'
+    implementation 'io.sentry:sentry-android:2.0.2'
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
     // Test
