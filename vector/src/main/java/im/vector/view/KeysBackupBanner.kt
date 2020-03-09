@@ -84,13 +84,6 @@ class KeysBackupBanner @JvmOverloads constructor(
      * @param newState the newState representing the view
      */
     fun render(newState: State, force: Boolean = false) {
-        // In Saba flavor, we don't need the backup banner to appear
-        if (BuildConfig.IS_SABA) {
-            var batnaSharedPreferences = BatnaSharedPreferences(context)
-            if (!batnaSharedPreferences.getBooleanData(KeyManager.RECOVERY_KEY_EXISTS)) {
-                return
-            }
-        }
         if (newState == state && !force) {
             Log.d(LOG_TAG, "State unchanged")
             return

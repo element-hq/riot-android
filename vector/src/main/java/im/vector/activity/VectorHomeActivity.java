@@ -368,6 +368,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } else {
                 switch (keysBackupState) {
                     case Disabled:
+                        if (BuildConfig.IS_SABA) {
+                            KeysBackupStateManager.KeysBackupState keyBackupState = mSession.getCrypto().getKeysBackup().getState();
+                            if (keyBackupState == KeysBackupStateManager.KeysBackupState.Disabled) {
+                                KeyManager.getKeyBackup(this, mSession);
+                            }
+                        }
                         mKeysBackupBanner.render(new KeysBackupBanner.State.Setup(model.getNumberOfKeysToBackup()), false);
                         break;
                     case NotTrusted:
@@ -576,16 +582,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onResume() {
         super.onResume();
-        if (BuildConfig.IS_SABA) {
-            KeysBackupStateManager.KeysBackupState keyBackupState = mSession.getCrypto().getKeysBackup().getState();
-            if (keyBackupState == KeysBackupStateManager.KeysBackupState.Disabled) {
-                KeyManager.getKeyBackup(this, mSession);
-            } else {
-                Log.v("KeyBackup error:", "There is already a backup key set for this account");
-                BatnaSharedPreferences batnaSharedPreferences = new BatnaSharedPreferences(this);
-                batnaSharedPreferences.saveBooleanData(KeyManager.RECOVERY_KEY_EXISTS, true);
-            }
-        }
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
