@@ -99,7 +99,7 @@
 
     <string name="rooms_header">Místnosti</string>
     <string name="rooms_directory_header">Adresář místností</string>
-    <string name="no_room_placeholder">Žádne místností</string>
+    <string name="no_room_placeholder">Žádné místnosti</string>
     <string name="no_public_room_placeholder">Žádné veřejné mistnosti nejsou k dispozici</string>
     <plurals name="public_room_nb_users">
 	<item quantity="one">Jeden uživatel</item>
@@ -247,11 +247,11 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="login_error_not_json">Neobsahuje platný JSON</string>
     <string name="login_error_login_email_not_yet">E-mailový odkaz, na který ještě nebylo klepnuto</string>
 
-    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč Vašemu homeserveru.
+    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč vašemu homeserveru.
 \nToto je nutné pouze jednou. 
 \nOmlouváme se za způsobené nepříjemnosti.</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Znovu požádat o šifrovací klíče </u> z Vašich ostatních relací.</string>
+    <string name="e2e_re_request_encryption_key"><u>Znovu požádat o šifrovací klíče</u> z vašich ostatních relací.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
 
@@ -472,16 +472,16 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
 
-    <string name="keys_backup_is_not_finished_please_wait">Záloha klíče není ještě dokončena, prosím počkejte…</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">Pokud se nyní odhlásíte, ztratíte vaše zašifrované zprávy</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Probíhá záloha klíče. Pokud se nyní odhlásíte, ztratíte přístup k vašim zašifrovaným zprávám.</string>
+    <string name="keys_backup_is_not_finished_please_wait">Záloha klíčů není ještě dokončena, prosím počkejte…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Pokud se nyní odhlásíte, přijdete o své zašifrované zprávy</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Probíhá záloha klíče. Pokud se nyní odhlásíte, ztratíte přístup ke svým zašifrovaným zprávám.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Zabezpečená záloha klíčů by měla být aktivní na všech vašich relacích, aby se předešlo ztrátě přístupu k vašim zašifrovaným zprávám.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nechci své zašifrované zprávy</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Zálohuji klíče…</string>
     <string name="keys_backup_activate">Použít zálohu klíče</string>
     <string name="are_you_sure">Opravdu\?</string>
     <string name="backup">Záloha</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Pokud neprovedete zálohu vašich klíčů před odhlášením, ztratíte přístup k vašim zašifrovaným zprávám.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Pokud nezazálohujete své klíče před odhlášením, přijdete o přístup ke svým zašifrovaným zprávám.</string>
 
     <string name="stay">Zůstat</string>
     <string name="skip">Přeskočit</string>
@@ -1051,4 +1051,37 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="login_signup_password_hint">Heslo</string>
     <string name="login_signup_submit">Další</string>
     <string name="soft_logout_signin_password_hint">Heslo</string>
+    <string name="encryption_information_verify_key_match">Potvrzuji, že klíče se shodují</string>
+
+    <string name="you_added_a_new_device">Přidal/a jste novou relaci \'%s\', která požaduje šifrovací klíče.</string>
+    <string name="keys_backup_setup_step1_manual_export">Exportovat klíče ručně</string>
+
+    <string name="keys_backup_setup_step3_text_line1">Probíhá zálohování vašich klíčů.</string>
+    <string name="keys_backup_setup_backup_started_message">Na pozadí právě probíhá zálohování vašich klíčů na domovský server. Prvotní zálohování může trvat několik minut.</string>
+
+
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Stahuji klíče…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importuji klíče…</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+	<item quantity="one">Obnovena záloha s %d klíčem.</item>
+	<item quantity="few">Obnovena záloha s %d klíči.</item>
+	<item quantity="other">Obnovena záloha s %d klíči.</item>
+</plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+	<item quantity="one">Do této relace byl přidán %d nový klíč.</item>
+	<item quantity="few">Do této relace byly přidány %d nové klíče.</item>
+	<item quantity="other">Do této relace bylo přidáno %d nových klíčů.</item>
+</plurals>
+
+    <string name="keys_backup_banner_in_progress">Zálohuji klíče…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Všechny klíče zazálohovány</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+	<item quantity="one">Zálohuji %d klíč…</item>
+	<item quantity="few">Zálohuji %d klíče…</item>
+	<item quantity="other">Zálohuji %d klíčů…</item>
+</plurals>
+
+    <string name="import_e2e_keys_from_file">Importovat E2E klíče ze souboru \"%1$s\".</string>
+
     </resources>
