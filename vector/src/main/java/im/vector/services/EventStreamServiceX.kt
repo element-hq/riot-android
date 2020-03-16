@@ -587,6 +587,10 @@ class EventStreamServiceX : VectorService() {
             Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.message, e)
         }
 
+        // Since This Service is always running and server does not distinguish between incoming and missed calls,
+        // We don't need to run CallService. FYI, SDK handles call management itself.
+        if (BuildConfig.IS_SABA) return
+
         if (!TextUtils.isEmpty(callId)) {
             CallService.onIncomingCall(this,
                     isVideo,
