@@ -7,7 +7,7 @@
     <string name="dark_theme">Koyu Tema</string>
     <string name="black_them">Siyah Tema</string>
 
-    <string name="notification_sync_in_progress">Eşzamanlama (senkronizasyon)</string>
+    <string name="notification_sync_in_progress">Eşitleniyor…</string>
     <string name="notification_listening_for_events">Olaylar dinleniyor</string>
     <string name="notification_noisy_notifications">Sesli bildirimler</string>
     <string name="notification_silent_notifications">Sessiz bildirimler</string>
@@ -50,15 +50,15 @@
     <string name="rename">Yeniden Adlandır</string>
     <string name="report_content">İçeriği bildir</string>
     <string name="active_call">Şu anki görüşme</string>
-    <string name="ongoing_conference_call">Devam eden konferans görüşmesi.
-\n%1$s veya %2$s olarak katıl.</string>
-    <string name="ongoing_conference_call_voice">Sesli</string>
+    <string name="ongoing_conference_call">Devam eden konferans görüşmesi. 
+\n%1$s veya %2$s olarak katıl</string>
+    <string name="ongoing_conference_call_voice">Sesli arama</string>
     <string name="ongoing_conference_call_video">Görüntülü</string>
     <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
     <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir…</string>
     <string name="missing_permissions_to_start_conf_call">Bu odada bir konferans başlatma davetiyesi göndermek için izniniz olması gerekmektedir</string>
     <string name="missing_permissions_title_to_start_conf_call">Arama gerçekleştirilemiyor</string>
-    <string name="device_information">Cihaz ayrıntıları</string>
+    <string name="device_information">Oturum bilgileri</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferans görüşmeleri şifreli (encrypted) odalarda desteklenmiyor</string>
     <string name="send_anyway">Ne olursa olsun gönder</string>
     <string name="or">veya</string>
@@ -185,7 +185,7 @@
     <string name="keys_backup_is_not_finished_please_wait">Anahtar yedekleme tamamlanmadı, lütfen bekleyiniz…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Oturumu şimdi kapatırsanız şifrelenmiş mesajlarınızı kaybedeceksiniz</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Anahtar yedekleme işlemi sürüyor. Şimdi oturumu kapatırsanız tüm şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Şifrelenmiş mesajlarınızı kaybetmeyi önlemek için Güvenli Anahtar Yedekleme\'nin tüm cihazlarınızda aktif olması gerekmektedir.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Şifrelenmiş mesajlarınıza erişimi kaybetmemek için Güvenli Anahtar Yedekleme\'nin tüm oturumlarınızda etkin olması gerekir.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Şifrelenmiş mesajlarımı istemiyorum</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Anahtarlar yedekleniyor…</string>
     <string name="keys_backup_activate">Anahtar Yedekleme Kullan</string>
@@ -1308,12 +1308,12 @@ Neden Riot.im’i seçmeliyim?
     <string name="keys_backup_info_title_signature">İmza</string>
 
     <string name="notification_sync_init">İşlem başlatılıyor</string>
-    <string name="title_activity_verify_device">Cihazı doğrula</string>
+    <string name="title_activity_verify_device">Oturumu doğrula</string>
 
     <string name="none">Hiç (Yok)</string>
     <string name="revoke">Geri Al</string>
     <string name="disconnect">Bağlantıyı Kes</string>
-    <string name="ignore">Önemseme</string>
+    <string name="ignore">Yoksay</string>
     <string name="review">Gözden Geçir</string>
     <string name="decline">Reddet</string>
 
@@ -1325,7 +1325,7 @@ Neden Riot.im’i seçmeliyim?
     <string name="auth_login_sso">Tek oturum açma ile giriş yap</string>
     <string name="auth_add_email_message_2">Hesap kurtarması için email ayarla, ve sonradan da isteğe bağlı olarak başklarının seni tanıyan kişilerin bulması için kullan.</string>
     <string name="login_error_unknown_host">Bu adrese erişilemiyor, lütfen kontrol et</string>
-    <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arkaplanda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır.</string>
+    <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arkaplanda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır</string>
     <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
     <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
 
