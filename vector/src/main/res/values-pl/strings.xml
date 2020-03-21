@@ -1362,4 +1362,9 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="sas_cancelled_by_me">Weyfikacja zostaje anulowana.
 \nPowód: %s</string>
 
+    <string name="send_suggestion_content">Proszę napisz swoją sugestię poniżej.</string>
+    <string name="send_suggestion_report_placeholder">Opisz swoją sugestię tutaj</string>
+    <string name="a11y_create_direct_message">Utwórz nową rozmowę bezpośrednią</string>
+    <string name="no_connectivity_to_the_server_indicator">Połączenie z serwerem zostało utracone</string>
+
     </resources>
