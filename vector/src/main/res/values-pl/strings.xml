@@ -1411,7 +1411,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_add_3pid_authentication_needed">Wymagane jest uwierzytelnienie</string>
 
 
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Niektóre rodzaje wiadomości będą ciche (wygenerują powiadomienie bez dźwięku)</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Niektóre rodzaje wiadomości będą ciche (wygenerują powiadomienie bez dźwięku).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nie udało się wczytać niestandardowych reguł, spróbuj ponowić.</string>
     <string name="settings_troubleshoot_test_play_services_title">Weryfikacja Usług Google</string>
     <string name="settings_troubleshoot_test_play_services_failed">Riot używa Usług Google Play do dostarczania wiadomości push. Konfiguracja usług nie wydaje się być prawidłowa:
@@ -1430,7 +1430,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Usługa nie uruchomiła się ponownie</string>
 
     <string name="settings_troubleshoot_test_service_boot_success">Usługa zostanie uruchomiona przy starcie urządzenia.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Usługa nie zostanie uruchomiona przy starcie urządzenia, nie otrzymasz żadnych powiadomień, dopóki Riot nie zostanie uruchomiona.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Usługa nie zostanie uruchomiona przy starcie urządzenia, nie otrzymasz żadnych powiadomień, dopóki Riot nie zostanie uruchomiony.</string>
     <string name="sas_security_advise">Dla zwiększenia bezpieczeństwa, zalecamy aby wykonać ten krok osobiście lub przez inne zaufane środki komunikacji.</string>
     <string name="content_reported_content">Treść została zgłoszona.
 \n
