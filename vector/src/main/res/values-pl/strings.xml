@@ -860,7 +860,7 @@ Czy chcesz dodać teraz kilka?</string>
     <string name="widget_integration_positive_power_level">Poziom uprawnień musi być liczbą dodatnią.</string>
     <string name="widget_integration_must_be_in_room">Nie jesteś w tym pokoju.</string>
     <string name="widget_integration_no_permission_in_room">Nie masz uprawnień, aby zrobić to w tym pokoju.</string>
-    <string name="settings_flair">Nastrój</string>
+    <string name="settings_flair">Wyróżnik społeczności</string>
 
     <string name="room_settings_no_flair">Ten pokój nie wyświetla wyróżników dla żadnych społeczności</string>
     <string name="widget_integration_missing_room_id">Brakujące room_id w żądaniu.</string>
@@ -1203,7 +1203,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="create_new_room">Utwórz nowy pokój</string>
     <string name="group_all_communities">Wszystkie społeczności</string>
 
-    <string name="fab_menu_create_chat">Rozmowy bezpośrednie</string>
+    <string name="fab_menu_create_chat">Wiadomości Bezpośrednie</string>
 
     <string name="create_room_title">Nowy pokój</string>
     <string name="create_room_action_create">STWÓRZ</string>
@@ -1442,7 +1442,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Wyłącz ograniczenia</string>
 
     <string name="settings_call_notifications_preferences">Konfiguruj powiadomienia połączeń</string>
-    <string name="settings_system_preferences_summary">Wybierz kolor diody LED, wibrację, dźwięk...</string>
+    <string name="settings_system_preferences_summary">Wybierz kolor diody LED, wibrację, dźwięk…</string>
 
 
     <string name="settings_integrations">Integracje</string>
