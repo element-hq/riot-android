@@ -1369,7 +1369,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Proszę wykonać kopię</string>
     <string name="settings_preferences">Preferencje</string>
-    <string name="preference_voice_and_video">Głos i Wideo</string>
+    <string name="preference_voice_and_video">Głos i wideo</string>
     <string name="bottom_action_people_x">Wiadomości Bezpośrednie</string>
 
     <string name="room_filtering_filter_hint">Filtruj rozmowy…</string>
@@ -1377,4 +1377,26 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="add_by_matrix_id">Dodaj przez matrix ID</string>
     <string name="direct_room_filter_hint">Filtruj wg nazwy użytkownika lub ID…</string>
 
+    <string name="settings_sdk_version">Wersja Matrix SDK</string>
+    <string name="preference_root_help_about">Pomoc i o aplikacji</string>
+
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Wszystkie wiadomości (hałaśliwy)</string>
+    <string name="room_list_quick_actions_notifications_all">Wszystkie wiadomości</string>
+    <string name="room_list_quick_actions_notifications_mentions">Tylko wspomnienia</string>
+    <string name="room_list_quick_actions_notifications_mute">Wycisz</string>
+    <string name="room_list_quick_actions_settings">Ustawienia</string>
+    <string name="no_ignored_users">Nie ignorujesz żadnych użytkowników</string>
+
+    <string name="seen_by">Widziany przez</string>
+
+    <string name="settings_advanced_settings">Zaawansowane ustawienia</string>
+    <string name="settings_developer_mode">Tryb programisty</string>
+    <string name="settings">Ustawienia</string>
+    <string name="room_profile_section_security">Bezpieczeństwo</string>
+    <string name="room_profile_section_more">Więcej</string>
+    <string name="room_profile_section_more_settings">Ustawienia pokoju</string>
+    <string name="room_profile_section_more_notifications">Powiadomienia</string>
+    <string name="room_profile_section_more_leave">Opuść pokój</string>
+    <string name="room_settings_enable_encryption">Włącz szyfrowanie end-to-end</string>
     </resources>
