@@ -675,7 +675,7 @@ Jesteś pewien?</string>
     <string name="settings_containing_my_display_name">Wiadomości zawierające moją wyświetlaną nazwę</string>
     <string name="settings_containing_my_user_name">Wiadomości zawierające moją nazwę użytkownika</string>
     <string name="settings_set_sync_timeout">Żądanie synchronizacji nieudane z powodu przekroczenia limitu czasu</string>
-    <string name="settings_set_sync_delay">Opóźnienie między każdym żądaniem</string>
+    <string name="settings_set_sync_delay">Opóźnienie między każdą synchronizacją</string>
     <string name="settings_olm_version">Wersja olm</string>
     <string name="settings_third_party_notices">Informacje o stronach trzecich</string>
     <string name="settings_keep_media">Zatrzymaj media</string>
@@ -1438,4 +1438,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="content_reported_as_spam_content">Treść została zgłoszona jako spam.
 \n
 \nJeśli nie chcesz więcej widzieć treści tego użytkownika,możesz go zablokować by ukryć jego wiadomości</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">Sprawdź ograniczenia pracy w tle</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Wyłącz ograniczenia</string>
+
+    <string name="settings_call_notifications_preferences">Konfiguruj powiadomienia połączeń</string>
+    <string name="settings_system_preferences_summary">Wybierz kolor diody LED, wibrację, dźwięk...</string>
+
+
+    <string name="settings_integrations">Integracje</string>
     </resources>
