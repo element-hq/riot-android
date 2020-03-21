@@ -575,9 +575,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
     <string name="auth_home_server">Serwer Domowy:</string>
     <string name="auth_identity_server">Serwer Tożsamości:</string>
-    <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane.
-
-Zostałeś wylogowany ze wszystkich urządzeń i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
+    <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane. Zostałeś wylogowany ze wszystkich sesji i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
 
     <string name="login_mobile_device">Numer telefonu</string>
 
@@ -1399,4 +1397,45 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_profile_section_more_notifications">Powiadomienia</string>
     <string name="room_profile_section_more_leave">Opuść pokój</string>
     <string name="room_settings_enable_encryption">Włącz szyfrowanie end-to-end</string>
+    <string name="none">Brak</string>
+    <string name="people_no_identity_server">Brak skonfigurowanego serwera tożsamości.</string>
+
+    <string name="call_failed_no_ice_description">Poproś administratora serwera (%1$s) o skonfigurowanie usługi TURN, aby połączenia mogły działać prawidłowo.
+\n
+\nMożesz także użyć publicznego serwera %2$s, choć nie będzie on tak niezawodny i pozna twój adres IP. Wybór możesz zmienić w Ustawieniach.</string>
+    <string name="call_failed_no_ice_use_alt">Spróbuj użyć %s</string>
+    <string name="auth_add_email_message_2">Wprowadź adres email, aby możliwe było odzyskiwanie konta. W przyszłości pozwoli on także odnaleźć Cię Twoim znajomym.</string>
+    <string name="auth_add_phone_message_2">Wprowadź numer telefonu, później pozwoli on Cię odnaleźć Twoim znajomym.</string>
+    <string name="login_error_homeserver_not_found">Nie udało się połączyć z serwerem o podanym adresie URL, upewnij się, że wpisano go poprawnie</string>
+    <string name="invite_no_identity_server_error">Dodaj serwer tożsamości w ustawieniach, aby móc wykonać tę akcję.</string>
+    <string name="settings_add_3pid_authentication_needed">Wymagane jest uwierzytelnienie</string>
+
+
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Niektóre rodzaje wiadomości będą ciche (wygenerują powiadomienie bez dźwięku)</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nie udało się wczytać niestandardowych reguł, spróbuj ponowić.</string>
+    <string name="settings_troubleshoot_test_play_services_title">Weryfikacja Usług Google</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Riot używa Usług Google Play do dostarczania wiadomości push. Konfiguracja usług nie wydaje się być prawidłowa:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_success">Otrzymano token FCM:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Niepowodzenie przy pobieraniu tokena FCM:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nRiot nie ma wpływu na wystąpienie tego problemu. Na tym urządzeniu nie ma konta Google. Otwórz menadżer kont i dodaj konto Google.</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM z powodzeniem zarejestrowany na serwerze domowym.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Niepowodzenie przy rejestracji tokena FCM na serwerze domowym:
+\n%1$s</string>
+
+    <string name="settings_troubleshoot_test_service_restart_success">Usługa została zatrzymana i automatycznie uruchomiona ponownie.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Usługa nie uruchomiła się ponownie</string>
+
+    <string name="settings_troubleshoot_test_service_boot_success">Usługa zostanie uruchomiona przy starcie urządzenia.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Usługa nie zostanie uruchomiona przy starcie urządzenia, nie otrzymasz żadnych powiadomień, dopóki Riot nie zostanie uruchomiona.</string>
+    <string name="sas_security_advise">Dla zwiększenia bezpieczeństwa, zalecamy aby wykonać ten krok osobiście lub przez inne zaufane środki komunikacji.</string>
+    <string name="content_reported_content">Treść została zgłoszona.
+\n
+\nJeśli nie chcesz więcej otrzymywać wiadomości od tego użytkownika, możesz go zablokować by ukryć jego wiadomości</string>
+    <string name="content_reported_as_spam_content">Treść została zgłoszona jako spam.
+\n
+\nJeśli nie chcesz więcej widzieć treści tego użytkownika,możesz go zablokować by ukryć jego wiadomości</string>
     </resources>
