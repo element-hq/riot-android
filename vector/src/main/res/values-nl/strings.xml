@@ -261,12 +261,12 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="permissions_rationale_msg_contacts">Riot heeft toegang nodig tot uw adresboek om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\n
-\nVerleen toegang op de volgende pop-up om gebruikers op Riot te ontdekken via uw adresboek.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot heeft toegang nodig tot uw adresboek om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\n
-\nRiot toegang verlenen tot uw contacten\?</string>
+    <string name="permissions_rationale_msg_contacts">Riot kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. 
+\n 
+\nAls u het goed vindt om uw adresboek te delen voor dit doel, verleen dan toegang op de volgende pop-up om gebruikers op Riot te ontdekken via uw adresboek.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. 
+\n 
+\nRiot toegang verlenen tot uw adresboek\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
 
@@ -1552,5 +1552,58 @@
 \nDe synchronisatie is mogelijk uitgesteld als gevolg van de batterij of staat van uw apparaat (slaapmodus).</string>
     <string name="settings_integrations">Integraties</string>
     <string name="resources_script">Latn</string>
+
+    <string name="settings_call_ringtone_use_default_stun">Terugvallen naar belassistentie-server toestaan</string>
+    <string name="settings_add_3pid_authentication_needed">Authenticatie vereist</string>
+
+
+    <string name="settings_integrations_summary">Gebruike een integratiemanager om bots, bruggen, widgets en stickerpakken te beheren.
+\nIntegratiemanagers ontvangen configuratiedata en kunnen widgets aanpassen, kameruitnodigingen versturen en stroomniveaus instellen namens jou.</string>
+    <string name="settings_discovery_category">Ontdekken</string>
+    <string name="settings_discovery_manage">Beheer uw ontdekinstellingen.</string>
+    <string name="settings_integration_allow">Integraties toestaan</string>
+    <string name="settings_integration_manager">Integratiemanager</string>
+
+    <string name="encryption_information_device_name_with_warning">Publieke naam (zichtbaar voor mensen waarmee je communiceert)</string>
+    <string name="device_name_warning">Een sessie\'s publieke naam is zichtbaar voor mensen met wie je communiceert</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Widget laden</string>
+    <string name="room_widget_permission_added_by">Deze widget was toegevoegd door:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Dit gebruiken kan cookies toevoegen en data delen met %s:</string>
+    <string name="room_widget_permission_shared_info_title">Dit gebruiken kan data delen met %s:</string>
+    <string name="room_widget_failed_to_load">Kon widget niet laden.
+\n%s</string>
+    <string name="room_widget_reload">Widget herladen</string>
+    <string name="room_widget_open_in_browser">In browser openen</string>
+    <string name="room_widget_revoke_access">Toegang intrekken voor mij</string>
+
+    <string name="room_widget_permission_display_name">Uw weergavenaam</string>
+    <string name="room_widget_permission_avatar_url">Uw avatar URL</string>
+    <string name="room_widget_permission_user_id">Uw gebruikers-ID</string>
+    <string name="room_widget_permission_theme">Uw thema</string>
+    <string name="room_widget_permission_widget_id">Widget-ID</string>
+    <string name="room_widget_permission_room_id">Kamer-ID</string>
+
+
+    <string name="room_widget_resource_permission_title">Deze widget wilt gebruikmaken van de volgende bronnen:</string>
+    <string name="room_widget_resource_grant_permission">Toestaan</string>
+    <string name="room_widget_resource_decline_permission">Alles blokkeren</string>
+    <string name="room_widget_webview_access_camera">Camera gebruiken</string>
+    <string name="room_widget_webview_access_microphone">Microfoon gebruiken</string>
+    <string name="room_widget_webview_read_protected_media">DRM-beschermde media lezen</string>
+
+    <string name="integration_manager_not_configured">Geen integratiemanager geconfigureerd.</string>
+    <string name="widget_integration_review_terms">Om door te gaan moet u de voorwaarden van deze dienst accepteren.</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Er bestaat al een backup op uw HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Het lijkt erop dat u al een backup van uw herstelsleutel heeft uit een andere sessie. Wilt u deze vervangen met degene die u nu aanmaakt\?</string>
+    <string name="keys_backup_setup_override_replace">Vervangen</string>
+    <string name="keys_backup_setup_override_stop">Stop</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Backupstatus controleren</string>
+    <string name="invalid_or_expired_credentials">U bent uitgelogd vanwege incorrecte of verlopen toegangsgegevens.</string>
+
+    <string name="identity_server_not_defined">U gebruikt geen Identeitsserver</string>
+    <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
 
     </resources>
