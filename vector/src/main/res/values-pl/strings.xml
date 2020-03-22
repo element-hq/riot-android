@@ -1647,4 +1647,23 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="sas_view_request_action">Wyświetl żądanie</string>
     <string name="sas_verified_successful_description">Bezpieczne wiadomości od tego użytkownika są zabezpeiczone za pomocą szyfrowania end-to-end i są nie do odczytania przez osoby trzecie.</string>
+    <string name="call_failed_no_ice_title">Połączenie nie powiodło się z powodu niewłaściwie skonfigurowanego serwera.</string>
+    <string name="settings_add_3pid_flow_not_supported">Nie możesz tego zrobić z mobilnej aplikacji Riot</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Niektóre powiadomienia są wyłączone w osobistej konfiguracji.</string>
+    <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Automatycznie uruchom ponownie usługę powiadomień</string>
+    <string name="sas_emoji_description">Potwierdź, że następujące emoji pojawiły się na ekranie partnera</string>
+    <string name="sas_decimal_description">Potwierdź, że następujące liczby pojawiły się na ekranie partnera</string>
+
+    <string name="sas_incoming_verification_request_dialog">Otrzymano przychodzące żądanie weryfikacji.</string>
+    <string name="sas_got_it">Rozumiem</string>
+
+    <string name="sas_verifying_keys">Nic się nie pojawiło\? Nie wszystkie aplikacje obsługują już interaktywną weryfikację. Spróbuj weryfikacji starszego typu.</string>
+    <string name="sas_legacy_verification_button_title">Użyj weryfikacji starszego typu.</string>
+
+    <string name="sas_cancelled_dialog_title">Weryfikacja Anulowana</string>
+    <string name="sas_verification_request_notification_channel">Interaktywna Weryfikacja Sesji</string>
+    <string name="sas_error_m_user">Użytkownik anulował weryfikację</string>
+    <string name="sas_error_m_timeout">Upłynął limit czasu weryfikacji</string>
+    <string name="sas_error_m_unknown_transaction">Urządzenie nie rozpoznało tej transakcji</string>
     </resources>
