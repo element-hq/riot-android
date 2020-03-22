@@ -2237,4 +2237,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="message_ignore_user">Zablokuj użytkownika</string>
 
+    <string name="send_suggestion">Złóż sugestię</string>
+    <string name="settings_developer_mode_summary">Tryb programisty aktywuje ukryte funkcje i może również spowodować, że aplikacja będzie mniej stabilna. Tylko dla programistów!</string>
+    <string name="room_profile_not_encrypted_subtitle">Wiadomości w tym pokoju nie są szyfrowane end-to-end.</string>
+    <string name="room_profile_section_more_uploads">Przesłane pliki</string>
     </resources>
