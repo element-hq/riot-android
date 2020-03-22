@@ -1084,4 +1084,156 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="import_e2e_keys_from_file">Importovat E2E klíče ze souboru \"%1$s\".</string>
 
+    <string name="encryption_information_verify_device_warning">Abyste ověřili důvěryhodnost této relace, prosím, kontaktujte jejího majitele nějakým jiným způsobem (např. osobně nebo telefonátem) s otázkou, zda se klíč, jenž je zobrazen v jejich Nastavení uživatele, shoduje s klíčem níže:</string>
+    <string name="encryption_information_verify_device_warning2">Pokud se shoduje, klepněte na tlačítko ověřit. Pokud ne, pak někdo jiný zachycuje tuto relaci a měli byste je snad zadat na černou listinu. V budoucnu bude tento ověřovací proces sofistikovanější.</string>
+    <string name="e2e_enabling_on_app_update">Riot nyní podporuje šifrování end-to-end, ale pro aktivaci se musíte se opět přihlásit.
+\n
+\nMůžete to provést nyní nebo později z aplikačních nastavení.</string>
+
+    <string name="unknown_devices_alert_title">Místnost obsahuje neznámé relace</string>
+    <string name="unknown_devices_alert_message">Tato místnost obsahuje neznámé relace, která nebyla ověřena.
+\nNelze tedy zaručit, že sezení patří těm uživatelům, o nichž to tvrdí.
+\nDoporučujeme, abyste prošli ověřovacím procesem pro každou relaci, než budete pokračovat, ale můžete poslat zprávu bez ověření, pokud si tak přejete.
+\n
+\nNeznámé relace:</string>
+
+    <string name="select_room_directory">Vybrat adresář místností</string>
+    <string name="directory_server_fail_to_retrieve_server">Server je partně nedostupný nebo přetížený</string>
+    <string name="directory_server_type_homeserver">Zadejte homeserver, z něhož si žádáte seznam veřejných místností</string>
+    <string name="directory_server_placeholder">URL homeserveru</string>
+    <string name="directory_server_all_rooms_on_server">Všechny místnosti na serveru %s</string>
+    <string name="directory_server_native_rooms">Všech %s vlastních místností</string>
+
+    <string name="lock_screen_hint">Zadat zde…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">1 nepřečtená oznámená zpráva</item>
+	<item quantity="few">%d nepřečtené oznámené zprávy</item>
+	<item quantity="other">%d nepřečtených oznámených zpráv</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">1 nepřečtená oznámená zpráva</item>
+	<item quantity="few">%d nepřečtené oznámené zprávy</item>
+	<item quantity="other">%d nepřečtených oznámených zpráv</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 místnost</item>
+	<item quantity="few">%d místnosti</item>
+	<item quantity="other">%d místností</item>
+</plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 zpráva</item>
+	<item quantity="few">%1$s: %2$d zprávy</item>
+	<item quantity="other">%1$s: %2$d zpráv</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d oznámení</item>
+	<item quantity="few">%d oznámení</item>
+	<item quantity="other">%d oznámení</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
+    <string name="notification_unknown_new_event">Nová událost</string>
+    <string name="notification_unknown_room_name">Místnost</string>
+    <string name="notification_new_messages">Nové zprávy</string>
+    <string name="notification_new_invitation">Nová pozvánka</string>
+    <string name="notification_sender_me">Já</string>
+    <string name="notification_inline_reply_failed">** Odeslání selhalo - prosím, otevřete místnost</string>
+
+    <string name="historical_placeholder">Hledej v minulosti</string>
+
+    <string name="widget_no_power_to_manage">Pro správu widgetů v této místnosti potřebujete oprávnění</string>
+    <string name="widget_creation_failure">Založení widgetu se nezdařilo</string>
+    <string name="event_formatter_widget_added">%2$s přidal %1$s</string>
+    <string name="event_formatter_widget_removed">%2$s odstranil(a) %1$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Založit konferenční hovor s jitsi</string>
+    <string name="widget_delete_message_confirmation">Jste si jisti, že chcete smazat widget z této místnosti\?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktivní widget</item>
+	<item quantity="few">%d aktivní widgety</item>
+	<item quantity="other">%d aktivních widgetů</item>
+</plurals>
+
+
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Načíst widget</string>
+    <string name="room_widget_permission_added_by">Tento widget přidal:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Použitím může dojít k nastavení cookie a sdílení dat s %s:</string>
+    <string name="room_widget_permission_shared_info_title">Použitím může dojít k sdílení dat s %s:</string>
+    <string name="room_widget_failed_to_load">Načtení widgetu se nezdařilo.
+\n%s</string>
+    <string name="room_widget_reload">Opět načíst widget</string>
+    <string name="room_widget_open_in_browser">Otevřít v prohlížeči</string>
+    <string name="room_widget_revoke_access">Zrušit přístup pro mě</string>
+
+    <string name="room_widget_permission_display_name">Vaše veřejné jméno</string>
+    <string name="room_widget_permission_avatar_url">URL Vašeho avatara</string>
+    <string name="room_widget_permission_user_id">Vaše uživatelské ID</string>
+    <string name="room_widget_permission_theme">Váš motiv</string>
+    <string name="room_widget_permission_widget_id">ID widgetu</string>
+    <string name="room_widget_permission_room_id">ID místnosti</string>
+
+
+    <string name="error_jitsi_not_supported_on_old_device">Promiňte, konferenční hovory s Jitsi nejsou podporovány na starších zařízeních (zařízení s Androidem nižším než 5.0)</string>
+    <string name="room_widget_resource_permission_title">Widget si žádá použití následujících zdrojů:</string>
+    <string name="room_widget_resource_grant_permission">Povolit</string>
+    <string name="room_widget_resource_decline_permission">Zamítnout vše</string>
+    <string name="room_widget_webview_access_camera">Použít fotoaparát</string>
+    <string name="room_widget_webview_access_microphone">Použít mikrofon</string>
+    <string name="room_widget_webview_read_protected_media">Číst media chráněná DRM</string>
+
+    <string name="widget_integration_unable_to_create">Nelze založit widget.</string>
+    <string name="widget_integration_failed_to_send_request">Odeslání požadavku selhalo.</string>
+    <string name="widget_integration_positive_power_level">Energetická hladina musí být pozitivní celé číslo.</string>
+    <string name="widget_integration_must_be_in_room">Nejste v této místnosti.</string>
+    <string name="widget_integration_no_permission_in_room">Nemáte oprávnění tak učinit v této místnosti.</string>
+    <string name="widget_integration_missing_room_id">V požadavku chybí id místnosti.</string>
+    <string name="widget_integration_missing_user_id">V požadavku chybí id uživatele.</string>
+    <string name="widget_integration_room_not_visible">Místnost %s není viditelná.</string>
+    <string name="widget_integration_missing_parameter">Požadovaný parametr chybí.</string>
+    <string name="widget_integration_invalid_parameter">Parametr není platný.</string>
+    <string name="integration_manager_not_configured">Žádný správce integrací není konfigurován.</string>
+    <string name="room_add_matrix_apps">Přidat aplikace Matrix</string>
+    <string name="settings_labs_native_camera">Použít vestavěný fotoaparát</string>
+    <string name="settings_labs_native_camera_summary">Spustit systémový fotoaprát místo vlastní obrazovky fotoaparátu.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Stisknout enter na klávesníci k odeslání zprávy</string>
+    <string name="settings_labs_enable_send_voice">Poslat hlasovou zprávu</string>
+    <string name="settings_labs_enable_send_voice_summary">Tato volba požaduje pro nahrání zprávy aplikaci třetí strany.</string>
+    <string name="widget_integration_review_terms">Před pokračováním musíte přijmout Podmínky této služby.</string>
+
+    <string name="you_added_a_new_device_with_info">Nová relace požaduje šifrovací klíč. Jméno relace: %1$s
+\nNaposledy viděna: %2$s
+\nPokud jste se nepřihlásili do jiné relace, ignorujte tento požadavek.</string>
+    <string name="your_unverified_device_requesting">Vaše neověřená relace \'%s\' požaduje šifrovací klíče.</string>
+    <string name="your_unverified_device_requesting_with_info">Neověřená relace požaduje šifrovací klíče.
+\nJméno relace: %1$s
+\nNaposledy viděna: %2$s
+\nPokud jste se nepřihlásili do jiné relace, ignorujte tento požadavek.</string>
+
+    <string name="start_verification">Spustit ověření</string>
+    <string name="start_verification_short_label">Ověřit</string>
+    <string name="share_without_verifying">Sdílet bez ověření</string>
+    <string name="share_without_verifying_short_label">Sdílet</string>
+    <string name="key_share_request">Požadavek na sdílení klíče</string>
+    <string name="ignore_request">Ignorovat požadavek</string>
+    <string name="ignore_request_short_label">Ignorovat</string>
+
+    <string name="conference_call_warning_title">Varování!</string>
+    <string name="conference_call_warning_message">Konferenční hovory jsou ve vývoji a mohou být nespolehlivé.</string>
+
+    <string name="command_error">Chyba příkazu</string>
+    <string name="unrecognized_command">Neznámý příkaz: %s</string>
+    <string name="command_problem_with_parameters">Příkaz \"%s\" potřebuje více parametrů nebo některé parametry jsou nesprávné.</string>
+    <string name="command_description_emote">Zobrazí akce</string>
+    <string name="command_description_ban_user">Zakáže uživatele s udaným id</string>
+    <string name="command_description_unban_user">Zruší zákaz uživateli s daným id</string>
+    <string name="command_description_op_user">Určit úroveň pokročilosti uživatele</string>
+    <string name="command_description_invite_user">Pozve uživatele s daným id do této místnosti</string>
+    <string name="command_description_join_room">Vstoupí do místnosti s daným aliasem</string>
+    <string name="command_description_part_room">Opustit místnost</string>
+    <string name="command_description_topic">Určit téma místnosti</string>
+    <string name="command_description_kick_user">Nakopne uživatele s daným id</string>
+    <string name="command_description_nick">Změní Vaši veřejnou přezdívku</string>
+    <string name="command_description_markdown">Markdown zap/vyp</string>
     </resources>
