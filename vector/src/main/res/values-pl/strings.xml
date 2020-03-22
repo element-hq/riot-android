@@ -1468,7 +1468,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \nSynchronizacja może zostać opóźniona w zależności od zasobów (bateria) lub stanu urządzenia (hibernacja).</string>
     <string name="settings_integrations_summary">Użyj Menedżera Integracji aby zarządzać botami, mostami, widżetami oraz pakietami naklejek.
 \nMenadżerowie Integracji odbierają dane konfiguracji, mogą zmieniać widżety, wysyłać zaproszenia do pokoi oraz ustawiać poziomy uprawnień na Twoje żądanie.</string>
-    <string name="settings_inline_url_preview_summary">Podglądaj linki bezpośrednio na czacie, jeżeli serwer domowy obsługuje tą funkcję.</string>
+    <string name="settings_inline_url_preview_summary">Pokaż podgląd linków wewnątrz czatu jeśli twój serwer wspiera tę funkcję.</string>
     <string name="settings_send_markdown_summary">Formatuj wiadomości używając składni Markdown zanim zostaną wysłane. Pozwala to na zaawansowane formatowanie takie jak używanie asterysków do wyświetlania tekstu w kursywie.</string>
     <string name="settings_show_join_leave_messages_summary">Nie wpływa to na zaproszenia, wyrzucenia oraz bany.</string>
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
@@ -2193,4 +2193,48 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Klucze są już aktualne!</string>
 
-</resources>
+<string name="review">Sprawdź</string>
+    <string name="decline">Zrezygnuj</string>
+
+    <string name="sas_error_m_key_mismatch">Niezgodność klucza</string>
+    <string name="sas_error_m_user_error">Niezgodność użytkowników</string>
+    <string name="identity_server_not_defined">Nie używasz Serwera Tożsamości</string>
+    <string name="identity_server_not_defined_for_password_reset">Nie skonfigurowano serwera toższamości, który jest wymagany do resetowania hasła.</string>
+
+    <string name="error_user_already_logged_in">Wygląda na to, że próbujesz podłączyć się do innego serwera domowego. Czy chcesz się wylogować\?</string>
+
+    <string name="send_you_invite">Przysyła zaproszenie</string>
+    <string name="invited_by">Zaproszono przez %s</string>
+
+    <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
+    <string name="room_list_catchup_welcome_title">Witaj w domu!</string>
+    <string name="title_activity_emoji_reaction_picker">Reakcje</string>
+    <string name="reactions_agree">Zgoda</string>
+    <string name="reactions_like">Lubię to</string>
+    <string name="message_view_reaction">Zobacz Reakcje</string>
+    <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
+    <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>
+    <string name="create_room_directory_title">Katalog Pokoi</string>
+    <string name="quick_reactions">Szybkie Reakcje</string>
+
+    <string name="settings_general_title">Ogólne</string>
+    <string name="settings_push_rules">Zasady push</string>
+    <string name="settings_push_gateway_no_pushers">Brak zarejestrowanych bramek push</string>
+
+    <string name="send_file_step_encrypting_thumbnail">Szyfrowanie miniatury…</string>
+    <string name="room_filtering_footer_title">Nie możesz czegoś odnaleźć\?</string>
+    <string name="room_filtering_footer_create_new_room">Utwórz nowy pokój</string>
+    <string name="room_filtering_footer_open_room_directory">Otwórz katalog pokoi</string>
+
+    <string name="room_directory_search_hint">Nazwa lub ID (#przykład:matrix.org)</string>
+
+    <string name="identity_server">Serwer toższamości</string>
+    <string name="disconnect_identity_server">Odłącz od serwera tożsamości</string>
+    <string name="add_identity_server">Skonfiguruj serwer tożsamości</string>
+    <string name="change_identity_server">Zmień serwer tożsamości</string>
+    <string name="attachment_type_camera">Aparat</string>
+    <string name="no_network_indicator">Obecnie nie ma połączenia z siecią</string>
+
+    <string name="message_ignore_user">Zablokuj użytkownika</string>
+
+    </resources>
