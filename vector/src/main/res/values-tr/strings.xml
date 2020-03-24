@@ -1557,4 +1557,16 @@ Neden Riot.im’i seçmeliyim?
 
     <string name="alpha_disclaimer_title">Betaya hoşgeldiniz!</string>
     <string name="alpha_disclaimer_content_line_1">RiotX geliştirme sürecindeyken bazı özellikler eksik olabilir ve hatalar ile karşılaşabilirsiniz.</string>
+    <string name="login_error_no_homeserver_found">Bu geçerli bir Matrix sunucu adresi değil</string>
+    <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
+    <string name="settings_add_3pid_flow_not_supported">Bunu Riot mobil ile yapamazsınız</string>
+    <string name="settings_add_3pid_authentication_needed">Kimlik doğrulama gereklidir</string>
+
+
+    <string name="settings_background_fdroid_sync_mode">Arkaplan Senkronizasyon Modu (Deneysel)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Batarya için optimize edildi</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Uygulama arka plandayken gelen mesajlar için uyarılmayacaksınız.</string>
+    <string name="settings_background_sync_update_error">Ayarlar güncellenemedi.</string>
+
+
     </resources>
