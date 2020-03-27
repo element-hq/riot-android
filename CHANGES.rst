@@ -21,7 +21,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - Upgrade gradle version from 5.4.1 to 5.6.4
 
 Changes in Riot 0.9.12 (2020-05-20)
 ===================================================
