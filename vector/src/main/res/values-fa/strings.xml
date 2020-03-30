@@ -342,4 +342,13 @@
     <string name="read_receipts_list">مشاهده گیرندگان</string>
 
     <string name="keys_backup_setup_skip_title">آیا مطمئن هستید؟</string>
-</resources>
+<string name="disconnect">عدم اتصال</string>
+    <string name="review">بررسی</string>
+    <string name="decline">رد کردن</string>
+
+    <string name="call_failed_dont_ask_again">دوباره از من نپرس</string>
+
+    <string name="auth_add_email_message_2">برای بازیابی یک ایمیل وارد کنید، و بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید.</string>
+    <string name="auth_add_phone_message_2">ثبت شماره تلفن (بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان هود استفاده کنید).</string>
+    <string name="auth_reset_password_message">برای بازیابی حساب کاربری،‌ ایمیل خود را وارد کنید.</string>
+    </resources>
