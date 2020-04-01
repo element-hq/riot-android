@@ -641,4 +641,85 @@
     <string name="new_signin">Ny innlogging</string>
 
     <string name="message_action_item_redact">Fjern …</string>
+    <string name="notification_noisy_notifications">Bråkete notifikasjoner</string>
+    <string name="notification_silent_notifications">Stille notifikasjoner</string>
+
+    <string name="title_activity_group_details">Samfunnsdetaljer</string>
+    <string name="title_activity_keys_backup_setup">Sikkerhetskopiering av nøkler</string>
+    <string name="title_activity_keys_backup_restore">Bruk sikkerhetskopiering av nøkler</string>
+    <string name="keys_backup_is_not_finished_please_wait">nøkkelbackup er ikke fulllført, vennligst vent…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">du kommer til å miste dine enkrypterte meldinger hvis du logger ut nå</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Sikkerhetskopiering av nøkler pågår. Hvis du logger ut nå mister du tilgang til dine enkrypterte meldinger.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Sikker sikkerhetskopiering av nøkler burde være aktivt på alle øktene dine for å unngå å miste tilgang til dine enkrypterte meldinger.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Jeg vil ikke ha mine enkrypterte meldinger</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Sikkerhetskopierer nøkler…</string>
+    <string name="keys_backup_activate">Bruk sikkerhetskopiering av nøkler</string>
+    <string name="backup">Sikkerhetskopi</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du kommer til å miste tilgang til dine enkrypterte meldinger med mindre du sikkerhetskopierer nøklene dine før du logger av.</string>
+
+    <string name="dialog_title_third_party_licences">Tredjepartslinsenser</string>
+
+    <string name="stay">Bli</string>
+    <string name="speak">Snakk</string>
+    <string name="view_decrypted_source">Se dekryptert kilde</string>
+    <string name="report_content">Rapporter innhold</string>
+    <string name="ongoing_conference_call">Pågående konferansesamtale.
+\nBli med som 1$s eller %2$s</string>
+    <string name="cannot_start_call">Kan ikke starte samtalen, vennligst prøv igjen senere</string>
+    <string name="missing_permissions_warning">På grunn av manglende tillatelse, kan noen funksjoner mangle…</string>
+    <string name="missing_permissions_error">Denne handlingen er ikke mulig på grunn av manglende tillatelser.</string>
+    <string name="missing_permissions_to_start_conf_call">Du må ha tillatelse til å invitere for å starte en konferanse i dette rommet</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kan ikke starte samtale</string>
+    <string name="device_information">Informasjon om Økten</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferansesamtaler er ikke støttet i enkrypterte rom</string>
+    <string name="call_anyway">Ring likevel.</string>
+    <string name="send_anyway">Send likevel</string>
+    <string name="action_sign_out_confirmation_simple">Er du sikker på at vil logge ut\?</string>
+    <string name="action_voice_call">Telefonsamtale</string>
+    <string name="action_video_call">Videosamtale</string>
+    <string name="action_global_search">Globalt søk</string>
+    <string name="action_mark_all_as_read">Marker alle som lest</string>
+    <string name="action_quick_reply">Raskt svar</string>
+    <string name="action_mark_room_read">Marker som lest</string>
+    <string name="action_open">Åpne</string>
+    <string name="dialog_title_confirmation">Bekreftelse</string>
+    <string name="bottom_action_favourites">Favoritter</string>
+    <string name="home_filter_placeholder_home">Filtrer romnavn</string>
+    <string name="home_filter_placeholder_favorites">Filtrer favoritter</string>
+    <string name="home_filter_placeholder_people">Filtrer folk</string>
+    <string name="home_filter_placeholder_rooms">Filtrer romnavn</string>
+    <string name="home_filter_placeholder_groups">Filtrer samfunnsnavn</string>
+
+    <string name="system_alerts_header">Systemadvarsler</string>
+
+    <string name="direct_chats_header">Samtaler</string>
+    <string name="local_address_book_header">Lokal adressebok</string>
+    <string name="user_directory_header">Brukerkatalog</string>
+    <string name="matrix_only_filter">Bare matrix-kontakter</string>
+    <string name="no_conversation_placeholder">Ingen samtaler</string>
+    <string name="no_contact_access_placeholder">Du ga ikke Riot tilgang til dine lokale kontakter</string>
+    <string name="people_no_identity_server">Ingen identitetsserver konfigurert.</string>
+
+    <string name="rooms_directory_header">Romkatalog</string>
+    <string name="no_public_room_placeholder">Ingen offentlige rom tilgjengelig</string>
+    <plurals name="public_room_nb_users">
+	<item quantity="one">1 bruker</item>
+	<item quantity="other">%d brukere</item>
+</plurals>
+
+    <string name="send_bug_report_include_crash_logs">Send kjæsjlogg</string>
+    <string name="send_bug_report_include_screenshot">Send skjermbilde</string>
+    <string name="send_bug_report_description">Vennligst forklar feilen. Hva gjorde du\? Hva forventet du at skulle skje\? Hva skjedde i stedet\?</string>
+    <string name="send_bug_report_description_in_english">Om mulig, vennligst beskriv på engelsk.</string>
+    <string name="send_bug_report_placeholder">Forklar problemet ditt her</string>
+    <string name="send_bug_report_logs_description">For å diagnotisere feil, logger fra denne klienten vil bli sendt med denne feilmeldingen. Feilmeldingen, som inkluderer loggene og skjermdumper, blir ikke offentlig synlig. Hvis du foretrekker å bare sende teksten over, vennligst fjern merkene fra boksene:</string>
+    <string name="send_bug_report_alert_message">Det ser ut som du rister på telefonen i frustrasjon. Har du list til å åpne feilrapporteringsskjermen\?</string>
+    <string name="send_bug_report_app_crashed">Applikasjonen kræsjet sist gang. Har du lyst til å åpne kræsjskjermen\?</string>
+    <string name="send_bug_report_rage_shake">Sinnarist for å rapportere feil</string>
+
+    <string name="send_bug_report_sent">Feilrapport har blitt sendt</string>
+    <string name="send_bug_report_failed">feilrapporten feilet å sendes (%s)</string>
+    <string name="send_files_in">Send inn i</string>
+    <string name="hs_url">Hjemmetjener URL</string>
+    <string name="start_new_chat">Start ny chat</string>
     </resources>
