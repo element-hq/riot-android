@@ -459,4 +459,186 @@
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="enter_secret_storage_passphrase_warning">Advarsel:</string>
     <string name="delete_event_dialog_title">Bekreft fjerning</string>
+    <string name="status_theme">Status.im-tema</string>
+
+    <string name="notification_listening_for_events">Lytter etter hendelser</string>
+    <string name="title_activity_verify_device">Verifiser økten</string>
+
+    <string name="active_call">Aktiv samtale</string>
+    <string name="send_bug_report_include_logs">Send loggbøker</string>
+    <string name="auth_send_reset_email">Send tilbakestillings-E-post</string>
+    <string name="auth_username_in_use">Brukernavnet er i bruk</string>
+    <string name="auth_home_server">Hjemmetjener:</string>
+    <string name="auth_identity_server">Identitetstjener:</string>
+    <string name="settings_call_category">Samtaler</string>
+    <plurals name="room_title_members">
+	<item quantity="one">1 medlem</item>
+	<item quantity="other">%d medlemmer</item>
+</plurals>
+    <string name="room_title_one_member">1 medlem</string>
+
+    <string name="room_participants_now">%1$s nå</string>
+    <string name="room_one_user_is_typing">%s skriver …</string>
+    <string name="search_hint">Søk</string>
+    <string name="search_members_hint">Filtrer rommets medlemmer</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 rom</item>
+	<item quantity="other">%d rom</item>
+</plurals>
+    <string name="room_settings_all_messages">Alle meldinger</string>
+    <string name="room_settings_mention_only">Kun nevninger</string>
+    <string name="settings_olm_version">olm-versjon</string>
+    <string name="settings_deactivate_account_section">Deaktiver kontoen</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="settings_integration_manager">Integreringsbehandler</string>
+
+    <string name="room_settings_room_name">Rommets navn</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Hvem kan lese historikken\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Hvem kan gå inn i dette rommet\?</string>
+
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Kun medlemmer (f.o.m. da denne innstillingen ble valgt)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Kun medlemmer (f.o.m. da de ble invitert)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Kun medlemmer (f.o.m. de ble med)</string>
+
+    <string name="room_settings_room_access_entry_only_invited">Kun folk som har blitt invitert</string>
+    <string name="room_settings_no_flair">Dette rommet viser ikke merkeskilter for noen samfunn</string>
+    <string name="room_settings_copy_room_id">Kopier rommets ID</string>
+    <string name="encryption_export_e2e_room_keys">Eksporter E2E-romnøkler</string>
+    <string name="encryption_export_room_keys">Eksporter romnøkler</string>
+    <string name="encryption_import_e2e_room_keys">Importer E2E-romnøkler</string>
+    <string name="encryption_import_room_keys">Importer romnøkler</string>
+    <string name="encryption_information_verified">Verifisert</string>
+    <string name="encryption_information_unverify">Av-verifiser</string>
+    <string name="encryption_information_verify_device">Verifiser økten</string>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 rom</item>
+	<item quantity="other">%d rom</item>
+</plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: 1 melding</item>
+	<item quantity="other">%1$s: %2$d meldinger</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d varsel</item>
+	<item quantity="other">%d varsler</item>
+</plurals>
+
+    <string name="notification_unknown_new_event">Ny hendelse</string>
+    <string name="notification_new_messages">Nye meldinger</string>
+    <string name="notification_new_invitation">Ny invitasjon</string>
+    <string name="tiny">Bitteliten</string>
+    <plurals name="active_widgets">
+	<item quantity="one">1 aktiv modul</item>
+	<item quantity="other">%d aktive moduler</item>
+</plurals>
+
+
+    <string name="room_widget_activity_title">Modul</string>
+    <string name="room_widget_permission_title">Last inn modul</string>
+    <string name="room_widget_permission_display_name">Ditt visningsnavn</string>
+    <string name="room_widget_permission_avatar_url">Din avatars URL</string>
+    <string name="room_add_matrix_apps">Legg til Matrix-apper</string>
+    <string name="start_verification">Begynn verifisering</string>
+    <string name="conference_call_warning_title">Advarsel!</string>
+    <string name="command_error">Kommandofeil</string>
+    <string name="command_description_part_room">Forlat rommet</string>
+    <string name="command_description_topic">Velg rommets tema</string>
+    <string name="notification_silent">Stille</string>
+    <string name="notification_noisy">Bråkete</string>
+
+    <string name="encrypted_message">Kryptert melding</string>
+
+    <string name="create_community">Opprett et samfunn</string>
+    <string name="community_name">Samfunnsnavn</string>
+    <string name="community_id">Samfunns-ID</string>
+    <string name="group_details_rooms">Rom</string>
+    <string name="no_users_placeholder">Ingen brukere</string>
+
+    <string name="rooms">Rom</string>
+    <plurals name="group_members">
+	<item quantity="one">1 medlem</item>
+	<item quantity="other">%d medlemmer</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 rom</item>
+	<item quantity="other">%d rom</item>
+</plurals>
+    <string name="reason_colon">Årsak: %1$s</string>
+    <string name="deactivate_account_prompt_password">For å gå videre, vennligst skriv inn passordet ditt:</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="keys_backup_setup">Begynn å bruke Nøkkelsikkerhetskopiering</string>
+    <string name="new_recovery_method_popup_was_me">Det var meg</string>
+    <string name="keys_backup_banner_setup_line2">Begynn å bruke Nøkkelsikkerhetskopiering</string>
+
+    <string name="send_you_invite">Sendte deg en invitasjon</string>
+    <string name="room_list_rooms_empty_title">Rom</string>
+    <string name="create_new_room">Opprett et nytt rom</string>
+    <string name="fab_menu_create_room">Rom</string>
+    <string name="fab_menu_create_chat">Direktemeldinger</string>
+
+    <string name="create_room_name_hint">Rommets navn</string>
+    <string name="alpha_disclaimer_title">Velkommen til betaen!</string>
+    <string name="push_gateway_item_url">URL:</string>
+    <string name="bottom_action_people_x">Direktemeldinger</string>
+
+    <string name="message_edits">Meldingsredigeringer</string>
+    <string name="room_filtering_filter_hint">Filtrer samtaler …</string>
+    <string name="room_filtering_footer_create_new_room">Opprett et nytt rom</string>
+    <string name="joining_room">Blir med i rommet …</string>
+
+    <string name="identity_server">Identitetstjener</string>
+    <string name="settings_discovery_enter_identity_server">Skriv inn en ny identitetstjener</string>
+    <string name="send_attachment">Send vedlegg</string>
+
+    <string name="attachment_type_sticker">Klistremerke</string>
+    <string name="report_content_spam">Det er søppelpost</string>
+    <string name="room_list_quick_actions_notifications_all">Alle meldinger</string>
+    <string name="room_list_quick_actions_notifications_mentions">Kun nevninger</string>
+    <string name="room_list_quick_actions_leave">Forlat rommet</string>
+    <string name="timeline_unread_messages">Uleste meldinger</string>
+
+    <string name="login_splash_submit">Kom i gang</string>
+
+    <string name="login_server_title">Velg en tjener</string>
+    <string name="login_reset_password_on">Tilbakestill passordet på %1$s</string>
+    <string name="login_reset_password_warning_title">Advarsel!</string>
+    <string name="login_set_email_title">Velg en E-postadresse</string>
+    <string name="login_set_msisdn_title">Velg et telefonnummer</string>
+    <string name="login_terms_title">Godkjenn vilkårene for å fortsette</string>
+
+    <string name="settings_advanced_settings">Avanserte innstillinger</string>
+    <string name="settings_developer_mode">Utviklermodus</string>
+    <string name="create_room_encryption_description">Dersom dette først har blitt skrudd på, kan kryptering aldri bli skrudd av.</string>
+
+    <string name="verification_sas_match">De samsvarer</string>
+    <string name="verification_conclusion_not_secure">Ikke sikker</string>
+    <string name="verification_request_waiting">Venter …</string>
+    <string name="verification_verify_device">Verifiser denne økten</string>
+    <string name="a13n_qr_code_description">QR-kodebilde</string>
+
+    <string name="room_profile_section_more_leave">Forlat rommet</string>
+    <string name="room_profile_leaving_room">Forlater rommet …</string>
+
+    <string name="room_settings_enable_encryption_warning">Dersom dette først har blitt skrudd på, kan kryptering aldri bli skrudd av.</string>
+
+    <string name="settings_active_sessions_list">Aktive økter</string>
+    <string name="settings_active_sessions_show_all">Vis alle økter</string>
+    <string name="settings_active_sessions_manage">Behandle økter</string>
+    <string name="crosssigning_verify_this_session">Verifiser denne økten</string>
+    <string name="verification_profile_verified">Verifisert</string>
+    <string name="trusted">Betrodd</string>
+    <string name="not_trusted">Ikke betrodd</string>
+
+    <string name="a11y_qr_code_for_verification">QR-kode</string>
+
+    <string name="qr_code_scanned_by_other_no">Nei</string>
+
+    <string name="settings_dev_tools">Utviklerverktøy</string>
+    <string name="new_signin">Ny innlogging</string>
+
+    <string name="message_action_item_redact">Fjern …</string>
     </resources>
