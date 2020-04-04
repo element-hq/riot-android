@@ -1728,7 +1728,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_set_workmanager_delay_summary">%s
 \nDie Synchronisierung kann aufgrund deiner Ressourcen (Akku) oder Gerätezustands (schlafend) verschoben werden.</string>
     <string name="settings_integrations">Integrationen</string>
-    <string name="settings_integrations_summary">Benutze einen Integrations-Manager um Bots, Brpcken, Widgets und Sticker-Pakete zu verwalten.
+    <string name="settings_integrations_summary">Benutze einen Integrations-Manager um Bots, Brücken, Widgets und Sticker-Pakete zu verwalten. 
 \nIntegrations-Manager erhalten Konfigurationsdaten und können Widgets verändern, Raum-Einladungen senden und in deinem Namen Berechtigungslevel setzen.</string>
     <string name="settings_integration_allow">Erlaube Integrationen</string>
     <string name="room_widget_activity_title">Widget</string>
