@@ -682,31 +682,6 @@ public class PeopleFragment extends AbsHomeFragment implements ContactsManager.C
 
     @Override
     public void onIdentityServerTermsNotSigned(String token) {
-        try {
-            // Trying to accept terms on user's behalf without showing the dialog!
-            Log.v("Terms accepted: ", "running my own code");
-            AcceptTermsViewModel viewModel = ViewModelProviders.of(this).get(AcceptTermsViewModel.class);
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_INFO, new ServiceTermsArgs(TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token));
-            viewModel.termsArgs = intent.getParcelableExtra(EXTRA_INFO);
-            MXSession session;
-            String matrixId = null;
-            if (intent.hasExtra(EXTRA_MATRIX_ID)) {
-                matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
-            }
-            session = Matrix.getInstance(getContext()).getSession(matrixId);
-            viewModel.initSession(session);
-            AcceptTermsFragment acceptTermsFragment = new AcceptTermsFragment();
-            acceptTermsFragment.initialize(getActivity());
-            onActivityResult(RequestCodesKt.TERMS_REQUEST_CODE, Activity.RESULT_OK, null);
-        } catch (Exception e) {
-            Log.e("Error in ", "onIdentityServerTermsNotSigned-- " + e.getMessage());
-            if (isAdded()) {
-                startActivityForResult(ReviewTermsActivity.Companion.intent(getActivity(),
-                        TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token),
-                        RequestCodesKt.TERMS_REQUEST_CODE);
-            }
-        }
     }
 
     @Override
