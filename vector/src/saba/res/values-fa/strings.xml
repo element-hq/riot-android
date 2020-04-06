@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- Saba Strings -->
-    <string name="saba_messenger">پیام‌رسان سبا</string>
-    <string name="saba_messenger_long">پیام‌رسان سازمانی امن سبا</string>
+    <string name="saba_messenger">پیام‌رسان</string>
+    <string name="saba_messenger_long">پیام‌رسان سازمانی امن</string>
 
     <!-- About Saba -->
     <string name="saba_about_version_info">نسخه %1$s</string>
@@ -10,7 +10,7 @@
     <string name="saba_about_title">درباره</string>
     <string name="saba_about_privacy">حریم خصوصی</string>
     <string name="saba_about_open_source_software">نرم‌افزارهای آزاد</string>
-    <string name="saba_about_about_saba">درباره سبا</string>
+    <string name="saba_about_about_saba">درباره پیام‌رسان</string>
 
     <!-- Menus -->
     <string name="saba_menu_conversations">گفتگوها</string>

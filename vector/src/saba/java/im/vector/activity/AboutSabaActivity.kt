@@ -15,7 +15,7 @@ import im.vector.BuildConfig
 
 
 /**
- * Display a activity containing info about Saba Messenger
+ * Display a activity containing info about Messenger
  */
 class AboutSabaActivity : AppCompatActivity() {
     @BindView(R.id.version_text)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Saba Strings -->
-    <string name="saba_messenger">Saba Messenger</string>
-    <string name="saba_messenger_long">Saba Secure Business Messenger</string>
+    <string name="saba_messenger">Messenger</string>
+    <string name="saba_messenger_long">Secure Business Messenger</string>
 
     <!-- About Saba -->
     <string name="saba_about_version_info">Version %1$s</string>
@@ -10,7 +10,7 @@
     <string name="saba_about_title">About</string>
     <string name="saba_about_privacy">Privacy Policy</string>
     <string name="saba_about_open_source_software">Open Source</string>
-    <string name="saba_about_about_saba">About Saba</string>
+    <string name="saba_about_about_saba">About</string>
 
     <!-- Menus -->
     <string name="saba_menu_conversations">Conversations</string>
