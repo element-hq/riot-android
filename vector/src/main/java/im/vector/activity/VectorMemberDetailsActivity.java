@@ -1581,6 +1581,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     private void refreshUserDevicesList() {
         // Refresh the adapter data
+        mSession.checkCrypto();
         List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
 
         mDevicesListViewAdapter.clear();
