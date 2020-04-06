@@ -148,8 +148,8 @@ android {
 
         saba {
             applicationId "com.sabaos.messaging"
-            versionCode 9812191
-            versionName "Esfand98-B"
+            versionCode 9901181
+            versionName "Farvardin99-A"
             buildConfigField "boolean", "IS_SABA", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
