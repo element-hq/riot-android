@@ -45,7 +45,7 @@ android {
 
     defaultConfig {
         applicationId "im.vector"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         // use the version code
         versionCode rootProject.ext.versionCodeProp
@@ -57,6 +57,7 @@ android {
         }
 
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
