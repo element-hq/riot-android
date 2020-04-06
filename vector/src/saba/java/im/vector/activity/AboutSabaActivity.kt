@@ -1,17 +1,15 @@
 package im.vector.activity
 
-//import android.support.v7.app.AppCompatActivity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
-
-import im.vector.R
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.BuildConfig
+import im.vector.R
 
 
 /**
@@ -52,6 +50,5 @@ class AboutSabaActivity : AppCompatActivity() {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("$homeServerUrl/privacy"))
             startActivity(i)
         }
-
     }
 }
