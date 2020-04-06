@@ -76,7 +76,7 @@
         <item quantity="one">%d مورد</item>
         <item quantity="other">%d مورد</item>
     </plurals>
-    <string name="malformed_id">شناسه نامعتبر است. باید یک آدرس ایمیل یا شناسه‌ای در قالب \'@username:sabaos.com\' وارد نمایید.</string>
+    <string name="malformed_id">شناسه نامعتبر است. باید یک آدرس ایمیل یا شناسه‌ای در قالب \'@username:example.com\' وارد نمایید.</string>
     <string name="room_details_people_invited_group_name">دعوت‌شدگان</string>
     <string name="room_details_people_present_group_name">اعضا</string>
 
