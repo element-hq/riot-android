@@ -624,25 +624,27 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             VectorUncaughtExceptionHandler.INSTANCE.clearAppCrashStatus(this);
 
             // crash reported by a rage shake
-            try {
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.send_bug_report_app_crashed)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                BugReporter.sendBugReport();
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                BugReporter.deleteCrashFile(VectorHomeActivity.this);
-                            }
-                        })
-                        .show();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
+            if (!BuildConfig.IS_SABA) {
+                try {
+                    new AlertDialog.Builder(this)
+                            .setMessage(R.string.send_bug_report_app_crashed)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    BugReporter.sendBugReport();
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    BugReporter.deleteCrashFile(VectorHomeActivity.this);
+                                }
+                            })
+                            .show();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
+                }
             }
         }
 
