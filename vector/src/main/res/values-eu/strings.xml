@@ -285,7 +285,7 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
     <string name="room_participants_action_unban">Debekua kendu</string>
     <string name="room_participants_action_set_default_power_level">Berrezarri erabiltzaile arrunt gisa</string>
     <string name="room_participants_action_set_moderator">Bihurtu moderatzaile</string>
-    <string name="room_participants_action_set_admin">Bihurtu kudeatzaile</string>
+    <string name="room_participants_action_set_admin">Bihurtu administratzaile</string>
     <string name="room_participants_action_ignore">Ezkutatu kide honen mezu guztiak</string>
     <string name="room_participants_action_unignore">Erakutsi kide honen mezu guztiak</string>
     <string name="room_participants_invite_search_another_user">Erabiltzailearen IDa, izena edo e-maila</string>
@@ -1291,7 +1291,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="ignore">Ezikusi</string>
 
     <string name="action_sign_out_confirmation_simple">Ziur saioa amaitu nahi duzula\?</string>
-    <string name="auth_login_sso">Hasi saioa urrats batean</string>
+    <string name="auth_login_sso">Hasi saioa Single sign-on bidez</string>
     <string name="login_error_unknown_host">URL-a ez dago eskuragarri, egiaztatu mesedez</string>
     <string name="login_error_ssl_handshake">Zure gailuak zaharkitutako TLS segurtasun protokolo bat darabil, erasotu daitekeena, zure segurtasunerako ezin izango zara konektatu</string>
     <string name="settings_send_message_with_enter">Bidali mezua Sartu tekla sakatuta</string>
