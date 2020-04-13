@@ -1226,7 +1226,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="unrecognized_command">Neznámý příkaz: %s</string>
     <string name="command_problem_with_parameters">Příkaz \"%s\" potřebuje více parametrů nebo některé parametry jsou nesprávné.</string>
     <string name="command_description_emote">Zobrazí akce</string>
-    <string name="command_description_ban_user">Zakáže uživatele s udaným id</string>
+    <string name="command_description_ban_user">Zakáže uživatele s daným id</string>
     <string name="command_description_unban_user">Zruší zákaz uživateli s daným id</string>
     <string name="command_description_op_user">Určit úroveň pokročilosti uživatele</string>
     <string name="command_description_invite_user">Pozve uživatele s daným id do této místnosti</string>
@@ -1236,4 +1236,108 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="command_description_kick_user">Nakopne uživatele s daným id</string>
     <string name="command_description_nick">Změní Vaši veřejnou přezdívku</string>
     <string name="command_description_markdown">Markdown zap/vyp</string>
+    <string name="command_description_deop_user">Odebere práva uživateli s daným id</string>
+    <string name="command_description_clear_scalar_token">Opravit správu aplikací Matrix</string>
+
+    <string name="markdown_has_been_enabled">Markdown byl zapnut.</string>
+    <string name="markdown_has_been_disabled">Markdown byl vypnut.</string>
+
+    <string name="notification_off">Vypnout</string>
+    <string name="notification_silent">Tiché</string>
+    <string name="notification_noisy">Hlučné</string>
+
+    <string name="create">Založit</string>
+    <string name="create_community">Založit komunitu</string>
+    <string name="community_name">Jméno komunity</string>
+    <string name="community_name_hint">Příklad</string>
+    <string name="community_id">Id komunity</string>
+    <string name="community_id_hint">příklad</string>
+
+    <string name="group_details_home">Doma</string>
+    <string name="group_details_people">Lidé</string>
+    <string name="group_details_rooms">Místnosti</string>
+    <string name="no_users_placeholder">Žádní uživatelé</string>
+
+    <string name="rooms">Místnosti</string>
+    <string name="joined">Přítomní</string>
+    <string name="invited">Pozvaní</string>
+    <string name="filter_group_members">Filtrovat členy skupiny</string>
+    <string name="filter_group_rooms">Filtrovat místnosti skupiny</string>
+
+    <plurals name="group_members">
+	<item quantity="one">1 člen</item>
+	<item quantity="few">%d členové</item>
+	<item quantity="other">%d členů</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 místnost</item>
+	<item quantity="few">%d místnosti</item>
+	<item quantity="other">%d místností</item>
+</plurals>
+    <string name="group_no_long_description">Správce komunity neposkytl podrobný popis této lomunity.</string>
+
+    <string name="has_been_kicked">%2$s Vás vykopnul z %1$s</string>
+    <string name="has_been_banned">%2$s Vám zakázal %1$s</string>
+    <string name="reason_colon">Důvod: %1$s</string>
+    <string name="rejoin">Opět se přidejte</string>
+    <string name="receipt_avatar">Avatar přijetí</string>
+    <string name="notice_avatar">Avatar vypovězení</string>
+    <string name="avatar">Avatar</string>
+
+    <string name="dialog_user_consent_content">Abyste mohli dále používat homeserver %1$s, musíte prohlédnout všeobecné podmínky a souhlasit s nimi.</string>
+    <string name="dialog_user_consent_submit">Prohlédnout nyní</string>
+
+    <string name="deactivate_account_title">Deaktivovat účet</string>
+    <string name="deactivate_account_content">To učiní Váš účet trvale nepoužitelným. Nebudete se moci přihlásit a nikdo nebude moci registrovat stejné uživatelské ID. Způsobí odchod Vašeho účtu ze všech místností, jichž se účastní a odstraní podrobnosti Vašeho účtu z ověřovacího serveru. <b>Tato akce je nevratná</b>.
+\n
+\nDeaktivace Vašeho účtu <b>samosebou nezpůsobí zapomenutí zpráv, jež jste poslali</b>. Pokud si přejete, abychom Vaše zprávy zapomněli, zaškrtněte box níže.
+\n
+\nViditelnost zpráv v Matrixu je podobná emailu. To, že zapomeneme Vaše zprávy, znamená, že nebudou ani s novými, ani neregistrovanými uživateli sdíleny, ale registrovaní uživatelé, kteří již přístup k Vašim zprávám mají, jej budou mít k jejich kopiím.</string>
+    <string name="deactivate_account_delete_checkbox">Prosím, při deaktivaci mého účtu zapomeňte všechny zprávy, které jsem poslal(a) (Varování: způsobí, že budoucí uživatelé uvidí neúplné konverzace)</string>
+    <string name="deactivate_account_prompt_password">Pokračujte po zadání svého hesla:</string>
+    <string name="deactivate_account_submit">Deaktivovat účet</string>
+
+    <string name="error_empty_field_enter_user_name">Prosím, zadejte uživatelské jméno.</string>
+    <string name="error_empty_field_your_password">Prosím, zadejte své heslo.</string>
+    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní</string>
+    <string name="room_tombstone_continuation_link">Konverzace pokračuje tady</string>
+    <string name="room_tombstone_continuation_description">Tato místnost je pokračováním jiné konverzace</string>
+    <string name="room_tombstone_predecessor_link">Po kliknutí zde uvidíte starší zprávy</string>
+
+    <string name="resource_limit_exceeded_title">Mez zdrojů překročena</string>
+    <string name="resource_limit_contact_action">Kontaktovat správce</string>
+
+    <string name="resource_limit_contact_admin">kontaktovat Vašeho správce služby</string>
+
+    <string name="resource_limit_soft_default">Tento homeserver překročil jednu ze svých mezí zdrojů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_default">Tento homeserver překročil jednu ze svých mezí zdrojů.</string>
+
+    <string name="resource_limit_soft_mau"> Tent homeserver narazil na svoji měsíční mez aktivních uživatelů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_mau">Tento homeserver narazil na svoji měsíční mez aktivních uživatelů.</string>
+
+    <string name="resource_limit_soft_contact">Prosím, %s, aby zvýšili mez.</string>
+    <string name="resource_limit_hard_contact">Prosím, %s, abyste mohli službu dále používate.</string>
+
+    <string name="settings_lazy_loading_title">Pomalé načítání členů místností</string>
+    <string name="settings_lazy_loading_description">Zvýší výkon tím, že načte členy místnosti při prvním náhledu.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Váš homeserver dosud nepodporuje pomalé načtení členů místností. Zkuste později.</string>
+
+    <string name="unknown_error">Omlouváme se, došlo k chybě</string>
+
+    <string name="merged_events_expand">rozbalit</string>
+    <string name="merged_events_collapse">sbalit</string>
+
+    <string name="settings_info_area_show">Ukázat informační pole</string>
+    <string name="show_info_area_always">Vždy</string>
+    <string name="show_info_area_messages_and_errors">U zpráv a chyb</string>
+    <string name="show_info_area_only_errors">Jen u chyb</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
+
+    <string name="store_title">Riot.im - Komunikujte, svým způsobem</string>
     </resources>
