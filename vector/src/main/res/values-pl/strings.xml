@@ -1837,7 +1837,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="login_server_url_form_modular_notice">Wprowadź adres Riot Modular lub serwera którego chcesz użyć</string>
     <string name="login_server_url_form_other_notice">Wprowadź adres serwera lub Riot z którym chcesz się połączyć</string>
 
-    <string name="login_sso_error_message">Wystąpił błąd podczas ładowania strony: %1$s (%2$s)</string>
+    <string name="login_sso_error_message">Wystąpił błąd podczas ładowania strony: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacja nie jest w stanie zalogować się do tego serwera domowego. Serwer domowy obsluguje następujące metody logowania: %1$s.
 \n
 \nCzy chcesz zalogować się używając klienta sieciowego\?</string>
@@ -2054,7 +2054,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="room_member_power_level_admin_in">Administrator w %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator w %1$s</string>
-    <string name="room_member_power_level_custom_in">Niestandardowy (%1$s) w %2$s</string>
+    <string name="room_member_power_level_custom_in">Niestandardowy (%1$d) w %2$s</string>
 
     <string name="room_member_jump_to_read_receipt">Przeskocz do znacznika odczytania</string>
 

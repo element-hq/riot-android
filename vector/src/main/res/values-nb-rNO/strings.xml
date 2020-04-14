@@ -665,7 +665,7 @@
     <string name="view_decrypted_source">Se dekryptert kilde</string>
     <string name="report_content">Rapporter innhold</string>
     <string name="ongoing_conference_call">Pågående konferansesamtale.
-\nBli med som 1$s eller %2$s</string>
+\nBli med som %1$s eller %2$s</string>
     <string name="cannot_start_call">Kan ikke starte samtalen, vennligst prøv igjen senere</string>
     <string name="missing_permissions_warning">På grunn av manglende tillatelse, kan noen funksjoner mangle…</string>
     <string name="missing_permissions_error">Denne handlingen er ikke mulig på grunn av manglende tillatelser.</string>
