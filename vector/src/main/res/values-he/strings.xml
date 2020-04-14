@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">he</string>
+<resources>
+    <string name="resources_language">he</string>
     <string name="resources_country_code">IL</string>
     <string name="light_theme">עיצוב בהיר</string>
     <string name="dark_theme">עיצוב כהה</string>
@@ -21,4 +22,4 @@
     <string name="title_activity_group_details">פרטי קהילה</string>
     <string name="title_activity_choose_sticker">שליחת מדבקה</string>
     <string name="notification_unknown_room_name">חדר</string>
-    </resources>
+</resources>

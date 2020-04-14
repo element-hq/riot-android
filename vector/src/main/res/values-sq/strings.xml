@@ -2133,18 +2133,18 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="qr_code_scanned_by_other_no">Jo</string>
 
     <string name="no_connectivity_to_the_server_indicator">Humbi lidhja me shërbyesin</string>
-<string name="login_signup_username_hint">Emër përdoruesi</string>
+    <string name="login_signup_username_hint">Emër përdoruesi</string>
     <string name="verification_verified_user">%s i verifikuar</string>
     <string name="settings_dev_tools">Mjete Zhvilluesi</string>
     <string name="settings_account_data">Të dhëna Llogarie</string>
     <plurals name="poll_info">
-	<item quantity="one">%d votë</item>
-	<item quantity="other">%d vota</item>
-</plurals>
+        <item quantity="one">%d votë</item>
+        <item quantity="other">%d vota</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d votë - Përfundimet finale</item>
-	<item quantity="other">%d vota - Përfundimet finale</item>
-</plurals>
+        <item quantity="one">%d votë - Përfundimet finale</item>
+        <item quantity="other">%d vota - Përfundimet finale</item>
+    </plurals>
     <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
     <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
     <string name="verification_cannot_access_other_session">S’hyni dot në një sesion ekzistues\?</string>
@@ -2161,9 +2161,9 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="message_action_item_redact">Hiqni…</string>
     <string name="share_confirm_room">Doni të dërgohet kjo bashkëngjitje te %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Dërgoje figurën në madhësinë origjinale</item>
-	<item quantity="other">Dërgoji figurat në madhësinë origjinale</item>
-</plurals>
+        <item quantity="one">Dërgoje figurën në madhësinë origjinale</item>
+        <item quantity="other">Dërgoji figurat në madhësinë origjinale</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Ripohoni Heqjen</string>
     <string name="delete_event_dialog_content">Jeni i sigurt se doni të hiqet (fshihet) kjo veprimtari\? Kini parasysh se, nëse fshini emrin ose ndryshimin e temës së një dhome, ndryshimi mund të zhbëhet.</string>

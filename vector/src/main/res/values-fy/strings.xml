@@ -78,7 +78,7 @@
     <string name="missing_permissions_to_start_conf_call">Om in gearkomst yn dit groepspetear te starten hasto útnûgingsrjochten nedich</string>
     <string name="missing_permissions_title_to_start_conf_call">Kin de oprop net starte</string>
     <string name="device_information">Apparaatynformaasje</string>
-<string name="room_no_conference_call_in_encrypted_rooms">Gearkomstpetearen wurde net stipe yn fersifere petearen</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Gearkomstpetearen wurde net stipe yn fersifere petearen</string>
     <string name="call_anyway">Dochs belje</string>
     <string name="send_anyway">Dochs ferstjoere</string>
     <string name="or">of</string>
@@ -142,9 +142,9 @@
     <string name="no_room_placeholder">Gjin petearen</string>
     <string name="no_public_room_placeholder">Gjin publike petearen beskikber</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 brûker</item>
-	<item quantity="other">%d brûkers</item>
-</plurals>
+        <item quantity="one">1 brûker</item>
+        <item quantity="other">%d brûkers</item>
+    </plurals>
 
     <string name="groups_invite_header">Utnûgje</string>
     <string name="groups_header">Mienskippen</string>
@@ -157,4 +157,4 @@
     <string name="send_bug_report_description">Beskriuw de flater. Wat hawwe jo dien\? Wat ferwachten jo dat der barre soe\? Wat is der echt bard\?</string>
     <string name="send_bug_report_description_in_english">Beskriuw it probleem yn it Ingelsk, wannear mooglik.</string>
     <string name="send_bug_report_placeholder">Beskriuw hjir jo probleem</string>
-    </resources>
+</resources>

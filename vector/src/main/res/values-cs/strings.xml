@@ -102,10 +102,10 @@
     <string name="no_room_placeholder">Žádné místnosti</string>
     <string name="no_public_room_placeholder">Žádné veřejné mistnosti nejsou k dispozici</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">Jeden uživatel</item>
-	<item quantity="few">%d uživatelé</item>
-	<item quantity="other">%d uživatelů</item>
-</plurals>
+        <item quantity="one">Jeden uživatel</item>
+        <item quantity="few">%d uživatelé</item>
+        <item quantity="other">%d uživatelů</item>
+    </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
     <string name="groups_header">Komunity</string>
@@ -259,7 +259,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
         <item quantity="many">%d změn členství</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -347,35 +347,35 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
         <item quantity="many">%d aktivních členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
         <item quantity="many">%d členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 s</item>
-	<item quantity="few">%d s</item>
-	<item quantity="other">%d s</item>
-</plurals>
+        <item quantity="one">1 s</item>
+        <item quantity="few">%d s</item>
+        <item quantity="other">%d s</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 min</item>
-	<item quantity="few">%d min</item>
-	<item quantity="other">%d min</item>
-</plurals>
+        <item quantity="one">1 min</item>
+        <item quantity="few">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 h</item>
-	<item quantity="few">%d h</item>
-	<item quantity="other">%d h</item>
-</plurals>
+        <item quantity="one">1 h</item>
+        <item quantity="few">%d h</item>
+        <item quantity="other">%d h</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 d</item>
-	<item quantity="few">%d d</item>
-	<item quantity="other">%d d</item>
-</plurals>
+        <item quantity="one">1 d</item>
+        <item quantity="few">%d d</item>
+        <item quantity="other">%d d</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
     <string name="room_participants_leave_prompt_msg">Opravdu chcete opustit tuto místnost\?</string>
@@ -410,10 +410,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Opravdu chcete vyhodit tohoto uživatele z této konverzace\?</item>
-	<item quantity="few">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
-	<item quantity="other">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
-</plurals>
+        <item quantity="one">Opravdu chcete vyhodit tohoto uživatele z této konverzace\?</item>
+        <item quantity="few">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
+        <item quantity="other">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Opravdu chcete zakázat vstup tohoto uživatele do této konverzace\?</string>
     <string name="reason_hint">Důvod</string>
 
@@ -450,7 +450,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
         <item quantity="many">%d nových zpráv</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -467,7 +467,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
         <item quantity="many">%d vybráno</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -1039,7 +1039,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_information_unblock">Odebrat z černé listiny</string>
 
     <string name="encryption_information_verify_device">Potvrdit relaci</string>
-<string name="font_size">Velikost písma</string>
+    <string name="font_size">Velikost písma</string>
     <string name="tiny">Velmi malé</string>
     <string name="small">Malé</string>
     <string name="normal">Normální</string>
@@ -1063,24 +1063,24 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Stahuji klíče…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importuji klíče…</string>
     <plurals name="keys_backup_restore_success_description_part1">
-	<item quantity="one">Obnovena záloha s %d klíčem.</item>
-	<item quantity="few">Obnovena záloha s %d klíči.</item>
-	<item quantity="other">Obnovena záloha s %d klíči.</item>
-</plurals>
+        <item quantity="one">Obnovena záloha s %d klíčem.</item>
+        <item quantity="few">Obnovena záloha s %d klíči.</item>
+        <item quantity="other">Obnovena záloha s %d klíči.</item>
+    </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Do této relace byl přidán %d nový klíč.</item>
-	<item quantity="few">Do této relace byly přidány %d nové klíče.</item>
-	<item quantity="other">Do této relace bylo přidáno %d nových klíčů.</item>
-</plurals>
+        <item quantity="one">Do této relace byl přidán %d nový klíč.</item>
+        <item quantity="few">Do této relace byly přidány %d nové klíče.</item>
+        <item quantity="other">Do této relace bylo přidáno %d nových klíčů.</item>
+    </plurals>
 
     <string name="keys_backup_banner_in_progress">Zálohuji klíče…</string>
 
     <string name="keys_backup_info_keys_all_backup_up">Všechny klíče zazálohovány</string>
     <plurals name="keys_backup_info_keys_backing_up">
-	<item quantity="one">Zálohuji %d klíč…</item>
-	<item quantity="few">Zálohuji %d klíče…</item>
-	<item quantity="other">Zálohuji %d klíčů…</item>
-</plurals>
+        <item quantity="one">Zálohuji %d klíč…</item>
+        <item quantity="few">Zálohuji %d klíče…</item>
+        <item quantity="other">Zálohuji %d klíčů…</item>
+    </plurals>
 
     <string name="import_e2e_keys_from_file">Importovat E2E klíče ze souboru \"%1$s\".</string>
 
@@ -1107,31 +1107,31 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="lock_screen_hint">Zadat zde…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">1 nepřečtená oznámená zpráva</item>
-	<item quantity="few">%d nepřečtené oznámené zprávy</item>
-	<item quantity="other">%d nepřečtených oznámených zpráv</item>
-</plurals>
+        <item quantity="one">1 nepřečtená oznámená zpráva</item>
+        <item quantity="few">%d nepřečtené oznámené zprávy</item>
+        <item quantity="other">%d nepřečtených oznámených zpráv</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">1 nepřečtená oznámená zpráva</item>
-	<item quantity="few">%d nepřečtené oznámené zprávy</item>
-	<item quantity="other">%d nepřečtených oznámených zpráv</item>
-</plurals>
+        <item quantity="one">1 nepřečtená oznámená zpráva</item>
+        <item quantity="few">%d nepřečtené oznámené zprávy</item>
+        <item quantity="other">%d nepřečtených oznámených zpráv</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 místnost</item>
-	<item quantity="few">%d místnosti</item>
-	<item quantity="other">%d místností</item>
-</plurals>
+        <item quantity="one">1 místnost</item>
+        <item quantity="few">%d místnosti</item>
+        <item quantity="other">%d místností</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 zpráva</item>
-	<item quantity="few">%1$s: %2$d zprávy</item>
-	<item quantity="other">%1$s: %2$d zpráv</item>
-</plurals>
+        <item quantity="one">%1$s: 1 zpráva</item>
+        <item quantity="few">%1$s: %2$d zprávy</item>
+        <item quantity="other">%1$s: %2$d zpráv</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d oznámení</item>
-	<item quantity="few">%d oznámení</item>
-	<item quantity="other">%d oznámení</item>
-</plurals>
+        <item quantity="one">%d oznámení</item>
+        <item quantity="few">%d oznámení</item>
+        <item quantity="other">%d oznámení</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
     <string name="notification_unknown_new_event">Nová událost</string>
@@ -1150,10 +1150,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_labs_create_conference_with_jitsi">Založit konferenční hovor s jitsi</string>
     <string name="widget_delete_message_confirmation">Jste si jisti, že chcete smazat widget z této místnosti\?</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktivní widget</item>
-	<item quantity="few">%d aktivní widgety</item>
-	<item quantity="other">%d aktivních widgetů</item>
-</plurals>
+        <item quantity="one">1 aktivní widget</item>
+        <item quantity="few">%d aktivní widgety</item>
+        <item quantity="other">%d aktivních widgetů</item>
+    </plurals>
 
 
     <string name="room_widget_activity_title">Widget</string>
@@ -1265,16 +1265,16 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="filter_group_rooms">Filtrovat místnosti skupiny</string>
 
     <plurals name="group_members">
-	<item quantity="one">1 člen</item>
-	<item quantity="few">%d členové</item>
-	<item quantity="other">%d členů</item>
-</plurals>
+        <item quantity="one">1 člen</item>
+        <item quantity="few">%d členové</item>
+        <item quantity="other">%d členů</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 místnost</item>
-	<item quantity="few">%d místnosti</item>
-	<item quantity="other">%d místností</item>
-</plurals>
+        <item quantity="one">1 místnost</item>
+        <item quantity="few">%d místnosti</item>
+        <item quantity="other">%d místností</item>
+    </plurals>
     <string name="group_no_long_description">Správce komunity neposkytl podrobný popis této lomunity.</string>
 
     <string name="has_been_kicked">%2$s Vás vykopnul z %1$s</string>
@@ -1340,4 +1340,4 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
 
     <string name="store_title">Riot.im - Komunikujte, svým způsobem</string>
-    </resources>
+</resources>

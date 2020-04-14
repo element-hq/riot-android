@@ -492,7 +492,7 @@
     <string name="room_details_settings">সেটিংস</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="malformed_id">বিকৃত পরিচয়।একটি ইমেইল ঠিকানা বা একটি মাধ্যমিক পরিচয় হতে হবে যেমন \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">আমন্ত্রিত</string>
@@ -1192,7 +1192,7 @@
     <string name="markdown_has_been_disabled">মার্কডাউন অক্ষম করা হয়েছে।</string>
 
     <string name="notification_off">অফ</string>
-<string name="login_error_no_homeserver_found">এটি কোনও বৈধ ম্যাট্রিক্স সার্ভারের ঠিকানা নয়</string>
+    <string name="login_error_no_homeserver_found">এটি কোনও বৈধ ম্যাট্রিক্স সার্ভারের ঠিকানা নয়</string>
     <string name="notification_silent">নিঃশব্দ</string>
     <string name="notification_noisy">সশব্দ</string>
 
@@ -1214,14 +1214,14 @@
     <string name="filter_group_rooms">গোষ্ঠীর ঘরগুলো ফিল্টার করুন</string>
 
     <plurals name="group_members">
-	<item quantity="one">১ জন সদস্য</item>
-	<item quantity="other">%d জন সদস্য</item>
-</plurals>
+        <item quantity="one">১ জন সদস্য</item>
+        <item quantity="other">%d জন সদস্য</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">১ টি ঘর</item>
-	<item quantity="other">%d টি ঘর</item>
-</plurals>
+        <item quantity="one">১ টি ঘর</item>
+        <item quantity="other">%d টি ঘর</item>
+    </plurals>
     <string name="group_no_long_description">সম্প্রদায় প্রশাসক এই সম্প্রদায়ের জন্য দীর্ঘ বিবরণ সরবরাহ করেনি।</string>
 
     <string name="has_been_banned">%2$s দ্বারা আপনাকে %1$s থেকে নিষিদ্ধ করা হয়েছে।</string>
@@ -1264,4 +1264,4 @@
     <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
     <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
 
-    </resources>
+</resources>

@@ -1306,9 +1306,9 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
         <item quantity="other">Backup mit %d Schlüssel wiederhergestellt.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d neuer Schlüssel wurde dieser Sitzung hinzugefügt.</item>
-	<item quantity="other">%d neue Schlüssel wurden dieser Sitzung hinzugefügt.</item>
-</plurals>
+        <item quantity="one">%d neuer Schlüssel wurde dieser Sitzung hinzugefügt.</item>
+        <item quantity="other">%d neue Schlüssel wurden dieser Sitzung hinzugefügt.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Konnte letzte Version der Wiederherstellungsschlüssel nicht laden (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Sitzungsverschlüsselung ist nicht aktiviert</string>
@@ -1955,7 +1955,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
 \nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
-<string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
+    <string name="reaction_search_type_hint">Beginne zu Tippen um eine Reaktion zu finden.</string>
 
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Befreie deine Kommunikation</string>
@@ -1992,9 +1992,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="login_error_outdated_homeserver_content">Auf diesem Heimserver läuft eine zu alte Version, um eine Verbindung herzustellen. Bitten die Heimserver-Administration um ein Upgrade.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunde…</item>
-	<item quantity="other">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunden…</item>
-</plurals>
+        <item quantity="one">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunde…</item>
+        <item quantity="other">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunden…</item>
+    </plurals>
 
     <string name="seen_by">Gesehen von</string>
 
@@ -2120,9 +2120,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_profile_section_more_settings">Raum Einstellungen</string>
     <string name="room_profile_section_more_notifications">Benachrichtigungen</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Eine Person</item>
-	<item quantity="other">%1$d Personen</item>
-</plurals>
+        <item quantity="one">Eine Person</item>
+        <item quantity="other">%1$d Personen</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Raum verlassen</string>
     <string name="room_profile_leaving_room">Verlasse den Raum…</string>
@@ -2194,9 +2194,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_active_sessions_unverified_device_desc">Verifiziere diese Sitzung, um sie als vertrauenswürdig zu markieren, und gewähren ihr Zugriff auf verschlüsselte Nachrichten. Wenn du dich nicht bei dieser Sitzung angemeldet hast, ist dein Konto möglicherweise gefährdet:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">Eine aktive Sitzung</item>
-	<item quantity="other">%d aktive Sitzungen</item>
-</plurals>
+        <item quantity="one">Eine aktive Sitzung</item>
+        <item quantity="other">%d aktive Sitzungen</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
     <string name="crosssigning_other_user_not_trust">Andere Benutzer!nnen vertrauen ihr möglicherweise nicht</string>
@@ -2233,13 +2233,13 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_dev_tools">Entwicklungswerkzeuge</string>
     <string name="settings_account_data">Kontodaten</string>
     <plurals name="poll_info">
-	<item quantity="one">%d Stimme</item>
-	<item quantity="other">%d Stimmen</item>
-</plurals>
+        <item quantity="one">%d Stimme</item>
+        <item quantity="other">%d Stimmen</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d Stimme - Endergebnis</item>
-	<item quantity="other">%d Stimmen - Endergebnis</item>
-</plurals>
+        <item quantity="one">%d Stimme - Endergebnis</item>
+        <item quantity="other">%d Stimmen - Endergebnis</item>
+    </plurals>
     <string name="poll_item_selected_aria">Ausgewählte Option</string>
     <string name="command_description_poll">Erstellt eine einfache Umfrage</string>
     <string name="verification_cannot_access_other_session">Kann nicht auf eine vorhandene Sitzung zugegriffen werden\?</string>
@@ -2256,9 +2256,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="message_action_item_redact">Entfernen…</string>
     <string name="share_confirm_room">Möchtest du diesen Anhang an %1$s senden\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Sende Bild in Originalgröße</item>
-	<item quantity="other">Sende Bilder in Originalgröße</item>
-</plurals>
+        <item quantity="one">Sende Bild in Originalgröße</item>
+        <item quantity="other">Sende Bilder in Originalgröße</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Entfernen bestätigen</string>
     <string name="delete_event_dialog_content">Möchtest du dieses Ereignis wirklich entfernen (löschen)\? Beachte, dass beim Löschen eines Raumnamens oder einer Themenänderung die Änderung rückgängig gemacht werden kann.</string>
@@ -2270,7 +2270,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
 
-<string name="spoiler">Spoiler</string>
+    <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
 
-    </resources>
+</resources>

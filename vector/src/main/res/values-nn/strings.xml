@@ -1070,7 +1070,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
     <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
     <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
-<string name="settings_noisy_notifications_preferences">Konfiguer bråkete-varsel</string>
+    <string name="settings_noisy_notifications_preferences">Konfiguer bråkete-varsel</string>
     <string name="settings_call_notifications_preferences">Konfiguer anrops-varsel</string>
     <string name="settings_silent_notifications_preferences">Konfiguer stille-varsel</string>
     <string name="settings_system_preferences_summary">Konfiguer LED-farge, vibrasjon eller lyd…</string>
@@ -1138,4 +1138,4 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="complete_security">Fullstendig sikkerheit</string>
 
-    </resources>
+</resources>

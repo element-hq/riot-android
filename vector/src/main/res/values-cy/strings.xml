@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">cy</string>
+<resources>
+    <string name="resources_language">cy</string>
     <string name="resources_country_code">GB</string>
     <string name="resources_script">Latn</string>
 
@@ -9,4 +10,4 @@
     <string name="status_theme">Thema Status.im</string>
 
     <string name="notification_sync_init">Yn paratoi gwasanaeth</string>
-    </resources>
+</resources>

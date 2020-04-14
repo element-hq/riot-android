@@ -2224,17 +2224,17 @@
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">La connessione al server è stata persa</string>
-<string name="login_signup_username_hint">Nome utente</string>
+    <string name="login_signup_username_hint">Nome utente</string>
     <string name="settings_dev_tools">Strumenti Svil</string>
     <string name="settings_account_data">Dati account</string>
     <plurals name="poll_info">
-	<item quantity="one">%d voto</item>
-	<item quantity="other">%d voti</item>
-</plurals>
+        <item quantity="one">%d voto</item>
+        <item quantity="other">%d voti</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d voto - Risultato finale</item>
-	<item quantity="other">%d voti - Risultato finale</item>
-</plurals>
+        <item quantity="one">%d voto - Risultato finale</item>
+        <item quantity="other">%d voti - Risultato finale</item>
+    </plurals>
     <string name="poll_item_selected_aria">Opzione selezionata</string>
     <string name="command_description_poll">Crea un semplice sondaggio</string>
     <string name="verification_cannot_access_other_session">Non puoi accedere ad una sessione esistente\?</string>
@@ -2251,9 +2251,9 @@
     <string name="message_action_item_redact">Rimuovi…</string>
     <string name="share_confirm_room">Vuoi inviare questo allegato a %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Invia immagine nella dimensione originale</item>
-	<item quantity="other">Invia immagini nella dimensione originale</item>
-</plurals>
+        <item quantity="one">Invia immagine nella dimensione originale</item>
+        <item quantity="other">Invia immagini nella dimensione originale</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Conferma rimozione</string>
     <string name="delete_event_dialog_content">Sei sicuro di volere rimuovere (eliminare) questo evento\? Nota che se elimini il nome della stanza o cambi l\'argomento, ciò potrebbe annullare la modifica.</string>

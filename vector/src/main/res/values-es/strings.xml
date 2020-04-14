@@ -1878,7 +1878,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="login_splash_submit">Empieza</string>
 
     <string name="login_server_title">Selecciona un servidor</string>
-<string name="login_server_text">Como el correo electrónico, las cuantas tienen un hogar, aunque se puede hablar con cualquiera</string>
+    <string name="login_server_text">Como el correo electrónico, las cuantas tienen un hogar, aunque se puede hablar con cualquiera</string>
     <string name="login_server_modular_text">Alojamiento de pago para organizaciones</string>
     <string name="login_server_modular_learn_more">Saber más</string>
     <string name="login_server_other_title">Otro</string>

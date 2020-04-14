@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">en</string>
+<resources>
+    <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
     <string name="resources_script">Latn</string>
 
@@ -19,4 +20,4 @@
     <string name="title_activity_verify_device">Bekräfta session</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Du kommer att förlora dina krypterade meddelanden om du loggar ut nu</string>
-    </resources>
+</resources>

@@ -342,7 +342,7 @@
     <string name="read_receipts_list">فهرست رسیدهای خواندن</string>
 
     <string name="keys_backup_setup_skip_title">آیا مطمئن هستید؟</string>
-<string name="disconnect">عدم اتصال</string>
+    <string name="disconnect">عدم اتصال</string>
     <string name="review">بررسی</string>
     <string name="decline">رد کردن</string>
 
@@ -360,13 +360,13 @@
     <string name="tab_title_search_rooms">اتاق‌ها</string>
     <string name="room_recents_conversations">اتاق‌ها</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">۱ اتاق</item>
-	<item quantity="other">%d اتاق</item>
-</plurals>
+        <item quantity="one">۱ اتاق</item>
+        <item quantity="other">%d اتاق</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s اتاق برای %2$s پیدا شد</item>
-	<item quantity="other">%1$s اتاق برای %2$s پیدا شد</item>
-</plurals>
+        <item quantity="one">%1$s اتاق برای %2$s پیدا شد</item>
+        <item quantity="other">%1$s اتاق برای %2$s پیدا شد</item>
+    </plurals>
     <string name="room_settings_direct_chat">گپ مستقیم</string>
     <string name="room_sliding_menu_version">نگارش</string>
     <string name="room_sliding_menu_version_x">نگارش %s</string>
@@ -486,14 +486,14 @@
     <string name="directory_server_native_rooms">تمامی اتاق‌های بومی %s</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">۱ اتاق</item>
-	<item quantity="other">%d اتاق</item>
-</plurals>
+        <item quantity="one">۱ اتاق</item>
+        <item quantity="other">%d اتاق</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d آگاهی</item>
-	<item quantity="other">%d آگاهی</item>
-</plurals>
+        <item quantity="one">%d آگاهی</item>
+        <item quantity="other">%d آگاهی</item>
+    </plurals>
 
     <string name="room_widget_permission_theme">زمینه‌تان</string>
     <string name="room_add_matrix_apps">افزودن کاره‌های ماتریس</string>
@@ -508,9 +508,9 @@
     <string name="filter_group_rooms">پالایش اتاق‌های گروهی</string>
 
     <plurals name="group_rooms">
-	<item quantity="one">۱ اتاق</item>
-	<item quantity="other">%d اتاق</item>
-</plurals>
+        <item quantity="one">۱ اتاق</item>
+        <item quantity="other">%d اتاق</item>
+    </plurals>
     <string name="group_no_long_description">مدیر اجتماع توضیحی بلند برای این اجتماع فراهم نکرده است.</string>
 
     <string name="settings_lazy_loading_title">بار کردن تنبلانهٔ اعضای اتاق</string>
@@ -647,11 +647,11 @@
     <string name="settings_active_sessions_show_all">نمایش تمامی نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d نشست فعّال</item>
-	<item quantity="other">%d نشست فعّال</item>
-</plurals>
+        <item quantity="one">%d نشست فعّال</item>
+        <item quantity="other">%d نشست فعّال</item>
+    </plurals>
 
     <string name="room_member_profile_failed_to_get_devices">شکست در گرفتن نشست‌ها</string>
     <string name="room_member_profile_sessions_section_title">نشست‌ها</string>
     <string name="settings_dev_tools">ابزارهای توسعه</string>
-    </resources>
+</resources>

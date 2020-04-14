@@ -1273,9 +1273,9 @@ Neden Riot.im’i seçmeliyim?
         <item quantity="other">Yedekleme %d anahtarları ile işlendi.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">%d yeni anahtar bu oturuma eklendi.</item>
-	<item quantity="other">%d tane yeni anahtar bu oturuma eklendi.</item>
-</plurals>
+        <item quantity="one">%d yeni anahtar bu oturuma eklendi.</item>
+        <item quantity="other">%d tane yeni anahtar bu oturuma eklendi.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Son sürüm onarma anahtarı alınırken hata oluştu (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Kripto oturumu etkin değil</string>
@@ -1327,7 +1327,7 @@ Neden Riot.im’i seçmeliyim?
     <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
     <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
 
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="people_no_identity_server">Hiçbir kimlik sunucusu yapılandırılmamış.</string>
 
@@ -1374,13 +1374,13 @@ Neden Riot.im’i seçmeliyim?
     <string name="device_name_warning">Bir oturumun görünür adı iletişim kurduğunuz kişilere görünür</string>
     <string name="encryption_information_unknown_ip">bilinmeyen ip</string>
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 mesaj</item>
-	<item quantity="other">%1$s: %2$d tane mesaj</item>
-</plurals>
+        <item quantity="one">%1$s: 1 mesaj</item>
+        <item quantity="other">%1$s: %2$d tane mesaj</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d bildirim</item>
-	<item quantity="other">%d tane bildirim</item>
-</plurals>
+        <item quantity="one">%d bildirim</item>
+        <item quantity="other">%d tane bildirim</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Yeni Etkinlik</string>
     <string name="notification_unknown_room_name">Oda</string>
@@ -1569,4 +1569,4 @@ Neden Riot.im’i seçmeliyim?
     <string name="settings_background_sync_update_error">Ayarlar güncellenemedi.</string>
 
 
-    </resources>
+</resources>

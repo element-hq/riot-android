@@ -1383,9 +1383,9 @@
         <item quantity="other">Back-up met %d sleutels hersteld.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Er is %d nieuwe sleutel toegevoegd aan deze sessie.</item>
-	<item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan deze sessie.</item>
-</plurals>
+        <item quantity="one">Er is %d nieuwe sleutel toegevoegd aan deze sessie.</item>
+        <item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan deze sessie.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Verkrijgen van laatste herstelsleutelversie (%s) mislukt.</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Sessieversleuteling is niet actief</string>
@@ -1518,7 +1518,7 @@
     <string name="people_no_identity_server">Geen identiteitsserver geconfigureerd.</string>
 
     <string name="call_failed_no_ice_title">Oproep mislukt door verkeerd geconfigureerde server</string>
-<string name="call_failed_no_ice_description">Vraag de beheerder van uw thuisserver (%1$s) om een TURN-server te configureren om oproepen betrouwbaar te doen werken.
+    <string name="call_failed_no_ice_description">Vraag de beheerder van uw thuisserver (%1$s) om een TURN-server te configureren om oproepen betrouwbaar te doen werken.
 \n
 \nAls alternatief kunt u de publieke server op %2$s gebruiken. Dit is minder betrouwbaar en zal tevens uw IP-addres delen met die server. U kunt dit ook configureren in de Instellingen.</string>
     <string name="call_failed_no_ice_use_alt">Probeer %s te gebruiken</string>
@@ -1605,4 +1605,4 @@
     <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
 
-    </resources>
+</resources>

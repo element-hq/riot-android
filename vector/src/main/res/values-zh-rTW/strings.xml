@@ -2124,15 +2124,15 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="qr_code_scanned_by_other_no">否</string>
 
     <string name="no_connectivity_to_the_server_indicator">到伺服器的連線已遺失</string>
-<string name="login_signup_username_hint">使用者名稱</string>
+    <string name="login_signup_username_hint">使用者名稱</string>
     <string name="settings_dev_tools">開發者工具</string>
     <string name="settings_account_data">帳號資料</string>
     <plurals name="poll_info">
-	<item quantity="other">%d 投票</item>
-</plurals>
+        <item quantity="other">%d 投票</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="other">%d 投票 - 最後結果</item>
-</plurals>
+        <item quantity="other">%d 投票 - 最後結果</item>
+    </plurals>
     <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
     <string name="verification_cannot_access_other_session">無法存取既有的工作階段？</string>
@@ -2149,8 +2149,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="message_action_item_redact">移除……</string>
     <string name="share_confirm_room">您想要傳送此附件到 %1$s 嗎？</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="other">使用原始大小傳送圖片</item>
-</plurals>
+        <item quantity="other">使用原始大小傳送圖片</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">確認移除</string>
     <string name="delete_event_dialog_content">您確定您想要移除（刪除）此活動嗎？注意，如果您刪除聊天室名稱或變更主題，則可能會撤銷變更。</string>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">nb</string>
+<resources>
+    <string name="resources_language">nb</string>
     <string name="resources_country_code">NO</string>
     <string name="resources_script">Latn</string>
 
@@ -129,21 +130,21 @@
 
     <string name="room_sync_in_progress">Synkroniserer …</string>
     <plurals name="format_time_s">
-	<item quantity="one">1sek</item>
-	<item quantity="other">%dsek</item>
-</plurals>
+        <item quantity="one">1sek</item>
+        <item quantity="other">%dsek</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1t</item>
-	<item quantity="other">%dt</item>
-</plurals>
+        <item quantity="one">1t</item>
+        <item quantity="other">%dt</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1d</item>
-	<item quantity="other">%dd</item>
-</plurals>
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
 
     <string name="room_participants_create">Lag</string>
 
@@ -472,9 +473,9 @@
     <string name="auth_identity_server">Identitetstjener:</string>
     <string name="settings_call_category">Samtaler</string>
     <plurals name="room_title_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlemmer</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemmer</item>
+    </plurals>
     <string name="room_title_one_member">1 medlem</string>
 
     <string name="room_participants_now">%1$s nå</string>
@@ -482,9 +483,9 @@
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommets medlemmer</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
     <string name="room_settings_all_messages">Alle meldinger</string>
     <string name="room_settings_mention_only">Kun nevninger</string>
     <string name="settings_olm_version">olm-versjon</string>
@@ -512,27 +513,27 @@
     <string name="encryption_information_unverify">Av-verifiser</string>
     <string name="encryption_information_verify_device">Verifiser økten</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: 1 melding</item>
-	<item quantity="other">%1$s: %2$d meldinger</item>
-</plurals>
+        <item quantity="one">%1$s: 1 melding</item>
+        <item quantity="other">%1$s: %2$d meldinger</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d varsel</item>
-	<item quantity="other">%d varsler</item>
-</plurals>
+        <item quantity="one">%d varsel</item>
+        <item quantity="other">%d varsler</item>
+    </plurals>
 
     <string name="notification_unknown_new_event">Ny hendelse</string>
     <string name="notification_new_messages">Nye meldinger</string>
     <string name="notification_new_invitation">Ny invitasjon</string>
     <string name="tiny">Bitteliten</string>
     <plurals name="active_widgets">
-	<item quantity="one">1 aktiv modul</item>
-	<item quantity="other">%d aktive moduler</item>
-</plurals>
+        <item quantity="one">1 aktiv modul</item>
+        <item quantity="other">%d aktive moduler</item>
+    </plurals>
 
 
     <string name="room_widget_activity_title">Modul</string>
@@ -558,14 +559,14 @@
 
     <string name="rooms">Rom</string>
     <plurals name="group_members">
-	<item quantity="one">1 medlem</item>
-	<item quantity="other">%d medlemmer</item>
-</plurals>
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemmer</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 rom</item>
-	<item quantity="other">%d rom</item>
-</plurals>
+        <item quantity="one">1 rom</item>
+        <item quantity="other">%d rom</item>
+    </plurals>
     <string name="reason_colon">Årsak: %1$s</string>
     <string name="deactivate_account_prompt_password">For å gå videre, vennligst skriv inn passordet ditt:</string>
     <string name="plus_x">+%d</string>
@@ -703,9 +704,9 @@
     <string name="rooms_directory_header">Romkatalog</string>
     <string name="no_public_room_placeholder">Ingen offentlige rom tilgjengelig</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 bruker</item>
-	<item quantity="other">%d brukere</item>
-</plurals>
+        <item quantity="one">1 bruker</item>
+        <item quantity="other">%d brukere</item>
+    </plurals>
 
     <string name="send_bug_report_include_crash_logs">Send kjæsjlogg</string>
     <string name="send_bug_report_include_screenshot">Send skjermbilde</string>
@@ -722,4 +723,4 @@
     <string name="send_files_in">Send inn i</string>
     <string name="hs_url">Hjemmetjener URL</string>
     <string name="start_new_chat">Start ny chat</string>
-    </resources>
+</resources>

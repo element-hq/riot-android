@@ -1320,9 +1320,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
         <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-	<item quantity="one">Yksi uusi avain lisätty tähän istuntoon.</item>
-	<item quantity="other">%d uutta avainta lisätty tähän listuntoon.</item>
-</plurals>
+        <item quantity="one">Yksi uusi avain lisätty tähän istuntoon.</item>
+        <item quantity="other">%d uutta avainta lisätty tähän listuntoon.</item>
+    </plurals>
 
     <string name="keys_backup_get_version_error">Uusimman palautusavaimen version hakeminen epäonnistui (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Istunnon kryptografia ei ole aktivoitu</string>
@@ -2026,7 +2026,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n
 \n• palvelimen ylläpitäjä on estänyt pääsysi turvallisuussyistä.</string>
     <string name="soft_logout_signin_e2e_warning_notice">Kirjaudu sisään palauttaaksesi salausavaimesi, jotka ovat tallessa vain tällä laitteella. Tarvitset niitä lukeaksi kaikki salatut viestisi millä tahansa laitteella.</string>
-<string name="settings_show_devices_list">Näytä kaikki istuntoni</string>
+    <string name="settings_show_devices_list">Näytä kaikki istuntoni</string>
     <string name="settings_advanced_settings">Lisäasetukset</string>
     <string name="settings">Asetukset</string>
     <string name="devices_current_device">Nykyinen istunto</string>
@@ -2045,10 +2045,10 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="room_profile_section_security_learn_more">Lue lisää</string>
     <string name="room_profile_section_more_notifications">Ilmoitukset</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Yksi henkilö</item>
-	<item quantity="other">%1$d ihmistä</item>
-</plurals>
+        <item quantity="one">Yksi henkilö</item>
+        <item quantity="other">%1$d ihmistä</item>
+    </plurals>
     <string name="room_profile_section_more_leave">Poistu huoneesta</string>
     <string name="room_profile_leaving_room">Poistutaan huoneesta…</string>
 
-    </resources>
+</resources>

@@ -2174,17 +2174,17 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="qr_code_scanned_by_other_no">Nem</string>
 
     <string name="no_connectivity_to_the_server_indicator">Megszakadt a kapcsolat a szerverrel</string>
-<string name="login_signup_username_hint">Felhasználónév</string>
+    <string name="login_signup_username_hint">Felhasználónév</string>
     <string name="settings_dev_tools">Fejlesztői Eszközök</string>
     <string name="settings_account_data">Fiók Adatok</string>
     <plurals name="poll_info">
-	<item quantity="one">%d szavazat</item>
-	<item quantity="other">%d szavazat</item>
-</plurals>
+        <item quantity="one">%d szavazat</item>
+        <item quantity="other">%d szavazat</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">Végeredmény - %d szavazat</item>
-	<item quantity="other">Végeredmény - %d szavazat</item>
-</plurals>
+        <item quantity="one">Végeredmény - %d szavazat</item>
+        <item quantity="other">Végeredmény - %d szavazat</item>
+    </plurals>
     <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
     <string name="verification_cannot_access_other_session">A létező munkamenet nem érhető el\?</string>
@@ -2201,9 +2201,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="message_action_item_redact">Töröl…</string>
     <string name="share_confirm_room">Ezt a csatolmányt el szeretnéd küldeni ide: %1$s\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Kép küldése eredeti méretben</item>
-	<item quantity="other">Képek küldése eredeti méretben</item>
-</plurals>
+        <item quantity="one">Kép küldése eredeti méretben</item>
+        <item quantity="other">Képek küldése eredeti méretben</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Törlés megerősítése</string>
     <string name="delete_event_dialog_content">Biztos hogy eltávolítod (törlöd) ezt az eseményt\? Figyelem, ha törlöd vagy megváltoztatod a szoba nevét vagy a témát ez a változtatás érvényét vesztheti.</string>
