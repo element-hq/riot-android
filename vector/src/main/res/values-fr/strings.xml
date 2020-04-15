@@ -2276,7 +2276,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="bootstrap_save_key_description">Utilisez cette %1$s comme filet de sécurité au cas où vous oublieriez votre %2$s.</string>
 
     <string name="bootstrap_crosssigning_progress_initializing">Publication des clés d’identité créées</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Génération d’une clé sécurisée depuis la phrase de passe</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Génération d’une clé sécurisée depuis la phrase secrète</string>
     <string name="bootstrap_crosssigning_progress_default_key">Définition de la clé par défaut du SSSS</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Synchronisation de la clé maîtresse</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Synchronisation de la clé de l’utilisateur</string>
