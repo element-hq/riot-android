@@ -884,7 +884,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="download">Letöltés</string>
     <string name="speak">Beszélj</string>
     <string name="clear">Törlés</string>
-    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt <u>kulcsok újrakérése</u> a többi munkamenetedtől.</string>
+    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.<u>kulcsok újrakérése</u> a többi munkamenetedtől.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
 
@@ -1319,7 +1319,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_banner_recover_line1">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_banner_recover_line2">Kulcs Mentés használata</string>
 
-    <string name="keys_backup_banner_update_line1">Új titkosítási kulcsok</string>
+    <string name="keys_backup_banner_update_line1">Új titkosított üzenet kulcsok</string>
     <string name="keys_backup_banner_update_line2">Kulcs Mentések kezelése</string>
 
     <string name="keys_backup_banner_in_progress">Kulcsok mentése…</string>
@@ -2169,7 +2169,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="a11y_qr_code_for_verification">QR kód</string>
 
-    <string name="qr_code_scanned_by_other_notice">A másik felhasználó sikeresen beolvasta a QR kódot\?</string>
+    <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pajzsot mutatja\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
     <string name="qr_code_scanned_by_other_no">Nem</string>
 
@@ -2187,8 +2187,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
-    <string name="verification_cannot_access_other_session">A létező munkamenet nem érhető el\?</string>
-    <string name="verification_use_passphrase">Használd a visszaállítási kulcsot vagy jelmondatot</string>
+    <string name="verification_cannot_access_other_session">Használd a visszaállítási eljárást</string>
+    <string name="verification_use_passphrase">Ha nem érsz el létező munkamenetet</string>
 
     <string name="new_signin">Új Bejelentkezés</string>
 
@@ -2215,4 +2215,22 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="keys_backup_restore_success_title_already_up_to_date">A kulcsok már frissek!</string>
 
-</resources>
+<string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Kulcs kérések</string>
+
+    <string name="e2e_use_keybackup">Régi titkosított üzenetek feloldása</string>
+
+    <string name="refresh">Frissítés</string>
+
+    <string name="new_session">Új munkamenet</string>
+    <string name="new_session_review">A megtekintéshez és ellenőrzéshez koppints</string>
+    <string name="verify_new_session_notice">Az új munkamenet ellenőrzéséhez használd ezt, amivel hozzáférést adsz a titkosított üzenetekhez.</string>
+    <string name="verify_new_session_was_not_me">Nem én voltam</string>
+    <string name="verify_new_session_compromized">A fiókodat lehet, hogy feltörték</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Ha megszakítod akkor ezen az eszközön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni</string>
+    <string name="verify_cancel_self_verification_from_trusted">Ha megszakítod akkor az eszközödön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni</string>
+    <string name="verify_cancel_other">Ha most megszakítod akkor ezt nem fogod ellenőrizni: %1$s (%2$s). A felhasználói profilból újrakezdheted.</string>
+
+    </resources>
