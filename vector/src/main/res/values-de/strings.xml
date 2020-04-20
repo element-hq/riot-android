@@ -2273,7 +2273,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
 
-<string name="login_mobile_device_riotx">RiotX Android</string>
+    <string name="login_mobile_device_riotx">RiotX Android</string>
 
     <string name="settings_key_requests">Schlüsselanforderungen</string>
 

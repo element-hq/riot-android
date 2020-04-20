@@ -1480,7 +1480,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="people_no_identity_server">没有设置身份服务器。</string>
 
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="call_failed_no_ice_description">请要求您的家庭服务器（%1$s）的管理员配置TURN服务器，以使通话可靠地工作。
 \n
@@ -1495,4 +1495,4 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="login_error_no_homeserver_found">這不是有效的 Matrix 服务器位置</string>
     <string name="login_error_homeserver_not_found">无法在此 URL 找到家庭服务器，请检查</string>
     <string name="settings_call_ringtone_use_default_stun">允许后备呼叫协助服务器</string>
-    </resources>
+</resources>
