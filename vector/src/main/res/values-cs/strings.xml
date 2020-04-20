@@ -1530,7 +1530,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
     <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
 
-    <string name="security_warning_identity_server">Předchozí verze Riotu měly bezpečnostní chybu, jež umožnila serveru pro identity přístup k Vašemu účtu. Pokud důvěřujete %2$s, můžete ignorovat; jinak se, prosím, odhlašte a znovu přihlašte.
+    <string name="security_warning_identity_server">Předchozí verze Riotu měly bezpečnostní chybu, jež umožnila serveru pro identity (%1$s) přístup k Vašemu účtu. Pokud důvěřujete %2$s, můžete ignorovat; jinak se, prosím, odhlašte a znovu přihlašte.
 \n
 \nDetaily zde:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
