@@ -939,7 +939,7 @@
     <string name="download">Scarica</string>
     <string name="speak">Parla</string>
     <string name="clear">Svuota</string>
-    <string name="e2e_re_request_encryption_key">Richiedi di nuovo le chiavi di crittografia dalle tue altre sessioni.<u>Richiedi di nuovo le chiavi di crittografia</u> dalle tue altre sessioni.</string>
+    <string name="e2e_re_request_encryption_key">Richiedi di nuovo le chiavi di crittografia dalle tue altre sessioni.</string>
 
     <string name="e2e_re_request_encryption_key_sent">La richiesta della chiave è stata inviata.</string>
 

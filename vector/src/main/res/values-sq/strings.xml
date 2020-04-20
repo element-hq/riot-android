@@ -831,7 +831,7 @@
     <string name="login_error_limit_exceeded">Janë dërguar shumë kërkesa</string>
     <string name="login_error_login_email_not_yet">Lidhja email që s’është klikuar ende</string>
 
-    <string name="e2e_re_request_encryption_key">Rikërkoni kyçe fshehtëzimi prej sesionesh tuaj të tjerë.<u>Rikërkoni kyçe fshehtëzimi</u> prej sesionesh tuaj të tjerë.</string>
+    <string name="e2e_re_request_encryption_key">Rikërkoni kyçe fshehtëzimi prej sesionesh tuaj të tjerë.</string>
 
     <plurals name="membership_changes">
         <item quantity="one">1 ndryshim anëtarësie</item>

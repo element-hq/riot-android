@@ -884,7 +884,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="download">Letöltés</string>
     <string name="speak">Beszélj</string>
     <string name="clear">Törlés</string>
-    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.<u>kulcsok újrakérése</u> a többi munkamenetedtől.</string>
+    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
 

@@ -889,7 +889,7 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="download">Télécharger</string>
     <string name="speak">Parler</string>
     <string name="clear">Effacer</string>
-    <string name="e2e_re_request_encryption_key">Redemander les clés de chiffrement à vos autres sessions.<u>Redemander les clés de chiffrement</u> à vos autres sessions.</string>
+    <string name="e2e_re_request_encryption_key">Redemander les clés de chiffrement à vos autres sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Demande de clé envoyée.</string>
 

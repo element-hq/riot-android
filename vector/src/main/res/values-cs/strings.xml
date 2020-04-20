@@ -251,7 +251,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \nToto je nutné pouze jednou. 
 \nOmlouváme se za způsobené nepříjemnosti.</string>
 
-    <string name="e2e_re_request_encryption_key">Znovu požádat o šifrovací klíče z vašich ostatních relací.<u>Znovu požádat o šifrovací klíče</u> z vašich ostatních relací.</string>
+    <string name="e2e_re_request_encryption_key">Znovu požádat o šifrovací klíče z vašich ostatních relací.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
 

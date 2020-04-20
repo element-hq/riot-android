@@ -934,7 +934,7 @@ Willst du welche hinzufügen?</string>
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
     <string name="clear">Leeren</string>
-    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen erneut anfragen.<u>erneut anfragen</u>.</string>
+    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen erneut anfragen.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
 
