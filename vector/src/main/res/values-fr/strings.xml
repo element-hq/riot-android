@@ -2228,7 +2228,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="refresh">Actualiser</string>
 
-    <string name="new_session">Connexion non vérifiée. Était-ce vous \?</string>
+    <string name="new_session">Connexion non vérifiée. Était-ce vous \?</string>
     <string name="new_session_review">Appuyer pour examiner et vérifier</string>
     <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
@@ -2338,10 +2338,25 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="bootstrap_progress_checking_backup">Vérification de la clé de sauvegarde</string>
     <string name="bootstrap_progress_checking_backup_with_info">Vérification de la clé de sauvegarde (%s)</string>
-    <string name="bootstrap_progress_generating_ssss">Génération de la clé SSSS à partir de la phrase</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">Génération de la clé SSSS à partir de la phrase (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Génération de la clé SSSS à partir de la phrase secrète</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Génération de la clé SSSS à partir de la phrase secrète (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir de la clé de récupération</string>
-    <string name="bootstrap_progress_storing_in_sss">Stockage du secret de la sauvegarde dans le SSSS</string>
+    <string name="bootstrap_progress_storing_in_sss">Stockage du secret de sauvegarde dans le SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
 
-    </resources>
+    <string name="security_prompt_text">Vérifiez vos sessions et les autres pour garantir la sûreté de vos discussions</string>
+
+    <string name="bootstrap_progress_compute_curve_key">Récupération de la clé de courbe</string>
+    <string name="bootstrap_migration_enter_backup_password">Saisissez votre phrase secrète de sauvegarde de clés pour continuer.</string>
+    <string name="bootstrap_migration_use_recovery_key">utiliser votre clé de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Clé de récupération de sauvegarde de clés</string>
+
+    <string name="settings_security_prevent_screenshots_title">Empêcher les captures d’écran de l’application</string>
+    <string name="settings_security_prevent_screenshots_summary">L’activation de ce paramètre ajoute FLAG_SECURE à toutes les activités. Redémarrez l’application pour que la modification soit prise en compte.</string>
+
+    <string name="media_file_added_to_gallery">Fichier multimédia ajouté à la galerie</string>
+    <string name="error_adding_media_file_to_gallery">Impossible d’ajouter le fichier multimédia à la galerie</string>
+    <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
+
+</resources>
