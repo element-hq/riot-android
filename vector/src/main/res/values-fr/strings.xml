@@ -875,11 +875,11 @@ Voulez-vous en ajouter ?</string>
     <string name="dialog_user_consent_submit">Voir maintenant</string>
 
     <string name="deactivate_account_title">Désactiver le compte</string>
-    <string name="deactivate_account_content">Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible. </b>
-
-Désactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
-
-La visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
+    <string name="deactivate_account_content">\"Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible.</b>
+\n
+\nDésactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
+\n
+\nLa visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.\"</string>
     <string name="deactivate_account_delete_checkbox">Veuillez oublier tous les messages que j’ai envoyé quand mon compte sera désactivé (Avertissement : les futurs utilisateurs verront une version incomplète des conversations)</string>
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
