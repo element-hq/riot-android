@@ -44,6 +44,7 @@ import java.util.Map;
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.repositories.ServerUrlsRepository;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
@@ -52,6 +53,14 @@ import im.vector.widgets.WidgetsManager;
  * Inspired from JitsiMeetActivity
  */
 public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiMeetActivityInterface {
+    /**
+     * Default Constructor
+     */
+    public JitsiCallActivity(){
+        //update the static string JITSI_SERVER_URL
+        updateJitsiServerUrl();
+    }
+
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**
@@ -65,9 +74,9 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     public static final String EXTRA_ENABLE_VIDEO = "EXTRA_ENABLE_VIDEO";
 
     /**
-     * Base server URL
+     * Base server URL, will be updated via "updateJitsiServerUrl()"
      */
-    public static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
+    public static String JITSI_SERVER_URL = "https://jitsi.riot.im/";
 
     // the jitsi view
     private JitsiMeetView mJitsiView;
@@ -122,6 +131,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         try {
             Uri uri = Uri.parse(mWidget.getUrl());
             String confId = uri.getQueryParameter("confId");
+            updateJitsiServerUrl();
             mCallUrl = JITSI_SERVER_URL + confId;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage(), e);
@@ -292,5 +302,13 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     @Override
     public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
         JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener);
+    }
+
+    public void updateJitsiServerUrl() {
+        JITSI_SERVER_URL = ServerUrlsRepository.INSTANCE.getDefaultHomeServerUrl(this);
+
+        if (!JITSI_SERVER_URL.endsWith("/")) {
+            JITSI_SERVER_URL = JITSI_SERVER_URL + "/";
+        }
     }
 }

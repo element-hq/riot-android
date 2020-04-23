@@ -104,4 +104,9 @@ object ServerUrlsRepository {
      * Return default identity server url from resources
      */
     fun getDefaultIdentityServerUrl(context: Context): String = context.getString(R.string.default_identity_server_url)
+
+    /**
+     * Return default jitsi server url from resources
+     */
+    fun getDefaultJitsiServerUrl(context: Context): String = context.getString(R.string.default_jitsi_server_url)
 }
