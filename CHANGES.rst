@@ -2,11 +2,11 @@ Changes in Riot 0.9.11 (2020-XX-XX)
 ===================================================
 
 MatrixSdk 🚀:
- - Upgrade MatrixSdk to version 0.X.Y.
- - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+ - Upgrade MatrixSdk to version 0.9.34.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.34
 
 Features ✨:
- -
+ - Added the ability to read the jitsi server url from .well-known configuration (#3443)
 
 Improvements 🙌:
  -

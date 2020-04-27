@@ -798,7 +798,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (info.getWellKnown().jitsiServer != null
                     && !TextUtils.isEmpty(info.getWellKnown().jitsiServer.preferredDomain)) {
                 js = info.getWellKnown().jitsiServer.preferredDomain;
-                if(!js.endsWith("/")) {
+                if (!js.endsWith("/")) {
                     js = js + "/";
                 }
             }
@@ -1076,7 +1076,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (checkFlowOnUpdate) {
                 checkFlows();
             }
-
 
 
             return true;
@@ -2553,7 +2552,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                     && !identityServerUrlString.startsWith("https://")) {
                 identityServerUrlString = "https://" + identityServerUrlString;
             }
-
 
 
             try {

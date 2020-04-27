@@ -296,16 +296,16 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     }
 
     /**
-     *
+     * Update static variable JITSI_SERVER_URL
      */
-    public void updateJitsiServerUrl(){
+    public void updateJitsiServerUrl() {
         //Make sure we have a session
-        if(mSession == null){
+        if (mSession == null) {
             mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
             mSession = Matrix.getMXSession(this, mWidget.getSessionId());
         }
 
-        if(mSession.getHomeServerConfig().getJitsiServerUri() != null){
+        if (mSession.getHomeServerConfig().getJitsiServerUri() != null) {
             JITSI_SERVER_URL = mSession.getHomeServerConfig().getJitsiServerUri().toString();
         }
     }
