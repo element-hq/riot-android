@@ -555,7 +555,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="encryption_information_sender_device_information">A küldő munkamenet információi</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
     <string name="encryption_information_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Azon.</string>
+    <string name="encryption_information_device_id">Azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_information_verification">Hitelesítés</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
@@ -1631,7 +1631,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="none">Nincs</string>
     <string name="revoke">Visszavonás</string>
     <string name="disconnect">Bontás</string>
-    <string name="people_no_identity_server">Azonosítási szerver nincs beállítva.</string>
+    <string name="people_no_identity_server">Nincs beállítva azonosítási kiszolgáló.</string>
 
     <string name="call_failed_no_ice_title">A hívás sikertelen a hibásan beállított szerver miatt</string>
     <string name="call_failed_no_ice_description">Kérd meg a matrix szervered (%1$s) adminisztrátorát, hogy állítson be egy TURN szervert, hogy a hívások megbízhatóan működjenek.
