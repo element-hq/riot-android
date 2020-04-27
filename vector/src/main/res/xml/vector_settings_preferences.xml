@@ -440,7 +440,7 @@
             android:title="@string/settings_home_server"
             tools:summary="@string/default_hs_server_url" />
 
-        <im.vector.preference.VectorEditTextPreference
+        <im.vector.preference.VectorPreference
             android:key="SETTINGS_JITSI_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_jitsi_server"
             android:summary="@string/default_jitsi_server_url" />

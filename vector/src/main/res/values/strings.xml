@@ -1537,6 +1537,9 @@ Why choose Riot.im?
 
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
+    <!-- Jitsi server -->
+    <string name="jitsi_server_not_defined">You are not using any Jitsi Server</string>
+
     <!-- String for RiotX -->
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>

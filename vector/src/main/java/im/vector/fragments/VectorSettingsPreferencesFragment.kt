@@ -292,6 +292,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
     }
+
+    private val jitsiServerPreference by lazy {
+       findPreference(PreferencesManager.SETTINGS_JITSI_SERVER_PREFERENCE_KEY) as VectorPreference
+    }
+
     private val identityServerPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
     }
@@ -625,6 +630,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // home server
         findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
                 .summary = mSession.homeServerConfig.homeserverUri.toString()
+
+        // jitsi server
+        updateJitsiServerPref()
 
         // identity server
         updateIdentityServerPref()
@@ -1016,6 +1024,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     true
                 }
             }
+        }
+    }
+
+    private fun updateJitsiServerPref() {
+        if (mSession.homeServerConfig.jitsiServerUri == null) {
+            // This case should not happen
+            jitsiServerPreference.summary = getString(R.string.jitsi_server_not_defined)
+        } else {
+            jitsiServerPreference.summary = mSession.homeServerConfig.jitsiServerUri.toString()
         }
     }
 

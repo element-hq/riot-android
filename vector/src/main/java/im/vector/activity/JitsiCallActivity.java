@@ -44,7 +44,6 @@ import java.util.Map;
 import butterknife.BindView;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.repositories.ServerUrlsRepository;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
@@ -53,14 +52,6 @@ import im.vector.widgets.WidgetsManager;
  * Inspired from JitsiMeetActivity
  */
 public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiMeetActivityInterface {
-    /**
-     * Default Constructor
-     */
-    public JitsiCallActivity(){
-        //update the static string JITSI_SERVER_URL
-        updateJitsiServerUrl();
-    }
-
     private static final String LOG_TAG = JitsiCallActivity.class.getSimpleName();
 
     /**
@@ -304,11 +295,18 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener);
     }
 
-    public void updateJitsiServerUrl() {
-        JITSI_SERVER_URL = ServerUrlsRepository.INSTANCE.getDefaultHomeServerUrl(this);
+    /**
+     *
+     */
+    public void updateJitsiServerUrl(){
+        //Make sure we have a session
+        if(mSession == null){
+            mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+            mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+        }
 
-        if (!JITSI_SERVER_URL.endsWith("/")) {
-            JITSI_SERVER_URL = JITSI_SERVER_URL + "/";
+        if(mSession.getHomeServerConfig().getJitsiServerUri() != null){
+            JITSI_SERVER_URL = mSession.getHomeServerConfig().getJitsiServerUri().toString();
         }
     }
 }
