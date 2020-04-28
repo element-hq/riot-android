@@ -2370,7 +2370,7 @@
 
     <string name="auth_invalid_login_param_space_in_password">Nome utente e/o password errati. La password inserita inizia o termina con spazi, controllala.</string>
 
-<string name="room_message_placeholder">Messaggio…</string>
+    <string name="room_message_placeholder">Messaggio…</string>
 
     <string name="upgrade_security">Aggiornamento cifratura disponibile</string>
     <string name="security_prompt_text">Verifica te stesso e gli altri per tenere al sicuro le chat</string>

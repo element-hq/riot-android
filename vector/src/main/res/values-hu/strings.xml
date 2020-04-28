@@ -2320,7 +2320,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="auth_invalid_login_param_space_in_password">Felhasználói név és/vagy jelszó hibás. A beírt jelszó szóközzel kezdődik vagy ér véget, kérlek ellenőrizd.</string>
 
-<string name="room_message_placeholder">Üzenet…</string>
+    <string name="room_message_placeholder">Üzenet…</string>
 
     <string name="upgrade_security">A titkosítás fejlesztése elérhető</string>
     <string name="security_prompt_text">Ellenőrizd magad és másokat, hogy a csevegéseid biztonságban legyenek</string>

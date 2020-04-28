@@ -259,7 +259,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
         <item quantity="many">%d změn členství</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -347,13 +347,13 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
         <item quantity="many">%d aktivních členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
         <item quantity="many">%d členů</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
@@ -450,7 +450,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
         <item quantity="many">%d nových zpráv</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -467,7 +467,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
         <item quantity="many">%d vybráno</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -1634,7 +1634,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="store_riotx_title">RiotX - Klient Matrixu pro příští generaci</string>
     <string name="store_riotx_short_description">Rychlejši a lehčí klient Matrixu s nejnovějšími konstrukcemi Androidu</string>
-<string name="store_riotx_full_description">"RiotX je nový klient protokolu Matrix (Matrix.org): otevřená síť pro bezpečnou, decentralizovanou komunikaci. RiotX je úplný přepis klienta Riot Android založený na úplném přepisu Matrix Android SDK.
+    <string name="store_riotx_full_description">"RiotX je nový klient protokolu Matrix (Matrix.org): otevřená síť pro bezpečnou, decentralizovanou komunikaci. RiotX je úplný přepis klienta Riot Android založený na úplném přepisu Matrix Android SDK.
 \n
 \nProhlášení: Toto je beta verze. RiotX nyní prochází aktivním vývojem, obsahuje omezení a (doufáme, že ne moc) chyby. Veškerý feedback je vítán.
 \n
@@ -1741,10 +1741,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="two_users_read">%1$s a %2$s přečetli</string>
     <string name="one_user_read">%s přečetl(a)</string>
     <plurals name="fallback_users_read">
-	<item quantity="one">1 uživatel přečetl</item>
-	<item quantity="few">%d uživatelé přečetli</item>
-	<item quantity="other">%d uživatelů přečetlo</item>
-</plurals>
+        <item quantity="one">1 uživatel přečetl</item>
+        <item quantity="few">%d uživatelé přečetli</item>
+        <item quantity="other">%d uživatelů přečetlo</item>
+    </plurals>
 
     <string name="error_file_too_big">Soubor \'%1$s\' (%2$s) je příliš velký k nahrání. Limit je %3$s.</string>
 
@@ -1918,10 +1918,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="login_error_outdated_homeserver_content">Tento homeserver používá za účelem spojení příliš starou verzi. Požádejte správce, aby provedl aktualizaci.</string>
 
     <plurals name="login_error_limit_exceeded_retry_after">
-	<item quantity="one">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřinu…</item>
-	<item quantity="few">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřiny…</item>
-	<item quantity="other">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřin…</item>
-</plurals>
+        <item quantity="one">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřinu…</item>
+        <item quantity="few">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřiny…</item>
+        <item quantity="other">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřin…</item>
+    </plurals>
 
     <string name="seen_by">Viděno</string>
 
@@ -2046,10 +2046,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_profile_section_more_settings">Nastavení místnosti</string>
     <string name="room_profile_section_more_notifications">Oznámení</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">Jedna osoba</item>
-	<item quantity="few">%1$d osoby</item>
-	<item quantity="other">%1$d osob</item>
-</plurals>
+        <item quantity="one">Jedna osoba</item>
+        <item quantity="few">%1$d osoby</item>
+        <item quantity="other">%1$d osob</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Nahrání</string>
     <string name="room_profile_section_more_leave">Opustit místnost</string>
     <string name="room_profile_leaving_room">Opouštím místnost…</string>
@@ -2123,10 +2123,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_active_sessions_unverified_device_desc">Ověřte tuto relaci a tím ji označíte za důvěryhodnou &amp; dovolíte jí přístup k zašifrovaným zprávám. Pokud jste se do této relace nepřihlásili, může být Váš účet ohrožen:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d aktivní relace</item>
-	<item quantity="few">%d aktivní relace</item>
-	<item quantity="other">%d aktivních relací</item>
-</plurals>
+        <item quantity="one">%d aktivní relace</item>
+        <item quantity="few">%d aktivní relace</item>
+        <item quantity="other">%d aktivních relací</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Ověřit tuto relaci</string>
     <string name="crosssigning_other_user_not_trust">Ostatní uživatelé ji nemusí důvěřovat</string>
@@ -2163,15 +2163,15 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_dev_tools">Vývojářské nástroje</string>
     <string name="settings_account_data">Údaje účtu</string>
     <plurals name="poll_info">
-	<item quantity="one">%d hlas</item>
-	<item quantity="few">%d hlasy</item>
-	<item quantity="other">%d hlasů</item>
-</plurals>
+        <item quantity="one">%d hlas</item>
+        <item quantity="few">%d hlasy</item>
+        <item quantity="other">%d hlasů</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d hlas - Konečné výsledky</item>
-	<item quantity="few">%d hlasy - Konečné výsledky</item>
-	<item quantity="other">%d hlasů - Konečné výsledky</item>
-</plurals>
+        <item quantity="one">%d hlas - Konečné výsledky</item>
+        <item quantity="few">%d hlasy - Konečné výsledky</item>
+        <item quantity="other">%d hlasů - Konečné výsledky</item>
+    </plurals>
     <string name="poll_item_selected_aria">Zvolená možnost</string>
     <string name="command_description_poll">Založí jednoduchou anketu</string>
     <string name="verification_cannot_access_other_session">Použijte metodu obnovy</string>
@@ -2188,10 +2188,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="message_action_item_redact">Odstranit…</string>
     <string name="share_confirm_room">Chcete %1$s poslat tuto přílohu\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Odeslat obrázek v původní velikosti</item>
-	<item quantity="few">Odeslat obrázky v původní velikosti</item>
-	<item quantity="other">Odeslat obrázky v původní velikosti</item>
-</plurals>
+        <item quantity="one">Odeslat obrázek v původní velikosti</item>
+        <item quantity="few">Odeslat obrázky v původní velikosti</item>
+        <item quantity="other">Odeslat obrázky v původní velikosti</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Potvrďte odstranění</string>
     <string name="delete_event_dialog_content">Jste si jist, že chcete odstranit (smazat) tuto událost\? Pamatujte, že pokud odstraníte jméno místnosti nebo téma, mohlo by to změnu zvrátit.</string>

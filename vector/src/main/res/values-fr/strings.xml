@@ -2325,7 +2325,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="auth_invalid_login_param_space_in_password">Nom et/ou mot de passe incorrect(s). Le mot de passe saisi commence ou se termine par des espaces, veuillez le vérifier.</string>
 
-<string name="room_message_placeholder">Message…</string>
+    <string name="room_message_placeholder">Message…</string>
 
     <string name="upgrade_security">Mise à niveau du chiffrement disponible</string>
     <string name="bootstrap_enter_recovery">Entrez votre %s pour continuer</string>

@@ -2051,5 +2051,5 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="room_profile_section_more_leave">Poistu huoneesta</string>
     <string name="room_profile_leaving_room">Poistutaan huoneesta…</string>
 
-<string name="login_signup_username_hint">Käyttäjätunnus</string>
-    </resources>
+    <string name="login_signup_username_hint">Käyttäjätunnus</string>
+</resources>

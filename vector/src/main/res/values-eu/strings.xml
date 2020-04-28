@@ -2212,7 +2212,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
 
-<string name="login_mobile_device_riotx">RiotX Android</string>
+    <string name="login_mobile_device_riotx">RiotX Android</string>
 
     <string name="settings_key_requests">Gako eskaerak</string>
 
