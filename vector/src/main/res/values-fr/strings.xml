@@ -2349,7 +2349,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="bootstrap_progress_compute_curve_key">Récupération de la clé de courbe</string>
     <string name="bootstrap_migration_enter_backup_password">Saisissez votre phrase secrète de sauvegarde de clés pour continuer.</string>
     <string name="bootstrap_migration_use_recovery_key">utiliser votre clé de récupération de sauvegarde de clés</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Clé de récupération de sauvegarde de clés</string>
 
     <string name="settings_security_prevent_screenshots_title">Empêcher les captures d’écran de l’application</string>
