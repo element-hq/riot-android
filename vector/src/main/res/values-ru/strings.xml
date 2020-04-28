@@ -957,7 +957,7 @@
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
     <string name="clear">Очистить</string>
-    <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.<u>Повторно запросить ключи шифрования</u> с других ваших сессий.</string>
+    <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 

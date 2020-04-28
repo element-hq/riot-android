@@ -881,7 +881,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="download">Deskargatu</string>
     <string name="speak">Hitz egin</string>
     <string name="clear">Garbitu</string>
-    <string name="e2e_re_request_encryption_key">Eskatu berriro zifratze-gakoak zure beste saioetatik.<u>Berriro eskatu zifratze-gakoak</u> zure beste saioetatik.</string>
+    <string name="e2e_re_request_encryption_key">Eskatu berriro zifratze-gakoak zure beste saioetatik.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
 
