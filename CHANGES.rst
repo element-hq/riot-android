@@ -15,7 +15,7 @@ Other changes:
  - Update Matomo app id (#3429)
 
 Bug fixes 🐛:
- -
+ - some unused strings trimmed from repository to pass lint checks
 
 Translations 🗣:
  -

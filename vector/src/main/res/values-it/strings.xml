@@ -2219,7 +2219,6 @@
 
     <string name="a11y_qr_code_for_verification">Codice QR</string>
 
-    <string name="qr_code_scanned_by_other_notice">Quasi fatto! %s sta mostrando lo stesso scudo\?</string>
     <string name="qr_code_scanned_by_other_yes">Sì</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 
@@ -2246,7 +2245,6 @@
     <string name="enter_secret_storage_passphrase">Inserisci la password dell\'archivio segreto</string>
     <string name="enter_secret_storage_passphrase_warning">Attenzione:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Dovresti accedere all\'archivio segreto solo da un dispositivo fidato</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Accedi alla cronologia dei messaggi sicuri e all\'identità di firma incrociata per verificare altre sessioni inserendo la tua password</string>
 
     <string name="message_action_item_redact">Rimuovi…</string>
     <string name="share_confirm_room">Vuoi inviare questo allegato a %1$s\?</string>

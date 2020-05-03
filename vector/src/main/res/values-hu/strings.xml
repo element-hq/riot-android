@@ -2169,7 +2169,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="a11y_qr_code_for_verification">QR kód</string>
 
-    <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pajzsot mutatja\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
     <string name="qr_code_scanned_by_other_no">Nem</string>
 
@@ -2196,7 +2195,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="enter_secret_storage_passphrase">Add meg a jelmondatot a biztonsági tárolóhoz</string>
     <string name="enter_secret_storage_passphrase_warning">Figyelem:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Csak biztonságos eszközről férj hozzá a biztonsági tárolóhoz</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">A jelmondat megadásával hozzáférhetsz a biztonságos üzeneteidhez és az eszközök közötti hitelesítéshez használt személyazonosságodhoz, hogy más munkameneteket hitelesíthess</string>
 
     <string name="message_action_item_redact">Töröl…</string>
     <string name="share_confirm_room">Ezt a csatolmányt el szeretnéd küldeni ide: %1$s\?</string>
