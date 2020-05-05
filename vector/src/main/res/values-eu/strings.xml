@@ -2166,7 +2166,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="a11y_qr_code_for_verification">QR kodea</string>
 
-    <string name="qr_code_scanned_by_other_notice">Ia bukatu duzu! %s-ek ezkutu bera erakusten du\?</string>
     <string name="qr_code_scanned_by_other_yes">Bai</string>
     <string name="qr_code_scanned_by_other_no">Ez</string>
 
@@ -2193,7 +2192,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="enter_secret_storage_passphrase">Sartu biltegi sekretuko pasa-esaldia</string>
     <string name="enter_secret_storage_passphrase_warning">Abisua:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Biltegi sekretura gailu fidagarri batetik konektatu beharko zinateke beti</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Atzitu zure mezu seguruen historiala eta zeharkako sinatzerako identitatea beste saioak egiaztatzeko zure pasa-esaldia sartuz</string>
 
     <string name="message_action_item_redact">Kendu…</string>
     <string name="share_confirm_room">Eranskin hau %1$s gelara bidali nahi duzu\?</string>
