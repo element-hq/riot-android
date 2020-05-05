@@ -441,6 +441,11 @@
             tools:summary="@string/default_hs_server_url" />
 
         <im.vector.preference.VectorPreference
+            android:key="SETTINGS_JITSI_SERVER_PREFERENCE_KEY"
+            android:title="@string/settings_jitsi_server"
+            android:summary="@string/default_jitsi_server_url" />
+
+        <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
             app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"

@@ -317,6 +317,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private String mHomeServerUrl = null;
     private String mIdentityServerUrl = null;
 
+    // the Jitsi Server url
+    private String mJitsiServerUrl = null;
+
     // Account creation - Three pid
     @BindView(R.id.instructions)
     TextView mThreePidInstructions;
@@ -791,6 +794,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             if (info.getWellKnown() == null) return;
             if (info.getWellKnown().homeServer == null) return;
             final String hs = info.getWellKnown().homeServer.baseURL;
+            String js = ServerUrlsRepository.INSTANCE.getDefaultJitsiServerUrl(LoginActivity.this);
+            if (info.getWellKnown().jitsiServer != null
+                    && !TextUtils.isEmpty(info.getWellKnown().jitsiServer.preferredDomain)) {
+                js = info.getWellKnown().jitsiServer.preferredDomain;
+                if (!js.endsWith("/")) {
+                    js = js + "/";
+                }
+            }
             String ids = ServerUrlsRepository.INSTANCE.getDefaultIdentityServerUrl(LoginActivity.this);
             if (info.getWellKnown().identityServer != null
                     && !TextUtils.isEmpty(info.getWellKnown().identityServer.baseURL)) {
@@ -803,24 +814,29 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         mHomeServerText.setText(null);
                         mIdentityServerText.setText(null);
                         mUseCustomHomeServersCheckbox.performClick();
+                        mJitsiServerUrl = null;
                     }
                 } else {
                     if (!mUseCustomHomeServersCheckbox.isChecked()
                             || !hs.equals(mHomeServerUrl)
-                            || !ids.equals(mIdentityServerUrl)) {
+                            || !ids.equals(mIdentityServerUrl)
+                            || !js.equals(mJitsiServerUrl)) {
                         String finalIds = ids;
+                        String finalJs = js;
                         new AlertDialog.Builder(LoginActivity.this)
                                 .setTitle(getString(R.string.autodiscover_well_known_autofill_dialog_title))
                                 .setMessage(getString(R.string.autodiscover_well_known_autofill_dialog_message,
                                         domain,
-                                        String.format("• %s\n• %s", hs, ids)))
+                                        String.format("• %s\n• %s\n• %s", hs, js, ids)))
                                 .setPositiveButton(getString(R.string.autodiscover_well_known_autofill_confirm), (dialog, which) -> {
                                     mHomeServerText.setText(hs);
                                     mIdentityServerText.setText(finalIds);
+                                    mJitsiServerUrl = finalJs;
                                     if (!mUseCustomHomeServersCheckbox.isChecked()) {
                                         mUseCustomHomeServersCheckbox.performClick();
                                     } else {
                                         onHomeServerUrlUpdate(true);
+                                        onJitsiServerUrlUpdate(true);
                                         onIdentityServerUrlUpdate(true);
                                     }
                                 })
@@ -858,6 +874,23 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
             if (url.endsWith("/")) {
                 url = url.substring(0, url.length() - 1);
+            }
+        }
+
+        return url;
+    }
+
+    /**
+     * @return the Jitsi server Url according to custom HS checkbox
+     */
+    private String getJitsiServerUrl() {
+        String url = ServerUrlsRepository.INSTANCE.getDefaultJitsiServerUrl(this);
+
+        if (mUseCustomHomeServersCheckbox.isChecked() && mJitsiServerUrl != null) {
+            url = mJitsiServerUrl.trim();
+
+            if (!url.endsWith("/")) {
+                url = url + "/";
             }
         }
 
@@ -1016,6 +1049,42 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /**
+     * Check if the jitsi server url has been updated
+     *
+     * @param checkFlowOnUpdate check the flow on IS update
+     * @return true if the IS url has been updated
+     */
+    private boolean onJitsiServerUrlUpdate(boolean checkFlowOnUpdate) {
+        if (!TextUtils.equals(mJitsiServerUrl, getJitsiServerUrl())) {
+            // Reset SSO mode
+            if (mMode == MODE_LOGIN_SSO) {
+                mMode = MODE_LOGIN;
+            }
+
+            mJitsiServerUrl = getJitsiServerUrl();
+            mRegistrationManager.reset();
+
+            // invalidate the current homeserver config
+            mHomeserverConnectionConfig = null;
+            // the account creation is not always supported so ensure that the dedicated button is always displayed.
+            if (mMode == MODE_ACCOUNT_CREATION) {
+                mRegisterButton.setVisibility(View.VISIBLE);
+            } else if (mMode == MODE_LOGIN) {
+                mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+            }
+
+            if (checkFlowOnUpdate) {
+                checkFlows();
+            }
+
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the identity server url has been updated
      *
      * @param checkFlowOnUpdate check the flow on IS update
@@ -1062,6 +1131,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // retrieve the home server path
         mHomeServerUrl = getHomeServerUrl();
+        mJitsiServerUrl = getJitsiServerUrl();
         mIdentityServerUrl = getIdentityServerUrl();
 
         // If home server url or identity server url are not the default ones, check the mUseCustomHomeServersCheckbox
@@ -1975,6 +2045,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void onClick() {
         onIdentityServerUrlUpdate(false);
         onHomeServerUrlUpdate(false);
+        onJitsiServerUrlUpdate(false);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
@@ -2454,6 +2525,20 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 hsUrlString = "https://" + hsUrlString;
             }
 
+            String jitsiServerUrlString = getJitsiServerUrl();
+            if (!TextUtils.isEmpty(jitsiServerUrlString) && !jitsiServerUrlString.startsWith("http")
+                    || TextUtils.equals(jitsiServerUrlString, "http://")
+                    || TextUtils.equals(jitsiServerUrlString, "https://")) {
+                displayErrorOnUrl(mHomeServerTextTil, getString(R.string.login_error_must_start_http));
+                return null;
+            }
+
+            if (!TextUtils.isEmpty(jitsiServerUrlString)
+                    && !jitsiServerUrlString.startsWith("http://")
+                    && !jitsiServerUrlString.startsWith("https://")) {
+                jitsiServerUrlString = "https://" + jitsiServerUrlString;
+            }
+
             String identityServerUrlString = getIdentityServerUrl();
             if (!TextUtils.isEmpty(identityServerUrlString) && !identityServerUrlString.startsWith("http")
                     || TextUtils.equals(identityServerUrlString, "http://")
@@ -2468,10 +2553,12 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 identityServerUrlString = "https://" + identityServerUrlString;
             }
 
+
             try {
                 mHomeserverConnectionConfig = null;
                 mHomeserverConnectionConfig = new HomeServerConnectionConfig.Builder()
                         .withHomeServerUri(Uri.parse(hsUrlString))
+                        .withJitsiServerUri(Uri.parse(jitsiServerUrlString))
                         .withIdentityServerUri(Uri.parse(identityServerUrlString))
                         .build();
             } catch (Exception e) {

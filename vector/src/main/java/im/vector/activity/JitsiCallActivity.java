@@ -65,9 +65,9 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     public static final String EXTRA_ENABLE_VIDEO = "EXTRA_ENABLE_VIDEO";
 
     /**
-     * Base server URL
+     * Base server URL, will be updated via "updateJitsiServerUrl()"
      */
-    public static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
+    public static String JITSI_SERVER_URL = "https://jitsi.riot.im/";
 
     // the jitsi view
     private JitsiMeetView mJitsiView;
@@ -122,6 +122,7 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         try {
             Uri uri = Uri.parse(mWidget.getUrl());
             String confId = uri.getQueryParameter("confId");
+            updateJitsiServerUrl();
             mCallUrl = JITSI_SERVER_URL + confId;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage(), e);
@@ -292,5 +293,20 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     @Override
     public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
         JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener);
+    }
+
+    /**
+     * Update static variable JITSI_SERVER_URL
+     */
+    public void updateJitsiServerUrl() {
+        //Make sure we have a session
+        if (mSession == null) {
+            mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+            mSession = Matrix.getMXSession(this, mWidget.getSessionId());
+        }
+
+        if (mSession.getHomeServerConfig().getJitsiServerUri() != null) {
+            JITSI_SERVER_URL = mSession.getHomeServerConfig().getJitsiServerUri().toString();
+        }
     }
 }
