@@ -9,7 +9,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Remove the warning when using server discovery, it's too confusing for non-technical users (#3310)
 
 Other changes:
  - Update Matomo app id (#3429)
