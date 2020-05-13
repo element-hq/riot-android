@@ -1,4 +1,29 @@
-Changes in Riot 0.9.11 (2020-XX-XX)
+Changes in Riot 0.9.12 (2020-XX-XX)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade MatrixSdk to version 0.X.Y.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.X.Y
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bug fixes 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in Riot 0.9.11 (2020-05-13)
 ===================================================
 
 MatrixSdk 🚀:
