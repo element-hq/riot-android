@@ -1501,62 +1501,7 @@ Neden Riot.im’i seçmeliyim?
 
     <string name="error_user_already_logged_in">Başka bir anasunucuya bağlanmaya çalışıyorsunuz gibi görünüyor. Çıkış yapmak ister misiniz\?</string>
 
-    <string name="edit">Düzenle</string>
-    <string name="reply">Yanıtla</string>
-
     <string name="global_retry">Tekrar dene</string>
-    <string name="room_list_empty">Uygulamayı kullanmaya başlamak için bir odaya katıl.</string>
-    <string name="send_you_invite">Sana bir davet gönderdi</string>
-    <string name="invited_by">%s seni davet etti</string>
-
-    <string name="room_list_catchup_empty_title">Her şey tamam!</string>
-    <string name="room_list_catchup_empty_body">Hiç okunmamış mesajınız bulunmuyor</string>
-    <string name="room_list_catchup_welcome_title">Eve hoşgeldiniz!</string>
-    <string name="room_list_catchup_welcome_body">Okunmamış mesajları burada bulursun</string>
-    <string name="room_list_people_empty_title">Tartışmalar</string>
-    <string name="room_list_people_empty_body">Doğrudan mesajların burada görünecek</string>
-    <string name="room_list_rooms_empty_title">Odalar</string>
-    <string name="room_list_rooms_empty_body">Odalar burada görünecek</string>
-
-    <string name="title_activity_emoji_reaction_picker">Tepkiler</string>
-    <string name="reactions_agree">Bencede</string>
-    <string name="reactions_like">Beğendim</string>
-    <string name="message_add_reaction">Bir Tepki Ekle</string>
-    <string name="message_view_reaction">Tekpileri Görüntüle</string>
-    <string name="reactions">Tepkiler</string>
-
-    <string name="event_redacted_by_user_reason">Etkinlik kullanıcı tarafından silindi</string>
-    <string name="event_redacted_by_admin_reason">Etkinlik oda yöneticisi tarafından yönetildi</string>
-    <string name="last_edited_info_message">%2$s tarihinde %1$s tarafından düzenlendi</string>
-
-
-    <string name="malformed_message">Hatalı etkinlik, görüntülenemiyor</string>
-    <string name="create_new_room">Yeni Oda Oluştur</string>
-    <string name="error_no_network">Internet yok. Lütfen internet bağlantını kontrol et.</string>
-    <string name="action_change">Değiştir</string>
-    <string name="change_room_directory_network">Ağı değiştir</string>
-    <string name="please_wait">Lütfen bekleyin…</string>
-    <string name="group_all_communities">Tüm Topluluklar</string>
-
-    <string name="room_preview_no_preview">Bu oda önizlenemez</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">RiotX henüz herkese-açık odaları önizlemeyi desteklemiyor</string>
-
-    <string name="fab_menu_create_room">Odalar</string>
-    <string name="fab_menu_create_chat">Doğrudan Mesajlar</string>
-
-    <string name="create_room_title">Yeni Oda</string>
-    <string name="create_room_action_create">OLUŞTUR</string>
-    <string name="create_room_name_hint">Oda Adı</string>
-    <string name="create_room_public_title">Herkese Açık</string>
-    <string name="create_room_public_description">Herkes bu odaya katılabilir</string>
-    <string name="create_room_directory_title">Oda Dizini</string>
-    <string name="create_room_directory_description">Bu odayı oda dizininde yayınla</string>
-
-    <string name="keys_backup_unable_to_get_trust_info">Güven bilgisi alınırken hata oluştu</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">Anahtar yedek verileri alınırken hata oluştu</string>
-
-    <string name="alpha_disclaimer_title">Betaya hoşgeldiniz!</string>
-    <string name="alpha_disclaimer_content_line_1">RiotX geliştirme sürecindeyken bazı özellikler eksik olabilir ve hatalar ile karşılaşabilirsiniz.</string>
     <string name="login_error_no_homeserver_found">Bu geçerli bir Matrix sunucu adresi değil</string>
     <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
     <string name="settings_add_3pid_flow_not_supported">Bunu Riot mobil ile yapamazsınız</string>

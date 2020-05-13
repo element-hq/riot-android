@@ -1504,66 +1504,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="sas_error_unknown">Error desconocido</string>
 
 
-    <string name="edit">Editar</string>
-    <string name="reply">Responder</string>
-
     <string name="global_retry">Reintentar</string>
-    <string name="room_list_empty">Unirse a una sala y empezar a usar la app.</string>
-    <string name="send_you_invite">Alguien te envió una invitación</string>
-    <string name="invited_by">Invitado por %s</string>
-
-    <string name="room_list_catchup_empty_body">No tienes más mensajes sin leer</string>
-    <string name="room_list_catchup_welcome_title">¡Bienvenido!</string>
-    <string name="room_list_people_empty_title">Conversaciones</string>
-    <string name="room_list_people_empty_body">Tus conversaciones directas (1 a 1) se mostrarán aquí</string>
-    <string name="room_list_rooms_empty_title">Salas</string>
-    <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí</string>
-
-    <string name="title_activity_emoji_reaction_picker">Reacciones</string>
-    <string name="reactions_agree">De acuerdo</string>
-    <string name="reactions_like">Me gusta</string>
-    <string name="message_add_reaction">Añadir reacción</string>
-    <string name="message_view_reaction">Ver reacciones</string>
-    <string name="reactions">Reacciones</string>
-
-    <string name="event_redacted_by_user_reason">Evento borrado por el usuario</string>
-    <string name="event_redacted_by_admin_reason">Evento moderado por el administrador de la sala</string>
-    <string name="last_edited_info_message">Última edición por %1$s on %2$s</string>
-
-
-    <string name="malformed_message">Evento con error, no se puede mostrar</string>
-    <string name="create_new_room">Crear sala</string>
-    <string name="error_no_network">No hay red, por favor comprueba tu conexión a internet.</string>
-    <string name="action_change">Cambiar</string>
-    <string name="change_room_directory_network">Cambiar red</string>
-    <string name="please_wait">Espere por favor…</string>
-    <string name="group_all_communities">Todas la comunidades</string>
-
-    <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con RiotX</string>
-
-    <string name="fab_menu_create_room">Salas</string>
-    <string name="fab_menu_create_chat">Mensajes directos</string>
-
-    <string name="create_room_title">Nueva sala</string>
-    <string name="create_room_action_create">CREAR</string>
-    <string name="create_room_name_hint">Nombre de la sala</string>
-    <string name="create_room_public_title">Público</string>
-    <string name="create_room_public_description">Cualquiera puede unirse a esta sala</string>
-    <string name="create_room_directory_title">Directorio de salas</string>
-    <string name="create_room_directory_description">Publicar esta sala en el directorio de salas</string>
-
-    <string name="keys_backup_unable_to_get_trust_info">Error obteniendo información de confiabilidad</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
-
-    <string name="room_list_catchup_empty_title">!Estás al día!</string>
-    <string name="alpha_disclaimer_content_line_1">Mientras RiotX esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
-    <string name="settings_preferences">Preferencias</string>
-    <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
-    <string name="preference_voice_and_video">Voz &amp; Video</string>
-    <string name="send_suggestion">Haz una sugerencia</string>
-    <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
-    <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
     <string name="resources_script">Latn</string>
 
     <string name="none">Ninguno</string>
@@ -1593,7 +1534,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_integrations">Integraciones</string>
     <string name="settings_discovery_category">Descubrimiento</string>
     <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
-    <string name="room_list_catchup_welcome_body">Entérese aquí de los mensajes sin leer</string>
     <string name="call_failed_no_ice_description">Por favor, pídele al administrador de tu servidor doméstico (%1$s) que configure un servidor TURN para que las llamadas funcionen de forma fiable.
 \n
 \nAlternativamente, puedes intentar usar el servidor público en %2$s, pero no será tan confiable, y compartirá tu dirección IP con ese servidor. También puedes cambiar esto en Configuración.</string>
@@ -1603,7 +1543,6 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
-    <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
     <string name="auth_add_phone_message_2">Pon un número de teléfono para que las personas que conoces te puedan encontrar.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Se usará %s como asistencia cuando el servidor doméstico no la ofrezca (su dirección IP se compartirá durante una llamada)</string>
     <string name="settings_background_fdroid_sync_mode">Modo sincronización en segundo plano (Experimental)</string>
@@ -1664,99 +1603,11 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="error_user_already_logged_in">Parece que estás intentando conectarte a otro servidor doméstico. ¿Quieres cerrar sesión\?</string>
 
-    <string name="alpha_disclaimer_content_line_2_gplay">La última lista de características está siempre en %1$s, y si encuentras errores por favor envía un informe des del menú superior izquierdo de Inicio, y los arreglaremos tan rápido como podamos.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripción de Play Store</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Si encuentras errores por favor envía un informe de errores des del menú superior izquierdo del menú de Inicio. Resolveremos el error tan rápido como podamos.</string>
-
-    <string name="import_e2e_keys_from_file">Importar llaves E2E des del fichero \"%1$s\".</string>
-
-    <string name="settings_sdk_version">Versión del SDK de Matrix</string>
-    <string name="settings_other_third_party_notices">Otros avisos de terceros</string>
-    <string name="navigate_to_room_when_already_in_the_room">¡Ya estas viendo esta sala!</string>
-
-    <string name="quick_reactions">Reacciones rápidas</string>
-
-    <string name="settings_general_title">General</string>
-    <string name="settings_expert">Experto</string>
-    <string name="settings_push_rules">Reglas Push</string>
-    <string name="settings_push_rules_no_rules">No hay reglas push definidas</string>
-    <string name="settings_push_gateway_no_pushers">No hay salidas push registradas</string>
-
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_url">Url:</string>
-    <string name="push_gateway_item_format">Formato:</string>
-
-    <string name="preference_root_help_about">Ayuda y Acerca de</string>
-
-
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrar token</string>
-
-    <string name="send_suggestion_sent">Gracias, la sugerencia ha sido enviada correctamente</string>
-    <string name="send_suggestion_failed">El envio de la sugerencia ha fallado (%s)</string>
-
-    <string name="settings_labs_show_hidden_events_in_timeline">Mostrar eventos ocultos en la línea de tiempo</string>
-
-    <string name="store_riotx_title">RiotX - Cliente Matrix de Futura Generación</string>
-    <string name="store_riotx_short_description">Un cliente para Matrix más rápido y ligero que usa los últimos frameworks de Android</string>
-    <string name="store_riotx_full_description">RiotX es un nuevo cliente del protocolo Matrix (Matrix.org): una red abierta para una comunicación segura y descentralizada. RiotX es una reescritura completa del cliente Riot Android, basada en una reescritura completa del SDK Matrix Android.
-\n
-\nDescargo de responsabilidad: Esta es una versión beta. RiotX está actualmente en desarrollo activo y contiene limitaciones y (esperamos que no demasiados) errores. Todas las sugerencias son bienvenidas!
-\n
-\nRiotX soporta: - Entrar en una cuenta existente - Crear una sala y unirse a las salas públicas - Aceptar y rechazar invitaciones - Listar las salas de los usuarios - Ver los detalles de la sala - Enviar mensajes de texto - Enviar archivos adjuntos - Leer y escribir mensajes en salas cifradas - Criptografía: Copia de seguridad de claves E2E, verificación avanzada de dispositivos, solicitud y respuesta de compartir claves - Notificación push - Temas claros, oscuros y negros
-\n
-\nNo todas las características de Riot están implementadas en RiotX todavía. Principales características que faltan (¡pronto disponibles!): - Configuración de la sala (lista de miembros de la sala, etc.) - Llamadas - Widgets - …</string>
-
-    <string name="bottom_action_people_x">Mensajes Directos</string>
-
-    <string name="send_file_step_idle">Esperando…</string>
-    <string name="send_file_step_encrypting_thumbnail">Cifrando la miniatura…</string>
-    <string name="send_file_step_sending_thumbnail">Enviando miniatura (%1$s / %2$s)</string>
-    <string name="send_file_step_encrypting_file">Cifrando el archivo…</string>
-    <string name="send_file_step_sending_file">Enviando el archivo (%1$s / %2$s)</string>
-
-    <string name="downloading_file">Descargando archivo %1$s…</string>
-    <string name="downloaded_file">¡El archivo %1$s ha sido descargado!</string>
-
-    <string name="edited_suffix">(editado)</string>
-
-    <string name="riotx_no_registration_notice">%1$s para crear una cuenta.</string>
-    <string name="riotx_no_registration_notice_colored_part">Usar la app antigua</string>
-
-
-    <string name="message_edits">Modificación de mensajes</string>
-    <string name="no_message_edits_found">No se han encontrado modificaciones</string>
-
-    <string name="room_filtering_filter_hint">Filtrar conversaciones…</string>
-    <string name="room_filtering_footer_title">¿No encuentras lo que buscas\?</string>
-    <string name="room_filtering_footer_create_new_room">Crear una nueva sala</string>
-    <string name="room_filtering_footer_create_new_direct_message">Enviar un nuevo mensaje directo</string>
-    <string name="room_filtering_footer_open_room_directory">Ver el directorio de la sala</string>
-
-    <string name="room_directory_search_hint">Nombre o ID (#ejemplo:servidor.org)</string>
-
-    <string name="labs_swipe_to_reply_in_timeline">Habilitar \"desplazar para contestar\" en la línea de tiempo</string>
-
-    <string name="link_copied_to_clipboard">Enlace copiado al portapapeles</string>
-
-    <string name="add_by_matrix_id">Agregar por ID de matrix</string>
-    <string name="creating_direct_room">Creando sala…</string>
-    <string name="direct_room_no_known_users">No se ha encontrado ningún resultado, utiliza \"Agregar usando ID de matrix\" para buscar en el servidor.</string>
-    <string name="direct_room_start_search">Empieza a escribir para ver resultados</string>
-    <string name="direct_room_filter_hint">Filtrar por usuario o ID…</string>
-
-    <string name="joining_room">Entrando en la sala…</string>
-
-    <string name="message_view_edit_history">Ver historial de modificaciones</string>
 
     <string name="terms_of_service">Términos de Servicio</string>
     <string name="review_terms">Revisar Términos</string>
     <string name="terms_description_for_identity_server">Ser descubierta por otros</string>
     <string name="terms_description_for_integration_manager">Utiliza Bots, puentes, widgets y packs de stickers</string>
-
-    <string name="read_at">Leer en</string>
-
 
     <string name="identity_server">Servidor de identidad</string>
     <string name="disconnect_identity_server">Desconectar servidor de identidad</string>
@@ -1781,133 +1632,5 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="settings_discovery_disconnect_with_bound_pid">Actualmente estás compartiendo direcciones de correo electrónico o números de teléfono en el servidor de identidad %1$s. Necesitarás reconectarte a %2$s para dejar de compartirlos.</string>
     <string name="settings_agree_to_terms">Acepte los términos de servicio del servidor de identidad (%s) para permitir que sea descubierto por correo electrónico o número de teléfono.</string>
-
-    <string name="labs_allow_extended_logging">Habilitar registros extensos.</string>
-    <string name="labs_allow_extended_logging_summary">Los logs extensivos ayudarán a los desarrolladores proporcionando más información cuando envíes un \"RageShake\" (Sacudir el dispositivo). Incluso cuando esto está habilitado, la aplicación no registra el contenido de los mensajes ni ningún otro dato privado.</string>
-
-
-    <string name="error_terms_not_accepted">Por favor, vuelva a intentarlo una vez que haya aceptado los términos y condiciones de su servidor.</string>
-
-    <string name="error_network_timeout">Parece que el servidor está tardando demasiado en responder, esto puede ser causado por una mala conectividad o un error con el servidor. Por favor, inténtelo de nuevo en un rato.</string>
-
-    <string name="send_attachment">Enviar el archivo adjunto</string>
-
-    <string name="a11y_open_drawer">Abrir el cajón de navegación</string>
-    <string name="a11y_create_menu_open">Abrir el menú de creación de sala</string>
-    <string name="a11y_create_menu_close">Cerrar el menú de creación de sala…</string>
-    <string name="a11y_create_direct_message">Crear una nueva conversación directa</string>
-    <string name="a11y_create_room">Crear una nueva sala</string>
-    <string name="a11y_close_keys_backup_banner">Cerrar el banner de copia de seguridad de las llaves</string>
-    <string name="a11y_show_password">Mostrar contraseña</string>
-    <string name="a11y_hide_password">Esconder contraseña</string>
-    <string name="a11y_jump_to_bottom">Saltar al final</string>
-
-    <string name="two_and_some_others_read">Leído por %1$s, %2$s, %3$d y otros</string>
-    <string name="three_users_read">Leído por %1$s, %2$s y %3$s</string>
-    <string name="two_users_read">Leído por %1$s y %2$s</string>
-    <string name="one_user_read">Leído por %s</string>
-    <plurals name="fallback_users_read">
-        <item quantity="one">Leído por 1 usuario</item>
-        <item quantity="other">Leído por %d usuarias</item>
-    </plurals>
-
-    <string name="error_file_too_big">El archivo \'%1$s\' (%2$s) es demasiado grande para ser subido. El límite es %3$s.</string>
-
-    <string name="error_attachment">Ha ocurrido un error recuperando el archivo adjunto.</string>
-    <string name="attachment_type_file">Archivo</string>
-    <string name="attachment_type_contact">Contacto</string>
-    <string name="attachment_type_camera">Cámara</string>
-    <string name="attachment_type_audio">Audio</string>
-    <string name="attachment_type_gallery">Galería</string>
-    <string name="attachment_type_sticker">Pegatina</string>
-    <string name="error_handling_incoming_share">No se han podido compartir los datos</string>
-
-    <string name="report_content_spam">Es spam</string>
-    <string name="report_content_inappropriate">Es inapropiado</string>
-    <string name="report_content_custom">Reporte personalizado…</string>
-    <string name="report_content_custom_title">Reportar contenido</string>
-    <string name="report_content_custom_hint">Razón por la que se ha reportado el contenido</string>
-    <string name="report_content_custom_submit">REPORTAR</string>
-    <string name="block_user">BLOQUEAR USUARIO</string>
-
-    <string name="content_reported_title">Contenido reportado</string>
-    <string name="content_reported_content">El contenido ha sido reportado
-\n
-\nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes</string>
-    <string name="content_reported_as_spam_title">Reportar como spam</string>
-    <string name="content_reported_as_spam_content">Este contenido ha sido reportado como spam.
-\n
-\nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes</string>
-    <string name="content_reported_as_inappropriate_title">Reportado como inapropiado</string>
-    <string name="content_reported_as_inappropriate_content">Este contenido fue reportado como inapropiado.
-\n
-\nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes</string>
-
-    <string name="permissions_rationale_msg_keys_backup_export">Riot necesita permiso para guardar tus claves E2E en la memória del dispositivo.
-\n
-\nPorfavor permite el acceso en el siguiente pop-up para poder exportar tus claves manualmente.</string>
-
-    <string name="no_network_indicator">No hay conexión de red</string>
-
-    <string name="message_ignore_user">Bloquear usuario</string>
-
-    <string name="room_list_quick_actions_notifications_all_noisy">Todos los mensajes (sonido)</string>
-    <string name="room_list_quick_actions_notifications_all">Todos los mensajes</string>
-    <string name="room_list_quick_actions_notifications_mentions">Solo menciones</string>
-    <string name="room_list_quick_actions_notifications_mute">Mutear</string>
-    <string name="room_list_quick_actions_settings">Ajustes</string>
-    <string name="room_list_quick_actions_leave">Abandonar sala</string>
-    <string name="notice_member_no_changes">%1$s no ha hecho ningún cambio</string>
-    <string name="command_description_spoiler">Envía el mensaje como spoiler</string>
-    <string name="spoiler">Spoiler</string>
-    <string name="reaction_search_type_hint">Escribe las palabras clave para encontrar una reacción.</string>
-
-    <string name="no_ignored_users">No hay usuarios ignorados</string>
-
-    <string name="help_long_click_on_room_for_more_options">Mantén pulsada una sala para ver más opciones</string>
-
-
-    <string name="room_join_rules_public">%1$s ha hecho la sala pública para cualquier persona con el link.</string>
-    <string name="room_join_rules_invite">%1$s: Ahora la sala solo es accesible por invitación.</string>
-    <string name="timeline_unread_messages">Mensajes no leídos</string>
-
-    <string name="login_splash_title">Libera tu comunicación</string>
-    <string name="login_splash_text1">Envía mensajes a personas o grupos</string>
-    <string name="login_splash_text2">Mantén las conversaciones privadas con encriptación</string>
-    <string name="login_splash_text3">Extiende y personaliza tu experiencia</string>
-    <string name="login_splash_submit">Empieza</string>
-
-    <string name="login_server_title">Selecciona un servidor</string>
-    <string name="login_server_text">Como el correo electrónico, las cuantas tienen un hogar, aunque se puede hablar con cualquiera</string>
-    <string name="login_server_modular_text">Alojamiento de pago para organizaciones</string>
-    <string name="login_server_modular_learn_more">Saber más</string>
-    <string name="login_server_other_title">Otro</string>
-    <string name="login_server_other_text">Ajustes avanzados y de personalización</string>
-
-    <string name="login_continue">Continuar</string>
-    <string name="login_connect_to">Conectarse a %1$s</string>
-    <string name="login_connect_to_modular">Conectarse a Modular</string>
-    <string name="login_connect_to_a_custom_server">Conectarse a un servidor externo</string>
-    <string name="login_signin_to">Iniciar sesión en %1$s</string>
-    <string name="login_signup">Registrarse</string>
-    <string name="login_signin">Iniciar sesión</string>
-    <string name="login_server_url_form_other_hint">Dirección</string>
-    <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
-    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Riot o servidor que quieres usar</string>
-    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Riot al que quieres conectarte</string>
-
-    <string name="login_sso_error_message">Se produjo un error al cargar la pagina: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">"La aplicación no es capaz de iniciar sesión en este servidor. Este solo soporta el acceso mediante:  %1$s.
-\n
-\n¿Quieres acceder usando un cliente web\?"</string>
-    <string name="login_registration_disabled">Lo sentimos, este servidor no acepta nuevas cuentas.</string>
-    <string name="login_registration_not_supported">La aplicación no fue capaz de crear una cuenta en este servidor.
-\n
-\n¿Quieres registrarte usando un cliente web\?</string>
-
-    <string name="login_login_with_email_error">La dirección de coreo electrónico no está asociada a ninguna cuenta.</string>
-
-    <string name="login_reset_password_on">Reiniciar contraseña en %1$s</string>
-    <string name="keys_backup_restore_success_title_already_up_to_date">¡Las claves ya están al día!</string>
 
 </resources>

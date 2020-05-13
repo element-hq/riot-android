@@ -1039,12 +1039,6 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 
     <string name="encryption_information_device_name_with_warning">公開端末名 (会話を行うユーザーに表示されます)</string>
     <string name="notification_silent">音なし</string>
-    <string name="a11y_show_password">パスワードを表示</string>
-    <string name="a11y_hide_password">パスワードを隠す</string>
-    <string name="login_reset_password_password_hint">新しいパスワード</string>
-
-    <string name="login_signup_password_hint">パスワード</string>
-    <string name="soft_logout_signin_password_hint">パスワード</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">今ここでサインアウトすると、あなたの暗号化されたメッセージは失われてしまいます</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると暗号化されたメッセージにアクセスできなくなります。</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたのデバイス全てで有効化してください。</string>

@@ -1068,8 +1068,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="error_lazy_loading_not_supported_by_home_server">Heimetenaren din støttar ikkje såklalla lazy-loading av rommelemar endå. Prøv igjen seinare.</string>
 
     <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
-    <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
-    <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
     <string name="settings_noisy_notifications_preferences">Konfiguer bråkete-varsel</string>
     <string name="settings_call_notifications_preferences">Konfiguer anrops-varsel</string>
     <string name="settings_silent_notifications_preferences">Konfiguer stille-varsel</string>
@@ -1097,45 +1095,4 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="keys_backup_restore_is_getting_backup_version">Hentar sikkerheitskopiversjon…</string>
     <string name="keys_backup_info_title_version">Versjon</string>
-    <string name="settings_sdk_version">Matrix SDK versjon</string>
-    <string name="settings_preferences">Innstillingar</string>
-    <string name="settings_security_and_privacy">Sikkerheit og personvern</string>
-    <string name="preference_voice_and_video">Tale &amp; Video</string>
-    <string name="preference_root_help_about">Hjelp &amp; Om</string>
-
-
-    <string name="settings_labs_show_hidden_events_in_timeline">Vis skjulte hendelsar i historikken</string>
-
-    <string name="labs_swipe_to_reply_in_timeline">Aktiver swipe-for-å-svare i historikken</string>
-
-    <string name="room_list_quick_actions_leave">Forlat rommet</string>
-    <string name="timeline_unread_messages">Uleste meldingar</string>
-
-    <string name="login_error_outdated_homeserver_content">Denne heime-tenaren køyrer ein gammal versjon, du kan derfor ikkje kopla til. Be administrator om å oppgradere.</string>
-
-    <string name="create_room_encryption_description">Etter aktivering, så kan ikkje kryptering bli deaktivert.</string>
-
-    <string name="room_profile_section_security">Sikkerheit</string>
-    <string name="room_profile_section_security_learn_more">Få meir info</string>
-    <string name="room_profile_section_more_settings">Rominnstillingar</string>
-    <string name="room_profile_section_more_leave">Forlat rom</string>
-    <string name="room_member_power_level_admins">Administratorar</string>
-    <string name="room_member_power_level_moderators">Moderatorar</string>
-    <string name="room_member_power_level_custom">Tilpassa</string>
-    <string name="room_member_power_level_invites">Invitasjonar</string>
-    <string name="room_member_power_level_users">Brukarar</string>
-
-    <string name="room_member_power_level_admin_in">Administrator i %1$s</string>
-    <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
-    <string name="room_member_power_level_custom_in">Tilpassa (%1$d) i %2$s</string>
-
-    <string name="verify_cannot_cross_sign">Denne økta klarde ikkje å dele denne verifikasjonen med dine andre økter.
-\nVerifikasjonsdata er lagra lokalt, og vil bli delt i ein framtidig versjon av programmet.</string>
-
-    <string name="settings_category_timeline">Historikk</string>
-
-    <string name="room_settings_enable_encryption_warning">Etter aktivering, så kan ikkje kryptering bli deaktivert.</string>
-
-    <string name="complete_security">Fullstendig sikkerheit</string>
-
 </resources>
