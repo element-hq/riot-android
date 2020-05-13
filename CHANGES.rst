@@ -15,6 +15,7 @@ Other changes:
  - Update Matomo app id (#3429)
 
 Bug fixes 🐛:
+ - Read Jitsi domain from server (#3443)
  - some unused strings trimmed from repository to pass lint checks
 
 Translations 🗣:
