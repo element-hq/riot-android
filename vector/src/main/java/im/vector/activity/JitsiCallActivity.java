@@ -47,6 +47,7 @@ import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
+import im.vector.widgets.model.JitsiWidgetProperties;
 
 /**
  * Inspired from JitsiMeetActivity
@@ -64,16 +65,14 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
      */
     public static final String EXTRA_ENABLE_VIDEO = "EXTRA_ENABLE_VIDEO";
 
-    /**
-     * Base server URL
-     */
-    public static final String JITSI_SERVER_URL = "https://jitsi.riot.im/";
-
     // the jitsi view
     private JitsiMeetView mJitsiView;
 
     // the linked widget
     private Widget mWidget = null;
+
+    // the linked widget's Jitsi info
+    private JitsiWidgetProperties mJitsi = null;
 
     // video call
     private boolean mIsVideoCall;
@@ -117,12 +116,13 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         setWaitingView(findViewById(R.id.jitsi_progress_layout));
 
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
+        mJitsi = new JitsiWidgetProperties(mWidget.getUrl());
         mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 
         try {
             Uri uri = Uri.parse(mWidget.getUrl());
             String confId = uri.getQueryParameter("confId");
-            mCallUrl = JITSI_SERVER_URL + confId;
+            mCallUrl = "https://" + mJitsi.getDomain() + "/" + confId;
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onCreate() failed : " + e.getMessage(), e);
             finish();
@@ -154,9 +154,15 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
     private void loadURL() {
         try {
             JitsiMeetUserInfo userInfo = new JitsiMeetUserInfo();
-            userInfo.setDisplayName(mSession.getMyUser().displayname);
+            final String displayName = mJitsi.getDisplayName();
+            userInfo.setDisplayName(
+                    displayName != null ? displayName :  mSession.getMyUser().displayname
+            );
             try {
-                String avatarUrl = mSession.getMyUser().avatar_url;
+                String avatarUrl = mJitsi.getAvatarUrl();
+                if (avatarUrl == null) {
+                    avatarUrl = mSession.getMyUser().avatar_url;
+                }
                 if (avatarUrl != null) {
                     String downloadableUrl = mSession.getContentManager().getDownloadableUrl(avatarUrl, false);
                     if (downloadableUrl != null) {

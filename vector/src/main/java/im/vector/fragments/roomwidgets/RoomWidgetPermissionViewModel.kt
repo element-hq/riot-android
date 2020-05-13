@@ -21,10 +21,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.Matrix
 import im.vector.R
-import im.vector.activity.JitsiCallActivity
-import im.vector.util.extractDomain
 import im.vector.widgets.Widget
 import im.vector.widgets.WidgetsManager
+import im.vector.widgets.model.JitsiWidgetProperties
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.callback.SimpleApiCallback
 import java.net.URL
@@ -121,7 +120,7 @@ class RoomWidgetPermissionViewModel(val session: MXSession, val widget: Widget, 
                         authorName = creator?.displayname,
                         authorId = widget.widgetEvent.sender,
                         authorAvatarUrl = creator?.getAvatarUrl(),
-                        widgetDomain = extractDomain(JitsiCallActivity.JITSI_SERVER_URL),
+                        widgetDomain = JitsiWidgetProperties(widget.url).domain,
                         permissionsList = infoShared
                 )
 

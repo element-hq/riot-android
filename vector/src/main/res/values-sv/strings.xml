@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">en</string>
+    <string name="resources_country_code">US</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Ljust tema</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="black_them">Svart tema</string>
+    <string name="status_theme">Status.im-tema</string>
+
+    <string name="notification_sync_init">Initialiserar tjänst</string>
+    <string name="notification_sync_in_progress">Synkroniserar…</string>
+    <string name="title_activity_home">Meddelanden</string>
+    <string name="title_activity_room">Rum</string>
+    <string name="title_activity_settings">Inställningar</string>
+    <string name="title_activity_historical">Historiskt</string>
+    <string name="title_activity_bug_report">Felrapport</string>
+    <string name="title_activity_choose_sticker">Skicka ett klistrat meddelande</string>
+    <string name="title_activity_verify_device">Bekräfta session</string>
+
+    <string name="sign_out_bottom_sheet_warning_no_backup">Du kommer att förlora dina krypterade meddelanden om du loggar ut nu</string>
+</resources>

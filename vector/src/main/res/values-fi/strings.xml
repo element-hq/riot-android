@@ -43,7 +43,7 @@
     <string name="missing_permissions_warning">Puuttuvien oikeuksien takia osa ominaisuuksista ei ole käytettävissä…</string>
     <string name="missing_permissions_to_start_conf_call">Sinulta puuttuu oikeus käynnistää ryhmäpuhelu tässä huoneessa</string>
     <string name="missing_permissions_title_to_start_conf_call">Puhelua ei voitu käynnistää</string>
-    <string name="device_information">Laitteen tiedot</string>
+    <string name="device_information">Istunnon tiedot</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Ryhmäpuhelut eivät ole tuettuja salatuissa huoneissa</string>
     <string name="send_anyway">Lähetä silti</string>
     <string name="or">tai</string>
@@ -313,7 +313,7 @@
     <string name="room_participants_header_admin_tools">YLLÄPITÄJÄN TYÖKALUT</string>
     <string name="room_participants_header_call">PUHELUT</string>
     <string name="room_participants_header_direct_chats">YKSITYISKESKUSTELUT</string>
-    <string name="room_participants_header_devices">LAITTEET</string>
+    <string name="room_participants_header_devices">ISTUNNOT</string>
 
     <string name="room_participants_action_invite">Kutsu</string>
     <string name="room_participants_action_leave">Poistu huoneesta</string>
@@ -327,7 +327,7 @@
     <string name="room_participants_action_unignore">Näytä kaikki tämän käyttäjän viestit</string>
     <string name="room_participants_invite_search_another_user">Käyttäjätunnus, nimi tai sähköpostiosoite</string>
     <string name="room_participants_action_mention">Mainitse</string>
-    <string name="room_participants_action_devices_list">Näytä laitelista</string>
+    <string name="room_participants_action_devices_list">Näytä istuntolista</string>
     <string name="room_participants_power_level_prompt">Olet ylentämässä käyttäjää samalle tasolle kuin oma käyttäjätasosi. Et voi perua tätä toimintoa.\nOletko varma?</string>
 
     <string name="room_participants_invite_prompt_msg">Haluatko kutsua käyttäjän %s tähän keskusteluun\?</string>
@@ -350,7 +350,7 @@
     <string name="room_message_placeholder_not_encrypted">Lähetä viesti (salaamaton)…</string>
     <string name="room_offline_notification">Yhteys palvelimeen katkesi.</string>
     <string name="room_unsent_messages_notification">Viestejä ei lähetetty. %1$s vai %2$s\?</string>
-    <string name="room_unknown_devices_messages_notification">Viestejä ei lähetetty koska huoneessa on tuntemattomia laitteita. %1$s vai %2$s\?</string>
+    <string name="room_unknown_devices_messages_notification">Viestejä ei lähetetty, koska läsnä on tuntemattomia istuntoja. %1$s vai %2$s\?</string>
     <string name="room_prompt_resend">Lähetä kaikki uudelleen</string>
     <string name="room_prompt_cancel">Peruuta kaikki</string>
     <string name="room_resend_unsent_messages">Lähetä lähettämättömät viestit</string>
@@ -443,7 +443,7 @@
     <string name="settings_app_info_link_title">Sovelluksen tiedot</string>
 
     <string name="settings_enable_all_notif">Ota ilmoitukset käyttöön tällä tilillä</string>
-    <string name="settings_enable_this_device">Ota ilmoitukset käyttöön tällä laitteella</string>
+    <string name="settings_enable_this_device">Ota ilmoitukset käyttöön tässä istunnossa</string>
     <string name="settings_turn_screen_on">Näyttö päälle kolmeksi sekunniksi</string>
 
     <string name="settings_messages_in_one_to_one">Viestit yksityiskeskusteluissa</string>
@@ -482,8 +482,8 @@
     <string name="settings_home_display">Koti</string>
     <string name="settings_pin_missed_notifications">Kiinnitä huoneet, joissa on huomaamatta jääneitä ilmoituksia</string>
     <string name="settings_pin_unread_messages">Kiinnitä huoneet, joissa on lukemattomia viestejä</string>
-    <string name="settings_devices_list">Laitteet</string>
-    <string name="devices_details_dialog_title">Laitteen tiedot</string>
+    <string name="settings_devices_list">Istunnot</string>
+    <string name="devices_details_dialog_title">Istunnon tiedot</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Julkinen nimi</string>
     <string name="devices_details_device_name">Päivitä julkinen nimi</string>
@@ -618,11 +618,11 @@
     <string name="encryption_information_session_id">Sessio-ID</string>
     <string name="encryption_information_decryption_error">Salauksenpurkuvirhe</string>
 
-    <string name="encryption_information_sender_device_information">Lähettävän laitteen tiedot</string>
+    <string name="encryption_information_sender_device_information">Lähettäjän istunnon tiedot</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
     <string name="encryption_information_name">Julkinen nimi</string>
     <string name="encryption_information_device_id">Tunnus</string>
-    <string name="encryption_information_device_key">Laitteen avain</string>
+    <string name="encryption_information_device_key">Istunnon avain</string>
     <string name="encryption_information_verification">Vahvistus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-sormenjälki</string>
 
@@ -647,7 +647,7 @@
     <string name="encryption_information_verified">Vahvistettu</string>
     <string name="encryption_information_blocked">Kielletty</string>
 
-    <string name="encryption_information_unknown_device">tuntematon laite</string>
+    <string name="encryption_information_unknown_device">tuntematon istunto</string>
     <string name="encryption_information_none">ei mitään</string>
 
     <string name="encryption_information_verify">Vahvista</string>
@@ -665,7 +665,7 @@
 \nVoit tehdä sen nyt tai myöhemmin sovelluksen asetuksissa.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia laitteita</string>
+    <string name="unknown_devices_alert_title">Huoneessa on tuntemattomia istuntoja</string>
     <string name="unknown_devices_alert_message">Huoneessa on tuntemattomia laitteita joita ei ole vahvistettu.\nLaitteet eivät välttämättä kuulu väitetyille omistajilleen.\nJokainen uusi laite kannattaa vahvistaa ennen kuin jatkat, mutta voit myös lähettää viestit vahvistamattomille laitteille.\n\nTuntemattomat laitteet:</string>
 
     <!-- directory activity  -->
@@ -752,7 +752,7 @@
     <string name="settings_labs_native_camera">Käytä järjestelmän kamerasovellusta</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Lisäsit uuden laitteen \'%s\', joka pyytää salausavaimia.</string>
+    <string name="you_added_a_new_device">Lisäsit uuden istunnon \'%s\', joka pyytää salausavaimia.</string>
     <string name="your_unverified_device_requesting">Vahvistamaton laitteesi \'%s\' pyytää salausavaimia.</string>
     <string name="start_verification">Aloita varmennus</string>
     <string name="share_without_verifying">Jaa ilman varmennusta</string>
@@ -890,7 +890,7 @@ Haluatko lisätä paketteja?</string>
     <string name="keys_backup_is_not_finished_please_wait">Avainten varmuuskopio ei ole valmis, odotathan hetken…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Menetät salatut viestisi, jos kirjaudut ulos nyt</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Avainten varmuuskopio on meneillään. Jos kirjaudut ulos, menetät pääsyn salattuihin viesteihisi.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Turvallinen avainten varmuuskopio pitäisi olla käytössä kaikilla laitteillasi, jotta et menettäisi pääsyä salattuihin viesteihisi.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Turvallinen avainten varmuuskopio pitäisi olla käytössä kaikissa istunnoissasi, jotta et menettäisi pääsyä salattuihin viesteihisi.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">En halua salattuja viestejäni</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Varmuuskopioidaan avaimia…</string>
     <string name="keys_backup_activate">Käytä avainten varmuuskopiointia</string>
@@ -913,12 +913,12 @@ Haluatko lisätä paketteja?</string>
     <string name="go_on_with">jatka sovelluksella…</string>
     <string name="error_no_external_application_found">Yhtään ulkopuolista sovellusta tämän toiminnon suorittamiseksi ei löytynyt.</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muilta laitteiltasi.</string>
+    <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muista istunnoistasi.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Avainpyyntö lähetetty.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Pyyntö lähetetty</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä Riot toisella laitteela, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän laitteeseen.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä Riot toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
 
     <plurals name="membership_changes">
         <item quantity="one">yksi jäsenyysmuutos</item>
@@ -1018,9 +1018,9 @@ Haluatko lisätä paketteja?</string>
 \nTarkista tilisi asetukset.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ota käyttöön</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Laitteen asetukset.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Ilmoitukset ovat käytössä tällä laitteella.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Ilmoituksia ei sallita tällä laitteella. 
+    <string name="settings_troubleshoot_test_device_settings_title">Istunnon asetukset.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Ilmoitukset ovat käytössä tässä istunnossa.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
 \nTarkista Riotin asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ota käyttöön</string>
 
@@ -1320,8 +1320,8 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
         <item quantity="other">Varmuuskopio palautettiin %d avaimella.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">yksi uusi avain lisätty tähän laitteeseen.</item>
-        <item quantity="other">%d uutta avainta lisätty tähän laitteeseen.</item>
+        <item quantity="one">Yksi uusi avain lisätty tähän istuntoon.</item>
+        <item quantity="other">%d uutta avainta lisätty tähän listuntoon.</item>
     </plurals>
 
     <string name="keys_backup_get_version_error">Uusimman palautusavaimen version hakeminen epäonnistui (%s).</string>
@@ -1332,11 +1332,11 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="keys_backup_settings_delete_backup_button">Poista varmuuskopio</string>
 
     <string name="keys_backup_settings_status_ok">Avaimien varmuuskopiointi on käytössä tällä laitteella.</string>
-    <string name="keys_backup_settings_status_ko">Avaimien varmuuskopiointi ei ole käytössä tällä laitteella.</string>
-    <string name="keys_backup_settings_status_not_setup">Avaimiasi ei varmuuskopioida tältä laitteelta.</string>
+    <string name="keys_backup_settings_status_ko">Avaimien varmuuskopiointi ei ole käytössä tässä istunnossa.</string>
+    <string name="keys_backup_settings_status_not_setup">Avaimiasi ei varmuuskopioida tästä istunnosta.</string>
 
     <string name="keys_backup_settings_signature_from_unknown_device">Varmuuskopiossa on allekirjoitus tuntemattomasta laitteesta ID:llä %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Varmuuskopiossa on pätevä allekirjoitus tältä laitteelta.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Varmuuskopiossa on pätevä allekirjoitus tästä istunnosta.</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Varmuuskopiossa on pätevä allekirjoitus varmennetulta laitteelta %s.</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Varmuuskopiossa on pätevä allekirjoitus varmentamattomalta laitteelta %s</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Varmuuskopiossa on epäkelpo allekirjoitus varmennetulta laitteelta %s</string>
@@ -1451,133 +1451,32 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="sas_got_it">Selvä</string>
 
     <string name="sas_cancelled_dialog_title">Pyyntö peruttu</string>
-    <string name="sas_error_m_unexpected_message">Laite vastaanotti odottamattoman viestin</string>
+    <string name="sas_error_m_unexpected_message">Istunto vastaanotti odottamattoman viestin</string>
     <string name="sas_error_m_invalid_message">Virheellinen viesti vastaanotettu</string>
     <string name="sas_error_m_key_mismatch">Avain ei täsmää</string>
     <string name="sas_error_m_user_error">Käyttäjä ei täsmää</string>
     <string name="sas_error_unknown">Tuntematon virhe</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">Kotipalvelimellasi on jo varmuuskopio</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Näyttää, että olet jo asettanut avainten varmuuskopioinnin toiselta laitteelta. Halutatko korvata sen tällä\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Näyttää, että olet jo asettanut avainten varmuuskopioinnin toisesta istunnosta. Halutatko korvata sen tällä\?</string>
     <string name="keys_backup_setup_override_replace">Korvaa</string>
     <string name="keys_backup_setup_override_stop">Seis</string>
 
     <string name="keys_backup_settings_checking_backup_state">Tarkistetaan varmuuskopion tilaa</string>
     <string name="sas_waiting_for_partner">Odotetaan vastapuolen varmistusta…</string>
 
-    <string name="sas_error_m_unknown_transaction">Laite ei ole tietoinen kyseisestä transaktiosta</string>
+    <string name="sas_error_m_unknown_transaction">Istunto ei ole tietoinen kyseisestä transaktiosta</string>
     <string name="sas_error_m_mismatched_sas">SAS ei täsmännyt</string>
-    <string name="edit">Muokkaa</string>
-    <string name="reply">Vastaa</string>
 
     <string name="global_retry">Yritä uudelleen</string>
-    <string name="room_list_empty">Aloita sovelluksen käyttö liittymällä huoneeseen.</string>
-    <string name="send_you_invite">Lähetti sinulle kutsun</string>
-    <string name="invited_by">%s kutsui</string>
-
-    <string name="room_list_catchup_empty_body">Sinulla ei ole enempää lukemattomia viestejä</string>
-    <string name="room_list_catchup_welcome_title">Tervetuloa kotiin!</string>
-    <string name="room_list_catchup_welcome_body">Löydät täältä lukemattomat viestit</string>
-    <string name="room_list_people_empty_title">Keskustelut</string>
-    <string name="room_list_people_empty_body">Tässä näytetään yksityiset keskustelusi</string>
-    <string name="room_list_rooms_empty_title">Huoneet</string>
-    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä</string>
-
-    <string name="title_activity_emoji_reaction_picker">Reaktiot</string>
-    <string name="reactions_agree">Samaa mieltä</string>
-    <string name="reactions_like">Tykkää</string>
-    <string name="message_add_reaction">Lisää reaktio</string>
-    <string name="message_view_reaction">Näytä reaktiot</string>
-    <string name="reactions">Reaktiot</string>
-
-    <string name="event_redacted_by_user_reason">Käyttäjä poisti tapahtuman</string>
-    <string name="event_redacted_by_admin_reason">Huoneen ylläpitäjä moderoi tapahtuman</string>
-    <string name="malformed_message">Epämuotoinen tapahtuma, ei voida näyttää</string>
-    <string name="create_new_room">Luo uusi huone</string>
-    <string name="error_no_network">Ei verkkoa. Tarkista internet-yhteytesi.</string>
-    <string name="please_wait">Odota…</string>
-    <string name="group_all_communities">Kaikki yhteisöt</string>
-
-    <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">RiotX ei vielä tue täysin julkisen huoneen esikatselua</string>
-
-    <string name="fab_menu_create_room">Huoneet</string>
-    <string name="fab_menu_create_chat">Yksityisviestit</string>
-
-    <string name="create_room_title">Uusi huone</string>
-    <string name="create_room_action_create">LUO</string>
-    <string name="create_room_name_hint">Huoneen nimi</string>
-    <string name="create_room_public_title">Julkinen</string>
-    <string name="create_room_public_description">Kuka tahansa voi liittyä tähän huoneeseen</string>
-    <string name="keys_backup_unable_to_get_trust_info">Luottamustietoa haettaessa tapahtui virhe</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">Avainten varmuuskopioinnin tietoja haettaessa tapahtui virhe</string>
 
     <string name="your_unverified_device_requesting_with_info">Tuntematon laite pyytää salausavaimia
 \nLaitteen nimi: %1$s
 \nViimeksi nähty: %2$s
 \nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.</string>
 
-    <string name="alpha_disclaimer_title">Tervetuloa beetaan!</string>
-    <string name="alpha_disclaimer_content_line_1">RiotX on varhaisessa kehitysvaiheessa, mistä johtuen osa ominaisuuksista puuttuu ja saatat kohdata virheitä.</string>
-    <string name="settings_sdk_version">Matrix SDK:n versio</string>
-    <string name="settings_other_third_party_notices">Muut kolmansien osapuolten huomautukset</string>
-    <string name="quick_reactions">Pikareaktiot</string>
 
-    <string name="settings_preferences">Asetukset</string>
-    <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
-    <string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
-    <string name="last_edited_info_message">Viimeksi muokannut %1$s %2$s</string>
-
-
-    <string name="change_room_directory_network">Vaihda verkkoa</string>
-    <string name="navigate_to_room_when_already_in_the_room">Katselet jo tätä huonetta!</string>
-
-    <string name="settings_general_title">Yleiset</string>
-    <string name="preference_voice_and_video">Ääni ja video</string>
-    <string name="preference_root_help_about">Ohje ja tietoa</string>
-
-
-    <string name="send_suggestion">Tee ehdotus</string>
-    <string name="send_suggestion_content">Kirjoita ehdotuksesi alle.</string>
-    <string name="send_suggestion_report_placeholder">Kuvaile ehdotuksesi tässä</string>
-    <string name="send_suggestion_sent">Kiitos, ehdotus on lähetetty</string>
-    <string name="send_suggestion_failed">Ehdotuksen lähettäminen epäonnistui (%s)</string>
-
-    <string name="settings_labs_show_hidden_events_in_timeline">Näytä piilotetut tapahtumat aikajanalla</string>
-
-    <string name="store_riotx_title">RiotX - seuraavan sukupolven Matrix-asiakasohjelma</string>
-    <string name="store_riotx_short_description">Nopeampi ja kevyempi Matrix-asiakasohjelma</string>
-    <string name="bottom_action_people_x">Yksityisviestit</string>
-
-    <string name="send_file_step_idle">Odotetaan…</string>
-    <string name="send_file_step_encrypting_file">Salataan tiedostoa…</string>
-    <string name="send_file_step_sending_file">Lähetetään tiedostoa (%1$s / %2$s)</string>
-
-    <string name="downloading_file">Ladataan tiedostoa %1$s…</string>
-    <string name="downloaded_file">Tiedosto %1$s ladattu!</string>
-
-    <string name="edited_suffix">(muokattu)</string>
-
-    <string name="riotx_no_registration_notice_colored_part">Käytä vanhaa sovellusta</string>
-
-
-    <string name="no_message_edits_found">Muokkauksia ei löytynyt</string>
-
-    <string name="room_filtering_filter_hint">Suodata keskusteluja…</string>
-    <string name="room_filtering_footer_title">Etkö löydä, mitä etsit\?</string>
-    <string name="room_filtering_footer_create_new_room">Luo uusi huone</string>
-    <string name="room_filtering_footer_create_new_direct_message">Lähetä uusi yksityisviesti</string>
-    <string name="room_filtering_footer_open_room_directory">Näytä huoneluettelo</string>
-
-    <string name="link_copied_to_clipboard">Linkki kopioitu leikepöydälle</string>
-
-    <string name="creating_direct_room">Luodaan huonetta…</string>
-    <string name="direct_room_start_search">Näet tuloksia kirjoittamalla jotain</string>
-    <string name="joining_room">Liitytään huoneeseen…</string>
-
-    <string name="message_view_edit_history">Näytä muokkaushistoria</string>
-
-    <string name="title_activity_verify_device">Vahvista laite</string>
+    <string name="title_activity_verify_device">Vahvista istunto</string>
 
     <string name="start_verification_short_label">Vahvista</string>
     <string name="key_share_request">Avaimen jakopyyntö</string>
@@ -1598,12 +1497,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="sas_error_m_user">Käyttäjä perui vahvistuksen</string>
     <string name="sas_error_m_timeout">Vahvistustoimenpide aikakatkaistiin</string>
-    <string name="create_room_directory_title">Huoneluettelo</string>
-    <string name="create_room_directory_description">Julkaise tämä huone huoneluettelossa</string>
-
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvauksessa</string>
-    <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
-    <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
     <string name="disconnect">Katkaise yhteys</string>
     <string name="decline">Kieltäydy</string>
 
@@ -1624,7 +1517,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynkronointia saatetaan lykätä resursseista (akusta) tai laitteen tilasta (virransäästö) riippuen.</string>
     <string name="encryption_information_device_name_with_warning">Julkinen nimi (näkyy ihmisille, joihin olet yhteydessä)</string>
-    <string name="device_name_warning">Laitteen julkinen nimi näkyy ihmisille, joihin olet yhteydessä</string>
+    <string name="device_name_warning">Istunnon julkinen nimi näkyy ihmisille, joihin olet yhteydessä</string>
     <string name="widget_integration_review_terms">Jatkaaksesi sinun täytyy hyväksyä palvelun käyttöehdot.</string>
 
     <string name="identity_server_not_defined">Et käytä identiteettipalvelinta</string>
@@ -1632,15 +1525,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="error_user_already_logged_in">Näyttää, että yrität yhdistää toiseen kotipalvelimeen. Haluatko kirjautua ulos\?</string>
 
-    <string name="push_gateway_item_url">URL-osoite:</string>
-    <string name="labs_swipe_to_reply_in_timeline">Ota käyttöön pyyhkäisemällä vastaaminen aikajanalla</string>
-
     <string name="terms_of_service">Käyttöehdot</string>
     <string name="review_terms">Lue ehdot</string>
     <string name="terms_description_for_integration_manager">Käytä botteja, siltoja, sovelmia ja tarrapaketteja</string>
-
-    <string name="read_at">Lue osoitteessa</string>
-
 
     <string name="identity_server">Identiteettipalvelin</string>
     <string name="disconnect_identity_server">Katkaise yhteys identiteettipalvelimeen</string>
@@ -1661,35 +1548,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_call_ringtone_use_default_stun">Salli varalla oleva puhelun apupalvelin</string>
     <string name="settings_discovery_disconnect_identity_server_info">Yhteyden katkaiseminen identiteettipalvelimeesi tarkoittaa, että muut käyttäjät eivät voi etsiä sinua etkä voi kutsua muita sähköpostin tai puhelinnumeron perusteella.</string>
     <string name="settings_discovery_confirm_mail">Lähetimme sinulle vahvistussähköpostin osoitteeseen %s, tarkista sähköpostisi ja klikkaa vahvistuslinkkiä</string>
-    <string name="labs_allow_extended_logging">Ota yksityiskohtaiset lokit käyttöön.</string>
-    <string name="error_terms_not_accepted">Yritä uudelleen, kun olet hyväksynyt kotipalvelimesi käyttöehdot.</string>
-
-    <string name="error_network_timeout">Palvelimen vastaus näyttäisi olevan liian hidas. Tämä voi johtua kehnosta yhteydestä tai palvelimella olevasta ongelmasta. Yritä hetken kuluttua uudelleen.</string>
-
-    <string name="send_attachment">Lähetä liite</string>
-
-    <string name="a11y_create_room">Luo uusi huone</string>
-    <string name="a11y_show_password">Näytä salasana</string>
-    <string name="a11y_hide_password">Piilota salasana</string>
-    <string name="a11y_jump_to_bottom">Siirry loppuun</string>
-
-    <string name="two_and_some_others_read">%1$s, %2$s ja %3$d muuta lukivat</string>
-    <string name="three_users_read">%1$s, %2$s ja %3$s lukivat</string>
-    <string name="two_users_read">%1$s ja %2$s lukivat</string>
-    <string name="one_user_read">%s luki</string>
-    <plurals name="fallback_users_read">
-        <item quantity="one">1 käyttäjä luki</item>
-        <item quantity="other">%d käyttäjää luki</item>
-    </plurals>
-
-    <string name="error_attachment">Liitettä noudettaessa tapahtui virhe.</string>
-    <string name="attachment_type_file">Tiedosto</string>
-    <string name="attachment_type_camera">Kamera</string>
-    <string name="attachment_type_gallery">Galleria</string>
-    <string name="attachment_type_sticker">Tarra</string>
-    <string name="report_content_spam">Se on roskapostia</string>
-    <string name="report_content_inappropriate">Se on sopimaton</string>
-    <string name="no_network_indicator">Verkkoyhteyttä ei ole juuri nyt</string>
 
     <string name="none">Ei mitään</string>
     <string name="call_failed_no_ice_description">Pyydä kotipalvelimesi (%1$s) ylläpitäjää määrittämään TURN-palvelin, jotta puhelut toimivat luotettavasti.
@@ -1703,12 +1561,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_background_fdroid_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">Riot synkronoi taustalla täsmällisin aikavälein (säädettävä).
 \nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että Riot kuuntelee tapahtumia.</string>
-    <string name="message_edits">Viestimuokkaukset</string>
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
 
-    <string name="settings_push_rules_no_rules">Viesti-ilmoitusten sääntöjä ei ole määritetty</string>
-    <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
     <string name="resources_script">Latn</string>
 
     <string name="revoke">Kumoa</string>
@@ -1778,252 +1633,10 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \nLue lisää:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
-    <string name="action_change">Muuta</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Viimeisin ominaisuuslista on aina %1$s. Jos löydät virheitä, lähetäthän virheraportin painikkeella, joka löytyy ylhäällä ja vasemmalla olevasta kotivalikosta, niin korjaamme vian niin nopeasti kuin pystymme.</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Jos löytät virheitä, lähetäthän virheraportin ylhäältä ja vasemmalta löytyvästä kotivalikosta, niin korjaamme ongelman niin nopeasti kuin vain pystymme.</string>
-
-    <string name="import_e2e_keys_from_file">Tuo osapuolten välisen salauksen avaimet tiedostosta ”%1$s”.</string>
-
-    <string name="settings_expert">Edistynyt</string>
-    <string name="settings_push_gateway_no_pushers">Ei rekisteröityjä viesti-ilmoitusten yhdyskäytäviä</string>
-
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
-    <string name="push_gateway_item_format">Formaatti:</string>
-
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">Rekisteröi tunniste</string>
-
-    <string name="store_riotx_full_description">RiotX on uusi Matrix-protokollaa (Matrix.org) käyttävä ohjelma: avointa ja hajautettua keskustelua tukeva turvallinen verkko. RiotX on täysin uusittu versio Riot Android -ohjelmasta, joka perustuu Matrix Android SDK:n uudelleenkirjoitukseen.
-\n
-\nHuomaa: tämä on betaversio. RiotX on vielä kehitystyössä, ja siinä on rajoitteita ja (toivottavasti ei kuitenkaan monta) bugeja. Kaikki palaute on tervetullutta!
-\n
-\nRiotX tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
-\n
-\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
-
-    <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
-    <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>
-    <string name="room_directory_search_hint">Nimi tai tunniste (#example:matrix.org)</string>
-
-    <string name="add_by_matrix_id">Lisää Matrix-tunnisteella</string>
-    <string name="direct_room_no_known_users">Tuloksia ei löytynyt. Käytä ”Lisää Matrix-tunnisteella” etsiäksesi palvelimelta.</string>
-    <string name="direct_room_filter_hint">Suodata käyttäjätunnuksella tai tunnisteella…</string>
-
     <string name="settings_discovery_emails_title">Etsittävät sähköpostiosoitteet</string>
     <string name="settings_discovery_no_mails">Vaihtoehdot ilmestyvät, kunhan olet lisännyt sähköpostiosoitteen.</string>
     <string name="settings_discovery_no_msisdn">Vaihtoehdot ilmestyvät, kunhan olet lisännyt puhelinnumeron.</string>
     <string name="settings_discovery_msisdn_title">Etsittävät puhelinnumerot</string>
-    <string name="labs_allow_extended_logging_summary">Runsassanaiset lokit auttavat antamalla enemmän tietoa kehittäjille, kun lähetät virheilmoituksen. Vaikka runsaammat lokit ovat käytössä, sovellus ei lähetä viestien sisältöjä tai mitään muuta yksityistä tietoa.</string>
-
-
-    <string name="a11y_open_drawer">Avaa navigaatiovalikko</string>
-    <string name="a11y_create_menu_open">Avaa huoneen luontivalikko</string>
-    <string name="a11y_create_menu_close">Sulje huoneen luontivalikko…</string>
-    <string name="a11y_close_keys_backup_banner">Sulje avainten varmuuskopion mainos</string>
-    <string name="error_file_too_big">Tiedosto ”%1$s” (%2$s) on liian iso lähetettäväksi. Raja on %3$s.</string>
-
-    <string name="attachment_type_contact">Yhteystieto</string>
-    <string name="attachment_type_audio">Ääni</string>
-    <string name="error_handling_incoming_share">Jakotiedon käsittely epäonnistui</string>
-
-    <string name="report_content_custom">Muokattu ilmianto…</string>
-    <string name="report_content_custom_title">Ilmianna tämä sisältö</string>
-    <string name="report_content_custom_hint">Sisällön ilmiannon syy</string>
-    <string name="report_content_custom_submit">ILMIANNA</string>
-    <string name="block_user">ESTÄ KÄYTTÄJÄ</string>
-
-    <string name="content_reported_title">Sisältö ilmiannettu</string>
-    <string name="content_reported_content">Tämä sisältö on ilmiannettu.
-\n
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
-    <string name="content_reported_as_spam_title">Ilmiannettu roskapostina</string>
-    <string name="content_reported_as_spam_content">Tämä sisältö on ilmiannettu roskapostina.
-\n
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
-    <string name="content_reported_as_inappropriate_title">Ilmiannettu epäsopivana</string>
-    <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana.
-\n
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
-
-    <string name="permissions_rationale_msg_keys_backup_export">Riot tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
-\n
-\nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
 
     <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
-    <string name="message_ignore_user">Estä käyttäjä</string>
-
-    <string name="room_list_quick_actions_notifications_all_noisy">Kaikki viestit (äänekäs)</string>
-    <string name="room_list_quick_actions_notifications_all">Kaikki viestit</string>
-    <string name="room_list_quick_actions_notifications_mentions">Vain maininnat</string>
-    <string name="room_list_quick_actions_notifications_mute">Vaimenna</string>
-    <string name="room_list_quick_actions_settings">Asetukset</string>
-    <string name="room_list_quick_actions_leave">Poistu huoneesta</string>
-    <string name="notice_member_no_changes">%1$s ei tehnyt muutoksia</string>
-    <string name="command_description_spoiler">Lähettää annetun viestin ilonpilaajana</string>
-    <string name="spoiler">Ilonpilaaja</string>
-    <string name="reaction_search_type_hint">Syötä avainsanat löytääksesi reaktion.</string>
-
-    <string name="no_ignored_users">Et jätä yhtään käyttäjää huomiotta</string>
-
-    <string name="help_long_click_on_room_for_more_options">Tee pitkä klikkaus huoneelle nähdäksesi lisää asetuksia</string>
-
-
-    <string name="room_join_rules_public">%1$s asetti huoneen julkiseksi kelle tahansa, joka tietää huoneen osoitteen.</string>
-    <string name="room_join_rules_invite">%1$s muutti huoneeseen liittymisen vaatimaan kutsua.</string>
-    <string name="timeline_unread_messages">Lukemattomia viestejä</string>
-
-    <string name="login_splash_title">Vapauta keskustelusi</string>
-    <string name="login_splash_text1">Keskustele kaksistaan tai ryhmissä</string>
-    <string name="login_splash_text2">Pidä keskustelut yksityisinä ja salattuina</string>
-    <string name="login_splash_text3">Laajenna ja muokkaa kokemustasi</string>
-    <string name="login_splash_submit">Aloita</string>
-
-    <string name="login_server_title">Valitse palvelin</string>
-    <string name="login_server_text">Kuten sähköpostissa, tunnuksilla on yksi koti, mutta voit keskustella koko maailman kanssa</string>
-    <string name="login_server_matrix_org_text">Liity miljoonien joukkoon suurimmalla julkisella palvelimella</string>
-    <string name="login_server_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
-    <string name="login_server_modular_learn_more">Lue lisää</string>
-    <string name="login_server_other_title">Muut</string>
-    <string name="login_server_other_text">Mukautetut ja monimutkaiset asetukset</string>
-
-    <string name="login_continue">Jatka</string>
-    <string name="login_connect_to">Yhdistä palvelimeen %1$s</string>
-    <string name="login_connect_to_modular">Yhdistä Modulariin</string>
-    <string name="login_connect_to_a_custom_server">Yhdistä itse määritettyyn palvelimeen</string>
-    <string name="login_signin_to">Kirjaudu sisään palvelimeen %1$s</string>
-    <string name="login_signup">Rekisteröidy</string>
-    <string name="login_signin">Kirjaudu sisään</string>
-    <string name="login_signin_sso">Jatka kertakirjautumiseen</string>
-
-    <string name="login_server_url_form_modular_hint">Modularin osoite</string>
-    <string name="login_server_url_form_other_hint">Osoite</string>
-    <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
-    <string name="login_server_url_form_modular_notice">Syötä Modular Riotin tai haluamasi palvelimen osoite</string>
-    <string name="login_sso_error_message">Sivun lataamisessa tapahtui virhe: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$s.
-\n
-\nHaluatko kirjautua sisään web-klientillä\?</string>
-    <string name="login_registration_disabled">Valitettavasti tämä palvelin ei hyväksy uusia tunnuksia.</string>
-    <string name="login_registration_not_supported">Sovellus ei pysty luomaan uusia tunnuksia tälle kotipalvelimelle.
-\n
-\nHaluatko rekisteröityä web-klientillä\?</string>
-
-    <string name="login_login_with_email_error">Tämä sähköpostiosoite ei ole liitettynä mihinkään tunnukseen.</string>
-
-    <string name="login_reset_password_on">Palauta salasana palvelimella %1$s</string>
-    <string name="login_reset_password_notice">Sähköpostiisi lähetetään viesti uuden salananan asettamiseksi.</string>
-    <string name="login_reset_password_submit">Seuraava</string>
-    <string name="login_reset_password_email_hint">Sähköposti</string>
-    <string name="login_reset_password_password_hint">Uusi salasana</string>
-
-    <string name="login_reset_password_warning_title">Varoitus!</string>
-    <string name="login_reset_password_warning_content">Salasanan vaihtaminen nollaa kaikki osapuolten välisen salauksen avaimet kaikilla laitteillasi, joka estää sinua lukemasta vanhoja viestejä. Ota käyttöön avainten varmuuskopiointi tai vie huoneen avaimet toiselta laitteelta ennen kuin vaihdat salasanasi.</string>
-    <string name="login_reset_password_warning_submit">Jatka</string>
-
-    <string name="login_reset_password_error_not_found">Tämä sähköposti ei ole liitettynä mihinkään tunnukseen</string>
-
-    <string name="login_reset_password_mail_confirmation_title">Tarkista sähköpostisi</string>
-    <string name="login_reset_password_mail_confirmation_notice">Vahvistusviesti lähetettiin osoitteeseen %1$s.</string>
-    <string name="login_reset_password_mail_confirmation_notice_2">Näpäytä linkkiä vahvistaaksesi uuden salasanasi. Seurattuasi siinä olevaa linkkiä, klikkaa alapuolelta.</string>
-    <string name="login_reset_password_mail_confirmation_submit">Olen vahvistanut sähköpostiosoitteeni</string>
-
-    <string name="login_reset_password_success_title">Valmis!</string>
-    <string name="login_reset_password_success_notice">Salasanasi on vaihdettu.</string>
-    <string name="login_reset_password_success_notice_2">Olet kirjautunut ulos kaikilta laitteilta, etkä saa enää viesti-ilmoituksia. Ottaaksesi viesti-ilmoitukset uudelleen käyttöön, kirjaudu sisään jokaisella laitteellasi.</string>
-    <string name="login_reset_password_success_submit">Takaisin sisäänkirjautumiseen</string>
-
-    <string name="login_reset_password_cancel_confirmation_title">Varoitus</string>
-    <string name="login_reset_password_cancel_confirmation_content">Salasanaasi ei ole vielä vaihdettu.
-\n
-\nPeru salasananvaihtoprosessi\?</string>
-
-    <string name="login_set_email_title">Aseta sähköpostiosoite</string>
-    <string name="login_set_email_notice">Aseta sähköpostiosoite palauttaaksesi tunnuksesi. Myöhemmin, voit antaa muiden löytää sinut sähköpostillasi.</string>
-    <string name="login_set_email_mandatory_hint">Sähköposti</string>
-    <string name="login_set_email_optional_hint">Sähköposti (vapaaehtoinen)</string>
-    <string name="login_set_email_submit">Seuraava</string>
-
-    <string name="login_set_msisdn_title">Aseta puhelinnumero</string>
-    <string name="login_set_msisdn_notice">Aseta puhelinnumero antaaksesi muiden löytää sinut puhellinumerosi perusteella.</string>
-    <string name="login_set_msisdn_notice2">Käytä maailmanlaajuista puhelinnumeron muotoa.</string>
-    <string name="login_set_msisdn_mandatory_hint">Puhelinnumero</string>
-    <string name="login_set_msisdn_optional_hint">Puhelinnumero (vapaaehtoinen)</string>
-    <string name="login_set_msisdn_submit">Seuraava</string>
-
-    <string name="login_msisdn_confirm_title">Vahvista puhelinnumero</string>
-    <string name="login_msisdn_confirm_notice">Lähetimme sinulle koodin numeroon %1$s. Syötä se alapuolelle vahvistaaksesi numeron.</string>
-    <string name="login_msisdn_confirm_hint">Syötä koodi</string>
-    <string name="login_msisdn_confirm_send_again">Lähetä uudelleen</string>
-    <string name="login_msisdn_confirm_submit">Seuraava</string>
-
-    <string name="login_msisdn_error_not_international">Kansainvälisten puhelinnumeroiden pitää alkaa merkillä ”+”</string>
-    <string name="login_msisdn_error_other">Puhelinnumero vaikuttaa epäkelvolta. Tarkista numero</string>
-
-    <string name="login_signup_to">Rekisteröidy palvelimelle %1$s</string>
-    <string name="login_signup_username_hint">Käyttäjätunnus tai sähköpostiosoite</string>
-    <string name="login_signup_password_hint">Salasana</string>
-    <string name="login_signup_submit">Seuraava</string>
-    <string name="login_signup_error_user_in_use">Käyttäjätunnus on varattu</string>
-    <string name="login_signup_cancel_confirmation_title">Varoitus</string>
-    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu.
-\n
-\nPeru rekisteröintiprosessi\?</string>
-
-    <string name="login_a11y_choose_matrix_org">Valitse matrix.org</string>
-    <string name="login_a11y_choose_modular">Valitse modular</string>
-    <string name="login_a11y_choose_other">Valitse muu kotipalvelin</string>
-    <string name="login_a11y_captcha_container">Ratkaise seuraava kuvavarmennushaaste</string>
-    <string name="login_terms_title">Hyväksy ehdot jatkaaksesi</string>
-
-    <string name="login_wait_for_email_title">Tarkista sähköpostisi</string>
-    <string name="login_wait_for_email_notice">Lähetimme sähköpostin osoitteeseen %1$s.
-\nKlikkaa siinä olevaa linkkiä jatkaaksesi tunnuksen luontia.</string>
-    <string name="login_validation_code_is_not_correct">Syöttämäsi koodi ei ole kelvollinen. Tarkista se.</string>
-    <string name="login_error_outdated_homeserver_title">Vanhentunut kotipalvelin</string>
-    <string name="login_error_outdated_homeserver_content">Tämä kotipalvelin pyörii liian vanhalla versiolla, jotta pystyisimme yhdistämään siihen. Pyydä kotipalvelimesi ylläpitäjää päivittämään palvelimensa.</string>
-
-    <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen 1 sekunnissa…</item>
-        <item quantity="other">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen %1$d sekunnissa…</item>
-    </plurals>
-
-    <string name="seen_by">Nähty toimesta</string>
-
-    <string name="signed_out_title">Olet kirjautunut ulos</string>
-    <string name="signed_out_submit">Kirjaudu sisään uudelleen</string>
-
-    <string name="soft_logout_title">Olet kirjautunut ulos</string>
-    <string name="soft_logout_signin_title">Kirjaudu sisään</string>
-    <string name="soft_logout_signin_notice">Kotipalvelimen (%1$s) ylläpitäjä on kirjannut sinut ulos tunnukseltasi %2$s (%3$s).</string>
-    <string name="soft_logout_signin_submit">Kirjaudu sisään</string>
-    <string name="soft_logout_signin_password_hint">Salasana</string>
-    <string name="soft_logout_clear_data_title">Poista henkilökohtaiset tiedot</string>
-    <string name="soft_logout_clear_data_notice">Varoitus: henkilökohtaiset tietosi (sisältää salausavaimesi) ovat vielä tallennettuna tälle laitteelle.
-\n
-\nPoista ne jos olet lopettanut tämän laitteen käytön, tai haluat kirjautua sisään toiselle tunnukselle.</string>
-    <string name="soft_logout_clear_data_submit">Poista kaikki tiedot</string>
-
-    <string name="soft_logout_clear_data_dialog_title">Poista tiedot</string>
-    <string name="soft_logout_clear_data_dialog_content">Poista kaikki tälle laitteelle tallennetut tiedot\?
-\nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.</string>
-    <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
-    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. RiotX ei tue tätä.
-\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää Riotin selainversiota.</string>
-
-    <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
-    <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
-
-    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen Riotin osoite, mihin haluat yhdistää</string>
-
-    <string name="signed_out_notice">Se voi johtua monesta eri syystä:
-\n
-\n• olet vaihtanut salasanasi toisella laitteella
-\n
-\n• olet poistanut tämän laitteen toisella laitteella
-\n
-\n• palvelimen ylläpitäjä on estänyt pääsysi turvallisuussyistä.</string>
-    <string name="soft_logout_signin_e2e_warning_notice">Kirjaudu sisään palauttaaksesi salausavaimesi, jotka ovat tallessa vain tällä laitteella. Tarvitset niitä lukeaksi kaikki salatut viestisi millä tahansa laitteella.</string>
 </resources>

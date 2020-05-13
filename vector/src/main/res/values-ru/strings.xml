@@ -40,7 +40,7 @@
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
-    <string name="device_information">Информация об устройстве</string>
+    <string name="device_information">Информация о сессии</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Все равно отправить</string>
     <string name="or">или</string>
@@ -128,7 +128,7 @@
     <string name="start_voice_call">Начать голосовой вызов</string>
     <string name="start_video_call">Начать видеовызов</string>
 
-    <string name="option_send_files">Отправка файлов</string>
+    <string name="option_send_files">Отправить файлы</string>
     <string name="option_take_photo_video">Камера</string>
 
     <!-- Authentication -->
@@ -176,9 +176,7 @@
     <string name="auth_reset_password_missing_password">Должен быть введен новый пароль.</string>
     <string name="auth_reset_password_email_validation_message">На адрес %s было отправлено письмо. После перехода по ссылке в письме, нажмите ниже.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить email: убедитесь, что вы перешли по присланной ссылке</string>
-    <string name="auth_reset_password_success_message">Ваш пароль сброшен.
-
-Осуществлен выход на всех устройствах - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
+    <string name="auth_reset_password_success_message">Ваш пароль сброшен. Осуществлен выход на всех сессиях - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL должен начинаться с http[s]://</string>
@@ -198,8 +196,7 @@
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этого устройства и отправлять публичный ключ вашему серверу.
-Это необходимо только один раз; извините за неудобства.</string>
+    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этой сессии и отправлять публичный ключ вашему серверу. Это необходимо только один раз; извините за неудобства.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Чтение списка вступивших</string>
@@ -305,7 +302,7 @@
     <string name="room_participants_header_admin_tools">АДМИНИСТРИРОВАНИЕ</string>
     <string name="room_participants_header_call">ВЫЗОВ</string>
     <string name="room_participants_header_direct_chats">ПРЯМЫЕ ЧАТЫ</string>
-    <string name="room_participants_header_devices">УСТРОЙСТВА</string>
+    <string name="room_participants_header_devices">СЕССИИ</string>
 
     <string name="room_participants_action_invite">Пригласить</string>
     <string name="room_participants_action_leave">Покинуть этот чат</string>
@@ -319,7 +316,7 @@
     <string name="room_participants_action_unignore">Отобразить все сообщения этого пользователя</string>
     <string name="room_participants_invite_search_another_user">ID пользователя, имя или email</string>
     <string name="room_participants_action_mention">Упомянуть</string>
-    <string name="room_participants_action_devices_list">Отобразить список устройств</string>
+    <string name="room_participants_action_devices_list">Отобразить список сессий</string>
     <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. Вы уверены?</string>
 
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
@@ -342,7 +339,7 @@
     <string name="room_message_placeholder_not_encrypted">Отправить сообщение…</string>
     <string name="room_offline_notification">Соединение с сервером потеряно.</string>
     <string name="room_unsent_messages_notification">Сообщения не отправлены. %1$s или %2$s сейчас?</string>
-    <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
+    <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных сессий. %1$s или %2$s сейчас\?</string>
     <string name="room_prompt_resend">Повторить отправку</string>
     <string name="room_prompt_cancel">Удалить все</string>
     <string name="room_resend_unsent_messages">Отправить неотправленные сообщения</string>
@@ -434,7 +431,7 @@
     <string name="settings_app_info_link_title">Сведения о приложении</string>
 
     <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
+    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
     <string name="settings_turn_screen_on">Включить экран на 3 секунды</string>
 
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
@@ -473,8 +470,8 @@
     <string name="settings_home_display">Домашний экран</string>
     <string name="settings_pin_missed_notifications">Прикрепить комнаты с отключенными уведомлениями</string>
     <string name="settings_pin_unread_messages">Прикрепить комнаты с непрочитанными сообщениями</string>
-    <string name="settings_devices_list">Устройства</string>
-    <string name="devices_details_dialog_title">Информация об устройстве</string>
+    <string name="settings_devices_list">Сессии</string>
+    <string name="devices_details_dialog_title">Информация о сессии</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Общеизвестное имя</string>
     <string name="devices_details_device_name">Обновить публичное имя</string>
@@ -570,8 +567,8 @@
     <string name="room_settings_labs_end_to_end">Сквозное шифрование</string>
     <string name="room_settings_labs_end_to_end_is_active">Сквозное шифрование активно</string>
     <string name="room_settings_labs_end_to_end_warnings">Вам необходимо выйти, чтобы включить шифрование.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных устройств</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных сессий</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные сессии в этой комнате с этой сессии.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
@@ -610,11 +607,11 @@
     <string name="encryption_information_session_id">ID сесии</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
 
-    <string name="encryption_information_sender_device_information">Информация об устройстве отправителя</string>
+    <string name="encryption_information_sender_device_information">Информация о сессии отправителя</string>
     <string name="encryption_information_device_name">Публичное имя</string>
     <string name="encryption_information_name">Публичное имя</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Ключ устройства</string>
+    <string name="encryption_information_device_key">Ключ сеанса</string>
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
 
@@ -632,14 +629,14 @@
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным устройствам.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
 
     <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В черном списке</string>
 
-    <string name="encryption_information_unknown_device">неизвестное устройство</string>
+    <string name="encryption_information_unknown_device">неизвестная сессия</string>
     <string name="encryption_information_none">ничего</string>
 
     <string name="encryption_information_verify">Подтвердить</string>
@@ -647,11 +644,9 @@
     <string name="encryption_information_block">Блокировать</string>
     <string name="encryption_information_unblock">Разрешить</string>
 
-    <string name="encryption_information_verify_device">Проверить устройство</string>
-    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этому устройству можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этого устройства:</string>
-    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже.
-Если не совпадает, возможно кто-то пытается перехватить устройство и  вы захотите добавить его в черный список.
-В будущем данный процесс будет улучшен."</string>
+    <string name="encryption_information_verify_device">Проверить сессию</string>
+    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
+    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
@@ -659,12 +654,12 @@
 Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.
-Это означает, что эти устройства могут не принадлежать тем пользователям, на которых они претендуют. 
-Перед продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.
-
-Неизвестные устройства:</string>
+    <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
+    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные сессии, которые не были подтверждены. 
+\nЭто означает, что эти сессии могут не принадлежать тем пользователям, на которых они претендуют. 
+\nПеред продолжением рекомендуем вам пройти процесс проверки для каждой сессии, но вы можете отправить сообщение повторно, не проверяя.
+\n
+\nНеизвестные сессии:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Выбор списка комнат</string>
@@ -738,8 +733,8 @@
 
     <string name="call">Вызов</string>
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>
-    <string name="you_added_a_new_device">Вы добавили новое устройство \'%s\', запрашивающее ключи шифрования.</string>
-    <string name="your_unverified_device_requesting">Ваше непроверенное устройство \'%s\' запрашивает ключи шифрования.</string>
+    <string name="you_added_a_new_device">Вы добавили новою сессию \'%s\', запрашивающая ключи шифрования.</string>
+    <string name="your_unverified_device_requesting">Ваше непроверенная сессия \'%s\' запрашивает ключи шифрования.</string>
     <string name="settings_containing_my_display_name">Сообщения, содержащие мое отображаемое имя</string>
     <string name="start_verification">Начать проверку</string>
     <string name="share_without_verifying">Поделиться без проверки</string>
@@ -909,9 +904,9 @@
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
-    <string name="settings_flair">Флэр</string>
+    <string name="settings_flair">Сообщества</string>
 
-    <string name="room_settings_no_flair">Эта комната не показывает флэр сообществ</string>
+    <string name="room_settings_no_flair">Эта комната не показывает любые сообщества</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
@@ -962,12 +957,12 @@
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
     <string name="clear">Очистить</string>
-    <string name="e2e_re_request_encryption_key"><u>Повторно запросить ключи шифрования</u> с другого вашего устройства.</string>
+    <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Запрос отправлен</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Запустите Riot на другом устройстве, которое может расшифровать сообщение, для отправки ключа на это устройство.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Запустите Riot на другом устройстве, которое может расшифровать сообщение, для отправки ключа на эту сессию.</string>
 
     <string name="lock_screen_hint">Введите здесь…</string>
 
@@ -1012,21 +1007,19 @@
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
-        <item quantity="one">%d сек.</item>
-        <item quantity="few">%d сек.</item>
-        <item quantity="many">%d сек.</item>
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dm</item>
-        <item quantity="few">%dm</item>
-        <item quantity="many">%dm</item>
-        <item quantity="other" />
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
@@ -1141,7 +1134,7 @@
     <string name="settings_troubleshoot_diagnostic">Результаты диагностики</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Запустить тесты</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Выполняется… (%1$d из %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">В основном всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">В основном, всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам разобраться.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Один или несколько тестов не пройдены, попробуйте предлагаемые решения.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один или несколько тестов не пройдены, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
 
@@ -1157,10 +1150,10 @@
 Пожалуйста, проверьте настройки аккаунта.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Настройки устройства.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этого устройства.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не разрешены для этого устройства.
-Пожалуйста, проверьте настройки Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии. 
+\nПожалуйста, проверьте настройки Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
@@ -1302,17 +1295,17 @@
     <string name="keys_backup_settings_delete_backup_error">Не удалось удалить резервную копию (%s)</string>
 
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Для Безопасного Восстановления Сообщений на этом устройстве, требуется пароль или ключ восстановления.</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет невалидную подпись верифицированного устройства %s</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Резервная копия имеет валидную подпись неверифицированного устройства %s</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет валидную подпись верифицированного устройства %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Резервная копия имеет валидную подпись этого устройства.</string>
-    <string name="keys_backup_settings_signature_from_unknown_device">Резервная копия подписана устройством с идентификатором: %s.</string>
-    <string name="keys_backup_settings_status_not_setup">Ваши ключи не сохраняются с этого устройства.</string>
+    <string name="keys_backup_settings_untrusted_backup">Для Восстановления Сообщений в этой сессии, требуется пароль или ключ восстановления.</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">"Резервная копия имеет  действительную подпись из неподтвержденной сессии %s"</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительно подпись из подтверждённой сессии %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Резервная копия имеет действительную подпись с этой сессии.</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">Резервная копия подписана сессией с идентификатором %s.</string>
+    <string name="keys_backup_settings_status_not_setup">Резервные копии ключей этой сессии не сохраняются.</string>
 
 
-    <string name="keys_backup_settings_status_ko">Резервное копирование ключей не активно на этом устройстве.</string>
-    <string name="keys_backup_settings_status_ok">Резервное копирование ключей успешно настроено для этого устройства.</string>
+    <string name="keys_backup_settings_status_ko">Резервное копирование ключей не активировано в этой сессии.</string>
+    <string name="keys_backup_settings_status_ok">Резервное копирование ключей успешно настроено для этой сессии.</string>
     <string name="keys_backup_settings_delete_backup_button">Удалить резервную копию</string>
 
     <string name="keys_backup_settings_restore_backup_button">Восстановить из резервной копии</string>
@@ -1340,7 +1333,7 @@
     <string name="keys_backup_restore_success_title">Резервная копия восстановлена %s !</string>
     <string name="keys_backup_get_trust_error">Ошибка получения информации о доверии для резервной копии (%s).</string>
 
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервная копия имеет невалиндую подпись неверифицированного устройства %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервная копия имеет недействительную подпись из неподтвержденной сессии %s</string>
     <string name="keys_backup_get_version_error">Не удалось получить последнюю версию ключей восстановления (%s).</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
@@ -1354,7 +1347,7 @@
         <item quantity="few">Восстановлены резервные копии с %d ключами.</item>
         <item quantity="many">Восстановлены резервные копии с %d ключами.</item>
     </plurals>
-    <string name="keys_backup_restore_success_description">Восстановлены %1$d сеансовые ключи и добавлены %2$d новые ключи, которые не были известны этому устройству</string>
+    <string name="keys_backup_restore_success_description">Восстановлены %1$d сессионные ключи и добавлены %2$d новые ключи, которые не были известны этой сессии</string>
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого ключа восстановления: убедитесь, что вы ввели правильный ключ.</string>
 
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью этой парольной фразы: убедитесь, что вы ввели верную фразу.</string>
@@ -1429,7 +1422,7 @@
     <string name="settings_data_save_mode_summary">В режиме экономии траффика применяется специальный фильтр, поэтому обновление присутствия и уведомления о наборе отфильтровываются.</string>
 
     <string name="keys_backup_setup_step1_recovery_key_alternative">Или защитите резервную копию с помощью ключа восстановления, сохранив его в безопасном месте.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Безопасная резервная копия ключей должна быть активирована на всех ваших устройствах, чтобы не потерять доступ к зашифрованным сообщениям.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Безопасная резервная копия ключей должна быть активирована на всех ваших сессиях, чтобы не потерять доступ к зашифрованным сообщениям.</string>
     <string name="keys_backup_setup_step2_text_description">"Зашифрованная копия ключей  будет храниться на вашем сервере. Для безопасности, защитите её парольной фразой.
 
 Для максимальной безопасности он должен отличаться от пароля вашей учетной записи."</string>
@@ -1472,7 +1465,7 @@
     <string name="notification_sender_me">Мне</string>
     <string name="autodiscover_well_known_autofill_confirm">Использовать настройку</string>
 
-    <string name="title_activity_verify_device">Проверить устройство</string>
+    <string name="title_activity_verify_device">Проверить сессию</string>
 
     <string name="login_error_ssl_handshake">Ваше устройство использует устаревший TLS протокол, уязвимый для атак, для вашей же безопасности вам отказано в подключении</string>
     <string name="settings_notification_privacy_no_background_sync">Приложениям <b>не</b>" нужно  подключаться к HomeServer в фоновом режиме, это должно снизить расход заряда батареи"</string>
@@ -1485,14 +1478,14 @@
 
     <string name="error_jitsi_not_supported_on_old_device">К сожалению, конференц-звонки с Jitsi не поддерживаются на старых устройствах (ниже Android OS - 5.0)</string>
 
-    <string name="you_added_a_new_device_with_info">Новое устройство запрашивает ключи шифрования.
-\nИмя устройства: %1$s
-\nПоследний раз в сети: %2$s
-\nЕсли вы не вошли с другого устройства, проигнорируйте этот запрос.</string>
-    <string name="your_unverified_device_requesting_with_info">Непроверенное устройство запрашивает ключи шифрования.
-\nИмя устройства: %1$s
-\nПоследний раз в сети: %2$s
-\nЕсли вы не вошли с другого устройства, проигнорируйте этот запрос.</string>
+    <string name="you_added_a_new_device_with_info">Новая сессия запрашивает ключи шифрования. 
+\nИмя сессии: %1$s 
+\nПоследний раз в сети: %2$s 
+\nЕсли вы не вошли с другой сессии, проигнорируйте этот запрос.</string>
+    <string name="your_unverified_device_requesting_with_info">Непроверенная сессия запрашивает ключи шифрования. 
+\nИмя сессии: %1$s 
+\nПоследний раз в сети: %2$s 
+\nЕсли вы не открывали новую сессию - проигнорируйте этот запрос.</string>
 
     <string name="start_verification_short_label">Подтвердить</string>
     <string name="share_without_verifying_short_label">Поделиться</string>
@@ -1507,18 +1500,18 @@
     <string name="sas_security_advise">Для обеспечения максимальной безопасности мы рекомендуем делать это лично или использовать другие надежные средства связи.</string>
     <string name="sas_verify_start_button_title">Начать проверку</string>
     <string name="sas_incoming_request_title">Входящий запрос о проверке</string>
-    <string name="sas_incoming_request_description">Проверьте это устройство, чтобы отметить его как доверенное. Доверенные устройства партнеров дают вам дополнительное спокойствие при использовании сквозного шифрования сообщений.</string>
-    <string name="sas_incoming_request_description_2">Убедитесь, что данное устройство является доверенным, а также проверьте, что оно доверено вашему партнеру.</string>
+    <string name="sas_incoming_request_description">Проверьте эту сессию, чтобы отметить её как доверенную. Доверие сессиям партнеров позволяет быть уверенным в надёжности сквозного шифрования сообщений.</string>
+    <string name="sas_incoming_request_description_2">Потдверждение этой сессии пометит её доверенной для вас и вашего партнёра.</string>
 
-    <string name="sas_emoji_description">Проверьте это устройство, убедившись, что следующие смайлики появляются на экране партнера</string>
-    <string name="sas_decimal_description">Проверьте это устройство, убедившись, что следующие цифры появляются на экране партнера</string>
+    <string name="sas_emoji_description">Подтвердите эту сессию, убедившись, что следующие смайлики появляются на экране партнера</string>
+    <string name="sas_decimal_description">Подтвердите эту сессию, убедившись, что следующие цифры появляются на экране партнера</string>
 
     <string name="sas_incoming_verification_request_dialog">Вы получили входящий запрос на подтверждение.</string>
     <string name="sas_view_request_action">Посмотреть запрос</string>
     <string name="sas_waiting_for_partner">В ожидании партнера, чтобы подтвердить …</string>
 
     <string name="sas_verified">Проверено!</string>
-    <string name="sas_verified_successful">Вы успешно проверили это устройство.</string>
+    <string name="sas_verified_successful">Вы успешно подтвердили эту сессию.</string>
     <string name="sas_verified_successful_description">Защищенные сообщения от этого пользователя шифруются end-to-end и не могут быть прочитаны третьими лицами.</string>
     <string name="sas_got_it">Понял</string>
 
@@ -1532,179 +1525,34 @@
     <string name="sas_cancelled_by_me">Проверка отменена.
 \nПричина: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Интерактивная проверка устройства</string>
+    <string name="sas_verification_request_notification_channel">Интерактивное подтверждение сессии</string>
     <string name="sas_incoming_request_notif_title">Запрос на подтверждение</string>
-    <string name="sas_incoming_request_notif_content">%s хочет проверить ваше устройство</string>
+    <string name="sas_incoming_request_notif_content">%s желает подтвердить ваше устройство</string>
 
     <string name="sas_error_m_user">Пользователь отменил проверку</string>
     <string name="sas_error_m_timeout">Время проверки истекло</string>
-    <string name="sas_error_m_unknown_transaction">Устройство не знает об этой транзакции</string>
-    <string name="sas_error_m_unknown_method">Устройство не может договориться о соглашении по ключе, хэше, MAC или методе SAS</string>
+    <string name="sas_error_m_unknown_transaction">Сессия не знает об этой транзакции</string>
+    <string name="sas_error_m_unknown_method">Сессия не может договориться о выработке общего ключе, хэше, MAC или методе SAS</string>
     <string name="sas_error_m_mismatched_commitment">Полученный хеш не соответствует</string>
     <string name="sas_error_m_mismatched_sas">SAS не соответствует</string>
-    <string name="sas_error_m_unexpected_message">Устройство получило нежданное сообщение</string>
+    <string name="sas_error_m_unexpected_message">Сессия получила неожиданное сообщение</string>
     <string name="sas_error_m_invalid_message">Было получено недопустимое сообщение</string>
     <string name="sas_error_m_key_mismatch">Несоответствие ключей</string>
     <string name="sas_error_m_user_error">Несоответствие пользователя</string>
     <string name="sas_error_unknown">Неизвестная ошибка</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">Резервная копия существует на домашнем сервере</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Похоже, что у вас уже есть резервное копирование ключа настройки с другого устройства. Вы хотите заменить его на тот, который вы создаете\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">"Похоже, у вас уже есть резервная копия  ключа настройки из другой сессии. Хотите заменить его новым\?"</string>
     <string name="keys_backup_setup_override_replace">Заменить</string>
     <string name="keys_backup_setup_override_stop">Стоп</string>
 
     <string name="keys_backup_settings_checking_backup_state">Проверка состояния резервного копирования</string>
     <string name="invalid_or_expired_credentials">Вы вышли из системы из-за недействительных или истекших учетных данных.</string>
 
-    <string name="edit">Редактировать</string>
-    <string name="reply">Ответ</string>
-
     <string name="global_retry">Повторить</string>
-    <string name="room_list_empty">Присоединитесь к комнате, чтобы начать использовать приложение.</string>
-    <string name="send_you_invite">Отправил вам приглашение</string>
-    <string name="invited_by">Приглашен %s</string>
-
-    <string name="room_list_catchup_empty_title">Вы в курсе!</string>
-    <string name="room_list_catchup_empty_body">У вас больше нет непрочитанных сообщений</string>
-    <string name="room_list_catchup_welcome_title">Добро пожаловать домой!</string>
-    <string name="room_list_catchup_welcome_body">Узнайте больше о непрочитанных сообщениях здесь</string>
-    <string name="room_list_people_empty_title">Беседа</string>
-    <string name="room_list_people_empty_body">Ваше прямое сообщение будет отображаться здесь</string>
-    <string name="room_list_rooms_empty_title">Комнаты</string>
-    <string name="room_list_rooms_empty_body">Ваши комнаты будут отображаться здесь</string>
-
-    <string name="title_activity_emoji_reaction_picker">Реакция</string>
-    <string name="reactions_agree">Соглашаться</string>
-    <string name="reactions_like">Нравиться</string>
-    <string name="message_add_reaction">Добавить действие</string>
-    <string name="message_view_reaction">Посмотреть реакции</string>
     <string name="settings_integration_manager">Менеджер интеграции</string>
 
     <string name="integration_manager_not_configured">Менеджер интеграции не настроен.</string>
-    <string name="reactions">Реакции</string>
-
-    <string name="event_redacted_by_user_reason">Удаленное пользователем событие</string>
-    <string name="event_redacted_by_admin_reason">Мероприятие, модерируемое администратором помещения</string>
-    <string name="last_edited_info_message">Последний раз редактировался %1$s на %2$s</string>
-
-
-    <string name="malformed_message">Некорректное событие, не может быть отображено</string>
-    <string name="create_new_room">Создать новую комнату</string>
-    <string name="error_no_network">Сети нет. Пожалуйста, проверьте подключение к Интернету.</string>
-    <string name="action_change">Изменить</string>
-    <string name="change_room_directory_network">Изменить сеть</string>
-    <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="group_all_communities">Все сообщества</string>
-
-    <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
-    <string name="fab_menu_create_room">Комнаты</string>
-    <string name="fab_menu_create_chat">Прямые сообщения</string>
-
-    <string name="create_room_title">Новая комната</string>
-    <string name="create_room_action_create">СОЗДАТЬ</string>
-    <string name="create_room_name_hint">Имя комнаты</string>
-    <string name="create_room_public_title">Публичные</string>
-    <string name="create_room_public_description">Любой сможет присоединиться к этой комнате</string>
-    <string name="create_room_directory_title">Каталог номеров</string>
-    <string name="create_room_directory_description">Опубликовать эту комнату в каталоге номеров</string>
-
-    <string name="keys_backup_unable_to_get_trust_info">Произошла ошибка при получении информации о доверии</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">Произошла ошибка при получении ключей резервного копирования данных</string>
-
-    <string name="alpha_disclaimer_title">Добро пожаловать в бету!</string>
-    <string name="alpha_disclaimer_content_line_1">Пока RiotX находится в ранней стадии разработки, некоторые функции могут отсутствовать и вы можете столкнуться с ошибками.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Последний список функций всегда находится в %1$s, и если вы найдете ошибку, пожалуйста, отправьте отчет в верхнее левое меню Home, и мы исправим их так быстро, как только сможем.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Описание магазина</string>
-    <string name="alpha_disclaimer_content_line_2_fdroid">Если вы обнаружите ошибку, пожалуйста, отправьте сообщение в верхнее левое меню Home, и мы исправим ее так быстро, как только сможем.</string>
-
-    <string name="import_e2e_keys_from_file">Импорт ключей e2e из файла \"%1$s\".</string>
-
-    <string name="settings_sdk_version">Версия Matrix SDK</string>
-    <string name="settings_other_third_party_notices">Другие уведомления третьих сторон</string>
-    <string name="navigate_to_room_when_already_in_the_room">Вы уже просмотрели эту комнату!</string>
-
-    <string name="quick_reactions">Быстрое реагирование</string>
-
-    <string name="settings_general_title">Общее</string>
-    <string name="settings_preferences">Установки</string>
-    <string name="settings_security_and_privacy">Безопасность &amp; Конфиденциальность</string>
-    <string name="settings_expert">Профессионал</string>
-    <string name="settings_push_rules">Пуш-Правила</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
-    <string name="push_gateway_item_url">Url:</string>
-    <string name="push_gateway_item_format">Формат:</string>
-
-    <string name="preference_voice_and_video">Голос &amp; Видио</string>
-    <string name="preference_root_help_about">Помощь и информация</string>
-
-
-    <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрационный токен</string>
-
-    <string name="send_suggestion">Сделайте предложение</string>
-    <string name="send_suggestion_content">Пожалуйста, напишите ваше предложение ниже.</string>
-    <string name="send_suggestion_report_placeholder">Опишите ваше предложение здесь</string>
-    <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
-    <string name="send_suggestion_failed">Предложение не было отправлено (%s)</string>
-
-    <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в временной шкале</string>
-
-    <string name="store_riotx_title">RiotX - Matrix клиент следующего поколения</string>
-    <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
-    <string name="store_riotx_full_description">RiotX - это новый клиент для матричного протокола (Matrix.org): открытой сети для безопасной децентрализованной связи. RiotX - это полная перезапись Riot Android клиента, основанная на полной перезаписи Matrix Android SDK. 
-\n 
-\nОговорка: Это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и (надеемся, не слишком много) ошибки. Мы будем рады любым отзывам! 
-\n 
-\nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общедоступным комнатам - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптография: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые и черные темы 
-\n 
-\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) свойства: - Настройки комнат (список членов комнат и т.д.) - Вызовы - Виджеты - .…</string>
-
-    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается</string>
-
-    <string name="bottom_action_people_x">Прямые сообщения</string>
-
-    <string name="send_file_step_idle">Ждите…</string>
-    <string name="send_file_step_encrypting_thumbnail">Шифрование миниатюры…</string>
-    <string name="send_file_step_sending_thumbnail">Отправка миниатюр (%1$s / %2$s)</string>
-    <string name="send_file_step_encrypting_file">Файл шифруется…</string>
-    <string name="send_file_step_sending_file">Файл отправляется (%1$s / %2$s)</string>
-
-    <string name="downloading_file">Файл %1$s загружается…</string>
-    <string name="downloaded_file">Файл %1$s был загружен!</string>
-
-    <string name="edited_suffix">(отредактированный)</string>
-
-    <string name="riotx_no_registration_notice">%1$s для создания учетной записи.</string>
-    <string name="riotx_no_registration_notice_colored_part">Используйте старое приложение</string>
-
-
-    <string name="message_edits">Редактирование сообщений</string>
-    <string name="no_message_edits_found">Редактирование не найдено</string>
-
-    <string name="room_filtering_filter_hint">Отфильтровывать разговоры…</string>
-    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
-    <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
-    <string name="room_filtering_footer_create_new_direct_message">Отправить новое прямое сообщение</string>
-    <string name="room_filtering_footer_open_room_directory">Просмотр список комнат</string>
-
-    <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
-
-    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа по хронологии</string>
-
-    <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
-
-    <string name="add_by_matrix_id">Добавить по Matrix ID</string>
-    <string name="creating_direct_room">Создание комнаты…</string>
-    <string name="direct_room_no_known_users">"Результат не найден, используйте добавить matrix ID  для поиска на сервере."</string>
-    <string name="direct_room_start_search">Начните печатать, чтобы получить результат</string>
-    <string name="direct_room_filter_hint">Фильтр по имени пользователя или ID…</string>
-
-    <string name="joining_room">Присоединение к комнате…</string>
-
-    <string name="message_view_edit_history">Просмотреть историю изменений</string>
-
     <string name="review">Обзор</string>
     <string name="decline">Отклонить</string>
 
@@ -1715,15 +1563,10 @@
 \nПодробнее об этом читайте здесь:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
-    <string name="settings_push_rules_no_rules">Пуш-правила не определены</string>
-    <string name="settings_push_gateway_no_pushers">Нет зарегистрированных пуш-шлюзов</string>
-
     <string name="terms_of_service">Условия предоставления услуг</string>
     <string name="review_terms">Условия просмотра</string>
     <string name="terms_description_for_identity_server">Быть доступным для других</string>
     <string name="terms_description_for_integration_manager">Используйте ботов, мосты, виджеты и стикеры</string>
-
-    <string name="read_at">Читать в</string>
 
     <string name="none">Никто</string>
     <string name="revoke">Отмена</string>
@@ -1763,7 +1606,7 @@
 \nСинхронизация может быть отложена в зависимости от ресурсов (батареи) или состояния устройства (спящий режим).</string>
     <string name="settings_discovery_manage">Управляйте настройками обнаружения.</string>
     <string name="encryption_information_device_name_with_warning">Публичное имя (видимое для людей, с которыми вы общаетесь)</string>
-    <string name="device_name_warning">Публичное имя устройства видны людям, с которыми вы общаетесь</string>
+    <string name="device_name_warning">Публичное имя сессии видны людям, с которыми вы общаетесь</string>
     <string name="identity_server_not_defined">Вы не используете какой-либо сервер идентификации</string>
     <string name="identity_server_not_defined_for_password_reset">Идентификационный сервер не настроен, требуется сброс пароля.</string>
 
@@ -1792,11 +1635,6 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
     <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
-    <string name="labs_allow_extended_logging">Включить подробное журнал.</string>
-    <string name="send_attachment">Отправить вложенное</string>
-
-    <string name="a11y_open_drawer">Откройте навигационный ящик</string>
-    <string name="a11y_create_menu_open">Откройте меню «Создать комнату»</string>
     <string name="login_error_no_homeserver_found">Неверный адрес сервера Matrix</string>
     <string name="settings_add_3pid_confirm_password_title">Подтвердите пароль</string>
     <string name="settings_add_3pid_authentication_needed">Требуется аутентификация</string>
@@ -1815,5 +1653,24 @@
     <string name="room_widget_permission_theme">Ваши тема</string>
     <string name="room_widget_permission_room_id">ID комнаты</string>
 
+
+    <string name="resources_script">Cyrl</string>
+
+    <string name="settings_integrations_summary">Используйте менеджер интеграций чтобы управлять ботами, мостами, виджетами и наборами стикеров.
+\nМенеджеры интеграций получают данные о конфигурации, могут изменять виджеты, отправлять приглашения в комнаты и устанавливать права от вашего имени.</string>
+    <string name="room_widget_permission_webview_shared_info_title">"Использование может оставить cookie на вашем устройстве и отправить данные в  %s:"</string>
+    <string name="room_widget_permission_shared_info_title">Использование может отправить данные в %s:</string>
+    <string name="room_widget_failed_to_load">Не удалось загрузить виджет.
+\n%s</string>
+    <string name="room_widget_revoke_access">Отозвать доступ для меня</string>
+
+    <string name="room_widget_permission_display_name">Ваше отображаемое имя</string>
+    <string name="room_widget_permission_avatar_url">URL вашего аватара</string>
+    <string name="room_widget_permission_user_id">Ваш ID</string>
+    <string name="room_widget_resource_permission_title">Данный виджет запрашивает доступ к следующим ресурсам:</string>
+    <string name="room_widget_resource_decline_permission">Запретить все</string>
+    <string name="room_widget_webview_access_camera">Использовать камеру</string>
+    <string name="room_widget_webview_access_microphone">Использовать микрофон</string>
+    <string name="room_widget_webview_read_protected_media">Получать доступ к медиа, защищённым DRM</string>
 
 </resources>

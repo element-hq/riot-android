@@ -242,7 +242,7 @@ class DiscoverySettingsViewModel(initialState: DiscoverySettingsState, private v
 
     fun revokeMsisdn(msisdn: String) = withState { state ->
         if (state.identityServer() == null) return@withState
-        if (state.emailList() == null) return@withState
+        if (state.phoneNumbersList() == null) return@withState
         changeMsisdnState(msisdn, Loading())
 
         val phoneNumber = PhoneNumberUtil.getInstance()
