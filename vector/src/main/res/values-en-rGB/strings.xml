@@ -70,5 +70,4 @@
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">Due to missing permissions, this action is not possible.</string>
-    <string name="missing_permissions_to_start_conf_call">Potrzebujesz uprawnień, aby rozpocząć połączenie grupowe</string>
 </resources>
