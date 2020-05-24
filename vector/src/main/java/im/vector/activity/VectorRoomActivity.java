@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,11 +53,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.gson.JsonParser;
 
@@ -93,6 +89,8 @@ import org.matrix.androidsdk.rest.model.StateEvent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -102,10 +100,16 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -141,6 +145,8 @@ import im.vector.widgets.WidgetManagerProvider;
 import im.vector.widgets.WidgetsManager;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static androidx.core.content.FileProvider.getUriForFile;
+
 /**
  * Displays a single room with messages.
  */
@@ -150,6 +156,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IOnScrollListener,
         VectorMessageListFragment.VectorMessageListFragmentListener,
         VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener {
+
 
     // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -330,6 +337,63 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     TextView invitationTextView;
     @BindView(R.id.room_preview_subinvitation_textview)
     TextView subInvitationTextView;
+
+    private MediaRecorder myAudioRecorder;
+    private ImageView stop;
+    private ImageView record;
+    File voicePath;
+    File newFile;
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressLint("WrongViewCast")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        stop=findViewById(R.id.room_stop_view);
+        record=findViewById(R.id.room_send_audio_view);
+    }
+
+    @OnLongClick(R.id.room_send_audio_view)
+    void room_send_audio_view() {
+
+        voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
+        newFile = new File(voicePath, "voice.3gp");
+        String outputFile = newFile.getAbsolutePath();
+        myAudioRecorder = new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
+
+        try {
+            myAudioRecorder.prepare();
+            myAudioRecorder.start();
+        } catch (IllegalStateException ise) {
+            // make something ...
+        } catch (IOException ioe) {
+            // make something
+        }
+        stop.setVisibility(View.VISIBLE);
+        record.setVisibility(View.GONE);
+
+    }
+    @OnClick(R.id.room_stop_view)
+    void room_stop_view() {
+        myAudioRecorder.stop();
+        myAudioRecorder.release();
+        myAudioRecorder = null;
+        Uri contentUri =
+                getUriForFile(getApplicationContext(),
+                        BuildConfig.APPLICATION_ID + ".fileProvider",
+                        newFile);
+        Intent intent=new Intent();
+        intent.setData(contentUri);
+        sendMediasIntent(intent);
+
+        record.setVisibility(View.VISIBLE);
+        stop.setVisibility(View.GONE);
+    }
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -628,6 +692,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public int getLayoutRes() {
         return R.layout.activity_vector_room;
     }
+
+
 
     @Override
     public void initUiAndData() {
@@ -1290,6 +1356,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 case TAKE_IMAGE_REQUEST_CODE:
                 case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
+                    
                     break;
                 case RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE:
                     sendSticker(data);
@@ -2003,6 +2070,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     @SuppressLint("NewApi")
     private void sendMediasIntent(Intent intent) {
+
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
             return;
@@ -2012,11 +2080,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
+
         }
 
         // check the extras
         if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
+
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(Intent.EXTRA_TEXT)) {
@@ -2031,10 +2101,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         }
+
+
         boolean hasItemToShare = !sharedDataItems.isEmpty();
         boolean isTextOnly = sharedDataItems.size() == 1
                 && "text/plain".equals(sharedDataItems.get(0).getMimeType(this));
         boolean shouldPreviewMedia = PreferencesManager.previewMediaWhenSending(this);
+
 
         if (hasItemToShare && !isTextOnly && shouldPreviewMedia) {
             if (null != intent) {
@@ -2058,7 +2131,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
             mVectorRoomMediasSender.sendMedias(sharedDataItems);
         }
-
+//        Toast.makeText(this, sharedDataItems.size(), Toast.LENGTH_SHORT).show();
         mLatestTakePictureCameraUri = null;
     }
 
@@ -3895,6 +3968,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
+
+
 
     @OnClick(R.id.room_send_image_view)
     void onSendClick() {
