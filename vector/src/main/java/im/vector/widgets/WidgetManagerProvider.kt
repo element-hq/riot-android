@@ -16,36 +16,84 @@
 package im.vector.widgets
 
 import android.content.Context
-import im.vector.util.PreferencesManager
+import im.vector.R
+import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.features.integrationmanager.IntegrationManager
 import java.net.MalformedURLException
 import java.net.URL
 
-object WidgetManagerProvider {
+class WidgetManagerProvider(private val session: MXSession) : IntegrationManager.IntegrationManagerManagerListener {
+
+
+    override fun onIntegrationManagerChange(managerConfig: IntegrationManager) {
+        //Clear caches
+        currentConfig = null
+        widgetsManager = null
+    }
+
+    init {
+        session.integrationManager.addListener(this)
+    }
 
     private var widgetsManager: WidgetsManager? = null
+    private var currentConfig: IntegrationManagerConfig? = null
 
     fun getWidgetManager(context: Context): WidgetsManager? {
-        if (widgetsManager != null) {
+        if (!session.integrationManager.integrationAllowed) return null
+
+        val userDefinedConfig = session.integrationManager.integrationServerConfig
+        val sdkConfig: IntegrationManagerConfig?
+        val defaultWhitelist = context.resources.getStringArray(R.array.integrations_widgets_urls).asList()
+
+        if (userDefinedConfig != null) {
+
+            val whiteList = defaultWhitelist + userDefinedConfig.apiUrl
+            sdkConfig = IntegrationManagerConfig(
+                    uiUrl = userDefinedConfig.uiUrl,
+                    apiUrl = userDefinedConfig.apiUrl,
+                    jitsiUrl = "${userDefinedConfig.apiUrl}/widgets/jitsi.html",
+                    whiteListedUrls = whiteList)
+        } else {
+            //Use the default IM
+            // Check if a config is defined in wellknown
+            val wellKnownIM = session.integrationManager.getWellKnownIntegrationManagerConfigs().firstOrNull()
+            sdkConfig = if (wellKnownIM != null) {
+                IntegrationManagerConfig(
+                        uiUrl = wellKnownIM.uiUrl,
+                        apiUrl = wellKnownIM.apiUrl,
+                        jitsiUrl = "${wellKnownIM.apiUrl}/widgets/jitsi.html",
+                        whiteListedUrls = listOf(wellKnownIM.apiUrl)
+                )
+            } else {
+                IntegrationManagerConfig(
+                        uiUrl = context.getString(R.string.integrations_ui_url),
+                        apiUrl = context.getString(R.string.integrations_rest_url),
+                        jitsiUrl = context.getString(R.string.integrations_jitsi_widget_url),
+                        whiteListedUrls = defaultWhitelist)
+            }
+        }
+
+
+
+        if (currentConfig == sdkConfig && widgetsManager != null) {
             return widgetsManager
         }
-        val uiURl = PreferencesManager.getIntegrationManagerUiUrl(context)
-        val apiURL = PreferencesManager.getIntegrationManagerApiUrl(context)
-        val jitsiUrl = PreferencesManager.getIntegrationManagerJitsiUrl(context)
-        if (uiURl.isNullOrBlank() || apiURL.isNullOrBlank() || jitsiUrl.isNullOrBlank()) return null
+
+        if (sdkConfig.uiUrl.isBlank() || sdkConfig.apiUrl.isBlank() || sdkConfig.jitsiUrl.isBlank()) {
+            currentConfig = null
+            widgetsManager = null
+            return null
+        }
+
         return try {
             //Very basic validity check (well formed url)
-            URL(uiURl)
-            URL(apiURL)
-            URL(jitsiUrl)
-            val defaultWhitelist = ArrayList(PreferencesManager.getIntegrationWhiteListedUrl(context))
-            defaultWhitelist.add(0, apiURL)
+            URL(sdkConfig.uiUrl)
+            URL(sdkConfig.apiUrl)
+            URL(sdkConfig.jitsiUrl)
 
-            val config = IntegrationManagerConfig(
-                    uiUrl = uiURl,
-                    apiUrl = apiURL,
-                    jitsiUrl = jitsiUrl,
-                    whiteListedUrls = defaultWhitelist)
-            WidgetsManager(config).also {
+            currentConfig = sdkConfig
+
+            WidgetsManager(sdkConfig).also {
                 this.widgetsManager = it
             }
         } catch (e: MalformedURLException) {

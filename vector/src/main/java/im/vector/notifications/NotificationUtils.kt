@@ -195,7 +195,7 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(context.getString(subTitleResId))
-                .setSmallIcon(R.drawable.sync)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setColor(accentColor)
                 .setContentIntent(pi)

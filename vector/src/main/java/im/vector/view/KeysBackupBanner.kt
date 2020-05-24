@@ -28,7 +28,10 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import im.vector.BuildConfig
 import im.vector.R
+import im.vector.keymanager.KeyManager
+import im.vector.sharedpreferences.BatnaSharedPreferences
 import org.jetbrains.anko.defaultSharedPreferences
 import org.matrix.androidsdk.core.Log
 
@@ -216,6 +219,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderBackingUp() {
+        if (BuildConfig.IS_SABA) return
         isVisible = true
 
         textView1.setText(R.string.keys_backup_banner_in_progress)

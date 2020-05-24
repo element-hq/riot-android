@@ -46,9 +46,9 @@
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
             android:order="1000"
             android:persistent="false"
-            android:title="@string/settings_discovery_category"
             android:summary="@string/settings_discovery_manage"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+            android:title="@string/settings_discovery_category"
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -235,9 +235,9 @@
 
         <!-- Preference for work manager-->
         <im.vector.preference.VectorEditTextPreference
-            android:key="SETTINGS_WORK_MANAGER_DELAY_PREFERENCE_KEY"
-            android:inputType="numberDecimal"
             android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:key="SETTINGS_WORK_MANAGER_DELAY_PREFERENCE_KEY"
             android:title="@string/settings_set_workmanager_delay" />
 
         <im.vector.preference.VectorEditTextPreference
@@ -443,15 +443,31 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"/>
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"
+            tools:summary="@string/default_identity_server_url" />
 
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceDivider />
+
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
 
         <im.vector.preference.VectorPreference
-            android:defaultValue="@string/integrations_ui_url"
-            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
-            android:title="@string/settings_integration_manager" />
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_integrations_summary" />
 
+        <im.vector.preference.VectorSwitchPreference
+            android:enabled="true"
+            android:key="SETTINGS_INTEGRATION_ALLOW"
+            android:persistent="false"
+            android:title="@string/settings_integration_allow" />
+
+        <im.vector.preference.VectorPreference
+            android:dependency="SETTINGS_INTEGRATION_ALLOW"
+            android:key="SETTINGS_INTEGRATION_MANAGER_UI_URL"
+            android:persistent="false"
+            android:title="@string/settings_integration_manager" />
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceDivider />

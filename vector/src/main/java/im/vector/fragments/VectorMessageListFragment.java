@@ -584,9 +584,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     resend(event);
                 }
             });
+            cancelSelectionMode();
         }
         else if (action == R.id.ic_action_vector_reply){
-            VectorMessagesAdapter.mSelectedEvent = null;
+//            VectorMessagesAdapter.mSelectedEvent = null;
         }
         else if (action == R.id.ic_action_vector_redact_message) {
             getActivity().runOnUiThread(new Runnable() {
@@ -613,6 +614,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                     })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
+                    cancelSelectionMode();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
@@ -622,6 +624,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     SystemUtilsKt.copyToClipboard(getActivity(), textMsg);
                 }
             });
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -646,6 +649,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             .show();
                 }
             });
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_quote) {
             Activity attachedActivity = getActivity();
 
@@ -664,6 +668,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 }
                 ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor(quotedTextMsg + "\n\n");
             }
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             Message message = JsonUtils.toMessage(event.getContent());
@@ -712,10 +717,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     startActivity(sendIntent);
                 }
             }
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_permalink) {
             SystemUtilsKt.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -740,8 +748,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             .show();
                 }
             });
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_device_verification) {
             onE2eIconClick(event, mAdapter.getDeviceInfo(event.eventId));
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_re_request_e2e_key) {
             mSession.getCrypto().reRequestRoomKeyForEvent(event);
 

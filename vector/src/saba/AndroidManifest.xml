@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <meta-data android:name="io.sentry.dsn" android:value="https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9" />
+
         <activity android:name="im.vector.activity.AboutSabaActivity" />
     </application>
 </manifest>

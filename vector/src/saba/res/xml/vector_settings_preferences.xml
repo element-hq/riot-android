@@ -48,7 +48,8 @@
             android:persistent="false"
             android:title="@string/settings_discovery_category"
             android:summary="@string/settings_discovery_manage"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"  />
+            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"
+            app:isPreferenceVisible="false" />
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -72,8 +73,7 @@
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_INTERFACE_KEY"
-        android:title="@string/settings_user_interface"
-        app:isPreferenceVisible="false">
+        android:title="@string/settings_user_interface">
 
         <im.vector.preference.VectorPreference
             android:dialogTitle="@string/settings_select_language"
@@ -152,7 +152,8 @@
             android:entryValues="@array/show_info_area_values"
             android:key="SETTINGS_SHOW_INFO_AREA_KEY"
             android:summary="%s"
-            android:title="@string/settings_info_area_show" />
+            android:title="@string/settings_info_area_show"
+            app:isPreferenceVisible="false"/>
 
     </im.vector.preference.VectorPreferenceCategory>
 
@@ -219,7 +220,8 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
+            app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment"
+            app:isPreferenceVisible="false" />
 
     </im.vector.preference.VectorPreferenceCategory>
 

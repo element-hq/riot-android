@@ -2512,9 +2512,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             menu.getItem(i).setVisible(false);
         }
         menu.findItem(R.id.ic_action_vector_reply).setVisible(true);
-        menu.findItem(R.id.ic_action_view_source).setVisible(true);
-        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
-        menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+        menu.findItem(R.id.ic_action_view_source).setVisible(false);
+//        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(false);
+        menu.findItem(R.id.ic_action_vector_permalink).setVisible(false);
 
         if (!TextUtils.isEmpty(textMsg)) {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
@@ -2589,7 +2590,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                cancelSelectionMode();
+//                cancelSelectionMode();
 
                 return true;
             }

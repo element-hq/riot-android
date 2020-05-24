@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="gone">
 
     <include
         layout="@layout/vector_message_header"
@@ -18,7 +19,8 @@
         android:layout_marginLeft="56dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <View
             android:id="@+id/messagesAdapter_highlight_message_marker"
@@ -28,18 +30,21 @@
             android:layout_marginLeft="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            tools:background="?attr/colorAccent" />
+            tools:background="?attr/colorAccent"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/messagesAdapter_merge_header_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/messagesAdapter_merge_header_text_view"
@@ -48,13 +53,15 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:textColor="?attr/colorAccent"
-                    tools:text="@string/merged_events_expand" />
+                    tools:text="@string/merged_events_expand"
+                    android:visibility="gone"/>
 
                 <include
                     android:id="@+id/messagesAdapter_merge_avatar_list"
                     layout="@layout/vector_message_merge_avatar_list"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -62,7 +69,8 @@
                 android:id="@+id/messagesAdapter_merge_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/colorAccent" />
+                android:background="?attr/colorAccent"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/messagesAdapter_merge_summary"
@@ -71,14 +79,17 @@
                 android:textColor="?android:textColorSecondary"
                 android:textIsSelectable="false"
                 android:textSize="14sp"
-                tools:text="3 membership changes" />
+                tools:text="3 membership changes"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <include layout="@layout/message_separator" />
+    <include layout="@layout/message_separator"
+        android:visibility="gone"/>
 
-    <include layout="@layout/message_read_marker" />
+    <include layout="@layout/message_read_marker"
+        android:visibility="gone"/>
 
 </LinearLayout>

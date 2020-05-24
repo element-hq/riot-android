@@ -184,8 +184,10 @@ class EventStreamServiceX : VectorService() {
             }
             ACTION_GO_TO_FOREGROUND -> {
                 // Stop foreground notification display
-                Log.i(LOG_TAG, "stopForeground")
-                stopForeground(true)
+                if (!BuildConfig.IS_SABA) {
+                    Log.i(LOG_TAG, "stopForeground")
+                    stopForeground(true)
+                }
             }
         }
 
@@ -228,7 +230,7 @@ class EventStreamServiceX : VectorService() {
             ACTION_STOP,
             ACTION_GO_TO_BACKGROUND,
             ACTION_LOGOUT ->
-                stop()
+                if (!BuildConfig.IS_SABA) stop()
             ACTION_PUSH_RECEIVED,
             ACTION_SIMULATED_PUSH_RECEIVED -> {
 
@@ -267,8 +269,10 @@ class EventStreamServiceX : VectorService() {
             ACTION_PUSH_UPDATE -> pushStatusUpdate()
             ACTION_BOOT_COMPLETE -> {
                 // No FCM only
-                mSimulatePushImmediate = true
-                stop()
+                if (!BuildConfig.IS_SABA) {
+                    mSimulatePushImmediate = true
+                    stop()
+                }
             }
             ACTION_APPLICATION_UPGRADE -> {
                 // FDroid only
@@ -583,6 +587,10 @@ class EventStreamServiceX : VectorService() {
             Log.e(LOG_TAG, "prepareNotification : getContentAsJsonObject " + e.message, e)
         }
 
+        // Since This Service is always running and server does not distinguish between incoming and missed calls,
+        // We don't need to run CallService. FYI, SDK handles call management itself.
+        if (BuildConfig.IS_SABA) return
+
         if (!TextUtils.isEmpty(callId)) {
             CallService.onIncomingCall(this,
                     isVideo,
@@ -605,7 +613,7 @@ class EventStreamServiceX : VectorService() {
         private const val ACTION_PUSH_UPDATE = "im.vector.services.EventStreamServiceX.PUSH_UPDATE"
         private const val ACTION_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.PUSH_RECEIVED"
         private const val ACTION_SIMULATED_PUSH_RECEIVED = "im.vector.services.EventStreamServiceX.SIMULATED_PUSH_RECEIVED"
-        private const val ACTION_SIMULATED_PERMANENT_LISTENING = "im.vector.services.EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING"
+        public const val ACTION_SIMULATED_PERMANENT_LISTENING = "im.vector.services.EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING"
         private const val ACTION_STOP = "im.vector.services.EventStreamServiceX.STOP"
         private const val ACTION_BOOT_COMPLETE = "im.vector.services.EventStreamServiceX.BOOT_COMPLETE"
         private const val ACTION_APPLICATION_UPGRADE = "im.vector.services.EventStreamServiceX.APPLICATION_UPGRADE"

@@ -16,6 +16,9 @@
 
 package im.vector.util
 
+import java.net.MalformedURLException
+import java.net.URL
+
 /**
  * Schemes
  */
@@ -41,4 +44,12 @@ fun removeUrlScheme(aUrl: String?): String? {
     }
 
     return urlRetValue
+}
+
+fun extractDomain(aUrl: String?): String? {
+    try {
+        return aUrl?.let {  URL(it).host }
+    } catch (e : MalformedURLException) {
+        return null
+    }
 }

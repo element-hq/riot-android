@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- this section has no title in purpose -->
     <im.vector.preference.RoomAvatarPreference
@@ -83,7 +84,8 @@
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="flair"
-        android:title="@string/settings_flair" />
+        android:title="@string/settings_flair"
+        app:isPreferenceVisible="false" />
 
     <im.vector.preference.VectorPreferenceDivider android:key="banned_divider" />
 

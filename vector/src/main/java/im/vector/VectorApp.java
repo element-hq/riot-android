@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,6 +71,7 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.notifications.NotificationDrawerManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
+import im.vector.services.EventStreamServiceX;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
 import im.vector.tools.VectorUncaughtExceptionHandler;
@@ -83,8 +83,6 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.RageShake;
 import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorUtils;
-import io.sentry.Sentry;
-import io.sentry.android.AndroidSentryClientFactory;
 
 /**
  * The main application injection point
@@ -196,17 +194,7 @@ public class VectorApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
-        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
-
-        //Initializing Sentry to report exceptions to the specified URL
-
-        Sentry.init("https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9", new AndroidSentryClientFactory(this));
-
-        PreferencesManager.setIntegrationManagerUrls(this,
-                getString(R.string.integrations_ui_url),
-                getString(R.string.integrations_rest_url),
-                getString(R.string.integrations_jitsi_widget_url));
 
         mLifeCycleListener = new VectorLifeCycleObserver();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(mLifeCycleListener);
@@ -371,6 +359,20 @@ public class VectorApp extends MultiDexApplication {
         PreferencesManager.fixMigrationIssues(this);
         initApplicationLocale();
         visitSessionVariables();
+        if (BuildConfig.IS_SABA) {
+            // Sentry.captureMessage("Startup");
+            try {
+                Intent serviceIntent = new Intent(this, EventStreamServiceX.class);
+                serviceIntent.setAction(EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    startForegroundService(serviceIntent);
+                } else {
+                    startService(serviceIntent);
+                }
+            } catch (Exception e) {
+                Log.v("Error in VectorApp:", e.getMessage());
+            }
+        }
     }
 
     @Override

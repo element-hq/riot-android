@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.Nullable;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.IMXCallsManagerListener;
@@ -44,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetManagerProvider;
@@ -241,12 +243,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * Refresh the view visibility
      */
     public void refresh() {
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
-        if (wm == null) {
-            return;
-        }
         if ((null != mRoom) && (null != mSession)) {
-            List<Widget> mActiveWidgets = wm.getActiveJitsiWidgets(mSession, mRoom);
+            List<Widget> mActiveWidgets = WidgetsManager.getActiveJitsiWidgets(mSession, mRoom);
             Widget widget = mActiveWidgets.isEmpty() ? null : mActiveWidgets.get(0);
 
             if (mActiveWidget != widget) {
@@ -264,7 +262,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
             setVisibility(((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) || (null != mActiveWidget)) ? View.VISIBLE : View.GONE);
 
             // show the close widget button if the user is allowed to do it
-            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == wm.checkWidgetPermission(mSession, mRoom))) ?
+            mCloseWidgetIcon.setVisibility(((null != mActiveWidget) && (null == WidgetsManager.checkWidgetPermission(mSession, mRoom))) ?
                     View.VISIBLE : View.GONE);
         }
     }
@@ -278,7 +276,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.addListener(mCallsListener);
         }
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.addListener(mWidgetListener);
         }
@@ -291,7 +289,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
         if (null != mSession) {
             mSession.mCallsManager.removeListener(mCallsListener);
         }
-        WidgetsManager wm = WidgetManagerProvider.INSTANCE.getWidgetManager(getContext());
+        WidgetsManager wm = Matrix.getWidgetManager(getContext());
         if (wm != null) {
             wm.removeListener(mWidgetListener);
         }
@@ -303,4 +301,5 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public Widget getActiveWidget() {
         return mActiveWidget;
     }
+
 }
