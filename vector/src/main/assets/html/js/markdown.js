@@ -1,4 +1,4 @@
-$(function() {
+document.addEventListener("DOMContentLoaded",function() {
     marked.setOptions({
         langPrefix: '',
 		gfm: true,
