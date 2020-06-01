@@ -78,6 +78,8 @@ public class MediaPreviewerActivity extends MXCActionBarActivity implements Medi
             Log.d(LOG_TAG, "onCreate : Going to splash screen");
             return;
         }
+        setResult(Activity.RESULT_OK, getIntent());
+        finish();
         mPreviewerVideoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
