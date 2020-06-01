@@ -91,8 +91,10 @@ import org.matrix.androidsdk.rest.model.message.Message;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -144,8 +146,8 @@ import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import kotlin.Unit;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
@@ -359,8 +361,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @OnLongClick(R.id.room_send_audio_view)
     void room_send_audio_view() {
 
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentTime = sdf.format(new Date());
         voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-        newFile = new File(voicePath, "voice.3gp");
+        newFile = new File(voicePath, currentTime+".3gp");
         String outputFile = newFile.getAbsolutePath();
         myAudioRecorder = new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);

@@ -339,7 +339,6 @@
                     android:layout_height="56dp"
                     android:layout_gravity="bottom"
                     android:layout_marginEnd="-5dp"
-                    android:layout_marginRight="-5dp"
                     android:contentDescription="@string/send"
                     android:padding="8dp"
                     android:rotationY="@integer/rtl_mirror_flip"
