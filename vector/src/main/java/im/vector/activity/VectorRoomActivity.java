@@ -54,6 +54,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
@@ -102,11 +109,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
@@ -150,6 +152,7 @@ import kotlin.Unit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static androidx.core.content.FileProvider.getUriForFile;
+import static im.vector.util.PermissionsToolsKt.MY_PERMISSIONS_REQUEST_REC_Audio;
 
 /**
  * Displays a single room with messages.
@@ -361,28 +364,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @OnLongClick(R.id.room_send_audio_view)
     void room_send_audio_view() {
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentTime = sdf.format(new Date());
-        voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-        newFile = new File(voicePath, currentTime+".3gp");
-        String outputFile = newFile.getAbsolutePath();
-        myAudioRecorder = new MediaRecorder();
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setOutputFile(outputFile);
-
-        try {
-            myAudioRecorder.prepare();
-            myAudioRecorder.start();
-        } catch (IllegalStateException ise) {
-            // make something ...
-        } catch (IOException ioe) {
-            // make something
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
+        } else {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String currentTime = sdf.format(new Date());
+            voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
+            newFile = new File(voicePath, currentTime + ".3gp");
+            String outputFile = newFile.getAbsolutePath();
+            myAudioRecorder = new MediaRecorder();
+            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+            myAudioRecorder.setOutputFile(outputFile);
+            try {
+                myAudioRecorder.prepare();
+                myAudioRecorder.start();
+            } catch (IllegalStateException ise) {
+                // make something ...
+            } catch (IOException ioe) {
+                // make something
+            }
+            stop.setVisibility(View.VISIBLE);
+            record.setVisibility(View.GONE);
         }
-        stop.setVisibility(View.VISIBLE);
-        record.setVisibility(View.GONE);
-
     }
     @OnClick(R.id.room_stop_view)
     void room_stop_view() {
