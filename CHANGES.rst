@@ -9,7 +9,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Remove jQuery library. Fixes #3381
 
 Other changes:
  -
