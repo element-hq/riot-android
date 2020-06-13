@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaRecorder;
@@ -347,7 +348,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     private MediaRecorder myAudioRecorder;
     private ImageView stop;
-    private ImageView record;
+    private ImageView recordButton;
     File voicePath;
     File newFile;
 
@@ -357,39 +358,70 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        stop=findViewById(R.id.room_stop_view);
-        record=findViewById(R.id.room_send_audio_view);
+        if (!mEditText.getText().toString().equalsIgnoreCase ("   recording ... "))
+            mEditText.setText("");
+        recordButton =findViewById(R.id.room_send_audio_view);
+        room_send_audio_view();
+
     }
 
-    @OnLongClick(R.id.room_send_audio_view)
+    @SuppressLint("ClickableViewAccessibility")
+    @OnTouch(R.id.room_send_audio_view)
     void room_send_audio_view() {
-
+        ColorStateList hintColor = mEditText.getHintTextColors();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
         } else {
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-            String currentTime = sdf.format(new Date());
-            voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-            newFile = new File(voicePath, currentTime + ".3gp");
-            String outputFile = newFile.getAbsolutePath();
-            myAudioRecorder = new MediaRecorder();
-            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-            myAudioRecorder.setOutputFile(outputFile);
-            try {
-                myAudioRecorder.prepare();
-                myAudioRecorder.start();
-            } catch (IllegalStateException ise) {
-                // make something ...
-            } catch (IOException ioe) {
-                // make something
-            }
-            stop.setVisibility(View.VISIBLE);
-            record.setVisibility(View.GONE);
+            recordButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        recordButton.getScaleX();
+                        recordButton.getScaleY();
+                        recordButton.setScaleX((float) 1.3);
+                        recordButton.setScaleY((float) 1.4);
+                        mEditText.setHint("  recording ... ");
+                        mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                        String currentTime = sdf.format(new Date());
+                        voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
+                        newFile = new File(voicePath, currentTime + ".3gp");
+                        String outputFile = newFile.getAbsolutePath();
+                        myAudioRecorder = new MediaRecorder();
+                        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+                        myAudioRecorder.setOutputFile(outputFile);
+                        try {
+                            myAudioRecorder.prepare();
+                            myAudioRecorder.start();
+
+                        } catch (IllegalStateException ise) {
+                            // make something ...
+                        } catch (IOException ioe) {
+                            // make something
+                        }
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1000) {
+                        recordButton.setScaleX((float) 1);
+                        recordButton.setScaleY((float) 1);
+                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
+                        mEditText.setHintTextColor(hintColor);
+                        room_stop_view();
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() < 1000) {
+                        recordButton.setScaleX((float) 1);
+                        recordButton.setScaleY((float) 1);
+                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
+                        mEditText.setHintTextColor(hintColor);
+                    }
+                    return true;
+                }
+            });
         }
+
     }
-    @OnClick(R.id.room_stop_view)
+
+
+
     void room_stop_view() {
         myAudioRecorder.stop();
         myAudioRecorder.release();
@@ -401,9 +433,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         Intent intent=new Intent();
         intent.setData(contentUri);
         sendMediasIntent(intent);
-
-        record.setVisibility(View.VISIBLE);
-        stop.setVisibility(View.GONE);
+        mEditText.setText("");
+        mEditText.setTextColor(Color.argb(255,0,0,0));
     }
 
     // network events
@@ -2492,6 +2523,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             for (int i = 0; i < permissions.length; i++) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
+                if (Manifest.permission.RECORD_AUDIO.equals(permissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
+                        Toast.makeText(this, "granted permissio", Toast.LENGTH_SHORT).show();
+                        room_send_audio_view();
+                    }
+                    else
+                        Toast.makeText(this, "granted nooo", Toast.LENGTH_SHORT).show();
+
+                }
                 if (Manifest.permission.CAMERA.equals(permissions[i])) {
                     if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
