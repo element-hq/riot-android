@@ -93,8 +93,19 @@ android {
         javaMaxHeapSize "2g"
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('./signature/debug.keystore')
+            storePassword 'android'
+        }
+    }
+
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
 
             resValue "bool", "debug_mode", "true"
             resValue "string", "git_revision", "\"${gitRevision()}\""
