@@ -347,10 +347,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     TextView subInvitationTextView;
 
     private MediaRecorder myAudioRecorder;
-    private ImageView stop;
-    private ImageView recordButton;
+    private static ImageView  recordButton;
     File voicePath;
     File newFile;
+    ColorStateList hintColor;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -360,81 +360,96 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         super.onCreate(savedInstanceState);
         if (!mEditText.getText().toString().equalsIgnoreCase ("   recording ... "))
             mEditText.setText("");
-        recordButton =findViewById(R.id.room_send_audio_view);
+        recordButton = findViewById(R.id.room_send_audio_view);
         room_send_audio_view();
+        hintColor = mEditText.getHintTextColors();
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @OnTouch(R.id.room_send_audio_view)
     void room_send_audio_view() {
-        ColorStateList hintColor = mEditText.getHintTextColors();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
-        } else {
-            recordButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        recordButton.getScaleX();
-                        recordButton.getScaleY();
-                        recordButton.setScaleX((float) 1.3);
-                        recordButton.setScaleY((float) 1.4);
-                        mEditText.setHint("  recording ... ");
-                        mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                        String currentTime = sdf.format(new Date());
-                        voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-                        newFile = new File(voicePath, currentTime + ".3gp");
-                        String outputFile = newFile.getAbsolutePath();
-                        myAudioRecorder = new MediaRecorder();
-                        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-                        myAudioRecorder.setOutputFile(outputFile);
-                        try {
-                            myAudioRecorder.prepare();
-                            myAudioRecorder.start();
-
-                        } catch (IllegalStateException ise) {
-                            // make something ...
-                        } catch (IOException ioe) {
-                            // make something
-                        }
-                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1000) {
-                        recordButton.setScaleX((float) 1);
-                        recordButton.setScaleY((float) 1);
-                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
-                        mEditText.setHintTextColor(hintColor);
-                        room_stop_view();
-                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() < 1000) {
-                        recordButton.setScaleX((float) 1);
-                        recordButton.setScaleY((float) 1);
-                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
-                        mEditText.setHintTextColor(hintColor);
-                    }
-                    return true;
-                }
-            });
         }
+        else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            {
+                recordButton.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            recordButton.setScaleX((float) 1.3);
+                            recordButton.setScaleY((float) 1.4);
+                            mEditText.setHint("  recording ... ");
+                            mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
 
+//                            recordThread = new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+                                    @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                                    String currentTime = sdf.format(new Date());
+                                    voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
+                                    newFile = new File(voicePath, currentTime + ".3gp");
+                                    String outputFile = newFile.getAbsolutePath();
+                                    myAudioRecorder = new MediaRecorder();
+                                    myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                                    myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                                    myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+                                    myAudioRecorder.setOutputFile(outputFile);
+                                    try {
+                                        myAudioRecorder.prepare();
+                                        myAudioRecorder.start();
+
+                                    } catch (IllegalStateException ise) {
+                                        // make something ...
+                                    } catch (IOException ioe) {
+                                        // make something
+                                    }
+//                                }
+//                            });
+//                            recordThread.start();
+
+                        } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1050) {
+                            recordButton.setScaleX((float) 1);
+                            recordButton.setScaleY((float) 1);
+                            mEditText.setHint(R.string.room_message_placeholder_encrypted);
+                            mEditText.setHintTextColor(hintColor);
+                            room_stop_view();
+                        } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() <= 1050) {
+                            recordButton.setScaleX((float) 1);
+                            recordButton.setScaleY((float) 1);
+                            mEditText.setHint(R.string.room_message_placeholder_encrypted);
+                            mEditText.setHintTextColor(hintColor);
+                        }
+                        return true;
+                    }
+                });
+            }
+
+        }
     }
 
 
-
     void room_stop_view() {
-        myAudioRecorder.stop();
-        myAudioRecorder.release();
-        myAudioRecorder = null;
-        Uri contentUri =
-                getUriForFile(getApplicationContext(),
-                        BuildConfig.APPLICATION_ID + ".fileProvider",
-                        newFile);
-        Intent intent=new Intent();
-        intent.setData(contentUri);
-        sendMediasIntent(intent);
-        mEditText.setText("");
-        mEditText.setTextColor(Color.argb(255,0,0,0));
+        try {
+            myAudioRecorder.stop();
+            myAudioRecorder.release();
+            myAudioRecorder = null;
+            Uri contentUri =
+                    getUriForFile(getApplicationContext(),
+                            BuildConfig.APPLICATION_ID + ".fileProvider",
+                            newFile);
+            Intent intent = new Intent();
+            intent.setData(contentUri);
+            sendMediasIntent(intent);
+            mEditText.setText("");
+            mEditText.setTextColor(Color.argb(255, 0, 0, 0));
+
+        } catch (IllegalStateException ise) {
+            // make something ...
+        }
+
     }
 
     // network events
@@ -2580,7 +2595,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
-        } else {
+        }else if (requestCode== MY_PERMISSIONS_REQUEST_REC_Audio){
+            room_send_audio_view();
+        }
+        else {
             // Transmit to Fragment
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
