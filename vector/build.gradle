@@ -132,6 +132,16 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
 
+        act {
+            applicationId "au.gov.act.communicator"
+            // use the version name
+            versionCode rootProject.ext.versionCodeProp
+            versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
+        }
+
         appfdroid {
             applicationId "im.vector.alpha"
             // use the version name
@@ -245,12 +255,12 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency
-    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.35'
+    // implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.35'
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
-    //implementation project(':matrix-sdk')
-    //implementation project(':matrix-sdk-crypto')
-    //implementation project(':matrix-sdk-core')
+    implementation project(':matrix-sdk')
+    implementation project(':matrix-sdk-crypto')
+    implementation project(':matrix-sdk-core')
 
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2')
@@ -262,7 +272,7 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    appImplementation('com.google.firebase:firebase-messaging:20.0.0') {
+    actImplementation('com.google.firebase:firebase-messaging:20.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

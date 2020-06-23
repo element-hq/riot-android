@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="riot_app_name" translatable="false">Communicator</string>
+
+    <!-- server urls -->
+    <string name="vector_im_server_url" translatable="false">https://vector.im</string>
+    <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_hs_server_url" translatable="false">https://matrix.org</string>
+    <string name="default_identity_server_url" translatable="false">https://vector.im</string>
+    <string name="matomo_server_url" translatable="false">https://matomo.riot.im</string>
+    <string name="matomo_site_id" translatable="false">13</string>
+    <string name="matomo_tracker_name" translatable="false">AndroidMatomoTracker</string>
+    <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <string name="default_stun_server" translatable="false">turn.matrix.org</string>
+
+    <!-- Widget urls -->
+    <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
+    <string name="integrations_rest_url" translatable="false">"https://scalar.vector.im/api"</string>
+    <string name="integrations_jitsi_widget_url" translatable="false">"https://scalar.vector.im/api/widgets/jitsi.html"</string>
+
+    <string-array name="integrations_widgets_urls" translatable="false">
+        <item>https://scalar.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar.vector.im/api</item>
+        <item>https://scalar-staging.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar-staging.vector.im/api</item>
+        <item>https://scalar-staging.riot.im/scalar/api</item>
+    </string-array>
+
+    <!-- empty means to use the active HS url -->
+    <!-- set a valid URL like "https://matrix.org" to use a custom one -->
+    <string name="push_server_url" translatable="false" />
+
+    <string-array name="room_directory_servers" translatable="false">
+        <item>matrix.org</item>
+    </string-array>
+
+</resources>
