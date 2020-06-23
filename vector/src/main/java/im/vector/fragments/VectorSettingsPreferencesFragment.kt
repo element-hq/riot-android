@@ -386,7 +386,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         refreshPhoneNumbersList()
 
         // Contacts
-        setContactsPreferences()
+        if (resources.getBoolean(R.bool.show_local_contacts))
+            setContactsPreferences()
+        else
+            removeLocalContactPreference()
 
         // user interface preferences
         setUserInterfacePreferences()
@@ -2692,6 +2695,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         preferenceScreen.let {
             it.removePreference(mDevicesListSettingsCategory)
             it.removePreference(mDevicesListSettingsCategoryDivider)
+        }
+    }
+
+    private fun removeLocalContactPreference() {
+        preferenceScreen.let {
+            it.removePreference(mContactSettingsCategory)
         }
     }
 
