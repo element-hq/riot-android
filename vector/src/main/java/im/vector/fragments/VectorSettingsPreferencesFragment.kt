@@ -344,10 +344,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Password
-        mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            onPasswordUpdateClick()
-            false
-        }
+        if (resources.getBoolean(R.bool.password_changeable)) {
+            mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                onPasswordUpdateClick()
+                false
+            }
+        }else
+            removePasswordPreference()
 
 
         // Add Email
@@ -1203,7 +1206,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mDisplayNamePreference.isEnabled = isConnected
 
         // change password
-        mPasswordPreference.isEnabled = isConnected
+        if(resources.getBoolean(R.bool.password_changeable))
+            mPasswordPreference.isEnabled = isConnected
 
         // update the push rules
         val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
@@ -2702,6 +2706,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         preferenceScreen.let {
             it.removePreference(mContactSettingsCategory)
         }
+    }
+
+    private fun removePasswordPreference() {
+        mUserSettingsCategory.removePreference(mPasswordPreference)
     }
 
     /**
