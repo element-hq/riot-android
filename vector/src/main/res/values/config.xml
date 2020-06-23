@@ -39,4 +39,6 @@
     <bool name="password_changeable">false</bool>
     <bool name="show_local_contacts">false</bool>
     <bool name="display_name_editable">false</bool>
+    <bool name="add_email_address_option">false</bool>
+    <bool name="add_phone_number_option">false</bool>
 </resources>

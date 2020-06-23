@@ -347,7 +347,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     false
                 }
             }
-        }else{
+        } else {
             mUserSettingsCategory.removePreference(mDisplayNamePreference)
             mNonEditableDisplayNamePreference.let {
                 it.summary = mSession.myUser.displayname
@@ -360,40 +360,48 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 onPasswordUpdateClick()
                 false
             }
-        }else
+        } else
             removePasswordPreference()
 
 
         // Add Email
-        (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
-            // It does not work on XML, do it here
-            it.icon = activity?.let {
-                ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
-            }
+        if (resources.getBoolean(R.bool.add_email_address_option)) {
+            (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
+                // It does not work on XML, do it here
+                it.icon = activity?.let {
+                    ThemeUtils.tintDrawable(it,
+                            ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                }
 
-            // Unfortunately, this is not supported in lib v7
-            // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                // Unfortunately, this is not supported in lib v7
+                // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                addEmail((newValue as String).trim())
-                false
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    addEmail((newValue as String).trim())
+                    false
+                }
             }
+        } else {
+            removeAddEmailPreference()
         }
 
         // Add phone number
-        findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY).let {
-            // It does not work on XML, do it here
-            it.icon = activity?.let {
-                ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
-            }
+        if (resources.getBoolean(R.bool.add_phone_number_option)) {
+            findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY).let {
+                // It does not work on XML, do it here
+                it.icon = activity?.let {
+                    ThemeUtils.tintDrawable(it,
+                            ContextCompat.getDrawable(it, R.drawable.ic_add_black)!!, R.attr.vctr_settings_icon_tint_color)
+                }
 
-            it.setOnPreferenceClickListener {
-                val intent = PhoneNumberAdditionActivity.getIntent(activity, mSession.credentials.userId)
-                startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
-                true
+                it.setOnPreferenceClickListener {
+                    val intent = PhoneNumberAdditionActivity.getIntent(activity, mSession.credentials.userId)
+                    startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
+                    true
+                }
             }
+        } else {
+            removeAddPhoneNumberPreference()
         }
 
         refreshEmailsList()
@@ -1216,13 +1224,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mDisplayNamePreference.summary = mSession.myUser.displayname
             mDisplayNamePreference.text = mSession.myUser.displayname
             mDisplayNamePreference.isEnabled = isConnected
-        }else{
+        } else {
             mNonEditableDisplayNamePreference.summary = mSession.myUser.displayname
             mNonEditableDisplayNamePreference.isEnabled = isConnected
         }
 
         // change password
-        if(resources.getBoolean(R.bool.password_changeable))
+        if (resources.getBoolean(R.bool.password_changeable))
             mPasswordPreference.isEnabled = isConnected
 
         // update the push rules
@@ -2033,9 +2041,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mDisplayedEmails = newEmailsList
 
             val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
-                    ?: return
 
-            var order = addEmailBtn.order
+            var order = addEmailBtn?.order
 
             for ((index, email3PID) in currentEmail3PID.withIndex()) {
                 val preference = VectorPreference(activity!!)
@@ -2043,7 +2050,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 preference.title = getString(R.string.settings_email_address)
                 preference.summary = email3PID.address
                 preference.key = EMAIL_PREFERENCE_KEY_BASE + index
-                preference.order = order
+                order?.let {
+                    preference.order = order
+                }
+                //preference.order = order
 
                 preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
                     displayDelete3PIDConfirmationDialog(email3PID, pref.summary)
@@ -2058,37 +2068,40 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
 
                 mUserSettingsCategory.addPreference(preference)
-
-                order++
+                order?.let {
+                    order++
+                }
             }
 
-            addEmailBtn.order = order
-            addEmailBtn.isVisible = true
-            addEmailBtn.isEnabled = false
-            //We need to check if the password flow is available
-            mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
-                    object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
-                        override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
-                            addEmailBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
-                                    || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
-                        }
+            addEmailBtn?.let {
+                addEmailBtn.order = order!!
+                addEmailBtn.isVisible = true
+                addEmailBtn.isEnabled = false
+                //We need to check if the password flow is available
+                mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
+                        object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
+                            override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
+                                addEmailBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                                        || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
+                            }
 
-                        override fun onUnexpectedError(e: java.lang.Exception?) {
-                            //In doubt enable
-                            addEmailBtn.isEnabled = true
-                        }
+                            override fun onUnexpectedError(e: java.lang.Exception?) {
+                                //In doubt enable
+                                addEmailBtn.isEnabled = true
+                            }
 
-                        override fun onNetworkError(e: java.lang.Exception?) {
-                            //In doubt enable
-                            addEmailBtn.isEnabled = true
-                        }
+                            override fun onNetworkError(e: java.lang.Exception?) {
+                                //In doubt enable
+                                addEmailBtn.isEnabled = true
+                            }
 
-                        override fun onMatrixError(e: MatrixError?) {
-                            //In doubt enable
-                            addEmailBtn.isEnabled = true
-                        }
+                            override fun onMatrixError(e: MatrixError?) {
+                                //In doubt enable
+                                addEmailBtn.isEnabled = true
+                            }
 
-                    })
+                        })
+            }
         }
     }
 
@@ -2349,9 +2362,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             mDisplayedPhoneNumber = phoneNumberList
 
             val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)
-                    ?: return
 
-            var order = addPhoneBtn.order
+            var order = addPhoneBtn?.order
 
             for ((index, phoneNumber3PID) in currentPhoneNumber3PID.withIndex()) {
                 val preference = VectorPreference(activity!!)
@@ -2368,7 +2380,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 preference.summary = phoneNumberFormatted
                 preference.key = PHONE_NUMBER_PREFERENCE_KEY_BASE + index
-                preference.order = order
+                order?.let {
+                    preference.order = order
+                }
 
                 preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
@@ -2382,37 +2396,38 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                 }
 
-                order++
+                order?.let {order++}
                 mUserSettingsCategory.addPreference(preference)
             }
+            addPhoneBtn?.let {
+                addPhoneBtn.order = order!!
+                addPhoneBtn.isVisible = true
+                addPhoneBtn.isEnabled = false
+                //We need to check if the password flow is available
+                mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
+                        object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
+                            override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
+                                addPhoneBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
+                                        || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
+                            }
 
-            addPhoneBtn.order = order
-            addPhoneBtn.isVisible = true
-            addPhoneBtn.isEnabled = false
-            //We need to check if the password flow is available
-            mSession.identityServerManager.checkAdd3pidInteractiveFlow(listOf(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD),
-                    object : ApiCallback<IdentityServerManager.SupportedFlowResult> {
-                        override fun onSuccess(info: IdentityServerManager.SupportedFlowResult) {
-                            addPhoneBtn.isEnabled = info == IdentityServerManager.SupportedFlowResult.SUPPORTED
-                                    || info == IdentityServerManager.SupportedFlowResult.INTERACTIVE_AUTH_NOT_SUPPORTED
-                        }
+                            override fun onUnexpectedError(e: java.lang.Exception?) {
+                                //In doubt enable
+                                addPhoneBtn.isEnabled = true
+                            }
 
-                        override fun onUnexpectedError(e: java.lang.Exception?) {
-                            //In doubt enable
-                            addPhoneBtn.isEnabled = true
-                        }
+                            override fun onNetworkError(e: java.lang.Exception?) {
+                                //In doubt enable
+                                addPhoneBtn.isEnabled = true
+                            }
 
-                        override fun onNetworkError(e: java.lang.Exception?) {
-                            //In doubt enable
-                            addPhoneBtn.isEnabled = true
-                        }
+                            override fun onMatrixError(e: MatrixError?) {
+                                //In doubt enable
+                                addPhoneBtn.isEnabled = true
+                            }
 
-                        override fun onMatrixError(e: MatrixError?) {
-                            //In doubt enable
-                            addPhoneBtn.isEnabled = true
-                        }
-
-                    })
+                        })
+            }
         }
 
     }
@@ -2726,6 +2741,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removePasswordPreference() {
         mUserSettingsCategory.removePreference(mPasswordPreference)
+    }
+
+    private fun removeAddEmailPreference() {
+        mUserSettingsCategory.removePreference(findPreference(ADD_EMAIL_PREFERENCE_KEY))
+    }
+
+    private fun removeAddPhoneNumberPreference() {
+        mUserSettingsCategory.removePreference(findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY))
     }
 
     /**
