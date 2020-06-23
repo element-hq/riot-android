@@ -175,6 +175,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mDisplayNamePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY) as EditTextPreference
     }
+    private val mNonEditableDisplayNamePreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_NON_EDITABLE_DISPLAY_NAME_PREFERENCE_KEY) as Preference
+    }
     private val mPasswordPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
     }
@@ -335,11 +338,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Display name
-        mDisplayNamePreference.let {
-            it.summary = mSession.myUser.displayname
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                onDisplayNameClick(newValue?.let { (it as String).trim() })
-                false
+        if (resources.getBoolean(R.bool.password_changeable)) {
+            mUserSettingsCategory.removePreference(mNonEditableDisplayNamePreference)
+            mDisplayNamePreference.let {
+                it.summary = mSession.myUser.displayname
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    onDisplayNameClick(newValue?.let { (it as String).trim() })
+                    false
+                }
+            }
+        }else{
+            mUserSettingsCategory.removePreference(mDisplayNamePreference)
+            mNonEditableDisplayNamePreference.let {
+                it.summary = mSession.myUser.displayname
             }
         }
 
@@ -1201,9 +1212,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mUserAvatarPreference.isEnabled = isConnected
 
         // refresh the display name
-        mDisplayNamePreference.summary = mSession.myUser.displayname
-        mDisplayNamePreference.text = mSession.myUser.displayname
-        mDisplayNamePreference.isEnabled = isConnected
+        if (resources.getBoolean(R.bool.password_changeable)) {
+            mDisplayNamePreference.summary = mSession.myUser.displayname
+            mDisplayNamePreference.text = mSession.myUser.displayname
+            mDisplayNamePreference.isEnabled = isConnected
+        }else{
+            mNonEditableDisplayNamePreference.summary = mSession.myUser.displayname
+            mNonEditableDisplayNamePreference.isEnabled = isConnected
+        }
 
         // change password
         if(resources.getBoolean(R.bool.password_changeable))

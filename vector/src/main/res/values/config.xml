@@ -38,5 +38,5 @@
     <bool name="avatar_editable">true</bool>
     <bool name="password_changeable">false</bool>
     <bool name="show_local_contacts">false</bool>
-
+    <bool name="display_name_editable">false</bool>
 </resources>

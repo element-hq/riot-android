@@ -17,6 +17,11 @@
             android:title="@string/settings_display_name" />
 
         <im.vector.preference.VectorPreference
+            android:key="SETTINGS_NON_EDITABLE_DISPLAY_NAME_PREFERENCE_KEY"
+            android:summary="@string/settings_display_name"
+            android:title="@string/settings_display_name" />
+
+        <im.vector.preference.VectorPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
             android:summary="@string/password_hint"
             android:title="@string/settings_password" />
