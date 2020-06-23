@@ -918,6 +918,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                         if (menuAction == ACTION_VECTOR_SAVE) {
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
+                                            if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3")){
+                                                VectorRoomActivity vectorRoomActivity=new VectorRoomActivity();
+                                                vectorRoomActivity.mediaPlayer(savedMediaPath);
+
+                                            }else
                                             ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);
                                         }
                                     }
@@ -1128,7 +1133,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         try {
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
-
             // toggle selection mode
             mAdapter.onEventTap(null);
         } catch (Exception e) {
@@ -1141,7 +1145,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         try {
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
-
             if (mAdapter.isInSelectionMode()) {
                 // cancel the selection mode.
                 mAdapter.onEventTap(null);
