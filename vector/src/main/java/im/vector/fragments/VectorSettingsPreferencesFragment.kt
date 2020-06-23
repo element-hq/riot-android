@@ -169,6 +169,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mUserSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
     }
+    private val mUserInterfaceCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_USER_INTERFACE_KEY) as PreferenceCategory
+    }
     private val mUserAvatarPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
     }
@@ -422,7 +425,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeDiscoveryPreference()
 
         // user interface preferences
-        setUserInterfacePreferences()
+        if (resources.getBoolean(R.bool.settings_language_visible))
+            setUserInterfacePreferences()
+        else
+            removeLanguagePreference()
 
         // Url preview
         (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
@@ -2761,6 +2767,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeDiscoveryPreference() {
         mUserSettingsCategory.removePreference(discoveryPreference)
+    }
+
+    private fun removeLanguagePreference() {
+        mUserInterfaceCategory.removePreference(selectedLanguagePreference)
     }
 
     /**
