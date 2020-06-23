@@ -97,6 +97,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.extensions.MatrixSdkExtensionsKt;
@@ -1254,6 +1255,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
+                /**
+                 * Developed by BATNA (Esmaeeil Moradi)
+                 */
+                //change reply color in Group
+                if (BuildConfig.IS_SABA) {
+                    textColor = Color.DKGRAY;
+                }
             }
 
             for (final TextView tv : textViews) {

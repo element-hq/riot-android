@@ -75,6 +75,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
@@ -191,7 +192,12 @@ class VectorMessagesAdapterHelper {
                     Context context = senderTextView.getContext();
                     int textColor = colorIndexForSender(fSenderId);
                     senderTextView.setTextColor(context.getResources().getColor(textColor));
-
+                    /**
+                     * Developed by BATNA (Esmaeeil Moradi ) change text color static
+                     */
+                    if (BuildConfig.IS_SABA) {
+                        senderTextView.setTextColor(context.getResources().getColor(R.color.text_black));
+                    }
                     senderTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -938,6 +944,16 @@ class VectorMessagesAdapterHelper {
         }
 
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
+        /**
+         * Developed  by BATNA (Esmaeeil Moradi) remove text 'In reply to' from SDK
+         */
+
+        if (BuildConfig.IS_SABA) {
+            String totalText = strBuilder.toString();
+            if (totalText.contains("In reply to")) {
+                strBuilder.replace(0, 11, "");
+            }
+        }
         URLSpan[] urls = strBuilder.getSpans(0, text.length(), URLSpan.class);
 
         if ((null != urls) && (urls.length > 0)) {
