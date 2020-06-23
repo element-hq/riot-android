@@ -41,7 +41,7 @@
             android:layout_alignEnd="@+id/room_avatar_direct_chat_icon"
             android:layout_alignRight="@+id/room_avatar_direct_chat_icon"
             android:layout_alignBottom="@+id/room_avatar"
-            android:src="@drawable/e2e_verified"
+            android:src="@drawable/e2e_verified_batna"
             android:tint="?attr/colorAccent"
             android:visibility="invisible"
             tools:visibility="visible" />

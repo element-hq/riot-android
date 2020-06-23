@@ -2228,6 +2228,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // oneself event
                 if (event.mSentState != Event.SentState.SENT) {
                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                    if (BuildConfig.IS_SABA){
+                        e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                    }
                 }
                 // not encrypted event
                 else if (!event.isEncrypted()) {
@@ -2242,6 +2245,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
                             && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                        if (BuildConfig.IS_SABA){
+                            e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                        }
+
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
@@ -2257,6 +2264,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
                             if (deviceInfo.isVerified()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                                if (BuildConfig.IS_SABA){
+                                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                                }
                             } else if (deviceInfo.isBlocked()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
                             } else {

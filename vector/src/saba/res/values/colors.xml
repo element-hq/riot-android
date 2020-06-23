@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_black">#000000</color>
+    <color name="background_header_message">#7feeeeee</color>
+    <color name="background_header_message_divider">#009f9f9f</color>
+
+</resources>

@@ -61,7 +61,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
-        android:src="@drawable/e2e_verified"
+        android:src="@drawable/e2e_verified_batna"
         android:tint="?attr/colorAccent"
         android:visibility="invisible"
         tools:visibility="visible" />

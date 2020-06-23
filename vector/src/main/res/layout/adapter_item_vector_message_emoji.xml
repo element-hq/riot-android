@@ -93,7 +93,7 @@
                         android:id="@+id/message_adapter_e2e_icon"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/e2e_verified" />
+                        android:src="@drawable/e2e_verified_batna" />
 
                     <TextView
                         android:id="@+id/messagesAdapter_body"

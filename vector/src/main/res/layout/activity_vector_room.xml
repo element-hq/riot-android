@@ -299,7 +299,7 @@
                     android:layout_height="12dp"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/e2e_verified"
+                    android:src="@drawable/e2e_verified_batna"
                     android:tint="?attr/colorAccent" />
 
                 <im.vector.view.VectorAutoCompleteTextView

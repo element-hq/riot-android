@@ -61,7 +61,7 @@
             android:layout_alignBottom="@+id/adapter_item_recent_room_avatar"
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
-            android:src="@drawable/e2e_verified"
+            android:src="@drawable/e2e_verified_batna"
             android:tint="?attr/colorAccent"
             android:visibility="gone"
             tools:visibility="visible" />

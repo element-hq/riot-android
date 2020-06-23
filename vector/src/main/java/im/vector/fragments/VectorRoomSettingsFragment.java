@@ -1795,6 +1795,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
             isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_enabled);
             isEncryptedPreference.setKey(key);
             isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified));
+            if (BuildConfig.IS_SABA){
+                isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified_batna));
+            }
             mAdvancedSettingsCategory.addPreference(isEncryptedPreference);
         } else {
             PowerLevels powerLevels = mRoom.getState().getPowerLevels();
