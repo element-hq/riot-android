@@ -110,6 +110,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     // disable some updates if there is
     private val mNetworkListener = IMXNetworkEventListener { refreshDisplay() }
+
     // events listener
     private val mEventsListener = object : MXEventListener() {
         override fun onBingRulesUpdate() {
@@ -148,6 +149,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     // devices: device IDs and device names
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
+
     // used to avoid requesting to enter the password for each deletion
     private var mAccountPassword: String? = null
 
@@ -198,6 +200,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mCryptographyCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)
     }
+
     // cryptography manage
     private val mCryptographyManageCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY) as PreferenceCategory
@@ -205,6 +208,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mCryptographyManageCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)
     }
+
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)
@@ -218,6 +222,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mDevicesListSettingsCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)
     }
+
     // displayed the ignored users list
     private val mIgnoredUserSettingsCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY)
@@ -225,6 +230,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mIgnoredUserSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_IGNORED_USERS_PREFERENCE_KEY) as PreferenceCategory
     }
+
     // background sync category
     private val mSyncRequestTimeoutPreference by lazy {
         // ? Cause it can be removed
@@ -288,6 +294,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val cryptoInfoTextPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
     }
+
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
@@ -320,10 +327,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Avatar
         mUserAvatarPreference.let {
             it.setSession(mSession)
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                onUpdateAvatarClick()
-                false
-            }
+            if (resources.getBoolean(R.bool.avatar_editable))
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    onUpdateAvatarClick()
+                    false
+                }
         }
 
         // Display name
@@ -961,11 +969,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                                             pushManager.setFdroidSyncModeOptimizedForRealTime();
                                         }
-                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
+                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> {
 
                                             pushManager.setFdroidSyncModeOptimizedForBattery();
                                         }
-                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> {
+                                        PreferencesManager.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> {
                                             pushManager.setFdroidSyncModeDisabled()
                                         }
                                     }
@@ -1212,12 +1220,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                             preference.isChecked = pushManager?.areDeviceNotificationsAllowed()
                                     ?: true
 
-                        PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY     -> {
+                        PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                             preference.isChecked = pushManager?.isScreenTurnedOn ?: false
                             preference.isEnabled = pushManager?.areDeviceNotificationsAllowed()
                                     ?: true
                         }
-                        else                                                          -> {
+                        else -> {
                             preference.isEnabled = null != rules && isConnected
                             preference.isChecked = preferences.getBoolean(preferenceKey, false)
                         }
@@ -1399,7 +1407,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         when (preferenceKey) {
 
-            PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY     -> {
+            PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY -> {
                 if (pushManager.isScreenTurnedOn != newValue) {
                     pushManager.isScreenTurnedOn = newValue
                 }
@@ -1465,7 +1473,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // on some old android APIs,
             // the callback is called even if there is no user interaction
             // so the value will be checked to ensure there is really no update.
-            else                                                          -> {
+            else -> {
 
                 val ruleId = mPrefKeyToBingRuleId[preferenceKey]
                 val rule = mSession.dataHandler.pushRules()?.findDefaultRule(ruleId)
@@ -1594,7 +1602,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_CALL_RINGTONE         -> {
+                REQUEST_CALL_RINGTONE -> {
                     val callRingtoneUri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     val thisActivity = activity
                     if (callRingtoneUri != null && thisActivity != null) {
@@ -1603,15 +1611,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                 }
                 REQUEST_E2E_FILE_REQUEST_CODE -> importKeys(data)
-                REQUEST_NEW_PHONE_NUMBER      -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY     -> onPhonebookCountryUpdate(data)
-                REQUEST_LOCALE                -> {
+                REQUEST_NEW_PHONE_NUMBER -> refreshPhoneNumbersList()
+                REQUEST_PHONEBOOK_COUNTRY -> onPhonebookCountryUpdate(data)
+                REQUEST_LOCALE -> {
                     activity?.let {
                         startActivity(it.intent)
                         it.finish()
                     }
                 }
-                VectorUtils.TAKE_IMAGE        -> {
+                VectorUtils.TAKE_IMAGE -> {
                     val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, mSession.mediaCache)
 
                     if (null != thumbnailUri) {
@@ -1726,7 +1734,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         mSession.myUser.delete3Pid(pid, object : ApiCallback<Void> {
                             override fun onSuccess(info: Void?) {
                                 when (pid.medium) {
-                                    ThreePid.MEDIUM_EMAIL  -> refreshEmailsList()
+                                    ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
                                     ThreePid.MEDIUM_MSISDN -> refreshPhoneNumbersList()
                                 }
                                 onCommonDone(null)

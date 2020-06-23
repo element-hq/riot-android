@@ -35,4 +35,6 @@
         <item>matrix.org</item>
     </string-array>
 
+    <bool name="avatar_editable">false</bool>
+
 </resources>
