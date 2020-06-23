@@ -184,6 +184,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mPasswordPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
     }
+    private val mTypingNotificationPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SEND_TYPING_NOTIF_KEY)
+    }
+    private val mShowTimestampPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY)
+    }
+    private val mShowReadReceiptPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SHOW_READ_RECEIPTS_KEY)
+    }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
@@ -429,6 +438,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             setUserInterfacePreferences()
         else
             removeLanguagePreference()
+
+        if (!resources.getBoolean(R.bool.settings_send_typing_notification_visible))
+            removeTypingNotificationPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_timestamp_visible))
+            removeShowTimestampPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_read_receipt_visible))
+            removeShowReadReceiptPreference()
 
         // Url preview
         (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
@@ -2771,6 +2789,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeLanguagePreference() {
         mUserInterfaceCategory.removePreference(selectedLanguagePreference)
+    }
+
+    private fun removeTypingNotificationPreference() {
+        mUserInterfaceCategory.removePreference(mTypingNotificationPreference)
+    }
+
+    private fun removeShowTimestampPreference() {
+        mUserInterfaceCategory.removePreference(mShowTimestampPreference)
+    }
+
+    private fun removeShowReadReceiptPreference() {
+        mUserInterfaceCategory.removePreference(mShowReadReceiptPreference)
     }
 
     /**
