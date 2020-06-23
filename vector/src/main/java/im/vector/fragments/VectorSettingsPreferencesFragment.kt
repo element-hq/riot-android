@@ -298,6 +298,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
     }
 
+    private val discoveryPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_DISCOVERY_PREFERENCE_KEY) as VectorPreference
+    }
+
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference(PreferencesManager.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
@@ -305,6 +309,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val identityServerPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
     }
+
 
     /* ==========================================================================================
      * Life cycle
@@ -330,7 +335,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Avatar
         mUserAvatarPreference.let {
             it.setSession(mSession)
-            if (resources.getBoolean(R.bool.avatar_editable))
+            if (resources.getBoolean(R.bool.settings_avatar_editable))
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     onUpdateAvatarClick()
                     false
@@ -338,7 +343,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Display name
-        if (resources.getBoolean(R.bool.password_changeable)) {
+        if (resources.getBoolean(R.bool.settings_password_changeable)) {
             mUserSettingsCategory.removePreference(mNonEditableDisplayNamePreference)
             mDisplayNamePreference.let {
                 it.summary = mSession.myUser.displayname
@@ -355,7 +360,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Password
-        if (resources.getBoolean(R.bool.password_changeable)) {
+        if (resources.getBoolean(R.bool.settings_password_changeable)) {
             mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onPasswordUpdateClick()
                 false
@@ -365,7 +370,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
 
         // Add Email
-        if (resources.getBoolean(R.bool.add_email_address_option)) {
+        if (resources.getBoolean(R.bool.settings_add_email_address_option)) {
             (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
                 // It does not work on XML, do it here
                 it.icon = activity?.let {
@@ -386,7 +391,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Add phone number
-        if (resources.getBoolean(R.bool.add_phone_number_option)) {
+        if (resources.getBoolean(R.bool.settings_add_phone_number_option)) {
             findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY).let {
                 // It does not work on XML, do it here
                 it.icon = activity?.let {
@@ -408,10 +413,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         refreshPhoneNumbersList()
 
         // Contacts
-        if (resources.getBoolean(R.bool.show_local_contacts))
+        if (resources.getBoolean(R.bool.settings_show_local_contacts))
             setContactsPreferences()
         else
             removeLocalContactPreference()
+
+        if (!resources.getBoolean(R.bool.settings_discovery_visible))
+            removeDiscoveryPreference()
 
         // user interface preferences
         setUserInterfacePreferences()
@@ -1220,7 +1228,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         mUserAvatarPreference.isEnabled = isConnected
 
         // refresh the display name
-        if (resources.getBoolean(R.bool.password_changeable)) {
+        if (resources.getBoolean(R.bool.settings_password_changeable)) {
             mDisplayNamePreference.summary = mSession.myUser.displayname
             mDisplayNamePreference.text = mSession.myUser.displayname
             mDisplayNamePreference.isEnabled = isConnected
@@ -1230,7 +1238,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // change password
-        if (resources.getBoolean(R.bool.password_changeable))
+        if (resources.getBoolean(R.bool.settings_password_changeable))
             mPasswordPreference.isEnabled = isConnected
 
         // update the push rules
@@ -2749,6 +2757,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAddPhoneNumberPreference() {
         mUserSettingsCategory.removePreference(findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY))
+    }
+
+    private fun removeDiscoveryPreference() {
+        mUserSettingsCategory.removePreference(discoveryPreference)
     }
 
     /**
