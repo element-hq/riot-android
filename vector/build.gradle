@@ -16,7 +16,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:5.12.0"
+        classpath "io.realm:realm-gradle-plugin:6.1.0"
     }
 }
 
@@ -255,12 +255,12 @@ dependencies {
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency
-    // implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.35'
+    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.35'
     // use the matrix SDK as a sub project
     // you have to uncomment some lines in settings.gradle
-    implementation project(':matrix-sdk')
-    implementation project(':matrix-sdk-crypto')
-    implementation project(':matrix-sdk-core')
+//    implementation project(':matrix-sdk')
+//    implementation project(':matrix-sdk-crypto')
+//    implementation project(':matrix-sdk-core')
 
     /************* jitsi **************/
     implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2')
