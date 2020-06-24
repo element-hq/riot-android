@@ -639,144 +639,147 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         refreshIgnoredUsersList()
 
         // Lab
-        val useCryptoPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
-        val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
+        if (resources.getBoolean(R.bool.settings_labs_category_visible)) {
+            val useCryptoPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
+            val cryptoIsEnabledPref = findPreference(PreferencesManager.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
-        if (mSession.isCryptoEnabled) {
-            mLabsCategory.removePreference(useCryptoPref)
+            if (mSession.isCryptoEnabled) {
+                mLabsCategory.removePreference(useCryptoPref)
 
-            cryptoIsEnabledPref.isEnabled = false
-        } else {
-            mLabsCategory.removePreference(cryptoIsEnabledPref)
+                cryptoIsEnabledPref.isEnabled = false
+            } else {
+                mLabsCategory.removePreference(cryptoIsEnabledPref)
 
-            useCryptoPref.isChecked = false
+                useCryptoPref.isChecked = false
 
-            useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
-                if (TextUtils.isEmpty(mSession.credentials.deviceId)) {
-                    activity?.let { activity ->
-                        AlertDialog.Builder(activity)
-                                .setMessage(R.string.room_settings_labs_end_to_end_warnings)
-                                .setPositiveButton(R.string.logout) { _, _ ->
-                                    CommonActivityUtils.logout(activity)
-                                }
-                                .setNegativeButton(R.string.cancel) { _, _ ->
-                                    useCryptoPref.isChecked = false
-                                }
-                                .setOnCancelListener {
-                                    useCryptoPref.isChecked = false
-                                }
-                                .show()
-                    }
-                } else {
-                    val newValue = newValueAsVoid as Boolean
+                useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
+                    if (TextUtils.isEmpty(mSession.credentials.deviceId)) {
+                        activity?.let { activity ->
+                            AlertDialog.Builder(activity)
+                                    .setMessage(R.string.room_settings_labs_end_to_end_warnings)
+                                    .setPositiveButton(R.string.logout) { _, _ ->
+                                        CommonActivityUtils.logout(activity)
+                                    }
+                                    .setNegativeButton(R.string.cancel) { _, _ ->
+                                        useCryptoPref.isChecked = false
+                                    }
+                                    .setOnCancelListener {
+                                        useCryptoPref.isChecked = false
+                                    }
+                                    .show()
+                        }
+                    } else {
+                        val newValue = newValueAsVoid as Boolean
 
-                    if (mSession.isCryptoEnabled != newValue) {
-                        displayLoadingView()
+                        if (mSession.isCryptoEnabled != newValue) {
+                            displayLoadingView()
 
-                        mSession.enableCrypto(newValue, object : ApiCallback<Void> {
-                            private fun refresh() {
-                                activity?.runOnUiThread {
-                                    hideLoadingView()
-                                    useCryptoPref.isChecked = mSession.isCryptoEnabled
+                            mSession.enableCrypto(newValue, object : ApiCallback<Void> {
+                                private fun refresh() {
+                                    activity?.runOnUiThread {
+                                        hideLoadingView()
+                                        useCryptoPref.isChecked = mSession.isCryptoEnabled
 
-                                    if (mSession.isCryptoEnabled) {
-                                        mLabsCategory.removePreference(useCryptoPref)
-                                        mLabsCategory.addPreference(cryptoIsEnabledPref)
+                                        if (mSession.isCryptoEnabled) {
+                                            mLabsCategory.removePreference(useCryptoPref)
+                                            mLabsCategory.addPreference(cryptoIsEnabledPref)
+                                        }
                                     }
                                 }
-                            }
 
-                            override fun onSuccess(info: Void?) {
-                                useCryptoPref.isEnabled = false
-                                refresh()
-                            }
+                                override fun onSuccess(info: Void?) {
+                                    useCryptoPref.isEnabled = false
+                                    refresh()
+                                }
 
-                            override fun onNetworkError(e: Exception) {
-                                useCryptoPref.isChecked = false
-                            }
+                                override fun onNetworkError(e: Exception) {
+                                    useCryptoPref.isChecked = false
+                                }
 
-                            override fun onMatrixError(e: MatrixError) {
-                                useCryptoPref.isChecked = false
-                            }
+                                override fun onMatrixError(e: MatrixError) {
+                                    useCryptoPref.isChecked = false
+                                }
 
-                            override fun onUnexpectedError(e: Exception) {
-                                useCryptoPref.isChecked = false
-                            }
-                        })
+                                override fun onUnexpectedError(e: Exception) {
+                                    useCryptoPref.isChecked = false
+                                }
+                            })
+                        }
                     }
+
+                    true
+                }
+            }
+
+            // Lazy Loading Management
+            findPreference(PreferencesManager.SETTINGS_LAZY_LOADING_PREFERENCE_KEY)
+                    .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val bNewValue = newValue as Boolean
+
+                if (!bNewValue) {
+                    // Disable LazyLoading, just reload the sessions
+                    PreferencesManager.setUserRefuseLazyLoading(appContext)
+                    Matrix.getInstance(appContext).reloadSessions(appContext, true)
+                } else {
+                    // Try to enable LazyLoading
+                    displayLoadingView()
+
+                    mSession.canEnableLazyLoading(object : SimpleApiCallback<Boolean>() {
+                        override fun onSuccess(info: Boolean?) {
+                            if (info == true) {
+                                // Lazy loading can be enabled
+                                PreferencesManager.setUseLazyLoading(activity, true)
+
+                                // Reload the sessions
+                                Matrix.getInstance(appContext).reloadSessions(appContext, true)
+                            } else {
+                                // The server does not support lazy loading yet
+                                hideLoadingView()
+
+                                context?.let {
+                                    AlertDialog.Builder(it)
+                                            .setTitle(R.string.dialog_title_error)
+                                            .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
+                                            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                            .show()
+                                }
+                            }
+                        }
+
+                        override fun onNetworkError(e: Exception) {
+                            hideLoadingView()
+                            activity?.toast(R.string.network_error)
+                        }
+
+                        override fun onMatrixError(e: MatrixError) {
+                            hideLoadingView()
+                            activity?.toast(R.string.network_error)
+                        }
+
+                        override fun onUnexpectedError(e: Exception) {
+                            hideLoadingView()
+                            activity?.toast(R.string.network_error)
+                        }
+                    })
+                }
+
+                // Do not update the value now when the user wants to enable the lazy loading
+                !bNewValue
+            }
+
+            // SaveMode Management
+            findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
+                    .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val sessions = Matrix.getMXSessions(activity)
+                for (session in sessions) {
+                    session.setUseDataSaveMode(newValue as Boolean)
                 }
 
                 true
             }
+        } else {
+            removeLabsPreference()
         }
-
-        // Lazy Loading Management
-        findPreference(PreferencesManager.SETTINGS_LAZY_LOADING_PREFERENCE_KEY)
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            val bNewValue = newValue as Boolean
-
-            if (!bNewValue) {
-                // Disable LazyLoading, just reload the sessions
-                PreferencesManager.setUserRefuseLazyLoading(appContext)
-                Matrix.getInstance(appContext).reloadSessions(appContext, true)
-            } else {
-                // Try to enable LazyLoading
-                displayLoadingView()
-
-                mSession.canEnableLazyLoading(object : SimpleApiCallback<Boolean>() {
-                    override fun onSuccess(info: Boolean?) {
-                        if (info == true) {
-                            // Lazy loading can be enabled
-                            PreferencesManager.setUseLazyLoading(activity, true)
-
-                            // Reload the sessions
-                            Matrix.getInstance(appContext).reloadSessions(appContext, true)
-                        } else {
-                            // The server does not support lazy loading yet
-                            hideLoadingView()
-
-                            context?.let {
-                                AlertDialog.Builder(it)
-                                        .setTitle(R.string.dialog_title_error)
-                                        .setMessage(R.string.error_lazy_loading_not_supported_by_home_server)
-                                        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                        .show()
-                            }
-                        }
-                    }
-
-                    override fun onNetworkError(e: Exception) {
-                        hideLoadingView()
-                        activity?.toast(R.string.network_error)
-                    }
-
-                    override fun onMatrixError(e: MatrixError) {
-                        hideLoadingView()
-                        activity?.toast(R.string.network_error)
-                    }
-
-                    override fun onUnexpectedError(e: Exception) {
-                        hideLoadingView()
-                        activity?.toast(R.string.network_error)
-                    }
-                })
-            }
-
-            // Do not update the value now when the user wants to enable the lazy loading
-            !bNewValue
-        }
-
-        // SaveMode Management
-        findPreference(PreferencesManager.SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY)
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            val sessions = Matrix.getMXSessions(activity)
-            for (session in sessions) {
-                session.setUseDataSaveMode(newValue as Boolean)
-            }
-
-            true
-        }
-
 
         if (resources.getBoolean(R.bool.settings_encryption_visible)) {
             // Device list
@@ -3036,7 +3039,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun removeHomeServerPreference() {
         mAdvancedCategory.removePreference(findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY))
     }
-    
+
     private fun removeIdentityServerPreference() {
         mAdvancedCategory.removePreference(identityServerPreference)
     }
@@ -3053,6 +3056,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAppInfoPreference() {
         mOtherCategory.removePreference(findPreference(APP_INFO_LINK_PREFERENCE_KEY))
+    }
+
+    private fun removeLabsPreference() {
+        preferenceScreen.removePreference(mLabsCategory)
+        preferenceScreen.removePreference(findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_DIVIDER_KEY))
     }
 
     private fun removeVersionPreference() {

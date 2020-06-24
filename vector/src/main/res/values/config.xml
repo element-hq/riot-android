@@ -76,4 +76,5 @@
     <bool name="settings_clear_cache_visible">false</bool>
     <bool name="settings_home_server_visible">false</bool>
     <bool name="settings_identity_server_visible">false</bool>
+    <bool name="settings_labs_category_visible">false</bool>
 </resources>
