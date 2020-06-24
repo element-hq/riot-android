@@ -433,7 +433,7 @@
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_advanced" android:key="SETTINGS_ADVANCED_PREFERENCE_KEY">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"

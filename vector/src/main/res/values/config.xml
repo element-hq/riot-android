@@ -74,4 +74,6 @@
     <bool name="settings_keep_media_visible">false</bool>
     <bool name="settings_clear_media_cache_visible">false</bool>
     <bool name="settings_clear_cache_visible">false</bool>
+    <bool name="settings_home_server_visible">false</bool>
+    <bool name="settings_identity_server_visible">false</bool>
 </resources>

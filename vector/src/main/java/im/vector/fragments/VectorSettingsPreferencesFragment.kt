@@ -385,6 +385,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mOtherCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_OTHERS_PREFERENCE_KEY) as PreferenceCategory
     }
+    private val mAdvancedCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_ADVANCED_PREFERENCE_KEY) as PreferenceCategory
+    }
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
@@ -792,11 +795,19 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 .summary = mSession.myUserId
 
         // home server
-        findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
-                .summary = mSession.homeServerConfig.homeserverUri.toString()
+        if (resources.getBoolean(R.bool.settings_home_server_visible)) {
+            findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
+                    .summary = mSession.homeServerConfig.homeserverUri.toString()
+        } else {
+            removeHomeServerPreference()
+        }
 
         // identity server
-        updateIdentityServerPref()
+        if (resources.getBoolean(R.bool.settings_identity_server_visible)) {
+            updateIdentityServerPref()
+        } else {
+            removeIdentityServerPreference()
+        }
 
         if (resources.getBoolean(R.bool.settings_integration_category_visible)) {
             (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? VectorSwitchPreference)?.let {
@@ -3022,6 +3033,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         preferenceScreen.removePreference(mDeactivateAccountCategory)
     }
 
+    private fun removeHomeServerPreference() {
+        mAdvancedCategory.removePreference(findPreference(PreferencesManager.SETTINGS_HOME_SERVER_PREFERENCE_KEY))
+    }
+    
+    private fun removeIdentityServerPreference() {
+        mAdvancedCategory.removePreference(identityServerPreference)
+    }
+
     private fun removeIntegrationPreference() {
         preferenceScreen.removePreference(mIntegrationCategory)
         preferenceScreen.removePreference(mIntegrationCategoryDivider)
@@ -3071,6 +3090,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun removeClearCachePreference() {
         mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY))
     }
+
     /**
      * Force the refresh of the devices list.<br></br>
      * The devices list is the list of the devices where the user as looged in.
