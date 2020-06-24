@@ -216,6 +216,26 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(NotificationAreaView.SHOW_INFO_AREA_KEY)
     }
 
+    //media
+    private val mMediaPreferenceCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_MEDIA_CATEGORY_PREFERENCE_KEY) as PreferenceCategory
+    }
+    private val mNativeCameraPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY) as SwitchPreference
+    }
+    private val mPlayShutterSoundPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_PLAY_SHUTTER_SOUND_KEY) as SwitchPreference
+    }
+    private val mPreviewMediaBeforeSendingPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY) as SwitchPreference
+    }
+    private val mDefaultCompressionPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY) as ListPreference
+    }
+    private val mDefaultMediaSourcePreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_DEFAULT_MEDIA_SOURCE_KEY) as ListPreference
+    }
+
     // Local contacts
     private val mContactSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
@@ -487,6 +507,21 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (!resources.getBoolean(R.bool.settings_show_info_area_visible))
             removeShowInfoAreaPreference()
+
+        if (!resources.getBoolean(R.bool.settings_use_native_camera_visible))
+            removeNativeCameraPreference()
+
+        if (!resources.getBoolean(R.bool.settings_play_shutter_sound_visible))
+            removePlayShutterSoundPreference()
+
+        if (!resources.getBoolean(R.bool.settings_preview_media_before_sending_visible))
+            removePreviewMediaBeforeSendingPreference()
+
+        if (!resources.getBoolean(R.bool.settings_default_compression_visible))
+            removeDefaultCompressionPreference()
+
+        if (!resources.getBoolean(R.bool.settings_default_media_source_visible))
+            removeDefaultMediaSourcePreference()
 
         // Url preview
         if (resources.getBoolean(R.bool.settings_inline_url_visible))
@@ -2878,6 +2913,26 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private fun removeFlairPreference() {
         preferenceScreen.removePreference(mGroupsFlairCategory)
         preferenceScreen.removePreference(findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY_DIVIDER))
+    }
+
+    private fun removeDefaultMediaSourcePreference() {
+        mMediaPreferenceCategory.removePreference(mDefaultMediaSourcePreference)
+    }
+
+    private fun removeNativeCameraPreference() {
+        mMediaPreferenceCategory.removePreference(mNativeCameraPreference)
+    }
+
+    private fun removePlayShutterSoundPreference() {
+        mMediaPreferenceCategory.removePreference(mPlayShutterSoundPreference)
+    }
+
+    private fun removePreviewMediaBeforeSendingPreference() {
+        mMediaPreferenceCategory.removePreference(mPreviewMediaBeforeSendingPreference)
+    }
+
+    private fun removeDefaultCompressionPreference() {
+        mMediaPreferenceCategory.removePreference(mDefaultCompressionPreference)
     }
 
     /**

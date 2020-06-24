@@ -54,4 +54,9 @@
     <bool name="settings_show_timestamp_visible">false</bool>
     <bool name="settings_show_read_receipt_visible">false</bool>
     <bool name="settings_flair_visible">false</bool>
+    <bool name="settings_use_native_camera_visible">false</bool>
+    <bool name="settings_play_shutter_sound_visible">false</bool>
+    <bool name="settings_preview_media_before_sending_visible">false</bool>
+    <bool name="settings_default_compression_visible">false</bool>
+    <bool name="settings_default_media_source_visible">false</bool>
 </resources>
