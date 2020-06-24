@@ -455,7 +455,7 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations" android:key="SETTINGS_INTEGRATION_ALLOW_CATEGORY_KEY">
 
         <im.vector.preference.VectorPreference
             android:focusable="false"

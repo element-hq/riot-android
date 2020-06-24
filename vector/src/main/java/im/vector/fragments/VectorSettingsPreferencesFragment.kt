@@ -367,6 +367,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
     }
 
+    private val mIntegrationCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW_CATEGORY_KEY) as PreferenceCategory
+    }
+    private val mIntegrationCategoryDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW_CATEGORY_DIVIDER_KEY) as Preference
+    }
     private val mAnalyticsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY) as PreferenceCategory
     }
@@ -769,7 +775,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             refreshDevicesList()
             //Refresh Key Management section
             refreshKeysManagementSection()
-        }else{
+        } else {
             removeCryptographyPreference()
             removeDevicesPreference()
         }
@@ -787,55 +793,62 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // identity server
         updateIdentityServerPref()
 
+        if (resources.getBoolean(R.bool.settings_integration_category_visible)) {
+            (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? VectorSwitchPreference)?.let {
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
 
-        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? VectorSwitchPreference)?.let {
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    //Disable it while updating the state, will be re-enabled by the account data listener.
+                    it.isEnabled = false
+                    mSession.integrationManager.enableIntegrationManagerUsage(newValue as Boolean, object : ApiCallback<Void> {
+                        override fun onSuccess(info: Void?) {
+                            refreshIntegrationManagerSettings()
+                        }
 
-                //Disable it while updating the state, will be re-enabled by the account data listener.
-                it.isEnabled = false
-                mSession.integrationManager.enableIntegrationManagerUsage(newValue as Boolean, object : ApiCallback<Void> {
-                    override fun onSuccess(info: Void?) {
-                        refreshIntegrationManagerSettings()
-                    }
+                        override fun onUnexpectedError(e: java.lang.Exception?) {
+                            refreshIntegrationManagerSettings()
+                        }
 
-                    override fun onUnexpectedError(e: java.lang.Exception?) {
-                        refreshIntegrationManagerSettings()
-                    }
+                        override fun onNetworkError(e: java.lang.Exception?) {
+                            refreshIntegrationManagerSettings()
+                        }
 
-                    override fun onNetworkError(e: java.lang.Exception?) {
-                        refreshIntegrationManagerSettings()
-                    }
+                        override fun onMatrixError(e: MatrixError?) {
+                            refreshIntegrationManagerSettings()
+                        }
 
-                    override fun onMatrixError(e: MatrixError?) {
-                        refreshIntegrationManagerSettings()
-                    }
-
-                })
-                true
+                    })
+                    true
+                }
             }
+        }else{
+            removeIntegrationPreference()
         }
 
         // Analytics
-
         // Analytics tracking management
-        (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
-            // On if the analytics tracking is activated
-            it.isChecked = PreferencesManager.useAnalytics(appContext)
+        if (resources.getBoolean(R.bool.settings_analytics_category_visible)) {
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
-                true
+            (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
+                // On if the analytics tracking is activated
+                it.isChecked = PreferencesManager.useAnalytics(appContext)
+
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
+                    true
+                }
             }
-        }
 
-        // Rageshake Management
-        (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
-            it.isChecked = PreferencesManager.useRageshake(appContext)
+            // Rageshake Management
+            (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
+                it.isChecked = PreferencesManager.useRageshake(appContext)
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
-                true
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
+                    true
+                }
             }
+        } else {
+            removeAnalyticsPreference()
         }
 
         // preference to start the App info screen, to facilitate App permissions access
@@ -920,9 +933,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 false
             }
-            if (!resources.getBoolean(R.bool.settings_analytics_category_visible)) {
-                removeAnalyticsPreference()
-            }
         }
 
         // clear medias cache
@@ -972,23 +982,24 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             false
         }
 
-        if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)){
-        mUseDefaultStunPreference.let {
-            activity?.let { activity ->
-                it.isChecked = PreferencesManager.useDefaultTurnServer(activity)
-                val stun = getString(R.string.default_stun_server)
-                it.summary = getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
-                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    if (mUseDefaultStunPreference.isChecked) {
-                        MXCallsManager.defaultStunServerUri = stun
-                    } else {
-                        MXCallsManager.defaultStunServerUri = null
+        if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)) {
+            mUseDefaultStunPreference.let {
+                activity?.let { activity ->
+                    it.isChecked = PreferencesManager.useDefaultTurnServer(activity)
+                    val stun = getString(R.string.default_stun_server)
+                    it.summary = getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
+                    it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        if (mUseDefaultStunPreference.isChecked) {
+                            MXCallsManager.defaultStunServerUri = stun
+                        } else {
+                            MXCallsManager.defaultStunServerUri = null
+                        }
+                        PreferencesManager.setUseDefaultTurnServer(activity, mUseDefaultStunPreference.isChecked)
+                        false
                     }
-                    PreferencesManager.setUseDefaultTurnServer(activity, mUseDefaultStunPreference.isChecked)
-                    false
                 }
             }
-        }}else{
+        } else {
             removeAllowFallbackCallPreference()
         }
 
@@ -1252,7 +1263,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this)
 
             mSession.integrationManager.addListener(integrationManagerManagerListener)
-            refreshIntegrationManagerSettings()
+            if (resources.getBoolean(R.bool.settings_integration_category_visible))
+                refreshIntegrationManagerSettings()
 
             // refresh anything else
             refreshPreferences()
@@ -2957,6 +2969,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAllowFallbackCallPreference() {
         mCallPreferenceCategory.removePreference(mUseDefaultStunPreference)
+    }
+
+    private fun removeIntegrationPreference() {
+        preferenceScreen.removePreference(mIntegrationCategory)
+        preferenceScreen.removePreference(mIntegrationCategoryDivider)
     }
 
     private fun removeAnalyticsPreference() {
