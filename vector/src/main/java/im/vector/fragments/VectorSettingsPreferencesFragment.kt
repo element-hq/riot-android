@@ -67,6 +67,7 @@ import im.vector.settings.VectorLocale
 import im.vector.ui.themes.ThemeUtils
 import im.vector.ui.util.SimpleTextWatcher
 import im.vector.util.*
+import im.vector.view.NotificationAreaView
 import org.jetbrains.anko.toast
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.call.MXCallsManager
@@ -204,6 +205,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
     private val mDisplayNameChangePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY)
+    }
+    private val mVibrateMentionPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_VIBRATE_ON_MENTION_KEY)
+    }
+    private val mSendMessageWithEnterPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SEND_MESSAGE_WITH_ENTER)
+    }
+    private val mShowInfoAreaPreference by lazy {
+        findPreference(NotificationAreaView.SHOW_INFO_AREA_KEY)
     }
 
     // Local contacts
@@ -468,6 +478,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (!resources.getBoolean(R.bool.settings_show_display_name_change_event_visible))
             removeDisplayNameChangePreference()
+
+        if (!resources.getBoolean(R.bool.settings_vibrate_mention_visible))
+            removeVibrateMentionPreference()
+
+        if (!resources.getBoolean(R.bool.settings_send_message_with_enter_visible))
+            removeSendMessageWithEnterPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_info_area_visible))
+            removeShowInfoAreaPreference()
 
         // Url preview
         if (resources.getBoolean(R.bool.settings_inline_url_visible))
@@ -2836,6 +2855,18 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeDisplayNameChangePreference() {
         mUserInterfaceCategory.removePreference(mDisplayNameChangePreference)
+    }
+
+    private fun removeVibrateMentionPreference() {
+        mUserInterfaceCategory.removePreference(mVibrateMentionPreference)
+    }
+
+    private fun removeSendMessageWithEnterPreference() {
+        mUserInterfaceCategory.removePreference(mSendMessageWithEnterPreference)
+    }
+
+    private fun removeShowInfoAreaPreference() {
+        mUserInterfaceCategory.removePreference(mShowInfoAreaPreference)
     }
 
     private fun removeShowUrlPreviewPreference() {

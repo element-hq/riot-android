@@ -45,6 +45,9 @@
     <bool name="settings_language_visible">false</bool>
     <bool name="settings_inline_url_visible">false</bool>
     <bool name="settings_enable_markdown_visible">false</bool>
+    <bool name="settings_vibrate_mention_visible">false</bool>
+    <bool name="settings_show_info_area_visible">false</bool>
+    <bool name="settings_send_message_with_enter_visible">false</bool>
     <bool name="settings_show_join_leave_event_visible">false</bool>
     <bool name="settings_show_display_name_change_event_visible">false</bool>
     <bool name="settings_send_typing_notification_visible">false</bool>
