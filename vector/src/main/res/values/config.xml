@@ -63,4 +63,5 @@
     <bool name="settings_encryption_visible">false</bool>
     <bool name="settings_analytics_category_visible">false</bool>
     <bool name="settings_integration_category_visible">false</bool>
+    <bool name="settings_deactivate_account_visible">false</bool>
 </resources>

@@ -379,7 +379,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mAnalyticsCategoryDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_ANALYTICS_DIVIDER_PREFERENCE_KEY) as Preference
     }
-
+    private val mDeactivateAccountCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY) as PreferenceCategory
+    }
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
@@ -1031,11 +1033,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Deactivate account section
 
         // deactivate account
-        findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let { startActivity(DeactivateAccountActivity.getIntent(it)) }
+        if (resources.getBoolean(R.bool.settings_deactivate_account_visible)) {
+            findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                activity?.let { startActivity(DeactivateAccountActivity.getIntent(it)) }
 
-            false
+                false
+            }
+        }else{
+            removeDeactivateAccountPreference()
         }
     }
 
@@ -2969,6 +2975,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAllowFallbackCallPreference() {
         mCallPreferenceCategory.removePreference(mUseDefaultStunPreference)
+    }
+
+    private fun removeDeactivateAccountPreference() {
+        preferenceScreen.removePreference(mDeactivateAccountCategory)
     }
 
     private fun removeIntegrationPreference() {
