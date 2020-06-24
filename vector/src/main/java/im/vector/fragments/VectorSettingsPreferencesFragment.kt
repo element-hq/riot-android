@@ -757,11 +757,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             true
         }
 
-        // Device list
-        refreshDevicesList()
 
-        //Refresh Key Management section
-        refreshKeysManagementSection()
+        if (resources.getBoolean(R.bool.settings_encryption_visible)) {
+            // Device list
+            refreshDevicesList()
+            //Refresh Key Management section
+            refreshKeysManagementSection()
+        }else{
+            removeCryptographyPreference()
+            removeDevicesPreference()
+        }
 
         // Advanced settings
 

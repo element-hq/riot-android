@@ -60,4 +60,5 @@
     <bool name="settings_default_compression_visible">false</bool>
     <bool name="settings_default_media_source_visible">false</bool>
     <bool name="settings_allow_fallback_call_visible">false</bool>
+    <bool name="settings_encryption_visible">false</bool>
 </resources>
