@@ -196,9 +196,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mShowUrlPreviewPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference
     }
-
     private val mEnableMarkdownPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ENABLE_MARKDOWN_KEY) as SwitchPreference
+    }
+    private val mShowJoinLeaveEventPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY) as SwitchPreference
+    }
+    private val mDisplayNameChangePreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY)
     }
 
     // Local contacts
@@ -457,6 +462,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (!resources.getBoolean(R.bool.settings_enable_markdown_visible))
             removeEnableMarkdownPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_join_leave_event_visible))
+            removeShowJoinLeaveEventPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_display_name_change_event_visible))
+            removeDisplayNameChangePreference()
 
         // Url preview
         if (resources.getBoolean(R.bool.settings_inline_url_visible))
@@ -2817,6 +2828,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeEnableMarkdownPreference() {
         mUserInterfaceCategory.removePreference(mEnableMarkdownPreference)
+    }
+
+    private fun removeShowJoinLeaveEventPreference() {
+        mUserInterfaceCategory.removePreference(mShowJoinLeaveEventPreference)
+    }
+
+    private fun removeDisplayNameChangePreference() {
+        mUserInterfaceCategory.removePreference(mDisplayNameChangePreference)
     }
 
     private fun removeShowUrlPreviewPreference() {
