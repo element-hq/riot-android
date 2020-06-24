@@ -133,7 +133,7 @@ android {
         }
 
         act {
-            applicationId "au.gov.act.communicator"
+            applicationId "au.gov.act.hd.aether"
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
