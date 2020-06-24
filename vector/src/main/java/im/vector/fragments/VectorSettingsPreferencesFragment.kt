@@ -193,6 +193,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mShowReadReceiptPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_SHOW_READ_RECEIPTS_KEY)
     }
+    private val mShowUrlPreviewPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference
+    }
+
+    private val mEnableMarkdownPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_ENABLE_MARKDOWN_KEY) as SwitchPreference
+    }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
@@ -448,8 +455,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         if (!resources.getBoolean(R.bool.settings_show_read_receipt_visible))
             removeShowReadReceiptPreference()
 
+        if (!resources.getBoolean(R.bool.settings_enable_markdown_visible))
+            removeEnableMarkdownPreference()
+
         // Url preview
-        (findPreference(PreferencesManager.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
+        if (resources.getBoolean(R.bool.settings_inline_url_visible))
+            mShowUrlPreviewPreference.let {
             it.isChecked = mSession.isURLPreviewEnabled
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -480,9 +491,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         }
                     })
                 }
-
                 false
             }
+        }else{
+            removeShowUrlPreviewPreference()
         }
 
         // Themes
@@ -2801,6 +2813,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeShowReadReceiptPreference() {
         mUserInterfaceCategory.removePreference(mShowReadReceiptPreference)
+    }
+
+    private fun removeEnableMarkdownPreference() {
+        mUserInterfaceCategory.removePreference(mEnableMarkdownPreference)
+    }
+
+    private fun removeShowUrlPreviewPreference() {
+        mUserInterfaceCategory.removePreference(mShowUrlPreviewPreference)
     }
 
     /**
