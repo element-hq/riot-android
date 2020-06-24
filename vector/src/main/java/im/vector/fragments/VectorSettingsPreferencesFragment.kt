@@ -382,6 +382,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mDeactivateAccountCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY) as PreferenceCategory
     }
+    private val mOtherCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_OTHERS_PREFERENCE_KEY) as PreferenceCategory
+    }
     /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
@@ -822,14 +825,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     true
                 }
             }
-        }else{
+        } else {
             removeIntegrationPreference()
         }
 
         // Analytics
         // Analytics tracking management
         if (resources.getBoolean(R.bool.settings_analytics_category_visible)) {
-
             (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
                 // On if the analytics tracking is activated
                 it.isChecked = PreferencesManager.useAnalytics(appContext)
@@ -854,128 +856,163 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // preference to start the App info screen, to facilitate App permissions access
-        findPreference(APP_INFO_LINK_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        if (resources.getBoolean(R.bool.settings_application_info_visible)) {
+            findPreference(APP_INFO_LINK_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
-            activity?.let {
-                val intent = Intent().apply {
-                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                activity?.let {
+                    val intent = Intent().apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-                    val uri = appContext?.let { Uri.fromParts("package", it.packageName, null) }
+                        val uri = appContext?.let { Uri.fromParts("package", it.packageName, null) }
 
-                    data = uri
+                        data = uri
+                    }
+                    it.applicationContext.startActivity(intent)
                 }
-                it.applicationContext.startActivity(intent)
-            }
 
-            true
+                true
+            }
+        } else {
+            removeAppInfoPreference()
         }
 
         // application version
-        (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
-            it.summary = VectorUtils.getApplicationVersion(appContext)
+        if (resources.getBoolean(R.bool.settings_version_visible)) {
+            (findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY)).let {
+                it.summary = VectorUtils.getApplicationVersion(appContext)
 
-            it.setOnPreferenceClickListener {
-                appContext?.let {
-                    copyToClipboard(it, VectorUtils.getApplicationVersion(it))
+                it.setOnPreferenceClickListener {
+                    appContext?.let {
+                        copyToClipboard(it, VectorUtils.getApplicationVersion(it))
+                    }
+                    true
                 }
-                true
             }
+        } else {
+            removeVersionPreference()
         }
 
         // olm version
-        findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
-                .summary = mSession.getCryptoVersion(appContext, false)
-
+        if (resources.getBoolean(R.bool.settings_olm_version_visible)) {
+            findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
+                    .summary = mSession.getCryptoVersion(appContext, false)
+        } else {
+            removeOlmVersionPreference()
+        }
         // copyright
-        findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppCopyright()
-            false
+        if (resources.getBoolean(R.bool.settings_copyright_visible)) {
+            findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                VectorUtils.displayAppCopyright()
+                false
+            }
+        } else {
+            removeCopyRightPreference()
         }
 
         // terms & conditions
-        findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppTac()
-            false
+        if (resources.getBoolean(R.bool.settings_terms_condition_visible)) {
+            findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                VectorUtils.displayAppTac()
+                false
+            }
+        } else {
+            removeTermsAndCOnditionPreference()
         }
 
         // privacy policy
-        findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayAppPrivacyPolicy()
-            false
+        if (resources.getBoolean(R.bool.settings_privacy_policy_visible)) {
+            findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                VectorUtils.displayAppPrivacyPolicy()
+                false
+            }
+        } else {
+            removePrivacyPolicyPreference()
         }
 
         // third party notice
-        findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            VectorUtils.displayThirdPartyLicenses()
-            false
+        if (resources.getBoolean(R.bool.settings_third_party_notice_visible)) {
+            findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                VectorUtils.displayThirdPartyLicenses()
+                false
+            }
+        } else {
+            removeThirdPartyNoticePreference()
         }
 
         // update keep medias period
-        findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
-            it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+        if (resources.getBoolean(R.bool.settings_keep_media_visible)) {
+            findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
+                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                context?.let { context: Context ->
-                    AlertDialog.Builder(context)
-                            .setSingleChoiceItems(R.array.media_saving_choice,
-                                    PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
-                                PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
-                                d.cancel()
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    context?.let { context: Context ->
+                        AlertDialog.Builder(context)
+                                .setSingleChoiceItems(R.array.media_saving_choice,
+                                        PreferencesManager.getSelectedMediasSavingPeriod(activity)) { d, n ->
+                                    PreferencesManager.setSelectedMediasSavingPeriod(activity, n)
+                                    d.cancel()
 
-                                it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
-                            }
-                            .show()
+                                    it.summary = PreferencesManager.getSelectedMediasSavingPeriodString(activity)
+                                }
+                                .show()
+                    }
+
+                    false
                 }
-
-                false
             }
+        } else {
+            removeKeepMediaPreference()
         }
 
         // clear medias cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
-            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long) {
-                    if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
-                    }
-                }
-            })
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayLoadingView()
-
-                val task = ClearMediaCacheAsyncTask(
-                        backgroundTask = {
-                            mSession.mediaCache.clear()
-                            activity?.let { it -> Glide.get(it).clearDiskCache() }
-                        },
-                        onCompleteTask = {
-                            hideLoadingView()
-
-                            MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
-                                override fun onSuccess(size: Long) {
-                                    it.summary = android.text.format.Formatter.formatFileSize(activity, size)
-                                }
-                            })
+        if (resources.getBoolean(R.bool.settings_clear_media_cache_visible)) {
+            findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
+                MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                    override fun onSuccess(size: Long) {
+                        if (null != activity) {
+                            it.summary = android.text.format.Formatter.formatFileSize(activity, size)
                         }
-                )
+                    }
+                })
 
-                try {
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                } catch (e: Exception) {
-                    Log.e(LOG_TAG, "## mSession.getMediaCache().clear() failed " + e.message, e)
-                    task.cancel(true)
-                    hideLoadingView()
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    displayLoadingView()
+
+                    val task = ClearMediaCacheAsyncTask(
+                            backgroundTask = {
+                                mSession.mediaCache.clear()
+                                activity?.let { it -> Glide.get(it).clearDiskCache() }
+                            },
+                            onCompleteTask = {
+                                hideLoadingView()
+
+                                MXMediaCache.getCachesSize(activity, object : SimpleApiCallback<Long>() {
+                                    override fun onSuccess(size: Long) {
+                                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+                                    }
+                                })
+                            }
+                    )
+
+                    try {
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    } catch (e: Exception) {
+                        Log.e(LOG_TAG, "## mSession.getMediaCache().clear() failed " + e.message, e)
+                        task.cancel(true)
+                        hideLoadingView()
+                    }
+
+                    false
                 }
-
-                false
             }
+        } else {
+            removeClearMediaPreference()
         }
 
         // Incoming call sounds
@@ -1014,20 +1051,24 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // clear cache
-        findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
-            MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
-                override fun onSuccess(size: Long) {
-                    if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+        if (resources.getBoolean(R.bool.settings_clear_cache_visible)) {
+            findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
+                MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
+                    override fun onSuccess(size: Long) {
+                        if (null != activity) {
+                            it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+                        }
                     }
-                }
-            })
+                })
 
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayLoadingView()
-                Matrix.getInstance(appContext).reloadSessions(appContext, true)
-                false
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    displayLoadingView()
+                    Matrix.getInstance(appContext).reloadSessions(appContext, true)
+                    false
+                }
             }
+        } else {
+            removeClearCachePreference()
         }
 
         // Deactivate account section
@@ -1040,7 +1081,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
                 false
             }
-        }else{
+        } else {
             removeDeactivateAccountPreference()
         }
     }
@@ -2991,6 +3032,45 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         preferenceScreen.removePreference(mAnalyticsCategoryDivider)
     }
 
+    private fun removeAppInfoPreference() {
+        mOtherCategory.removePreference(findPreference(APP_INFO_LINK_PREFERENCE_KEY))
+    }
+
+    private fun removeVersionPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_VERSION_PREFERENCE_KEY))
+    }
+
+    private fun removeOlmVersionPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_OLM_VERSION_PREFERENCE_KEY))
+    }
+
+    private fun removeCopyRightPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_COPYRIGHT_PREFERENCE_KEY))
+    }
+
+    private fun removeTermsAndCOnditionPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY))
+    }
+
+    private fun removePrivacyPolicyPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY))
+    }
+
+    private fun removeThirdPartyNoticePreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY))
+    }
+
+    private fun removeKeepMediaPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY))
+    }
+
+    private fun removeClearMediaPreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY))
+    }
+
+    private fun removeClearCachePreference() {
+        mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY))
+    }
     /**
      * Force the refresh of the devices list.<br></br>
      * The devices list is the list of the devices where the user as looged in.
