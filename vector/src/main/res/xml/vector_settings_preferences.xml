@@ -475,7 +475,7 @@
             android:title="@string/settings_integration_manager" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_INTEGRATION_ALLOW_CATEGORY_DIVIDER_KEY"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
