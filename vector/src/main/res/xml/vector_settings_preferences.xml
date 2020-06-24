@@ -492,7 +492,7 @@
             android:title="@string/send_bug_report_rage_shake" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_ANALYTICS_DIVIDER_PREFERENCE_KEY"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY"

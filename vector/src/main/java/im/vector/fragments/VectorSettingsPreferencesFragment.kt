@@ -367,6 +367,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY) as VectorPreference
     }
 
+    private val mAnalyticsCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_ANALYTICS_PREFERENCE_KEY) as PreferenceCategory
+    }
+    private val mAnalyticsCategoryDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_ANALYTICS_DIVIDER_PREFERENCE_KEY) as Preference
+    }
 
     /* ==========================================================================================
      * Life cycle
@@ -913,6 +919,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
 
                 false
+            }
+            if (!resources.getBoolean(R.bool.settings_analytics_category_visible)) {
+                removeAnalyticsPreference()
             }
         }
 
@@ -2948,6 +2957,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAllowFallbackCallPreference() {
         mCallPreferenceCategory.removePreference(mUseDefaultStunPreference)
+    }
+
+    private fun removeAnalyticsPreference() {
+        preferenceScreen.removePreference(mAnalyticsCategory)
+        preferenceScreen.removePreference(mAnalyticsCategoryDivider)
     }
 
     /**
