@@ -320,6 +320,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val backgroundSyncModePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)
     }
+    private val mCallPreferenceCategory by lazy {
+        findPreference(PreferencesManager.SETTINGS_CALL_CATEGORY_PREFERENCE_KEY) as PreferenceCategory
+    }
     private val mUseRiotCallRingtonePreference by lazy {
         findPreference(PreferencesManager.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
     }
@@ -955,6 +958,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             false
         }
 
+        if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)){
         mUseDefaultStunPreference.let {
             activity?.let { activity ->
                 it.isChecked = PreferencesManager.useDefaultTurnServer(activity)
@@ -970,6 +974,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     false
                 }
             }
+        }}else{
+            removeAllowFallbackCallPreference()
         }
 
         mCallRingtonePreference.let {
@@ -2933,6 +2939,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeDefaultCompressionPreference() {
         mMediaPreferenceCategory.removePreference(mDefaultCompressionPreference)
+    }
+
+    private fun removeAllowFallbackCallPreference() {
+        mCallPreferenceCategory.removePreference(mUseDefaultStunPreference)
     }
 
     /**

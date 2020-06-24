@@ -307,7 +307,7 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_call_category" android:key="SETTINGS_CALL_CATEGORY_PREFERENCE_KEY">
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
