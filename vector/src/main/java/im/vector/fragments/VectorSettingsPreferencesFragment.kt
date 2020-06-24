@@ -491,39 +491,39 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // Url preview
         if (resources.getBoolean(R.bool.settings_inline_url_visible))
             mShowUrlPreviewPreference.let {
-            it.isChecked = mSession.isURLPreviewEnabled
+                it.isChecked = mSession.isURLPreviewEnabled
 
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                if (null != newValue && newValue as Boolean != mSession.isURLPreviewEnabled) {
-                    displayLoadingView()
-                    mSession.setURLPreviewStatus(newValue, object : ApiCallback<Void> {
-                        override fun onSuccess(info: Void?) {
-                            it.isChecked = mSession.isURLPreviewEnabled
-                            hideLoadingView()
-                        }
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    if (null != newValue && newValue as Boolean != mSession.isURLPreviewEnabled) {
+                        displayLoadingView()
+                        mSession.setURLPreviewStatus(newValue, object : ApiCallback<Void> {
+                            override fun onSuccess(info: Void?) {
+                                it.isChecked = mSession.isURLPreviewEnabled
+                                hideLoadingView()
+                            }
 
-                        private fun onError(errorMessage: String) {
-                            activity?.toast(errorMessage)
+                            private fun onError(errorMessage: String) {
+                                activity?.toast(errorMessage)
 
-                            onSuccess(null)
-                        }
+                                onSuccess(null)
+                            }
 
-                        override fun onNetworkError(e: Exception) {
-                            onError(e.localizedMessage)
-                        }
+                            override fun onNetworkError(e: Exception) {
+                                onError(e.localizedMessage)
+                            }
 
-                        override fun onMatrixError(e: MatrixError) {
-                            onError(e.localizedMessage)
-                        }
+                            override fun onMatrixError(e: MatrixError) {
+                                onError(e.localizedMessage)
+                            }
 
-                        override fun onUnexpectedError(e: Exception) {
-                            onError(e.localizedMessage)
-                        }
-                    })
+                            override fun onUnexpectedError(e: Exception) {
+                                onError(e.localizedMessage)
+                            }
+                        })
+                    }
+                    false
                 }
-                false
-            }
-        }else{
+            } else {
             removeShowUrlPreviewPreference()
         }
 
@@ -543,8 +543,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Flair
-        refreshGroupFlairsList()
-
+        if (resources.getBoolean(R.bool.settings_flair_visible))
+            refreshGroupFlairsList()
+        else
+            removeFlairPreference()
         // push rules
 
         // Notification privacy
@@ -2470,7 +2472,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     }
                 }
 
-                order?.let {order++}
+                order?.let { order++ }
                 mUserSettingsCategory.addPreference(preference)
             }
             addPhoneBtn?.let {
@@ -2871,6 +2873,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeShowUrlPreviewPreference() {
         mUserInterfaceCategory.removePreference(mShowUrlPreviewPreference)
+    }
+
+    private fun removeFlairPreference() {
+        preferenceScreen.removePreference(mGroupsFlairCategory)
+        preferenceScreen.removePreference(findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY_DIVIDER))
     }
 
     /**
@@ -3419,61 +3426,62 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             mPublicisedGroups = publicisedGroups.toMutableSet()
 
-            for ((prefIndex, group) in joinedGroups.withIndex()) {
-                val vectorGroupPreference = VectorGroupPreference(activity!!)
-                vectorGroupPreference.key = DEVICES_PREFERENCE_KEY_BASE + prefIndex
+            if (resources.getBoolean(R.bool.settings_flair_visible))
+                for ((prefIndex, group) in joinedGroups.withIndex()) {
+                    val vectorGroupPreference = VectorGroupPreference(activity!!)
+                    vectorGroupPreference.key = DEVICES_PREFERENCE_KEY_BASE + prefIndex
 
-                vectorGroupPreference.setGroup(group, mSession)
-                vectorGroupPreference.title = group.displayName
-                vectorGroupPreference.summary = group.groupId
+                    vectorGroupPreference.setGroup(group, mSession)
+                    vectorGroupPreference.title = group.displayName
+                    vectorGroupPreference.summary = group.groupId
 
-                vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
-                mGroupsFlairCategory.addPreference(vectorGroupPreference)
+                    vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
+                    mGroupsFlairCategory.addPreference(vectorGroupPreference)
 
-                vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    if (newValue is Boolean) {
-                        /*
-                         *  if mPublicisedGroup is null somehow, then
-                         *  we cant check it contains groupId or not
-                         *  so set isFlaired to false
-                        */
-                        val isFlaired = mPublicisedGroups?.contains(group.groupId) ?: false
+                    vectorGroupPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                        if (newValue is Boolean) {
+                            /*
+                             *  if mPublicisedGroup is null somehow, then
+                             *  we cant check it contains groupId or not
+                             *  so set isFlaired to false
+                            */
+                            val isFlaired = mPublicisedGroups?.contains(group.groupId) ?: false
 
-                        if (newValue != isFlaired) {
-                            displayLoadingView()
-                            mSession.groupsManager.updateGroupPublicity(group.groupId, newValue, object : ApiCallback<Void> {
-                                override fun onSuccess(info: Void?) {
-                                    hideLoadingView()
-                                    if (newValue) {
-                                        mPublicisedGroups?.add(group.groupId)
-                                    } else {
-                                        mPublicisedGroups?.remove(group.groupId)
+                            if (newValue != isFlaired) {
+                                displayLoadingView()
+                                mSession.groupsManager.updateGroupPublicity(group.groupId, newValue, object : ApiCallback<Void> {
+                                    override fun onSuccess(info: Void?) {
+                                        hideLoadingView()
+                                        if (newValue) {
+                                            mPublicisedGroups?.add(group.groupId)
+                                        } else {
+                                            mPublicisedGroups?.remove(group.groupId)
+                                        }
                                     }
-                                }
 
-                                private fun onError() {
-                                    hideLoadingView()
-                                    // restore default value
-                                    vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
-                                }
+                                    private fun onError() {
+                                        hideLoadingView()
+                                        // restore default value
+                                        vectorGroupPreference.isChecked = publicisedGroups.contains(group.groupId)
+                                    }
 
-                                override fun onNetworkError(e: Exception) {
-                                    onError()
-                                }
+                                    override fun onNetworkError(e: Exception) {
+                                        onError()
+                                    }
 
-                                override fun onMatrixError(e: MatrixError) {
-                                    onError()
-                                }
+                                    override fun onMatrixError(e: MatrixError) {
+                                        onError()
+                                    }
 
-                                override fun onUnexpectedError(e: Exception) {
-                                    onError()
-                                }
-                            })
+                                    override fun onUnexpectedError(e: Exception) {
+                                        onError()
+                                    }
+                                })
+                            }
                         }
+                        true
                     }
-                    true
                 }
-            }
 
             refreshCryptographyPreference(mMyDeviceInfo)
         }

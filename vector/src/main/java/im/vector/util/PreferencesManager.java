@@ -121,6 +121,7 @@ public class PreferencesManager {
 
     // flair
     public static final String SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY";
+    public static final String SETTINGS_GROUPS_FLAIR_KEY_DIVIDER = "SETTINGS_GROUPS_FLAIR_KEY_DIVIDER";
 
     // notifications
     public static final String SETTINGS_NOTIFICATIONS_KEY = "SETTINGS_NOTIFICATIONS_KEY";

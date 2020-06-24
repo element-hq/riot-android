@@ -53,4 +53,5 @@
     <bool name="settings_send_typing_notification_visible">false</bool>
     <bool name="settings_show_timestamp_visible">false</bool>
     <bool name="settings_show_read_receipt_visible">false</bool>
+    <bool name="settings_flair_visible">false</bool>
 </resources>
