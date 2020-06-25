@@ -349,6 +349,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.homeserver_layout)
     View mHomeServerOptionLayout;
 
+    @BindView(R.id.display_server_url_layout)
+    View customServerUrlLayout;
+
     // Registration Manager
     private RegistrationManager mRegistrationManager;
 
@@ -732,6 +735,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mHomeServerText.setText(loginConfig.getHomeServerUrl());
             mIdentityServerText.setText(loginConfig.getIdentityServerUrl());
             mUseCustomHomeServersCheckbox.performClick();
+        }
+
+        //hide/hide the custom server option according to config
+        if(getResources().getBoolean(R.bool.hide_custom_url_login)){
+            customServerUrlLayout.setVisibility(View.GONE);
+        }else{
+            customServerUrlLayout.setVisibility(View.VISIBLE);
         }
     }
 
