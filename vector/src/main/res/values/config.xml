@@ -52,6 +52,7 @@
     <bool name="settings_show_display_name_change_event_visible">true</bool>
     <bool name="settings_send_typing_notification_visible">true</bool>
     <bool name="settings_show_timestamp_visible">true</bool>
+    <bool name="settings_show_twelve_hour_timestamp_visible">true</bool>
     <bool name="settings_show_read_receipt_visible">true</bool>
     <bool name="settings_flair_visible">true</bool>
     <bool name="settings_use_native_camera_visible">true</bool>

@@ -191,6 +191,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mShowTimestampPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY)
     }
+    private val mShowTwelveHourTimestampPreference by lazy {
+        findPreference(PreferencesManager.SETTINGS_12_24_TIMESTAMPS_KEY)
+    }
     private val mShowReadReceiptPreference by lazy {
         findPreference(PreferencesManager.SETTINGS_SHOW_READ_RECEIPTS_KEY)
     }
@@ -508,6 +511,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         if (!resources.getBoolean(R.bool.settings_show_timestamp_visible))
             removeShowTimestampPreference()
+
+        if (!resources.getBoolean(R.bool.settings_show_twelve_hour_timestamp_visible))
+            removeShowTwelveHourTimestampPreference()
 
         if (!resources.getBoolean(R.bool.settings_show_read_receipt_visible))
             removeShowReadReceiptPreference()
@@ -2993,6 +2999,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeShowTimestampPreference() {
         mUserInterfaceCategory.removePreference(mShowTimestampPreference)
+    }
+
+    private fun removeShowTwelveHourTimestampPreference() {
+        mUserInterfaceCategory.removePreference(mShowTwelveHourTimestampPreference)
     }
 
     private fun removeShowReadReceiptPreference() {
