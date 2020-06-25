@@ -651,7 +651,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         refreshBackgroundSyncSection(appContext)
 
         // Push target
-        refreshPushersList()
+        if (resources.getBoolean(R.bool.settings_notification_targets_visible))
+            refreshPushersList()
+        else
+            removeNotificationTargetsPreference()
 
         // Ignore users
         refreshIgnoredUsersList()
@@ -1333,7 +1336,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
             })
 
-            Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : SimpleApiCallback<Void>(activity) {
+            if (resources.getBoolean(R.bool.settings_notification_targets_visible))
+                Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : SimpleApiCallback<Void>(activity) {
                 override fun onSuccess(info: Void?) {
                     refreshPushersList()
                 }
@@ -1686,7 +1690,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                         private fun onDone() {
                             activity?.runOnUiThread {
                                 hideLoadingView(true)
-                                refreshPushersList()
+                                if (resources.getBoolean(R.bool.settings_notification_targets_visible))
+                                    refreshPushersList()
                             }
                         }
 
@@ -3140,6 +3145,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeNotificationTroubleshootPreference() {
         notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY))
+    }
+
+    private fun removeNotificationTargetsPreference() {
+        preferenceScreen.removePreference(mPushersSettingsCategory)
     }
 
     /**
