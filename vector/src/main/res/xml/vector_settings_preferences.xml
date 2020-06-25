@@ -17,6 +17,11 @@
             android:title="@string/settings_display_name" />
 
         <im.vector.preference.VectorPreference
+            android:key="SETTINGS_NON_EDITABLE_DISPLAY_NAME_PREFERENCE_KEY"
+            android:summary="@string/settings_display_name"
+            android:title="@string/settings_display_name" />
+
+        <im.vector.preference.VectorPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
             android:summary="@string/password_hint"
             android:title="@string/settings_password" />
@@ -179,7 +184,7 @@
         android:key="SETTINGS_GROUPS_FLAIR_KEY"
         android:title="@string/settings_flair" />
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_GROUPS_FLAIR_KEY_DIVIDER"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_KEY"
@@ -265,7 +270,7 @@
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_media">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_media" android:key="SETTINGS_MEDIA_CATEGORY_PREFERENCE_KEY" >
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
@@ -302,7 +307,7 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_call_category" android:key="SETTINGS_CALL_CATEGORY_PREFERENCE_KEY">
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -370,7 +375,7 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_LABS_PREFERENCE_DIVIDER_KEY"/>
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.preference.VectorPreferenceCategory
@@ -428,7 +433,7 @@
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_advanced" android:key="SETTINGS_ADVANCED_PREFERENCE_KEY">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
@@ -450,7 +455,7 @@
 
     <im.vector.preference.VectorPreferenceDivider />
 
-    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations">
+    <im.vector.preference.VectorPreferenceCategory android:title="@string/settings_integrations" android:key="SETTINGS_INTEGRATION_ALLOW_CATEGORY_KEY">
 
         <im.vector.preference.VectorPreference
             android:focusable="false"
@@ -470,7 +475,7 @@
             android:title="@string/settings_integration_manager" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_INTEGRATION_ALLOW_CATEGORY_DIVIDER_KEY"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
@@ -487,7 +492,7 @@
             android:title="@string/send_bug_report_rage_shake" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_ANALYTICS_DIVIDER_PREFERENCE_KEY"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_OTHERS_PREFERENCE_KEY"

@@ -366,7 +366,7 @@ class NotificationAreaView @JvmOverloads constructor(
         /**
          * Preference key.
          */
-        private const val SHOW_INFO_AREA_KEY = "SETTINGS_SHOW_INFO_AREA_KEY"
+        const val SHOW_INFO_AREA_KEY = "SETTINGS_SHOW_INFO_AREA_KEY"
 
         /**
          * Always show the info area.
