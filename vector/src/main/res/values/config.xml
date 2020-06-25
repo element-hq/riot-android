@@ -77,4 +77,10 @@
     <bool name="settings_home_server_visible">false</bool>
     <bool name="settings_identity_server_visible">false</bool>
     <bool name="settings_labs_category_visible">false</bool>
+    <bool name="settings_enable_notification__account_visible">false</bool>
+    <bool name="settings_enable_notification_session_visible">false</bool>
+    <bool name="settings_turn_on_screen_three_seconds_visible">false</bool>
+    <bool name="settings_notification_privacy_visible">false</bool>
+    <bool name="settings_advanced_notification_visible">false</bool>
+    <bool name="settings_troubleshoot_notification_visible">false</bool>
 </resources>

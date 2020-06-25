@@ -303,7 +303,6 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_WORK_MANAGER_DELAY_PREFERENCE_KEY) as EditTextPreference?
     }
 
-
     private val mLabsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_LABS_PREFERENCE_KEY) as PreferenceCategory
     }
@@ -608,11 +607,30 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         // push rules
 
         // Notification privacy
-        mNotificationPrivacyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            startActivity(NotificationPrivacyActivity.getIntent(activity))
-            true
+        if (resources.getBoolean(R.bool.settings_notification_privacy_visible)) {
+            mNotificationPrivacyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                startActivity(NotificationPrivacyActivity.getIntent(activity))
+                true
+            }
+            refreshNotificationPrivacy()
+        }else{
+            removeNotificationPrivacyPreference()
         }
-        refreshNotificationPrivacy()
+
+        if (!resources.getBoolean(R.bool.settings_enable_notification__account_visible))
+            removeEnableNotificationAccountPreference()
+
+        if (!resources.getBoolean(R.bool.settings_enable_notification_session_visible))
+            removeEnableNotificationSessionPreference()
+
+        if (!resources.getBoolean(R.bool.settings_turn_on_screen_three_seconds_visible))
+            removeScreenTurnOnPreference()
+
+        if (!resources.getBoolean(R.bool.settings_advanced_notification_visible))
+            removeAdvancedNotificationPreference()
+
+        if (!resources.getBoolean(R.bool.settings_troubleshoot_notification_visible))
+            removeNotificationTroubleshootPreference()
 
         for (preferenceKey in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference(preferenceKey)
@@ -1329,6 +1347,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             // refresh anything else
             refreshPreferences()
+            if (resources.getBoolean(R.bool.settings_notification_privacy_visible))
             refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
@@ -3097,6 +3116,30 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeClearCachePreference() {
         mOtherCategory.removePreference(findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY))
+    }
+
+    private fun removeEnableNotificationAccountPreference() {
+        notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY))
+    }
+
+    private fun removeEnableNotificationSessionPreference() {
+        notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY))
+    }
+
+    private fun removeScreenTurnOnPreference() {
+        notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY))
+    }
+
+    private fun removeNotificationPrivacyPreference() {
+        notificationsSettingsCategory.removePreference(mNotificationPrivacyPreference)
+    }
+
+    private fun removeAdvancedNotificationPreference() {
+        notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY))
+    }
+
+    private fun removeNotificationTroubleshootPreference() {
+        notificationsSettingsCategory.removePreference(findPreference(PreferencesManager.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY))
     }
 
     /**
