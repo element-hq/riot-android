@@ -413,6 +413,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onClick(View v) {
                 linearLayout.setVisibility(View.GONE);
                 mediaPlayer.stop();
+                isRemainderVoice=false;
             }
         });
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -454,6 +455,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mediaPlayer=new MediaPlayer();
         if (!mEditText.getText().toString().equalsIgnoreCase("   recording ... "))
             mEditText.setText("");
         recordButton = findViewById(R.id.room_send_audio_view);
