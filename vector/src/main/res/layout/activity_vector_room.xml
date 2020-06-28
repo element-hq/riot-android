@@ -255,6 +255,59 @@
             tools:background="@color/vector_fuchsia_color"
             tools:visibility="visible" />
 
+        <LinearLayout
+            android:id="@+id/play_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/waiting_background_dark"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="1">
+
+            <ImageView
+                android:id="@+id/play"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/pause"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/pause"
+                android:visibility="visible"
+                tools:ignore="ContentDescription" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4.5dp"
+                android:layout_weight="0.8"
+                android:keepScreenOn="true"/>
+
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/ic_close"
+                android:visibility="visible"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
         <View
             android:id="@+id/bottom_separator"
             android:layout_width="match_parent"

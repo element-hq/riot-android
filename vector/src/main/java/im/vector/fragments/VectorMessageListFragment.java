@@ -919,8 +919,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
                                             if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3")){
-                                                VectorRoomActivity vectorRoomActivity=new VectorRoomActivity();
-                                                vectorRoomActivity.mediaPlayer(savedMediaPath);
+                                                VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
+                                                assert vectorRoomActivity != null;
+                                                vectorRoomActivity.playBack(savedMediaPath);
 
                                             }else
                                             ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);

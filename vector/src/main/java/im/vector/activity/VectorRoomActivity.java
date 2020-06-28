@@ -35,6 +35,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -53,6 +54,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -348,23 +351,103 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     TextView subInvitationTextView;
 
     private MediaRecorder myAudioRecorder;
-    private static ImageView  recordButton;
-    File voicePath;
-    File newFile;
-    ColorStateList hintColor;
+    private ImageView  recordButton;
+    private File voicePath;
+    private File newFile;
+    private ColorStateList hintColor;
+    private ImageView play;
+    private ImageView pause;
+    private ImageView close;
+    private SeekBar seekBar;
+    private LinearLayout linearLayout;
+    private static Handler myHandler = new Handler();
+    private static MediaPlayer mediaPlayer ;
+    private static boolean isRemainderVoice;
 
 
     @SuppressLint("SetTextI18n")
-    public void mediaPlayer(String savedMediaPath){
-        MediaPlayer mediaPlayer=new MediaPlayer();
+
+    public void playBack(String savedMediaPath) {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+
+        mediaPlayer = new MediaPlayer();
+        linearLayout.setVisibility(View.VISIBLE);
+        pause.setVisibility(View.VISIBLE);
+        play.setVisibility(View.GONE);
+
         try {
+            isRemainderVoice = true;
             mediaPlayer.setDataSource(savedMediaPath);
             mediaPlayer.prepare();
             mediaPlayer.start();
+            seekBar.setMax(mediaPlayer.getDuration());
+            myHandler.postDelayed(UpdateVoiceTime, 50);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    play.setVisibility(View.VISIBLE);
+                    pause.setVisibility(View.GONE);
+                }
+            }
+        });
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.start();
+                pause.setVisibility(View.VISIBLE);
+                play.setVisibility(View.GONE);
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.GONE);
+                mediaPlayer.stop();
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser)
+                    mediaPlayer.seekTo(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
+
+    private Runnable UpdateVoiceTime = new Runnable() {
+        public void run() {
+            int startTime = mediaPlayer.getCurrentPosition();
+            seekBar.setProgress(startTime);
+            if (isRemainderVoice)
+                myHandler.postDelayed(this, 50);
+            if (mediaPlayer.getDuration() <= mediaPlayer.getCurrentPosition() + 51) {
+                linearLayout.setVisibility(View.GONE);
+                isRemainderVoice = false;
+            }
+
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
@@ -374,6 +457,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (!mEditText.getText().toString().equalsIgnoreCase("   recording ... "))
             mEditText.setText("");
         recordButton = findViewById(R.id.room_send_audio_view);
+        play = findViewById(R.id.play);
+        pause = findViewById(R.id.pause);
+        close = findViewById(R.id.close);
+        seekBar=findViewById(R.id.seekBar);
+        linearLayout=findViewById(R.id.play_layout);
         hintColor = mEditText.getHintTextColors();
         Activity vector=this;
 
