@@ -286,7 +286,6 @@ dependencies {
     /************* flavors management **************/
 
     // app flavor only
-    actImplementation('com.google.firebase:firebase-messaging:20.0.0') {
     implementation('com.google.firebase:firebase-messaging:20.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
