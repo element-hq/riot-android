@@ -619,7 +619,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 true
             }
             refreshNotificationPrivacy()
-        }else{
+        } else {
             removeNotificationPrivacyPreference()
         }
 
@@ -1057,9 +1057,13 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Incoming call sounds
-        mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
-            false
+        if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)) {
+            mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
+                false
+            }
+        } else {
+            removeDefaultRingtonePreference()
         }
 
         if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)) {
@@ -1083,12 +1087,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeAllowFallbackCallPreference()
         }
 
-        mCallRingtonePreference.let {
-            activity?.let { activity -> it.summary = getCallRingtoneName(activity) }
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayRingtonePicker()
-                false
+        if (resources.getBoolean(R.bool.settings_set_ringtone_visible)) {
+            mCallRingtonePreference.let {
+                activity?.let { activity -> it.summary = getCallRingtoneName(activity) }
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    displayRingtonePicker()
+                    false
+                }
             }
+        } else {
+            removeCallRingtonePreference()
         }
 
         // clear cache
@@ -1344,10 +1352,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
             if (resources.getBoolean(R.bool.settings_notification_targets_visible))
                 Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : SimpleApiCallback<Void>(activity) {
-                override fun onSuccess(info: Void?) {
-                    refreshPushersList()
-                }
-            })
+                    override fun onSuccess(info: Void?) {
+                        refreshPushersList()
+                    }
+                })
 
             PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this)
 
@@ -1358,7 +1366,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             // refresh anything else
             refreshPreferences()
             if (resources.getBoolean(R.bool.settings_notification_privacy_visible))
-            refreshNotificationPrivacy()
+                refreshNotificationPrivacy()
             refreshDisplay()
             refreshBackgroundSyncPrefs()
             refreshEmailsList()
@@ -3064,6 +3072,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeAllowFallbackCallPreference() {
         mCallPreferenceCategory.removePreference(mUseDefaultStunPreference)
+    }
+
+    private fun removeDefaultRingtonePreference() {
+        mCallPreferenceCategory.removePreference(mUseRiotCallRingtonePreference)
+    }
+
+    private fun removeCallRingtonePreference() {
+        mCallPreferenceCategory.removePreference(mCallRingtonePreference)
     }
 
     private fun removeDeactivateAccountPreference() {

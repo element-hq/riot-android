@@ -349,7 +349,7 @@ public class PreferencesManager {
      * @return true to use the native camera app to record video or take photo.
      */
     public static boolean useNativeCamera(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, context.getResources().getBoolean(R.bool.settings_native_camera_use_default_value));
     }
 
     /**
