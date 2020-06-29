@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "345143529889",
+    "firebase_url": "https://act-riot-app.firebaseio.com",
+    "project_id": "act-riot-app",
+    "storage_bucket": "act-riot-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345143529889:android:bda5d0174ea4b94bfffbe0",
+        "android_client_info": {
+          "package_name": "au.gov.act.hd.aether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345143529889-jbor2m7bvu7ujq2tpcn7boh1n8sm2697.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.gov.act.hd.aether",
+            "certificate_hash": "76670a420f9bd687710067113e0a695f8bb61458"
+          }
+        },
+        {
+          "client_id": "345143529889-nj77c3aabi059vb66gg0b9gf8uvftle5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9_F1bIpiaOajWgTWJb3yW4i4cPtVAb0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345143529889-nj77c3aabi059vb66gg0b9gf8uvftle5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -146,6 +146,16 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
 
+        actcwd {
+            applicationId "au.gov.act.hd.aether"
+            // use the version name
+            versionCode rootProject.ext.versionCodeProp
+            versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
+        }
+
         appfdroid {
             applicationId "im.vector.alpha"
             // use the version name
@@ -277,6 +287,7 @@ dependencies {
 
     // app flavor only
     actImplementation('com.google.firebase:firebase-messaging:20.0.0') {
+    implementation('com.google.firebase:firebase-messaging:20.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

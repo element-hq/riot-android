@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="riot_app_name" translatable="false">Lingo</string>
+    <string name="riot_app_name" translatable="false">Communicator</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url" translatable="false">https://vector.im</string>
@@ -35,56 +35,56 @@
         <item>matrix.org</item>
     </string-array>
 
-    <bool name="settings_avatar_editable">true</bool>
-    <bool name="settings_password_changeable">true</bool>
-    <bool name="settings_show_local_contacts">true</bool>
-    <bool name="settings_display_name_editable">true</bool>
-    <bool name="settings_add_email_address_option">true</bool>
-    <bool name="settings_add_phone_number_option">true</bool>
-    <bool name="settings_discovery_visible">true</bool>
-    <bool name="settings_language_visible">true</bool>
+    <bool name="settings_avatar_editable">false</bool>
+    <bool name="settings_password_changeable">false</bool>
+    <bool name="settings_show_local_contacts">false</bool>
+    <bool name="settings_display_name_editable">false</bool>
+    <bool name="settings_add_email_address_option">false</bool>
+    <bool name="settings_add_phone_number_option">false</bool>
+    <bool name="settings_discovery_visible">false</bool>
+    <bool name="settings_language_visible">false</bool>
     <bool name="settings_inline_url_visible">true</bool>
     <bool name="settings_enable_markdown_visible">true</bool>
     <bool name="settings_vibrate_mention_visible">true</bool>
-    <bool name="settings_show_info_area_visible">true</bool>
+    <bool name="settings_show_info_area_visible">false</bool>
     <bool name="settings_send_message_with_enter_visible">true</bool>
-    <bool name="settings_show_twelve_hour_timestamp_visible">true</bool>
-    <bool name="settings_show_join_leave_event_visible">true</bool>
-    <bool name="settings_show_display_name_change_event_visible">true</bool>
-    <bool name="settings_send_typing_notification_visible">true</bool>
-    <bool name="settings_show_timestamp_visible">true</bool>
-    <bool name="settings_show_read_receipt_visible">true</bool>
-    <bool name="settings_flair_visible">true</bool>
+    <bool name="settings_show_twelve_hour_timestamp_visible">false</bool>
+    <bool name="settings_show_join_leave_event_visible">false</bool>
+    <bool name="settings_show_display_name_change_event_visible">false</bool>
+    <bool name="settings_send_typing_notification_visible">false</bool>
+    <bool name="settings_show_timestamp_visible">false</bool>
+    <bool name="settings_show_read_receipt_visible">false</bool>
+    <bool name="settings_flair_visible">false</bool>
     <bool name="settings_use_native_camera_visible">true</bool>
-    <bool name="settings_play_shutter_sound_visible">true</bool>
-    <bool name="settings_preview_media_before_sending_visible">true</bool>
+    <bool name="settings_play_shutter_sound_visible">false</bool>
+    <bool name="settings_preview_media_before_sending_visible">false</bool>
     <bool name="settings_default_compression_visible">true</bool>
     <bool name="settings_default_media_source_visible">true</bool>
-    <bool name="settings_allow_fallback_call_visible">true</bool>
+    <bool name="settings_allow_fallback_call_visible">false</bool>
     <bool name="settings_encryption_visible">true</bool>
-    <bool name="settings_analytics_category_visible">true</bool>
-    <bool name="settings_integration_category_visible">true</bool>
-    <bool name="settings_deactivate_account_visible">true</bool>
+    <bool name="settings_analytics_category_visible">false</bool>
+    <bool name="settings_integration_category_visible">false</bool>
+    <bool name="settings_deactivate_account_visible">false</bool>
     <bool name="settings_application_info_visible">true</bool>
     <bool name="settings_version_visible">true</bool>
     <bool name="settings_olm_version_visible">true</bool>
-    <bool name="settings_copyright_visible">true</bool>
+    <bool name="settings_copyright_visible">false</bool>
     <bool name="settings_terms_condition_visible">true</bool>
     <bool name="settings_privacy_policy_visible">true</bool>
     <bool name="settings_third_party_notice_visible">true</bool>
-    <bool name="settings_keep_media_visible">true</bool>
-    <bool name="settings_clear_media_cache_visible">true</bool>
+    <bool name="settings_keep_media_visible">false</bool>
+    <bool name="settings_clear_media_cache_visible">false</bool>
     <bool name="settings_clear_cache_visible">true</bool>
     <bool name="settings_home_server_visible">true</bool>
-    <bool name="settings_identity_server_visible">true</bool>
+    <bool name="settings_identity_server_visible">false</bool>
     <bool name="settings_labs_category_visible">true</bool>
     <bool name="settings_enable_notification__account_visible">true</bool>
     <bool name="settings_enable_notification_session_visible">true</bool>
-    <bool name="settings_turn_on_screen_three_seconds_visible">true</bool>
-    <bool name="settings_notification_privacy_visible">true</bool>
+    <bool name="settings_turn_on_screen_three_seconds_visible">false</bool>
+    <bool name="settings_notification_privacy_visible">false</bool>
     <bool name="settings_advanced_notification_visible">true</bool>
-    <bool name="settings_troubleshoot_notification_visible">true</bool>
+    <bool name="settings_troubleshoot_notification_visible">false</bool>
     <bool name="settings_notification_targets_visible">true</bool>
 
-    <bool name="hide_custom_url_login">false</bool>
+    <bool name="hide_custom_url_login">true</bool>
 </resources>
