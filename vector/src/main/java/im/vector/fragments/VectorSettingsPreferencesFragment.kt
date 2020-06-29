@@ -1099,6 +1099,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeCallRingtonePreference()
         }
 
+        if (!resources.getBoolean(R.bool.settings_set_ringtone_visible) && !resources.getBoolean(R.bool.settings_allow_fallback_call_visible) && !resources.getBoolean(R.bool.settings_default_ringtone_visible)) {
+            removeCallCategoryPreference()
+        }
+
         // clear cache
         if (resources.getBoolean(R.bool.settings_clear_cache_visible)) {
             findPreference(PreferencesManager.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
@@ -3076,6 +3080,10 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeDefaultRingtonePreference() {
         mCallPreferenceCategory.removePreference(mUseRiotCallRingtonePreference)
+    }
+
+    private fun removeCallCategoryPreference() {
+        preferenceScreen.removePreference(mCallPreferenceCategory)
     }
 
     private fun removeCallRingtonePreference() {
