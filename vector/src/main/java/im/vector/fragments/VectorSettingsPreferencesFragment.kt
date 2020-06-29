@@ -1057,7 +1057,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         }
 
         // Incoming call sounds
-        if (resources.getBoolean(R.bool.settings_allow_fallback_call_visible)) {
+        if (resources.getBoolean(R.bool.settings_default_ringtone_visible)) {
             mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
                 false
