@@ -85,6 +85,11 @@
     <bool name="settings_advanced_notification_visible">true</bool>
     <bool name="settings_troubleshoot_notification_visible">true</bool>
     <bool name="settings_notification_targets_visible">true</bool>
+    <bool name="settings_default_ringtone_visible">false</bool>
+    <bool name="settings_set_ringtone_visible">false</bool>
 
     <bool name="hide_custom_url_login">false</bool>
+
+    <!--default values-->
+    <bool name="settings_native_camera_use_default_value">true</bool>
 </resources>
