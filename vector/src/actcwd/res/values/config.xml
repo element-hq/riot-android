@@ -71,7 +71,7 @@
     <bool name="settings_copyright_visible">false</bool>
     <bool name="settings_terms_condition_visible">true</bool>
     <bool name="settings_privacy_policy_visible">true</bool>
-    <bool name="settings_third_party_notice_visible">true</bool>
+    <bool name="settings_third_party_notice_visible">false</bool>
     <bool name="settings_keep_media_visible">false</bool>
     <bool name="settings_clear_media_cache_visible">false</bool>
     <bool name="settings_clear_cache_visible">true</bool>

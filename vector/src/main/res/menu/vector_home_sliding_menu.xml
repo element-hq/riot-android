@@ -35,7 +35,7 @@
 
         <item
             android:id="@+id/sliding_copyright_terms"
-            android:title="@string/room_sliding_menu_copyright" />
+            android:title="@string/room_sliding_menu_credit" />
 
         <item
             android:id="@+id/sliding_menu_app_tac"
@@ -46,6 +46,7 @@
             android:title="@string/room_sliding_menu_privacy_policy" />
 
         <item
+            android:visible="@bool/settings_third_party_notice_visible"
             android:id="@+id/sliding_menu_third_party_notices"
             android:title="@string/room_sliding_menu_third_party_notices" />
     </group>
