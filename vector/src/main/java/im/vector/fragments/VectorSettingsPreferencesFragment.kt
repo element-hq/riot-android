@@ -3083,6 +3083,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     }
 
     private fun removeCallCategoryPreference() {
+        preferenceScreen.removePreference(findPreference(PreferencesManager.SETTINGS_CALL_CATEGORY_DIVIDER_PREFERENCE_KEY))
         preferenceScreen.removePreference(mCallPreferenceCategory)
     }
 

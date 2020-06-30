@@ -327,7 +327,7 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_CALL_CATEGORY_DIVIDER_PREFERENCE_KEY"/>
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
