@@ -61,7 +61,7 @@
     <bool name="settings_default_compression_visible">true</bool>
     <bool name="settings_default_media_source_visible">true</bool>
     <bool name="settings_allow_fallback_call_visible">false</bool>
-    <bool name="settings_encryption_visible">true</bool>
+    <bool name="settings_encryption_visible">false</bool>
     <bool name="settings_analytics_category_visible">false</bool>
     <bool name="settings_integration_category_visible">false</bool>
     <bool name="settings_deactivate_account_visible">false</bool>
@@ -74,10 +74,10 @@
     <bool name="settings_third_party_notice_visible">false</bool>
     <bool name="settings_keep_media_visible">false</bool>
     <bool name="settings_clear_media_cache_visible">false</bool>
-    <bool name="settings_clear_cache_visible">true</bool>
+    <bool name="settings_clear_cache_visible">false</bool>
     <bool name="settings_home_server_visible">true</bool>
-    <bool name="settings_identity_server_visible">false</bool>
-    <bool name="settings_labs_category_visible">true</bool>
+    <bool name="settings_identity_server_visible">true</bool>
+    <bool name="settings_labs_category_visible">false</bool>
     <bool name="settings_enable_notification__account_visible">true</bool>
     <bool name="settings_enable_notification_session_visible">true</bool>
     <bool name="settings_turn_on_screen_three_seconds_visible">false</bool>
