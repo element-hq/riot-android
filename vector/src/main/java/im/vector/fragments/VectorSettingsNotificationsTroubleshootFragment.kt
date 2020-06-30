@@ -129,12 +129,12 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         } else {
                             mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
                         }
-                        mSummaryButton.visibility = View.VISIBLE
+                        mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.SUCCESS -> {
                         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
-                        mSummaryButton.visibility = View.VISIBLE
+                        mSummaryButton.visibility = View.GONE
                         mRunButton.visibility = View.VISIBLE
                     }
                 }

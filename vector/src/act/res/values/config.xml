@@ -82,7 +82,7 @@
     <bool name="settings_enable_notification_session_visible">true</bool>
     <bool name="settings_turn_on_screen_three_seconds_visible">false</bool>
     <bool name="settings_notification_privacy_visible">false</bool>
-    <bool name="settings_advanced_notification_visible">true</bool>
+    <bool name="settings_advanced_notification_visible">false</bool>
     <bool name="settings_troubleshoot_notification_visible">true</bool>
     <bool name="settings_notification_targets_visible">true</bool>
     <bool name="settings_default_ringtone_visible">true</bool>
