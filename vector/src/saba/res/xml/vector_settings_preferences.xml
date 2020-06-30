@@ -417,7 +417,7 @@
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
         android:title="@string/settings_cryptography_manage_keys"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="true">
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
