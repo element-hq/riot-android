@@ -1594,6 +1594,36 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
+            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3")) {
+                assert imageTypeView != null;
+                imageTypeView.setImageResource(R.drawable.play);
+            }
+
+//            assert imageTypeView != null;
+
+//            imageTypeView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (!(previousPosition ==position))
+//                        previousPosition=position;
+//
+//                    Toast.makeText(mContext, "previousPosition  "+previousPosition+"  position "+position, Toast.LENGTH_SHORT).show();
+//
+//                    String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+//                    File file = new File(filePath);
+//                    if (file.exists()) {
+//                        if (!VectorRoomActivity.getMediaPlayer().isPlaying()) {
+//                            activity.playBack(filePath);
+//                            imageTypeView.setImageResource(R.drawable.pause);
+//                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying()) {
+//                            VectorRoomActivity.getMediaPlayer().pause();
+//                            imageTypeView.setImageResource(R.drawable.play);
+//                        }
+//                    }
+//
+//
+//                }
+//            });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
 
             mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
