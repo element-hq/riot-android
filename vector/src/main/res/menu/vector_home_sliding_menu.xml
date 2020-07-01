@@ -3,6 +3,11 @@
 
     <group android:id="@+id/account_group">
         <item
+            android:id="@+id/sliding_menu_roles"
+            android:icon="@drawable/ic_work"
+            android:title="@string/room_sliding_menu_role" />
+
+        <item
             android:id="@+id/sliding_menu_messages"
             android:icon="@drawable/logo_transparent"
             android:title="@string/room_sliding_menu_messages" />
