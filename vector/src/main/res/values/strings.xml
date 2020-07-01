@@ -95,6 +95,8 @@
     <string name="or">or</string>
     <string name="invite">Invite</string>
     <string name="offline">Offline</string>
+    <string name="online">Online</string>
+    <string name="busy">Busy</string>
     <string name="accept">Accept</string>
     <string name="skip">Skip</string>
     <string name="done">Done</string>

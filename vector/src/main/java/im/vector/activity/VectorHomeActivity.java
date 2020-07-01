@@ -1923,6 +1923,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             userIdTextView.setText(mSession.getMyUserId());
         }
 
+        TextView statusTextView = navigationView.findViewById(R.id.status_text_view);
+        ImageView statusIndicator = navigationView.findViewById(R.id.status_indicator);
+        if (null != statusTextView && null != statusIndicator) {
+            statusTextView.setText(getText(R.string.online));
+            statusIndicator.setBackgroundResource(R.drawable.avatar_indicator_online);
+        }
+
         ImageView mainAvatarView = navigationView.findViewById(R.id.home_menu_main_avatar);
 
         if (null != mainAvatarView) {
