@@ -82,6 +82,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -100,6 +101,7 @@ import java.util.Set;
 import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
@@ -228,6 +230,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final Drawable mPadlockDrawable;
 
     private VectorImageGetter mImageGetter;
+    private VectorRoomActivity activity;
+
 
     private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
         HtmlTagHandler mHtmlTagHandler;
@@ -271,6 +275,24 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity activity) {
+        this(session, context,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_room_member,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_file,
+                R.layout.adapter_item_vector_message_merge,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_code,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_redact,
+                R.layout.adapter_item_vector_message_room_versioned,
+                mediasCache);
+        this.activity = activity;
+    }
     public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
@@ -287,6 +309,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_redact,
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
+
     }
 
     /**
@@ -1567,6 +1590,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
+    private int previousPosition;
+
     private View getFileView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_FILE), parent, false);
@@ -1597,33 +1622,57 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3")) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.play);
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && position == previousPosition) {
+//                    imageTypeView.setImageResource(R.drawable.pause);
+                    imageTypeView.setImageResource(R.drawable.play);
+                }
             }
+            assert imageTypeView != null;
+            imageTypeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    if (!(previousPosition == position))
+//                    Toast.makeText(mContext, "previousPosition  " + previousPosition + "  position " + position, Toast.LENGTH_SHORT).show();
 
-//            assert imageTypeView != null;
 
-//            imageTypeView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (!(previousPosition ==position))
-//                        previousPosition=position;
-//
-//                    Toast.makeText(mContext, "previousPosition  "+previousPosition+"  position "+position, Toast.LENGTH_SHORT).show();
-//
-//                    String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
-//                    File file = new File(filePath);
-//                    if (file.exists()) {
-//                        if (!VectorRoomActivity.getMediaPlayer().isPlaying()) {
-//                            activity.playBack(filePath);
+                    String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !(previousPosition == position)) {
+                            activity.playBack(filePath);
 //                            imageTypeView.setImageResource(R.drawable.pause);
-//                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying()) {
-//                            VectorRoomActivity.getMediaPlayer().pause();
-//                            imageTypeView.setImageResource(R.drawable.play);
-//                        }
-//                    }
-//
-//
-//                }
-//            });
+                            imageTypeView.setImageResource(R.drawable.play);
+
+//                            Toast.makeText(mContext, "new voice", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && (previousPosition == position)){
+                            VectorRoomActivity.getMediaPlayer().start();
+//                            imageTypeView.setImageResource(R.drawable.pause);
+                            imageTypeView.setImageResource(R.drawable.play);
+
+//                            Toast.makeText(mContext, "resume", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (VectorRoomActivity.getMediaPlayer().isPlaying()&&(previousPosition == position)) {
+                            VectorRoomActivity.getMediaPlayer().pause();
+                            imageTypeView.setImageResource(R.drawable.play);
+//                            Toast.makeText(mContext, "pause", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (VectorRoomActivity.getMediaPlayer().isPlaying()&&!(previousPosition == position)) {
+                            activity.playBack(filePath);
+//                            imageTypeView.setImageResource(R.drawable.pause);
+//                            Toast.makeText(mContext, "new voice2", Toast.LENGTH_SHORT).show();
+                            imageTypeView.setImageResource(R.drawable.play);
+
+
+
+                        }
+                    }
+
+                    previousPosition = position;
+                }
+            });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
 
             mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);

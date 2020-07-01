@@ -361,13 +361,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private SeekBar seekBar;
     private LinearLayout linearLayout;
     private static Handler myHandler = new Handler();
+    public static String mediaDataSourceName;
+
+
     private static MediaPlayer mediaPlayer ;
     private static boolean isRemainderVoice;
 
 
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
     @SuppressLint("SetTextI18n")
 
     public void playBack(String savedMediaPath) {
+        // flag    fragment = 1
+//        adapter play
+        mediaDataSourceName=savedMediaPath;
+        Log.v("javad","activity    : "+mediaDataSourceName);
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }

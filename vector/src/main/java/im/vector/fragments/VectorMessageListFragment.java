@@ -294,7 +294,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
     @Override
     public VectorMessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache(), (VectorRoomActivity) getActivity());
     }
 
     /**
