@@ -15,12 +15,14 @@
         <item
             android:id="@+id/sliding_menu_send_bug_report"
             android:icon="@drawable/ic_material_bug_report"
-            android:title="@string/send_bug_report" />
+            android:title="@string/send_bug_report"
+            android:visible="@bool/show_report_bug_navigation_bar" />
 
         <item
             android:id="@+id/sliding_menu_exit"
             android:icon="@drawable/ic_power_settings"
-            android:title="@string/action_exit" />
+            android:title="@string/action_exit"
+            android:visible="@bool/show_exit_navigation_bar" />
 
         <item
             android:id="@+id/sliding_menu_sign_out"

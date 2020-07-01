@@ -35,4 +35,6 @@
         <item>matrix.org</item>
     </string-array>
 
+    <bool name="show_exit_navigation_bar">true</bool>
+    <bool name="show_report_bug_navigation_bar">true</bool>
 </resources>
