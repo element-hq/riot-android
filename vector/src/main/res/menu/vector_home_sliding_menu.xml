@@ -58,7 +58,7 @@
             android:id="@+id/sliding_menu_version"
             android:title="@string/room_sliding_menu_version" />
     </group>
-    
+
     <group android:visible="@bool/debug_mode">
         <item
             android:id="@+id/sliding_menu_debug"

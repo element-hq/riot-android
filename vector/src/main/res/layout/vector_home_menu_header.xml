@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/navigation_view_height"
-    android:background="?colorPrimary">
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    android:minHeight="@dimen/navigation_view_height">
 
-    <ImageView
+    <!--<ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:rotationY="@integer/rtl_mirror_flip"
         android:scaleType="centerCrop"
-        android:src="@drawable/bubbles_bg_portrait" />
+        android:src="@drawable/bubbles_bg_portrait" />-->
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/home_menu_main_avatar"
@@ -21,6 +23,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="@dimen/navigation_avatar_top_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -28,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/home_menu_main_matrix_id"
+        android:layout_marginTop="@dimen/navigation_avatar_bottom_margin"
         android:layout_marginBottom="2dp"
         android:paddingStart="16dp"
         android:paddingLeft="16dp"
@@ -35,6 +40,8 @@
         android:paddingRight="16dp"
         android:textColor="@android:color/white"
         android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_avatar"
         tools:text="A displayname here" />
 
     <TextView
@@ -49,6 +56,16 @@
         android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_displayname"
         tools:text="A matrix id here" />
 
-</RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rolesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/navigation_avatar_bottom_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_displayname" />
+</androidx.constraintlayout.widget.ConstraintLayout>
