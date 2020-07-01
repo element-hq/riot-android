@@ -92,4 +92,7 @@
 
     <!--default values-->
     <bool name="settings_native_camera_use_default_value">true</bool>
+    
+    <bool name="show_exit_navigation_bar">true</bool>
+    <bool name="show_report_bug_navigation_bar">true</bool>
 </resources>
