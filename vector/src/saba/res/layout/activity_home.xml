@@ -106,7 +106,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?vctr_bottom_nav_background_color"
-            android:visibility="gone"
+
             app:itemBackground="?vctr_bottom_nav_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"
