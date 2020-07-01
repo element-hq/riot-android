@@ -30,17 +30,13 @@
             android:visible="@bool/show_exit_navigation_bar" />
 
         <item
-            android:visible="@bool/show_sign_out_navigation_bar"
             android:id="@+id/sliding_menu_sign_out"
             android:icon="@drawable/ic_material_exit_to_app"
-            android:title="@string/action_sign_out" />
+            android:title="@string/action_sign_out"
+            android:visible="@bool/show_sign_out_navigation_bar" />
     </group>
 
     <group android:id="@+id/app_group">
-        <item
-            android:id="@+id/sliding_menu_version"
-            android:title="@string/room_sliding_menu_version" />
-
         <item
             android:id="@+id/sliding_copyright_terms"
             android:title="@string/room_sliding_menu_credit" />
@@ -54,11 +50,15 @@
             android:title="@string/room_sliding_menu_privacy_policy" />
 
         <item
-            android:visible="@bool/settings_third_party_notice_visible"
             android:id="@+id/sliding_menu_third_party_notices"
-            android:title="@string/room_sliding_menu_third_party_notices" />
-    </group>
+            android:title="@string/room_sliding_menu_third_party_notices"
+            android:visible="@bool/settings_third_party_notice_visible" />
 
+        <item
+            android:id="@+id/sliding_menu_version"
+            android:title="@string/room_sliding_menu_version" />
+    </group>
+    
     <group android:visible="@bool/debug_mode">
         <item
             android:id="@+id/sliding_menu_debug"
