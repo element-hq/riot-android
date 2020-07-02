@@ -209,12 +209,12 @@ public class VectorUtils {
 
         // prepare the text drawing
         Paint textPaint = new Paint();
-        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
         // the text size is proportional to the avatar size.
         // by default, the avatar size is 42dp, the text size is 28 dp (not sp because it has to be fixed).
-        textPaint.setTextSize(pixelsSide * 2 / 3);
+        textPaint.setTextSize((float) (pixelsSide * .5));
 
         // get its size
         Rect textBounds = new Rect();
@@ -281,7 +281,7 @@ public class VectorUtils {
      * @return the avatar.
      */
     public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
-        String firstChar = getInitialLetter(aText);
+        String firstChar = getInitialLetter(aText) + getInitialLetter(aText);
         String key = firstChar + "_" + backgroundColor;
 
         // check if the avatar is already defined
