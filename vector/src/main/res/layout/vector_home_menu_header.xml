@@ -33,30 +33,30 @@
         android:layout_height="16dp"
         android:background="@drawable/avatar_indicator_online"
         app:layout_constraintBottom_toBottomOf="@+id/home_menu_main_avatar"
-        app:layout_constraintRight_toRightOf="@+id/home_menu_main_avatar"/>
+        app:layout_constraintRight_toRightOf="@+id/home_menu_main_avatar" />
 
     <TextView
         android:id="@+id/status_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8sp"
+        android:layout_marginLeft="8sp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        android:layout_marginStart="8sp"
-        app:layout_constraintLeft_toRightOf="@+id/home_menu_main_avatar"
         app:layout_constraintBottom_toBottomOf="@+id/home_menu_main_avatar"
-        tools:text="online"
-        android:layout_marginLeft="8sp" />
+        app:layout_constraintLeft_toRightOf="@+id/home_menu_main_avatar"
+        tools:text="online" />
 
     <TextView
         android:id="@+id/home_menu_main_displayname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="@dimen/navigation_avatar_bottom_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="2dp"
-        android:paddingStart="16dp"
-        android:paddingLeft="16dp"
-        android:paddingEnd="16dp"
-        android:paddingRight="16dp"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -83,7 +83,11 @@
         android:id="@+id/rolesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="@dimen/navigation_avatar_bottom_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_menu_main_displayname" />
 </androidx.constraintlayout.widget.ConstraintLayout>

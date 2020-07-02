@@ -64,6 +64,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -115,6 +117,8 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.adapters.RolesInNavigationBarAdapter;
+import im.vector.adapters.model.UserRole;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -259,6 +263,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
+
+    //Role Adapter
+    RolesInNavigationBarAdapter rolesInNavigationBarAdapter = new RolesInNavigationBarAdapter();
 
     private final BroadcastReceiver mBrdRcvStopWaitingView = new BroadcastReceiver() {
         @Override
@@ -1952,6 +1959,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     refreshSlidingMenu();
                 }
             });
+        }
+
+        RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
+        if (null != roleRecyclerView) {
+            roleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+
+            //test data
+            List<UserRole> roles = new ArrayList<>();
+            roles.add(new UserRole(true, "Developer"));
+            roles.add(new UserRole(false, "Business Analyst"));
+            roles.add(new UserRole(false, "Test Analyst"));
+            rolesInNavigationBarAdapter.setData(roles);
         }
     }
 
