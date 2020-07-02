@@ -599,6 +599,14 @@ public class VectorUtils {
     /**
      * Display the copyright.
      */
+    public static void displayUrlToBrowser(Context context, String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(browserIntent);
+    }
+
+    /**
+     * Display the copyright.
+     */
     public static void displayAppCopyright() {
         if (null != VectorApp.getCurrentActivity()) {
             displayInWebView(VectorApp.getCurrentActivity(), "https://riot.im/copyright");

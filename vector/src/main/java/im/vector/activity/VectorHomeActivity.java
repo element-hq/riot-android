@@ -1810,18 +1810,18 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         break;
                     }
 
-                    case R.id.sliding_copyright_terms: {
-                        VectorUtils.displayAppCopyright();
-                        break;
-                    }
-
                     case R.id.sliding_menu_app_tac: {
-                        VectorUtils.displayAppTac();
+                        VectorUtils.displayUrlToBrowser(VectorHomeActivity.this, getString(R.string.terms_and_condition_url));
                         break;
                     }
 
                     case R.id.sliding_menu_privacy_policy: {
-                        VectorUtils.displayAppPrivacyPolicy();
+                        VectorUtils.displayUrlToBrowser(VectorHomeActivity.this, getString(R.string.privacy_policy_url));
+                        break;
+                    }
+
+                    case R.id.sliding_acknowledgement: {
+                        VectorUtils.displayUrlToBrowser(VectorHomeActivity.this, getString(R.string.sliding_acknowledgement_url));
                         break;
                     }
 

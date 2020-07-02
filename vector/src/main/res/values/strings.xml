@@ -1572,4 +1572,7 @@ Why choose Riot.im?
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
 
+    <string name="terms_and_condition_url">https://www.act.gov.au/privacy</string>
+    <string name="privacy_policy_url">https://www.act.gov.au/privacy</string>
+    <string name="sliding_acknowledgement_url">https://www.act.gov.au/privacy</string>
 </resources>

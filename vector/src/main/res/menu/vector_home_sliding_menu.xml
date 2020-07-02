@@ -51,7 +51,7 @@
             android:visible="@bool/settings_third_party_notice_visible" />
 
         <item
-            android:id="@+id/sliding_copyright_terms"
+            android:id="@+id/sliding_acknowledgement"
             android:title="@string/room_sliding_menu_credit" />
 
         <item
