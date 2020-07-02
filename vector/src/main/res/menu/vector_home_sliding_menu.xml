@@ -38,10 +38,6 @@
 
     <group android:id="@+id/app_group">
         <item
-            android:id="@+id/sliding_copyright_terms"
-            android:title="@string/room_sliding_menu_credit" />
-
-        <item
             android:id="@+id/sliding_menu_app_tac"
             android:title="@string/room_sliding_menu_term_and_conditions" />
 
@@ -53,6 +49,10 @@
             android:id="@+id/sliding_menu_third_party_notices"
             android:title="@string/room_sliding_menu_third_party_notices"
             android:visible="@bool/settings_third_party_notice_visible" />
+
+        <item
+            android:id="@+id/sliding_copyright_terms"
+            android:title="@string/room_sliding_menu_credit" />
 
         <item
             android:id="@+id/sliding_menu_version"

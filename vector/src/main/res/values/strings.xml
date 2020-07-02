@@ -622,7 +622,7 @@
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
-    <string name="room_sliding_menu_credit">Credit</string>
+    <string name="room_sliding_menu_credit">Acknowledgement</string>
     <string name="room_sliding_menu_role">Roles</string>
 
     <!-- Vector Settings -->
