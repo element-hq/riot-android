@@ -281,18 +281,33 @@ public class VectorUtils {
      * @return the avatar.
      */
     public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
-        String firstChar = getInitialLetter(aText) + getInitialLetter(aText);
-        String key = firstChar + "_" + backgroundColor;
-
+        String initials = getInitials(aText);
+        String key = initials + "_" + backgroundColor;
         // check if the avatar is already defined
         Bitmap thumbnail = mAvatarImageByKeyDict.get(key);
 
         if ((null == thumbnail) && create) {
-            thumbnail = VectorUtils.createAvatarThumbnail(context, backgroundColor, firstChar);
+            thumbnail = VectorUtils.createAvatarThumbnail(context, backgroundColor, initials);
             mAvatarImageByKeyDict.put(key, thumbnail);
         }
 
         return thumbnail;
+    }
+    
+    /**
+     *
+     * @param name display name
+     * @return two/one character initials
+     */
+    public static String getInitials(String name){
+        String[] names = name.split(" ");
+        String initials = "";
+        if (names.length > 1) {
+            initials = getInitialLetter(names[0]) + getInitialLetter(names[names.length - 1]);
+        } else {
+            initials = getInitialLetter(names[0]);
+        }
+        return initials;
     }
 
     /**
