@@ -1575,4 +1575,11 @@ Why choose Riot.im?
     <string name="terms_and_condition_url">https://www.act.gov.au/privacy</string>
     <string name="privacy_policy_url">https://www.act.gov.au/privacy</string>
     <string name="sliding_acknowledgement_url">https://www.act.gov.au/privacy</string>
+
+    <!--Directory Tabs-->
+    <string-array name="directory_tabs">
+        <item>Roles</item>
+        <item>People</item>
+        <item>Groups</item>
+    </string-array>
 </resources>

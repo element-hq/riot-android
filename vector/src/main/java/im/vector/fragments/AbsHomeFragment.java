@@ -81,10 +81,10 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
         }
     };
 
-    int mPrimaryColor = -1;
-    int mSecondaryColor = -1;
-    int mFabColor = -1;
-    int mFabPressedColor = -1;
+    protected int mPrimaryColor = -1;
+    protected int mSecondaryColor = -1;
+    protected int mFabColor = -1;
+    protected int mFabPressedColor = -1;
 
 
     /*
