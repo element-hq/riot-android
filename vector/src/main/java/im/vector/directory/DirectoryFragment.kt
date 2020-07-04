@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
+import im.vector.directory.group.DirectoryGroupFragment
+import im.vector.directory.people.DirectoryPeopleFragment
+import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils.getColor
 import kotlinx.android.synthetic.main.fragment_directory.*
@@ -33,7 +36,6 @@ class DirectoryFragment : AbsHomeFragment() {
             mFabColor = ContextCompat.getColor(activity, R.color.tab_people)
             mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_people_secondary)
         }
-
     }
 
     override fun getRooms(): MutableList<Room> {
@@ -54,7 +56,12 @@ class DirectoryFragment : AbsHomeFragment() {
 
     class DemoCollectionPagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
-            return DirectoryRoleFragment()
+            return when (position) {
+                0 -> DirectoryRoleFragment()
+                1 -> DirectoryPeopleFragment()
+                2 -> DirectoryGroupFragment()
+                else -> DirectoryRoleFragment()
+            }
         }
 
         override fun getCount(): Int = titles.size
