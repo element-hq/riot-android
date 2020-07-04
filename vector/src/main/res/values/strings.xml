@@ -1582,4 +1582,9 @@ Why choose Riot.im?
         <item>People</item>
         <item>Groups</item>
     </string-array>
+    <string name="search_role">Search for a role</string>
+    <string name="category">Category</string>
+    <string name="organisation_unit">Organisation Unit</string>
+    <string name="speciality">Speciality</string>
+    <string name="location">Location</string>
 </resources>

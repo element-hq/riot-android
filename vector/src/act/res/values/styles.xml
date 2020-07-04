@@ -254,4 +254,16 @@
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
     </style>
 
+
+    <style name="directory_view_input_layout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_marginLeft">@dimen/layout_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/layout_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/layout_vertical_margin</item>
+    </style>
+
+    <style name="directory_view_drop_down_input_layout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:layout_marginLeft">@dimen/layout_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/layout_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/layout_vertical_margin</item>
+    </style>
 </resources>

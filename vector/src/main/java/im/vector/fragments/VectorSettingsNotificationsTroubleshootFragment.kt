@@ -164,7 +164,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         (activity as? MXCActionBarActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is VectorSettingsFragmentInteractionListener) {
             interactionListener = context

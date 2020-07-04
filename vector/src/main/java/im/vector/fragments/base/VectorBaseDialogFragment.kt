@@ -26,7 +26,7 @@ abstract class VectorBaseDialogFragment<LISTENER> : androidx.fragment.app.Dialog
 
     protected var listener: LISTENER? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         // Cannot use (context is LISTENER)

@@ -45,7 +45,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     protected var vectorActivity: VectorAppCompatActivity? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         vectorActivity = context as VectorAppCompatActivity

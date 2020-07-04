@@ -22,5 +22,4 @@
     <dimen name="drawable_padding_small">8dp</dimen>
 
     <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>
-
 </resources>
