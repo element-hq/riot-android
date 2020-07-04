@@ -301,7 +301,7 @@
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this session and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
     <!-- request again e2e key -->
-    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other sessions.</string>
+    <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
@@ -423,7 +423,6 @@
         <item quantity="other">%d members</item>
     </plurals>
     <string name="room_title_one_member">1 member</string>
-    <string name="room_header_online_members">%d members, %d online</string>
 
     <!--  Time -->
     <plurals name="format_time_s">
@@ -510,6 +509,7 @@
     <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
     <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="room_header_online_members">%d عضو، %d آنلاین</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
@@ -1740,9 +1740,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
-    <string name="saba_menu_conversations">Conversations</string>
-    <string name="saba_menu_groups">Groups</string>
-    <string name="saba_about_about_saba">About</string>
 
     <string name="labs_allow_extended_logging">Enable verbose logs.</string>
     <string name="labs_allow_extended_logging_summary">Verbose logs will help developers by providing more logs when you send a RageShake. Even when enabled, the application does not log message contents or any other private data.</string>
@@ -2156,5 +2153,4 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Connectivity to the server has been lost</string>
->>>>>>> 6f8ee3c4f5a9b9611eb0e39804b4435171407a67
 </resources>

@@ -1320,22 +1320,25 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * *********************************************************************************************
      */
 
-    private void revealFloatingActionMenu() {
+        private void revealFloatingActionMenu() {
+        mFloatingActionsMenu.setVisibility(View.VISIBLE);
     }
 
     private void concealFloatingActionMenu() {
         if (null != mFloatingActionsMenu) {
             mFloatingActionsMenu.collapse();
-            ViewPropertyAnimator animator = mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    if (mFloatingActionsMenu != null) {
-                        mFloatingActionsMenu.setVisibility(View.GONE);
-                    }
-                }
-            });
-            animator.start();
+            mFloatingActionsMenu.setVisibility(View.GONE);
+
+//            ViewPropertyAnimator animator = mFabMain.animate().scaleX(0).scaleY(0).alpha(0).setListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    super.onAnimationEnd(animation);
+//                    if (mFloatingActionsMenu != null) {
+//                        mFloatingActionsMenu.setVisibility(View.GONE);
+//                    }
+//                }
+//            });
+//            animator.start();
         }
     }
 
@@ -2438,9 +2441,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     /* ==========================================================================================
      * Main Helper Methods
      * ========================================================================================== */
+
     /**
      * Open the room creation with inviting people.
-     *  This method is used for starting a new 1-1 chat.
+     * This method is used for starting a new 1-1 chat.
      */
     private void invitePeopleToNewRoom() {
         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);

@@ -1,3 +1,31 @@
+Changes in Riot 0.9.12 (2020-05-20)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade MatrixSdk to version 0.9.35.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.35
+
+Changes in Riot 0.9.11 (2020-05-13)
+===================================================
+
+MatrixSdk 🚀:
+ - Upgrade MatrixSdk to version 0.9.34.
+ - Changelog: https://github.com/matrix-org/matrix-android-sdk/releases/tag/v0.9.34
+
+Improvements 🙌:
+ - Remove the warning when using server discovery, it's too confusing for non-technical users (#3310)
+
+Other changes:
+ - Update Matomo app id (#3429)
+
+Bug fixes 🐛:
+ - Read Jitsi domain from server (#3443)
+ - some unused strings trimmed from repository to pass lint checks
+ - Fix issue with identity server missing token (#3404)
+
+Translations 🗣:
+ - String for RiotX has been removed from this project
+
 Changes in RiotX 0.9.10 (2019-02-10)
 ===================================================
 

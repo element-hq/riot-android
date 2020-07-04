@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Saba Strings -->
     <string name="saba_messenger">پیام‌رسان</string>
     <string name="saba_messenger_long">پیام‌رسان سازمانی امن</string>
@@ -410,7 +410,7 @@
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">تمام پیام‌های رمزشده‌تان را از دست می‌دهید مگر اینکه از کلید‌ها پشتیبان‌گیری کنید.</string>
 
     <string name="loading">درحال بارگیری…</string>
-    <string name="reply">پاسخ</string>
+    <string name="reply" >پاسخ</string>
     <string name="permissions_rationale_popup_title">اطلاع\u200cرسانی</string>
     <string name="permissions_rationale_msg_camera">پیام\u200cرسان برای گرفتن عکس و برقراری تماس تصویری نیازمند دسترسی به دوربین است.</string>
     <string name="permissions_rationale_msg_record_audio">پیام\u200cرسان برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است</string>

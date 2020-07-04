@@ -25,16 +25,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
-                android:id="@+id/button_start_chat"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:contentDescription="@string/start_new_chat"
-                app:srcCompat="@drawable/ic_add_white" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/button_start_chat"-->
+<!--                android:background="?android:attr/selectableItemBackground"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:layout_marginRight="24dp"-->
+<!--                android:contentDescription="@string/start_new_chat"-->
+<!--                app:srcCompat="@drawable/ic_add_white" />-->
 
             <ImageButton
                 android:id="@+id/button_global_search"
@@ -137,7 +137,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="12dp"
-            android:visibility="gone"
             app:borderWidth="0dp"
             app:elevation="12dp"
             app:fab_expandDirection="up"
@@ -145,6 +144,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:backgroundTint="?attr/colorAccent"
             tools:fab_addButtonColorNormal="?attr/colorAccent">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_start_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@android:color/white"
+                app:fab_icon="@drawable/ic_person_black_24dp"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_start_chat"
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
+
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_create_room"

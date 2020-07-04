@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">he</string>
+    <string name="resources_country_code">IL</string>
+    <string name="light_theme">עיצוב בהיר</string>
+    <string name="dark_theme">עיצוב כהה</string>
+    <string name="black_them">עיצוב שחור</string>
+    <string name="status_theme">עיצוב Status.im</string>
+
+    <string name="notification_sync_init">מאתחל שירות</string>
+    <string name="notification_sync_in_progress">מסנכרן…</string>
+    <string name="notification_listening_for_events">האזנה לאירועים</string>
+    <string name="notification_noisy_notifications">התראות רועשות</string>
+    <string name="notification_silent_notifications">התראות שקטות</string>
+
+    <string name="title_activity_home">הודעות</string>
+    <string name="title_activity_room">חדר</string>
+    <string name="title_activity_settings">הגדרות</string>
+    <string name="title_activity_member_details">פרטי משתתף</string>
+    <string name="title_activity_historical">היסטורי</string>
+    <string name="title_activity_bug_report">דיווח על באג</string>
+    <string name="title_activity_group_details">פרטי קהילה</string>
+    <string name="title_activity_choose_sticker">שליחת מדבקה</string>
+    <string name="notification_unknown_room_name">חדר</string>
+</resources>
