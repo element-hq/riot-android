@@ -1069,7 +1069,7 @@ public class CommonActivityUtils {
 
                     try {
                         File file = new File(fullFilePath);
-                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), false);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage(), e);
                     }
