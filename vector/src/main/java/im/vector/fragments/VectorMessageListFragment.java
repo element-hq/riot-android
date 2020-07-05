@@ -283,6 +283,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        VectorRoomActivity.getMediaPlayer().stop();
+    }
+
+    @Override
     public MXSession getSession(String matrixId) {
         return Matrix.getMXSession(getActivity(), matrixId);
     }
