@@ -265,4 +265,15 @@
         <item name="android:layout_marginRight">@dimen/layout_horizontal_margin</item>
         <item name="android:layout_marginTop">@dimen/layout_vertical_margin</item>
     </style>
+
+    <style name="VectorMaterialToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="materialThemeOverlay">@style/MyThemeOverlay_Toolbar</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="background">?colorPrimary</item>
+        <item name="theme">@style/VectorToolbarTheme</item>
+    </style>
+
+    <style name="MyThemeOverlay_Toolbar" parent="">
+        <item name="android:textColorPrimary">?attr/vctr_toolbar_primary_text_color</item>
+    </style>
 </resources>
