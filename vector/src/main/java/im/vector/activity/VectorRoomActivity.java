@@ -374,8 +374,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @SuppressLint("SetTextI18n")
 
     public void playBack(String savedMediaPath) {
-        // flag    fragment = 1
-//        adapter play
         mediaDataSourceName=savedMediaPath;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
@@ -2652,15 +2650,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             for (int i = 0; i < permissions.length; i++) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): " + permissions[i] + "=" + grantResults[i]);
 
-                if (Manifest.permission.RECORD_AUDIO.equals(permissions[i])) {
-                    if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
-                        Toast.makeText(this, "granted permissio", Toast.LENGTH_SHORT).show();
-//                        room_send_audio_view();
-                    }
-                    else
-                        Toast.makeText(this, "granted nooo", Toast.LENGTH_SHORT).show();
-
-                }
                 if (Manifest.permission.CAMERA.equals(permissions[i])) {
                     if (PackageManager.PERMISSION_GRANTED == grantResults[i]) {
                         Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
@@ -2709,8 +2698,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
-        }else if (requestCode== MY_PERMISSIONS_REQUEST_REC_Audio){
-//            room_send_audio_view();
         }
         else {
             // Transmit to Fragment
