@@ -50,7 +50,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -1619,13 +1621,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
-            if (((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3")))) {
+            if (((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.play);
             }
             if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
+            }
+            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+            File file = new File(filePath);
+            if (!file.exists()){
+                imageTypeView.setImageResource(R.drawable.ic_down_arrow);
             }
             assert imageTypeView != null;
             imageTypeView.setOnClickListener(new View.OnClickListener() {

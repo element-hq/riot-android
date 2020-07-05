@@ -886,6 +886,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
+    private boolean isExist(String filename){
+        String filePath = "/storage/emulated/0/Download/" + filename;
+        File file = new File(filePath);
+        return file.exists();
+
+    }
 
     /***
      * Manage save / share / forward actions on a media file
@@ -924,10 +930,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                         if (menuAction == ACTION_VECTOR_SAVE) {
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
-                                            if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3")){
+                                            if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3") || savedMediaPath.contains(".aac")){
                                                 VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
                                                 assert vectorRoomActivity != null;
                                                 vectorRoomActivity.playBack(savedMediaPath);
+                                                if (isExist(filename));{
+                                                    mAdapter.notifyDataSetChanged();
+                                                }
 
                                             }else
                                             ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);

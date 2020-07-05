@@ -492,12 +492,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
                         String currentTime = sdf.format(new Date());
                         voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-                        newFile = new File(voicePath, currentTime + ".3gp");
+                        newFile = new File(voicePath, currentTime + ".aac");
                         String outputFile = newFile.getAbsolutePath();
                         myAudioRecorder = new MediaRecorder();
                         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
                         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+                        myAudioRecorder.setAudioEncodingBitRate(16*44100);
+                        myAudioRecorder.setAudioSamplingRate(44100);
                         myAudioRecorder.setOutputFile(outputFile);
 
                         try {
