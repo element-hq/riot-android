@@ -543,7 +543,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
         mIsUiUpdateSkipped = !aIsListenerEnabled;
 
         try {
-            //SharedPreferences prefMgr = getActivity().getSharedPreferences("VectorSettingsFile", Context.MODE_PRIVATE);
             SharedPreferences prefMgr = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             if (aIsListenerEnabled) {
@@ -758,13 +757,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
             mRoomTopicEditTxt.setText(value);
         }
 
-        // update room directory visibility
-//        if (null != mRoomDirectoryVisibilitySwitch) {
-//            boolean isRoomPublic = TextUtils.equals(mRoom.getVisibility()/*getState().visibility ou .isPublic()*/, RoomState.DIRECTORY_VISIBILITY_PUBLIC);
-//            if (isRoomPublic !isRoomPublic= mRoomDirectoryVisibilitySwitch.isChecked())
-//                mRoomDirectoryVisibilitySwitch.setChecked(isRoomPublic);
-//        }
-
         // check if fragment is added to its Activity
         if (!isAdded()) {
             Log.e(LOG_TAG, "## updatePreferenceUiValues(): fragment not added to Activity - isAdded()=false");
@@ -820,11 +812,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                     value = RoomTag.ROOM_TAG_FAVOURITE;
                 } else if (null != mRoom.getAccountData().roomTag(RoomTag.ROOM_TAG_LOW_PRIORITY)) {
                     value = RoomTag.ROOM_TAG_LOW_PRIORITY;
-                /* For further use in case of multiple tags support
-                } else if (!mRoom.getAccountData().getKeys().isEmpty()) {
-                    for (String tag : customTagList){
-                        summary += (!summary.isEmpty()?" ":"") + tag;
-                    }*/
                 } else {
                     // no tag associated to the room
                     value = RoomTag.ROOM_TAG_NO_TAG;
@@ -1795,6 +1782,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
             isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_enabled);
             isEncryptedPreference.setKey(key);
             isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified));
+            /**
+             * BATNA ==> (Esmaeeil Moradi) change icon lock
+             */
             if (BuildConfig.IS_SABA){
                 isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified_batna));
             }

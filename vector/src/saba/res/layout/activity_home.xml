@@ -25,17 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/button_start_chat"-->
-<!--                android:background="?android:attr/selectableItemBackground"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="end"-->
-<!--                android:layout_marginEnd="24dp"-->
-<!--                android:layout_marginRight="24dp"-->
-<!--                android:contentDescription="@string/start_new_chat"-->
-<!--                app:srcCompat="@drawable/ic_add_white" />-->
-
             <ImageButton
                 android:id="@+id/button_global_search"
                 android:background="?android:attr/selectableItemBackground"
@@ -106,7 +95,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?vctr_bottom_nav_background_color"
-
             app:itemBackground="?vctr_bottom_nav_background_color"
             app:itemIconTint="@color/home_bottom_nav_view_tint"
             app:itemTextColor="@color/home_bottom_nav_view_tint"

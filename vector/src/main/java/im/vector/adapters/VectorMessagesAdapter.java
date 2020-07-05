@@ -1279,9 +1279,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
                 /**
-                 * Developed by BATNA (Esmaeeil Moradi)
+                 * BATNA ==> (Esmaeeil Moradi) change reply color in Group
                  */
-                //change reply color in Group
                 if (BuildConfig.IS_SABA) {
                     textColor = Color.DKGRAY;
                 }
@@ -1631,9 +1630,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (!(previousPosition == position))
-//                    Toast.makeText(mContext, "previousPosition  " + previousPosition + "  position " + position, Toast.LENGTH_SHORT).show();
-
 
                     String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
                     File file = new File(filePath);

@@ -377,7 +377,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         // flag    fragment = 1
 //        adapter play
         mediaDataSourceName=savedMediaPath;
-        Log.v("javad","activity    : "+mediaDataSourceName);
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }
@@ -513,9 +512,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                         } catch (IOException ioe) {
                             // make something
                         }
-//                                }
-//                            });
-//                            recordThread.start();
 
                     } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1050) {
                         recordButton.setScaleX((float) 1);
@@ -1960,39 +1956,43 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             isVideoCall = false;
             permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
-            if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
-                startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+            if (BuildConfig.IS_SABA) {
+                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                }
             }
         } else {
             isVideoCall = true;
             permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
-
-            if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
-                startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+            if (BuildConfig.IS_SABA) {
+                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                }
             }
         }
+        if (!BuildConfig.IS_SABA) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
+                    .setTitle(R.string.dialog_title_confirmation);
 
-//        AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
-//                .setTitle(R.string.dialog_title_confirmation);
-//
-//        if (isVideoCall) {
-//            builder.setMessage(getString(R.string.start_video_call_prompt_msg));
-//        } else {
-//            builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
-//        }
-//
-//        builder
-//                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
-//                            startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
-//                        }
-//                    }
-//                })
-//                .setNegativeButton(R.string.cancel, null)
-//                .show();
+            if (isVideoCall) {
+                builder.setMessage(getString(R.string.start_video_call_prompt_msg));
+            } else {
+                builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
+            }
+
+            builder
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                                startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
     }
 
     /**

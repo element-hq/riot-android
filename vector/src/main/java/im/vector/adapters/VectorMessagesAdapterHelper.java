@@ -193,7 +193,7 @@ class VectorMessagesAdapterHelper {
                     int textColor = colorIndexForSender(fSenderId);
                     senderTextView.setTextColor(context.getResources().getColor(textColor));
                     /**
-                     * Developed by BATNA (Esmaeeil Moradi ) change text color static
+                     * BATNA ==> (Esmaeeil Moradi ) change text color set static
                      */
                     if (BuildConfig.IS_SABA) {
                         senderTextView.setTextColor(context.getResources().getColor(R.color.text_black));
@@ -945,9 +945,8 @@ class VectorMessagesAdapterHelper {
 
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
         /**
-         * Developed  by BATNA (Esmaeeil Moradi) remove text 'In reply to' from SDK
+         * BATNA ==> (Esmaeeil Moradi) remove text 'In reply to' from SDK
          */
-
         if (BuildConfig.IS_SABA) {
             String totalText = strBuilder.toString();
             if (totalText.contains("In reply to")) {
