@@ -14,6 +14,7 @@ import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils.getColor
+import im.vector.ui.themes.ThemeUtils.setTabLayoutTheme
 import kotlinx.android.synthetic.main.fragment_directory.*
 import org.matrix.androidsdk.data.Room
 
@@ -30,6 +31,7 @@ class DirectoryFragment : AbsHomeFragment() {
         pager.adapter = DemoCollectionPagerAdapter(childFragmentManager, resources.getStringArray(R.array.directory_tabs))
         tabLayout.setupWithViewPager(pager)
         activity?.let { activity ->
+            setTabLayoutTheme(activity, tabLayout)
             mPrimaryColor = getColor(activity, R.attr.vctr_tab_home)
             mSecondaryColor = getColor(activity, R.attr.vctr_tab_home_secondary)
 

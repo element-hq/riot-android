@@ -6,8 +6,12 @@ import androidx.lifecycle.ViewModel
 class DirectoryRoleViewModel : ViewModel() {
     val advancedSearchVisibility = MutableLiveData<Boolean>()
 
+    init {
+        advancedSearchVisibility.value = false
+    }
+
     fun toggleSearchView() {
-        if (advancedSearchVisibility.value == null || advancedSearchVisibility.value == false) {
+        if (advancedSearchVisibility.value == false) {
             advancedSearchVisibility.postValue(true)
         } else {
             advancedSearchVisibility.postValue(false)

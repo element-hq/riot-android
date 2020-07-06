@@ -12,7 +12,6 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/VectorMaterialToolbarStyle"
             app:title="@string/riot_app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

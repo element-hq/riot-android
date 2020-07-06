@@ -5,6 +5,7 @@
 
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
+    <dimen name="layout_vertical_margin_half">8dp</dimen>
     <dimen name="layout_vertical_margin_big">32dp</dimen>
 
     <dimen name="profile_avatar_size">50dp</dimen>
