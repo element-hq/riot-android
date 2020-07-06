@@ -123,6 +123,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.dialogs.DialogCallAdapter;
 import im.vector.dialogs.DialogListItem;
 import im.vector.dialogs.DialogSendItemAdapter;
@@ -355,11 +356,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private File voicePath;
     private File newFile;
     private ColorStateList hintColor;
-    private ImageView play;
-    private ImageView pause;
-    private ImageView close;
-    private SeekBar seekBar;
-    private LinearLayout linearLayout;
+    private static ImageView play;
+    private static ImageView pause;
+    private static ImageView close;
+    private  SeekBar seekBar;
+    private static LinearLayout linearLayout;
     private static Handler myHandler = new Handler();
     public static String mediaDataSourceName;
 
@@ -370,6 +371,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     public static MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+    public static LinearLayout getLinearLayout() {
+        return linearLayout;
+    }
+    public static ImageView getPlay() {
+        return play;
+    }
+    public static ImageView getPause() {
+        return pause;
     }
     @SuppressLint("SetTextI18n")
 
@@ -404,6 +414,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     mediaPlayer.pause();
                     play.setVisibility(View.VISIBLE);
                     pause.setVisibility(View.GONE);
+                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
                 }
             }
         });
@@ -413,6 +424,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mediaPlayer.start();
                 pause.setVisibility(View.VISIBLE);
                 play.setVisibility(View.GONE);
+                VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.pause);
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -421,6 +433,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 linearLayout.setVisibility(View.GONE);
                 mediaPlayer.stop();
                 isRemainderVoice=false;
+                VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
+                VectorMessagesAdapter.setRemainderVoice(false);
             }
         });
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
