@@ -1,114 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/searchInputLayout"
-          style="@style/directory_view_input_layout"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/search_role"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/advancedSearchViewGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="categoryLayout, organisationLayout, specialityLayout, locationLayout, applyButton, cancelButton" />
 
-          <com.google.android.material.textfield.TextInputEditText
-              android:id="@+id/searchEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:imeOptions="actionNext"
-              android:inputType="text"
-              android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
+    <ImageButton
+        android:id="@+id/advancedSearchButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="24dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_more_vert"
+        app:layout_constraintBottom_toBottomOf="@+id/searchInputLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/searchInputLayout" />
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/categoryLayout"
-          style="@style/directory_view_drop_down_input_layout"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/category"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/searchInputLayout">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:hint="@string/search_role"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/advancedSearchButton"
+        app:layout_constraintTop_toTopOf="parent">
 
-          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-              android:id="@+id/categoryEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:cursorVisible="false"
-              android:focusableInTouchMode="false"
-              android:inputType="none"
-              android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/organisationLayout"
-          style="@style/directory_view_drop_down_input_layout"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/category"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/categoryLayout">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/categoryLayout"
+        style="@style/directory_view_drop_down_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/category"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchInputLayout">
 
-          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-              android:id="@+id/organisationEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:cursorVisible="false"
-              android:focusableInTouchMode="false"
-              android:inputType="none"
-              android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/categoryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/specialityLayout"
-          style="@style/directory_view_drop_down_input_layout"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/category"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/organisationLayout">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/organisationLayout"
+        style="@style/directory_view_drop_down_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/organisation_unit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryLayout">
 
-          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-              android:id="@+id/specialityEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:cursorVisible="false"
-              android:focusableInTouchMode="false"
-              android:inputType="none"
-              android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/organisationEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/locationLayout"
-          style="@style/directory_view_drop_down_input_layout"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:hint="@string/category"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/specialityLayout">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/specialityLayout"
+        style="@style/directory_view_drop_down_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/speciality"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organisationLayout">
 
-          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-              android:id="@+id/locationEditText"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:cursorVisible="false"
-              android:focusableInTouchMode="false"
-              android:inputType="none"
-              android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/specialityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/recyclerview"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/locationLayout"
+        style="@style/directory_view_drop_down_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/location"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/specialityLayout">
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/locationEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/applyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:text="@string/apply"
+        app:layout_constraintRight_toLeftOf="@+id/cancelButton"
+        app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:text="@string/cancel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

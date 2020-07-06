@@ -1587,4 +1587,6 @@ Why choose Riot.im?
     <string name="organisation_unit">Organisation Unit</string>
     <string name="speciality">Speciality</string>
     <string name="location">Location</string>
+    <string name="apply">Apply</string>
+    <string name="roles">Role</string>
 </resources>
