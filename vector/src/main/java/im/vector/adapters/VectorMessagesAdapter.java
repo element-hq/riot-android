@@ -50,9 +50,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -127,7 +125,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     // an event is selected when the user taps on it
     public static Event mSelectedEvent;
-    private String fileName;
 
     // events listeners
     IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
@@ -1185,6 +1182,21 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         // Sender avatar
         View avatarView = mHelper.setSenderAvatar(convertView, row, isMergedView);
 
+        /**
+         * BATNA ==> (Esmaeeil Moradi) change LayoutDirection messagesAdapter_body_view
+         */
+
+        if (BuildConfig.IS_SABA) {
+            final String userId = event.getSender();
+            if (userId.equals(mSession.getMyUserId())) {
+                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+            } else {
+                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
+
+
         // if the messages are merged
         // the thumbnail is hidden
         // and the subview must be moved to be aligned with the previous body
@@ -1282,9 +1294,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
                 /**
-                 * Developed by BATNA (Esmaeeil Moradi)
+                 * BATNA ==> (Esmaeeil Moradi) change reply color in Group
                  */
-                //change reply color in Group
                 if (BuildConfig.IS_SABA) {
                     textColor = Color.DKGRAY;
                 }
@@ -1593,6 +1604,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
+    private int previousPosition;
 
     private View getFileView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -1621,45 +1633,55 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
-            if (((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
+            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3")) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.play);
-            }
-            if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
-                assert imageTypeView != null;
-                imageTypeView.setImageResource(R.drawable.pause);
-            }
-            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
-            File file = new File(filePath);
-            if (!file.exists()){
-                imageTypeView.setImageResource(R.drawable.ic_down_arrow);
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && position == previousPosition) {
+//                    imageTypeView.setImageResource(R.drawable.pause);
+                    imageTypeView.setImageResource(R.drawable.play);
+                }
             }
             assert imageTypeView != null;
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
                     File file = new File(filePath);
                     if (file.exists()) {
-                        if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
+                        if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !(previousPosition == position)) {
                             activity.playBack(filePath);
-                            imageTypeView.setImageResource(R.drawable.pause);
-                            notifyDataSetChanged();
-                        } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName)) {
+//                            imageTypeView.setImageResource(R.drawable.pause);
+                            imageTypeView.setImageResource(R.drawable.play);
+
+//                            Toast.makeText(mContext, "new voice", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && (previousPosition == position)){
                             VectorRoomActivity.getMediaPlayer().start();
-                            imageTypeView.setImageResource(R.drawable.pause);
-                            notifyDataSetChanged();
-                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName)) {
+//                            imageTypeView.setImageResource(R.drawable.pause);
+                            imageTypeView.setImageResource(R.drawable.play);
+
+//                            Toast.makeText(mContext, "resume", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (VectorRoomActivity.getMediaPlayer().isPlaying()&&(previousPosition == position)) {
                             VectorRoomActivity.getMediaPlayer().pause();
                             imageTypeView.setImageResource(R.drawable.play);
-                            notifyDataSetChanged();
-                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
+//                            Toast.makeText(mContext, "pause", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (VectorRoomActivity.getMediaPlayer().isPlaying()&&!(previousPosition == position)) {
                             activity.playBack(filePath);
+//                            imageTypeView.setImageResource(R.drawable.pause);
+//                            Toast.makeText(mContext, "new voice2", Toast.LENGTH_SHORT).show();
                             imageTypeView.setImageResource(R.drawable.play);
-                            notifyDataSetChanged();
+
+
+
                         }
                     }
-                    fileName = fileMessage.body;
+
+                    previousPosition = position;
                 }
             });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
