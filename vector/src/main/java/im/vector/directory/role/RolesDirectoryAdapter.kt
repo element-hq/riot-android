@@ -25,11 +25,11 @@ class RolesDirectoryAdapter(val context: Context) :
     }
 
     class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var avatar: VectorCircularImageView? = null
-        private var expandableIcon: ImageView? = null
-        private var officialName: TextView? = null
-        private var secondaryName: TextView? = null
-        private var description: TextView? = null
+        var avatar: VectorCircularImageView? = null
+        var expandableIcon: ImageView? = null
+        var officialName: TextView? = null
+        var secondaryName: TextView? = null
+        var description: TextView? = null
 
         init {
             avatar = itemView.findViewById(R.id.avatar)
@@ -43,11 +43,21 @@ class RolesDirectoryAdapter(val context: Context) :
             VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
-            if(role.expanded){
+            if (role.expanded) {
                 description?.visibility = View.VISIBLE
-            }else{
+            } else {
                 description?.visibility = View.GONE
             }
+            description?.text = getStringArraysAsString("Role", role.roles).plus(getStringArraysAsString("Category", role.category))
+                    .plus(getStringArraysAsString("Speciality", role.speciality)).plus(getStringArraysAsString("Location", role.location))
+        }
+
+        private fun getStringArraysAsString(title: String, strings: ArrayList<String>): String {
+            val stringBuilder = StringBuilder()
+            for (string in strings) {
+                stringBuilder.append(title).append(": ").append(string)
+            }
+            return stringBuilder.toString()
         }
     }
 
@@ -70,6 +80,10 @@ class RolesDirectoryAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
         holder.bind(context, mSession, roles[position])
+        holder.expandableIcon?.setOnClickListener {
+            roles[position].expanded = !roles[position].expanded
+            notifyItemChanged(position)
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

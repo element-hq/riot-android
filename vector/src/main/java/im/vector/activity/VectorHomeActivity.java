@@ -957,6 +957,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = HomeFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
+                mSearchView.setVisibility(View.VISIBLE);
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 break;
             case R.id.bottom_action_favourites:
@@ -966,6 +967,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
+                mSearchView.setVisibility(View.VISIBLE);
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
                 break;
             case R.id.bottom_action_people:
@@ -975,7 +977,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new DirectoryFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                mSearchView.setVisibility(View.GONE);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(getString(R.string.directory_title));
+                }
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -984,6 +990,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
+                mSearchView.setVisibility(View.VISIBLE);
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 break;
             case R.id.bottom_action_groups:
@@ -993,6 +1000,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = GroupsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
+                mSearchView.setVisibility(View.VISIBLE);
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
                 break;
         }
