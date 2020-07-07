@@ -432,8 +432,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             public void onClick(View v) {
                 linearLayout.setVisibility(View.GONE);
                 mediaPlayer.stop();
-                isRemainderVoice=false;
-                VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
+                isRemainderVoice = false;
+                if (VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView() != null) {
+                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
+                }
                 VectorMessagesAdapter.setRemainderVoice(false);
             }
         });
