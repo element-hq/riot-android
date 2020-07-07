@@ -1,6 +1,6 @@
-package im.vector.directory.role;
+package im.vector.directory.role.model;
 
-class DropDownItem {
+public class DropDownItem {
     public DropDownItem(int id, String name) {
         this.id = id;
         this.name = name;

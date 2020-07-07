@@ -73,6 +73,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.directory.role.model.Role;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -353,6 +354,21 @@ public class VectorUtils {
         if (null != room) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, room.getAvatarUrl(), room.getRoomId(), room.getRoomDisplayName(context));
+        }
+    }
+
+    /**
+     * Set the room avatar in an imageView.
+     *
+     * @param context   the context
+     * @param session   the session
+     * @param imageView the image view
+     * @param role      the role
+     */
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Role role) {
+        if (null != role) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
         }
     }
 

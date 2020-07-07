@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
+import im.vector.directory.role.model.DropDownItem
+import im.vector.directory.role.model.Role
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 
 class DirectoryRoleFragment : Fragment() {
@@ -16,6 +19,7 @@ class DirectoryRoleFragment : Fragment() {
     private lateinit var organisationUnitAdapter: DropDownAdapter
     private lateinit var specialityAdapter: DropDownAdapter
     private lateinit var locationAdapter: DropDownAdapter
+    private lateinit var roleAdapter: RolesDirectoryAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +52,10 @@ class DirectoryRoleFragment : Fragment() {
         locationEditText.threshold = 1
         locationEditText.setAdapter(locationAdapter)
 
+        roleAdapter = RolesDirectoryAdapter(requireContext())
+        roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        roleRecyclerview.adapter = roleAdapter
+
         //test data
         val testDropDownData = mutableListOf<DropDownItem>()
         for (i in 1..5) {
@@ -57,6 +65,12 @@ class DirectoryRoleFragment : Fragment() {
         organisationUnitAdapter.addData(testDropDownData)
         specialityAdapter.addData(testDropDownData)
         locationAdapter.addData(testDropDownData)
+
+        val testRoleData = mutableListOf<Role>()
+        for (i in 1..10) {
+            testRoleData.add(Role(i.toString(), "Official Name $i", "Secondary Name $i", null, arrayListOf("Role $i"), arrayListOf("Category $i"), arrayListOf("speciality $i"), arrayListOf("Location $i")))
+        }
+        roleAdapter.setData(testRoleData)
     }
 
     private fun subscribeUI() {
