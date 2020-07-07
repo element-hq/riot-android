@@ -1,6 +1,9 @@
 package im.vector.directory.role
 
 import android.content.Context
+import android.graphics.Color
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.directory.RoundedBackgroundSpan
 import im.vector.directory.role.model.Role
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -19,9 +23,11 @@ class RolesDirectoryAdapter(val context: Context) :
         RecyclerView.Adapter<RolesDirectoryAdapter.RoleViewHolder>() {
     private val roles = mutableListOf<Role>()
     var mSession: MXSession? = null
+    var textSize: Float = 0.0F
 
     init {
         mSession = Matrix.getInstance(context).defaultSession
+        textSize = 13 * context.resources.displayMetrics.scaledDensity // sp to px
     }
 
     class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,7 +45,7 @@ class RolesDirectoryAdapter(val context: Context) :
             description = itemView.findViewById(R.id.description)
         }
 
-        fun bind(context: Context, session: MXSession?, role: Role) {
+        fun bind(context: Context, session: MXSession?, role: Role, textSize:Float) {
             VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
@@ -48,16 +54,23 @@ class RolesDirectoryAdapter(val context: Context) :
             } else {
                 description?.visibility = View.GONE
             }
-            description?.text = getStringArraysAsString("Role", role.roles).plus(getStringArraysAsString("Category", role.category))
-                    .plus(getStringArraysAsString("Speciality", role.speciality)).plus(getStringArraysAsString("Location", role.location))
+            description?.text =
+            getStringArraysAsString("Role", role.roles, textSize).append(getStringArraysAsString("Category", role.category, textSize))
+                    .append(getStringArraysAsString("Speciality", role.speciality, textSize)).append(getStringArraysAsString("Location", role.location, textSize))
         }
 
-        private fun getStringArraysAsString(title: String, strings: ArrayList<String>): String {
-            val stringBuilder = StringBuilder()
+        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize:Float): SpannableStringBuilder {
+            val stringBuilder = SpannableStringBuilder()
+            var start = 0
+
             for (string in strings) {
-                stringBuilder.append(title).append(": ").append(string)
+                stringBuilder.append(title).append(": ").append(string).append(" ")
+                var spanLength = title.plus(": ").plus(string).length
+                val tagSpan = RoundedBackgroundSpan(Color.RED, Color.BLACK, textSize)
+                stringBuilder.setSpan(tagSpan, start, spanLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                start += title.plus(": ").plus(string).plus(" ").length
             }
-            return stringBuilder.toString()
+            return stringBuilder
         }
     }
 
@@ -79,7 +92,7 @@ class RolesDirectoryAdapter(val context: Context) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position])
+        holder.bind(context, mSession, roles[position], textSize)
         holder.expandableIcon?.setOnClickListener {
             roles[position].expanded = !roles[position].expanded
             notifyItemChanged(position)
