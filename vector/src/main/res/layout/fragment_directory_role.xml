@@ -24,7 +24,6 @@
 
             <ImageButton
                 android:id="@+id/advancedSearchButton"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="24dp"
                 android:layout_height="0dp"
                 android:src="@drawable/ic_more_vert"
