@@ -20,7 +20,7 @@ import im.vector.view.VectorCircularImageView
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDirectoryAdapter(val context: Context) :
+class RolesDirectoryAdapter(val context: Context, val onClickListener: RoleClickListener) :
         RecyclerView.Adapter<RolesDirectoryAdapter.RoleViewHolder>() {
     private val roles = mutableListOf<Role>()
     var mSession: MXSession? = null
@@ -102,8 +102,15 @@ class RolesDirectoryAdapter(val context: Context) :
             roles[position].expanded = !roles[position].expanded
             notifyItemChanged(position)
         }
+        holder.itemView.setOnClickListener {
+            onClickListener.onRoleClick(roles[position])
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = roles.size
+}
+
+interface RoleClickListener{
+    fun onRoleClick(role: Role)
 }

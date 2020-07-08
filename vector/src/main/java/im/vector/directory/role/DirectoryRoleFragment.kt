@@ -1,5 +1,6 @@
 package im.vector.directory.role
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
+import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.DropDownItem
 import im.vector.directory.role.model.Role
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 
-class DirectoryRoleFragment : Fragment() {
+class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -52,7 +54,7 @@ class DirectoryRoleFragment : Fragment() {
         locationEditText.threshold = 1
         locationEditText.setAdapter(locationAdapter)
 
-        roleAdapter = RolesDirectoryAdapter(requireContext())
+        roleAdapter = RolesDirectoryAdapter(requireContext(), this)
         roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         roleRecyclerview.adapter = roleAdapter
 
@@ -81,5 +83,9 @@ class DirectoryRoleFragment : Fragment() {
                 advancedSearchViewGroup.visibility = View.GONE
             }
         })
+    }
+
+    override fun onRoleClick(role: Role) {
+        startActivity(Intent(activity, RoleDetailActivity::class.java))
     }
 }

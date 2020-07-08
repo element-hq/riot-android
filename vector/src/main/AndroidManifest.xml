@@ -171,6 +171,10 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/login" />
         <activity
+            android:name=".directory.role.detail.RoleDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/role_detail" />
+        <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|screenSize" />
         <activity
