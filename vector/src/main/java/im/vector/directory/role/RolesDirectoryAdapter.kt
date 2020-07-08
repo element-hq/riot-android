@@ -27,7 +27,7 @@ class RolesDirectoryAdapter(val context: Context) :
 
     init {
         mSession = Matrix.getInstance(context).defaultSession
-        textSize = 13 * context.resources.displayMetrics.scaledDensity // sp to px
+        textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
     }
 
     class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
