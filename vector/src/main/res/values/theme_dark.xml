@@ -158,6 +158,7 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Dark</item>
+        <item name="vctr_list_icon_tint_color">@color/riot_primary_background_color_light</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
