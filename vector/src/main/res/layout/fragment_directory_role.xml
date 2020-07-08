@@ -147,7 +147,6 @@
 
             <Button
                 android:id="@+id/cancelButton"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
