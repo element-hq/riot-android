@@ -159,6 +159,8 @@
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Dark</item>
         <item name="vctr_list_icon_tint_color">@color/riot_primary_background_color_light</item>
+        <item name="vctr_text_reverse_color">@color/riot_primary_background_color_dark</item>
+        <item name="vctr_text_spanable_text_background_color">@color/riot_primary_background_color_light</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

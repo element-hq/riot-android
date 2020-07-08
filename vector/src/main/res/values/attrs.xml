@@ -92,5 +92,8 @@
         <!-- Widget banner background -->
         <attr name="vctr_widget_banner_background" format="color" />
 
+        <attr name="vctr_text_reverse_color" format="color" />
+        <attr name="vctr_text_spanable_text_background_color" format="color" />
+
     </declare-styleable>
 </resources>

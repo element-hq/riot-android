@@ -14,6 +14,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.RoundedBackgroundSpan
 import im.vector.directory.role.model.Role
+import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import org.matrix.androidsdk.MXSession
@@ -24,13 +25,17 @@ class RolesDirectoryAdapter(val context: Context) :
     private val roles = mutableListOf<Role>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
+    var spanTextBackgroundColor: Int
+    var spanTextColor: Int
 
     init {
         mSession = Matrix.getInstance(context).defaultSession
         textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
+        spanTextBackgroundColor = getColor(context, R.attr.vctr_text_spanable_text_background_color)
+        spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
     }
 
-    class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var avatar: VectorCircularImageView? = null
         var expandableIcon: ImageView? = null
         var officialName: TextView? = null
@@ -45,7 +50,7 @@ class RolesDirectoryAdapter(val context: Context) :
             description = itemView.findViewById(R.id.description)
         }
 
-        fun bind(context: Context, session: MXSession?, role: Role, textSize:Float) {
+        fun bind(context: Context, session: MXSession?, role: Role) {
             VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
@@ -66,7 +71,7 @@ class RolesDirectoryAdapter(val context: Context) :
             for (string in strings) {
                 stringBuilder.append(title).append(": ").append(string).append(" ")
                 var spanLength = title.plus(": ").plus(string).length
-                val tagSpan = RoundedBackgroundSpan(Color.RED, Color.BLACK, textSize)
+                val tagSpan = RoundedBackgroundSpan(spanTextBackgroundColor, spanTextColor, textSize)
                 stringBuilder.setSpan(tagSpan, start, spanLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 start += title.plus(": ").plus(string).plus(" ").length
             }
@@ -92,7 +97,7 @@ class RolesDirectoryAdapter(val context: Context) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], textSize)
+        holder.bind(context, mSession, roles[position])
         holder.expandableIcon?.setOnClickListener {
             roles[position].expanded = !roles[position].expanded
             notifyItemChanged(position)
