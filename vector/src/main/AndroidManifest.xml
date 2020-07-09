@@ -173,7 +173,7 @@
         <activity
             android:name=".directory.role.detail.RoleDetailActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/role_detail" />
+            android:label="@string/title_activity_role_detail" />
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|screenSize" />
