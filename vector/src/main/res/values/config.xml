@@ -35,4 +35,5 @@
         <item>matrix.org</item>
     </string-array>
 
+    <bool name="analytics_prompt_at_the_beginning">true</bool>
 </resources>
