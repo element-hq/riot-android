@@ -4,6 +4,7 @@
     <dimen name="layout_touch_size">48dp</dimen>
 
     <dimen name="layout_horizontal_margin">16dp</dimen>
+    <dimen name="layout_horizontal_margin_half">8dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
     <dimen name="layout_vertical_margin_half">8dp</dimen>
     <dimen name="layout_vertical_margin_big">32dp</dimen>
