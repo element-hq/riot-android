@@ -835,7 +835,7 @@ public class PreferencesManager {
      * @return true if a dialog has been displayed to ask to use the analytics tracking
      */
     public static boolean didAskToUseAnalytics(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, !context.getResources().getBoolean(R.bool.analytics_prompt_at_the_beginning));
     }
 
     /**
