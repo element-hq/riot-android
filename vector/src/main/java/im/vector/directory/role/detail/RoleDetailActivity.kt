@@ -7,7 +7,7 @@ import im.vector.activity.AbstractWidgetActivity
 import im.vector.activity.MXCActionBarActivity
 import im.vector.activity.VectorAppCompatActivity
 import im.vector.directory.role.RolesDirectoryAdapter
-import kotlinx.android.synthetic.main.fragment_directory_role.*
+import kotlinx.android.synthetic.main.activity_role_detail.*
 
 class RoleDetailActivity: MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener {
     private lateinit var roleAdapter: RolesDetailAdapter
@@ -20,6 +20,10 @@ class RoleDetailActivity: MXCActionBarActivity(), FragmentManager.OnBackStackCha
         roleAdapter = RolesDetailAdapter( this)
         roleRecyclerview.layoutManager = LinearLayoutManager(this)
         roleRecyclerview.adapter = roleAdapter
+
+        callIcon.setOnClickListener {  }
+        chatIcon.setOnClickListener {  }
+        videoCallIcon.setOnClickListener {  }
     }
 
     override fun onDestroy() {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
@@ -57,12 +58,18 @@ class RolesDetailAdapter(val context: Context) :
         var heading: TextView? = null
         var officialName: TextView? = null
         var secondaryName: TextView? = null
+        var callIcon: ImageView? = null
+        var chatIcon: ImageView? = null
+        var videoCallIcon: ImageView? = null
 
         init {
             avatar = itemView.avatar
             heading = itemView.heading
             officialName = itemView.officialName
             secondaryName = itemView.secondaryName
+            callIcon = itemView.callIcon
+            chatIcon = itemView.chatIcon
+            videoCallIcon = itemView.videoCallIcon
         }
 
         fun bind(context: Context, session: MXSession?, role: Role) {
@@ -70,8 +77,10 @@ class RolesDetailAdapter(val context: Context) :
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
             //heading.text
+            callIcon?.setOnClickListener {  }
+            chatIcon?.setOnClickListener {  }
+            videoCallIcon?.setOnClickListener {  }
         }
-
     }
 
     fun setData(roles: MutableList<Role>) {
@@ -85,11 +94,11 @@ class RolesDetailAdapter(val context: Context) :
         // create a new view
         return when(viewType){
             TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_directory_role, parent, false))
+                    .inflate(R.layout.item_role_detail_category1, parent, false))
             TYPE_PRACTITIONER_IN_ROLE-> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_directory_role, parent, false))
+                    .inflate(R.layout.item_role_detail_category2, parent, false))
             else -> RoleViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_directory_role, parent, false))
+                    .inflate(R.layout.item_role_detail_category1, parent, false))
         }
     }
 
