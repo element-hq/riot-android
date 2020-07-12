@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.item_directory_people.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener) :
-        RecyclerView.Adapter<RolesDirectoryAdapter.RoleViewHolder>() {
+class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener) :
+        RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>() {
     private val people = mutableListOf<DirectoryPeople>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
@@ -35,7 +35,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: P
         spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
     }
 
-    inner class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PeopleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var avatar: VectorCircularImageView? = null
         var expandableIcon: ImageView? = null
         var officialName: TextView? = null
@@ -80,17 +80,17 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: P
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): RoleViewHolder {
+                                    viewType: Int): PeopleViewHolder {
         // create a new view
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_directory_people, parent, false)
         // set the view's size, margins, paddings and layout parameters
 
-        return RoleViewHolder(view)
+        return PeopleViewHolder(view)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PeopleViewHolder, position: Int) {
         holder.bind(context, mSession, people[position])
         holder.itemView.setOnClickListener {
             onClickListener.onPeopleClick(people[position])
@@ -103,4 +103,5 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: P
 
 interface PeopleClickListener{
     fun onPeopleClick(directoryPeople: DirectoryPeople)
+    fun onPeopleFavorite(directoryPeople: DirectoryPeople)
 }
