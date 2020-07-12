@@ -1591,4 +1591,5 @@ Why choose Riot.im?
     <string name="roles">Role</string>
     <string name="title_activity_role_detail">Role Detail</string>
     <string name="search_people">Search for people</string>
+    <string name="title_activity_people_detail">People Detail</string>
 </resources>

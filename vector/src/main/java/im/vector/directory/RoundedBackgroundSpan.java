@@ -30,6 +30,12 @@ public class RoundedBackgroundSpan extends ReplacementSpan {
         mTextSize = textSize;
     }
 
+    public static float convertDpToPixel(float dp) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
+    }
+
     @Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
         paint = new Paint(paint); // make a copy for not editing the referenced paint
@@ -58,11 +64,5 @@ public class RoundedBackgroundSpan extends ReplacementSpan {
         paint = new Paint(paint); // make a copy for not editing the referenced paint
         paint.setTextSize(mTextSize);
         return getTagWidth(text, start, end, paint);
-    }
-
-    public static float convertDpToPixel(float dp){
-        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi / 160f);
-        return Math.round(px);
     }
 }

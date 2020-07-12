@@ -55,10 +55,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             officialName?.text = people.officialName
             jobTitle?.text = people.jobTitle
             description?.text =
-            getStringArraysAsString("Organisations: ", people.organisations, textSize).append(getStringArraysAsString("Business Unit:", people.businessUnits, textSize))
+                    getStringArraysAsString("Organisations: ", people.organisations, textSize).append(getStringArraysAsString("Business Unit:", people.businessUnits, textSize))
         }
 
-        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize:Float): SpannableStringBuilder {
+        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize: Float): SpannableStringBuilder {
             val stringBuilder = SpannableStringBuilder()
             var start = 0
 
@@ -101,7 +101,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
     override fun getItemCount() = people.size
 }
 
-interface PeopleClickListener{
+interface PeopleClickListener {
     fun onPeopleClick(directoryPeople: DirectoryPeople)
     fun onPeopleFavorite(directoryPeople: DirectoryPeople)
 }

@@ -77,9 +77,9 @@ class RolesDetailAdapter(val context: Context) :
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
             //heading.text
-            callIcon?.setOnClickListener {  }
-            chatIcon?.setOnClickListener {  }
-            videoCallIcon?.setOnClickListener {  }
+            callIcon?.setOnClickListener { }
+            chatIcon?.setOnClickListener { }
+            videoCallIcon?.setOnClickListener { }
         }
     }
 
@@ -92,10 +92,10 @@ class RolesDetailAdapter(val context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): RecyclerView.ViewHolder {
         // create a new view
-        return when(viewType){
+        return when (viewType) {
             TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
-            TYPE_PRACTITIONER_IN_ROLE-> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
+            TYPE_PRACTITIONER_IN_ROLE -> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category2, parent, false))
             else -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
@@ -104,7 +104,7 @@ class RolesDetailAdapter(val context: Context) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(roles[position].type){
+        when (roles[position].type) {
             TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, roles[position])
             TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, roles[position])
         }

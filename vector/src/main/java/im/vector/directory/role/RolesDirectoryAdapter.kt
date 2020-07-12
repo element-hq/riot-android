@@ -1,7 +1,6 @@
 package im.vector.directory.role
 
 import android.content.Context
-import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.view.LayoutInflater
@@ -60,11 +59,11 @@ class RolesDirectoryAdapter(val context: Context, val onClickListener: RoleClick
                 description?.visibility = View.GONE
             }
             description?.text =
-            getStringArraysAsString("Role", role.roles, textSize).append(getStringArraysAsString("Category", role.category, textSize))
-                    .append(getStringArraysAsString("Speciality", role.speciality, textSize)).append(getStringArraysAsString("Location", role.location, textSize))
+                    getStringArraysAsString("Role", role.roles, textSize).append(getStringArraysAsString("Category", role.category, textSize))
+                            .append(getStringArraysAsString("Speciality", role.speciality, textSize)).append(getStringArraysAsString("Location", role.location, textSize))
         }
 
-        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize:Float): SpannableStringBuilder {
+        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize: Float): SpannableStringBuilder {
             val stringBuilder = SpannableStringBuilder()
             var start = 0
 
@@ -111,6 +110,6 @@ class RolesDirectoryAdapter(val context: Context, val onClickListener: RoleClick
     override fun getItemCount() = roles.size
 }
 
-interface RoleClickListener{
+interface RoleClickListener {
     fun onRoleClick(role: Role)
 }

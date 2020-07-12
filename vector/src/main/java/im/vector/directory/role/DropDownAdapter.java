@@ -30,7 +30,7 @@ public class DropDownAdapter extends ArrayAdapter<DropDownItem> {
         this.dropDownItemsAll = new ArrayList<>();
     }
 
-    public void addData(List<DropDownItem> data){
+    public void addData(List<DropDownItem> data) {
         dropDownItemsAll.clear();
         dropDownItems.clear();
         dropDownItemsAll.addAll(data);
