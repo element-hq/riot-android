@@ -1178,14 +1178,36 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorSecondary));
+                /**
+                 * BATNA ==>  change text color
+                 */
+                tsTextView.setTextColor(Color.BLACK);
+
             }
 
-            tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
+            tsTextView.setTextColor(Color.BLACK);
+
         }
 
         // Sender avatar
         View avatarView = mHelper.setSenderAvatar(convertView, row, isMergedView);
+
+        /**
+         * BATNA ==> (Esmaeeil Moradi) change LayoutDirection messagesAdapter_body_view
+         */
+
+        if (BuildConfig.IS_SABA) {
+            final String userId = event.getSender();
+            if (userId.equals(mSession.getMyUserId())) {
+                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext,R.drawable.out_message_shape));
+
+            } else {
+                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext,R.drawable.in_message_shape));
+            }
+        }
+
 
         // if the messages are merged
         // the thumbnail is hidden

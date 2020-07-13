@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/room_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- room header displayed when the status bar title is pressed -->
+
+        <include
+            android:id="@+id/action_bar_header"
+            layout="@layout/vector_room_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp">
+
+            <include layout="@layout/vector_message_action_bar_custom_layout" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/room_sync_in_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_action_bar"
+        android:background="?colorPrimary"
+        android:contentDescription="@string/room_sync_in_progress"
+        android:indeterminate="true" />
+
+    <LinearLayout
+        android:id="@+id/room_preview_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_sync_in_progress"
+        android:background="?android:attr/colorBackground"
+        android:orientation="vertical"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/room_preview_invitation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="14sp"
+            tools:text="Preview invitation" />
+
+        <LinearLayout
+            android:id="@+id/preview_actions_bar"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/button_decline"
+                android:layout_width="110dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/white"
+                android:text="@string/cancel"
+                android:textColor="@color/vector_fuchsia_color" />
+
+            <Button
+                android:id="@+id/button_join_room"
+                android:layout_width="110dp"
+                android:layout_height="36dp"
+                android:background="?attr/colorAccent"
+                android:text="@string/join_room"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/room_preview_subinvitation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/vector_silver_color"
+            android:textSize="14sp"
+            tools:text="invitation subtitle" />
+
+    </LinearLayout>
+
+    <im.vector.view.VectorPendingCallView
+        android:id="@+id/room_pending_call_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_preview_info_layout"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <im.vector.view.VectorOngoingConferenceCallView
+        android:id="@+id/room_ongoing_conference_call_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_pending_call_view"
+        android:background="?colorAccent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <im.vector.view.ActiveWidgetsBanner
+        android:id="@+id/room_pending_widgets_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_ongoing_conference_call_view"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/jump_to_first_unread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/room_pending_widgets_view"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="?android:attr/colorBackground"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/jump_to_first_unread_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toStartOf="@+id/close_jump_to_first_unread"
+            android:layout_toLeftOf="@+id/close_jump_to_first_unread"
+            android:drawableStart="@drawable/jump_to_unread"
+            android:drawableLeft="@drawable/jump_to_unread"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/room_jump_to_first_unread" />
+
+        <ImageView
+            android:id="@+id/close_jump_to_first_unread"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:layout_alignBottom="@+id/jump_to_first_unread_label"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/action_close"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/vector_leave_room_black"
+            android:tint="?attr/vctr_message_text_color" />
+
+        <ProgressBar
+            android:id="@+id/jump_to_read_spinner"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/jump_to_first_unread_label"
+            android:layout_alignBottom="@+id/jump_to_first_unread_label"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="2dp"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/jump_to_first_unread_label"
+            android:background="?attr/vctr_room_activity_divider_color" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/jump_to_first_unread"
+        android:background="?android:attr/colorBackground">
+
+        <ImageView
+            android:id="@+id/search_background_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFFFF"
+            android:src="@drawable/vector_search_bg"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/search_no_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/search_no_results"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="no result"
+            tools:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/anchor_fragment_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/room_notification_separator" />
+
+        <View
+            android:id="@+id/room_notification_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@id/room_notifications_area"
+            android:background="?attr/vctr_room_activity_divider_color" />
+
+        <im.vector.view.NotificationAreaView
+            android:id="@+id/room_notifications_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_separator"
+            android:minHeight="42dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:visibility="invisible"
+            tools:background="@color/vector_fuchsia_color"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/play_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/waiting_background_dark"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="1">
+
+            <ImageView
+                android:id="@+id/play"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/pause"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/ic_baseline_pause_24"
+                android:visibility="visible"
+                tools:ignore="ContentDescription" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4.5dp"
+                android:layout_weight="0.8"
+                android:keepScreenOn="true"/>
+
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0.1"
+                android:padding="2dp"
+                android:src="@drawable/ic_close"
+                android:visibility="visible"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@id/room_bottom_layout"
+            android:background="?attr/vctr_room_activity_divider_color" />
+
+        <RelativeLayout
+            android:id="@+id/room_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/colorBackground">
+
+            <im.vector.view.VectorCircularImageView
+                android:id="@+id/room_self_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:id="@+id/room_sending_message_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/room_self_avatar"
+                android:layout_toRightOf="@id/room_self_avatar"
+                android:minHeight="56dp">
+
+                <ImageView
+                    android:id="@+id/room_encrypted_image_view"
+                    android:layout_width="20dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2e_verified_batna"
+                    android:tint="?attr/colorAccent" />
+
+                <im.vector.view.VectorAutoCompleteTextView
+                    android:id="@+id/editText_messageBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:dropDownAnchor="@+id/room_sending_message_layout"
+                    android:hint="@string/room_message_placeholder_not_encrypted"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxHeight="160dp"
+                    android:textColor="?android:textColorPrimary"
+                    android:textColorHint="?attr/vctr_default_text_hint_color"
+                    android:textCursorDrawable="@drawable/searches_cursor_background"
+                    android:textSize="14sp"
+                    tools:text="line 1" />
+
+                <ImageView
+                    android:id="@+id/room_send_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/send"
+                    android:padding="8dp"
+                    android:rotationY="@integer/rtl_mirror_flip"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_material_file"
+                    android:tint="?attr/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/room_send_audio_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginEnd="-5dp"
+                    android:contentDescription="@string/send"
+                    android:padding="8dp"
+                    android:rotationY="@integer/rtl_mirror_flip"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_mic_black_24dp"
+                    android:tint="?attr/colorAccent" />
+
+
+
+                <ImageView
+                    android:id="@+id/room_start_call_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/call_connecting"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/voice_call_start_green"
+                    android:tint="?attr/colorAccent"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/room_end_call_image_view"
+                    android:layout_width="38dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="bottom"
+                    android:contentDescription="@string/call_ended"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/voice_call_end_fushia"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <View
+                    android:id="@+id/room_button_margin_right"
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/room_cannot_post_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@id/room_self_avatar"
+                android:layout_toRightOf="@id/room_self_avatar"
+                android:text="@string/room_do_not_have_permission_to_post"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_back_progress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_forward_progress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/anchor_fragment_messages"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/room_preview_info_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="?attr/vctr_waiting_background_color"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/medias_processing_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/loading"
+            android:indeterminate="true" />
+
+    </RelativeLayout>
+</RelativeLayout>

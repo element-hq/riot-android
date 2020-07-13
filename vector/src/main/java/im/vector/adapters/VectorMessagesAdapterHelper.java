@@ -183,8 +183,22 @@ class VectorMessagesAdapterHelper {
                         || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                     senderTextView.setVisibility(View.GONE);
                 } else {
-                    senderTextView.setVisibility(View.VISIBLE);
-                    senderTextView.setText(row.getSenderDisplayName());
+                    /**
+                     * BATNA ==> remove MyName from message
+                     */
+                    if (BuildConfig.IS_SABA){
+
+                        final String userId = event.getSender();
+                        if (userId.equals(mSession.getMyUserId())) {
+                            senderTextView.setVisibility(View.GONE);
+                        }else {
+                            senderTextView.setVisibility(View.VISIBLE);
+                            senderTextView.setText(row.getSenderDisplayName());
+                        }
+                    }else {
+                        senderTextView.setVisibility(View.VISIBLE);
+                        senderTextView.setText(row.getSenderDisplayName());
+                    }
 
                     final String fSenderId = event.getSender();
                     final String fDisplayName = (null == senderTextView.getText()) ? "" : senderTextView.getText().toString();

@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="text_black">#000000</color>
-    <color name="background_header_message">#7feeeeee</color>
+    <color name="background_header_message">#9feeeeee</color>
     <color name="background_header_message_divider">#009f9f9f</color>
+
+
+
+
+
+
+    <!-- theses colours are requested a background cannot be set by an ?attr on android < 5 -->
+    <!-- dedicated drawables are created for each theme -->
+    <!-- Default/Background-->
+<!--    <color name="riot_primary_background_color_light">#7f7f7f</color>-->
+    <!-- Dark/Background-->
+<!--    <color name="riot_primary_background_color_dark">#356859</color>-->
+    <!-- Black/Background-->
+<!--    <color name="riot_primary_background_color_black">#FF000000</color>-->
+<!--    <color name="riot_primary_background_color_status">#7F7F7F</color>-->
+<!--    <color name="accent_color_light">#356859</color>-->
+
+
+
+
+
+
+
+
+
 
 </resources>

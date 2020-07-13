@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" 
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:layout_gravity="start"
+
+    android:gravity="end">
+
+    <TextView
+        android:id="@+id/messagesAdapter_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp"
+        android:gravity="start"
+        tools:text="1970/01/01 00:00:00" />
+
+    <ImageView
+        android:id="@+id/messagesAdapter_action_image"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
+
+        android:src="@drawable/vector_actions_9b" />
+
+    <View
+        android:id="@+id/messagesAdapter_action_anchor"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:gravity="start"
+
+        android:contentDescription="@string/actions" />
+
+</LinearLayout>
+

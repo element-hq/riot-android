@@ -90,7 +90,6 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
@@ -216,9 +215,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 onRowClick(position);
             }
         });
-
-        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), android.R.attr.colorBackground));
-
+/**
+ * BATNA ==>(Esmaeeil Moradi) set background conversation layout
+ */
+        v.setBackgroundResource(R.drawable.background_main_conversation);
         return v;
     }
 
