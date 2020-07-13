@@ -31,7 +31,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -103,10 +102,8 @@ import org.matrix.androidsdk.rest.model.message.Message;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -121,6 +118,7 @@ import butterknife.OnTouch;
 import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.Thread.VectorThread;
 import im.vector.VectorApp;
 import im.vector.activity.util.RequestCodesKt;
 import im.vector.adapters.VectorMessagesAdapter;
@@ -157,7 +155,6 @@ import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static androidx.core.content.FileProvider.getUriForFile;
 import static im.vector.util.PermissionsToolsKt.MY_PERMISSIONS_REQUEST_REC_Audio;
 
 /**
@@ -351,23 +348,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_preview_subinvitation_textview)
     TextView subInvitationTextView;
 
-    private MediaRecorder myAudioRecorder;
-    private ImageView  recordButton;
-    private File voicePath;
-    private File newFile;
+    private static ImageView  recordButton;
+
+    private static File newFile;
     private ColorStateList hintColor;
+    @SuppressLint("StaticFieldLeak")
     private static ImageView play;
     private static ImageView pause;
     private static ImageView close;
     private  SeekBar seekBar;
+    private static TextView voiceCancel;
+
     private static LinearLayout linearLayout;
     private static Handler myHandler = new Handler();
     public static String mediaDataSourceName;
 
-
     private static MediaPlayer mediaPlayer ;
     private static boolean isRemainderVoice;
 
+    private static Handler mHandler;
+    private static int time = 0;
+    private boolean recordIsDone = false;
+    private static VectorThread vectorThread;
+    private static boolean actionUp;
 
     public static MediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -456,9 +459,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             }
         });
-
     }
-
     private Runnable UpdateVoiceTime = new Runnable() {
         public void run() {
             int startTime = mediaPlayer.getCurrentPosition();
@@ -473,102 +474,148 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     };
 
+    Runnable mAction = new Runnable() {
+        @Override
+        public void run() {
+
+            if (actionUp) {
+                mHandler.postDelayed(this, 100);
+                if (time < 500) {
+                    time += 100;
+
+                } else {
+                    vectorThread = new VectorThread();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mEditText.setHint(R.string.recording);
+                            voiceCancel.setText(R.string.cancel_recording);
+                        }
+                    });
+                    vectorThread.startVoiceRecorder(getApplicationContext());
+                    vectorThread.start();
+                    recordIsDone = true;
+                    actionUp = false;
+                }
+            }
+
+        }
+    };
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mediaPlayer=new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         if (!mEditText.getText().toString().equalsIgnoreCase("   recording ... "))
             mEditText.setText("");
         recordButton = findViewById(R.id.room_send_audio_view);
         play = findViewById(R.id.play);
         pause = findViewById(R.id.pause);
+        voiceCancel = findViewById(R.id.voice_cancel_hint);
         close = findViewById(R.id.close);
-        seekBar=findViewById(R.id.seekBar);
-        linearLayout=findViewById(R.id.play_layout);
+        seekBar = findViewById(R.id.seekBar);
+        linearLayout = findViewById(R.id.play_layout);
         hintColor = mEditText.getHintTextColors();
-        Activity vector=this;
+        resetLayout();
+        Activity vector = this;
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
         }
         recordButton.setOnTouchListener(new View.OnTouchListener() {
-            boolean recordIsDone =false;
-            @SuppressLint("ClickableViewAccessibility")
+            boolean cancelRecording = false;
+
+            @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
 
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        recordButton.setScaleX((float) 1.4);
-                        recordButton.setScaleY((float) 1.5);
-                        mEditText.setHint("  recording ... ");
-                        mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                        String currentTime = sdf.format(new Date());
-                        voicePath = new File(getApplicationContext().getFilesDir(), "ext_share");
-                        newFile = new File(voicePath, currentTime + ".aac");
-                        String outputFile = newFile.getAbsolutePath();
-                        myAudioRecorder = new MediaRecorder();
-                        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-                        myAudioRecorder.setAudioEncodingBitRate(16*44100);
-                        myAudioRecorder.setAudioSamplingRate(44100);
-                        myAudioRecorder.setOutputFile(outputFile);
+                int y = 0, x = 0, xResult = 0;
+                int eventX = (int) event.getX();
+                int[] location = new int[2];
+                recordButton.getLocationOnScreen(location);
+                x = location[0];
+                y = location[1];
 
-                        try {
-                            myAudioRecorder.prepare();
-                            myAudioRecorder.start();
-                            recordIsDone =true;
+                xResult = Math.abs(Math.abs(x) + Math.abs(eventX));
+                int a = (206 + (eventX));
+                int alpha = eventX > 0 ? 255 : Math.max(0, a);
+                voiceCancel.setTextColor(Color.argb(alpha, 0, 0, 0));
+                mEditText.setHintTextColor(Color.argb(alpha, 230, 10, 10));
 
-                        } catch (IllegalStateException ise) {
-                            // make something ...
-                        } catch (IOException ioe) {
-                            // make something
-                        }
-
-                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1050) {
-                        recordButton.setScaleX((float) 1);
-                        recordButton.setScaleY((float) 1);
-                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
-                        mEditText.setHintTextColor(hintColor);
-                        try {
-                            if (recordIsDone || myAudioRecorder!=null)  {
-                                myAudioRecorder.stop();
-                                myAudioRecorder.release();
-                                myAudioRecorder = null;
-                                Uri contentUri = getUriForFile(getApplicationContext(),
-                                                BuildConfig.APPLICATION_ID + ".fileProvider",
-                                                newFile);
-                                Intent intent = new Intent();
-                                intent.setData(contentUri);
-                                sendMediasIntent(intent);
-                            }
-                            else
-                                Toast.makeText(VectorRoomActivity.this, " imyAudioRecorder is null ", Toast.LENGTH_SHORT).show();
-                            mEditText.setText("");
-                            mEditText.setTextColor(Color.argb(255, 0, 0, 0));
-
-                        } catch (IllegalStateException ise) {
-                            // make something ...
-                        }
-                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() <= 1050) {
-                        recordButton.setScaleX((float) 1);
-                        recordButton.setScaleY((float) 1);
-                        mEditText.setHint(R.string.room_message_placeholder_encrypted);
-                        mEditText.setHintTextColor(hintColor);
-                        myAudioRecorder=null;
+                if (xResult >= Math.abs(x + 150)) {
+                    cancelRecording = true;
+                    resetLayout();
+                    if (VectorThread.getAudioRecorder() != null) {
+                        vectorThread.resetVoiceRecorder();
+                        vectorThread.deleteFile();
                     }
                 }
-                else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    mHandler = new Handler();
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        actionUp = true;
+                        mHandler.postDelayed(mAction, 0);
+                        voiceCancel.setVisibility(View.VISIBLE);
+                        mStartCallLayout.setVisibility(View.INVISIBLE);
+                        mSendImageView.setVisibility(View.GONE);
+                        mEditText.setHint("");
+                        recordButton.setScaleX((float) 1.4);
+                        recordButton.setScaleY((float) 1.5);
+                        mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
+
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1550 && !cancelRecording) {
+                        resetLayout();
+                        actionUp = false;
+                        time = 0;
+                        if (recordIsDone) {
+                            sendMediasIntent(vectorThread.stopVoiceRecorder(getApplicationContext()));
+                            recordIsDone = false;
+                        }
+
+                        mEditText.setText("");
+                        mEditText.setTextColor(Color.argb(255, 0, 0, 0));
+
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() <= 1550) {
+                        resetLayout();
+                        if (vectorThread != null)
+                            vectorThread.deleteFile();
+                        if (vectorThread != null) {
+                            vectorThread.resetVoiceRecorder();
+                        }
+                    }
+
+                } else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(vector, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    actionUp = false;
+                    time = 0;
+                    if (vectorThread != null) {
+                        vectorThread.resetVoiceRecorder();
+                    }
+                    resetLayout();
+                    if (cancelRecording) {
+                        cancelRecording = false;
+                        return false;
+                    }
                 }
                 return true;
             }
         });
-      }
+    }
+
+    private void resetLayout() {
+        recordButton.setScaleX((float) 1);
+        recordButton.setScaleY((float) 1);
+        mEditText.setHint(R.string.room_message_placeholder_encrypted);
+        mEditText.setHintTextColor(hintColor);
+        voiceCancel.setVisibility(View.GONE);
+        mStartCallLayout.setVisibility(View.VISIBLE);
+        mSendImageView.setVisibility(View.VISIBLE);
+    }
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
