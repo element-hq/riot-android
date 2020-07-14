@@ -103,6 +103,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.extensions.MatrixSdkExtensionsKt;
+import im.vector.fragments.VectorMessageListFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.VectorQuoteSpan;
@@ -236,6 +237,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
     private VectorImageGetter mImageGetter;
     private VectorRoomActivity activity;
+    private VectorMessageListFragment vectorMessageListFragment;
 
 
     private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
@@ -280,7 +282,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity activity) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity activity,VectorMessageListFragment vectorMessageListFragment) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -297,6 +299,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
         this.activity = activity;
+        this.vectorMessageListFragment=vectorMessageListFragment;
     }
     public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
@@ -1691,6 +1694,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (imageTypeView.getDrawable().getConstantState()
+                            ==  activity.getResources().getDrawable( R.drawable.ic_down_arrow).
+                    getConstantState()){
+                        vectorMessageListFragment.onContentClick(position);
+                }
 
                     String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
                     File file = new File(filePath);
