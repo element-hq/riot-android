@@ -348,7 +348,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_preview_subinvitation_textview)
     TextView subInvitationTextView;
 
-    private static ImageView  recordButton;
+    private static ImageView recordButton;
 
     private static File newFile;
     private ColorStateList hintColor;
@@ -356,14 +356,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static ImageView play;
     private static ImageView pause;
     private static ImageView close;
-    private  SeekBar seekBar;
+    private SeekBar seekBar;
     private static TextView voiceCancel;
 
     private static LinearLayout linearLayout;
     private static Handler myHandler = new Handler();
     public static String mediaDataSourceName;
 
-    private static MediaPlayer mediaPlayer ;
+    private static MediaPlayer mediaPlayer;
     private static boolean isRemainderVoice;
 
     private static Handler mHandler;
@@ -386,10 +386,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
     @SuppressLint("SetTextI18n")
 
-    public void playBack(String savedMediaPath) {
-        mediaDataSourceName=savedMediaPath;
+    public void playBack(String savedMediaPath,boolean downloaded) {
+        mediaDataSourceName = savedMediaPath;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
+        }
+        File file = new File(savedMediaPath);
+        if (file.exists() && downloaded) {
+            mVectorMessageListFragment.getMessageAdapter().notifyDataSetChanged();
+            return;
         }
 
         mediaPlayer = new MediaPlayer();
@@ -914,7 +919,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public int getLayoutRes() {
         return R.layout.activity_vector_room;
     }
-
 
 
     @Override
@@ -1578,7 +1582,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 case TAKE_IMAGE_REQUEST_CODE:
                 case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
-                    
+
                     break;
                 case RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE:
                     sendSticker(data);
@@ -2763,8 +2767,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startIpCall(PreferencesManager.useJitsiConfCall(this), true);
             }
-        }
-        else {
+        } else {
             // Transmit to Fragment
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -4230,7 +4233,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
-
 
 
     @OnClick(R.id.room_send_image_view)

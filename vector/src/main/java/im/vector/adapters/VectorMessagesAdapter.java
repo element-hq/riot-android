@@ -1698,6 +1698,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             ==  activity.getResources().getDrawable( R.drawable.ic_down_arrow).
                     getConstantState()){
                         vectorMessageListFragment.onContentClick(position);
+                        imageTypeView.setImageResource(R.drawable.play);
                 }
 
                     String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
@@ -1709,7 +1710,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             VectorRoomActivity.getPlay().setVisibility(View.GONE);
                             myHandler.postDelayed(checkRemainingVoice, 50);
                             vectorMessagesAdapterImageTypeView = imageTypeView;
-                            activity.playBack(filePath);
+                            activity.playBack(filePath,false);
                             imageTypeView.setImageResource(R.drawable.pause);
                             notifyDataSetChanged();
 
@@ -1729,7 +1730,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             notifyDataSetChanged();
 
                         } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
-                            activity.playBack(filePath);
+                            activity.playBack(filePath,false);
                             imageTypeView.setImageResource(R.drawable.play);
                             VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                             VectorRoomActivity.getPlay().setVisibility(View.GONE);

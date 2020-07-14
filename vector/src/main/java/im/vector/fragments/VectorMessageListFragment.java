@@ -933,7 +933,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                             if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3") || savedMediaPath.contains(".aac")){
                                                 VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
                                                 assert vectorRoomActivity != null;
-                                                vectorRoomActivity.playBack(savedMediaPath);
+                                                vectorRoomActivity.playBack(savedMediaPath,true);
                                                 if (isExist(filename));{
                                                     mAdapter.notifyDataSetChanged();
                                                 }
