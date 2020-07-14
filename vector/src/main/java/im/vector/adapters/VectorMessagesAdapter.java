@@ -1200,13 +1200,19 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             final String userId = event.getSender();
             if (userId.equals(mSession.getMyUserId())) {
                 convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType))
+                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
                     convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                } else {
+                    convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                }
 
-            } else {
+            } else{
                 convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType))
+                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
                     convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                } else {
+                    convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                }
             }
         }
 
