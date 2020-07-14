@@ -255,59 +255,6 @@
             tools:background="@color/vector_fuchsia_color"
             tools:visibility="visible" />
 
-        <LinearLayout
-            android:id="@+id/play_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@color/waiting_background_dark"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="1">
-
-            <ImageView
-                android:id="@+id/play"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.1"
-                android:padding="2dp"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                android:visibility="gone"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/pause"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.1"
-                android:padding="2dp"
-                android:src="@drawable/ic_baseline_pause_24"
-                android:visibility="visible"
-                tools:ignore="ContentDescription" />
-
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4.5dp"
-                android:layout_weight="0.8"
-                android:keepScreenOn="true"/>
-
-            <ImageView
-                android:id="@+id/close"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="0.1"
-                android:padding="2dp"
-                android:src="@drawable/ic_close"
-                android:visibility="visible"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
         <View
             android:id="@+id/bottom_separator"
             android:layout_width="match_parent"
@@ -352,7 +299,7 @@
                     android:layout_height="12dp"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/e2e_verified_batna"
+                    android:src="@drawable/e2e_verified"
                     android:tint="?attr/colorAccent" />
 
                 <im.vector.view.VectorAutoCompleteTextView
@@ -385,15 +332,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_material_file"
                     android:tint="?attr/colorAccent" />
-                <TextView
-                    android:id="@+id/voice_cancel_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textSize="16sp"
-                    android:visibility="visible"
-                    android:text="@string/cancel_recording"
-                    />
 
                 <ImageView
                     android:id="@+id/room_start_call_image_view"
@@ -407,18 +345,6 @@
                     android:tint="?attr/colorAccent"
                     android:visibility="gone"
                     tools:visibility="visible" />
-                <ImageView
-                    android:id="@+id/room_send_audio_view"
-                    android:layout_width="38dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginEnd="-5dp"
-                    android:contentDescription="@string/send"
-                    android:padding="8dp"
-                    android:rotationY="@integer/rtl_mirror_flip"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_mic_black_24dp"
-                    android:tint="?attr/colorAccent" />
 
                 <ImageView
                     android:id="@+id/room_end_call_image_view"

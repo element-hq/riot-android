@@ -1675,7 +1675,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
             String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
             File file = new File(filePath);
-            if (!file.exists()){
+            if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))){
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.ic_down_arrow);
             }
