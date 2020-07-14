@@ -19,7 +19,7 @@ import im.vector.view.VectorCircularImageView
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDirectoryAdapter(val context: Context, val onClickListener: RoleClickListener) :
+class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener) :
         RecyclerView.Adapter<RolesDirectoryAdapter.RoleViewHolder>() {
     private val roles = mutableListOf<Role>()
     var mSession: MXSession? = null
