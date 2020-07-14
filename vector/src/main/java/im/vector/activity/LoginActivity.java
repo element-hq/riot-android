@@ -739,9 +739,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         //hide/hide the custom server option according to config
         if(getResources().getBoolean(R.bool.hide_custom_url_login)){
-            customServerUrlLayout.setVisibility(View.GONE);
-        }else{
             customServerUrlLayout.setVisibility(View.VISIBLE);
+        }else{
+            customServerUrlLayout.setVisibility(View.GONE);
         }
     }
 
