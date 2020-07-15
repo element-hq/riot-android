@@ -403,10 +403,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         play.setVisibility(View.GONE);
 
         try {
+            mediaPlayer.reset();
             isRemainderVoice = true;
             mediaPlayer.setDataSource(savedMediaPath);
             mediaPlayer.prepare();
-            mediaPlayer.start();
+
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    mediaPlayer.reset();
+                    return false;
+                }
+            });
             seekBar.setMax(mediaPlayer.getDuration());
             myHandler.postDelayed(UpdateVoiceTime, 50);
 

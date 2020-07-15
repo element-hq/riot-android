@@ -236,7 +236,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final Drawable mPadlockDrawable;
 
     private VectorImageGetter mImageGetter;
-    private VectorRoomActivity activity;
+    private VectorRoomActivity vectorRoomActivity;
     private VectorMessageListFragment vectorMessageListFragment;
 
 
@@ -282,7 +282,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity activity,VectorMessageListFragment vectorMessageListFragment) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity vectorRoomActivity,VectorMessageListFragment vectorMessageListFragment) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -298,7 +298,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_redact,
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
-        this.activity = activity;
+        this.vectorRoomActivity = vectorRoomActivity;
         this.vectorMessageListFragment=vectorMessageListFragment;
     }
     public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
@@ -1695,7 +1695,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 @Override
                 public void onClick(View v) {
                     if (imageTypeView.getDrawable().getConstantState()
-                            ==  activity.getResources().getDrawable( R.drawable.ic_down_arrow).
+                            ==  vectorRoomActivity.getResources().getDrawable( R.drawable.ic_down_arrow).
                     getConstantState()){
                         vectorMessageListFragment.onContentClick(position);
                         imageTypeView.setImageResource(R.drawable.play);
@@ -1710,7 +1710,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             VectorRoomActivity.getPlay().setVisibility(View.GONE);
                             myHandler.postDelayed(checkRemainingVoice, 50);
                             vectorMessagesAdapterImageTypeView = imageTypeView;
-                            activity.playBack(filePath,false);
+                            vectorRoomActivity.playBack(filePath,false);
                             imageTypeView.setImageResource(R.drawable.pause);
                             notifyDataSetChanged();
 
@@ -1730,7 +1730,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             notifyDataSetChanged();
 
                         } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
-                            activity.playBack(filePath,false);
+                            vectorRoomActivity.playBack(filePath,false);
                             imageTypeView.setImageResource(R.drawable.play);
                             VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                             VectorRoomActivity.getPlay().setVisibility(View.GONE);
