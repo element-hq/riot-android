@@ -49,14 +49,19 @@ public class VectorThread extends Thread {
 
 
     public Intent stopVoiceRecorder(Context context) {
-        audioRecorder.stop();
-        audioRecorder.reset();
-        Uri contentUri = getUriForFile(context.getApplicationContext(),
-                BuildConfig.APPLICATION_ID + ".fileProvider",
-                newFile);
-        Intent intent = new Intent();
-        intent.setData(contentUri);
-        return intent;
+        try {
+            audioRecorder.stop();
+            audioRecorder.reset();
+            Uri contentUri = getUriForFile(context.getApplicationContext(),
+                    BuildConfig.APPLICATION_ID + ".fileProvider",
+                    newFile);
+            Intent intent = new Intent();
+            intent.setData(contentUri);
+            return intent;
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void resetVoiceRecorder() {

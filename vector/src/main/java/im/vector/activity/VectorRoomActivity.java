@@ -412,6 +412,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mediaPlayer.start();
+                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.pause);
                 }
             });
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
