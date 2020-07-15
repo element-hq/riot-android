@@ -407,29 +407,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             isRemainderVoice = true;
             mediaPlayer.setDataSource(savedMediaPath);
             mediaPlayer.prepare();
-
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mediaPlayer.start();
-                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.pause);
-                }
-            });
-            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    mediaPlayer.reset();
-                    return false;
-                }
-            });
+            mediaPlayer.start();
             seekBar.setMax(mediaPlayer.getDuration());
-            myHandler.postDelayed(UpdateVoiceTime, 50);
-
+            myHandler.postDelayed(UpdateVoiceTime, 100);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                linearLayout.setVisibility(View.GONE);
+                isRemainderVoice = false;
+            }
+        });
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -476,7 +467,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+            }
+        });
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mp.reset();
+                return false;
             }
         });
     }
@@ -485,12 +482,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             int startTime = mediaPlayer.getCurrentPosition();
             seekBar.setProgress(startTime);
             if (isRemainderVoice)
-                myHandler.postDelayed(this, 50);
-            if (mediaPlayer.getDuration() <= mediaPlayer.getCurrentPosition() + 51) {
-                linearLayout.setVisibility(View.GONE);
-                isRemainderVoice = false;
-            }
-
+                myHandler.postDelayed(this, 100);
         }
     };
 
@@ -550,7 +542,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                linearLayout.setVisibility(View.GONE);
                 int y = 0, x = 0, xResult = 0;
                 int eventX = (int) event.getX();
                 int[] location = new int[2];

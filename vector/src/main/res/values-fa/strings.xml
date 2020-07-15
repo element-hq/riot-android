@@ -519,6 +519,7 @@
     <string name="keys_backup_restore_is_getting_backup_version">گرفتن نگارش پشتیبان…</string>
     <string name="keys_backup_get_version_error">شکست در گرفتن آخرین نگارش کلیدهای بازیابی (%s).</string>
     <string name="keys_backup_info_title_version">نگارش</string>
-
+    <string name="cancel_recording">بکشید تا لغو شود</string>
+    <string name="recording">  در حال ضبط… </string>
     <string name="global_retry">تلاش دوباره</string>
 </resources>

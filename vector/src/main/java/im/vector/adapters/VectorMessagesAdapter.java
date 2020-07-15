@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -1620,18 +1621,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
-    private Runnable checkRemainingVoice = new Runnable() {
-        public void run() {
-            if (isRemainderVoice)
-                myHandler.postDelayed(this, 50);
-
-            if (VectorRoomActivity.getMediaPlayer().getDuration() <= VectorRoomActivity.getMediaPlayer().getCurrentPosition() + 51) {
-                vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.play);
-                isRemainderVoice = false;
-            }
-        }
-    };
-
     public static void setRemainderVoice(boolean isRemainderVoice) {
         VectorMessagesAdapter.isRemainderVoice = isRemainderVoice;
     }
@@ -1656,6 +1645,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         try {
             MessageRow row = getItem(position);
+            assert row != null;
             Event event = row.getEvent();
 
             final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
@@ -1690,70 +1680,77 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.ic_down_arrow);
             }
+
+            VectorRoomActivity.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.play);
+                    VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
+                    notifyDataSetChanged();
+                    isRemainderVoice = false;
+                }
+            });
             assert imageTypeView != null;
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (imageTypeView.getDrawable().getConstantState()
-                            ==  vectorRoomActivity.getResources().getDrawable( R.drawable.ic_down_arrow).
-                    getConstantState()){
-                        vectorMessageListFragment.onContentClick(position);
-                        imageTypeView.setImageResource(R.drawable.play);
-                }
-
-                    String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
-                    File file = new File(filePath);
-                    if (file.exists()) {
-                        if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName) || VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE) {
-                            isRemainderVoice = true;
-                            VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
-                            VectorRoomActivity.getPlay().setVisibility(View.GONE);
-                            myHandler.postDelayed(checkRemainingVoice, 50);
-                            vectorMessagesAdapterImageTypeView = imageTypeView;
-                            vectorRoomActivity.playBack(filePath,false);
-                            imageTypeView.setImageResource(R.drawable.pause);
-                            notifyDataSetChanged();
-
-                        } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName) && !(VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE)
-                        ) {
-                            VectorRoomActivity.getMediaPlayer().start();
-                            imageTypeView.setImageResource(R.drawable.pause);
-                            VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
-                            VectorRoomActivity.getPlay().setVisibility(View.GONE);
-                            notifyDataSetChanged();
-
-                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName)) {
-                            VectorRoomActivity.getMediaPlayer().pause();
-                            VectorRoomActivity.getPause().setVisibility(View.GONE);
-                            VectorRoomActivity.getPlay().setVisibility(View.VISIBLE);
-                            imageTypeView.setImageResource(R.drawable.play);
-                            notifyDataSetChanged();
-
-                        } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
-                            vectorRoomActivity.playBack(filePath,false);
-                            imageTypeView.setImageResource(R.drawable.play);
-                            VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
-                            VectorRoomActivity.getPlay().setVisibility(View.GONE);
-                            notifyDataSetChanged();
-                        }
-                    }
-                    fileName = fileMessage.body;
+                    playBack( imageTypeView, position,  fileMessage);
                 }
             });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
-
             mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
             mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
-
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
-
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage(), e);
         }
-
         return convertView;
+    }
+
+        private void playBack(ImageView imageTypeView,int position, FileMessage fileMessage){
+            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+            File file = new File(filePath);
+        if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable( R.drawable.ic_down_arrow).getConstantState()){
+            vectorMessageListFragment.onContentClick(position);
+            imageTypeView.setImageResource(R.drawable.play);
+        }
+
+        if (file.exists()) {
+            if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName) || VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE) {
+                isRemainderVoice = true;
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                vectorMessagesAdapterImageTypeView = imageTypeView;
+                vectorRoomActivity.playBack(filePath,false);
+                imageTypeView.setImageResource(R.drawable.pause);
+                notifyDataSetChanged();
+
+            } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName) && !(VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE)
+            ) {
+                VectorRoomActivity.getMediaPlayer().start();
+                imageTypeView.setImageResource(R.drawable.pause);
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                notifyDataSetChanged();
+
+            } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName)) {
+                VectorRoomActivity.getMediaPlayer().pause();
+                VectorRoomActivity.getPause().setVisibility(View.GONE);
+                VectorRoomActivity.getPlay().setVisibility(View.VISIBLE);
+                imageTypeView.setImageResource(R.drawable.play);
+                notifyDataSetChanged();
+
+            } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
+                vectorRoomActivity.playBack(filePath,false);
+                imageTypeView.setImageResource(R.drawable.play);
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                notifyDataSetChanged();
+            }
+        }
+        fileName = fileMessage.body;
     }
 
     /**
