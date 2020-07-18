@@ -435,6 +435,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mediaPlayer.isPlaying() && mediaPlayer.getCurrentPosition() <= 500)
+                    return;
+
                 mediaPlayer.start();
                 pause.setVisibility(View.VISIBLE);
                 play.setVisibility(View.GONE);
@@ -472,7 +475,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                mp.reset();
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.reset();
                 return false;
             }
         });

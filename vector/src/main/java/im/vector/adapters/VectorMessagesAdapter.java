@@ -1709,16 +1709,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
-        private void playBack(ImageView imageTypeView,int position, FileMessage fileMessage){
-            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
-            File file = new File(filePath);
-        if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable( R.drawable.ic_down_arrow).getConstantState()){
+    private void playBack(ImageView imageTypeView, int position, FileMessage fileMessage) {
+        String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+        File file = new File(filePath);
+        if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
             vectorMessageListFragment.onContentClick(position);
             imageTypeView.setImageResource(R.drawable.play);
         }
 
         if (file.exists()) {
             if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName) || VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE) {
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
                 isRemainderVoice = true;
                 VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                 VectorRoomActivity.getPlay().setVisibility(View.GONE);
@@ -1729,6 +1731,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName) && !(VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE)
             ) {
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
                 VectorRoomActivity.getMediaPlayer().start();
                 imageTypeView.setImageResource(R.drawable.pause);
                 VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
@@ -1743,7 +1747,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 notifyDataSetChanged();
 
             } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
-                vectorRoomActivity.playBack(filePath,false);
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
+                vectorRoomActivity.playBack(filePath, false);
                 imageTypeView.setImageResource(R.drawable.play);
                 VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                 VectorRoomActivity.getPlay().setVisibility(View.GONE);
