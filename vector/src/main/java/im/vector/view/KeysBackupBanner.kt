@@ -183,12 +183,17 @@ class KeysBackupBanner @JvmOverloads constructor(
             // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {
-            isVisible = true
+            if (BuildConfig.IS_SABA) {
+                isVisible = false
 
-            textView1.setText(R.string.keys_backup_banner_setup_line1)
-            textView2.isVisible = true
-            textView2.setText(R.string.keys_backup_banner_setup_line2)
-            close.isVisible = true
+            } else {
+                isVisible = true
+
+                textView1.setText(R.string.keys_backup_banner_setup_line1)
+                textView2.isVisible = true
+                textView2.setText(R.string.keys_backup_banner_setup_line2)
+                close.isVisible = true
+            }
         }
     }
 
@@ -196,12 +201,17 @@ class KeysBackupBanner @JvmOverloads constructor(
         if (version == context.defaultSharedPreferences.getString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, null)) {
             isVisible = false
         } else {
-            isVisible = true
+            if (BuildConfig.IS_SABA) {
+                isVisible = false
 
-            textView1.setText(R.string.keys_backup_banner_recover_line1)
-            textView2.isVisible = true
-            textView2.setText(R.string.keys_backup_banner_recover_line2)
-            close.isVisible = true
+            } else {
+                isVisible = true
+
+                textView1.setText(R.string.keys_backup_banner_recover_line1)
+                textView2.isVisible = true
+                textView2.setText(R.string.keys_backup_banner_recover_line2)
+                close.isVisible = true
+            }
         }
     }
 
@@ -209,18 +219,23 @@ class KeysBackupBanner @JvmOverloads constructor(
         if (version == context.defaultSharedPreferences.getString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, null)) {
             isVisible = false
         } else {
-            isVisible = true
+            if (BuildConfig.IS_SABA) {
+                isVisible = false
 
-            textView1.setText(R.string.keys_backup_banner_update_line1)
-            textView2.isVisible = true
-            textView2.setText(R.string.keys_backup_banner_update_line2)
-            close.isVisible = true
+            } else {
+                isVisible = true
+
+                textView1.setText(R.string.keys_backup_banner_update_line1)
+                textView2.isVisible = true
+                textView2.setText(R.string.keys_backup_banner_update_line2)
+                close.isVisible = true
+            }
         }
     }
 
     private fun renderBackingUp() {
         if (BuildConfig.IS_SABA) return
-        isVisible = true
+        isVisible = false
 
         textView1.setText(R.string.keys_backup_banner_in_progress)
         loading.isVisible = true
