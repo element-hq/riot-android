@@ -448,7 +448,6 @@
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:fragment="im.vector.fragments.discovery.VectorSettingsDiscoveryFragment"
             tools:summary="@string/default_identity_server_url" />
 
     </im.vector.preference.VectorPreferenceCategory>
