@@ -87,6 +87,6 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
     }
 
     override fun onRoleClick(role: DummyRole) {
-        startActivity(Intent(activity, RoleDetailActivity::class.java))
+        startActivity(RoleDetailActivity.intent(requireContext(), role))
     }
 }
