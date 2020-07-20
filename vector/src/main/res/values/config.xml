@@ -35,5 +35,5 @@
         <item>matrix.org</item>
     </string-array>
 
-    <bool name="hide_custom_url_login">true</bool>
+    <bool name="show_custom_url_login">true</bool>
 </resources>
