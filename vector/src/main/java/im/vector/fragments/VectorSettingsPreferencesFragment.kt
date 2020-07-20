@@ -490,6 +490,8 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         refreshEmailsList()
         refreshPhoneNumbersList()
+        
+        setFontPreferences()
 
         // Contacts
         if (resources.getBoolean(R.bool.settings_show_local_contacts))
@@ -502,7 +504,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // user interface preferences
         if (resources.getBoolean(R.bool.settings_language_visible))
-            setUserInterfacePreferences()
+            setLanguagePreferences()
         else
             removeLanguagePreference()
 
@@ -2713,7 +2715,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     // user interface management
     //==============================================================================================================
 
-    private fun setUserInterfacePreferences() {
+    private fun setLanguagePreferences() {
         // Selected language
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
@@ -2721,7 +2723,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)
             true
         }
+    }
 
+    private fun setFontPreferences() {
         // Text size
         textSizePreference.summary = FontScale.getFontScaleDescription()
 
