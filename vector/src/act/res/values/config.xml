@@ -88,7 +88,7 @@
     <bool name="settings_default_ringtone_visible">true</bool>
     <bool name="settings_set_ringtone_visible">true</bool>
 
-    <bool name="hide_custom_url_login">false</bool>
+    <bool name="show_custom_url_login">false</bool>
 
     <!--default values-->
     <bool name="settings_native_camera_use_default_value">false</bool>
