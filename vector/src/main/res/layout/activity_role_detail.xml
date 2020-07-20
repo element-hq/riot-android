@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/officialName"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/secondaryName"
-            style="@style/TextAppearance.AppCompat.Small"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/short_text"
@@ -110,10 +110,8 @@
             android:id="@+id/roleRecyclerview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_horizontal_margin"
             android:layout_marginTop="@dimen/layout_vertical_margin"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:layout_marginRight="@dimen/layout_horizontal_margin"
+            android:layout_marginBottom="@dimen/layout_vertical_margin"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line" />

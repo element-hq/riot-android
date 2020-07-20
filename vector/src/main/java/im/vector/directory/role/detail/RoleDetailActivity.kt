@@ -4,10 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
-import im.vector.activity.ReviewTermsActivity
 import im.vector.directory.role.model.DummyRole
+import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_role_detail.*
 
 class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener {
@@ -18,12 +19,17 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
 
     override fun initUiAndData() {
         configureToolbar()
+        mSession = Matrix.getInstance(this).defaultSession
 
         val role = intent.getParcelableExtra<DummyRole>(ROLE_EXTRA)
+        VectorUtils.loadRoomAvatar(this, session, avatar, role)
+        officialName.text = role.officialName
+        secondaryName.text = role.secondaryName
 
         roleAdapter = RolesDetailAdapter(this)
         roleRecyclerview.layoutManager = LinearLayoutManager(this)
         roleRecyclerview.adapter = roleAdapter
+        roleAdapter.setData(role)
 
         callIcon.setOnClickListener { }
         chatIcon.setOnClickListener { }

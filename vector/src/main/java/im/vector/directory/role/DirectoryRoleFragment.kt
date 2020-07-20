@@ -70,8 +70,8 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
 
         val testRoleData = mutableListOf<DummyRole>()
         for (i in 1..10) {
-            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, arrayListOf(Role("$i", "role $i", "location $i")),
-                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i","Location $i"))))
+            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, "Organization Unit $i" ,arrayListOf(Role("$i", "role $i", "location $i")),
+                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i","Location $i")), arrayListOf(Team("$i","Team $i"))))
         }
         roleAdapter.setData(testRoleData)
     }

@@ -3,6 +3,8 @@ package im.vector.directory.role.detail
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +23,7 @@ import org.matrix.androidsdk.MXSession
 
 class RolesDetailAdapter(val context: Context) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val roles = mutableListOf<DummyRole>()
+    private val adapterModels = mutableListOf<AdapterModel>()
     private val TYPE_ROLE = 1
     private val TYPE_ORGANISATION_UNIT = 2
     private val TYPE_TEAM = 3
@@ -46,10 +48,15 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, role: DummyRole) {
-            officialName?.text = role.officialName
-            secondaryName?.text = role.secondaryName
-            //heading.text
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+            heading?.text = adapterModel.title
+            officialName?.text = adapterModel.primaryText
+            if(adapterModel.secondaryText==null) {
+                secondaryName?.visibility = GONE
+                secondaryName?.text = adapterModel.secondaryText
+            }else{
+                secondaryName?.visibility = VISIBLE
+            }
         }
     }
 
@@ -72,20 +79,35 @@ class RolesDetailAdapter(val context: Context) :
             videoCallIcon = itemView.videoCallIcon
         }
 
-        fun bind(context: Context, session: MXSession?, role: DummyRole) {
-            VectorUtils.loadRoomAvatar(context, session, avatar, role)
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+            /*VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
             //heading.text
             callIcon?.setOnClickListener { }
             chatIcon?.setOnClickListener { }
-            videoCallIcon?.setOnClickListener { }
+            videoCallIcon?.setOnClickListener { }*/
         }
     }
 
-    fun setData(roles: MutableList<DummyRole>) {
-        this.roles.clear()
-        this.roles.addAll(roles)
+    fun setData(role: DummyRole) {
+        this.adapterModels.clear()
+
+        for(rl in role.roles){
+            adapterModels.add(AdapterModel("Role", rl.name, rl.category, TYPE_ROLE))
+        }
+        for(sp in role.speciality){
+            adapterModels.add(AdapterModel("Speciality", sp.name, null, TYPE_SPECIALITY))
+        }
+        for(lc in role.location){
+            adapterModels.add(AdapterModel("Location", lc.name, null, TYPE_LOCATION))
+        }
+        for(tm in role.teams){
+            adapterModels.add(AdapterModel("Team", tm.name, null, TYPE_TEAM))
+        }
+        adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, TYPE_ORGANISATION_UNIT))
+
+        notifyDataSetChanged()
     }
 
     // Create new views (invoked by the layout manager)
@@ -104,14 +126,14 @@ class RolesDetailAdapter(val context: Context) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (roles[position].type) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, roles[position])
-            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, roles[position])
+        when (adapterModels[position].rowType) {
+            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position])
+            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position])
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (roles[position].type) {
+        return when (adapterModels[position].rowType) {
             1 -> TYPE_ROLE
             2 -> TYPE_ORGANISATION_UNIT
             3 -> TYPE_TEAM
@@ -123,5 +145,8 @@ class RolesDetailAdapter(val context: Context) :
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = roles.size
+    override fun getItemCount() = adapterModels.size
 }
+
+data class AdapterModel(val title: String, val primaryText: String, val secondaryText: String?,
+                        val rowType: Int)
