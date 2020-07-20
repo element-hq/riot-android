@@ -632,6 +632,15 @@ public class VectorUtils {
         }
     }
 
+    /**
+     * Display the acknowledgement text.
+     */
+    public static void displayAcknowledgement() {
+        if (null != VectorApp.getCurrentActivity()) {
+            displayInWebView(VectorApp.getCurrentActivity(), "file:///android_asset/acknowledgement.html");
+        }
+    }
+
     //==============================================================================================================
     // List uris from intent
     //==============================================================================================================

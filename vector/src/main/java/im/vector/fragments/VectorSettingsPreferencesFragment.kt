@@ -988,6 +988,15 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeThirdPartyNoticePreference()
         }
 
+        // acknowledgement
+        if (resources.getBoolean(R.bool.settings_acknowledgement_visible)) {
+            findPreference(PreferencesManager.SETTINGS_ACKNOWLEDGEMENT_PREFERENCE_KEY)
+                    .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                VectorUtils.displayAcknowledgement()
+                false
+            }
+        }
+
         // update keep medias period
         if (resources.getBoolean(R.bool.settings_keep_media_visible)) {
             findPreference(PreferencesManager.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
