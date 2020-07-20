@@ -87,6 +87,7 @@
     <bool name="settings_notification_targets_visible">true</bool>
     <bool name="settings_default_ringtone_visible">false</bool>
     <bool name="settings_set_ringtone_visible">false</bool>
+    <bool name="settings_acknowledgement_visible">true</bool>
 
     <bool name="hide_custom_url_login">false</bool>
 
