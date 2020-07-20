@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.directory.role.model.Role
+import im.vector.directory.role.model.DummyRole
 import org.matrix.androidsdk.MXSession
 
 
 class PeopleDetailAdapter(val context: Context) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val roles = mutableListOf<Role>()
+    private val roles = mutableListOf<DummyRole>()
     private val TYPE_EMAIL = 1
     private val TYPE_PHONE = 2
     private val TYPE_ROLE = 3
@@ -28,7 +28,7 @@ class PeopleDetailAdapter(val context: Context) :
 
     }
 
-    fun setData(roles: MutableList<Role>) {
+    fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
     }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.directory.role.model.Role
+import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_role_detail_category1.view.heading
@@ -21,7 +21,7 @@ import org.matrix.androidsdk.MXSession
 
 class RolesDetailAdapter(val context: Context) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val roles = mutableListOf<Role>()
+    private val roles = mutableListOf<DummyRole>()
     private val TYPE_ROLE = 1
     private val TYPE_ORGANISATION_UNIT = 2
     private val TYPE_TEAM = 3
@@ -46,7 +46,7 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, role: Role) {
+        fun bind(context: Context, session: MXSession?, role: DummyRole) {
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
             //heading.text
@@ -72,7 +72,7 @@ class RolesDetailAdapter(val context: Context) :
             videoCallIcon = itemView.videoCallIcon
         }
 
-        fun bind(context: Context, session: MXSession?, role: Role) {
+        fun bind(context: Context, session: MXSession?, role: DummyRole) {
             VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
@@ -83,7 +83,7 @@ class RolesDetailAdapter(val context: Context) :
         }
     }
 
-    fun setData(roles: MutableList<Role>) {
+    fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
     }

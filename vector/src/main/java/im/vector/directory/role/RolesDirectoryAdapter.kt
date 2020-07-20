@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.RoundedBackgroundSpan
-import im.vector.directory.role.model.Role
+import im.vector.directory.role.model.DummyRole
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -21,7 +21,7 @@ import org.matrix.androidsdk.MXSession
 
 class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener) :
         RecyclerView.Adapter<RolesDirectoryAdapter.RoleViewHolder>() {
-    private val roles = mutableListOf<Role>()
+    private val roles = mutableListOf<DummyRole>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
     var spanTextBackgroundColor: Int
@@ -49,7 +49,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
             description = itemView.findViewById(R.id.description)
         }
 
-        fun bind(context: Context, session: MXSession?, role: Role) {
+        fun bind(context: Context, session: MXSession?, role: DummyRole) {
             VectorUtils.loadRoomAvatar(context, session, avatar, role)
             officialName?.text = role.officialName
             secondaryName?.text = role.secondaryName
@@ -58,27 +58,21 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
             } else {
                 description?.visibility = View.GONE
             }
-            description?.text =
-                    getStringArraysAsString("Role", role.roles, textSize).append(getStringArraysAsString("Category", role.category, textSize))
-                            .append(getStringArraysAsString("Speciality", role.speciality, textSize)).append(getStringArraysAsString("Location", role.location, textSize))
-        }
-
-        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize: Float): SpannableStringBuilder {
             val stringBuilder = SpannableStringBuilder()
-            var start = 0
-
-            for (string in strings) {
-                stringBuilder.append(title).append(": ").append(string).append(" ")
-                var spanLength = title.plus(": ").plus(string).length
-                val tagSpan = RoundedBackgroundSpan(spanTextBackgroundColor, spanTextColor, textSize)
-                stringBuilder.setSpan(tagSpan, start, spanLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                start += title.plus(": ").plus(string).plus(" ").length
+            for(rl in role.roles){
+                stringBuilder.append(rl.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize)).append(" ")
             }
-            return stringBuilder
+            for(sp in role.speciality){
+                stringBuilder.append(sp.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize)).append(" ")
+            }
+            for(lc in role.location){
+                stringBuilder.append(lc.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize))
+            }
+            description?.text = stringBuilder
         }
     }
 
-    fun setData(roles: MutableList<Role>) {
+    fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
     }
@@ -111,5 +105,5 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
 }
 
 interface RoleClickListener {
-    fun onRoleClick(role: Role)
+    fun onRoleClick(role: DummyRole)
 }

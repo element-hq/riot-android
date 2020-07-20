@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.role.detail.RoleDetailActivity
-import im.vector.directory.role.model.DropDownItem
-import im.vector.directory.role.model.Role
+import im.vector.directory.role.model.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+import java.util.*
 
 class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
@@ -68,9 +68,10 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         specialityAdapter.addData(testDropDownData)
         locationAdapter.addData(testDropDownData)
 
-        val testRoleData = mutableListOf<Role>()
+        val testRoleData = mutableListOf<DummyRole>()
         for (i in 1..10) {
-            testRoleData.add(Role(i.toString(), "Official Name $i", "Secondary Name $i", null, arrayListOf("Role $i"), arrayListOf("Category $i"), arrayListOf("speciality $i"), arrayListOf("Location $i")))
+            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, arrayListOf(Role("$i", "role $i", "location $i")),
+                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i","Location $i"))))
         }
         roleAdapter.setData(testRoleData)
     }
@@ -85,7 +86,7 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         })
     }
 
-    override fun onRoleClick(role: Role) {
+    override fun onRoleClick(role: DummyRole) {
         startActivity(Intent(activity, RoleDetailActivity::class.java))
     }
 }

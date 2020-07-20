@@ -74,7 +74,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.directory.people.model.DirectoryPeople;
-import im.vector.directory.role.model.Role;
+import im.vector.directory.role.model.DummyRole;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -366,7 +366,7 @@ public class VectorUtils {
      * @param imageView the image view
      * @param role      the role
      */
-    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Role role) {
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyRole role) {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
