@@ -67,7 +67,7 @@
     <bool name="settings_deactivate_account_visible">false</bool>
     <bool name="settings_application_info_visible">true</bool>
     <bool name="settings_version_visible">true</bool>
-    <bool name="settings_olm_version_visible">true</bool>
+    <bool name="settings_olm_version_visible">false</bool>
     <bool name="settings_copyright_visible">false</bool>
     <bool name="settings_terms_condition_visible">true</bool>
     <bool name="settings_privacy_policy_visible">true</bool>
