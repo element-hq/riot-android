@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -53,9 +54,9 @@ class RolesDetailAdapter(val context: Context) :
             officialName?.text = adapterModel.primaryText
             if(adapterModel.secondaryText==null) {
                 secondaryName?.visibility = GONE
-                secondaryName?.text = adapterModel.secondaryText
             }else{
                 secondaryName?.visibility = VISIBLE
+                secondaryName?.text = adapterModel.secondaryText
             }
         }
     }
@@ -80,13 +81,13 @@ class RolesDetailAdapter(val context: Context) :
         }
 
         fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
-            /*VectorUtils.loadRoomAvatar(context, session, avatar, role)
-            officialName?.text = role.officialName
-            secondaryName?.text = role.secondaryName
-            //heading.text
+            VectorUtils.loadRoomAvatar(context, session, avatar, adapterModel.people)
+            officialName?.text = adapterModel.people?.officialName
+            secondaryName?.text = adapterModel.people?.jobTitle
+            heading?.text = adapterModel.title
             callIcon?.setOnClickListener { }
             chatIcon?.setOnClickListener { }
-            videoCallIcon?.setOnClickListener { }*/
+            videoCallIcon?.setOnClickListener { }
         }
     }
 
@@ -94,19 +95,26 @@ class RolesDetailAdapter(val context: Context) :
         this.adapterModels.clear()
 
         for(rl in role.roles){
-            adapterModels.add(AdapterModel("Role", rl.name, rl.category, TYPE_ROLE))
+            adapterModels.add(AdapterModel("Role", rl.name, rl.category, null, TYPE_ROLE))
         }
         for(sp in role.speciality){
-            adapterModels.add(AdapterModel("Speciality", sp.name, null, TYPE_SPECIALITY))
+            adapterModels.add(AdapterModel("Speciality", sp.name, null, null, TYPE_SPECIALITY))
         }
         for(lc in role.location){
-            adapterModels.add(AdapterModel("Location", lc.name, null, TYPE_LOCATION))
+            adapterModels.add(AdapterModel("Location", lc.name, null, null, TYPE_LOCATION))
         }
         for(tm in role.teams){
-            adapterModels.add(AdapterModel("Team", tm.name, null, TYPE_TEAM))
+            adapterModels.add(AdapterModel("Team", tm.name, null, null, TYPE_TEAM))
         }
-        adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, TYPE_ORGANISATION_UNIT))
+        adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, null, TYPE_ORGANISATION_UNIT))
 
+        notifyDataSetChanged()
+    }
+
+    fun setData(people: List<DirectoryPeople>) {
+        for(ppl in people){
+            adapterModels.add(AdapterModel("Practitioner in Role", null, null, ppl, TYPE_PRACTITIONER_IN_ROLE))
+        }
         notifyDataSetChanged()
     }
 
@@ -148,5 +156,5 @@ class RolesDetailAdapter(val context: Context) :
     override fun getItemCount() = adapterModels.size
 }
 
-data class AdapterModel(val title: String, val primaryText: String, val secondaryText: String?,
+data class AdapterModel(val title: String, val primaryText: String?, val secondaryText: String?, val people: DirectoryPeople?,
                         val rowType: Int)

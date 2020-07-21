@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
+import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_role_detail.*
@@ -34,6 +35,13 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
         callIcon.setOnClickListener { }
         chatIcon.setOnClickListener { }
         videoCallIcon.setOnClickListener { }
+
+        //test data
+        val testPeopleData = mutableListOf<DirectoryPeople>()
+        for (i in 1..3) {
+            testPeopleData.add(DirectoryPeople(i.toString(), "Official Name $i", "job title $i", null, arrayListOf("Role $i"), arrayListOf("Category $i")))
+        }
+        roleAdapter.setData(testPeopleData)
     }
 
     override fun onDestroy() {
