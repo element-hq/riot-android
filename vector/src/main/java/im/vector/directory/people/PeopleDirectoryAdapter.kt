@@ -54,22 +54,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             VectorUtils.loadRoomAvatar(context, session, avatar, people)
             officialName?.text = people.officialName
             jobTitle?.text = people.jobTitle
-            description?.text =
-                    getStringArraysAsString("Organisations: ", people.organisations, textSize).append(getStringArraysAsString("Business Unit:", people.businessUnits, textSize))
-        }
-
-        private fun getStringArraysAsString(title: String, strings: ArrayList<String>, textSize: Float): SpannableStringBuilder {
-            val stringBuilder = SpannableStringBuilder()
-            var start = 0
-
-            for (string in strings) {
-                stringBuilder.append(title).append(": ").append(string).append(" ")
-                var spanLength = title.plus(": ").plus(string).length
-                val tagSpan = RoundedBackgroundSpan(spanTextBackgroundColor, spanTextColor, textSize)
-                stringBuilder.setSpan(tagSpan, start, spanLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                start += title.plus(": ").plus(string).plus(" ").length
-            }
-            return stringBuilder
+            description?.text = people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Organisation", people.organisations).append(people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Business Unit", people.businessUnits))
         }
     }
 

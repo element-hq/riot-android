@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
+import im.vector.directory.role.detail.RoleDetailActivity
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 
 class DirectoryPeopleFragment : Fragment(), PeopleClickListener {
@@ -32,13 +33,13 @@ class DirectoryPeopleFragment : Fragment(), PeopleClickListener {
         //test data
         val testPeopleData = mutableListOf<DirectoryPeople>()
         for (i in 1..10) {
-            testPeopleData.add(DirectoryPeople(i.toString(), "Official Name $i", "job title $i", null, arrayListOf("Role $i"), arrayListOf("Category $i")))
+            testPeopleData.add(DirectoryPeople(i.toString(), "Official Name $i", "job title $i", null, "Organisation $i", "Business Unit $i"))
         }
         peopleDirectoryAdapter.setData(testPeopleData)
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
-        startActivity(Intent(activity, PeopleDetailActivity::class.java))
+        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople))
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {

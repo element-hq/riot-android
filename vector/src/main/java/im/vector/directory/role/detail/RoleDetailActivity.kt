@@ -39,7 +39,7 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
         //test data
         val testPeopleData = mutableListOf<DirectoryPeople>()
         for (i in 1..3) {
-            testPeopleData.add(DirectoryPeople(i.toString(), "Official Name $i", "job title $i", null, arrayListOf("Role $i"), arrayListOf("Category $i")))
+            testPeopleData.add(DirectoryPeople(i.toString(), "Official Name $i", "job title $i", null, "Organisation $i", "Business Unit $i"))
         }
         roleAdapter.setData(testPeopleData)
     }
