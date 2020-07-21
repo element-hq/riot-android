@@ -1,6 +1,5 @@
 package im.vector.directory.people
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
-import im.vector.directory.role.detail.RoleDetailActivity
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 
 class DirectoryPeopleFragment : Fragment(), PeopleClickListener {

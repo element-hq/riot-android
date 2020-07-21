@@ -8,8 +8,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.directory.people.model.DirectoryPeople
-import im.vector.directory.role.detail.RoleDetailActivity
-import im.vector.directory.role.model.DummyRole
+import im.vector.directory.role.model.*
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
 
@@ -34,6 +33,15 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         peopleDetailAdapter = PeopleDetailAdapter(this)
         peopleRecyclerview.layoutManager = LinearLayoutManager(this)
         peopleRecyclerview.adapter = peopleDetailAdapter
+        peopleDetailAdapter.setData(people)
+
+        val testRoleData = mutableListOf<DummyRole>()
+        for (i in 1..5) {
+            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, "Organization Unit $i", arrayListOf(Role("$i", "role $i", "location $i")),
+                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i", "Location $i")), arrayListOf(Team("$i", "Team $i"))))
+        }
+        peopleDetailAdapter.setData(testRoleData)
+
 
         callIcon.setOnClickListener { }
         chatIcon.setOnClickListener { }

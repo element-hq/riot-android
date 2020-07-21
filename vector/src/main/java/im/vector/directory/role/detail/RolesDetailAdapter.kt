@@ -52,9 +52,9 @@ class RolesDetailAdapter(val context: Context) :
         fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
             heading?.text = adapterModel.title
             officialName?.text = adapterModel.primaryText
-            if(adapterModel.secondaryText==null) {
+            if (adapterModel.secondaryText == null) {
                 secondaryName?.visibility = GONE
-            }else{
+            } else {
                 secondaryName?.visibility = VISIBLE
                 secondaryName?.text = adapterModel.secondaryText
             }
@@ -94,16 +94,16 @@ class RolesDetailAdapter(val context: Context) :
     fun setData(role: DummyRole) {
         this.adapterModels.clear()
 
-        for(rl in role.roles){
+        for (rl in role.roles) {
             adapterModels.add(AdapterModel("Role", rl.name, rl.category, null, TYPE_ROLE))
         }
-        for(sp in role.speciality){
+        for (sp in role.speciality) {
             adapterModels.add(AdapterModel("Speciality", sp.name, null, null, TYPE_SPECIALITY))
         }
-        for(lc in role.location){
+        for (lc in role.location) {
             adapterModels.add(AdapterModel("Location", lc.name, null, null, TYPE_LOCATION))
         }
-        for(tm in role.teams){
+        for (tm in role.teams) {
             adapterModels.add(AdapterModel("Team", tm.name, null, null, TYPE_TEAM))
         }
         adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, null, TYPE_ORGANISATION_UNIT))
@@ -112,7 +112,7 @@ class RolesDetailAdapter(val context: Context) :
     }
 
     fun setData(people: List<DirectoryPeople>) {
-        for(ppl in people){
+        for (ppl in people) {
             adapterModels.add(AdapterModel("Practitioner in Role", null, null, ppl, TYPE_PRACTITIONER_IN_ROLE))
         }
         notifyDataSetChanged()
@@ -141,15 +141,7 @@ class RolesDetailAdapter(val context: Context) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (adapterModels[position].rowType) {
-            1 -> TYPE_ROLE
-            2 -> TYPE_ORGANISATION_UNIT
-            3 -> TYPE_TEAM
-            4 -> TYPE_SPECIALITY
-            5 -> TYPE_LOCATION
-            6 -> TYPE_PRACTITIONER_IN_ROLE
-            else -> TYPE_ROLE
-        }
+        return adapterModels[position].rowType
     }
 
     // Return the size of your dataset (invoked by the layout manager)

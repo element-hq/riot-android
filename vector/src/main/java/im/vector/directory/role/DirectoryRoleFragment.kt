@@ -1,6 +1,5 @@
 package im.vector.directory.role
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import im.vector.R
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
-import java.util.*
 
 class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
@@ -70,8 +68,8 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
 
         val testRoleData = mutableListOf<DummyRole>()
         for (i in 1..10) {
-            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, "Organization Unit $i" ,arrayListOf(Role("$i", "role $i", "location $i")),
-                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i","Location $i")), arrayListOf(Team("$i","Team $i"))))
+            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, "Organization Unit $i", arrayListOf(Role("$i", "role $i", "location $i")),
+                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i", "Location $i")), arrayListOf(Team("$i", "Team $i"))))
         }
         roleAdapter.setData(testRoleData)
     }

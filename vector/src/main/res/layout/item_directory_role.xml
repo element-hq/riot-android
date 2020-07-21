@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="16dp"
+    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingRight="@dimen/layout_horizontal_margin"
     android:background="?attr/selectableItemBackground">
 
     <im.vector.view.VectorCircularImageView

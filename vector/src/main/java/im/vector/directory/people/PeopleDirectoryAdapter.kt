@@ -1,8 +1,6 @@
 package im.vector.directory.people
 
 import android.content.Context
-import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.directory.RoundedBackgroundSpan
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils

@@ -15,7 +15,7 @@ data class DummyRole(val id: String, val officialName: String, val secondaryName
 }
 
 @Parcelize
-data class Role(val id: String, val name: String, val category: String): Parcelable {
+data class Role(val id: String, val name: String, val category: String) : Parcelable {
     fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float): SpannableStringBuilder {
         val stringBuilder = SpannableStringBuilder()
         stringBuilder.append("Role: ").append(name).append(", ").append("Category").append(": ").append(category).append(" ")
@@ -28,8 +28,8 @@ data class Role(val id: String, val name: String, val category: String): Parcela
 }
 
 @Parcelize
-data class Speciality(val id: String, val name: String): Parcelable{
-     fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float): SpannableStringBuilder {
+data class Speciality(val id: String, val name: String) : Parcelable {
+    fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float): SpannableStringBuilder {
         val stringBuilder = SpannableStringBuilder()
         stringBuilder.append("Speciality").append(": ").append(name).append(" ")
         val tagSpan = RoundedBackgroundSpan(spanTextBackgroundColor, spanTextColor, textSize)
@@ -39,8 +39,8 @@ data class Speciality(val id: String, val name: String): Parcelable{
 }
 
 @Parcelize
-data class DummyLocation(val id: String, val name: String): Parcelable{
-     fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float): SpannableStringBuilder {
+data class DummyLocation(val id: String, val name: String) : Parcelable {
+    fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float): SpannableStringBuilder {
         val stringBuilder = SpannableStringBuilder()
         stringBuilder.append("Location").append(": ").append(name).append(" ")
         val tagSpan = RoundedBackgroundSpan(spanTextBackgroundColor, spanTextColor, textSize)
@@ -50,4 +50,4 @@ data class DummyLocation(val id: String, val name: String): Parcelable{
 }
 
 @Parcelize
-data class Team(val id: String, val name: String): Parcelable
+data class Team(val id: String, val name: String) : Parcelable
