@@ -38,6 +38,14 @@
             android:textColor="@android:color/white"
             tools:text="topic" />
 
+        <im.vector.view.NotificationAreaViewToolbar
+            android:id="@+id/room_notifications_area_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            tools:background="@color/vector_fuchsia_color"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
     <ImageView

@@ -63,8 +63,8 @@
     <string name="room_message_file_not_found">پرونده پیدا نشد</string>
     <string name="room_do_not_have_permission_to_post">شما اجازه‌ی ارسال پیام در این گفتگو را ندارید</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">%d پیام جدید</item>
-        <item quantity="other">%d پیام جدید</item>
+        <item quantity="one">%d </item>
+        <item quantity="other">%d </item>
     </plurals>
 
     <!-- Room Details -->

@@ -146,6 +146,7 @@ import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.ActiveWidgetsBanner;
 import im.vector.view.NotificationAreaView;
+import im.vector.view.NotificationAreaViewToolbar;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
@@ -309,6 +310,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     // notifications area
     @BindView(R.id.room_notifications_area)
     NotificationAreaView mNotificationsArea;
+
+    // notifications area toolbar
+    @BindView(R.id.room_notifications_area_head)
+    NotificationAreaViewToolbar mNotificationsAreaHead;
 
     private String mLatestTypingMessage;
     private Boolean mIsScrolledToTheBottom;
@@ -1021,6 +1026,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
 
+
+        /**
+         * Batna  => setDelegate Notification toolbar
+         */
+        if (BuildConfig.IS_SABA) {
+            mNotificationsAreaHead.setDelegate(new NotificationAreaViewToolbar.Delegate() {
+                @NotNull
+                @Override
+                public IMessagesAdapterActionsListener providesMessagesActionListener() {
+                    return mVectorMessageListFragment;
+                }
+
+                @Override
+                public void resendUnsentEvents() {
+                    mVectorMessageListFragment.resendUnsentMessages();
+                }
+
+                @Override
+                public void deleteUnsentEvents() {
+                    mVectorMessageListFragment.deleteUnsentEvents();
+                }
+
+                @Override
+                public void closeScreen() {
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+
+                @Override
+                public void jumpToBottom() {
+                    if (mReadMarkerManager != null) {
+                        mReadMarkerManager.handleJumpToBottom();
+                    } else {
+                        mVectorMessageListFragment.scrollToBottom(0);
+                    }
+                }
+            });
+        }
+
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
         configureToolbar();
@@ -1357,6 +1401,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) || hasBeenKicked) {
             if (!mIsUnreadPreviewMode || hasBeenKicked) {
                 mNotificationsArea.setVisibility(View.GONE);
+                if (BuildConfig.IS_SABA)
+                    mNotificationsAreaHead.setVisibility(View.GONE);
                 mBottomSeparator.setVisibility(View.GONE);
                 findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
             }
@@ -1739,6 +1785,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (mNotificationsArea != null) {
             mNotificationsArea.setScrollState(scrollState);
+        }
+        if (mNotificationsAreaHead != null) {
+            mNotificationsAreaHead.setScrollState(scrollState);
         }
     }
 
@@ -2975,17 +3024,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
 
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
+        NotificationAreaViewToolbar.State stateToolbar = NotificationAreaViewToolbar.State.Default.INSTANCE;
         mHasUnsentEvents = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
             state = NotificationAreaView.State.Hidden.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.Hidden.INSTANCE;
         } else if (hardResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(false, hardResourceLimitExceededError);
+            stateToolbar = new NotificationAreaViewToolbar.State.ResourceLimitExceededError(false, hardResourceLimitExceededError);
         } else if (softResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(true, softResourceLimitExceededError);
+            stateToolbar = new NotificationAreaViewToolbar.State.ResourceLimitExceededError(true, softResourceLimitExceededError);
         } else if (!Matrix.getInstance(this).isConnected()) {
             state = NotificationAreaView.State.ConnectionError.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.ConnectionError.INSTANCE;
         } else if (mIsUnreadPreviewMode) {
             state = NotificationAreaView.State.UnreadPreview.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.UnreadPreview.INSTANCE;
         } else {
             final List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliveredEvents(mRoom.getRoomId());
             final List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
@@ -2994,6 +3049,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (hasUndeliverableEvents || hasUnknownDeviceEvents) {
                 mHasUnsentEvents = true;
                 state = new NotificationAreaView.State.UnsentEvents(hasUndeliverableEvents, hasUnknownDeviceEvents);
+                mNotificationsArea.setBackgroundColor(Color.WHITE);
+                if (findViewById(R.id.room_notification_message).getVisibility() == View.GONE) {
+                    findViewById(R.id.room_notification_message).setVisibility(View.VISIBLE);
+                    mNotificationsArea.setBackgroundColor(Color.WHITE);
+                }
+
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 int unreadCount = 0;
                 final RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
@@ -3001,8 +3062,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getReadReceiptEventId());
                 }
                 state = new NotificationAreaView.State.ScrollToBottom(unreadCount, mLatestTypingMessage);
+                stateToolbar = new NotificationAreaViewToolbar.State.ScrollToBottom(unreadCount, mLatestTypingMessage);
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 state = new NotificationAreaView.State.Typing(mLatestTypingMessage);
+                stateToolbar = new NotificationAreaViewToolbar.State.Typing(mLatestTypingMessage);
             } else if (mRoom.getState().isVersioned()) {
                 final RoomTombstoneContent roomTombstoneContent = mRoom.getState().getRoomTombstoneContent();
                 final List<Event> events = mRoom.getState().getStateEvents(new HashSet<>(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE)));
@@ -3013,9 +3076,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
 
                 state = new NotificationAreaView.State.Tombstone(roomTombstoneContent, sender);
+                stateToolbar = new NotificationAreaViewToolbar.State.Tombstone(roomTombstoneContent, sender);
             }
         }
         mNotificationsArea.render(state);
+
+        /**
+         * Batna ==> render state (Notification) in toolbar
+         */
+        if (BuildConfig.IS_SABA)
+            mNotificationsAreaHead.render(stateToolbar);
 
         supportInvalidateOptionsMenu();
     }

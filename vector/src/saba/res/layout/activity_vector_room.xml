@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_main_message"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -205,8 +206,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/jump_to_first_unread"
-        android:background="?android:attr/colorBackground">
+        android:layout_below="@+id/jump_to_first_unread">
 
         <ImageView
             android:id="@+id/search_background_imageview"
@@ -234,12 +234,12 @@
             android:id="@+id/anchor_fragment_messages"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/room_notification_separator" />
+            android:layout_above="@id/room_bottom_layout" />
 
         <View
             android:id="@+id/room_notification_separator"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0dp"
             android:layout_above="@id/room_notifications_area"
             android:background="?attr/vctr_room_activity_divider_color" />
 

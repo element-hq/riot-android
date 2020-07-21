@@ -218,7 +218,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 /**
  * BATNA ==>(Esmaeeil Moradi) set background conversation layout
  */
-        v.setBackgroundResource(R.drawable.background_main_conversation);
+        v.setBackgroundResource(R.drawable.background_main_conversation_shape);
         return v;
     }
 
