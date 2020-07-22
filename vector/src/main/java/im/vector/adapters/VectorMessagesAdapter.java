@@ -51,6 +51,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -1644,6 +1645,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         try {
+            ProgressBar progressBar=convertView.findViewById(R.id.download_progressBar);
             MessageRow row = getItem(position);
             assert row != null;
             Event event = row.getEvent();
@@ -1662,7 +1664,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // display the right message type icon.
             // Audio and File messages are managed by the same method
             final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
-
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
@@ -1676,25 +1677,43 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
             String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
             File file = new File(filePath);
-            if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))){
+            if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.ic_down_arrow);
+            } else if (file.exists() && progressBar.getVisibility() == View.VISIBLE && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
+                progressBar.setVisibility(View.GONE);
+                imageTypeView.setVisibility(View.VISIBLE);
+                notifyDataSetChanged();
             }
-
             VectorRoomActivity.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.play);
-                    VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
-                    notifyDataSetChanged();
-                    isRemainderVoice = false;
+                    try {
+                        if (imageTypeView != null) {
+                            imageTypeView.setImageResource(R.drawable.play);
+                            VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
+                            notifyDataSetChanged();
+                            isRemainderVoice = false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             assert imageTypeView != null;
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    playBack( imageTypeView, position,  fileMessage);
+                    if (!file.exists() && ((fileMessage.body.contains("3gp") ||
+                            fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        imageTypeView.setVisibility(View.GONE);
+                        playBack( imageTypeView, position,  fileMessage);
+                    } else if(((fileMessage.body.contains("3gp") ||fileMessage.body.contains("mp3") ||
+                            fileMessage.body.contains("aac")))){
+                        progressBar.setVisibility(View.GONE);
+                        playBack( imageTypeView, position,  fileMessage);
+                    }
                 }
             });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
@@ -1710,6 +1729,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     }
 
     private void playBack(ImageView imageTypeView, int position, FileMessage fileMessage) {
+        vectorMessagesAdapterImageTypeView = imageTypeView;
+
         String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
         File file = new File(filePath);
         if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
@@ -1724,9 +1745,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 isRemainderVoice = true;
                 VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                 VectorRoomActivity.getPlay().setVisibility(View.GONE);
-                vectorMessagesAdapterImageTypeView = imageTypeView;
                 vectorRoomActivity.playBack(filePath,false);
                 imageTypeView.setImageResource(R.drawable.pause);
+
                 notifyDataSetChanged();
 
             } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName) && !(VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE)

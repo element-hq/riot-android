@@ -116,6 +116,11 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginLeft="4dp"
                                 android:src="@drawable/filetype_image" />
+                            <ProgressBar
+                                android:id="@+id/download_progressBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
 
                             <!-- the media -->
                             <TextView

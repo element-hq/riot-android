@@ -908,6 +908,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                        final EncryptedFileInfo encryptedFileInfo) {
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
+        VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
 
         final MXMediaCache mediasCache = Matrix.getInstance(getActivity()).getMediaCache();
         // check if the media has already been downloaded
@@ -931,7 +932,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
                                             if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3") || savedMediaPath.contains(".aac")){
-                                                VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
+
                                                 assert vectorRoomActivity != null;
                                                 vectorRoomActivity.playBack(savedMediaPath,true);
                                                 if (isExist(filename));{
