@@ -59,7 +59,7 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         //test data
         val testDropDownData = mutableListOf<DropDownItem>()
         for (i in 1..5) {
-            testDropDownData.add(DropDownItem(i, "Item $i"))
+            testDropDownData.add(DropDownItem(i, "Item 1"))
         }
         categoryAdapter.addData(testDropDownData)
         organisationUnitAdapter.addData(testDropDownData)
@@ -67,10 +67,27 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         locationAdapter.addData(testDropDownData)
 
         val testRoleData = mutableListOf<DummyRole>()
-        for (i in 1..10) {
-            testRoleData.add(DummyRole(i.toString(), "Official Name $i", "Secondary Name $i", null, "Organization Unit $i", arrayListOf(Role("$i", "role $i", "location $i")),
-                    arrayListOf(Speciality("$i", "Speciality $i")), arrayListOf(DummyLocation("$i", "Location $i")), arrayListOf(Team("$i", "Team $i"))))
-        }
+        testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute RMO", "Emergency Department  Acute Resident Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Resident", "Doctor")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute Intern", "Emergency Department  Acute Intern", null, "ED {Emergency Department}", arrayListOf(Role("1", "Intern", "Doctor")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute Consultant", "Emergency Department  Acute Consultant", null, "ED {Emergency Department}", arrayListOf(Role("1", "Consultant", "Doctor")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute East Nurse", "Emergency Department  Acute East Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute East PL", "Emergency Department  Acute East Pod Leader", null, "ED {Emergency Department}", arrayListOf(Role("1", "Nursing Team Leader", "Nursing and Midwifery")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
+        testRoleData.add(DummyRole("1", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
         roleAdapter.setData(testRoleData)
     }
 

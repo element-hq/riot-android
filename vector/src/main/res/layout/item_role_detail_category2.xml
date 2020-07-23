@@ -14,6 +14,7 @@
     <TextView
         android:id="@+id/heading"
         style="@style/TextAppearance.AppCompat.Title"
+        android:textSize="@dimen/title_text_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_activity_role_detail"
@@ -23,8 +24,9 @@
 
     <ImageView
         android:id="@+id/callIcon"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:padding="2dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:background="?attr/selectableItemBackground"
@@ -36,8 +38,9 @@
 
     <ImageView
         android:id="@+id/chatIcon"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:padding="2dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:background="?attr/selectableItemBackground"
@@ -49,8 +52,8 @@
 
     <ImageView
         android:id="@+id/videoCallIcon"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/video_call_black"
         android:tint="?attr/vctr_list_icon_tint_color"
@@ -58,9 +61,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <im.vector.view.VectorCircularImageView
+        android:layout_marginTop="4dp"
         android:id="@+id/avatar"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/heading" />
 
@@ -68,7 +72,9 @@
         android:id="@+id/officialName"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/sub_title_text_size"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingLeft="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
@@ -81,6 +87,7 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/sub_title_text_size"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingLeft="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"

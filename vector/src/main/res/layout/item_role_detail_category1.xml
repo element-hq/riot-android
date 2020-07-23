@@ -14,6 +14,7 @@
     <TextView
         android:id="@+id/heading"
         style="@style/TextAppearance.AppCompat.Title"
+        android:textSize="@dimen/title_text_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_activity_role_detail"
@@ -24,6 +25,7 @@
     <TextView
         android:id="@+id/officialName"
         style="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="@dimen/sub_title_text_size"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingLeft="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
@@ -37,6 +39,7 @@
     <TextView
         android:id="@+id/secondaryName"
         android:paddingStart="@dimen/layout_horizontal_margin"
+        android:textSize="@dimen/sub_title_text_size"
         android:paddingLeft="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
         style="@style/TextAppearance.AppCompat.Medium"
