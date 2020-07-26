@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/background_main_message"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main_message">
 
     <FrameLayout
         android:id="@+id/room_action_bar"
@@ -25,7 +25,8 @@
             android:id="@+id/toolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp">
 
@@ -293,7 +294,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4.5dp"
                 android:layout_weight="0.8"
-                android:keepScreenOn="true"/>
+                android:keepScreenOn="true" />
 
             <ImageView
                 android:id="@+id/close"
@@ -390,10 +391,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:textSize="16sp"
-                    android:visibility="visible"
                     android:text="@string/cancel_recording"
-                    />
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/room_start_call_image_view"
