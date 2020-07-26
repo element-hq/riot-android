@@ -910,6 +910,27 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         final String trimmedFileName = new File(filename).getName();
         VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
 
+        if (filename.contains(".3gp")|| filename.contains(".mp3") || filename.contains(".aac")){
+            File file1=new File(VectorRoomActivity.voicePath+filename);
+            if (file1.exists() ) {
+                return;
+            }
+            if (!file1.exists() ) {
+                File dir = new File(VectorRoomActivity.voicePath);
+                if (dir.isDirectory())
+                {
+                    String[] voices = dir.list();
+                    for (String voice : voices) {
+                        new File(dir, voice).delete();
+                    }
+                    assert vectorRoomActivity != null;
+                }
+            }
+            if (isExist(filename)) ;
+            {
+                mAdapter.notifyDataSetChanged();
+            }
+        }
         final MXMediaCache mediasCache = Matrix.getInstance(getActivity()).getMediaCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {

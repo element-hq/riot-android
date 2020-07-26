@@ -396,9 +396,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @SuppressLint("SetTextI18n")
 
     public void playBack(String savedMediaPath, boolean downloaded) {
-//        progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-
         mediaDataSourceName = savedMediaPath;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
