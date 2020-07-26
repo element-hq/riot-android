@@ -363,6 +363,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static ImageView close;
     private SeekBar seekBar;
     private static TextView voiceCancel;
+    public static String voicePath;
 
     private static LinearLayout linearLayout;
     private static Handler myHandler = new Handler();
@@ -531,6 +532,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        voicePath =getApplicationContext().getCacheDir()+"/voice/";
         mediaPlayer = new MediaPlayer();
         if (!mEditText.getText().toString().equalsIgnoreCase("   recording ... "))
             mEditText.setText("");

@@ -1675,7 +1675,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
             }
-            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+            String filePath = VectorRoomActivity.voicePath + fileMessage.body;
             File file = new File(filePath);
             if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
                 assert imageTypeView != null;
@@ -1731,7 +1731,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void playBack(ImageView imageTypeView, int position, FileMessage fileMessage) {
         vectorMessagesAdapterImageTypeView = imageTypeView;
 
-        String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+        String filePath = VectorRoomActivity.voicePath + fileMessage.body;
         File file = new File(filePath);
         if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
             vectorMessageListFragment.onContentClick(position);

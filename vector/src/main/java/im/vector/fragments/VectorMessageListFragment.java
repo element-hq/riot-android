@@ -887,7 +887,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 .show();
     }
     private boolean isExist(String filename){
-        String filePath = "/storage/emulated/0/Download/" + filename;
+        String filePath = VectorRoomActivity.voicePath + filename;
         File file = new File(filePath);
         return file.exists();
 
