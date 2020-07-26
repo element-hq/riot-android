@@ -466,4 +466,5 @@
         <item quantity="other">%d عضو آنلاین</item>
     </plurals>
     <string name="room_header_online_members">%d عضو، %d آنلاین</string>
+    <string name="preview">پیوستن</string>
 </resources>

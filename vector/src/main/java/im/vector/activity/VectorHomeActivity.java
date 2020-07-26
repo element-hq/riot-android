@@ -1646,7 +1646,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             private void onError(final String message) {
                 hideWaitingView();
-                Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                /**
+                 * BATNA  ==>  remove error toast from preview page
+                 *
+                 * */
+                if (!BuildConfig.IS_SABA) {
+                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override

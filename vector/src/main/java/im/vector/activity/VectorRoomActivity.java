@@ -383,15 +383,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     public static LinearLayout getLinearLayout() {
         return linearLayout;
     }
+
     public static ImageView getPlay() {
         return play;
     }
+
     public static ImageView getPause() {
         return pause;
     }
+
     @SuppressLint("SetTextI18n")
 
-    public void playBack(String savedMediaPath,boolean downloaded) {
+    public void playBack(String savedMediaPath, boolean downloaded) {
 //        progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
@@ -489,6 +492,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
         });
     }
+
     private Runnable UpdateVoiceTime = new Runnable() {
         public void run() {
             int startTime = mediaPlayer.getCurrentPosition();
@@ -3758,175 +3762,225 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageRoomPreview() {
         if (null != sRoomPreviewData) {
-            mRoomPreviewLayout.setVisibility(View.VISIBLE);
 
-            Button joinButton = findViewById(R.id.button_join_room);
-            Button declineButton = findViewById(R.id.button_decline);
+/**
+ * BATNA==> remove preview layout
+ */
+            if (BuildConfig.IS_SABA) {
+                mRoomPreviewLayout.setVisibility(View.GONE);
 
-            final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
+                if (null != sRoomPreviewData) {
+                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
-            String roomName = sRoomPreviewData.getRoomName();
-            if (TextUtils.isEmpty(roomName)) {
-                roomName = " ";
-            }
+                    String signUrl = null;
+                    showWaitingView();
 
-            Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
-
-
-            // if the room already exists
-            if (null != mRoom) {
-                Log.d(LOG_TAG, "manageRoomPreview : The room is known");
-
-                String inviter = "";
-
-                if (null != roomEmailInvitation) {
-                    inviter = roomEmailInvitation.inviterName;
-                }
-
-                if (TextUtils.isEmpty(inviter)) {
-                    mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
+                    room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
                         @Override
-                        public void onSuccess(List<RoomMember> members) {
-                            String inviter = "";
+                        public void onSuccess(Void info) {
+                            onJoined();
+                        }
 
-                            for (RoomMember member : members) {
-                                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                                    inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
-                                }
+                        private void onError(String errorMessage) {
+                            Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            hideWaitingView();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                hideWaitingView();
+                                getConsentNotGivenHelper().displayDialog(e);
+                            } else {
+                                onError(e.getLocalizedMessage());
                             }
+                        }
 
-                            invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
                         }
                     });
-                } else {
-                    invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                 }
-
-                declineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(LOG_TAG, "The user clicked on decline.");
-
-                        showWaitingView();
-
-                        mRoom.leave(new ApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void info) {
-                                Log.d(LOG_TAG, "The invitation is rejected");
-                                onDeclined();
-                            }
-
-                            private void onError(String errorMessage) {
-                                Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
-                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                hideWaitingView();
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                    hideWaitingView();
-                                    getConsentNotGivenHelper().displayDialog(e);
-                                } else {
-                                    onError(e.getLocalizedMessage());
-                                }
-                            }
-
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-                        });
-                    }
-                });
 
             } else {
-                if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
-                    invitationTextView.setText(getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
-                    subInvitationTextView.setText(getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
-                } else {
-                    invitationTextView.setText(getString(R.string.room_preview_try_join_an_unknown_room,
-                            TextUtils.isEmpty(sRoomPreviewData.getRoomName()) ? getString(R.string.room_preview_try_join_an_unknown_room_default) : roomName));
 
-                    // the room preview has some messages
-                    if ((null != sRoomPreviewData.getRoomResponse()) && (null != sRoomPreviewData.getRoomResponse().messages)) {
-                        subInvitationTextView.setText(getString(R.string.room_preview_room_interactions_disabled));
-                    }
+                mRoomPreviewLayout.setVisibility(View.VISIBLE);
+
+                Button joinButton = findViewById(R.id.button_join_room);
+                Button declineButton = findViewById(R.id.button_decline);
+
+                final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
+
+                String roomName = sRoomPreviewData.getRoomName();
+                if (TextUtils.isEmpty(roomName)) {
+                    roomName = " ";
                 }
 
-                declineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+                Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
 
-                        sRoomPreviewData = null;
-                        finish();
+
+                // if the room already exists
+                if (null != mRoom) {
+                    Log.d(LOG_TAG, "manageRoomPreview : The room is known");
+
+                    String inviter = "";
+
+                    if (null != roomEmailInvitation) {
+                        inviter = roomEmailInvitation.inviterName;
                     }
-                });
-            }
 
-            joinButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(LOG_TAG, "The user clicked on Join.");
-
-                    if (null != sRoomPreviewData) {
-                        Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
-
-                        String signUrl = null;
-
-                        if (null != roomEmailInvitation) {
-                            signUrl = roomEmailInvitation.signUrl;
-                        }
-
-                        showWaitingView();
-
-                        room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                    if (TextUtils.isEmpty(inviter)) {
+                        mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
                             @Override
-                            public void onSuccess(Void info) {
-                                onJoined();
-                            }
+                            public void onSuccess(List<RoomMember> members) {
+                                String inviter = "";
 
-                            private void onError(String errorMessage) {
-                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                hideWaitingView();
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                    hideWaitingView();
-                                    getConsentNotGivenHelper().displayDialog(e);
-                                } else {
-                                    onError(e.getLocalizedMessage());
+                                for (RoomMember member : members) {
+                                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                                        inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                onError(e.getLocalizedMessage());
+                                invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                             }
                         });
                     } else {
-                        finish();
+                        invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                     }
+
+                    declineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(LOG_TAG, "The user clicked on decline.");
+
+                            showWaitingView();
+
+                            mRoom.leave(new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    Log.d(LOG_TAG, "The invitation is rejected");
+                                    onDeclined();
+                                }
+
+                                private void onError(String errorMessage) {
+                                    Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
+                                    Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    hideWaitingView();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                        hideWaitingView();
+                                        getConsentNotGivenHelper().displayDialog(e);
+                                    } else {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+                    if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
+                        invitationTextView.setText(getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+                        subInvitationTextView.setText(getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
+                    } else {
+                        invitationTextView.setText(getString(R.string.room_preview_try_join_an_unknown_room,
+                                TextUtils.isEmpty(sRoomPreviewData.getRoomName()) ? getString(R.string.room_preview_try_join_an_unknown_room_default) : roomName));
+
+                        // the room preview has some messages
+                        if ((null != sRoomPreviewData.getRoomResponse()) && (null != sRoomPreviewData.getRoomResponse().messages)) {
+                            subInvitationTextView.setText(getString(R.string.room_preview_room_interactions_disabled));
+                        }
+                    }
+
+                    declineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+
+                            sRoomPreviewData = null;
+                            finish();
+                        }
+                    });
                 }
-            });
 
-            enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+                joinButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(LOG_TAG, "The user clicked on Join.");
 
+                        if (null != sRoomPreviewData) {
+                            Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+
+                            String signUrl = null;
+
+                            if (null != roomEmailInvitation) {
+                                signUrl = roomEmailInvitation.signUrl;
+                            }
+
+                            showWaitingView();
+
+                            room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    onJoined();
+                                }
+
+                                private void onError(String errorMessage) {
+                                    Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    hideWaitingView();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                        hideWaitingView();
+                                        getConsentNotGivenHelper().displayDialog(e);
+                                    } else {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        } else {
+                            finish();
+                        }
+                    }
+                });
+
+                enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+
+            }
         } else {
             mRoomPreviewLayout.setVisibility(View.GONE);
+
         }
     }
 
