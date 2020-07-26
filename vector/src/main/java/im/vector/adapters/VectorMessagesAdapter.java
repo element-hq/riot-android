@@ -1675,7 +1675,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
             }
-            String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+            String filePath = VectorRoomActivity.voicePath + fileMessage.body;
             File file = new File(filePath);
             if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
                 assert imageTypeView != null;
@@ -1706,8 +1706,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public void onClick(View v) {
                     if (!file.exists() && ((fileMessage.body.contains("3gp") ||
                             fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
+                        File dir = new File(VectorRoomActivity.voicePath);
+                        if (dir.isDirectory())
+                        {
+                            String[] voices = dir.list();
+                            for (String voice : voices) {
+                                new File(dir, voice).delete();
+                            }
+                        }
                         progressBar.setVisibility(View.VISIBLE);
                         imageTypeView.setVisibility(View.GONE);
+                        VectorRoomActivity.getMediaPlayer().stop();
+                        VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
                         playBack( imageTypeView, position,  fileMessage);
                     } else if(((fileMessage.body.contains("3gp") ||fileMessage.body.contains("mp3") ||
                             fileMessage.body.contains("aac")))){
@@ -1731,7 +1741,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private void playBack(ImageView imageTypeView, int position, FileMessage fileMessage) {
         vectorMessagesAdapterImageTypeView = imageTypeView;
 
-        String filePath = "/storage/emulated/0/Download/" + fileMessage.body;
+        String filePath = VectorRoomActivity.voicePath + fileMessage.body;
         File file = new File(filePath);
         if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
             vectorMessageListFragment.onContentClick(position);
