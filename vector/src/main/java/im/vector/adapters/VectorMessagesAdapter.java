@@ -1706,8 +1706,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 public void onClick(View v) {
                     if (!file.exists() && ((fileMessage.body.contains("3gp") ||
                             fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
+                        File dir = new File(VectorRoomActivity.voicePath);
+                        if (dir.isDirectory())
+                        {
+                            String[] voices = dir.list();
+                            for (String voice : voices) {
+                                new File(dir, voice).delete();
+                            }
+                        }
                         progressBar.setVisibility(View.VISIBLE);
                         imageTypeView.setVisibility(View.GONE);
+                        VectorRoomActivity.getMediaPlayer().stop();
+                        VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
                         playBack( imageTypeView, position,  fileMessage);
                     } else if(((fileMessage.body.contains("3gp") ||fileMessage.body.contains("mp3") ||
                             fileMessage.body.contains("aac")))){
