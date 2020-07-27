@@ -284,7 +284,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
-    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache,  VectorRoomActivity vectorRoomActivity,VectorMessageListFragment vectorMessageListFragment) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache, VectorRoomActivity vectorRoomActivity, VectorMessageListFragment vectorMessageListFragment) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_image_video,
@@ -301,8 +301,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
         this.vectorRoomActivity = vectorRoomActivity;
-        this.vectorMessageListFragment=vectorMessageListFragment;
+        this.vectorMessageListFragment = vectorMessageListFragment;
     }
+
     public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
@@ -1204,19 +1205,27 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (BuildConfig.IS_SABA) {
             final String userId = event.getSender();
             if (userId.equals(mSession.getMyUserId())) {
-                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
-                    convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
-                } else {
-                    convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                try {
+                    convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                    if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
+                        convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                    } else {
+                        convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-            } else{
-                convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
-                    convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
-                } else {
-                    convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+            } else {
+                try {
+                    convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
+                        convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                    } else {
+                        convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -1645,7 +1654,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         }
 
         try {
-            ProgressBar progressBar=convertView.findViewById(R.id.download_progressBar);
+            ProgressBar progressBar = convertView.findViewById(R.id.download_progressBar);
             MessageRow row = getItem(position);
             assert row != null;
             Event event = row.getEvent();
@@ -1707,8 +1716,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     if (!file.exists() && ((fileMessage.body.contains("3gp") ||
                             fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
                         File dir = new File(VectorRoomActivity.voicePath);
-                        if (dir.isDirectory())
-                        {
+                        if (dir.isDirectory()) {
                             String[] voices = dir.list();
                             for (String voice : voices) {
                                 new File(dir, voice).delete();
@@ -1718,11 +1726,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         imageTypeView.setVisibility(View.GONE);
                         VectorRoomActivity.getMediaPlayer().stop();
                         VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
-                        playBack( imageTypeView, position,  fileMessage);
-                    } else if(((fileMessage.body.contains("3gp") ||fileMessage.body.contains("mp3") ||
-                            fileMessage.body.contains("aac")))){
+                        playBack(imageTypeView, position, fileMessage);
+                    } else if (((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") ||
+                            fileMessage.body.contains("aac")))) {
                         progressBar.setVisibility(View.GONE);
-                        playBack( imageTypeView, position,  fileMessage);
+                        playBack(imageTypeView, position, fileMessage);
                     }
                 }
             });
@@ -1755,7 +1763,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 isRemainderVoice = true;
                 VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
                 VectorRoomActivity.getPlay().setVisibility(View.GONE);
-                vectorRoomActivity.playBack(filePath,false);
+                vectorRoomActivity.playBack(filePath, false);
                 imageTypeView.setImageResource(R.drawable.pause);
 
                 notifyDataSetChanged();
@@ -2408,7 +2416,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // oneself event
                 if (event.mSentState != Event.SentState.SENT) {
                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
-                    if (BuildConfig.IS_SABA){
+                    if (BuildConfig.IS_SABA) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
                     }
                 }
@@ -2425,7 +2433,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
                             && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
-                        if (BuildConfig.IS_SABA){
+                        if (BuildConfig.IS_SABA) {
                             e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
                         }
 
@@ -2444,7 +2452,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
                             if (deviceInfo.isVerified()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
-                                if (BuildConfig.IS_SABA){
+                                if (BuildConfig.IS_SABA) {
                                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
                                 }
                             } else if (deviceInfo.isBlocked()) {
