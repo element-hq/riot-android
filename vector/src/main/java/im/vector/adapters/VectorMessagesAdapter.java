@@ -1667,24 +1667,33 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
-            if (((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
-                assert imageTypeView != null;
-                imageTypeView.setImageResource(R.drawable.play);
-            }
+
+
+            String filePath = VectorRoomActivity.voicePath + fileMessage.body;
+            File file = new File(filePath);
+            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")){
+                if (file.exists()) {
+                    assert imageTypeView != null;
+                    imageTypeView.setImageResource(R.drawable.play);
+                } else if (!file.exists()) {
+                    assert imageTypeView != null;
+                    imageTypeView.setImageResource(R.drawable.ic_down_arrow);
+                }
+                if (file.exists() && progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                    assert imageTypeView != null;
+                    imageTypeView.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                }
+        }
+
+
+
             if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
             }
-            String filePath = VectorRoomActivity.voicePath + fileMessage.body;
-            File file = new File(filePath);
-            if (!file.exists() && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
-                assert imageTypeView != null;
-                imageTypeView.setImageResource(R.drawable.ic_down_arrow);
-            } else if (file.exists() && progressBar.getVisibility() == View.VISIBLE && ((fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
-                progressBar.setVisibility(View.GONE);
-                imageTypeView.setVisibility(View.VISIBLE);
-                notifyDataSetChanged();
-            }
+
             VectorRoomActivity.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
@@ -1704,26 +1713,25 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             imageTypeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!file.exists() && ((fileMessage.body.contains("3gp") ||
-                            fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")))) {
-                        File dir = new File(VectorRoomActivity.voicePath);
-                        if (dir.isDirectory())
-                        {
-                            String[] voices = dir.list();
-                            for (String voice : voices) {
-                                new File(dir, voice).delete();
+                    if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                        if (!file.exists()) {
+                            File dir = new File(VectorRoomActivity.voicePath);
+                            if (dir.isDirectory()) {
+                                String[] voices = dir.list();
+                                for (String voice : voices) {
+                                    new File(dir, voice).delete();
+                                }
                             }
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageTypeView.setVisibility(View.GONE);
+                            VectorRoomActivity.getMediaPlayer().stop();
+                            VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
+                            playBack(imageTypeView, position, fileMessage);
+                        } else if (file.exists()) {
+//                            progressBar.setVisibility(View.GONE);
+                            playBack(imageTypeView, position, fileMessage);
                         }
-                        progressBar.setVisibility(View.VISIBLE);
-                        imageTypeView.setVisibility(View.GONE);
-                        VectorRoomActivity.getMediaPlayer().stop();
-                        VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
-                        playBack( imageTypeView, position,  fileMessage);
-                    } else if(((fileMessage.body.contains("3gp") ||fileMessage.body.contains("mp3") ||
-                            fileMessage.body.contains("aac")))){
-                        progressBar.setVisibility(View.GONE);
-                        playBack( imageTypeView, position,  fileMessage);
-                    }
+                }
                 }
             });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
