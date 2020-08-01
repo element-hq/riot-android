@@ -1768,6 +1768,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             imageTypeView.setImageResource(R.drawable.play);
         }
 
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
+            vectorMessageListFragment.onContentClick(position);
+            imageTypeView.setImageResource(R.drawable.play);
+        }
+
         if (file.exists()) {
             if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName) || VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE) {
                 if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
