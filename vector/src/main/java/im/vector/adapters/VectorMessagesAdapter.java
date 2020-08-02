@@ -1701,6 +1701,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
+                if (vectorMessagesAdapterImageTypeView!=null) {
+                    vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.pause);
+                }
             }
 
             VectorRoomActivity.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -1761,6 +1764,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         String filePath = VectorRoomActivity.voicePath + fileMessage.body;
         File file = new File(filePath);
         if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
+            vectorMessageListFragment.onContentClick(position);
+            imageTypeView.setImageResource(R.drawable.play);
+        }
+
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
             vectorMessageListFragment.onContentClick(position);
             imageTypeView.setImageResource(R.drawable.play);
         }
@@ -2257,9 +2265,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MessageRow row = getItem(position);
+                Event event = row.getEvent();
+                final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+
                 if (null != mVectorMessagesAdapterEventsListener) {
                     // GA issue
                     if (position < getCount()) {
+                        if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
+                            vectorMessagesAdapterImageTypeView = imageTypeView;
+                            fileName = fileMessage.body;
+                        }
                         mVectorMessagesAdapterEventsListener.onContentClick(position);
                     }
                 }
