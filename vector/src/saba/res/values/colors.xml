@@ -4,8 +4,8 @@
     <color name="background_header_message">#9feeeeee</color>
     <color name="background_header_message_divider">#009f9f9f</color>
 
-
-
+    <!-- Notification (do not depends on theme) -->
+    <color name="notification_accent_color">#cc0000</color>
 
 
 

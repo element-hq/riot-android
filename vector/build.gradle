@@ -151,6 +151,7 @@ android {
             versionCode 9905061
             versionName "Mordad99-A"
             buildConfigField "boolean", "IS_SABA", "true"
+            buildConfigField "boolean", "ALLOW_HOME_SERVER_CHANGE", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"Saba\""

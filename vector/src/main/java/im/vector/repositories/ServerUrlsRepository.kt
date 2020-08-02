@@ -18,8 +18,10 @@ package im.vector.repositories
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import im.vector.BuildConfig
 import im.vector.R
 
 /**
@@ -98,7 +100,18 @@ object ServerUrlsRepository {
     /**
      * Return default home server url from resources
      */
-    fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.default_hs_server_url)
+    fun getDefaultHomeServerUrl(context: Context): String {
+        if (BuildConfig.IS_SABA) {
+            if (BuildConfig.ALLOW_HOME_SERVER_CHANGE) {
+                return context.getString(R.string.default_hs_server_url)
+            } else {
+                return context.getString(R.string.default_hs_server_url_saba)
+
+            }
+        } else {
+            return context.getString(R.string.default_hs_server_url)
+        }
+    }
 
     /**
      * Return default identity server url from resources

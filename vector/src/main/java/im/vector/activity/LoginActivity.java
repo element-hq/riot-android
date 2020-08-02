@@ -2350,9 +2350,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mForgotValidateEmailButton.setVisibility(View.GONE);
         mSubmitThreePidButton.setVisibility(View.GONE);
         mSkipThreePidButton.setVisibility(View.GONE);
-
-        mHomeServerOptionLayout.setVisibility(View.VISIBLE);
-
+        /**
+         * Batna ==>Allow choose home server
+         */
+        if (BuildConfig.IS_SABA) {
+            if (BuildConfig.ALLOW_HOME_SERVER_CHANGE) {
+                mHomeServerOptionLayout.setVisibility(View.VISIBLE);
+            } else {
+                mHomeServerOptionLayout.setVisibility(View.GONE);
+            }
+        }else {
+            mHomeServerOptionLayout.setVisibility(View.VISIBLE);
+        }
         // Then show them depending on mode
         switch (mMode) {
             case MODE_LOGIN:
