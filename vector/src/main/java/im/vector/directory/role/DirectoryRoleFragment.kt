@@ -3,11 +3,15 @@ package im.vector.directory.role
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
@@ -20,6 +24,8 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var specialityAdapter: DropDownAdapter
     private lateinit var locationAdapter: DropDownAdapter
     private lateinit var roleAdapter: RolesDirectoryAdapter
+    val constraintCollapsed = ConstraintSet()
+    val constraintExpanded = ConstraintSet()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +41,21 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         advancedSearchButton.setOnClickListener {
             viewModel.toggleSearchView()
         }
+
+        constraintCollapsed.clone(innerConstraintLayout)
+        constraintCollapsed.setVisibility(categoryLayout.id, GONE)
+        constraintCollapsed.setVisibility(organisationLayout.id, GONE)
+        constraintCollapsed.setVisibility(specialityLayout.id, GONE)
+        constraintCollapsed.setVisibility(locationLayout.id, GONE)
+        constraintCollapsed.setVisibility(applyButton.id, GONE)
+        constraintCollapsed.setVisibility(cancelButton.id, GONE)
+        constraintExpanded.clone(innerConstraintLayout)
+        constraintExpanded.setVisibility(categoryLayout.id, VISIBLE)
+        constraintExpanded.setVisibility(organisationLayout.id, VISIBLE)
+        constraintExpanded.setVisibility(specialityLayout.id, VISIBLE)
+        constraintExpanded.setVisibility(locationLayout.id, VISIBLE)
+        constraintExpanded.setVisibility(applyButton.id, VISIBLE)
+        constraintExpanded.setVisibility(cancelButton.id, VISIBLE)
 
         categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         categoryEditText.threshold = 1
@@ -93,11 +114,9 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
 
     private fun subscribeUI() {
         viewModel.advancedSearchVisibility.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                advancedSearchViewGroup.visibility = View.VISIBLE
-            } else {
-                advancedSearchViewGroup.visibility = View.GONE
-            }
+            TransitionManager.beginDelayedTransition(innerConstraintLayout)
+            val constraint = if(it) constraintExpanded else constraintCollapsed
+            constraint.applyTo(innerConstraintLayout)
         })
     }
 

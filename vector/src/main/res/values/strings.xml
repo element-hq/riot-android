@@ -1581,7 +1581,6 @@ Why choose Riot.im?
     <string-array name="directory_tabs">
         <item>Roles</item>
         <item>People</item>
-        <item>Groups</item>
     </string-array>
     <string name="search_role">Search for a role</string>
     <string name="category">Category</string>

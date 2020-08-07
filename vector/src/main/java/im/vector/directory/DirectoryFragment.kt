@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
-import im.vector.directory.group.DirectoryGroupFragment
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
@@ -61,7 +60,6 @@ class DirectoryFragment : AbsHomeFragment() {
             return when (position) {
                 0 -> DirectoryRoleFragment()
                 1 -> DirectoryPeopleFragment()
-                2 -> DirectoryGroupFragment()
                 else -> DirectoryRoleFragment()
             }
         }
