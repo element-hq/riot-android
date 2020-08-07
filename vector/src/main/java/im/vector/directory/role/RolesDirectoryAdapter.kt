@@ -51,7 +51,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this)
+        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position)
         holder.itemView.setOnClickListener {
             onClickListener.onRoleClick(roles[position])
         }
@@ -60,8 +60,8 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = roles.size
 
-    override fun onDataChange() {
-        notifyDataSetChanged()
+    override fun onDataChange(position: Int) {
+        notifyItemChanged(position)
     }
 }
 
@@ -70,7 +70,7 @@ interface RoleClickListener {
 }
 
 interface OnDataSetChange {
-    fun onDataChange()
+    fun onDataChange(position: Int)
 }
 
 class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -88,13 +88,15 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         description = itemView.findViewById(R.id.description)
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange) {
+    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
         if (role.expanded) {
+            expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
             description?.visibility = View.VISIBLE
         } else {
+            expandableIcon?.animate()?.setDuration(200)?.rotation(0F)
             description?.visibility = View.GONE
         }
         val stringBuilder = SpannableStringBuilder()
@@ -110,7 +112,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         description?.text = stringBuilder
         expandableIcon?.setOnClickListener {
             role.expanded = !role.expanded
-            onDataSetChange.onDataChange()
+            onDataSetChange.onDataChange(position)
         }
     }
 }

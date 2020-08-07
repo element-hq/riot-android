@@ -89,7 +89,7 @@ class PeopleDetailAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (models[position].type) {
-            TYPE_ROLE -> (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this)
+            TYPE_ROLE -> (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position)
             TYPE_EMAIL, TYPE_PHONE -> (holder as EmailPhoneViewHolder).bind(models[position])
         }
     }
@@ -100,8 +100,8 @@ class PeopleDetailAdapter(val context: Context) :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = models.size
-    override fun onDataChange() {
-        notifyDataSetChanged()
+    override fun onDataChange(position: Int) {
+        notifyItemChanged(position)
     }
 }
 

@@ -11,11 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+
 
 class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
@@ -24,8 +26,8 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private lateinit var specialityAdapter: DropDownAdapter
     private lateinit var locationAdapter: DropDownAdapter
     private lateinit var roleAdapter: RolesDirectoryAdapter
-    val constraintCollapsed = ConstraintSet()
-    val constraintExpanded = ConstraintSet()
+    private val constraintCollapsed = ConstraintSet()
+    private val constraintExpanded = ConstraintSet()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -74,8 +76,10 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
         locationEditText.setAdapter(locationAdapter)
 
         roleAdapter = RolesDirectoryAdapter(requireContext(), this)
+        (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         roleRecyclerview.adapter = roleAdapter
+        roleRecyclerview.setHasFixedSize(true)
 
         //test data
         val testDropDownData = mutableListOf<DropDownItem>()

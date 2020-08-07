@@ -33,7 +33,7 @@
             android:id="@+id/officialName"
             style="@style/TextAppearance.AppCompat.Title"
             android:textSize="@dimen/title_text_size"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:text="@string/short_text"
@@ -48,7 +48,7 @@
         <TextView
             android:id="@+id/secondaryName"
             style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:textSize="@dimen/sub_title_text_size"
             android:gravity="center"
             android:layout_height="wrap_content"
