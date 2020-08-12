@@ -107,14 +107,10 @@ object ServerUrlsRepository {
                 return context.getString(R.string.default_hs_server_url)
             } else {
                 if (URL_NOT_PROVIDED != getServerUrlFromMdm(context)) {
-                    Log.d("MBD", "Url Received: " + getServerUrlFromMdm(context))
                     return getServerUrlFromMdm(context)
                 } else {
-                    Log.d("MBD", "Returned : default_hs_server_url_saba")
                     return context.getString(R.string.default_hs_server_url_saba)
                 }
-
-
             }
         } else {
             return context.getString(R.string.default_hs_server_url)
