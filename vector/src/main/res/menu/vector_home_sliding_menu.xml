@@ -10,7 +10,8 @@
         <item
             android:id="@+id/sliding_menu_messages"
             android:icon="@drawable/logo_transparent"
-            android:title="@string/room_sliding_menu_messages" />
+            android:title="@string/room_sliding_menu_messages"
+            android:visible="@bool/show_message_navigation_bar"/>
 
         <item
             android:id="@+id/sliding_menu_settings"
