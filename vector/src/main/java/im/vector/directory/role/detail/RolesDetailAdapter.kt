@@ -27,10 +27,9 @@ class RolesDetailAdapter(val context: Context) :
     private val adapterModels = mutableListOf<AdapterModel>()
     private val TYPE_ROLE = 1
     private val TYPE_ORGANISATION_UNIT = 2
-    private val TYPE_TEAM = 3
-    private val TYPE_SPECIALITY = 4
-    private val TYPE_LOCATION = 5
-    private val TYPE_PRACTITIONER_IN_ROLE = 6
+    private val TYPE_SPECIALITY = 3
+    private val TYPE_LOCATION = 4
+    private val TYPE_PRACTITIONER_IN_ROLE = 5
 
     var mSession: MXSession? = null
 
@@ -66,18 +65,12 @@ class RolesDetailAdapter(val context: Context) :
         var heading: TextView? = null
         var officialName: TextView? = null
         var secondaryName: TextView? = null
-        var callIcon: ImageView? = null
-        var chatIcon: ImageView? = null
-        var videoCallIcon: ImageView? = null
 
         init {
             avatar = itemView.avatar
             heading = itemView.heading
             officialName = itemView.officialName
             secondaryName = itemView.secondaryName
-            callIcon = itemView.callIcon
-            chatIcon = itemView.chatIcon
-            videoCallIcon = itemView.videoCallIcon
         }
 
         fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
@@ -85,9 +78,6 @@ class RolesDetailAdapter(val context: Context) :
             officialName?.text = adapterModel.people?.officialName
             secondaryName?.text = adapterModel.people?.jobTitle
             heading?.text = adapterModel.title
-            callIcon?.setOnClickListener { }
-            chatIcon?.setOnClickListener { }
-            videoCallIcon?.setOnClickListener { }
         }
     }
 
@@ -102,9 +92,6 @@ class RolesDetailAdapter(val context: Context) :
         }
         for (lc in role.location) {
             adapterModels.add(AdapterModel("Location", lc.name, null, null, TYPE_LOCATION))
-        }
-        for (tm in role.teams) {
-            adapterModels.add(AdapterModel("Team", tm.name, null, null, TYPE_TEAM))
         }
         adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, null, TYPE_ORGANISATION_UNIT))
 
@@ -123,7 +110,7 @@ class RolesDetailAdapter(val context: Context) :
                                     viewType: Int): RecyclerView.ViewHolder {
         // create a new view
         return when (viewType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
+            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
             TYPE_PRACTITIONER_IN_ROLE -> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category2, parent, false))
@@ -135,7 +122,7 @@ class RolesDetailAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (adapterModels[position].rowType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_TEAM, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position])
+            TYPE_ROLE, TYPE_ORGANISATION_UNIT,  TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position])
             TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position])
         }
     }

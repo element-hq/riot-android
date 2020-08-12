@@ -22,44 +22,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/callIcon"
-        android:padding="2dp"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_material_call_white"
-        android:tint="?attr/vctr_list_icon_tint_color"
-        app:layout_constraintRight_toLeftOf="@+id/videoCallIcon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/chatIcon"
-        android:padding="2dp"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_material_message_black"
-        android:tint="?attr/vctr_list_icon_tint_color"
-        app:layout_constraintRight_toLeftOf="@+id/callIcon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/videoCallIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/video_call_black"
-        android:tint="?attr/vctr_list_icon_tint_color"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <im.vector.view.VectorCircularImageView
         android:layout_marginTop="4dp"
         android:id="@+id/avatar"
