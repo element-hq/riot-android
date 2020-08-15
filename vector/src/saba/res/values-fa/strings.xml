@@ -467,4 +467,7 @@
     </plurals>
     <string name="room_header_online_members">%d عضو، %d آنلاین</string>
     <string name="preview">پیوستن</string>
+    <!-- Alert    ACTION_MANAGE_OVERLAY_PERMISSION -->
+    <string name="saba_receiving_a_permission">دریافت مجوز </string>
+    <string name="saba_receiving_a_permission_desc" ><![CDATA[<br><h2> مجوز نمایش روی سایر برنامه ها </h2></br><p>اپلیکیشن برای کارایی بهتر نیاز به این مجوز دارد. لطفا تایید نمایید.</p>]]></string>
 </resources>

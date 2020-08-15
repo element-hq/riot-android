@@ -34,7 +34,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -53,6 +55,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -315,6 +318,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         return R.layout.activity_home;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void initUiAndData() {
         mFragmentManager = getSupportFragmentManager();
@@ -566,6 +570,31 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
 
         initViews();
+
+        /**
+         *BATNA ==> Added  'ACTION_MANAGE_OVERLAY_PERMISSION' to app
+         */
+        if (BuildConfig.IS_SABA) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    new AlertDialog.Builder(VectorHomeActivity.this)
+                            .setMessage(Html.fromHtml(getString(R.string.saba_receiving_a_permission_desc), Html.FROM_HTML_MODE_COMPACT))
+                            .setPositiveButton(R.string.saba_receiving_a_permission, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (!Settings.canDrawOverlays(VectorHomeActivity.this)) {
+                                        Intent intentTest = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                                        startActivityForResult(intentTest, 0);
+                                    }
+                                }
+                            })
+                            .setNegativeButton("", null)
+                            .setCancelable(false)
+                            .show();
+                }
+            }
+        }
+
     }
 
     /**
