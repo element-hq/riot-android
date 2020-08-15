@@ -1680,7 +1680,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             String filePath = VectorRoomActivity.voicePath + fileMessage.body;
             File file = new File(filePath);
-            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")){
+            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
                 if (file.exists()) {
                     assert imageTypeView != null;
                     imageTypeView.setImageResource(R.drawable.play);
@@ -1694,14 +1694,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     imageTypeView.setVisibility(View.VISIBLE);
                     notifyDataSetChanged();
                 }
-        }
-
+            }
 
 
             if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
                 assert imageTypeView != null;
                 imageTypeView.setImageResource(R.drawable.pause);
-                if (vectorMessagesAdapterImageTypeView!=null) {
+                if (vectorMessagesAdapterImageTypeView != null) {
                     vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.pause);
                 }
             }
@@ -1743,7 +1742,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 //                            progressBar.setVisibility(View.GONE);
                             playBack(imageTypeView, position, fileMessage);
                         }
-                }
+                    }
                 }
             });
             imageTypeView.setBackgroundColor(Color.TRANSPARENT);
@@ -1768,7 +1767,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             imageTypeView.setImageResource(R.drawable.play);
         }
 
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             vectorMessageListFragment.onContentClick(position);
             imageTypeView.setImageResource(R.drawable.play);
         }
@@ -2272,12 +2271,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 if (null != mVectorMessagesAdapterEventsListener) {
                     // GA issue
                     if (position < getCount()) {
-                        if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
-                            final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
-                            vectorMessagesAdapterImageTypeView = imageTypeView;
-                            fileName = fileMessage.body;
+                        try {
+                            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                                final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
+                                vectorMessagesAdapterImageTypeView = imageTypeView;
+                                fileName = fileMessage.body;
+                            }
+                            mVectorMessagesAdapterEventsListener.onContentClick(position);
+                        } catch (Exception ignored) {
+
                         }
-                        mVectorMessagesAdapterEventsListener.onContentClick(position);
                     }
                 }
             }

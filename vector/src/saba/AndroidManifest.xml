@@ -4,6 +4,10 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="im.vector.fetchurl.GetServerAddress" />
+
+
     <application>
         <meta-data android:name="io.sentry.dsn" android:value="https://aed3a5cb6b28438f8298dabe99a37c67@sentry.ir-cloud.ir/9" />
 
