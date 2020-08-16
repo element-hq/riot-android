@@ -148,8 +148,8 @@ android {
 
         saba {
             applicationId "ir.batna.messaging"
-            versionCode 9905071
-            versionName "Mordad99-B"
+            versionCode 9905261
+            versionName "Mordad99-C"
             buildConfigField "boolean", "IS_SABA", "true"
             buildConfigField "boolean", "ALLOW_HOME_SERVER_CHANGE", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
