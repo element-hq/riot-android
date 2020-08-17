@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -54,6 +55,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
@@ -594,6 +596,14 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
 
                 // let's playing
                 mPlayingVideoView = videoView;
+                /**
+                 * BATNA ===>  set media controller when start video view
+                 */
+                if (BuildConfig.IS_SABA) {
+                    MediaController mediaController = new MediaController(mContext);
+                    mediaController.setAnchorView(videoView);
+                    videoView.setMediaController(mediaController);
+                }
                 videoView.start();
 
             } catch (Exception e) {
