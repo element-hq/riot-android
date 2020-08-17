@@ -54,6 +54,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -3448,13 +3449,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mBottomSeparator.setVisibility(View.VISIBLE);
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
+
+                /**
+                 * BATNA ==>  Show room_bottom_layout when user have permission send message
+                 */
+                if (BuildConfig.IS_SABA) {
+                    RelativeLayout layout = findViewById(R.id.room_bottom_layout);
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height =  ViewGroup.LayoutParams.WRAP_CONTENT;
+                    layout.setLayoutParams(params);
+                }
             } else if (state.isVersioned() || mSession.getDataHandler().getResourceLimitExceededError() != null) {
                 mBottomSeparator.setVisibility(View.GONE);
                 mBottomLayout.getLayoutParams().height = 0;
             } else {
                 mBottomSeparator.setVisibility(View.GONE);
                 mSendingMessagesLayout.setVisibility(View.GONE);
-                mCanNotPostTextView.setVisibility(View.VISIBLE);
+
+                /**
+                 * BATNA ==>  Donot show room_bottom_layout when user havenot permission send message
+                 */
+                if (BuildConfig.IS_SABA) {
+                    RelativeLayout layout = findViewById(R.id.room_bottom_layout);
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height = 0;
+                    layout.setLayoutParams(params);
+                } else {
+                    mCanNotPostTextView.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
