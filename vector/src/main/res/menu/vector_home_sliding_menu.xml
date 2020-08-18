@@ -63,6 +63,7 @@
     <group android:visible="@bool/debug_mode">
         <item
             android:id="@+id/sliding_menu_debug"
-            android:title="@string/debug_screen" />
+            android:title="@string/debug_screen"
+            android:visible="@bool/show_debug_screen_navigation_bar"/>
     </group>
 </menu>

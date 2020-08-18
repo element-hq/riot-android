@@ -97,6 +97,7 @@
     <bool name="show_exit_navigation_bar">false</bool>
     <bool name="show_sign_out_navigation_bar">false</bool>
     <bool name="show_message_navigation_bar">false</bool>
+    <bool name="show_debug_screen_navigation_bar">false</bool>
     <bool name="show_report_bug_navigation_bar">false</bool>
     <bool name="analytics_prompt_at_the_beginning">false</bool>
 
