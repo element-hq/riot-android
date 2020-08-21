@@ -1366,9 +1366,21 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             })
 
             if (resources.getBoolean(R.bool.settings_notification_targets_visible))
-                Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : SimpleApiCallback<Void>(activity) {
+                Matrix.getInstance(context)?.pushManager?.refreshPushersList(Matrix.getInstance(context)?.sessions, object : ApiCallback<Void> {
                     override fun onSuccess(info: Void?) {
                         refreshPushersList()
+                    }
+
+                    override fun onUnexpectedError(e: java.lang.Exception?) {
+                        Log.d(LOG_TAG, e?.message)
+                    }
+
+                    override fun onMatrixError(e: MatrixError?) {
+                        Log.d(LOG_TAG, e?.message)
+                    }
+
+                    override fun onNetworkError(e: java.lang.Exception?) {
+                        Log.d(LOG_TAG, e?.message)
                     }
                 })
 
