@@ -302,14 +302,17 @@ public class VectorUtils {
      * @return two/one character initials
      */
     public static String getInitials(String name){
-        String[] names = name.split(" ");
-        String initials = "";
-        if (names.length > 1) {
-            initials = getInitialLetter(names[0]) + getInitialLetter(names[names.length - 1]);
-        } else {
-            initials = getInitialLetter(names[0]);
+        if(name != null) {
+            String[] names = name.split(" ");
+            String initials = "";
+            if (names.length > 1) {
+                initials = getInitialLetter(names[0]) + getInitialLetter(names[names.length - 1]);
+            } else {
+                initials = getInitialLetter(names[0]);
+            }
+            return initials;
         }
-        return initials;
+        return "";
     }
 
     /**
