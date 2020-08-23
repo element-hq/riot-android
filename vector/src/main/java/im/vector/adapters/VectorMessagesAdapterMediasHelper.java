@@ -56,6 +56,7 @@ import org.matrix.androidsdk.rest.model.message.VideoMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 
@@ -206,6 +207,16 @@ class VectorMessagesAdapterMediasHelper {
         // retrieve the common items
         if (message instanceof ImageMessage) {
             ImageMessage imageMessage = (ImageMessage) message;
+            /**
+             * BTNA ==>set text caption in ImageMessage
+             */
+            if (BuildConfig.IS_SABA) {
+                final TextView txtCaption = convertView.findViewById(R.id.txt_batna_caption);
+                int index = imageMessage.body.indexOf("*") + 1;
+                StringBuffer buf = new StringBuffer(imageMessage.body);
+                txtCaption.setText(buf.replace(0, index, " "));
+            }
+
             imageMessage.checkMediaUrls();
 
             // Backwards compatibility with events from before Synapse 0.6.0
@@ -236,7 +247,16 @@ class VectorMessagesAdapterMediasHelper {
                 }
             }
         } else if (message instanceof VideoMessage) {
-            VideoMessage videoMessage = (VideoMessage) message;
+            VideoMessage videoMessage = (VideoMessage) message ;
+            /**
+             * BTNA ==>set text caption in VideoMessage
+             */
+            if (BuildConfig.IS_SABA) {
+                final TextView txtCaption = convertView.findViewById(R.id.txt_batna_caption);
+                int index = videoMessage.body.indexOf("*") + 1;
+                StringBuffer buf = new StringBuffer(videoMessage.body);
+                txtCaption.setText(buf.replace(0, index, " "));
+            }
             videoMessage.checkMediaUrls();
 
             thumbUrl = videoMessage.getThumbnailUrl();

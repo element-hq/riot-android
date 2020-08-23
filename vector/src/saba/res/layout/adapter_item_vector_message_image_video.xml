@@ -16,9 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:orientation="horizontal">
 
@@ -26,10 +26,10 @@
             android:id="@+id/messagesAdapter_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="bottom"
             android:adjustViewBounds="true"
             android:contentDescription="@string/avatar"
             android:scaleType="centerCrop"
-            android:layout_gravity="bottom"
             tools:src="@tools:sample/avatars" />
 
         <View
@@ -48,8 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:background="@android:color/white"
+            android:orientation="vertical"
             android:paddingBottom="5dp">
 
             <RelativeLayout
@@ -59,23 +59,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/message_timestamp_layout"
-                    android:layout_toLeftOf="@+id/message_timestamp_layout"
                     android:orientation="horizontal">
 
                     <include layout="@layout/vector_message_sender" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/message_timestamp_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal">
-
-                    <include layout="@layout/vector_message_timestamp" />
-                </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout
@@ -99,7 +87,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         tools:layout_height="220dp">
 
@@ -115,7 +102,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
 
@@ -162,7 +148,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
                         android:background="@drawable/sticker_description_triangle" />
 
                     <TextView
@@ -186,6 +171,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <TextView
+                    android:id="@+id/txt_batna_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="18dp"
+                    android:gravity="start"
+                    android:padding="4dp"
+                    android:textColor="@color/text_black" />
+
+                <LinearLayout
+                    android:id="@+id/message_timestamp_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/vector_message_timestamp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

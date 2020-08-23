@@ -32,4 +32,5 @@
         <item quantity="one">1 </item>
         <item quantity="other">%d </item>
     </plurals>
+    <string name="hint_caption">Caption …</string>
 </resources>

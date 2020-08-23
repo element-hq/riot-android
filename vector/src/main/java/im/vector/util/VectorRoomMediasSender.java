@@ -46,7 +46,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.BuildConfig;
 import im.vector.R;
+import im.vector.activity.VectorMediaPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.fragments.VectorMessageListFragment;
@@ -241,7 +243,12 @@ public class VectorRoomMediasSender {
                         mVectorRoomActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mVectorMessageListFragment.sendMediaMessage(sharedDataItem);
+                                if (!BuildConfig.IS_SABA) {
+                                    mVectorMessageListFragment.sendMediaMessage(sharedDataItem);
+                                } else {
+                                    mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(sharedDataItem.getUri(),
+                                            sharedDataItem.getFileName(mVectorRoomActivity) + "*" + VectorMediaPickerActivity.stringCaption));
+                                }
                             }
                         });
 
@@ -808,8 +815,14 @@ public class VectorRoomMediasSender {
                                                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
-                                                                    roomMediaMessage.getFileName(mVectorRoomActivity)));
+                                                            if (BuildConfig.IS_SABA) {
+                                                                mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
+                                                                        roomMediaMessage.getFileName(mVectorRoomActivity) + "*" + VectorMediaPickerActivity.stringCaption));
+
+                                                            } else {
+                                                                mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
+                                                                        roomMediaMessage.getFileName(mVectorRoomActivity)));
+                                                            }
                                                             aListener.onDone();
                                                         }
                                                     });
