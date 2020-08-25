@@ -68,7 +68,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
 
     String mCurrentFilter;
 
-    MXSession mSession;
+    public MXSession mSession;
     OnRoomChangedListener mOnRoomChangedListener;
 
     final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
