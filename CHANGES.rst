@@ -12,6 +12,7 @@ Improvements 🙌:
  - Remove jQuery library. Fixes #3381
 
 Other changes:
+ - Fix F-Droid badge and improve formatting and capitalization in README (#3492)
  -
 
 Bug fixes 🐛:
