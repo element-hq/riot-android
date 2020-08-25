@@ -106,6 +106,8 @@ import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ViewUtilKt;
 
+import static im.vector.disclaimer.DisclaimerDialogKt.showDisclaimerDialog;
+
 /**
  * Displays the login screen.
  */
@@ -1072,6 +1074,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
 
         refreshDisplay(true);
+
+        showDisclaimerDialog(this, false);
     }
 
     /**

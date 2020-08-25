@@ -43,6 +43,9 @@
     <!-- disable the battery optimisation on some devices to let the background sync works -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- To be able to delete the app -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+
     <!-- videocall feature -->
     <!-- android.permission.CAMERA defines android.hardware.camera -->
     <uses-feature

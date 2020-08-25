@@ -142,6 +142,8 @@ import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
 
+import static im.vector.disclaimer.DisclaimerDialogKt.showDisclaimerDialog;
+
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
@@ -570,6 +572,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
+    private Boolean disclaimerShown = false;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -634,6 +638,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         .show();
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
+            }
+        } else {
+            if (!disclaimerShown) {
+                disclaimerShown = true;
+                showDisclaimerDialog(this, true);
             }
         }
 

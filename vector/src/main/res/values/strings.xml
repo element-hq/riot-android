@@ -1568,4 +1568,10 @@ Why choose Riot.im?
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
 
+    <string name="element_disclaimer_title">Riot is now Element!</string>
+    <string name="element_disclaimer_content">We’re excited to announce we’ve changed name!\n\nYou have to install the new Element Android application and sign in again.</string>
+    <string name="element_disclaimer_negative_button">Later</string>
+    <string name="element_disclaimer_positive_button">Get Element</string>
+    <string name="element_disclaimer_uninstall_button">Uninstall</string>
+
 </resources>

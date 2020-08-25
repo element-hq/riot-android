@@ -1,5 +1,9 @@
-Changes in Riot 0.9.13 (2020-XX-XX)
+Changes in Riot 0.9.13 (2020-08-25)
 ===================================================
+
+Riot-Android is now deprecated, and not maintained by the core team anymore.
+The version 0.9.13 contains code to inform F-Droid users that the application is deprecated and they have to install Element Android instead (#3507).
+This branch will never be merged on develop.
 
 MatrixSdk 🚀:
  - Upgrade MatrixSdk to version 0.X.Y.
