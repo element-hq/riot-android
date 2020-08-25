@@ -46,7 +46,6 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
             mSecondaryColor = getColor(activity, R.attr.vctr_tab_home_secondary)
             mFabColor = ContextCompat.getColor(activity, R.color.tab_rooms)
             mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_rooms_secondary)
-
         }
     }
 
@@ -60,10 +59,6 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
 
     override fun onResetFilter() {
         TODO("Not yet implemented")
-    }
-
-    override fun onSelectRoom(room: Room?, position: Int) {
-        openRoom(room)
     }
 
     override fun onRoomResultUpdated(result: HomeRoomsViewModel.Result?) {
@@ -88,22 +83,16 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
         dataUpdateListeners.forEachIndexed { index, listener ->
             when (index) {
                 ROOM_FRAGMENTS.INVITE.ordinal -> {
-                    listener.onUpdate(mActivity.roomInvitations)
+                    listener.onUpdate(mActivity.roomInvitations, notificationComparator)
                 }
                 ROOM_FRAGMENTS.FAVORITE.ordinal -> {
-                    listener.onUpdate(result?.favourites)
+                    listener.onUpdate(result?.favourites, notificationComparator)
                 }
-                ROOM_FRAGMENTS.NORMAL.ordinal -> listener.onUpdate(result?.otherRooms)
-                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> listener.onUpdate(result?.lowPriorities)
+                ROOM_FRAGMENTS.NORMAL.ordinal -> listener.onUpdate(result?.otherRooms, notificationComparator)
+                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> listener.onUpdate(result?.lowPriorities, notificationComparator)
             }
         }
-        /*sortAndDisplay(result.favourites, notificationComparator, mFavouritesSection)
-        sortAndDisplay(result.directChats, notificationComparator, mDirectChatsSection)
-        sortAndDisplay(result.lowPriorities, notificationComparator, mLowPrioritySection)
-        sortAndDisplay(result.otherRooms, notificationComparator, mRoomsSection)
-        sortAndDisplay(result.serverNotices, notificationComparator, mServerNoticesSection)*/
         mActivity.hideWaitingView()
-        //mInvitationsSection.setRooms(mActivity.roomInvitations)
     }
 
     override fun onLongClickRoom(v: View?, room: Room?, position: Int) {
@@ -112,6 +101,10 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
         val isFavorite = tags != null && tags.contains(RoomTag.ROOM_TAG_FAVOURITE)
         val isLowPriority = tags != null && tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)
         RoomUtils.displayPopupMenu(activity, mSession, room, v, isFavorite, isLowPriority, this)
+    }
+
+    override fun onSelectRoom(room: Room?, position: Int) {
+        openRoom(room)
     }
 
     override fun onRegister(listener: UpDateListener) {
@@ -123,29 +116,45 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
     }
 
     inner class HomePagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentPagerAdapter(fm) {
+            private val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
+            private val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
+            private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
+
         override fun getItem(position: Int): Fragment {
             val fragment = when (position) {
                 ROOM_FRAGMENTS.INVITE.ordinal -> {
                     val fragment = InviteRoomFragment()
-                    fragment.onUpdate(mActivity.roomInvitations)
+                    fragment.onUpdate(mActivity.roomInvitations, notificationComparator)
+                    fragment.onSelectRoomListener = this@NewHomeFragment
+                    fragment.invitationListener = this@NewHomeFragment
+                    fragment.moreActionListener = null
                     fragment
                 }
                 ROOM_FRAGMENTS.FAVORITE.ordinal -> {
                     val fragment = FavoriteRoomFragment()
-                    fragment.onUpdate(result?.favourites)
+                    fragment.onUpdate(result?.favourites, notificationComparator)
+                    fragment.onSelectRoomListener = this@NewHomeFragment
+                    fragment.invitationListener = null
+                    fragment.moreActionListener = null
                     fragment
                 }
                 ROOM_FRAGMENTS.NORMAL.ordinal -> {
                     val fragment = NormalRoomFragment()
-                    fragment.onUpdate(result?.otherRooms)
+                    fragment.onUpdate(result?.otherRooms, notificationComparator)
+                    fragment.onSelectRoomListener = this@NewHomeFragment
+                    fragment.invitationListener = null
+                    fragment.moreActionListener = null
                     fragment
                 }
                 ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
                     val fragment = LowPriorityRoomFragment()
-                    fragment.onUpdate(result?.lowPriorities)
+                    fragment.onUpdate(result?.lowPriorities, notificationComparator)
+                    fragment.onSelectRoomListener = this@NewHomeFragment
+                    fragment.invitationListener = null
+                    fragment.moreActionListener = null
                     fragment
                 }
-                else -> BaseNewHomeIndividualFragment()
+                else -> InviteRoomFragment()
             }
             fragment.registerListener = this@NewHomeFragment
             return fragment
