@@ -7,20 +7,23 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentPagerAdapter
 import im.vector.R
 import im.vector.adapters.HomeRoomAdapter
-import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.ui.themes.ThemeUtils.setTabLayoutTheme
+import im.vector.util.HomeRoomsViewModel
+import im.vector.util.PreferencesManager
 import im.vector.util.RoomUtils
 import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
-import java.util.*
 
-class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener {
+class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
+    val dataUpdateListeners = ArrayList<UpDateListener>()
+    var result: HomeRoomsViewModel.Result? = null
+
     override fun getLayoutResId(): Int {
         return R.layout.fragment_view_pager_tab
     }
@@ -34,6 +37,7 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        pager.offscreenPageLimit = 3
         pager.adapter = HomePagerAdapter(childFragmentManager, resources.getStringArray(R.array.home_tabs))
         tabLayout.setupWithViewPager(pager)
         activity?.let { activity ->
@@ -62,6 +66,46 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener 
         openRoom(room)
     }
 
+    override fun onRoomResultUpdated(result: HomeRoomsViewModel.Result?) {
+        if (isResumed) {
+            refreshData(result)
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Data management
+     * *********************************************************************************************
+     */
+    /**
+     * Init the rooms data
+     */
+    private fun refreshData(result: HomeRoomsViewModel.Result?) {
+        this.result = result
+        val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
+        val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
+        val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
+        dataUpdateListeners.forEachIndexed { index, listener ->
+            when (index) {
+                ROOM_FRAGMENTS.INVITE.ordinal -> {
+                    listener.onUpdate(mActivity.roomInvitations)
+                }
+                ROOM_FRAGMENTS.FAVORITE.ordinal -> {
+                    listener.onUpdate(result?.favourites)
+                }
+                ROOM_FRAGMENTS.NORMAL.ordinal -> listener.onUpdate(result?.otherRooms)
+                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> listener.onUpdate(result?.lowPriorities)
+            }
+        }
+        /*sortAndDisplay(result.favourites, notificationComparator, mFavouritesSection)
+        sortAndDisplay(result.directChats, notificationComparator, mDirectChatsSection)
+        sortAndDisplay(result.lowPriorities, notificationComparator, mLowPrioritySection)
+        sortAndDisplay(result.otherRooms, notificationComparator, mRoomsSection)
+        sortAndDisplay(result.serverNotices, notificationComparator, mServerNoticesSection)*/
+        mActivity.hideWaitingView()
+        //mInvitationsSection.setRooms(mActivity.roomInvitations)
+    }
+
     override fun onLongClickRoom(v: View?, room: Room?, position: Int) {
         // User clicked on the "more actions" area
         val tags = room!!.accountData.keys
@@ -70,15 +114,41 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener 
         RoomUtils.displayPopupMenu(activity, mSession, room, v, isFavorite, isLowPriority, this)
     }
 
-    class HomePagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm) {
+    override fun onRegister(listener: UpDateListener) {
+        dataUpdateListeners.add(listener)
+    }
+
+    override fun onUnregister(listener: UpDateListener) {
+        dataUpdateListeners.remove(listener)
+    }
+
+    inner class HomePagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> InviteRoomFragment()
-                1 -> FavoriteRoomFragment()
-                2 -> NormalRoomFragment()
-                3-> LowPriorityRoomFragment()
-                else -> DirectoryRoleFragment()
+            val fragment = when (position) {
+                ROOM_FRAGMENTS.INVITE.ordinal -> {
+                    val fragment = InviteRoomFragment()
+                    fragment.onUpdate(mActivity.roomInvitations)
+                    fragment
+                }
+                ROOM_FRAGMENTS.FAVORITE.ordinal -> {
+                    val fragment = FavoriteRoomFragment()
+                    fragment.onUpdate(result?.favourites)
+                    fragment
+                }
+                ROOM_FRAGMENTS.NORMAL.ordinal -> {
+                    val fragment = NormalRoomFragment()
+                    fragment.onUpdate(result?.otherRooms)
+                    fragment
+                }
+                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
+                    val fragment = LowPriorityRoomFragment()
+                    fragment.onUpdate(result?.lowPriorities)
+                    fragment
+                }
+                else -> BaseNewHomeIndividualFragment()
             }
+            fragment.registerListener = this@NewHomeFragment
+            return fragment
         }
 
         override fun getCount(): Int = titles.size
@@ -87,4 +157,12 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener 
             return titles[position]
         }
     }
+
+    enum class ROOM_FRAGMENTS {
+        INVITE,
+        FAVORITE,
+        NORMAL,
+        LOW_PRIORITY
+    }
 }
+

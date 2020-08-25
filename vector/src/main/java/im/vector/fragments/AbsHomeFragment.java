@@ -64,7 +64,7 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
 
-    VectorHomeActivity mActivity;
+    public VectorHomeActivity mActivity;
 
     String mCurrentFilter;
 

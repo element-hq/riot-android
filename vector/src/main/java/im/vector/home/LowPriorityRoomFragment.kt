@@ -2,5 +2,5 @@ package im.vector.home
 
 import androidx.fragment.app.Fragment
 
-class LowPriorityRoomFragment : Fragment(){
+class LowPriorityRoomFragment : BaseNewHomeIndividualFragment(){
 }

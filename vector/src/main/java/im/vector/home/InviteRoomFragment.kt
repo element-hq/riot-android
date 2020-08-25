@@ -2,5 +2,5 @@ package im.vector.home
 
 import androidx.fragment.app.Fragment
 
-class InviteRoomFragment: Fragment() {
+class InviteRoomFragment: BaseNewHomeIndividualFragment() {
 }
