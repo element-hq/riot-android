@@ -22,7 +22,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-open abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener{
+abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener{
     private val LOG_TAG = BaseNewHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null

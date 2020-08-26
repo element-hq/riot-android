@@ -135,7 +135,7 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
                     fragment.onUpdate(result?.favourites, notificationComparator)
                     fragment.onSelectRoomListener = this@NewHomeFragment
                     fragment.invitationListener = null
-                    fragment.moreActionListener = null
+                    fragment.moreActionListener = this@NewHomeFragment
                     fragment
                 }
                 ROOM_FRAGMENTS.NORMAL.ordinal -> {
@@ -143,7 +143,7 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
                     fragment.onUpdate(result?.otherRooms, notificationComparator)
                     fragment.onSelectRoomListener = this@NewHomeFragment
                     fragment.invitationListener = null
-                    fragment.moreActionListener = null
+                    fragment.moreActionListener = this@NewHomeFragment
                     fragment
                 }
                 ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
@@ -151,7 +151,7 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
                     fragment.onUpdate(result?.lowPriorities, notificationComparator)
                     fragment.onSelectRoomListener = this@NewHomeFragment
                     fragment.invitationListener = null
-                    fragment.moreActionListener = null
+                    fragment.moreActionListener = this@NewHomeFragment
                     fragment
                 }
                 else -> InviteRoomFragment()

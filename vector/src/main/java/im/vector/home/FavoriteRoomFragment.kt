@@ -15,7 +15,7 @@ class FavoriteRoomFragment : BaseNewHomeIndividualFragment(){
         super.onActivityCreated(savedInstanceState)
         sectionView.setPlaceholders(null, getString(R.string.no_result_placeholder))
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
-                R.layout.adapter_item_circular_room_view, true , onSelectRoomListener, invitationListener, moreActionListener)
+                R.layout.adapter_item_room_view, true , onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
     }
 }
