@@ -5,24 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils
-import im.vector.util.PreferencesManager
-import im.vector.util.RoomUtils
-import im.vector.view.HomeSectionView
 import kotlinx.android.synthetic.main.fragment_home_individual.*
-import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener{
+abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener {
     private val LOG_TAG = BaseNewHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -55,7 +49,7 @@ abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener
         }
         rooms?.let {
             localRooms.addAll(it)
-            if(sectionView!=null){
+            if (sectionView != null) {
                 sectionView.setRooms(localRooms)
             }
         }
@@ -84,11 +78,13 @@ abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener
     }
 }
 
-interface UpDateListener{
+interface UpDateListener {
     fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>)
+    fun onFilter(pattern: String?, listener: AbsHomeFragment.OnFilterListener?)
+    fun onResetFilter()
 }
 
-interface RegisterListener{
+interface RegisterListener {
     fun onRegister(listener: UpDateListener)
     fun onUnregister(listener: UpDateListener)
 }

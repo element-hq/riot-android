@@ -54,11 +54,15 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        TODO("Not yet implemented")
+        dataUpdateListeners.forEach {
+            it.onFilter(pattern, listener)
+        }
     }
 
     override fun onResetFilter() {
-        TODO("Not yet implemented")
+        dataUpdateListeners.forEach {
+            it.onFilter("", null)
+        }
     }
 
     override fun onRoomResultUpdated(result: HomeRoomsViewModel.Result?) {
@@ -88,8 +92,12 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
                 ROOM_FRAGMENTS.FAVORITE.ordinal -> {
                     listener.onUpdate(result?.favourites, notificationComparator)
                 }
-                ROOM_FRAGMENTS.NORMAL.ordinal -> listener.onUpdate(result?.otherRooms, notificationComparator)
-                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> listener.onUpdate(result?.lowPriorities, notificationComparator)
+                ROOM_FRAGMENTS.NORMAL.ordinal -> {
+                    listener.onUpdate(result?.otherRooms?.plus(result.directChats), notificationComparator)
+                }
+                ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
+                    listener.onUpdate(result?.lowPriorities, notificationComparator)
+                }
             }
         }
         mActivity.hideWaitingView()
@@ -116,9 +124,9 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
     }
 
     inner class HomePagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentPagerAdapter(fm) {
-            private val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
-            private val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
-            private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
+        private val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
+        private val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
+        private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
 
         override fun getItem(position: Int): Fragment {
             val fragment = when (position) {

@@ -139,8 +139,10 @@ public class HomeSectionView extends RelativeLayout {
 
                     if (notificationCounter.getNotifications() == 0) {
                         mBadge.setVisibility(GONE);
+                        mHeader.setVisibility(GONE);
                     } else {
-                        //mBadge.setVisibility(VISIBLE);
+                        mHeader.setVisibility(VISIBLE);
+                        mBadge.setVisibility(VISIBLE);
                         mBadge.setText(RoomUtils.formatUnreadMessagesCounter(notificationCounter.getNotifications()));
 
                         int bingUnreadColor;
