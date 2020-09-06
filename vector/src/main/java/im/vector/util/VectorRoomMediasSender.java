@@ -815,10 +815,12 @@ public class VectorRoomMediasSender {
                                                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            if (BuildConfig.IS_SABA) {
+                                                            if (BuildConfig.IS_SABA & VectorMediaPickerActivity.stringCaption != null) {
+                                                                Log.e("Essi", "stringCaption  == >  " + VectorMediaPickerActivity.stringCaption);
+
                                                                 mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
                                                                         roomMediaMessage.getFileName(mVectorRoomActivity) + "*" + VectorMediaPickerActivity.stringCaption));
-
+                                                                VectorMediaPickerActivity.stringCaption="";
                                                             } else {
                                                                 mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
                                                                         roomMediaMessage.getFileName(mVectorRoomActivity)));
