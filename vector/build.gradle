@@ -48,8 +48,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         // use the version code
-        versionCode rootProject.ext.versionCodeProp
-        versionName rootProject.ext.versionNameProp
+        versionCode 9907051
+        versionName "Mehr99-A"
 
         // Keep abiFilter for the universalApk
         ndk {
