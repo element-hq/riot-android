@@ -5,7 +5,7 @@
     android:opacity="opaque">
 
     <!-- Background color -->
-    <item android:drawable="@color/riot_primary_background_color_light" />
+    <item android:drawable="@color/accent_color_dark" />
 
     <!-- Centered logo -->
     <item
