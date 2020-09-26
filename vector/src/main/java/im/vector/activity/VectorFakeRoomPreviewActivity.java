@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 
 import org.matrix.androidsdk.MXSession;
@@ -26,6 +27,7 @@ import org.matrix.androidsdk.data.RoomPreviewData;
 
 import im.vector.Matrix;
 import im.vector.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Dummy activity used to trigger the room activity in preview mode,
@@ -40,6 +42,11 @@ import im.vector.R;
 @SuppressLint("LongLogTag")
 public class VectorFakeRoomPreviewActivity extends VectorAppCompatActivity {
     private static final String LOG_TAG = VectorFakeRoomPreviewActivity.class.getSimpleName();
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

@@ -65,6 +65,7 @@ class AcceptTermsViewModel : ViewModel() {
                 object : ApiCallback<Unit> {
                     override fun onSuccess(info: Unit) {
                         acceptTerms.postValue(MxAsync.Success(Unit))
+                        Log.v("Terms accepted: ", "Successfully")
                     }
 
                     override fun onUnexpectedError(e: java.lang.Exception?) {

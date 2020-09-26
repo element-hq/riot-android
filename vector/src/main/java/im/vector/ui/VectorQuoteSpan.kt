@@ -33,8 +33,11 @@ import im.vector.R
  */
 class VectorQuoteSpan(context: Context) : LeadingMarginSpan, LineBackgroundSpan {
 
-    private val backgroundColor = ContextCompat.getColor(context, R.color.quote_background_color)
-    private val stripeColor = ContextCompat.getColor(context, R.color.quote_strip_color)
+    /**
+     * BATNA ==> (Esmaeeil Moradi) change color background header message in vector message adapter
+     */
+    private val backgroundColor = ContextCompat.getColor(context, R.color.background_header_message)
+    private val stripeColor = ContextCompat.getColor(context, R.color.background_header_message_divider)
     private val stripeWidth = context.resources.getDimension(R.dimen.quote_width)
     private val gap = context.resources.getDimension(R.dimen.quote_gap)
 

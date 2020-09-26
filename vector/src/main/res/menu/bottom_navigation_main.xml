@@ -5,7 +5,7 @@
         android:id="@+id/bottom_action_home"
         android:contentDescription="@string/bottom_action_home"
         android:enabled="true"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_person_black_24dp"
         android:title="" />
 
     <item
@@ -19,7 +19,7 @@
         android:id="@+id/bottom_action_people"
         android:contentDescription="@string/bottom_action_people"
         android:enabled="true"
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="" />
 
     <item

@@ -39,6 +39,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.binaryfork.spanny.Spanny
+import im.vector.BuildConfig
 import im.vector.R
 import im.vector.features.hhs.ResourceLimitErrorFormatter
 import im.vector.listeners.IMessagesAdapterActionsListener
@@ -65,6 +66,8 @@ class NotificationAreaView @JvmOverloads constructor(
     lateinit var imageView: ImageView
     @BindView(R.id.room_notification_message)
     lateinit var messageView: TextView
+    @BindView(R.id.txt_new_message_count)
+    lateinit var countMessage: TextView
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -175,8 +178,13 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     private fun renderTombstone(state: State.Tombstone) {
+        if (countMessage.visibility == View.VISIBLE) {
+            countMessage.visibility = View.GONE
+        }
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
+        if (!BuildConfig.IS_SABA) {
+            imageView.setImageResource(R.drawable.error)
+        }
         val roomTombstoneContent = state.tombstoneContent
         val urlSpan = MatrixURLSpan(roomTombstoneContent.replacementRoom, state.tombstoneEventSenderId, delegate?.providesMessagesActionListener())
         val textColorInt = ThemeUtils.getColor(context, R.attr.vctr_message_text_color)
@@ -186,7 +194,6 @@ class NotificationAreaView @JvmOverloads constructor(
                 .append("\n")
                 .append(resources.getString(R.string.room_tombstone_continuation_link), urlSpan, ForegroundColorSpan(textColorInt))
         messageView.movementMethod = LinkMovementMethod.getInstance()
-        messageView.text = message
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
@@ -203,29 +210,40 @@ class NotificationAreaView @JvmOverloads constructor(
         }
         val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
         messageView.setTextColor(Color.WHITE)
-        messageView.text = message
+        if (!BuildConfig.IS_SABA) messageView.text = message
         messageView.movementMethod = LinkMovementMethod.getInstance()
         messageView.setLinkTextColor(Color.WHITE)
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
     private fun renderConnectionError() {
+        if (countMessage.visibility == View.VISIBLE) {
+            countMessage.visibility = View.GONE
+        }
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
+        if (!BuildConfig.IS_SABA) {
+            imageView.setImageResource(R.drawable.error)
+        }
         messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        messageView.text = SpannableString(resources.getString(R.string.room_offline_notification))
+        if (!BuildConfig.IS_SABA) messageView.text = SpannableString(resources.getString(R.string.room_offline_notification))
     }
 
     private fun renderTyping(state: State.Typing) {
         visibility = visibilityForMessages
-        imageView.setImageResource(R.drawable.vector_typing)
-        messageView.text = SpannableString(state.message)
+        if (!BuildConfig.IS_SABA) {
+            imageView.setImageResource(R.drawable.vector_typing)
+        }
+        if (!BuildConfig.IS_SABA) messageView.text = SpannableString(state.message)
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
     }
 
     private fun renderUnreadPreview() {
         visibility = visibilityForMessages
-        imageView.setImageResource(R.drawable.scrolldown)
+        if (BuildConfig.IS_SABA) {
+            imageView.setImageResource(R.drawable.scrolldown_saba)
+        } else {
+            imageView.setImageResource(R.drawable.scrolldown)
+        }
         messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
         imageView.setOnClickListener { delegate?.closeScreen() }
     }
@@ -233,14 +251,26 @@ class NotificationAreaView @JvmOverloads constructor(
     private fun renderScrollToBottom(state: State.ScrollToBottom) {
         visibility = visibilityForMessages
         if (state.unreadCount > 0) {
-            imageView.setImageResource(R.drawable.newmessages)
+            if (BuildConfig.IS_SABA) {
+                countMessage.visibility = View.VISIBLE
+                imageView.setImageResource(R.drawable.scrolldown_saba)
+            } else {
+                imageView.setImageResource(R.drawable.newmessages)
+            }
             messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-            messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
+            if (!BuildConfig.IS_SABA) messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
+            countMessage.text = resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount)
         } else {
-            imageView.setImageResource(R.drawable.scrolldown)
+
+            if (BuildConfig.IS_SABA) {
+                imageView.setImageResource(R.drawable.scrolldown_saba)
+                countMessage.visibility = View.GONE
+            } else {
+                imageView.setImageResource(R.drawable.scrolldown)
+            }
             messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
             if (!TextUtils.isEmpty(state.message)) {
-                messageView.text = SpannableString(state.message)
+                if (!BuildConfig.IS_SABA) messageView.text = SpannableString(state.message)
             }
         }
         messageView.setOnClickListener { delegate?.jumpToBottom() }

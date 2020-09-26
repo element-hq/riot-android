@@ -49,7 +49,7 @@
         android:layout_alignBottom="@+id/room_avatar"
         android:layout_marginEnd="-4dp"
         android:layout_marginRight="-4dp"
-        android:src="@drawable/e2e_verified"
+        android:src="@drawable/e2e_verified_batna"
         android:tint="?attr/colorAccent"
         android:visibility="invisible"
         tools:visibility="visible" />
@@ -71,11 +71,14 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/room_unread_count"
             android:layout_toLeftOf="@+id/room_unread_count"
+            android:textAlignment="viewStart"
             android:ellipsize="end"
             android:fontFamily="sans-serif-regular"
             android:maxLines="1"
             android:textSize="16sp"
-            tools:text="Room name a bit long to be displayed completely" />
+            tools:text="Room name a bit long to be displayed completely"
+            tools:ignore="RtlHardcoded"
+            android:gravity="start" />
 
         <TextView
             android:id="@+id/room_message"
@@ -83,11 +86,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/room_name"
             android:layout_marginTop="3dp"
+            android:textAlignment="viewStart"
+            android:gravity="start"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
-            tools:text="First message of the room is a bit too long to be displayed" />
+            tools:text="First message of the room is a bit too long to be displayed"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/room_more_action_ic"

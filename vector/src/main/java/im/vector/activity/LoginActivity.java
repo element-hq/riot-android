@@ -105,6 +105,7 @@ import im.vector.repositories.ServerUrlsRepository;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ViewUtilKt;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Displays the login screen.
@@ -407,6 +408,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private PhoneNumberHandler mRegistrationPhoneNumberHandler;
 
     private Dialog mCurrentDialog;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onDestroy() {
@@ -2344,9 +2350,18 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mForgotValidateEmailButton.setVisibility(View.GONE);
         mSubmitThreePidButton.setVisibility(View.GONE);
         mSkipThreePidButton.setVisibility(View.GONE);
-
-        mHomeServerOptionLayout.setVisibility(View.VISIBLE);
-
+        /**
+         * Batna ==>Allow choose home server
+         */
+        if (BuildConfig.IS_SABA) {
+            if (BuildConfig.ALLOW_HOME_SERVER_CHANGE) {
+                mHomeServerOptionLayout.setVisibility(View.VISIBLE);
+            } else {
+                mHomeServerOptionLayout.setVisibility(View.GONE);
+            }
+        }else {
+            mHomeServerOptionLayout.setVisibility(View.VISIBLE);
+        }
         // Then show them depending on mode
         switch (mMode) {
             case MODE_LOGIN:

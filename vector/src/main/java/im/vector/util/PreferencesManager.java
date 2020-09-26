@@ -91,6 +91,7 @@ public class PreferencesManager {
     public static final String SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY";
 
     public static final String SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY";
+    public static final String SETTINGS_USER_INTERFACE_KEY = "SETTINGS_USER_INTERFACE_KEY";
 
     // user
     public static final String SETTINGS_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_DISPLAY_NAME_PREFERENCE_KEY";
@@ -315,7 +316,7 @@ public class PreferencesManager {
      * @return true if the join and leave membership events should be shown in the messages list
      */
     public static boolean showJoinLeaveMessages(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, false);
     }
 
     /**
@@ -345,7 +346,7 @@ public class PreferencesManager {
      * @return true if the send voice feature is enabled.
      */
     public static boolean isSendVoiceFeatureEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, true);
     }
 
     /**
@@ -770,7 +771,7 @@ public class PreferencesManager {
      * @return true if the message timestamps must be always shown
      */
     public static boolean alwaysShowTimeStamps(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,true);
     }
 
     /**
@@ -865,7 +866,7 @@ public class PreferencesManager {
      * @return true to preview media
      */
     public static boolean previewMediaWhenSending(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, true);
     }
 
     /**
@@ -885,7 +886,7 @@ public class PreferencesManager {
      * @return true if the rage shake is used
      */
     public static boolean useRageshake(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, false);
     }
 
     /**

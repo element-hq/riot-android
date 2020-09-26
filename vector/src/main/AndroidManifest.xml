@@ -549,7 +549,7 @@
         <service
             android:name=".services.CallService"
             android:exported="false" />
-    
+
     </application>
 
 </manifest>

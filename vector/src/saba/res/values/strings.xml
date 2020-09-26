@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Saba Strings -->
+    <string name="saba_messenger">Messenger</string>
+    <string name="saba_messenger_long">Secure Business Messenger</string>
+
+    <!-- About Saba -->
+    <string name="saba_about_version_info">Version %1$s</string>
+    <string name="saba_about_security_level_info">System Security Level %1$s</string>
+    <string name="saba_about_title">About</string>
+    <string name="saba_about_privacy">Privacy Policy</string>
+    <string name="saba_about_open_source_software">Open Source</string>
+    <string name="saba_about_about_saba">About</string>
+    <string name="preview">Join </string>
+
+
+
+
+    <!-- Alert    ACTION_MANAGE_OVERLAY_PERMISSION -->
+    <string name="saba_receiving_a_permission">Receiving a permission </string>
+    <string name="saba_receiving_a_permission_desc" ><![CDATA[<br><h2> Allow display over other apps </h2></br><p>The application needs this permission for better performance. Please confirm.</p>]]></string>
+
+
+
+
+
+    <!-- Menus -->
+    <string name="saba_menu_conversations">Conversations</string>
+    <string name="saba_menu_groups">Groups</string>
+    <!-- Notification Area  -->
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 </item>
+        <item quantity="other">%d </item>
+    </plurals>
+    <string name="hint_caption">Caption …</string>
+</resources>

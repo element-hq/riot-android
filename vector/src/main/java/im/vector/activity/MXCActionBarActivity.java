@@ -38,6 +38,7 @@ import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * extends ActionBarActivity to manage the rageshake
@@ -48,6 +49,11 @@ public abstract class MXCActionBarActivity extends VectorAppCompatActivity {
 
     protected MXSession mSession = null;
     Room mRoom = null;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onLowMemory() {

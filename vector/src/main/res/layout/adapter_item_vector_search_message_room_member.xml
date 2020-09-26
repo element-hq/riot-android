@@ -40,9 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/messagesAdapter_search_body"
-            layout="@layout/adapter_item_vector_message_room_member" />
+<!--        <include-->
+<!--            android:id="@+id/messagesAdapter_search_body"-->
+<!--            layout="@layout/adapter_item_vector_message_room_member" />-->
     </RelativeLayout>
 
     <RelativeLayout

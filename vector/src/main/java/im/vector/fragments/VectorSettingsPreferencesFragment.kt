@@ -186,6 +186,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         findPreference(PreferencesManager.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
     }
 
+    // User Interface
+    private val mLanguageSettingCategory by lazy{
+        findPreference(PreferencesManager.SETTINGS_USER_INTERFACE_KEY) as PreferenceCategory
+    }
+
     // Group Flairs
     private val mGroupsFlairCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
@@ -867,7 +872,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun refreshIntegrationManagerSettings() {
         val integrationAllowed = mSession.integrationManager.integrationAllowed
-        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as SwitchPreference).let {
+        (findPreference(PreferencesManager.SETTINGS_INTEGRATION_ALLOW) as? SwitchPreference)?.let {
             val savedListener = it.onPreferenceChangeListener
             it.onPreferenceChangeListener = null
             it.isChecked = integrationAllowed
@@ -1757,6 +1762,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     /**
      * Refresh the ignored users list
      */
+    @SuppressLint("StringFormatInvalid")
     private fun refreshIgnoredUsersList() {
         val ignoredUsersList = mSession.dataHandler.ignoredUserIds
 
@@ -2426,6 +2432,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
         selectedLanguagePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            //test if it will work like mContactPhonebookCountryPreference when it is visible
             startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)
             true
         }

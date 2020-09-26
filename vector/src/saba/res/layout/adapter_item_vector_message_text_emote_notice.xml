@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/testEsmaeeil"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/vector_message_header"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/messagesAdapter_body_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+            <im.vector.view.VectorCircularImageView
+                android:id="@+id/messagesAdapter_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dp"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:contentDescription="@string/avatar"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
+
+
+            <FrameLayout
+                android:id="@+id/messagesAdapter_body_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp">
+
+
+                    <!-- the body is here -->
+                    <LinearLayout
+                        android:id="@+id/messagesAdapter_text_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:minWidth="100dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/vector_message_sender" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/messagesAdapter_body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:textIsSelectable="false"
+                            android:textSize="14sp"
+                            tools:text="A body www.example.org" />
+
+
+                        <TextView
+                            android:id="@+id/messagesAdapter_re_request_e2e_key"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:text="@string/e2e_re_request_encryption_key"
+                            android:textIsSelectable="false"
+                            android:textSize="14sp" />
+
+
+                        <LinearLayout
+                            android:id="@+id/message_timestamp_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="8dp"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/message_adapter_e2e_icon"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_weight="0"
+                                android:src="@drawable/e2e_verified_batna" />
+
+                            <include
+                                layout="@layout/vector_message_timestamp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_weight="1" />
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/messagesAdapter_urls_preview_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <include
+        android:id="@+id/messagesAdapter_avatars_list"
+        layout="@layout/vector_message_receipts_list" />
+
+    <include layout="@layout/message_separator" />
+
+    <include layout="@layout/message_read_marker" />
+
+</LinearLayout>

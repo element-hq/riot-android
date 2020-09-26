@@ -192,10 +192,19 @@ object NotificationUtils {
         val pi = PendingIntent.getActivity(context, 0, i, 0)
 
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        /**
+         * Batna ==>change notification icon
+         */
+        var notificationIcon: Int
+        if (BuildConfig.IS_SABA) {
+            notificationIcon = R.drawable.notification_icon
+        } else {
+            notificationIcon = R.mipmap.ic_launcher
+        }
 
         val builder = NotificationCompat.Builder(context, LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(context.getString(subTitleResId))
-                .setSmallIcon(R.drawable.sync)
+                .setSmallIcon(notificationIcon)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setColor(accentColor)
                 .setContentIntent(pi)
@@ -377,7 +386,15 @@ object NotificationUtils {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(context, roomInfo.roomId)
-        val smallIcon = if (roomInfo.shouldBing) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        /**
+         * Batna ==>change notification icon
+         */
+        val smallIcon: Int
+        if (BuildConfig.IS_SABA) {
+            smallIcon = if (roomInfo.shouldBing) R.drawable.notification_icon else R.drawable.notification_icon
+        } else {
+            smallIcon = if (roomInfo.shouldBing) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        }
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
@@ -480,7 +497,15 @@ object NotificationUtils {
     fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?, matrixId: String): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        /**
+         * Batna ==>change notification icon
+         */
+        val smallIcon: Int
+        if (BuildConfig.IS_SABA) {
+            smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.notification_icon else R.drawable.notification_icon
+        } else {
+            smallIcon = if (simpleNotifiableEvent.noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        }
 
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -609,8 +634,15 @@ object NotificationUtils {
                                      noisy: Boolean,
                                      lastMessageTimestamp: Long): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
-
+        /**
+         * Batna ==>change notification icon
+         */
+        val smallIcon: Int
+        if (BuildConfig.IS_SABA) {
+            smallIcon = if (noisy) R.drawable.notification_icon else R.drawable.notification_icon
+        } else {
+            smallIcon = if (noisy) R.drawable.icon_notif_important else R.drawable.logo_transparent
+        }
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 // used in compat < N, after summary is built based on child notifications
                 .setWhen(lastMessageTimestamp)

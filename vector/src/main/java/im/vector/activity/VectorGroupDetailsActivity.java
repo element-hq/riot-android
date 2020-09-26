@@ -49,6 +49,7 @@ import im.vector.adapters.GroupDetailsFragmentPagerAdapter;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.view.VectorViewPager;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  *
@@ -136,6 +137,11 @@ public class VectorGroupDetailsActivity extends MXCActionBarActivity {
             onGroupUsersListUpdate(groupId);
         }
     };
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

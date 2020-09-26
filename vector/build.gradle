@@ -31,6 +31,7 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 
 android {
     compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -44,11 +45,11 @@ android {
 
     defaultConfig {
         applicationId "im.vector"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         // use the version code
-        versionCode rootProject.ext.versionCodeProp
-        versionName rootProject.ext.versionNameProp
+        versionCode 9907051
+        versionName "Mehr99-A"
 
         // Keep abiFilter for the universalApk
         ndk {
@@ -56,6 +57,7 @@ android {
         }
 
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -138,6 +140,7 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "IS_SABA", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -148,14 +151,27 @@ android {
             // use the version name
             versionCode rootProject.ext.versionCodeProp
             versionName rootProject.ext.versionNameProp
+            buildConfigField "boolean", "IS_SABA", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+
+        saba {
+            applicationId "ir.batna.messaging"
+            versionCode 9905261
+            versionName "Mordad99-C"
+            buildConfigField "boolean", "IS_SABA", "true"
+            buildConfigField "boolean", "ALLOW_HOME_SERVER_CHANGE", "true"
+            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
+            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"S\""
+            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"Saba\""
         }
     }
 
     lintOptions {
         lintConfig file("lint.xml")
+        abortOnError false
     }
 
     testOptions {
@@ -187,6 +203,8 @@ static def gitBranchName() {
 }
 
 dependencies {
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -281,6 +299,9 @@ dependencies {
 
     // appfdroid flavor only
 
+    implementation 'io.sentry:sentry-android:2.0.2'
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
+
     // Test
     testImplementation 'junit:junit:4.12' // Test
     testImplementation 'androidx.test:runner:1.2.0'
@@ -307,7 +328,8 @@ configurations.all {
     }
 }
 
-if (!getGradle().getStartParameter().getTaskRequests().toString().contains("Appfdroid")
+if (!getGradle().getStartParameter().getTaskRequests().toString().contains("fdroid")
+        && !getGradle().getStartParameter().getTaskRequests().toString().contains("Saba")
         && !getGradle().getStartParameter().getTaskRequests().toString().contains("assembleAndroidTest")) {
     apply plugin: 'com.google.gms.google-services'
 }

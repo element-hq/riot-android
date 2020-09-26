@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.VectorHomeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/home_toolbar"
+            style="@style/VectorToolbarStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:title="@string/saba_messenger"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/button_global_search"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:contentDescription="@string/search"
+                app:srcCompat="@drawable/ic_material_search_white" />
+
+            <!-- The search view is added in the toolbar not in the menu
+                 to ensure that the overflow icon menu is not hidden.-->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/home_search_view"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ProgressBar
+            android:id="@+id/home_recents_sync_in_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
+            tools:visibility="visible" />
+
+        <im.vector.view.VectorPendingCallView
+            android:id="@+id/listView_pending_callview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_recents_sync_in_progress"
+            tools:visibility="visible" />
+
+        <im.vector.view.KeysBackupBanner
+            android:id="@+id/home_keys_backup_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listView_pending_callview"
+            tools:visibility="visible" />
+
+        <!-- The main content view -->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?android:attr/colorBackground"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/home_keys_backup_banner" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?vctr_bottom_nav_background_color"
+            app:itemBackground="?vctr_bottom_nav_background_color"
+            app:itemIconTint="@color/home_bottom_nav_view_tint"
+            app:itemTextColor="@color/home_bottom_nav_view_tint"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_navigation_main" />
+
+        <!-- Elevate above BottomNavigationView (above lollipop). -->
+        <View
+            android:id="@+id/floating_action_menu_touch_guard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:background="@android:color/background_dark"
+            android:elevation="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Elevate button above the touch guard (above lollipop). -->
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/floating_action_menu"
+            style="@style/Floating_Action_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="12dp"
+            app:borderWidth="0dp"
+            app:elevation="12dp"
+            app:fab_expandDirection="up"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:backgroundTint="?attr/colorAccent"
+            tools:fab_addButtonColorNormal="?attr/colorAccent">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_start_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@android:color/white"
+                app:fab_icon="@drawable/ic_person_black_24dp"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_start_chat"
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
+
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_create_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_icon="@drawable/ic_add_white"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_create_room"
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_join_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_icon="@drawable/riot_tab_rooms"
+                app:fab_size="mini"
+                app:fab_title="@string/room_recents_join_room"
+                tools:fab_colorNormal="?attr/colorAccent"
+                tools:fab_colorPressed="?attr/colorAccent" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <FrameLayout
+            android:id="@+id/listView_spinner_views"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/vctr_waiting_background_color"
+            android:elevation="14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listView_pending_callview">
+
+            <ProgressBar
+                android:id="@+id/listView_spinner"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="?android:attr/colorBackground"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/vector_home_menu_header"
+        app:itemIconTint="?attr/vctr_home_navigation_icon_color"
+        app:menu="@menu/vector_home_sliding_menu"
+        app:theme="@style/NavigationViewStyle" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -50,6 +51,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -82,6 +84,7 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.StickerMessage;
 import org.matrix.androidsdk.view.HtmlTagHandler;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -97,9 +100,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.extensions.MatrixSdkExtensionsKt;
+import im.vector.fragments.VectorMessageListFragment;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.VectorQuoteSpan;
@@ -121,13 +127,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private static final String LOG_TAG = VectorMessagesAdapter.class.getSimpleName();
 
     // an event is selected when the user taps on it
-    private Event mSelectedEvent;
+    public static Event mSelectedEvent;
+    private String fileName;
 
     // events listeners
     IMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
 
     // current date : used to compute the day header
     private Date mReferenceDate = new Date();
+    private static Handler myHandler = new Handler();
+    private static boolean isRemainderVoice;
+    @SuppressLint("StaticFieldLeak")
+    private static ImageView vectorMessagesAdapterImageTypeView;
 
     // day date of each message
     // the hours, minutes and seconds are removed
@@ -227,6 +238,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private final Drawable mPadlockDrawable;
 
     private VectorImageGetter mImageGetter;
+    private VectorRoomActivity vectorRoomActivity;
+    private VectorMessageListFragment vectorMessageListFragment;
+
 
     private HtmlToolbox mHtmlToolbox = new HtmlToolbox() {
         HtmlTagHandler mHtmlTagHandler;
@@ -270,6 +284,26 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     /**
      * Creates a messages adapter with the default layouts.
      */
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache, VectorRoomActivity vectorRoomActivity, VectorMessageListFragment vectorMessageListFragment) {
+        this(session, context,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_room_member,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_file,
+                R.layout.adapter_item_vector_message_merge,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_emoji,
+                R.layout.adapter_item_vector_message_code,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_redact,
+                R.layout.adapter_item_vector_message_room_versioned,
+                mediasCache);
+        this.vectorRoomActivity = vectorRoomActivity;
+        this.vectorMessageListFragment = vectorMessageListFragment;
+    }
+
     public VectorMessagesAdapter(MXSession session, Context context, MXMediaCache mediasCache) {
         this(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
@@ -286,6 +320,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 R.layout.adapter_item_vector_message_redact,
                 R.layout.adapter_item_vector_message_room_versioned,
                 mediasCache);
+
     }
 
     /**
@@ -1149,14 +1184,52 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             if (row.getEvent().isUndelivered() || row.getEvent().isUnknownDevice()) {
                 tsTextView.setTextColor(mNotSentMessageTextColor);
             } else {
-                tsTextView.setTextColor(ThemeUtils.INSTANCE.getColor(mContext, android.R.attr.textColorSecondary));
+                /**
+                 * BATNA ==>  change text color
+                 */
+                tsTextView.setTextColor(Color.BLACK);
+
             }
 
-            tsTextView.setVisibility((((position + 1) == getCount()) || mIsSearchMode || mAlwaysShowTimeStamps) ? View.VISIBLE : View.GONE);
+            tsTextView.setTextColor(Color.BLACK);
+
         }
 
         // Sender avatar
         View avatarView = mHelper.setSenderAvatar(convertView, row, isMergedView);
+
+        /**
+         * BATNA ==> (Esmaeeil Moradi) change LayoutDirection messagesAdapter_body_view
+         */
+
+        if (BuildConfig.IS_SABA) {
+            final String userId = event.getSender();
+            if (userId.equals(mSession.getMyUserId())) {
+                try {
+                    convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                    if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
+                        convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                    } else {
+                        convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_message_shape));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                try {
+                    convertView.findViewById(R.id.messagesAdapter_body_view).setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    if ((ROW_TYPE_IMAGE != msgType) && (ROW_TYPE_FILE != msgType) && (ROW_TYPE_VIDEO != msgType) && (ROW_TYPE_STICKER != msgType)) {
+                        convertView.findViewById(R.id.messagesAdapter_text_layout).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                    } else {
+                        convertView.findViewById(R.id.layout_item_vector_message).setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_message_shape));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
         // if the messages are merged
         // the thumbnail is hidden
@@ -1254,6 +1327,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 textColor = mNotSentMessageTextColor;
             } else {
                 textColor = shouldHighlighted ? mHighlightMessageTextColor : mDefaultMessageTextColor;
+                /**
+                 * Developed by BATNA (Esmaeeil Moradi)
+                 */
+                //change reply color in Group
+                if (BuildConfig.IS_SABA) {
+                    textColor = Color.DKGRAY;
+                }
             }
 
             for (final TextView tv : textViews) {
@@ -1551,6 +1631,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
+    public static void setRemainderVoice(boolean isRemainderVoice) {
+        VectorMessagesAdapter.isRemainderVoice = isRemainderVoice;
+    }
+
+    public static ImageView getVectorMessagesAdapterImageTypeView() {
+        return vectorMessagesAdapterImageTypeView;
+    }
+
     /**
      * File message management
      *
@@ -1559,13 +1647,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
      * @param parent      the parent view
      * @return the updated text view.
      */
+
     private View getFileView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mRowTypeToLayoutId.get(ROW_TYPE_FILE), parent, false);
         }
 
         try {
+            ProgressBar progressBar = convertView.findViewById(R.id.download_progressBar);
             MessageRow row = getItem(position);
+            assert row != null;
             Event event = row.getEvent();
 
             final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
@@ -1582,24 +1673,145 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             // display the right message type icon.
             // Audio and File messages are managed by the same method
             final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
-
             if (null != imageTypeView) {
                 imageTypeView.setImageResource(Message.MSGTYPE_AUDIO.equals(fileMessage.msgtype) ? R.drawable.filetype_audio : R.drawable.filetype_attachment);
             }
-            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
 
+
+            String filePath = VectorRoomActivity.voicePath + fileMessage.body;
+            File file = new File(filePath);
+            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                if (file.exists()) {
+                    assert imageTypeView != null;
+                    imageTypeView.setImageResource(R.drawable.play);
+                } else if (!file.exists()) {
+                    assert imageTypeView != null;
+                    imageTypeView.setImageResource(R.drawable.ic_down_arrow);
+                }
+                if (file.exists() && progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                    assert imageTypeView != null;
+                    imageTypeView.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                }
+            }
+
+
+            if (fileMessage.body.equalsIgnoreCase(fileName) && VectorRoomActivity.getMediaPlayer().isPlaying()) {
+                assert imageTypeView != null;
+                imageTypeView.setImageResource(R.drawable.pause);
+                if (vectorMessagesAdapterImageTypeView != null) {
+                    vectorMessagesAdapterImageTypeView.setImageResource(R.drawable.pause);
+                }
+            }
+
+            VectorRoomActivity.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    try {
+                        if (imageTypeView != null) {
+                            imageTypeView.setImageResource(R.drawable.play);
+                            VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
+                            notifyDataSetChanged();
+                            isRemainderVoice = false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            assert imageTypeView != null;
+            imageTypeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                        if (!file.exists()) {
+                            File dir = new File(VectorRoomActivity.voicePath);
+                            if (dir.isDirectory()) {
+                                String[] voices = dir.list();
+                                for (String voice : voices) {
+                                    new File(dir, voice).delete();
+                                }
+                            }
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageTypeView.setVisibility(View.GONE);
+                            VectorRoomActivity.getMediaPlayer().stop();
+                            VectorRoomActivity.getLinearLayout().setVisibility(View.GONE);
+                            playBack(imageTypeView, position, fileMessage);
+                        } else if (file.exists()) {
+//                            progressBar.setVisibility(View.GONE);
+                            playBack(imageTypeView, position, fileMessage);
+                        }
+                    }
+                }
+            });
+            imageTypeView.setBackgroundColor(Color.TRANSPARENT);
             mMediasHelper.managePendingFileDownload(convertView, event, fileMessage, position);
             mMediasHelper.managePendingUpload(convertView, event, ROW_TYPE_FILE, fileMessage.url);
-
             View fileLayout = convertView.findViewById(R.id.messagesAdapter_file_layout);
             manageSubView(position, convertView, fileLayout, ROW_TYPE_FILE);
-
             addContentViewListeners(convertView, fileTextView, position, ROW_TYPE_FILE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getFileView() failed " + e.getMessage(), e);
         }
-
         return convertView;
+    }
+
+    private void playBack(ImageView imageTypeView, int position, FileMessage fileMessage) {
+        vectorMessagesAdapterImageTypeView = imageTypeView;
+
+        String filePath = VectorRoomActivity.voicePath + fileMessage.body;
+        File file = new File(filePath);
+        if (imageTypeView.getDrawable().getConstantState() == vectorRoomActivity.getResources().getDrawable(R.drawable.ic_down_arrow).getConstantState()) {
+            vectorMessageListFragment.onContentClick(position);
+            imageTypeView.setImageResource(R.drawable.play);
+        }
+
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            vectorMessageListFragment.onContentClick(position);
+            imageTypeView.setImageResource(R.drawable.play);
+        }
+
+        if (file.exists()) {
+            if (!VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName) || VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE) {
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
+                isRemainderVoice = true;
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                vectorRoomActivity.playBack(filePath, false);
+                imageTypeView.setImageResource(R.drawable.pause);
+
+                notifyDataSetChanged();
+
+            } else if (!VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName) && !(VectorRoomActivity.getLinearLayout().getVisibility() == View.GONE)
+            ) {
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
+                VectorRoomActivity.getMediaPlayer().start();
+                imageTypeView.setImageResource(R.drawable.pause);
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                notifyDataSetChanged();
+
+            } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && fileMessage.body.equalsIgnoreCase(fileName)) {
+                VectorRoomActivity.getMediaPlayer().pause();
+                VectorRoomActivity.getPause().setVisibility(View.GONE);
+                VectorRoomActivity.getPlay().setVisibility(View.VISIBLE);
+                imageTypeView.setImageResource(R.drawable.play);
+                notifyDataSetChanged();
+
+            } else if (VectorRoomActivity.getMediaPlayer().isPlaying() && !fileMessage.body.equalsIgnoreCase(fileName)) {
+                if (VectorRoomActivity.getMediaPlayer().isPlaying() && VectorRoomActivity.getMediaPlayer().getCurrentPosition() <= 500)
+                    return;
+                vectorRoomActivity.playBack(filePath, false);
+                imageTypeView.setImageResource(R.drawable.play);
+                VectorRoomActivity.getPause().setVisibility(View.VISIBLE);
+                VectorRoomActivity.getPlay().setVisibility(View.GONE);
+                notifyDataSetChanged();
+            }
+        }
+        fileName = fileMessage.body;
     }
 
     /**
@@ -2052,10 +2264,23 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MessageRow row = getItem(position);
+                Event event = row.getEvent();
+                final FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+
                 if (null != mVectorMessagesAdapterEventsListener) {
                     // GA issue
                     if (position < getCount()) {
-                        mVectorMessagesAdapterEventsListener.onContentClick(position);
+                        try {
+                            if (fileMessage.body.contains("3gp") || fileMessage.body.contains("mp3") || fileMessage.body.contains("aac")) {
+                                final ImageView imageTypeView = convertView.findViewById(R.id.messagesAdapter_image_type);
+                                vectorMessagesAdapterImageTypeView = imageTypeView;
+                                fileName = fileMessage.body;
+                            }
+                            mVectorMessagesAdapterEventsListener.onContentClick(position);
+                        } catch (Exception ignored) {
+
+                        }
                     }
                 }
             }
@@ -2220,6 +2445,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 // oneself event
                 if (event.mSentState != Event.SentState.SENT) {
                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                    if (BuildConfig.IS_SABA) {
+                        e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                    }
                 }
                 // not encrypted event
                 else if (!event.isEncrypted()) {
@@ -2234,6 +2462,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id)
                             && TextUtils.equals(mSession.getMyUserId(), event.getSender())) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                        if (BuildConfig.IS_SABA) {
+                            e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                        }
+
                         MXDeviceInfo deviceInfo = mSession.getCrypto()
                                 .deviceWithIdentityKey(encryptedEventContent.sender_key, encryptedEventContent.algorithm);
 
@@ -2249,6 +2481,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
                             if (deviceInfo.isVerified()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                                if (BuildConfig.IS_SABA) {
+                                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified_batna);
+                                }
                             } else if (deviceInfo.isBlocked()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
                             } else {
@@ -2511,10 +2746,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setVisible(false);
         }
-
-        menu.findItem(R.id.ic_action_view_source).setVisible(true);
-        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
-        menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+        menu.findItem(R.id.ic_action_vector_reply).setVisible(true);
+        menu.findItem(R.id.ic_action_view_source).setVisible(false);
+//        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(false);
+        menu.findItem(R.id.ic_action_vector_permalink).setVisible(false);
 
         if (!TextUtils.isEmpty(textMsg)) {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
@@ -2589,7 +2825,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // disable the selection
-                cancelSelectionMode();
+//                cancelSelectionMode();
 
                 return true;
             }

@@ -53,6 +53,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.RoomDirectoryPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AdapterSection;
+import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.RoomAdapter;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.HomeRoomsViewModel;
@@ -230,6 +231,10 @@ public class RoomsFragment extends AbsHomeFragment implements AbsHomeFragment.On
             @Override
             public void onSelectItem(PublicRoom publicRoom) {
                 onPublicRoomSelected(publicRoom);
+            }
+
+            @Override
+            public void onSelectItem(ParticipantAdapterItem contact, int position) {
             }
         }, this, this);
         mRecycler.setAdapter(mAdapter);

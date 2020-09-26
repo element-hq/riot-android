@@ -38,6 +38,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -389,6 +391,16 @@ public class VectorCallViewActivity extends VectorAppCompatActivity implements S
         View rejectIncomingCallButton = findViewById(R.id.reject_incoming_call);
 
         View mainContainerLayoutView = findViewById(R.id.call_layout);
+
+        /**
+         * BATNA ==> Open call view Activity when phone lock
+         */
+        if (BuildConfig.IS_SABA) {
+            Window winManager = getWindow();
+            winManager.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            winManager.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+            winManager.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        }
 
         // when video is in full screen, touching the screen restore the edges (fade in)
         mainContainerLayoutView.setOnClickListener(new View.OnClickListener() {

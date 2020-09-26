@@ -86,7 +86,7 @@ abstract class VectorAppCompatActivity : BaseMvRxActivity() {
         super.attachBaseContext(VectorApp.getLocalisedContext(base))
     }
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
+    open override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         ThemeUtils.setActivityTheme(this, getOtherThemes())

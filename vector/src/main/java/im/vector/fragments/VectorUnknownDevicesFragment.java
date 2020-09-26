@@ -261,8 +261,10 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 .setView(v)
                 .setTitle(R.string.unknown_devices_alert_title);
 
+        mIsSendAnywayTapped = false;
+
         if (null != mListener) {
-            // Add action buttons
+             //Add action buttons
             int messageResId = mIsForCalling ? R.string.call_anyway : R.string.send_anyway;
             builder.setPositiveButton(messageResId, new DialogInterface.OnClickListener() {
                 @Override
@@ -278,19 +280,20 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             });
 
         } else {
-            // Add action buttons
+             //Add action buttons
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    // nothing : everything will be done on onDismiss()
+                     //nothing : everything will be done on onDismiss()
                 }
             });
         }
 
+        builder.create().dismiss();
+
         return builder.create();
+
     }
-
-
     @Override
     public void dismissAllowingStateLoss() {
         // reported by GA

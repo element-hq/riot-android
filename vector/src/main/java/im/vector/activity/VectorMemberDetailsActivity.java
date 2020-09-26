@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -42,6 +43,7 @@ import org.matrix.androidsdk.core.MXPatterns;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
@@ -74,6 +76,7 @@ import im.vector.util.CallsManager;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SystemUtilsKt;
 import im.vector.util.VectorUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
@@ -245,6 +248,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     };
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == DEVICE_VERIFICATION_REQ_CODE) {
             refreshUserDevicesList();
@@ -371,9 +379,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         final int requestCode;
 
         if (aIsVideoCall) {
-            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
         } else {
-            requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
+            requestCode = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
         }
 
         if (PermissionsToolsKt.checkPermissions(requestCode, this, requestCode)) {
@@ -385,11 +393,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (0 == permissions.length) {
             Log.d(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + requestCode);
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL) {
             if (PermissionsToolsKt.onPermissionResultAudioIpCall(this, grantResults)) {
                 startCall(false);
             }
-        } else if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL) {
+        } else if (requestCode == PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL) {
             if (PermissionsToolsKt.onPermissionResultVideoIpCall(this, grantResults)) {
                 startCall(true);
             }
@@ -436,7 +444,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                                 Log.d(LOG_TAG, "## performItemAction(): Start new room - start chat");
 
                                 enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                                mSession.createDirectMessageRoom(mMemberId, mCreateDirectMessageCallBack);
+                                mSession.createDirectMessageRoom(mMemberId, CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, mCreateDirectMessageCallBack);
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -1573,6 +1581,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     private void refreshUserDevicesList() {
         // Refresh the adapter data
+        mSession.checkCrypto();
         List<MXDeviceInfo> deviceList = mSession.getCrypto().getUserDevices(mMemberId);
 
         mDevicesListViewAdapter.clear();

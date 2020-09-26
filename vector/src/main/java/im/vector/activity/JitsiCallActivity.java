@@ -116,7 +116,6 @@ public class JitsiCallActivity extends VectorAppCompatActivity implements JitsiM
         setWaitingView(findViewById(R.id.jitsi_progress_layout));
 
         mWidget = (Widget) getIntent().getSerializableExtra(EXTRA_WIDGET_ID);
-        mJitsi = new JitsiWidgetProperties(mWidget.getUrl());
         mIsVideoCall = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO, true);
 
         try {

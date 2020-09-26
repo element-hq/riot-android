@@ -90,7 +90,6 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.PermissionsToolsKt;
@@ -216,9 +215,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 onRowClick(position);
             }
         });
-
-        v.setBackgroundColor(ThemeUtils.INSTANCE.getColor(getActivity(), android.R.attr.colorBackground));
-
+/**
+ * BATNA ==>(Esmaeeil Moradi) set background conversation layout
+ */
+        v.setBackgroundResource(R.drawable.background_main_conversation_shape);
         return v;
     }
 
@@ -283,6 +283,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        VectorRoomActivity.getMediaPlayer().stop();
+    }
+
+    @Override
     public MXSession getSession(String matrixId) {
         return Matrix.getMXSession(getActivity(), matrixId);
     }
@@ -294,7 +300,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
     @Override
     public VectorMessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediaCache(), (VectorRoomActivity) getActivity(),this);
     }
 
     /**
@@ -584,7 +590,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     resend(event);
                 }
             });
-        } else if (action == R.id.ic_action_vector_redact_message) {
+            cancelSelectionMode();
+        }
+        else if (action == R.id.ic_action_vector_reply){
+//            VectorMessagesAdapter.mSelectedEvent = null;
+        }
+        else if (action == R.id.ic_action_vector_redact_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -609,6 +620,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                     })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
+                    cancelSelectionMode();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
@@ -618,6 +630,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     SystemUtilsKt.copyToClipboard(getActivity(), textMsg);
                 }
             });
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -642,6 +655,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             .show();
                 }
             });
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_quote) {
             Activity attachedActivity = getActivity();
 
@@ -660,6 +674,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 }
                 ((VectorRoomActivity) attachedActivity).insertQuoteInTextEditor(quotedTextMsg + "\n\n");
             }
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             Message message = JsonUtils.toMessage(event.getContent());
@@ -708,10 +723,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                     startActivity(sendIntent);
                 }
             }
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_permalink) {
             SystemUtilsKt.copyToClipboard(getActivity(), PermalinkUtils.createPermalink(event));
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
+            cancelSelectionMode();
         } else if ((action == R.id.ic_action_view_source) || (action == R.id.ic_action_view_decrypted_source)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -736,8 +754,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             .show();
                 }
             });
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_device_verification) {
             onE2eIconClick(event, mAdapter.getDeviceInfo(event.eventId));
+            cancelSelectionMode();
         } else if (action == R.id.ic_action_re_request_e2e_key) {
             mSession.getCrypto().reRequestRoomKeyForEvent(event);
 
@@ -866,6 +886,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
+    private boolean isExist(String filename){
+        String filePath = VectorRoomActivity.voicePath + filename;
+        File file = new File(filePath);
+        return file.exists();
+
+    }
 
     /***
      * Manage save / share / forward actions on a media file
@@ -882,7 +908,29 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                        final EncryptedFileInfo encryptedFileInfo) {
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
+        VectorRoomActivity vectorRoomActivity = (VectorRoomActivity) getActivity();
 
+        if (filename.contains(".3gp")|| filename.contains(".mp3") || filename.contains(".aac")){
+            File file1=new File(VectorRoomActivity.voicePath+filename);
+            if (file1.exists() ) {
+                return;
+            }
+            if (!file1.exists() ) {
+                File dir = new File(VectorRoomActivity.voicePath);
+                if (dir.isDirectory())
+                {
+                    String[] voices = dir.list();
+                    for (String voice : voices) {
+                        new File(dir, voice).delete();
+                    }
+                    assert vectorRoomActivity != null;
+                }
+            }
+            if (isExist(filename)) ;
+            {
+                mAdapter.notifyDataSetChanged();
+            }
+        }
         final MXMediaCache mediasCache = Matrix.getInstance(getActivity()).getMediaCache();
         // check if the media has already been downloaded
         if (mediasCache.isMediaCached(mediaUrl, mediaMimeType)) {
@@ -904,6 +952,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                                         if (menuAction == ACTION_VECTOR_SAVE) {
                                             Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                                         } else {
+                                            if (savedMediaPath.contains(".3gp")|| savedMediaPath.contains(".mp3") || savedMediaPath.contains(".aac")){
+
+                                                assert vectorRoomActivity != null;
+                                                vectorRoomActivity.playBack(savedMediaPath,false);
+                                                if (isExist(filename));{
+                                                    mAdapter.notifyDataSetChanged();
+                                                }
+
+                                            }else
                                             ExternalApplicationsUtilKt.openMedia(getActivity(), savedMediaPath, mediaMimeType);
                                         }
                                     }
@@ -1114,9 +1171,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         try {
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
-
             // toggle selection mode
-            mAdapter.onEventTap(event);
+            mAdapter.onEventTap(null);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage(), e);
         }
@@ -1127,7 +1183,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         try {
             MessageRow row = mAdapter.getItem(position);
             Event event = row.getEvent();
-
             if (mAdapter.isInSelectionMode()) {
                 // cancel the selection mode.
                 mAdapter.onEventTap(null);
@@ -1160,7 +1215,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 }
             } else {
                 // toggle selection mode
-                mAdapter.onEventTap(event);
+                mAdapter.onEventTap(null);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage(), e);

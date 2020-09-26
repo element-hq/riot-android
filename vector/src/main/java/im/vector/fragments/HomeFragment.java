@@ -181,12 +181,14 @@ public class HomeFragment extends AbsHomeFragment implements HomeRoomAdapter.OnS
 
         // People
         mDirectChatsSection.setTitle(R.string.bottom_action_people);
+        mDirectChatsSection.setHideIfEmpty(true);
         mDirectChatsSection.setPlaceholders(getString(R.string.no_conversation_placeholder), getString(R.string.no_result_placeholder));
         mDirectChatsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);
 
         // Rooms
         mRoomsSection.setTitle(R.string.bottom_action_rooms);
+        mRoomsSection.setHideIfEmpty(true);
         mRoomsSection.setPlaceholders(getString(R.string.no_room_placeholder), getString(R.string.no_result_placeholder));
         mRoomsSection.setupRoomRecyclerView(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false),
                 R.layout.adapter_item_circular_room_view, true, this, null, null);

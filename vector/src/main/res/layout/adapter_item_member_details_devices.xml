@@ -33,7 +33,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        tools:src="@drawable/e2e_verified" />
+        tools:src="@drawable/e2e_verified_batna" />
 
     <LinearLayout
         android:id="@+id/container_buttons"

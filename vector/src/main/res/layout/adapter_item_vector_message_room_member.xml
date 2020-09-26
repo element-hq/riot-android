@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+<!--    android:background="@drawable/customborder">-->
+<!--    android:visibility="gone"-->
+
 
     <include
-        layout="@layout/vector_message_header"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        layout="@layout/vector_message_header"/>
+<!--        android:visibility="gone"-->
+<!--        tools:visibility="gone" />-->
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
@@ -19,15 +22,17 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="horizontal">
+<!--        android:visibility="gone">-->
 
         <im.vector.view.VectorCircularImageView
             android:id="@+id/messagesAdapter_avatar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/avatar"
             android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"/>
+<!--            android:visibility="gone"/>-->
 
         <View
             android:id="@+id/messagesAdapter_highlight_message_marker"
@@ -37,7 +42,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="#f00" />
+            android:background="#f00"/>
+<!--            android:visibility="gone" />-->
 
         <LinearLayout
             android:layout_width="0dp"
@@ -46,6 +52,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:paddingBottom="5dp">
+<!--            android:visibility="gone">-->
 
             <FrameLayout
                 android:id="@+id/messagesAdapter_body_layout"
@@ -53,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp">
+<!--                android:visibility="gone">-->
 
                 <!-- the body is here -->
                 <RelativeLayout
@@ -60,12 +68,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start">
+<!--                    android:visibility="gone">-->
 
                     <ImageView
                         android:id="@+id/message_adapter_e2e_icon"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/e2e_verified" />
+                        android:src="@drawable/e2e_verified_batna"/>
+<!--                        android:visibility="gone"/>-->
 
                     <LinearLayout
                         android:id="@+id/message_timestamp_layout"
@@ -74,8 +84,10 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:orientation="horizontal">
+<!--                        android:visibility="gone">-->
 
-                        <include layout="@layout/vector_message_timestamp" />
+                        <include layout="@layout/vector_message_timestamp"/>
+<!--                            android:visibility="gone"/>-->
 
                     </LinearLayout>
 
@@ -86,14 +98,19 @@
                         android:layout_gravity="start"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
+                        android:paddingStart="30dp"
                         android:layout_toStartOf="@+id/message_timestamp_layout"
                         android:layout_toLeftOf="@+id/message_timestamp_layout"
                         android:layout_toEndOf="@id/message_adapter_e2e_icon"
                         android:layout_toRightOf="@id/message_adapter_e2e_icon"
                         android:autoLink="none"
                         android:textIsSelectable="false"
-                        android:textSize="14sp"
-                        tools:text="A body" />
+                        android:textSize="10sp"
+                        android:textColor="#C0C0C0"
+                        tools:text="A body"
+                        tools:ignore="RtlSymmetry"
+                        android:paddingLeft="30dp" />
+<!--                        android:visibility="gone"/>-->
                 </RelativeLayout>
 
             </FrameLayout>
@@ -104,10 +121,13 @@
 
     <include
         android:id="@+id/messagesAdapter_avatars_list"
-        layout="@layout/vector_message_receipts_list" />
+        layout="@layout/vector_message_receipts_list"/>
+<!--        android:visibility="gone"/>-->
 
-    <include layout="@layout/message_separator" />
+    <include layout="@layout/message_separator"/>
+<!--        android:visibility="gone"/>-->
 
-    <include layout="@layout/message_read_marker" />
+    <include layout="@layout/message_read_marker"/>
+<!--        android:visibility="gone"/>-->
 
 </LinearLayout>

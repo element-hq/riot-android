@@ -38,6 +38,7 @@ import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CountryPhoneData;
 import im.vector.util.PhoneNumberUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CountryPickerActivity extends VectorAppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
@@ -72,6 +73,12 @@ public class CountryPickerActivity extends VectorAppCompatActivity implements Co
      */
 
     @NotNull
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     public ActivityOtherThemes getOtherThemes() {
         return ActivityOtherThemes.Picker.INSTANCE;

@@ -19,6 +19,7 @@
 package im.vector.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -34,6 +35,7 @@ import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.ApiCallback;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.crypto.CryptoConstantsKt;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.features.identityserver.IdentityServerNotConfiguredException;
@@ -51,6 +53,7 @@ import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomCreationAdapter;
 import kotlin.Pair;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // tags
@@ -118,6 +121,11 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     // displayed participants
     private List<ParticipantAdapterItem> mParticipants = new ArrayList<>();
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {
@@ -326,7 +334,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 } else {
                     // direct message flow
                     showWaitingView();
-                    mSession.createDirectMessageRoom(otherUserId, mCreateDirectMessageCallBack);
+                    mSession.createDirectMessageRoom(otherUserId, CryptoConstantsKt.MXCRYPTO_ALGORITHM_MEGOLM, mCreateDirectMessageCallBack);
                 }
             }
 

@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -54,6 +56,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
@@ -87,6 +90,7 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
     private VideoView mPlayingVideoView = null;
 
     private int mAutoPlayItemAt = -1;
+    private MediaController mediaController;
 
     public VectorMediaViewerAdapter(Context context,
                                     MXSession session,
@@ -542,60 +546,125 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
      * @param videoMimeType the video mime type
      */
     private void playVideo(View pageView, VideoView videoView, File videoFile, String videoMimeType) {
+
         if ((null != videoFile) && videoFile.exists()) {
             try {
-                stopPlayingVideo();
-                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(videoMimeType);
+                if (!(videoView.getCurrentPosition() > 0)) {
 
-                if (null != extension) {
-                    extension += "." + extension;
-                }
+                    stopPlayingVideo();
+                    String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(videoMimeType);
 
-                // copy the media to ensure that it is deleted while playing
-                File dstFile = new File(mContext.getCacheDir(), "sliderMedia" + extension);
-                if (dstFile.exists()) {
-                    dstFile.delete();
-                }
-
-                // Copy source file to destination
-                FileInputStream inputStream = null;
-                FileOutputStream outputStream = null;
-                try {
-                    // create only the
-                    if (!dstFile.exists()) {
-                        dstFile.createNewFile();
-
-                        inputStream = new FileInputStream(videoFile);
-                        outputStream = new FileOutputStream(dstFile);
-
-                        byte[] buffer = new byte[1024 * 10];
-                        int len;
-                        while ((len = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, len);
-                        }
+                    if (null != extension) {
+                        extension += "." + extension;
                     }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage(), e);
-                    dstFile = null;
-                } finally {
-                    // Close resources
+
+                    // copy the media to ensure that it is deleted while playing
+                    File dstFile = new File(mContext.getCacheDir(), "sliderMedia" + extension);
+                    if (dstFile.exists()) {
+                        dstFile.delete();
+                    }
+
+                    // Copy source file to destination
+                    FileInputStream inputStream = null;
+                    FileOutputStream outputStream = null;
                     try {
-                        if (inputStream != null) inputStream.close();
-                        if (outputStream != null) outputStream.close();
+                        // create only the
+                        if (!dstFile.exists()) {
+                            dstFile.createNewFile();
+
+                            inputStream = new FileInputStream(videoFile);
+                            outputStream = new FileOutputStream(dstFile);
+
+                            byte[] buffer = new byte[1024 * 10];
+                            int len;
+                            while ((len = inputStream.read(buffer)) != -1) {
+                                outputStream.write(buffer, 0, len);
+                            }
+                        }
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage(), e);
+                        dstFile = null;
+                    } finally {
+                        // Close resources
+                        try {
+                            if (inputStream != null) inputStream.close();
+                            if (outputStream != null) outputStream.close();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage(), e);
+                        }
                     }
+
+                    // update the source
+                    videoView.setVideoPath(dstFile.getAbsolutePath());
+                    // hide the thumbnail
+                    displayVideoThumbnail(pageView, false);
+
+
+                    // let's playing
+                    mPlayingVideoView = videoView;
+
+
+                    /**
+                     * BATNA ===>  set media controller when start video view
+                     */
+                    if (BuildConfig.IS_SABA) {
+                        mediaController = new MediaController(mContext, false) {
+                            @Override
+                            public void show() {
+                                super.show();
+                                if (videoView.isPlaying()) {
+
+                                    pageView.findViewById(R.id.media_slider_video_play).setVisibility(View.GONE);
+                                    pageView.findViewById(R.id.media_slider_video_pause).setVisibility(View.VISIBLE);
+
+                                    pageView.findViewById(R.id.media_slider_video_pause).setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            videoView.pause();
+                                            pageView.findViewById(R.id.media_slider_video_pause).setVisibility(View.GONE);
+                                            pageView.findViewById(R.id.media_slider_video_play).setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                } else {
+                                    if (videoView.getCurrentPosition() > 0)
+                                        pageView.findViewById(R.id.media_slider_video_play).setVisibility(View.VISIBLE);
+                                    else
+                                        pageView.findViewById(R.id.media_slider_video_pause).setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void hide() {
+                                super.hide();
+                                pageView.findViewById(R.id.media_slider_video_pause).setVisibility(View.GONE);
+                                pageView.findViewById(R.id.media_slider_video_play).setVisibility(View.GONE);
+                            }
+                        };
+
+                        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer pMp) {
+                                LinearLayout viewGroupLevel1 = (LinearLayout) mediaController.getChildAt(0);
+                                LinearLayout viewGroupLevel2 = (LinearLayout) viewGroupLevel1.getChildAt(0);
+                                View view = viewGroupLevel2.getChildAt(2);
+                                view.setVisibility(View.GONE);
+                                mediaController.show();
+                            }
+                        });
+                        videoView.setMediaController(mediaController);
+                        mediaController.setMediaPlayer(videoView);
+                        videoView.requestFocus();
+                    }
+                    videoView.start();
+                } else {
+                    if (pageView.findViewById(R.id.media_slider_video_play).getVisibility() == View.VISIBLE) {
+                        pageView.findViewById(R.id.media_slider_video_play).setVisibility(View.GONE);
+                        pageView.findViewById(R.id.media_slider_video_pause).setVisibility(View.VISIBLE);
+                        videoView.seekTo(videoView.getCurrentPosition());
+                        videoView.start();
+                    }
+
                 }
-
-                // update the source
-                videoView.setVideoPath(dstFile.getAbsolutePath());
-                // hide the thumbnail
-                displayVideoThumbnail(pageView, false);
-
-                // let's playing
-                mPlayingVideoView = videoView;
-                videoView.start();
-
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## playVideo() : videoView.start(); failed " + e.getMessage(), e);
             }
@@ -634,8 +703,19 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         ((View) videoView.getParent()).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopPlayingVideo();
-                displayVideoThumbnail(view, true);
+                if (!videoView.isPlaying()) {
+                    if (videoView.getCurrentPosition() > 0) {
+//                        videoView.seekTo(videoView.getCurrentPosition());
+//                        videoView.start();
+                    } else {
+                        stopPlayingVideo();
+                        displayVideoThumbnail(view, true);
+                    }
+                } else if (videoView.canPause()) {
+//
+                } else {
+//
+              }
             }
         });
 

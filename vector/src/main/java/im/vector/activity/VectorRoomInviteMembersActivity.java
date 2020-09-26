@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,7 +32,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProviders;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.MXPatterns;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
@@ -57,10 +60,15 @@ import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.fragments.terms.AcceptTermsFragment;
+import im.vector.fragments.terms.AcceptTermsViewModel;
+import im.vector.fragments.terms.ServiceTermsArgs;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorAutoCompleteTextView;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static android.provider.DocumentsContract.EXTRA_INFO;
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
@@ -84,6 +92,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // account data
     private String mMatrixId;
+
+    private VectorRoomInviteMembersActivity activity;
 
     // main UI items
     @BindView(R.id.room_details_members_list)
@@ -126,9 +136,29 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         @Override
         public void onIdentityServerTermsNotSigned(String token) {
-            startActivityForResult(ReviewTermsActivity.Companion.intent(VectorRoomInviteMembersActivity.this,
-                    TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* cannot be null */, token),
-                    RequestCodesKt.TERMS_REQUEST_CODE);
+            try {
+                // Trying to accept terms on user's behalf without showing the dialog!
+                Log.v("Terms accepted: ", "running my own code");
+                AcceptTermsViewModel viewModel = ViewModelProviders.of(activity).get(AcceptTermsViewModel.class);
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_INFO, new ServiceTermsArgs(TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* Cannot be null */, token));
+                viewModel.termsArgs = intent.getParcelableExtra(EXTRA_INFO);
+                MXSession session;
+                String matrixId = null;
+                if (intent.hasExtra(EXTRA_MATRIX_ID)) {
+                    matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
+                }
+                session = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+                viewModel.initSession(session);
+                AcceptTermsFragment acceptTermsFragment = new AcceptTermsFragment();
+                acceptTermsFragment.initialize(activity);
+                onActivityResult(RequestCodesKt.TERMS_REQUEST_CODE, Activity.RESULT_OK, null);
+            } catch (Exception e) {
+                Log.e("Error in ", "onIdentityServerTermsNotSigned-- " + e.getMessage());
+                startActivityForResult(ReviewTermsActivity.Companion.intent(VectorRoomInviteMembersActivity.this,
+                        TermsManager.ServiceType.IdentityService, mSession.getIdentityServerManager().getIdentityServerUrl() /* cannot be null */, token),
+                        RequestCodesKt.TERMS_REQUEST_CODE);
+            }
         }
 
         @Override
@@ -168,6 +198,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     };
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.activity_vector_invite_members;
     }
@@ -175,7 +210,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     public void initUiAndData() {
         super.initUiAndData();
-
+        activity = this;
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -308,6 +343,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             return;
         }
 
+        // By default the user will see all Matrix users, but if she enters anything, the program will search for that value
+        // if (pattern.isEmpty()) {
+        //    // saba is part of every username in our server (in the domain part), so searching for
+        //    //  it shows all users in our home server
+        //    pattern = "saba";
+        //}
         mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
@@ -325,6 +366,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             }
         });
     }
+
+
 
     /**
      * Display a selection confirmation dialog.

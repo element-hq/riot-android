@@ -28,6 +28,7 @@ import butterknife.OnClick;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.push.PushManager;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /*
  * This activity allows the user to choose a notifications privacy policy.
@@ -52,6 +53,11 @@ public class NotificationPrivacyActivity extends VectorAppCompatActivity {
     /* ==========================================================================================
      * LifeCycle
      * ========================================================================================== */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

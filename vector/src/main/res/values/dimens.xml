@@ -16,8 +16,8 @@
     <dimen name="chat_avatar_size">40dp</dimen>
     <dimen name="member_list_avatar_size">60dp</dimen>
 
-    <dimen name="quote_width">4dp</dimen>
-    <dimen name="quote_gap">8dp</dimen>
+    <dimen name="quote_width">8dp</dimen>
+    <dimen name="quote_gap">10dp</dimen>
     <dimen name="drawable_padding_small">8dp</dimen>
 
     <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>

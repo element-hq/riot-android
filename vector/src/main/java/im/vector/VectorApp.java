@@ -71,6 +71,7 @@ import im.vector.contacts.PIDsRetriever;
 import im.vector.notifications.NotificationDrawerManager;
 import im.vector.notifications.NotificationUtils;
 import im.vector.push.PushManager;
+import im.vector.services.EventStreamServiceX;
 import im.vector.settings.FontScale;
 import im.vector.settings.VectorLocale;
 import im.vector.tools.VectorUncaughtExceptionHandler;
@@ -193,7 +194,6 @@ public class VectorApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
-        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
         mLifeCycleListener = new VectorLifeCycleObserver();
@@ -359,6 +359,20 @@ public class VectorApp extends MultiDexApplication {
         PreferencesManager.fixMigrationIssues(this);
         initApplicationLocale();
         visitSessionVariables();
+        if (BuildConfig.IS_SABA) {
+            // Sentry.captureMessage("Startup");
+            try {
+                Intent serviceIntent = new Intent(this, EventStreamServiceX.class);
+                serviceIntent.setAction(EventStreamServiceX.ACTION_SIMULATED_PERMANENT_LISTENING);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    startForegroundService(serviceIntent);
+                } else {
+                    startService(serviceIntent);
+                }
+            } catch (Exception e) {
+                Log.v("Error in VectorApp:", e.getMessage());
+            }
+        }
     }
 
     @Override

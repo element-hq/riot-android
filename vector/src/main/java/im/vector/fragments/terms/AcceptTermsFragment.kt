@@ -17,15 +17,19 @@ package im.vector.fragments.terms
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.epoxy.EpoxyRecyclerView
+import im.vector.BuildConfig
 import im.vector.R
 import im.vector.fragments.VectorBaseFragment
 import im.vector.util.openUrlInExternalBrowser
@@ -54,6 +58,7 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
     lateinit var bottomBar: ViewGroup
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(requireActivity()).get(AcceptTermsViewModel::class.java)
@@ -152,5 +157,95 @@ class AcceptTermsFragment : VectorBaseFragment(), TermsController.Listener {
     @OnClick(R.id.terms_bottom_decline)
     fun onDeclineButton() {
         activity?.finish()
+    }
+
+    fun initialize(fragmentActivity: FragmentActivity) {
+        viewModel = ViewModelProviders.of(fragmentActivity).get(AcceptTermsViewModel::class.java)
+
+        val description = when (viewModel.termsArgs.type) {
+            TermsManager.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsManager.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
+        }
+
+        termsController = TermsController(description, this)
+        termsList.setController(termsController)
+        termsController
+        viewModel.loadTerms(getString(R.string.resources_language))
+
+        viewModel.termsList.observe(this, Observer { terms ->
+            when (terms) {
+                is MxAsync.Loading -> {
+                    Log.v("MxAsync: ", "is loading")
+                }
+                is MxAsync.Error   -> {
+                    Log.v("MxAsync: ", "Error in AcceptTermsFragment.kt in viewModel.termsList")
+                }
+                is MxAsync.Success -> {
+                    updateState(terms.value)
+                    for (term in terms.value) setChecked(term, true)
+                    viewModel.acceptTerms()
+                }
+            }
+        })
+
+        viewModel.acceptTerms.observe(this, Observer { request ->
+            when (request) {
+                is MxAsync.Loading -> {
+                }
+                is MxAsync.Error   -> {
+                    Log.v("MxAsync: ", "Error in AcceptTermsFragment.kt in viewModel.acceptTerms")
+                }
+                is MxAsync.Success -> {
+                    Log.v("MxAsync: ", "Success")
+                }
+            }
+        })
+
+        return
+    }
+
+    fun initialize(activity: AppCompatActivity) {
+        viewModel = ViewModelProviders.of(activity).get(AcceptTermsViewModel::class.java)
+
+        val description = when (viewModel.termsArgs.type) {
+            TermsManager.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsManager.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
+        }
+
+        termsController = TermsController(description, this)
+        termsList.setController(termsController)
+        termsController
+        viewModel.loadTerms(getString(R.string.resources_language))
+
+        viewModel.termsList.observe(this, Observer { terms ->
+            when (terms) {
+                is MxAsync.Loading -> {
+                    Log.v("MxAsync: ", "is loading")
+                }
+                is MxAsync.Error   -> {
+                    Log.v("MxAsync: ", "Error in AcceptTermsFragment.kt in viewModel.termsList")
+                }
+                is MxAsync.Success -> {
+                    updateState(terms.value)
+                    for (term in terms.value) setChecked(term, true)
+                    viewModel.acceptTerms()
+                }
+            }
+        })
+
+        viewModel.acceptTerms.observe(this, Observer { request ->
+            when (request) {
+                is MxAsync.Loading -> {
+                }
+                is MxAsync.Error   -> {
+                    Log.v("MxAsync: ", "Error in AcceptTermsFragment.kt in viewModel.acceptTerms")
+                }
+                is MxAsync.Success -> {
+                    Log.v("MxAsync: ", "Success")
+                }
+            }
+        })
+
+        return
     }
 }

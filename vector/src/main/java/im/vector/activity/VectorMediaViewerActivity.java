@@ -17,6 +17,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
@@ -48,6 +49,7 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorMediaViewerAdapter;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Display a medias list.
@@ -115,6 +117,11 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
                 view.setAlpha(0);
             }
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

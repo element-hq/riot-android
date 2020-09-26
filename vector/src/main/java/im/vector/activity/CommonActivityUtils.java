@@ -920,7 +920,7 @@ public class CommonActivityUtils {
      * @param outputFilename optional the output filename
      * @param callback       the asynchronous callback
      */
-    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback) {
+    private static void saveFileInto(final File sourceFile, final String dstDirPath, final String outputFilename, final ApiCallback<String> callback, Context context) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -958,7 +958,11 @@ public class CommonActivityUtils {
                 }
 
                 File dstDir = Environment.getExternalStoragePublicDirectory(dstDirPath);
-                if (dstDir != null) {
+                assert outputFilename != null;
+                if (outputFilename.contains(".3gp")|| outputFilename.contains(".mp3") ||outputFilename.contains(".aac")) {
+                    dstDir = new File(context.getApplicationContext().getCacheDir(), "voice");
+                }
+                    if (dstDir != null) {
                     dstDir.mkdirs();
                 }
 
@@ -1069,7 +1073,7 @@ public class CommonActivityUtils {
 
                     try {
                         File file = new File(fullFilePath);
-                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), false);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## saveMediaIntoDownloads(): Exception Msg=" + e.getMessage(), e);
                     }
@@ -1103,7 +1107,7 @@ public class CommonActivityUtils {
                     callback.onUnexpectedError(e);
                 }
             }
-        });
+        },context);
     }
 
     //==============================================================================================================

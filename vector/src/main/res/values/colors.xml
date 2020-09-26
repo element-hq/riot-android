@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <!-- Error colors -->
     <color name="vector_success_color">#70BF56</color>
     <color name="vector_warning_color">#ff4b55</color>

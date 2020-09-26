@@ -53,6 +53,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -88,6 +89,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
+import im.vector.BuildConfig;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.listeners.ImageViewOnTouchListener;
@@ -98,6 +100,7 @@ import im.vector.util.PreferencesManager;
 import im.vector.util.ViewUtilKt;
 import im.vector.view.RecentMediaLayout;
 import im.vector.view.VideoRecordView;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -175,6 +178,10 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
     // camera preview and gallery selection layout
     private ImageView mTakeImageView;
+    /**
+     * BATNA ==> add caption to image and video
+     */
+    private EditText edtSendCaption;
     private TableLayout mGalleryTableLayout;
     private RelativeLayout mCameraPreviewLayout;
     private TextureView mCameraTextureView;
@@ -229,7 +236,18 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
 
     private VideoRecordView mRecordAnimationView;
 
+    /**
+     * BATNA ==> define String caption
+     */
+    public static String stringCaption;
+
     @NotNull
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     public ActivityOtherThemes getOtherThemes() {
         return ActivityOtherThemes.NoActionBarFullscreen.INSTANCE;
@@ -281,6 +299,11 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         mVideoButtonView = findViewById(R.id.media_picker_preview_video_button);
 
         mTakeImageView = findViewById(R.id.media_picker_camera_button);
+        /**
+         * BATNA ==> find caption edit text
+         */
+        if (BuildConfig.IS_SABA)
+            edtSendCaption = findViewById(R.id.test_send_caption);
         mGalleryTableLayout = findViewById(R.id.gallery_table_layout);
 
         // hide switch camera view if there is only one camera
@@ -335,8 +358,15 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
             public void onClick(View v) {
                 if (null != mVideoUri) {
                     sendVideoFile();
+                    /**
+                     * BATNA ==> init String caption
+                     */
+                    if (BuildConfig.IS_SABA)
+                        stringCaption = edtSendCaption.getText().toString();
                 } else {
                     attachImageFrom(mTakenImageOrigin);
+                    if (BuildConfig.IS_SABA)
+                        stringCaption = edtSendCaption.getText().toString();
                 }
             }
         });

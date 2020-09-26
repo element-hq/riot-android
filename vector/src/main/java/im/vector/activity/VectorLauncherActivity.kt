@@ -18,6 +18,7 @@ package im.vector.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 
 /**
@@ -27,8 +28,14 @@ class VectorLauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /**
+         * BATNA ==> set duration for Splash Activity
+         */
+        Handler().postDelayed(Runnable {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish() },500)
 
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+
+
     }
 }

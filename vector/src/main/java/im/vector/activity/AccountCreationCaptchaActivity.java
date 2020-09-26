@@ -18,6 +18,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
@@ -46,6 +47,7 @@ import java.util.Map;
 
 import im.vector.R;
 import im.vector.ui.themes.ThemeUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * AccountCreationCaptchaActivity displays a webview to check captchas.
@@ -83,6 +85,11 @@ public class AccountCreationCaptchaActivity extends VectorAppCompatActivity {
             " </script> " +
             " </body> " +
             " </html> ";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public int getLayoutRes() {

@@ -17,6 +17,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 
 import org.matrix.androidsdk.MXSession;
@@ -30,11 +31,18 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Dummy activity used to manage the shared
  */
 public class VectorSharedFilesActivity extends VectorAppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     private static final String LOG_TAG = VectorSharedFilesActivity.class.getSimpleName();
 
     private final String SHARED_FOLDER = "VectorShared";

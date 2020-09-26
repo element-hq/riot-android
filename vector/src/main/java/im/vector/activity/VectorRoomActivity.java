@@ -27,11 +27,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -50,12 +53,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.gson.JsonParser;
@@ -93,6 +101,8 @@ import org.matrix.androidsdk.rest.model.StateEvent;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.message.Message;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,10 +116,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
+import im.vector.BuildConfig;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.Thread.VectorThread;
 import im.vector.VectorApp;
 import im.vector.activity.util.RequestCodesKt;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.dialogs.DialogCallAdapter;
 import im.vector.dialogs.DialogListItem;
 import im.vector.dialogs.DialogSendItemAdapter;
@@ -134,6 +147,7 @@ import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.ActiveWidgetsBanner;
 import im.vector.view.NotificationAreaView;
+import im.vector.view.NotificationAreaViewToolbar;
 import im.vector.view.VectorAutoCompleteTextView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
@@ -141,6 +155,9 @@ import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static im.vector.util.PermissionsToolsKt.MY_PERMISSIONS_REQUEST_REC_Audio;
 
 /**
  * Displays a single room with messages.
@@ -151,6 +168,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         MatrixMessageListFragment.IOnScrollListener,
         VectorMessageListFragment.VectorMessageListFragmentListener,
         VectorReadReceiptsDialogFragment.VectorReadReceiptsDialogFragmentListener {
+
 
     // the session
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -294,6 +312,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     @BindView(R.id.room_notifications_area)
     NotificationAreaView mNotificationsArea;
 
+    // notifications area toolbar
+    @BindView(R.id.room_notifications_area_head)
+    NotificationAreaViewToolbar mNotificationsAreaHead;
+
     private String mLatestTypingMessage;
     private Boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
@@ -331,6 +353,299 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     TextView invitationTextView;
     @BindView(R.id.room_preview_subinvitation_textview)
     TextView subInvitationTextView;
+
+    private static ImageView recordButton;
+
+    private static File newFile;
+    private ColorStateList hintColor;
+    @SuppressLint("StaticFieldLeak")
+    private static ImageView play;
+    private static ImageView pause;
+    private static ImageView close;
+    private SeekBar seekBar;
+    private static TextView voiceCancel;
+    public static String voicePath;
+
+    private static LinearLayout linearLayout;
+    private static Handler myHandler = new Handler();
+    public static String mediaDataSourceName;
+
+    private static MediaPlayer mediaPlayer;
+    private static boolean isRemainderVoice;
+
+    private static Handler mHandler;
+    private static int time = 0;
+    private boolean recordIsDone = false;
+    private static VectorThread vectorThread;
+    private static boolean actionUp;
+
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+    public static LinearLayout getLinearLayout() {
+        return linearLayout;
+    }
+
+    public static ImageView getPlay() {
+        return play;
+    }
+
+    public static ImageView getPause() {
+        return pause;
+    }
+
+    @SuppressLint("SetTextI18n")
+
+    public void playBack(String savedMediaPath, boolean downloaded) {
+        mediaDataSourceName = savedMediaPath;
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        File file = new File(savedMediaPath);
+        if (file.exists() && downloaded) {
+            mVectorMessageListFragment.getMessageAdapter().notifyDataSetChanged();
+            return;
+        }
+
+        mediaPlayer = new MediaPlayer();
+        linearLayout.setVisibility(View.VISIBLE);
+        pause.setVisibility(View.VISIBLE);
+        play.setVisibility(View.GONE);
+
+        try {
+            mediaPlayer.reset();
+            isRemainderVoice = true;
+            mediaPlayer.setDataSource(savedMediaPath);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            seekBar.setMax(mediaPlayer.getDuration());
+            myHandler.postDelayed(UpdateVoiceTime, 100);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                linearLayout.setVisibility(View.GONE);
+                isRemainderVoice = false;
+            }
+        });
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    play.setVisibility(View.VISIBLE);
+                    pause.setVisibility(View.GONE);
+                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
+                }
+            }
+        });
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying() && mediaPlayer.getCurrentPosition() <= 500)
+                    return;
+
+                mediaPlayer.start();
+                pause.setVisibility(View.VISIBLE);
+                play.setVisibility(View.GONE);
+                VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.pause);
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.GONE);
+                mediaPlayer.stop();
+                isRemainderVoice = false;
+                if (VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView() != null) {
+                    VectorMessagesAdapter.getVectorMessagesAdapterImageTypeView().setImageResource(R.drawable.play);
+                }
+                VectorMessagesAdapter.setRemainderVoice(false);
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser)
+                    mediaPlayer.seekTo(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.reset();
+                return false;
+            }
+        });
+    }
+
+    private Runnable UpdateVoiceTime = new Runnable() {
+        public void run() {
+            int startTime = mediaPlayer.getCurrentPosition();
+            seekBar.setProgress(startTime);
+            if (isRemainderVoice)
+                myHandler.postDelayed(this, 100);
+        }
+    };
+
+    Runnable mAction = new Runnable() {
+        @Override
+        public void run() {
+
+            if (actionUp) {
+                mHandler.postDelayed(this, 100);
+                if (time < 500) {
+                    time += 100;
+
+                } else {
+                    vectorThread = new VectorThread();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mEditText.setHint(R.string.recording);
+                            voiceCancel.setText(R.string.cancel_recording);
+                        }
+                    });
+                    vectorThread.startVoiceRecorder(getApplicationContext());
+                    vectorThread.start();
+                    recordIsDone = true;
+                    actionUp = false;
+                }
+            }
+
+        }
+    };
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        voicePath =getApplicationContext().getCacheDir()+"/voice/";
+        mediaPlayer = new MediaPlayer();
+        if (!mEditText.getText().toString().equalsIgnoreCase("   recording ... "))
+            mEditText.setText("");
+        recordButton = findViewById(R.id.room_send_audio_view);
+        play = findViewById(R.id.play);
+        pause = findViewById(R.id.pause);
+        voiceCancel = findViewById(R.id.voice_cancel_hint);
+        close = findViewById(R.id.close);
+        seekBar = findViewById(R.id.seekBar);
+        linearLayout = findViewById(R.id.play_layout);
+        hintColor = mEditText.getHintTextColors();
+        resetLayout();
+        Activity vector = this;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
+        }
+        recordButton.setOnTouchListener(new View.OnTouchListener() {
+            boolean cancelRecording = false;
+
+            @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                linearLayout.setVisibility(View.GONE);
+                int y = 0, x = 0, xResult = 0;
+                int eventX = (int) event.getX();
+                int[] location = new int[2];
+                recordButton.getLocationOnScreen(location);
+                x = location[0];
+                y = location[1];
+
+                xResult = Math.abs(Math.abs(x) + Math.abs(eventX));
+                int a = (206 + (eventX));
+                int alpha = eventX > 0 ? 255 : Math.max(0, a);
+                voiceCancel.setTextColor(Color.argb(alpha, 0, 0, 0));
+                mEditText.setHintTextColor(Color.argb(alpha, 230, 10, 10));
+
+                if (xResult >= Math.abs(x + 150)) {
+                    cancelRecording = true;
+                    resetLayout();
+                    if (VectorThread.getAudioRecorder() != null) {
+                        vectorThread.resetVoiceRecorder();
+                        vectorThread.deleteFile();
+                    }
+                }
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    mHandler = new Handler();
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        actionUp = true;
+                        mHandler.postDelayed(mAction, 0);
+                        voiceCancel.setVisibility(View.VISIBLE);
+                        mStartCallLayout.setVisibility(View.INVISIBLE);
+                        mSendImageView.setVisibility(View.GONE);
+                        mEditText.setHint("");
+                        recordButton.setScaleX((float) 1.4);
+                        recordButton.setScaleY((float) 1.5);
+                        mEditText.setHintTextColor(Color.argb(255, 230, 10, 10));
+
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() > 1550 && !cancelRecording) {
+                        resetLayout();
+                        actionUp = false;
+                        time = 0;
+                        if (recordIsDone) {
+                            sendMediasIntent(vectorThread.stopVoiceRecorder(getApplicationContext()));
+                            recordIsDone = false;
+                        }
+
+                        mEditText.setText("");
+                        mEditText.setTextColor(Color.argb(255, 0, 0, 0));
+
+                    } else if (event.getAction() == MotionEvent.ACTION_UP && event.getEventTime() - event.getDownTime() <= 1550) {
+                        resetLayout();
+                        if (vectorThread != null)
+                            vectorThread.deleteFile();
+                        if (vectorThread != null) {
+                            vectorThread.resetVoiceRecorder();
+                        }
+                    }
+
+                } else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(vector, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_REC_Audio);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    actionUp = false;
+                    time = 0;
+                    if (vectorThread != null) {
+                        vectorThread.resetVoiceRecorder();
+                    }
+                    resetLayout();
+                    if (cancelRecording) {
+                        cancelRecording = false;
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    private void resetLayout() {
+        recordButton.setScaleX((float) 1);
+        recordButton.setScaleY((float) 1);
+        mEditText.setHint(R.string.room_message_placeholder_encrypted);
+        mEditText.setHintTextColor(hintColor);
+        voiceCancel.setVisibility(View.GONE);
+        mStartCallLayout.setVisibility(View.VISIBLE);
+        mSendImageView.setVisibility(View.VISIBLE);
+    }
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -621,9 +936,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     //================================================================================
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.activity_vector_room;
     }
+
 
     @Override
     public void initUiAndData() {
@@ -711,6 +1032,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         });
+
+
+        /**
+         * Batna  => setDelegate Notification toolbar
+         */
+        if (BuildConfig.IS_SABA) {
+            mNotificationsAreaHead.setDelegate(new NotificationAreaViewToolbar.Delegate() {
+                @NotNull
+                @Override
+                public IMessagesAdapterActionsListener providesMessagesActionListener() {
+                    return mVectorMessageListFragment;
+                }
+
+                @Override
+                public void resendUnsentEvents() {
+                    mVectorMessageListFragment.resendUnsentMessages();
+                }
+
+                @Override
+                public void deleteUnsentEvents() {
+                    mVectorMessageListFragment.deleteUnsentEvents();
+                }
+
+                @Override
+                public void closeScreen() {
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+
+                @Override
+                public void jumpToBottom() {
+                    if (mReadMarkerManager != null) {
+                        mReadMarkerManager.handleJumpToBottom();
+                    } else {
+                        mVectorMessageListFragment.scrollToBottom(0);
+                    }
+                }
+            });
+        }
 
         // use a toolbar instead of the actionbar
         // to be able to display an expandable header
@@ -1048,6 +1408,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if ((!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) || hasBeenKicked) {
             if (!mIsUnreadPreviewMode || hasBeenKicked) {
                 mNotificationsArea.setVisibility(View.GONE);
+                if (BuildConfig.IS_SABA)
+                    mNotificationsAreaHead.setVisibility(View.GONE);
                 mBottomSeparator.setVisibility(View.GONE);
                 findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
             }
@@ -1286,6 +1648,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 case TAKE_IMAGE_REQUEST_CODE:
                 case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
+
                     break;
                 case RequestCodesKt.STICKER_PICKER_ACTIVITY_REQUEST_CODE:
                     sendSticker(data);
@@ -1430,6 +1793,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (mNotificationsArea != null) {
             mNotificationsArea.setScrollState(scrollState);
         }
+        if (mNotificationsAreaHead != null) {
+            mNotificationsAreaHead.setScrollState(scrollState);
+        }
     }
 
     @Override
@@ -1506,7 +1872,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 searchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
             }
             if (useMatrixAppsMenuItem != null) {
-                useMatrixAppsMenuItem.setVisible(hasIntegrationManager && TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
+                useMatrixAppsMenuItem.setVisible(false);
+                //useMatrixAppsMenuItem.setVisible(hasIntegrationManager && TextUtils.isEmpty(mEventId) && null == sRoomPreviewData);
             }
             if (resendUnsentMenuItem != null) {
                 resendUnsentMenuItem.setVisible(mHasUnsentEvents);
@@ -1725,32 +2092,43 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             isVideoCall = false;
             permissions = PermissionsToolsKt.PERMISSIONS_FOR_AUDIO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_AUDIO_CALL;
+            if (BuildConfig.IS_SABA) {
+                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                }
+            }
         } else {
             isVideoCall = true;
             permissions = PermissionsToolsKt.PERMISSIONS_FOR_VIDEO_IP_CALL;
             requestCode = PermissionsToolsKt.PERMISSION_REQUEST_CODE_VIDEO_CALL;
+            if (BuildConfig.IS_SABA) {
+                if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                    startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                }
+            }
         }
+        if (!BuildConfig.IS_SABA) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
+                    .setTitle(R.string.dialog_title_confirmation);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(VectorRoomActivity.this)
-                .setTitle(R.string.dialog_title_confirmation);
+            if (isVideoCall) {
+                builder.setMessage(getString(R.string.start_video_call_prompt_msg));
+            } else {
+                builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
+            }
 
-        if (isVideoCall) {
-            builder.setMessage(getString(R.string.start_video_call_prompt_msg));
-        } else {
-            builder.setMessage(getString(R.string.start_voice_call_prompt_msg));
-        }
-
-        builder
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
-                            startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+            builder
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (PermissionsToolsKt.checkPermissions(permissions, VectorRoomActivity.this, requestCode)) {
+                                startIpCall(PreferencesManager.useJitsiConfCall(VectorRoomActivity.this), isVideoCall);
+                            }
                         }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
     }
 
     /**
@@ -2021,6 +2399,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     @SuppressLint("NewApi")
     private void sendMediasIntent(Intent intent) {
+
         // sanity check
         if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
             return;
@@ -2030,11 +2409,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
+
         }
 
         // check the extras
         if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
+
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(Intent.EXTRA_TEXT)) {
@@ -2049,10 +2430,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
             }
         }
+
+
         boolean hasItemToShare = !sharedDataItems.isEmpty();
         boolean isTextOnly = sharedDataItems.size() == 1
                 && "text/plain".equals(sharedDataItems.get(0).getMimeType(this));
         boolean shouldPreviewMedia = PreferencesManager.previewMediaWhenSending(this);
+
 
         if (hasItemToShare && !isTextOnly && shouldPreviewMedia) {
             if (null != intent) {
@@ -2076,7 +2460,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             }
             mVectorRoomMediasSender.sendMedias(sharedDataItems);
         }
-
+//        Toast.makeText(this, sharedDataItems.size(), Toast.LENGTH_SHORT).show();
         mLatestTakePictureCameraUri = null;
     }
 
@@ -2647,17 +3031,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final MatrixError softResourceLimitExceededError = limitResourceState.softErrorOrNull();
 
         NotificationAreaView.State state = NotificationAreaView.State.Default.INSTANCE;
+        NotificationAreaViewToolbar.State stateToolbar = NotificationAreaViewToolbar.State.Default.INSTANCE;
         mHasUnsentEvents = false;
         if (!mIsUnreadPreviewMode && !TextUtils.isEmpty(mEventId)) {
             state = NotificationAreaView.State.Hidden.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.Hidden.INSTANCE;
         } else if (hardResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(false, hardResourceLimitExceededError);
+            stateToolbar = new NotificationAreaViewToolbar.State.ResourceLimitExceededError(false, hardResourceLimitExceededError);
         } else if (softResourceLimitExceededError != null) {
             state = new NotificationAreaView.State.ResourceLimitExceededError(true, softResourceLimitExceededError);
+            stateToolbar = new NotificationAreaViewToolbar.State.ResourceLimitExceededError(true, softResourceLimitExceededError);
         } else if (!Matrix.getInstance(this).isConnected()) {
             state = NotificationAreaView.State.ConnectionError.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.ConnectionError.INSTANCE;
         } else if (mIsUnreadPreviewMode) {
             state = NotificationAreaView.State.UnreadPreview.INSTANCE;
+            stateToolbar = NotificationAreaViewToolbar.State.UnreadPreview.INSTANCE;
         } else {
             final List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliveredEvents(mRoom.getRoomId());
             final List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
@@ -2666,6 +3056,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             if (hasUndeliverableEvents || hasUnknownDeviceEvents) {
                 mHasUnsentEvents = true;
                 state = new NotificationAreaView.State.UnsentEvents(hasUndeliverableEvents, hasUnknownDeviceEvents);
+                mNotificationsArea.setBackgroundColor(Color.WHITE);
+                if (findViewById(R.id.room_notification_message).getVisibility() == View.GONE) {
+                    findViewById(R.id.room_notification_message).setVisibility(View.VISIBLE);
+                    mNotificationsArea.setBackgroundColor(Color.WHITE);
+                }
+
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 int unreadCount = 0;
                 final RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
@@ -2673,8 +3069,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getReadReceiptEventId());
                 }
                 state = new NotificationAreaView.State.ScrollToBottom(unreadCount, mLatestTypingMessage);
+                stateToolbar = new NotificationAreaViewToolbar.State.ScrollToBottom(unreadCount, mLatestTypingMessage);
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 state = new NotificationAreaView.State.Typing(mLatestTypingMessage);
+                stateToolbar = new NotificationAreaViewToolbar.State.Typing(mLatestTypingMessage);
             } else if (mRoom.getState().isVersioned()) {
                 final RoomTombstoneContent roomTombstoneContent = mRoom.getState().getRoomTombstoneContent();
                 final List<Event> events = mRoom.getState().getStateEvents(new HashSet<>(Arrays.asList(Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE)));
@@ -2685,9 +3083,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 }
 
                 state = new NotificationAreaView.State.Tombstone(roomTombstoneContent, sender);
+                stateToolbar = new NotificationAreaViewToolbar.State.Tombstone(roomTombstoneContent, sender);
             }
         }
         mNotificationsArea.render(state);
+
+        /**
+         * Batna ==> render state (Notification) in toolbar
+         */
+        if (BuildConfig.IS_SABA)
+            mNotificationsAreaHead.render(stateToolbar);
 
         supportInvalidateOptionsMenu();
     }
@@ -3044,13 +3449,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 mBottomSeparator.setVisibility(View.VISIBLE);
                 mSendingMessagesLayout.setVisibility(View.VISIBLE);
                 mCanNotPostTextView.setVisibility(View.GONE);
+
+                /**
+                 * BATNA ==>  Show room_bottom_layout when user have permission send message
+                 */
+                if (BuildConfig.IS_SABA) {
+                    RelativeLayout layout = findViewById(R.id.room_bottom_layout);
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height =  ViewGroup.LayoutParams.WRAP_CONTENT;
+                    layout.setLayoutParams(params);
+                }
             } else if (state.isVersioned() || mSession.getDataHandler().getResourceLimitExceededError() != null) {
                 mBottomSeparator.setVisibility(View.GONE);
                 mBottomLayout.getLayoutParams().height = 0;
             } else {
                 mBottomSeparator.setVisibility(View.GONE);
                 mSendingMessagesLayout.setVisibility(View.GONE);
-                mCanNotPostTextView.setVisibility(View.VISIBLE);
+
+                /**
+                 * BATNA ==>  Donot show room_bottom_layout when user havenot permission send message
+                 */
+                if (BuildConfig.IS_SABA) {
+                    RelativeLayout layout = findViewById(R.id.room_bottom_layout);
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    params.height = 0;
+                    layout.setLayoutParams(params);
+                } else {
+                    mCanNotPostTextView.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -3159,8 +3585,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         } else if (null != sRoomPreviewData) {
             text = getResources().getQuantityString(R.plurals.room_title_members, joinedMembersCount, joinedMembersCount);
         } else {
-            text = activeMembersCount + "/" +
-                    getResources().getQuantityString(R.plurals.room_header_active_members_count, joinedMembersCount, joinedMembersCount);
+            text = getString(R.string.room_header_online_members, joinedMembersCount, activeMembersCount);
         }
 
         mActionBarHeaderActiveMembersTextView.setText(text);
@@ -3358,175 +3783,225 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void manageRoomPreview() {
         if (null != sRoomPreviewData) {
-            mRoomPreviewLayout.setVisibility(View.VISIBLE);
 
-            Button joinButton = findViewById(R.id.button_join_room);
-            Button declineButton = findViewById(R.id.button_decline);
+/**
+ * BATNA==> remove preview layout
+ */
+            if (BuildConfig.IS_SABA) {
+                mRoomPreviewLayout.setVisibility(View.GONE);
 
-            final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
+                if (null != sRoomPreviewData) {
+                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
-            String roomName = sRoomPreviewData.getRoomName();
-            if (TextUtils.isEmpty(roomName)) {
-                roomName = " ";
-            }
+                    String signUrl = null;
+                    showWaitingView();
 
-            Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
-
-
-            // if the room already exists
-            if (null != mRoom) {
-                Log.d(LOG_TAG, "manageRoomPreview : The room is known");
-
-                String inviter = "";
-
-                if (null != roomEmailInvitation) {
-                    inviter = roomEmailInvitation.inviterName;
-                }
-
-                if (TextUtils.isEmpty(inviter)) {
-                    mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
+                    room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
                         @Override
-                        public void onSuccess(List<RoomMember> members) {
-                            String inviter = "";
+                        public void onSuccess(Void info) {
+                            onJoined();
+                        }
 
-                            for (RoomMember member : members) {
-                                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                                    inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
-                                }
+                        private void onError(String errorMessage) {
+                            Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            hideWaitingView();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                hideWaitingView();
+                                getConsentNotGivenHelper().displayDialog(e);
+                            } else {
+                                onError(e.getLocalizedMessage());
                             }
+                        }
 
-                            invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
                         }
                     });
-                } else {
-                    invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                 }
-
-                declineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(LOG_TAG, "The user clicked on decline.");
-
-                        showWaitingView();
-
-                        mRoom.leave(new ApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void info) {
-                                Log.d(LOG_TAG, "The invitation is rejected");
-                                onDeclined();
-                            }
-
-                            private void onError(String errorMessage) {
-                                Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
-                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                hideWaitingView();
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                    hideWaitingView();
-                                    getConsentNotGivenHelper().displayDialog(e);
-                                } else {
-                                    onError(e.getLocalizedMessage());
-                                }
-                            }
-
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-                        });
-                    }
-                });
 
             } else {
-                if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
-                    invitationTextView.setText(getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
-                    subInvitationTextView.setText(getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
-                } else {
-                    invitationTextView.setText(getString(R.string.room_preview_try_join_an_unknown_room,
-                            TextUtils.isEmpty(sRoomPreviewData.getRoomName()) ? getString(R.string.room_preview_try_join_an_unknown_room_default) : roomName));
 
-                    // the room preview has some messages
-                    if ((null != sRoomPreviewData.getRoomResponse()) && (null != sRoomPreviewData.getRoomResponse().messages)) {
-                        subInvitationTextView.setText(getString(R.string.room_preview_room_interactions_disabled));
-                    }
+                mRoomPreviewLayout.setVisibility(View.VISIBLE);
+
+                Button joinButton = findViewById(R.id.button_join_room);
+                Button declineButton = findViewById(R.id.button_decline);
+
+                final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
+
+                String roomName = sRoomPreviewData.getRoomName();
+                if (TextUtils.isEmpty(roomName)) {
+                    roomName = " ";
                 }
 
-                declineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+                Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
 
-                        sRoomPreviewData = null;
-                        finish();
+
+                // if the room already exists
+                if (null != mRoom) {
+                    Log.d(LOG_TAG, "manageRoomPreview : The room is known");
+
+                    String inviter = "";
+
+                    if (null != roomEmailInvitation) {
+                        inviter = roomEmailInvitation.inviterName;
                     }
-                });
-            }
 
-            joinButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(LOG_TAG, "The user clicked on Join.");
-
-                    if (null != sRoomPreviewData) {
-                        Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
-
-                        String signUrl = null;
-
-                        if (null != roomEmailInvitation) {
-                            signUrl = roomEmailInvitation.signUrl;
-                        }
-
-                        showWaitingView();
-
-                        room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                    if (TextUtils.isEmpty(inviter)) {
+                        mRoom.getActiveMembersAsync(new SimpleApiCallback<List<RoomMember>>(this) {
                             @Override
-                            public void onSuccess(Void info) {
-                                onJoined();
-                            }
+                            public void onSuccess(List<RoomMember> members) {
+                                String inviter = "";
 
-                            private void onError(String errorMessage) {
-                                Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                hideWaitingView();
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onError(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                                    hideWaitingView();
-                                    getConsentNotGivenHelper().displayDialog(e);
-                                } else {
-                                    onError(e.getLocalizedMessage());
+                                for (RoomMember member : members) {
+                                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                                        inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                onError(e.getLocalizedMessage());
+                                invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                             }
                         });
                     } else {
-                        finish();
+                        invitationTextView.setText(getString(R.string.room_preview_invitation_format, inviter));
                     }
+
+                    declineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(LOG_TAG, "The user clicked on decline.");
+
+                            showWaitingView();
+
+                            mRoom.leave(new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    Log.d(LOG_TAG, "The invitation is rejected");
+                                    onDeclined();
+                                }
+
+                                private void onError(String errorMessage) {
+                                    Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
+                                    Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    hideWaitingView();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                        hideWaitingView();
+                                        getConsentNotGivenHelper().displayDialog(e);
+                                    } else {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+                    if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
+                        invitationTextView.setText(getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+                        subInvitationTextView.setText(getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
+                    } else {
+                        invitationTextView.setText(getString(R.string.room_preview_try_join_an_unknown_room,
+                                TextUtils.isEmpty(sRoomPreviewData.getRoomName()) ? getString(R.string.room_preview_try_join_an_unknown_room_default) : roomName));
+
+                        // the room preview has some messages
+                        if ((null != sRoomPreviewData.getRoomResponse()) && (null != sRoomPreviewData.getRoomResponse().messages)) {
+                            subInvitationTextView.setText(getString(R.string.room_preview_room_interactions_disabled));
+                        }
+                    }
+
+                    declineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+
+                            sRoomPreviewData = null;
+                            finish();
+                        }
+                    });
                 }
-            });
 
-            enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+                joinButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(LOG_TAG, "The user clicked on Join.");
 
+                        if (null != sRoomPreviewData) {
+                            Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+
+                            String signUrl = null;
+
+                            if (null != roomEmailInvitation) {
+                                signUrl = roomEmailInvitation.signUrl;
+                            }
+
+                            showWaitingView();
+
+                            room.joinWithThirdPartySigned(sRoomPreviewData.getSession(), sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    onJoined();
+                                }
+
+                                private void onError(String errorMessage) {
+                                    Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    hideWaitingView();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                                        hideWaitingView();
+                                        getConsentNotGivenHelper().displayDialog(e);
+                                    } else {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        } else {
+                            finish();
+                        }
+                    }
+                });
+
+                enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+
+            }
         } else {
             mRoomPreviewLayout.setVisibility(View.GONE);
+
         }
     }
 
@@ -3726,6 +4201,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Assume he wants to update it.
      */
     private void onRoomTopicClick() {
+
         if (mRoom == null) {
             return;
         }
@@ -3882,6 +4358,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
     private void chooseMediaSource(boolean useNativeCamera, boolean isVoiceFeatureEnabled) {
         // hide the header room
+
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         final List<DialogListItem> items = new ArrayList<>();
@@ -3917,6 +4394,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
+
 
     @OnClick(R.id.room_send_image_view)
     void onSendClick() {
@@ -3975,6 +4453,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     }
 
     private void onSendChoiceClicked(DialogListItem dialogListItem) {
+
         if (dialogListItem instanceof DialogListItem.SendFile) {
             launchFileSelectionIntent();
         } else if (dialogListItem instanceof DialogListItem.SendVoice) {

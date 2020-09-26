@@ -40,6 +40,7 @@ import im.vector.adapters.LanguagesAdapter;
 import im.vector.settings.VectorLocale;
 import im.vector.ui.themes.ActivityOtherThemes;
 import im.vector.ui.themes.ThemeUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LanguagePickerActivity extends VectorAppCompatActivity implements LanguagesAdapter.OnSelectLocaleListener, SearchView.OnQueryTextListener {
 
@@ -64,6 +65,12 @@ public class LanguagePickerActivity extends VectorAppCompatActivity implements L
      */
 
     @NotNull
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     public ActivityOtherThemes getOtherThemes() {
         return ActivityOtherThemes.Picker.INSTANCE;
