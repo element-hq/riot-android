@@ -69,6 +69,8 @@
     <string name="clear">Clear</string>
     <string name="later">Later</string>
     <string name="forward">Forward</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
     <string name="view_decrypted_source">View Decrypted Source</string>
