@@ -275,10 +275,10 @@ public class DrawerScrollView extends ScrollView {
         }
     }
 
-    private String getStringTagForView(View v) {
-        Object tagObject = v.getTag();
-        return String.valueOf(tagObject);
-    }
+    private static String getStringTagForView(View v) {
+		Object tagObject = v.getTag();
+		return String.valueOf(tagObject);
+	}
 
     private int getLeftForViewRelativeOnlyChild(View v) {
         int left = v.getLeft();
