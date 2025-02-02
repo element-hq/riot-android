@@ -86,4 +86,16 @@
         android:title="@string/device_information"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/ic_action_play_audio"
+        android:icon="@drawable/ic_baseline_play_arrow_24px"
+        android:title="@string/play"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_pause_audio"
+        android:icon="@drawable/ic_baseline_pause_24px"
+        android:title="@string/pause"
+        app:showAsAction="never" />
+
 </menu>

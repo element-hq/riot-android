@@ -156,6 +156,16 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <include
+                            android:id="@+id/content_media_playback_layout"
+                            layout="@layout/media_playback_control" />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
         </LinearLayout>
