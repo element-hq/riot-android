@@ -44,6 +44,7 @@
         android:background="@android:color/transparent"
         android:indeterminate="true"
         android:indeterminateTint="@color/tab_groups_secondary"
+        android:indeterminateTintMode="src_in"
         android:visibility="visible" />
 
     <im.vector.view.VectorViewPager
